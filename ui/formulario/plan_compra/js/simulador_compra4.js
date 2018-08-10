@@ -632,10 +632,7 @@ $(window).on('load', function () {
 
                                 var detalle = json.Body.detalleConsultaOrdenCompra.detalle;
 
-                                //console.log();
-
-                                //if(detalle[0].ordenCompra.length > 0) {
-                                if(detalle[0].ordenCompra) {
+                                if(detalle[0].ordenCompra.length > 0) {
 
                                     $('#txt_noc_' + id_fila).html(detalle[0].ordenCompra);
                                     $('#txt_estadooc_' + id_fila).html(detalle[0].estadoOC);
