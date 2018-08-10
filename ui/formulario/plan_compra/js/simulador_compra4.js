@@ -751,7 +751,7 @@ $(window).on('load', function () {
                 var tabla2_buscar_columnas = $('#tabla2').DataTable({
                    // "ordering": false,
                   paging: false,
-                    scrollY: "150px",
+                    scrollY: "140px",
                     scrollX: true,
                   "info": false,
                     fixedColumns:true,
@@ -791,7 +791,6 @@ $(window).on('load', function () {
             //delay calcular totales
             var delay_calculos_totales = 4000;
             setTimeout(function () {
-                var nFilas = $("#tabla2 tbody tr").length;
                 cal_campos();
             },delay_calculos_totales);
 
@@ -2684,7 +2683,7 @@ $('#btn_esconder_tabla1').on('click',function () {
     $('#btn_esconder_tabla1').hide();
     $('#btn_mostrar_tabla1').show();
 
-    $('.dataTables_scrollBody').attr('style','position: relative; overflow: auto; width: 100%; max-height: 65%;');
+    $('.dataTables_scrollBody').attr('style','position: relative; overflow: auto; width: 100%; max-height: 60%;');
 
 });
 
@@ -2694,7 +2693,7 @@ $('#btn_mostrar_tabla1').on('click',function () {
     $('#btn_esconder_tabla1').show();
     $('#btn_mostrar_tabla1').hide();
 
-    $('.dataTables_scrollBody').attr('style','position: relative; overflow: auto; width: 100%; max-height: 150px;');
+    $('.dataTables_scrollBody').attr('style','position: relative; overflow: auto; width: 100%; max-height: 140px;');
 });
 
 
