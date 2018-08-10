@@ -133,10 +133,8 @@ var cronometro = setInterval(
             }
 
             //validacion... si no hay respuesta de parte del usuario el sistema lo expulsara
-            if ((contador_m == 1) && (contador_s == 5)){
-                $.getJSON(url_eliminar_concurrencia_sessiones_activas,{TEMPO:tempo, DEPTO:depto,COD_USU:cod_usu}).done(function (data) {
-
-                });
+            if ((contador_m == 3) && (contador_s == 5)){
+                $.getJSON(url_eliminar_concurrencia_sessiones_activas,{TEMPO:tempo, DEPTO:depto,COD_USU:cod_usu});
             }
 
         s.innerHTML = contador_s;
