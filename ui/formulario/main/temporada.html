@@ -1,0 +1,30 @@
+
+
+<div id="selecciona_temporada" class="modal fade" role="dialog" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content borde_especial">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Bienvenido a C1 Automática Web</h4>
+            </div>
+            <div class="modal-body">
+                <p>Para comenzar debe seleccionar la <b>Temporada de Compra</b></p>
+
+                <div class="form-group">
+                    <label>Código - Temporada</label>
+                    <select id="SELECT_TEMPORADA" name="SELECT_TEMPORADA" class="form-control SELECT_TEMPORADA">
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="temporada_compra" class="btn btn-default pull-left temporada_compra_validar_tipo_usr" id="temporada_compra_validar_tipo_usr">Nueva Temporada</a>
+                <a class="btn btn-primary ir_al_plan" >Ir al Plan</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<script src="{{@JQUERY}}ui/formulario/main/js/temporada.js"></script>

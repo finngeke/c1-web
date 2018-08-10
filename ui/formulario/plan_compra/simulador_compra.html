@@ -1,0 +1,871 @@
+
+<link rel="stylesheet" type="text/css" href="{{@JQUERY}}ui/formulario/plan_compra/css/handsontable.full.min.css">
+
+<!--<link rel="stylesheet" type="text/css" href="{{@JQUERY}}ui/formulario/plan_compra/css/main_grilla_especial.css">-->
+<script src="{{@JQUERY}}ui/formulario/plan_compra/js/handsontable.full.min.js"></script>
+<script src="{{@JQUERY}}ui/formulario/plan_compra/js/jquery.handsontable.maxlength.full.js"></script>
+
+<section class="content-header">
+    <ol class="breadcrumb">
+        <button class="btn btn-app importar_bmt"  data-tooltip="tooltip"  data-toggle="modal" data-target="#importar_bmt" data-placement="top" title="Importar BMT">
+            <i class="fa fa-cloud-download"></i> Load </button>
+
+        <a class="btn btn-app eliminar_bmt" data-target="#elimina_bmt" data-tooltip="tooltip" data-toggle="modal" title="Eliminar BMT">
+            <i class="fa fa-trash"></i> Eliminar
+        </a>
+
+        <a class="btn btn-app actualiza_grid" data-target="#actualiza_grilla" data-toggle="modal" data-tooltip="tooltip" title="Actualizar Grilla" data-placement="top">
+            <i class="fa fa-repeat"></i> actulizar
+        </a>
+
+        <a href="plan_compra?codigo={{@COD_TEMPORADA}}" class="btn btn-app" data-toggle="tooltip" data-placement="top" title="Volver al MAIN.">
+            <i class="fa fa-sign-out"></i> Salir
+        </a>
+    </ol>
+    <h1 class="bmt">{{@nombre_form}} Temporada : <b>{{@depto_form}}</b> - {{@NOM_TEMPORADA_CORTO}}</h1>
+
+</section>
+<!-- Main content -->
+<section class="content">
+    <div class="row" >
+        <!-- left column -->
+        <div class="col-md-12">
+            <div class="box box-primary">
+                <div class="box-body">
+
+                    <div id="hot1" class="hot handsontable htRowHeaders htColumnHeaders" style="height: 320px; overflow: hidden; width: 100%;" data-originalstyle="overflow: auto;color: #000" ></div>
+
+<script>
+
+                function cellRender(row, col, prop, colProperties) {
+                var cellProperties = {};
+                cellProperties.readOnly = true;
+                return cellProperties;
+                }
+                var dataObject1 = {{json_encode(@GRILLA_CABECERA)}};
+                var hotElement1 = document.querySelector('#hot1');
+                var hotElementContainer1 = hotElement1.parentNode;
+                var hotSettings1 = {
+                data: dataObject1,
+                        stretchH: 'all',
+                        height: 100,
+                        manualRowResize: true,
+                        manualColumnResize: true,
+                        cells: function (row, col, prop) {
+                        return cellRender(row, col, prop);
+                        },
+                        columns: [{data: 'Tipo', type: 'numeric', readOnly: true},
+                        {data: 'Ac', type: 'numeric', readOnly: true},
+                        {data: 'Bc', type: 'numeric', readOnly: true},
+                        {data: 'Cc', type: 'numeric', readOnly: true},
+                        {data: 'Dc', type: 'numeric', readOnly: true},
+                        {data: 'Ec', type: 'numeric', readOnly: true},
+                        {data: 'Fc', type: 'numeric', readOnly: true},
+                        {data: 'Gc', type: 'numeric', readOnly: true},
+                        {data: 'Hc', type: 'numeric', readOnly: true},
+                        {data: 'Ic', type: 'numeric', readOnly: true},
+                        {data: 'Totalc', type: 'numeric', readOnly: true},
+                        {data: 'Ar', type: 'numeric', readOnly: true},
+                        {data: 'Br', type: 'numeric', readOnly: true},
+                        {data: 'Cr', type: 'numeric', readOnly: true},
+                        {data: 'Dr', type: 'numeric', readOnly: true},
+                        {data: 'Er', type: 'numeric', readOnly: true},
+                        {data: 'Fr', type: 'numeric', readOnly: true},
+                        {data: 'Gr', type: 'numeric', readOnly: true},
+                        {data: 'Hr', type: 'numeric', readOnly: true},
+                        {data: 'Ir', type: 'numeric', readOnly: true},
+                        {data: 'Totalr', type: 'numeric', readOnly: true},
+                        {data: 'Ae', type: 'numeric', readOnly: true}, //, numericFormat: {pattern: '%'}},
+                        {data: 'Be', type: 'numeric', readOnly: true}, // numericFormat: {pattern: '%'}},
+                        {data: 'Ce', type: 'numeric', readOnly: true}, // numericFormat: {pattern: '%'}},
+                        {data: 'De', type: 'numeric', readOnly: true}, // numericFormat: {pattern: '%'}},
+                        {data: 'Ee', type: 'numeric', readOnly: true}, // numericFormat: {pattern: '%'}},
+                        {data: 'Fe', type: 'numeric', readOnly: true}, // numericFormat: {pattern: '%'}},
+                        {data: 'Ge', type: 'numeric', readOnly: true}, // numericFormat: {pattern: '%'}},
+                        {data: 'He', type: 'numeric', readOnly: true}, // numericFormat: {pattern: '%'}},
+                        {data: 'Ie', type: 'numeric', readOnly: true}, //numericFormat: {pattern: '%'}},
+                        {data: 'Totale', type: 'numeric', readOnly: true}], // numericFormat: {pattern: '%'}}],
+                        colHeaders: ['tipo', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'TOTAL'
+                                , 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'TOTAL'
+                                , 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'TOTAL'],
+                        nestedHeaders: [
+                        [{label: '', colspan: 1},
+                        {label: 'Compra Costo(CH/.)', colspan: 10},
+                        {label: 'Compra Retail(CH/.)', colspan: 10},
+                        {label: 'Embarque(%)', colspan: 10}
+                        ],
+                        ['tipo', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'TOTAL'
+                                , 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'TOTAL'
+                                , 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'TOTAL']
+                        ]
+                };
+                var hot1 = new Handsontable(hotElement1, hotSettings1);
+</script>
+
+                </div>
+                <!-- /.box-body -->
+
+                <check if="{{ isset(@mensaje) }}">  
+                    <ul class="todo-list ui-sortable">
+                        <li style="padding: 4px;background-color: rgba(255, 255, 0, 0.49);">
+                            <span class="handle ui-sortable-handle">
+                                <i class="fa fa-ellipsis-v"></i>
+                                <i class="fa fa-ellipsis-v"></i>
+                            </span>
+                            <small class="label label-{{@mensaje.icon}}"><i class="fa fa-clock-o"></i> {{@mensaje.header}}</small>
+                            <span class="text">{{@mensaje.message}}</span>
+
+
+                        </li>
+                    </ul>
+                </check> 
+            </div>
+
+            <div class="box box-primary" style="overflow-x:hidden;
+                 overflow-y:visible;
+                 height:500px;">
+
+                <!-- /.box-header -->
+                <div class="box-body">
+
+<input type="text" id="asigna_linea" name="asigna_linea">
+<input type="text" id="asigna_linea2" name="asigna_linea2">
+
+
+
+                    <div id="example1" class="hot handsontable htRowHeaders htColumnHeaders" style="height: 320px; overflow: hidden; width: 100%;" data-originalstyle="height: 320px; overflow: hidden; width: 584px;"></div>
+
+<script>
+
+                       // $(document).ready(function () {
+
+                        function coverRenderer(instance, td, row, col, prop, value, cellProperties) {
+                        //var escaped = Handsontable.helper.stringify(value);
+
+                        //td.style.backgroundColor = '#ffffe0';
+                        td.style.color = 'red';
+                        //   td.append(Handsontable.helper.stringify(value));
+                        }
+
+
+                        function cellRender(row, col, prop, colProperties) {
+                            var cellProperties = {};
+                            if (col == 14||col == 21||col == 25||col == 27||col == 29||col == 30||col == 31 ||col == 33||col == 34||col == 37
+                                ||col == 42||col == 43||col == 48||col == 50||col == 57||col == 58||col == 59||col == 60||col == 61||col == 62
+                                ||col == 63||col == 64||col == 65||col == 66||col == 67||col == 68||col == 73||col == 75||col == 76||col == 77
+                                ||col == 78||col == 79||col == 80||col == 81||col == 82||col == 83) {
+                            cellProperties.readOnly = true;
+                            }
+                            return cellProperties;
+                        }
+
+// ###################################### TRABAJO CON CBX ######################################
+
+                        // Llenar estos CBX dinámicamente
+                        // Traer la Data de un JSON
+
+
+                        // CBX Temporada
+                        var optionsTemporada = {
+                            '2': 'Ver',
+                            '3': 'Ttiemp'
+                        };
+
+
+                        // CBX Línea
+                        var url_optionsLinea = "ajax_simulador_cbx/listar_optionsLinea";
+                        var var_optionsLinea = "";
+                        $.getJSON(url_optionsLinea,function (data) {
+                            $.each(data, function (i,o) {
+                                var_optionsLinea += "'"+o[0]+"':'"+o[1]+"',";
+                            });
+                            var_optionsLinea = "{"+var_optionsLinea.slice(0,-1)+"}";
+
+                            $('#asigna_linea').val(var_optionsLinea);
+                            $('#asigna_linea2').val("nada");
+
+                        });
+
+                        //var optionsLinea = "{"+var_optionsLinea+"}"
+                        var dato_input1 = $('#asigna_linea').val();
+                        var dato_input2 = $('#asigna_linea2').val();
+
+                        alert(dato_input1);
+                        alert(dato_input2);
+
+
+                        // Asigno al INPUT del CBX 1 el valor que me trae la BD
+                        $('#asigna_linea').val(var_optionsLinea);
+
+
+                        var optionsLinea = {
+                            '1111':'MARQUIS MUJER 1',
+                            '2222':'MARQUIS MUJER 2'
+                        };
+
+
+
+                        // CBX SubLínea
+                        var optionsSubLinea = {
+                                '': 'Seleccionar'
+                        };
+
+                        // CBX Marca
+                        var optionsMarca = {
+                                '': 'Seleccionar'
+                        };
+
+                        // CBX Estilo Vida
+                        var optionsEstiloVida = {
+                                '': 'Seleccionar'
+                        };
+
+                        // CBX Ocacion Uso
+                        var optionsOcacionUso = {
+                                '': 'Seleccionar'
+                        };
+
+                        // CBX Pirámide Mix
+                        var optionsPiramideMix = {
+                                '': 'Seleccionar'
+                        };
+
+                        // CBX Ventana Llegada
+                        var optionsVentanaLlegada = {
+                                '': 'Seleccionar'
+                        };
+
+                        // CBX Rank. Venta
+                        var optionsRankVta = {
+                                '': 'Seleccionar'
+                        };
+
+                        // CBX Ciclo Vida
+                        var optionsCicloVida = {
+                                '': 'Seleccionar'
+                        };
+
+                        // CBX Color
+                        var optionsColor = {
+                                '': 'Seleccionar'
+                        };
+
+                        // CBX Tipo Producto
+                        var optionsTipoProducto = {
+                                '': 'Seleccionar'
+                        };
+
+                        // CBX Tipo Exhibicion
+                        var optionsTipoExhibicion = {
+                                '': 'Seleccionar'
+                        };
+
+                        // CBX Cluster
+                        var optionsCluster = {
+                                '': 'Seleccionar'
+                        };
+
+                        // CBX Formato
+                        var optionsFormato = {
+                                '': 'Seleccionar'
+                        };
+
+                        // CBX Proced
+                        var optionsProced = {
+                                '': 'Seleccionar'
+                        };
+
+                        // CBX Vía
+                        var optionsVia = {
+                                '': 'Seleccionar'
+                        };
+
+                        // CBX País
+                        var optionsPais = {
+                                '': 'Seleccionar'
+                        };
+
+                        // CBX Moneda
+                        var optionsMoneda = {
+                                '': 'Seleccionar'
+                        };
+
+                        // CBX Razón Social
+                        var optionsRazonSocial = {
+                                '': 'Seleccionar'
+                        };
+
+                        // CBX Trader
+                        var optionsTrader = {
+                                '': 'Seleccionar'
+                        };
+
+                        // CBX Estado Opción
+                        var optionsEstadoOpcion = {
+                                '': 'Seleccionar'
+                        };
+
+// ###################################### FIN TRABAJO CON CBX ######################################
+
+                        var
+                                container = document.getElementById('example1'),
+                                hot;
+
+                        hot = new Handsontable(container, {
+
+                        data: {{json_encode(@Grilla_bmt)}},
+                                height: 370,
+                                minSpareRows: 10,
+                                colHeaders: true,
+                                contextMenu: true,
+                                /*cells: function (row, col, prop) {
+                                 this.maxLength = 150;
+                                 },*/
+                                cells: function (row, col, prop) {
+                                return cellRender(row, col, prop);
+                                },
+                                rowHeaders: true,
+                                colHeaders: [
+                                'ID',
+                                'Grupo Compra',
+                                'Temp',
+                                'Linea',
+                                'SubLinea',
+                                'Marca',
+                                'Estilo',
+                                'Cod Corp',
+                                'Descrip.',
+                                'Descrip. Internet',
+                                'Composicion',
+                                'Colección',
+                                'Evento',
+                                'Estilo Vida',
+                                'Calidad',
+                                'Ocasion Uso',
+                                'Piramide Mix',
+                                'Ventana',
+                                'Rank Vta',
+                                'Ciclo Vida',
+                                'Color'
+                                ,'Hist'
+                                ,'Tipo Producto',
+                                'Tipo Exhibicion',
+                                'Tallas',
+                                '%Compra Ini',
+                                '%Compra Ajust',
+                                '% Ajust',
+                                'Curva',
+                                'Curva Min',
+                                'Uni Ini',
+                                'Uni Ajust',
+                                'Uni Final',
+                                'MtrPack',
+                                'Nº Cajas',
+                                'Cluster',
+                                'Formato',
+                                'Tdas',
+                                'A',
+                                'B',
+                                'C',
+                                'I',
+                                'Primera Carga',
+                                '%Tiendas',
+                                'Proced',
+                                'Vía',
+                                'País',
+                                'Viaje'
+                                ,'Mkup'
+                                ,'Precio Blanco'
+                                ,'GM'
+                                ,'Moneda'
+                                ,'Target'
+                                ,'FOB'
+                                ,'Insp'
+                                ,'RFID'
+                                ,'Royalty(%)'
+                                ,'Costo Unitario Final US$'
+                                ,'Costo Unitario Final Pesos'
+                                ,'Total Target US$'
+                                ,'Total Fob US$'
+                                ,'Costo Total Pesos'
+                                ,'Total Retail Pesos(Sin IVA)'
+                                ,'Debut/Reorder'
+                                ,'Sem Ini'
+                                ,'Sem Fin'
+                                ,'Semanas Ciclo de Vida'
+                                ,'Agot Obj'
+                                ,'Semanas Liquidación'
+                                ,'Proveedor'
+                                ,'Razon Social'
+                                ,'Trader'
+                                ,'Cod Sku Proveedor'
+                                ,'Cod. Padre'
+                                ,'Proforma'
+                                ,'Archivo'
+                                ,'Estilo PMM'
+                                ,'Estado Match'
+                                ,'N° OC'
+                                ,'Estado OC'
+                                ,'Fecha Embarque'
+                                ,'Fecha ETA'
+                                ,'Fecha Recepción CD'
+                                ,'Días Atraso CD'
+                                ,'Estado Opción'
+                                ],
+                                columns: [
+                                {
+                                    data: 'ID', type: 'numeric', readOnly: true
+                                },
+                                {
+                                    // renderer: coverRenderer,
+                                    data: 'Grupo Compra',
+                                    //  renderer: coverRenderer,
+                                    type: 'text'
+
+                                },
+                                {
+                                    data: 'Temp',
+                                    type: 'text',
+                                    editor: 'select',
+                                    selectOptions: optionsTemporada
+                                },
+                                {
+                                    data: 'Linea',
+                                    type: 'text',
+                                    editor: 'select',
+                                    selectOptions: optionsLinea
+                                },
+                                {
+                                    data: 'Sublinea',
+                                    type: 'text',
+                                    editor: 'select',
+                                    selectOptions: optionsSubLinea
+                                },
+                                {
+                                    data: 'Marca',
+                                    type: 'text',
+                                    editor: 'select',
+                                    selectOptions: optionsMarca
+                                },
+                                {
+                                    data: 'Estilo',
+                                    type: 'text',
+                                    editor: 'select',
+                                    selectOptions: optionsEstiloVida
+                                },
+                                {
+                                    data: 'Cod corp', type: 'text'
+                                },
+                                {
+                                    data: 'Descrip.', type: 'text'
+                                },
+                                {
+                                    data: 'Descri Internet', type: 'text'
+                                },
+                                {
+                                    data: 'Composicion', type: 'text'
+                                },
+                                {
+                                    data: 'Coleccion', type: 'text'
+                                },
+                                {
+                                    data: 'Evento', type: 'text'
+                                },
+                                {
+                                    data: 'Estilo Vida', type: 'text'
+                                },
+                                {
+                                    data: 'Calidad', type: 'text'
+                                },
+                                {
+                                    data: 'Ocasion Uso',
+                                    type: 'text',
+                                    editor: 'select',
+                                    selectOptions: optionsOcacionUso
+                                },
+                                {
+                                    data: 'Piramide Mix',
+                                    type: 'text',
+                                    editor: 'select',
+                                    selectOptions: optionsPiramideMix
+                                },
+                                {
+                                    data: 'Ventana',
+                                    type: 'text',
+                                    editor: 'select',
+                                    selectOptions: optionsVentanaLlegada
+                                },
+                                {
+                                    data: 'Rank Vta',
+                                    type: 'text',
+                                    editor: 'select',
+                                    selectOptions: optionsRankVta
+                                },
+                                {
+                                    data: 'Ciclo Vida',
+                                    type: 'text',
+                                    editor: 'select',
+                                    selectOptions: optionsCicloVida
+                                },
+                                {
+                                    data: 'Color',
+                                    type: 'text',
+                                    editor: 'select',
+                                    selectOptions: optionsColor
+                                },
+                                {
+                                    data: 'Hist', type: 'text'
+                                },
+                                {
+                                    data: 'Tipo Producto',
+                                    type: 'text',
+                                    editor: 'select',
+                                    selectOptions: optionsTipoProducto
+                                },
+                                {
+                                    data: 'Tipo Exhibicion',
+                                    type: 'text',
+                                    editor: 'select',
+                                    selectOptions: optionsTipoExhibicion
+                                },
+                                {
+                                    data: 'Tallas', type: 'text'
+                                },
+                                {
+                                    data: '%Compra Ini', type: 'text'
+                                },
+                                {
+                                    data: '%Compra Ajust', type: 'text'
+                                },
+                                {
+                                    data: '% Ajust', type: 'text'
+                                },
+                                {
+                                    data: 'Curva', type: 'text'
+                                },
+                                {
+                                    data: 'Curva Min', type: 'text'
+                                },
+                                {
+                                    data: 'Uni Ini', type: 'numeric'
+                                },
+                                {
+                                    data: 'Uni Ajust', type: 'numeric'
+                                },
+                                {
+                                    data: 'Uni Final', type: 'numeric'
+                                },
+                                {
+                                    data: 'MtrPack', type: 'numeric'
+                                },
+                                {
+                                    data: 'Nº Cajas', type: 'numeric'
+                                },
+                                {
+                                    data: 'Cluster',
+                                    type: 'text',
+                                    editor: 'select',
+                                    selectOptions: optionsCluster
+                                },
+                                {
+                                    data: 'Formato',
+                                    type: 'text',
+                                    editor: 'select',
+                                    selectOptions: optionsFormato
+                                },
+                                {
+                                    data: 'Tdas', type: 'numeric'
+                                },
+                                {
+                                    data: 'A', type: 'numeric'
+                                },
+                                {
+                                    data: 'B', type: 'numeric'
+                                },
+                                {
+                                    data: 'C', type: 'numeric'
+                                },
+                                {
+                                    data: 'I', type: 'numeric'
+                                },
+                                {
+                                    data: 'Primera Carga',type: 'numeric'
+                                },
+                                {
+                                    data: '%Tiendas', type: 'text'
+                                },
+                                {
+                                    data: 'Proced',
+                                    type: 'text',
+                                    editor: 'select',
+                                    selectOptions: optionsProced
+                                },
+                                {
+                                    data: 'Vía',
+                                    type: 'text',
+                                    editor: 'select',
+                                    selectOptions: optionsVia
+                                },
+                                {
+                                    data: 'País',
+                                    type: 'text',
+                                    editor: 'select',
+                                    selectOptions: optionsPais
+                                },
+                                {
+                                    data: 'Viaje', type: 'text'
+                                },
+                                {
+                                    data: 'Mkup', type: 'numeric',numericFormat: {pattern: '0.,'}
+                                },
+                                {
+                                    data: 'Precio Blanco', type: 'numeric',
+                                },
+                                {
+                                    data: 'GM', type: 'numeric'
+                                },
+                                {
+                                    data: 'Moneda',
+                                    type: 'text',
+                                    editor: 'select',
+                                    selectOptions: optionsMoneda
+                                },
+                                {
+                                    data: 'Target', type: 'numeric',numericFormat: {pattern: '0.,'}
+                                },
+                                {
+                                    data: 'FOB', type: 'numeric',  numericFormat: {pattern: '0.,'}
+                                },
+                                {
+                                    data: 'Insp', type: 'numeric',numericFormat: {pattern: '0.,'}
+                                },
+                                {
+                                    data: 'RFID', type: 'numeric',numericFormat: {pattern: '0.,'}
+                                },
+                                {
+                                    data: 'Royalty(%)', type: 'numeric',numericFormat: {pattern: '0.,'}
+                                },
+                                {
+                                    data: 'Costo Unitario Final US$', type: 'numeric',numericFormat: {pattern: '0.,'}
+                                },
+                                {
+                                    data: 'Costo Unitario Final Pesos', type: 'numeric'
+                                },
+                                {
+                                    data: 'Total Target US$', type: 'numeric',numericFormat: {pattern: '0.,0'}
+                                },
+                                {
+                                    data: 'Total Fob US$', type: 'numeric',numericFormat: {pattern: '0.,0'}
+                                },
+                                {
+                                    data: 'Costo Total Pesos', type: 'numeric'
+                                },
+                                {
+                                    data: 'Total Retail Pesos(Sin IVA)', type: 'numeric'
+                                },
+                                {
+                                    data: 'Debut/Reorder', type: 'text'
+                                },
+                                {
+                                    data: 'Sem Ini', type: 'text'
+                                },
+                                {
+                                    data: 'Sem Fin', type: 'text'
+                                },
+                                {
+                                    data: 'Semanas Ciclo de Vida', type: 'numeric'
+                                },
+                                {
+                                    data: 'Agot Obj', type: 'text'
+                                },
+                                {
+                                    data: 'Semanas Liquidación', type: 'numeric'
+                                },
+                                {
+                                    data: 'Proveedor', type: 'numeric'
+                                },
+                                {
+                                    data: 'Razon Social',
+                                    type: 'text',
+                                    editor: 'select',
+                                    selectOptions: optionsRazonSocial
+                                },
+                                {
+                                    data: 'Trader',
+                                    type: 'text',
+                                    editor: 'select',
+                                    selectOptions: optionsTrader
+                                },
+                                {
+                                    data: 'Cod Sku Proveedor', type: 'text'
+                                },
+                                {
+                                    data: 'Cod. Padre', type: 'text'
+                                },
+                                {
+                                    data: 'Proforma', type: 'text'
+                                },
+                                {
+                                    data: 'Archivo', type: 'text'
+                                },
+                                {
+                                    data: 'Estilo PMM', type: 'text'
+                                },
+                                {
+                                    data: 'Estado Match', type: 'text'
+                                },
+                                {
+                                    data: 'N° OC', type: 'text'
+                                },
+                                {
+                                    data: 'Estado OC', type: 'text'
+                                },
+                                {
+                                    data: 'Fecha Embarque', type: 'text'
+                                },
+                                {
+                                    data: 'Fecha ETA', type: 'text'
+                                },
+                                {
+                                    data: 'Fecha Recepción CD', type: 'text'
+                                },
+                                {
+                                    data: 'Días Atraso CD', type: 'numeric'
+                                },
+                                {
+                                    data: 'Estado Opción',
+                                    type: 'numeric',
+                                    editor: 'select',
+                                    selectOptions: optionsEstadoOpcion
+                                }
+                            ],
+                                nestedHeaders:[
+                                [{label: 'Definición por estilo', colspan: 17},
+                                    {label: 'Definición de Opción/Color', colspan: 5},
+                                    {label: 'Definición de Generales', colspan: 2},
+                                    {label: 'Definición de Tallas', colspan: 6},
+                                    {label: 'Definición de Unidades', colspan: 5},
+                                    {label: 'Definición de Tiendas', colspan: 3},
+                                    {label: 'Curvas por tipo de tiendas', colspan: 6},
+                                    {label: 'Definición de Procedencia', colspan: 4},
+                                    {label: 'Precio blanco CH/.', colspan: 3},
+                                    {label: 'Definicion de costo Unitario', colspan: 8},
+                                    {label: 'Costo Total', colspan: 4},
+                                    {label: 'Ciclo de Vida', colspan: 6},
+                                    {label: 'Definición de Proveedores', colspan: 4},
+                                    {label: 'Gestión in Season', colspan: 11},
+                                    {label: 'Estados', colspan: 1},
+                                ],
+                                ['ID', 'Grupo Compra', 'Temp', 'Linea', 'SubLinea', 'Marca', 'Estilo', 'Cod Corp', 'Descrip.', 'Descrip. Internet', 'Composicion', 'Coleccion','Evento','Estilo Vida','Calidad','Ocasion Uso','Piramide Mix'
+                                    , 'Ventana', 'Rank Vta', 'Ciclo Vida','Color','Hist'
+                                    , 'Tipo Producto', 'Tipo Exhibicion',
+                                    , 'Tallas','%Compra Ini', '%Compra Ajust','% Ajust','Curva', 'Curva Min',
+                                    , 'Unid Ini.', 'Uni Ajust', 'Uni Final', 'MtrPack', 'Nº Cajas'
+                                    , 'Cluster','Formato','Tdas'
+                                    , 'A','B','C','I','Primera Carga','%Tiendas'
+                                    , 'Proced','Vía','País','Viaje'
+                                    , 'Mkup','Precio Blanco','GM'
+                                    , 'Moneda','Target','FOB','Insp','RFID','Royalty(%)','Costo Unitario Final US$','Costo Unitario Final Pesos'
+                                    , 'Total Target US$','Total Fob US$','Costo Total Pesos','Total Retail Pesos(Sin IVA)'
+                                    , 'Debut/Reorder','Sem Ini','Sem Fin','Semanas Ciclo de Vida','Agot Obj','Semanas Liquidación'
+                                    , 'Proveedor','Razon Social','Trader','Cod Sku Proveedor'
+                                    , 'Cod. Padre','Proforma','Archivo','Estilo PMM','Estado Match','N° OC','Estado OC','Fecha Embarque','Fecha ETA','Fecha Recepción CD','Días Atraso CD'
+                                    , 'Estado Opción'
+                                ]
+                                ],
+                                manualRowMove: true,
+                                manualColumnMove: true,
+                                contextMenu: true,
+                                filters: true,
+                                dropdownMenu: true
+                        });
+                       // });
+</script>
+
+                </div>
+                <!-- /.box-body -->
+            </div>
+
+        </div>
+        <!--/.col (left) -->
+    </div>
+    <!-- /.row -->
+
+</section>
+
+<div id="elimina_bmt" class="modal fade" role="dialog" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content borde_especial">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Confirmación de usuario</h4>
+            </div>
+            <div class="modal-body">
+
+                <p>¿Está seguro de que desea eliminar el registro de la BMT [<span class="registro"></span>] ?</p>
+                <b>IMPORTANTE :</b> <span>No se puede eliminar los registros BMT si estan en estado Final.</span>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-danger elimina_bmt" data-dismiss="modal">Eliminar BMT</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="importar_bmt" class="modal fade" role="dialog" data-keyboard="false" data-backdrop="static">
+    <form method="post" enctype="multipart/form-data" class="form_import_bmt" action="guardar/archivo_bmt">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content borde_especial">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Importar Archivo Assortment/BMT  </h4>
+                </div>
+                <div class="modal-body">
+                    <div >
+                     <label for="tipos">Tipo Archivo:</label>
+                    <select class="FORM-CONTROL" id="tipos" name="tipos">
+                        <option value="1">Assortment</option>
+                        <option value="2">BMT</option>
+                    </select>
+                    </div>
+
+                    <br> <input type="file" name="user_file" class="file"> <!--required--></br>
+                    <b>IMPORTANTE :</b> <span>El archivo debe estar en formato Excel (.xls o .xlsx)</span></div>
+                <div class="modal-footer">
+                    <!--<button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cerrar</button>-->
+                    <div class="loading" style="display: none"><i class='fa fa-spinner fa-2x fa-spin '></i> Importando Archivo</div>
+                    <input type="submit" class="btn btn-primary carga_bmt"  value="Cargar">
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div id="actualiza_grilla" class="modal fade" role="dialog" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-center" style="width: 320px;">
+        <!-- Modal content-->
+        <div class="modal-content borde_especial">
+
+            <div class="modal-body">
+                <div class="loading text-center">
+                    <i class='fa fa-spinner fa-2x fa-spin '></i> Actualizando Grilla del Simulador
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+<include href="{{ @tipo_ventana_llegada }}" />
+<include href="{{ @tipo_ppto_costo }}" />
+<include href="{{ @tipo_ppto_retail }}" />
+<include href="{{ @tipo_tienda }}" />
+<include href="{{ @tipo_formato }}" />
+
+<script src="{{@JQUERY}}ui/formulario/plan_compra/js/simulador_compra.js"></script>

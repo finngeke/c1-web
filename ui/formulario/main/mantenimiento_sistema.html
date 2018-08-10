@@ -1,0 +1,33 @@
+<include href="{{ @temporada }}" />
+<!-- Lib DataTables -->
+<link rel="stylesheet" href="{{@BASE}}/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
+
+<!-- Cabecera Modulo -->
+<section class="content-header">
+    <h1>
+        Mantenedor de <b>{{@nombre_form}}</b>
+
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="inicio"><i class="fa fa-dashboard"></i> Main</a></li>
+        <li class="active">Mantendedor de {{@nombre_form}}</li>
+    </ol>
+    <check if="{{ isset(@mensaje) }}">   
+        <div class="box-body">
+            <ul class="todo-list ui-sortable">
+
+                <li class="">
+                    <span class="handle ui-sortable-handle">
+                        <i class="fa fa-ellipsis-v"></i>
+                        <i class="fa fa-ellipsis-v"></i>
+                    </span>
+                    <small class="label label-{{@mensaje.icon}}"><i class="fa fa-clock-o"></i> {{@mensaje.header}}</small>
+                    <span class="text">{{@mensaje.message}}</span>
+                </li>
+
+            </ul>
+        </div>
+    </check>  
+    
+</section>
+<script src="{{@JQUERY}}ui/formulario/main/js/mantenimiento_sistema.js"></script>

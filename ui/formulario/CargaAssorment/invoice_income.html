@@ -1,0 +1,145 @@
+<!-- Cabecera Modulo -->
+<section class="content-header">
+	<h1>
+        <b>{{@nombre_form}}</b>
+		<small class="text-muted">{{@proveedor}}</small>
+    </h1>
+	<ol class="breadcrumb">
+		<li><a href="proveedor?cod_proveedor={{@cod_proveedor}}"><i class="fa fa-home"></i> Home</a></li>
+		<li class="active">{{@nombre_form}}</li>
+	</ol>
+</section>
+<!-- Main content -->
+<section class="content animated fadeInDown">
+	<div class="row">
+		<!-- left column -->
+		<div class="col-md-12">
+			<!-- general form elements -->
+			<div class="box box-primary">
+				<section class="content">
+					<form id="formInvoiceIncome" class="form-horizontal" method="get" novalidate>
+						<div class="form-group">
+							<label for="invoiceNumber" class="col-sm-2 control-label">Invoice Number</label>
+							<div class="col-sm-5">
+								<input type="text" class="form-control" id="invoiceNumber" name="invoiceNumber" placeholder="Invoice Number" required>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="invoiceDate" class="col-sm-2 control-label">Invoice Date</label>
+							<div class="col-sm-4">
+								<input type="date" class="form-control" id="invoiceDate" name="invoiceDate" placeholder="Invoice Date" required>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="invoiceTotalAmount" class="col-sm-2 control-label">Invoice Total Amount</label>
+							<div class="col-sm-4">
+								<input type="text" class="form-control" id="invoiceTotalAmount" name="invoiceTotalAmount" placeholder="Invoice Total Amount" required>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="invoiceTotalUnits" class="col-sm-2 control-label">Invoice Total Units</label>
+							<div class="col-sm-4">
+								<input type="number" class="form-control" id="invoiceTotalUnits" name="invoiceTotalUnits" placeholder="Invoice Total Units" required>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">Assiciate OC's</label>
+							<div class="table-responsive col-sm-10">
+								<table class="table table-hover table-condensed">
+									<thead>
+										<tr>
+											<th>OC Number</th>
+											<th>Description</th>
+											<th>Total Amount</th>
+											<th>Total Units</th>
+											<th><input type="checkbox" id="checkAll" value="0|312|2"></th>
+										</tr>
+									</thead>
+									<tbody>
+
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-offset-2 col-sm-10">
+								<button type="submit" class="btn btn-primary">Save</button>
+								<a href="proveedor?cod_proveedor={{@cod_proveedor}}" class="btn btn-default">Cancel</a>
+							</div>
+						</div>
+					</form>
+				</section>
+			</div>
+		</div>
+		<!--/.col (left) -->
+	</div>
+</section>
+<script>
+	Date.prototype.formatYYYYMMDD = function() {
+		var dd = this.getDate();
+		var mm = this.getMonth() + 1;
+		var yy = this.getFullYear();
+		if (dd < 10) {
+			dd = '0' + dd
+		}
+		if (mm < 10) {
+			mm = '0' + mm
+		}
+		return yy + '-' + mm + '-' + dd;
+	};
+
+	function inicializarForm() {
+		var today = new Date();
+		$('#invoiceDate').attr('max', today.formatYYYYMMDD());
+	}
+
+	function validateForm() {
+		var totalAmount = parseFloat($('#invoiceTotalAmount').val());
+		var totalAmountA = totalAmount - (totalAmount * 0.01);
+		var totalAmountB = totalAmount + (totalAmount * 0.01);
+		var totalUnits = parseFloat($('#invoiceTotalUnits').val());
+		var sumUnits = 0;
+		var sumAmount = 0;
+		$('input:checkbox:checked').not('#checkAll').each(function() {
+			var data = $(this).val().split('|');
+			sumAmount += parseFloat(data[1].replace(',', '.'));
+			sumUnits += parseFloat(data[2]);
+		});
+		if (totalAmountA > sumAmount || sumAmount > totalAmountB) {
+			alert('El monto total no coincide');
+		}
+		if (sumUnits != totalUnits) {
+			alert('Las unidades no coinciden');
+		}
+		return false;
+	}
+
+	$(function() {
+		inicializarForm();
+
+		$('#checkAll').click(function() {
+			$('input:checkbox').not(this).prop('checked', this.checked);
+		});
+
+		$('#formInvoiceIncome').submit(function(e) {
+			e.preventDefault();
+			if (!validateForm()) {
+				return;
+			}
+			this.submit();
+		});
+
+		$.get('getOC?cod_proveedor={{@cod_proveedor}}', function(data) {
+			var tbody = $('.table tbody');
+			$.each(data, function(i, e) {
+				var tr = $('<tr></tr>');
+				tr.append('<td>' + e.OC_NUMBER + '</td>');
+				tr.append('<td>' + e.DESCRIPTION + '</td>');
+				tr.append('<td>' + e.TOTAL_AMOUNT + '</td>');
+				tr.append('<td>' + e.TOTAL_UNITS + '</td>');
+				tr.append('<td><input type="checkbox" name="checkOC" value="' + e.OC_NUMBER + '|' + e.TOTAL_AMOUNT + '|' + e.TOTAL_UNITS + '"></td>');
+				tbody.append(tr);
+			});
+		});
+	})
+</script>

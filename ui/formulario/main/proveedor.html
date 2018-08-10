@@ -1,0 +1,31 @@
+<link rel="stylesheet" href="{{@BASE}}/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
+
+<div id="divProveedor" class="modal fade" role="dialog" data-keyboard="false" data-backdrop="static">
+	<div class="modal-dialog">
+		<div class="modal-content borde_especial">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Bienvenido a C1 Automática Web</h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<table id="tablaProveedores" class="table table-bordered table-striped tabla_smaller">
+						<thead>
+							<tr>
+								<th>Código</th>
+								<th>RUT</th>
+								<th>Nombre</th>
+								<th>Ir</th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="{{@BASE}}/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="{{@BASE}}/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="{{@JQUERY}}ui/formulario/main/js/proveedor.js"></script>

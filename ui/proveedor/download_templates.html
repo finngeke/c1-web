@@ -1,0 +1,102 @@
+<!-- Cabecera Modulo -->
+<link rel="stylesheet" href="../../web/bower_components/datatables.net-fixedcolumns-bs/css/fixedColumns.bootstrap.css">
+<link rel="stylesheet" href="{{@BASE}}/bower_components/datatables.net-bs/css/dataTables.bootstrap.css">
+<section class="content-header">
+	<h1>
+		<b>{{@nombre_form}}</b>
+		<small class="text-muted">{{@proveedor}}</small>
+	</h1>
+	<ol class="breadcrumb">
+		<li><a href="proveedor?cod_proveedor={{@cod_proveedor}}"><i class="fa fa-home"></i> Home</a></li>
+		<li class="active">{{@nombre_form}}</li>
+	</ol>
+</section>
+<!-- Main content -->
+<section class="content animated fadeInDown">
+	<div class="row">
+		<!-- left column -->
+		<div class="col-md-12">
+			<!-- general form elements -->
+			<div class="box box-primary">
+				<section class="content">
+					<table class="table table-hover table-condensed" style="width:100%">
+						<thead>
+							<tr>
+								<th style="text-align: center;">PO Date</th>
+								<th style="text-align: center;">PO Number</th>
+								<th style="text-align: center;">PI Number</th>
+								<th style="text-align: center;">Total Units</th>
+								<th style="text-align: center;">Total Amount</th>
+								<th style="text-align: center;">Packing Instructions</th>
+								<th style="text-align: center;">Label Data</th>
+								<th style="text-align: center;">Packing List Template</th>
+							</tr>
+						</thead>
+						<tbody>
+							<repeat group="{{ @lista_oc }}" value="{{ @lista_oc }}">
+								<tr>
+									<td style="text-align: center;">{{@lista_oc[0]}}</td>
+									<td style="text-align: right;">{{@lista_oc[1]}}</td>
+									<td>{{@lista_oc[3]}}</td>
+									<td style="text-align: right;">{{@lista_oc[4]}}</td>
+									<td style="text-align: right;">{{@lista_oc[5]}}</td>
+									<td style="text-align: center;">
+										<a href="download_packing_instructions?po_number={{@lista_oc[1]}}" target="_blank" class="btn btn-success btn-xs"><i class="fa fa-download"></i> Download</a>
+									</td>
+									<td style="text-align: center;">
+										<a href="download_label_data?po_number={{@lista_oc[1]}}" target="_blank" class="btn btn-success btn-xs"><i class="fa fa-download"></i> Download</a>
+									</td>
+									<td style="text-align: center;">
+										<a href="download_packing_list?po_number={{@lista_oc[1]}}" target="_blank" class="btn btn-success btn-xs"><i class="fa fa-download"></i> Download</a>
+									</td>
+								</tr>
+							</repeat>
+						</tbody>
+						<tfoot>
+							<tr>
+								<th style="text-align: center;">
+									<input class="form-control input-sm" type="text" style="width: 100px;"></th>
+								<th style="text-align: center;">
+									<input class="form-control input-sm" type="text" style="width: 100px;"></th>
+								<th style="text-align: center;">
+									<input class="form-control input-sm" type="text" style="width: 100px;"></th>
+								<th style="text-align: center;">
+									<input class="form-control input-sm" type="text" style="width: 100px;"></th>
+								<th style="text-align: center;">
+									<input class="form-control input-sm" type="text" style="width: 100px;"></th>
+								<th></th>
+								<th></th>
+								<th></th>
+							</tr>
+						</tfoot>
+					</table>
+				</section>
+			</div>
+		</div>
+		<!--/.col (left) -->
+	</div>
+</section>
+<!-- DataTables -->
+<script src="{{@BASE}}/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="{{@BASE}}/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script>
+	$(function() {
+		var table = $('.table').DataTable({
+			scrollY: "350px",
+			scrollX: true,
+			scrollCollapse: true,
+			paging: false,
+			searching: true,
+			ordering: true,
+			info: false
+		});
+		table.columns().every(function() {
+			var that = this;
+			$('input', this.footer()).on('keyup change', function() {
+				if (that.search() !== this.value) {
+					that.search(this.value).draw();
+				}
+			});
+		});
+	});
+</script>

@@ -1,0 +1,21 @@
+
+.comuna_especial{
+    background-color: #ffffe0;
+    color: red;
+}
+.fila_blue_white{
+    background-color: #4682b4;
+    color: black;
+}
+
+.tabla_smaller_especial{
+     font-size: 11px;
+}
+.TxtboxTipocambio{
+
+    width: 40px;
+}
+
+.inputcentrado {
+    text-align: center
+}

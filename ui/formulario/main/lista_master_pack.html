@@ -1,0 +1,195 @@
+<include href="{{ @temporada }}" />
+<include href="{{ @tipo_deptomarca }}" />
+
+<!-- Lib DataTables -->
+<link rel="stylesheet" href="{{@BASE}}/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
+
+<!-- Cabecera Modulo -->
+<section class="content-header">
+    <h1>
+        Mantenedor de <b>{{@nombre_form}}</b> - Filtro : [{{@filtro}}]
+
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="inicio"><i class="fa fa-dashboard"></i> Main</a></li>
+        <li class="active">Mantendedor de {{@nombre_form}}</li>
+    </ol>
+    <check if="{{ isset(@mensaje) }}">   
+        <div class="box-body">
+            <ul class="todo-list ui-sortable">
+
+                <li class="">
+                    <span class="handle ui-sortable-handle">
+                        <i class="fa fa-ellipsis-v"></i>
+                        <i class="fa fa-ellipsis-v"></i>
+                    </span>
+                    <small class="label label-{{@mensaje.icon}}"><i class="fa fa-clock-o"></i> {{@mensaje.header}}</small>
+                    <span class="text">{{@mensaje.message}}</span>
+
+
+            </ul>
+        </div>
+    </check>  
+
+</section>
+<!-- Main content -->
+<section class="content animated fadeInDown">
+   
+        <div class="row">
+            <div class="box-body">
+                <button id="btn_guardar_master_pack" class="btn btn-app button_form"> <i class="fa fa-save"></i> Guardar</button>
+                <a class="btn btn-app agregar_master" data-toggle="modal" data-target="#agrega_master"><i class="fa fa-plus"></i> Agregar</a>
+                <!--<a class="btn btn-app limpiar_form"><i class="fa fa-repeat"></i> Limpiar</a>-->
+                <a href="master_pack" class="btn btn-app"><i class="fa fa-sign-out"></i> Cambiar División</a>
+                <a href="inicio" class="btn btn-app"><i class="fa fa-sign-out"></i> Salir</a>
+                <!--<div id="progressbar" class="btn">Cargando<br><span id="texto_contador_progreso"> 1 de 56 </span></div>-->
+            </div>
+        </div>
+
+        <div class="row" style="overflow-x:hidden;
+             overflow-y:visible;
+             height:500px;">
+            <!-- left column -->
+            <div class="col-md-12">
+
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        Lista de Departamentos
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <table id="lista_master_pack" class="table table-bordered table-striped tabla_smaller">
+                            <thead>
+                                <tr>
+                                    <th style="display: none;"></th>
+                                    <th>División</th>
+                                    <th>Departamento</th>
+                                    <th>Linea</th>
+                                    <th>Sublinea</th>
+                                    <th>MasterPack</th>
+                                    <th style="display: none;"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <repeat group="{{@Lista_master_pack}}" value="{{@Lista_master_pack}}" key="{{@key}}">
+                                <tr class="filas" data-funcionario="{{utf8_encode(@Lista_master_pack['1'])}}">
+                                    <td id="{{utf8_encode(@Lista_master_pack['1']) }}" style="display: none;">
+                                        <input type="radio" class="fila" value="{{utf8_encode(@Lista_master_pack['1'])}}-{{@Lista_master_pack['3']}}-{{@Lista_master_pack['5']}}-{{@Lista_master_pack['7']}}">
+                                    </td>
+                                    <td id="{{utf8_encode(@Lista_master_pack['2'])}}">{{utf8_encode(@Lista_master_pack['2'])}}</td>
+                                    <td id="{{@Lista_master_pack['3']}}">{{@Lista_master_pack['3']}}-{{@Lista_master_pack['4']}}</td>
+                                    <td id="{{@Lista_master_pack['5']}}">{{@Lista_master_pack['5']}}-{{@Lista_master_pack['6']}}</td>
+                                    <td id="{{@Lista_master_pack['7']}}">{{@Lista_master_pack['7']}}-{{@Lista_master_pack['8']}}</td>
+                                    <td><input type="text" id="cantidad_master_{{@key}}" class="cantidad_master" value="{{@Lista_master_pack['9']}}" style="color: #000;" onchange="cambia_estado(event);"></td>
+                                    <td id="actualiza_campo_{{@key}}" style="display: none;"></td>
+                                </tr>
+                            </repeat>
+                            </tbody>
+                        </table>
+                        <br>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+            </div>
+            <!--/.col (left) -->
+        </div>
+        <!-- /.row -->
+</section>
+
+<!-- modal popup -->
+<div id="agrega_perfil" class="modal fade" role="dialog" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content borde_especial">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Crear Nuevo Perfil</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                        <input type="text" id="nuevo_perfil" class="form-control nuevo_perfil" placeholder="Ingrese el nuevo perfil">
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary crea_perfil" data-dismiss="modal">Crear</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="elimina_perfil" class="modal fade" role="dialog" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content borde_especial">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Confirmación de usuario</h4>
+            </div>
+            <div class="modal-body">
+                <p>¿Está seguro de que desea eliminar el registro [<span class="registro"></span>] ?</p>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-danger elimina_perfil" data-dismiss="modal">Eliminar</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="agrega_master" class="modal fade" role="dialog" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content borde_especial">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Agregar Linea y Sublineas</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="pais">División</label>
+                        {{utf8_encode(strtoupper(@Lista_divisiones->setAtributos(["class"=>"form-control division"])->getHTML()))}}
+                </div>
+                <div class="form-group">
+                    <label for="pais">Departamento</label>
+                    <select class="form-control depto" id="depto" name="depto" >
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="pais">Linea</label>
+                    <select class="form-control linea" id="linea" name="linea" >
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="pais">Sub-Linea</label>
+                    <select class="form-control sublinea" id="sublinea" name="sublinea" >
+                    </select>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary agrega_master" data-dismiss="modal">Agregar</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- /.content -->
+
+
+<!-- DataTables -->
+<script src="{{@BASE}}/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="{{@BASE}}/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="{{@JQUERY}}ui/formulario/main/js/master_pack.js"></script>
+

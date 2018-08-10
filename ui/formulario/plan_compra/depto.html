@@ -1,0 +1,57 @@
+<!-- Lib DataTables -->
+<link rel="stylesheet" href="{{@BASE}}/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
+
+
+<div id="selecciona_depto" class="modal fade" role="dialog" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content borde_especial">
+            <div class="modal-header">
+                <!-- <button type="button" class="close" data-dismiss="modal">&times;</button>-->
+                <h4 class="modal-title">Acceso Simulador de Compra</h4>
+            </div>
+            <div class="modal-body">
+                <p>Para ir al simulador debes seleccionar el <b>DEPARTAMENTO</b></p>
+                <span id="version_app" style="display: none">{{@VERSION}}</span>
+
+                <div class="form-group">
+                     <table id="lista_deptos" class="table table-bordered table-striped tabla_smaller lista_deptos">
+                            <thead>
+                                <tr>
+                                    <th>División</th>
+                                    <th>Departamento</th>
+                                    <th>Ir</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <repeat group="{{ @Lista_deptos }}" value="{{ @Lista_deptos }}">
+                                <tr class="filas" data-funcionario="{{ utf8_encode(@Lista_deptos['1']) }}">
+                                    <th>{{utf8_encode(@Lista_deptos['1'])}}</th>
+                                    <th>{{@Lista_deptos['2']}} - {{@Lista_deptos['3']}}</th>
+                                    <th><a id="popacc_simulador_depto_{{@Lista_deptos['2']}}" class="btn btn-primary fa fa-arrow-right simulador" href="#" onclick="redireccDeptoPopUp(event);"></a></th>
+                                    <!--<th><a class="btn btn-primary fa fa-arrow-right simulador" href="simulador_compra?depto={{@Lista_deptos['2']}}"></a></th>-->
+                                </tr>
+                            </repeat>
+                            </tbody>
+                        </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="loading" style="display: none"><i class='fa fa-spinner fa-2x fa-spin '></i> Procesando consulta</div>
+                <!--<a  href="inicio" class="btn btn-primary pull-left cambia" >Cambiar Temporada</a>-->
+                <a href="plan_compra?codigo={{@SESSION.COD_TEMPORADA}}" class="btn btn-primary pull-left cambia" >Volver</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<include href="{{ @tipo_ventana_llegada }}" />
+<include href="{{ @tipo_ppto_costo }}" />
+<include href="{{ @tipo_ppto_retail }}" />
+<include href="{{ @tipo_tienda }}" />
+
+<!-- DataTables -->
+<script src="{{@BASE}}/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="{{@BASE}}/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="{{@JQUERY}}ui/formulario/plan_compra/js/depto.js"></script>

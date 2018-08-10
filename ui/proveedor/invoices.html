@@ -1,0 +1,156 @@
+<!-- Cabecera Modulo -->
+<link rel="stylesheet" href="{{@BASE}}/bower_components/datatables.net-bs/css/dataTables.bootstrap.css">
+<section class="content-header">
+	<h1>
+		<b>{{@nombre_form}}</b>
+		<small class="text-muted">{{@proveedor}}</small>
+	</h1>
+	<ol class="breadcrumb">
+		<li><a href="proveedor?cod_proveedor={{@cod_proveedor}}"><i class="fa fa-home"></i> Home</a></li>
+		<li class="active">{{@nombre_form}}</li>
+	</ol>
+</section>
+<!-- Main content -->
+<section class="content animated fadeInDown">
+	<div class="row">
+		<div class="box-body">
+			<a class="btn btn-app" href="#" data-toggle="modal" data-target="#divArchivo"><i class="fa fa-upload"></i>Upload Packing List</a>
+			<a class="btn btn-app" href="invoice_income?cod_proveedor={{@cod_proveedor}}"><i class="fa fa-usd"></i>Invoice Income</a>
+		</div>
+	</div>
+	<div class="row">
+		<!-- left column -->
+		<div class="col-md-12">
+			<!-- general form elements -->
+			<div class="box box-primary">
+				<section class="content">
+					<table class="table table-hover table-condensed table-bordered" style="width:100%">
+						<thead>
+							<tr>
+								<th style="text-align: center; vertical-align: middle;" rowspan="2">Invoice Number</th>
+								<th style="text-align: center; vertical-align: middle;" rowspan="2">Invoice Date</th>
+								<th style="text-align: center; vertical-align: middle;" colspan="2">Invoice</th>
+								<th style="text-align: center; vertical-align: middle;" colspan="2">Packing List</th>
+								<th style="text-align: center; vertical-align: middle;" rowspan="2">Quantity of PO's</th>
+								<th style="text-align: center; vertical-align: middle;" rowspan="2">Approve Invoice</th>
+							</tr>
+							<tr>
+								<th style="text-align: center; vertical-align: middle;">Total Units</th>
+								<th style="text-align: center; vertical-align: middle;">Total Amount</th>
+								<th style="text-align: center; vertical-align: middle;">Total Units</th>
+								<th style="text-align: center; vertical-align: middle;">Total Amount</th>
+							</tr>
+						</thead>
+						<tbody>
+							<repeat group="{{ @invoices }}" value="{{ @invoice }}">
+								<tr>
+									<td style="text-align: center; vertical-align: middle;">{{@invoice[0]}}</td>
+									<td style="text-align: center; vertical-align: middle;">{{@invoice[1]}}</td>
+									<td style="text-align: right; vertical-align: middle;">{{@invoice[3]}}</td>
+									<td style="text-align: right; vertical-align: middle;">{{@invoice[2]}}</td>
+									<td style="text-align: right; vertical-align: middle;">{{@invoice[5]}}</td>
+									<td style="text-align: right; vertical-align: middle;">{{@invoice[4]}}</td>
+									<td style="text-align: right; vertical-align: middle;">{{@invoice[6]}}</td>
+									<td style="text-align: center; vertical-align: middle;">
+										<check if="{{ @invoice[7]==0 }}">
+											<true>
+												<a class="btn btn-primary" href="approve_invoice?cod_proveedor={{@cod_proveedor}}&nro_factura={{@invoice[0]}}"><i class="fa fa-check-square-o"></i></a>
+											</true>
+											<false>
+												<!--<span class="text-info">Invoice already approved</span>-->
+												<span class="text-success"><i class="fa fa-check" aria-hidden="true"></i></span>
+											</false>
+										</check>
+									</td>
+								</tr>
+							</repeat>
+						</tbody>
+						<tfoot>
+							<tr>
+								<th style="text-align: center;">
+									<input class="form-control input-sm" type="text" style="width: 100px;"></th>
+								<th style="text-align: center;">
+									<input class="form-control input-sm" type="text" style="width: 100px;"></th>
+								<th style="text-align: center;">
+									<input class="form-control input-sm" type="text" style="width: 100px;"></th>
+								<th style="text-align: center;">
+									<input class="form-control input-sm" type="text" style="width: 100px;"></th>
+								<th style="text-align: center;">
+									<input class="form-control input-sm" type="text" style="width: 100px;"></th>
+								<th style="text-align: center;">
+									<input class="form-control input-sm" type="text" style="width: 100px;"></th>
+								<th style="text-align: center;">
+									<input class="form-control input-sm" type="text" style="width: 100px;"></th>
+								<th></th>
+							</tr>
+						</tfoot>
+					</table>
+				</section>
+			</div>
+		</div>
+		<!--/.col (left) -->
+	</div>
+</section>
+<div id="divArchivo" class="modal fade" role="dialog" data-keyboard="false" data-backdrop="static">
+	<div class="modal-dialog">
+		<div class="modal-content borde_especial">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Upload Packing List</h4>
+			</div>
+			<div class="modal-body">
+				<form id="formSavePL" method="post" action="save_pl" enctype="multipart/form-data">
+					<input name="cod_proveedor" type="hidden" value="{{@cod_proveedor}}">
+					<div class="form-group">
+						<label for="packingListFile">Select packing list file</label>
+						<input type="file" id="packingListFile" name="packingListFile" class="file" required>
+						<p class="help-block">
+							<strong>IMPORTANT: </strong>The file must be in Excel format (.xls or .xlsx)</p>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default cancel-upload" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary upload-file">Upload file</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- DataTables -->
+<script src="{{@BASE}}/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="{{@BASE}}/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script>
+	$(function() {
+		var table = $('.table').DataTable({
+			scrollY: "280px",
+			scrollX: true,
+			scrollCollapse: true,
+			paging: false,
+			searching: true,
+			ordering: true,
+			info: false
+		});
+		table.columns().every(function() {
+			var that = this;
+			$('input', this.footer()).on('keyup change', function() {
+				if (that.search() !== this.value) {
+					that.search(this.value).draw();
+				}
+			});
+		});
+
+		$('#divArchivo').on('hidden.bs.modal', function(e) {
+			$('#formSavePL')[0].reset();
+		}).on('show.bs.modal', function() {
+			$('.cancel-upload').prop('disabled', false);
+			$('.upload-file').prop('disabled', false);
+		});
+		$('.upload-file').click(function(e) {
+			e.preventDefault();
+			$('.loading').fadeIn();
+			$('.cancel-upload').prop("disabled", true);
+			$('.upload-file').prop("disabled", true).html('<i class="fa fa-spinner fa-spin"></i> Loading file. Please, do not close this window.');
+			$('#formSavePL').submit();
+		});
+	});
+</script>

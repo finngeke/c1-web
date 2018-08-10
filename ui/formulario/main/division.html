@@ -1,0 +1,39 @@
+
+<div id="selecciona_division" class="modal fade" role="dialog" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content borde_especial">
+            <div class="modal-header">
+                <!--<button type="button" class="close" data-dismiss="modal">&times;</button>-->
+                <button type="button" class="close" onclick="window.history.go(-1); return false;">&times;</button>
+                <h4 class="modal-title">Filtro por división Master Pack</h4>
+            </div>
+            <div class="modal-body">
+                <p>Para mantener el <b>Master Pack</b></p>
+
+                <div class="form-group">
+                    <label>Seleccione la División</label>
+                    <!-- ->setOptionNulo('Seleccione temporada de compra')-->
+                    {{strtoupper (@Lista_divisiones->setAtributos(["class"=>"form-control"])->getHTML())}}
+                </div>
+                <div class="form-group">
+                    <label>Seleccione la Departamento</label>
+                    <div>
+                        <select id="popup_masterpack_depto" name="popup_masterpack_depto" class="form-control">
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="loading" style="display: none"><i class='fa fa-spinner fa-2x fa-spin '></i> Procesando consulta</div>
+                <a class="btn btn-primary ir_al_master_pack">Ir al Master Pack</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<script src="{{@JQUERY}}ui/formulario/main/js/division.js"></script>
+
+

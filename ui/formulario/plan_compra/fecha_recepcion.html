@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+
+<!--<link rel="stylesheet" href="{{@JQUERY}}ui/formulario/plan_compra/css/fecha_recepcion.css">-->
+<link rel="stylesheet" href="{{@BASE}}/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.css">
+
+
+<section class="content-header">
+    <h1>
+        {{@nombre_form}} <b>{{@depto_form}}</b>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="inicio"><i class="fa fa-dashboard"></i> Main</a></li>
+        <li class="active">Mantendedor de {{@nombre_form}}</li>
+    </ol>
+	<check if="{{ isset(@mensaje) }}">
+        <div class="box-body">
+            <ul class="todo-list ui-sortable">
+                <li class="">
+                    <span class="handle ui-sortable-handle">
+                        <i class="fa fa-ellipsis-v"></i>
+                        <i class="fa fa-ellipsis-v"></i>
+                    </span>
+                    <small class="label label-{{@mensaje.icon}}"><i class="fa fa-clock-o"></i>{{@mensaje.header}}</small>
+                    <span class="text">{{@mensaje.message}}</span>
+                </li>
+            </ul>
+        </div>
+    </check>
+</section>
+
+<section class="content animated fadeInDown">
+
+    <div class="row">
+        <div class="box-body">
+			<button class="btn btn-app btn_guardar_fecha_recepcion"><i class="fa fa-save"></i>Guardar</button>
+			<button class="btn btn-app btn_exportar_fecha_recepcion"><i class="fa fa-file-excel-o"></i>Exportar</button>
+			<button class="btn btn-app btn_eliminar_fecha_recepcion"><i class="fa fa-trash"></i>Quitar Ventana</button>
+            <!--<a href="inicio" class="btn btn-app"><i class="fa fa-sign-out"></i> Salir</a>-->
+            <a href="plan_compra?codigo={{@SESSION.COD_TEMPORADA}}" class="btn btn-app"><i class="fa fa-sign-out"></i> Salir</a>
+            <div id="progressbar"><div class="progress-label"></div></div>
+        </div>
+    </div>
+
+    <!-- grilla -->
+    <div class="row" style="overflow-x:hidden;
+         overflow-y:visible;
+         height:500px;">
+        <!-- left column -->
+
+        <div class="col-md-12"></div>
+
+        <div class="col-md-12">
+
+            <div class="box box-primary">
+
+                <!-- Grilla -->
+                <div class="box-body">
+                    <table id="tabla_fecha_recepcion" class="table table-bordered table-striped tabla_smaller tabla_fecha_recepcion" data-excel-name="Fecha Recepción">
+                        <thead>
+                            <tr>
+                                <th style="display: none;" id="COD_VENTANA">COD_VENTANA</th>
+                                <th style="text-align:center">Ventana</th>
+                                <th style="text-align:center">Fec Ini Recep CD</th>
+                                <th style="text-align:center">Sem Ini Recep CD</th>
+                                <th style="text-align:center">Mes Ini Recep CD</th>
+                                <th style="text-align:center">Fec Ini Venta</th>
+                                <th style="text-align:center">Sem Ini Venta</th>
+                                <th style="text-align:center">Mes Ini Venta</th>
+                                <th style="text-align:center" id="QUITA_VENTANA">Quitar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        <!-- Hay que construir la estructura a manu luego asignar los valores -->
+                        <tr>
+                            <td style="display: none;" id="COD_VENTANA_A">1</td>
+                            <td style="text-align:center;color:red;background:beige;" id="VENT_DESCRI_A">A</td>
+                            <td id="FECHA_RECEPCD_A"><input type = "text" class="fecha fr_A" style="background:dodgerblue;text-align:center;color:white;" data-date-format="dd/mm/yyyy" value ="" ></td>
+                            <td style="text-align:center" id="SEMINIRECEPCD_A"></td>
+                            <td style="text-align:center" id="MESINIRECEPCD_A"></td>
+                            <td id="FECHA_TDA_A"><input type = "text" class="fecha ft_A" style="background:dodgerblue;text-align:center;color:white;" data-date-format="dd/mm/yyyy" value =""></td>
+                            <td style="text-align:center" id="SEMINIVENTA_A"></td>
+                            <td style="text-align:center" id="MESINIVENTA_A"></td>
+                            <td style="text-align:center" id="QUITA_VENTANA_A"><input type="checkbox" name="input_A" id="input_A" value="1"></td>
+                        </tr>
+                        <tr>
+                            <td style="display: none;" id="COD_VENTANA_B">2</td>
+                            <td style="text-align:center;color:red;background:beige;" id="VENT_DESCRI_B">B</td>
+                            <td id="FECHA_RECEPCD_B"><input type = "text" class="fecha fr_B" style="background:dodgerblue;text-align:center;color:white;" data-date-format="dd/mm/yyyy" value =""></td>
+                            <td style="text-align:center" id="SEMINIRECEPCD_B"></td>
+                            <td style="text-align:center" id="MESINIRECEPCD_B"></td>
+                            <td id="FECHA_TDA_B"><input type = "text" class="fecha ft_B" style="background:dodgerblue;text-align:center;color:white;" data-date-format="dd/mm/yyyy" value =""></td>
+                            <td style="text-align:center" id="SEMINIVENTA_B"></td>
+                            <td style="text-align:center" id="MESINIVENTA_B"></td>
+                            <td style="text-align:center" id="QUITA_VENTANA_B"><input type="checkbox" name="input_B" id="input_B" value="10"></td>
+                        </tr>
+                        <tr>
+                            <td style="display: none;" id="COD_VENTANA_C">3</td>
+                            <td style="text-align:center;color:red;background:beige;" id="VENT_DESCRI_C">C</td>
+                            <td id="FECHA_RECEPCD_C"><input type = "text" class="fecha fr_C" style="background:dodgerblue;text-align:center;color:white;" data-date-format="dd/mm/yyyy" value =""></td>
+                            <td style="text-align:center" id="SEMINIRECEPCD_C"></td>
+                            <td style="text-align:center" id="MESINIRECEPCD_C"></td>
+                            <td id="FECHA_TDA_C"><input type = "text" class="fecha ft_C" style="background:dodgerblue;text-align:center;color:white;" data-date-format="dd/mm/yyyy" value =""></td>
+                            <td style="text-align:center" id="SEMINIVENTA_C"></td>
+                            <td style="text-align:center" id="MESINIVENTA_C"></td>
+                            <td style="text-align:center" id="QUITA_VENTANA_C"><input type="checkbox" name="input_C" id="input_C" value="3"></td>
+                        </tr>
+                        <tr>
+                            <td style="display: none;" id="COD_VENTANA_D">4</td>
+                            <td style="text-align:center;color:red;background:beige;" id="VENT_DESCRI_D">D</td>
+                            <td id="FECHA_RECEPCD_D"><input type = "text" class="fecha fr_D" style="background:dodgerblue;text-align:center;color:white;" data-date-format="dd/mm/yyyy" value =""></td>
+                            <td style="text-align:center" id="SEMINIRECEPCD_D"></td>
+                            <td style="text-align:center" id="MESINIRECEPCD_D"></td>
+                            <td id="FECHA_TDA_D"><input type = "text" class="fecha ft_D" style="background:dodgerblue;text-align:center;color:white;" data-date-format="dd/mm/yyyy" value =""></td>
+                            <td style="text-align:center" id="SEMINIVENTA_D"></td>
+                            <td style="text-align:center" id="MESINIVENTA_D"></td>
+                            <td style="text-align:center" id="QUITA_VENTANA_D"><input type="checkbox" name="input_D" id="input_D" value="4"></td>
+                        </tr>
+                        <tr>
+                            <td style="display: none;" id="COD_VENTANA_E">5</td>
+                            <td style="text-align:center;color:red;background:beige;" id="VENT_DESCRI_E">E</td>
+                            <td id="FECHA_RECEPCD_E"><input type = "text" class="fecha fr_E" style="background:dodgerblue;text-align:center;color:white;" data-date-format="dd/mm/yyyy" value =""></td>
+                            <td style="text-align:center" id="SEMINIRECEPCD_E"></td>
+                            <td style="text-align:center" id="MESINIRECEPCD_E"></td>
+                            <td id="FECHA_TDA_E"><input type = "text" class="fecha ft_E" style="background:dodgerblue;text-align:center;color:white;" data-date-format="dd/mm/yyyy" value=""></td>
+                            <td style="text-align:center" id="SEMINIVENTA_E"></td>
+                            <td style="text-align:center" id="MESINIVENTA_E"></td>
+                            <td style="text-align:center" id="QUITA_VENTANA_E"><input type="checkbox" name="input_E" id="input_E" value="11"></td>
+                        </tr>
+                        <tr>
+                            <td style="display: none;" id="COD_VENTANA_F">6</td>
+                            <td style="text-align:center;color:red;background:beige;" id="VENT_DESCRI_F">F</td>
+                            <td id="FECHA_RECEPCD_F"><input type = "text" class="fecha fr_F" style="background:dodgerblue;text-align:center;color:white;" data-date-format="dd/mm/yyyy" value =""></td>
+                            <td style="text-align:center" id="SEMINIRECEPCD_F"></td>
+                            <td style="text-align:center" id="MESINIRECEPCD_F"></td>
+                            <td id="FECHA_TDA_F"><input type = "text" class="fecha ft_F" style="background:dodgerblue;text-align:center;color:white;" data-date-format="dd/mm/yyyy" value =""></td>
+                            <td style="text-align:center" id="SEMINIVENTA_F"></td>
+                            <td style="text-align:center" id="MESINIVENTA_F"></td>
+                            <td style="text-align:center" id="QUITA_VENTANA_F"><input type="checkbox" name="input_F" id="input_F" value="6"></td>
+                        </tr>
+                        <tr>
+                            <td style="display: none;" id="COD_VENTANA_G">7</td>
+                            <td style="text-align:center;color:red;background:beige;" id="VENT_DESCRI_G">G</td>
+                            <td id="FECHA_RECEPCD_G"><input type = "text" class="fecha fr_G" style="background:dodgerblue;text-align:center;color:white;" data-date-format="dd/mm/yyyy" value =""></td>
+                            <td style="text-align:center" id="SEMINIRECEPCD_G"></td>
+                            <td style="text-align:center" id="MESINIRECEPCD_G"></td>
+                            <td id="FECHA_TDA_G"><input type = "text" class="fecha ft_G" style="background:dodgerblue;text-align:center;color:white;" data-date-format="dd/mm/yyyy" value =""></td>
+                            <td style="text-align:center" id="SEMINIVENTA_G"></td>
+                            <td style="text-align:center" id="MESINIVENTA_G"></td>
+                            <td style="text-align:center" id="QUITA_VENTANA_G"><input type="checkbox" name="input_G" id="input_G" value="7"></td>
+                        </tr>
+                        <tr>
+                            <td style="display: none;" id="COD_VENTANA_H">8</td>
+                            <td style="text-align:center;color:red;background:beige;" id="VENT_DESCRI_H">H</td>
+                            <td id="FECHA_RECEPCD_H"><input type = "text" class="fecha fr_H" style="background:dodgerblue;text-align:center;color:white;" data-date-format="dd/mm/yyyy" value =""></td>
+                            <td style="text-align:center" id="SEMINIRECEPCD_H"></td>
+                            <td style="text-align:center" id="MESINIRECEPCD_H"></td>
+                            <td id="FECHA_TDA_H"><input type = "text" class="fecha ft_H" style="background:dodgerblue;text-align:center;color:white;" data-date-format="dd/mm/yyyy" value =""></td>
+                            <td style="text-align:center" id="SEMINIVENTA_H"></td>
+                            <td style="text-align:center" id="MESINIVENTA_H"></td>
+                            <td style="text-align:center" id="QUITA_VENTANA_H"><input type="checkbox" name="input_H" id="input_H" value="8"></td>
+                        </tr>
+                        <tr>
+                            <td style="display: none;" id="COD_VENTANA_I">9</td>
+                            <td style="text-align:center;color:red;background:beige;" id="VENT_DESCRI_I">I</td>
+                            <td id="FECHA_RECEPCD_I"><input type = "text" class="fecha fr_I" style="background:dodgerblue;text-align:center;color:white;" data-date-format="dd/mm/yyyy" value =""></td>
+                            <td style="text-align:center;" id="SEMINIRECEPCD_I"></td>
+                            <td style="text-align:center;" id="MESINIRECEPCD_I"></td>
+                            <td id="FECHA_TDA_I"><input type = "text" class="fecha ft_I" style="background:dodgerblue;text-align:center;color:white;" data-date-format="dd/mm/yyyy" value =""></td>
+                            <td style="text-align:center;" id="SEMINIVENTA_I"></td>
+                            <td style="text-align:center;" id="MESINIVENTA_I"></td>
+                            <td style="text-align:center" id="QUITA_VENTANA_I"><input type="checkbox" name="input_I" id="input_I" value="9"></td>
+                        </tr>
+
+
+                        </tbody>
+                    </table>
+                    <br>
+                    <input type="hidden" name="fecha_recepcion_usuario" id="fecha_recepcion_usuario" value="{{ @login }}">
+                </div>
+            </div>
+
+        </div>
+        <!--/.col (left) -->
+    </div>
+    <!-- /.row -->
+
+</section>
+
+
+<include href="{{ @tipo_deptomarca }}" />
+
+
+    <script src="{{@BASE}}/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.js"></script>
+    <script src="{{@BASE}}/bower_components/bootstrap-datepicker/dist/locales/bootstrap-datepicker.es.min.js"></script>
+    <script src="{{@JQUERY}}ui/formulario/plan_compra/js/table2excelrps.js"></script>
+    <!-- <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> -->
+    <!-- DataTables -->
+    <script src="{{@BASE}}/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="{{@BASE}}/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+    <script src="{{@JQUERY}}ui/formulario/plan_compra/js/fecha_recepcion.js"></script>
+

@@ -1,0 +1,49 @@
+
+<link rel="stylesheet" href="{{@JQUERY}}ui/formulario/plan_compra/css/jexcel/jquery.jexcel.css">
+<link rel="stylesheet" href="{{@JQUERY}}ui/formulario/plan_compra/css/jexcel/jquery.jcalendar.css">
+<!-- POPUP DE CURVA-->
+<div id="selecciona_popup_curva" class="modal fade" role="dialog" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content borde_especial">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title titulo_mantenedor_curva"></h4>
+            </div>
+            <div class="modal-body cuerpo_tipo_curva">
+<!-- COMIENZO CONTENIDO -->
+
+                <div id="tabla_curva" style="overflow-y: scroll;height:380px;"></div>
+                <hr>
+                <p>
+                    <button id='agrega_nueva_linea_curva'>Inserta Nueva Fila</button>
+                    <button id='quitar_nueva_linea_curva'>Habilitar Eliminación</button>
+                    <button id='download_linea_curva'>Exportar</button>
+                </p>
+                <p>
+                    <input type="hidden" name="hidden_filas_con_registro" id="hidden_filas_con_registro" value="">
+                    <input type="hidden" name="hidden_filas_sin_registro" id="hidden_filas_sin_registro" value="">
+
+                </p>
+
+
+<!-- FIN CONTENIDO -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary tipo_btn_curva" id="tipo_btn_curva" name="tipo_btn_curva">Guardar</button>
+                </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+<script src="{{@JQUERY}}ui/formulario/plan_compra/js/popup_curva.js"></script>
+<!-- Hay que llamar a las librerias de la tabla excel -->
+<script src="{{@JQUERY}}ui/formulario/plan_compra/js/jexcel/jquery.jexcel.js"></script>
+<!--<script src="{{@JQUERY}}ui/formulario/plan_compra/js/jexcel/jquery.jcalendar.js"></script>-->
+<script src="{{@JQUERY}}ui/formulario/plan_compra/js/jexcel/jquery.csv.min.js"></script>
+
+

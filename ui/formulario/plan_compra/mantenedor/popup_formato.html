@@ -1,0 +1,76 @@
+
+<div id="selecciona_popup_formato" class="modal fade" role="dialog" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content borde_especial">
+            <div class="modal-header">
+               <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title titulo_mantenedor_formato"></h4>
+            </div>
+            <div class="modal-body cuerpo_tipo_formato">
+<!-- COMIENZO CONTENIDO -->    
+
+<div class='row'>
+    <div class='col-md-3'><b>Formato: </b></div>
+    <div class='col-md-6'>{{strtoupper (@lis_formato->setNombre("FORMATO")->setOptionNulo("Seleccione")->setAtributos(["class"=>"form-control FORMATO"])->getHTML())}}</div>
+    <div class='col-md-3'>
+        <!--<button type="button" class="btn btn-primary tipo_btn_formatos_nuevo" id="tipo_btn_formatos_nuevo" name="tipo_btn_formatos_nuevo">Nuevo</button>-->
+        <button type="button" id="modulo_formato_btn_crear_nuevo" class="btn btn-primary" data-toggle="modal" data-target="#nuevoFormatoModal">Crear Nuevo</button>
+    </div>
+</div>
+
+<div class='container-fluid'>&nbsp;</div>
+<div class='row'>
+<div class='col-md-5'>
+    <select class="form-control DISPONIBLE_FORMATO" id="DISPONIBLE_FORMATO" name="DISPONIBLE_FORMATO"></select>
+</div>
+<div class='col-md-2 col-centered'>
+    <button id="btn_agregar_formato" class='btn btn-default btn-sm btn-block agregar'> >> </button>
+    <br>
+    <button id="btn_quitar_formato" class='btn btn-default btn-sm btn-block quitar'> << </button>
+</div>
+<div class='col-md-5'>
+    <select class="form-control ASIGNADO_FORMATO" id="ASIGNADO_FORMATO" name="ASIGNADO_FORMATO"></select>
+</div>
+</div><!-- agregado -->
+<div class='col-md-12'>&nbsp;</div>
+
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="nuevoFormatoModal" role="dialog">
+        <div class="modal-dialog">
+            <!-- Contenido del Modal -->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <!--<button type="button" class="close" data-dismiss="modal">&times;</button>-->
+                    <h4 class="modal-title">Nuevo Formato</h4>
+                </div>
+                <div class="modal-body">
+                    <div class='row'>
+                        <div class='col-md-3'><b>Nombre Formato: </b></div>
+                        <div class='col-md-7'><input type="text" class="form-control NUEVO_FORMATO" name="NUEVO_FORMATO" id="NUEVO_FORMATO" value=""></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <!--<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>-->
+                    <button type="button" class="btn btn-default pull-left btn_cancelar_nuevo_formato" id="btn_cancelar_nuevo_formato" name="btn_cancelar_nuevo_formato">Cancelar</button>
+                    <button type="button" class="btn btn-primary tipo_btn_formatos_nuevo" id="tipo_btn_formatos_nuevo" name="tipo_btn_formatos_nuevo">Crear</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Fin Modal -->
+
+
+<!-- FIN CONTENIDO -->            
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary tipo_btn_formatos" id="tipo_btn_formatos" name="tipo_btn_formatos">Guardar</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="{{@JQUERY}}ui/formulario/plan_compra/js/popup_formato.js"></script>

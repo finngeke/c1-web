@@ -1,0 +1,45 @@
+
+<div id="selecciona_popup_ppto_costo" class="modal fade" role="dialog" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+        <!-- Modal content-->
+        <div class="modal-content borde_especial">
+            <div class="modal-header">
+               <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title titulo_mantenedor_ppto_costo"></h4>
+            </div>
+            <div class="modal-body cuerpo_tipo_ppto_costo">
+<!-- COMIENZO CONTENIDO -->    
+
+<div class='table-responsive'>
+    <!-- Aquí desplegar la tabla de contenidos-->
+    <table class="table table-condensed tabla_ppto_costo">
+        <thead>
+        <tr>
+            <th class="text-center">Departamento</th>
+            <th class="text-center">Presupuesto</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td class="text-center">TODO</td>
+            <td><input type="text" class="form-control text-center input-sm " id="input_total_ppto_costo" name="input_total_ppto_costo" value=""></td>
+        </tr>
+        </tbody>
+    </table>
+    <input type="hidden" name="ppto_costo_usuario" id="ppto_costo_usuario" value="{{ @login }}">
+</div>
+
+
+
+
+<!-- FIN CONTENIDO -->            
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary tipo_btn_ppto_costo" id="tipo_btn_ppto_costo" name="tipo_btn_ppto_costo">Guardar</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="{{@JQUERY}}ui/formulario/plan_compra/js/popup_ppto_costo.js"></script>

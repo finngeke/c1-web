@@ -1,0 +1,91 @@
+<link rel="stylesheet" href="{{@BASE}}/bower_components/datatables.net-bs/css/dataTables.bootstrap.css">
+<section class="content-header">
+	<h1>
+		ENVIAR INFORMACION A COMEX - {{@nombre_form}}
+	</h1>
+	<ol class="breadcrumb">
+		<li><a href="inicio"><i class="fa fa-dashboard"></i> Main</a></li>
+		<li class="active">{{@nombre_form}}</li>
+	</ol>
+</section>
+<!-- Main content -->
+<section class="content animated fadeInDown">
+	<check if="{{ isset(@mensaje) }}">
+		<div class="alert alert-{{@mensaje.icon}}" role="alert">
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				<span aria-hidden="true">&times;</span></button>
+			<strong>{{@mensaje.header}}:</strong> {{@mensaje.message|raw}}
+		</div>
+	</check>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="box box-primary">
+				<div class="box-body">
+					<h3>Seleccione una factura para enviar a COMEX</h3>
+					<table class="table table-bordered table-striped" style="width:100%;white-space:nowrap; font-size: 0.8em;">
+						<thead>
+							<tr>
+								<th style="text-align:center;vertical-align:middle;">RUT Proveedor</th>
+								<th style="text-align:center;vertical-align:middle;">Nombre Proveedor</th>
+								<th style="text-align:center;vertical-align:middle;">Nro. Factura</th>
+								<th style="text-align:center;vertical-align:middle;">Fecha Factura</th>
+								<th style="text-align:center;vertical-align:middle;">Monto Factura</th>
+								<th style="text-align:center;vertical-align:middle;">Unidades Factura</th>
+								<th style="text-align:center;vertical-align:middle;">Asociar contenedores</th>
+						</thead>
+						<tbody>
+							<repeat group="{{@data}}" value="{{@item}}">
+								<tr>
+									<td style="text-align:center;vertical-align:middle;">{{@item[1]}}</td>
+									<td style="text-align:center;vertical-align:middle;">{{@item[2]}}</td>
+									<td style="text-align:center;vertical-align:middle;">{{@item[3]}}</td>
+									<td style="text-align:center;vertical-align:middle;">{{@item[4]}}</td>
+									<td style="text-align:center;vertical-align:middle;">{{@item[5]}}</td>
+									<td style="text-align:center;vertical-align:middle;">{{@item[6]}}</td>
+									<td style="text-align:center;vertical-align:middle;">
+										<a class="btn btn-success enviar_embarque" href="asociar_contenedor?cod_proveedor={{@item[0]}}&nro_factura={{@item[3]}}"><i class="fa fa-arrow-right"></i></a>
+									</td>
+								</tr>
+							</repeat>
+						</tbody>
+						<tfoot>
+							<tr>
+								<td style="text-align: center;"><input type="text" style="width: 90px;"></td>
+								<td style="text-align: center;"><input type="text" style="width: 90px;"></td>
+								<td style="text-align: center;"><input type="text" style="width: 90px;"></td>
+								<td style="text-align: center;"><input type="text" style="width: 90px;"></td>
+								<td style="text-align: center;"><input type="text" style="width: 90px;"></td>
+								<td style="text-align: center;"><input type="text" style="width: 90px;"></td>
+								<td></td>
+							</tr>
+						</tfoot>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<!-- DataTables -->
+<script src="{{@BASE}}/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="{{@BASE}}/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script>
+	$(function() {
+		var table = $('.table').DataTable({
+			scrollY: "280px",
+			scrollX: true,
+			scrollCollapse: true,
+			paging: false,
+			searching: true,
+			ordering: true,
+			info: false
+		});
+		table.columns().every(function() {
+			var that = this;
+			$('input', this.footer()).on('keyup change', function() {
+				if (that.search() !== this.value) {
+					that.search(this.value).draw();
+				}
+			});
+		});
+	});
+</script>

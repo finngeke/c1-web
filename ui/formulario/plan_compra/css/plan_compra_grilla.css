@@ -1,0 +1,141 @@
+
+.columnas{
+    background-color: #ffffe0;
+    color: red;
+}
+.columnasreorder{
+    background-color: white;
+    color: white;
+}
+.titulos{
+    background-color: #D4D0C8;
+    color: black;
+}
+.ids{
+    background-color: #fdf5e6;
+    color: black;
+}
+.Colum_bmt{
+    background-color: black;
+    color: white;
+    border: 1px solid white;
+    height: 40px;
+    font-size: 12px ;
+}
+.Colum_bmt2{
+    background-color: black;
+    color: white;
+    border: 1px solid white;
+}
+.Colum_bmt_sinborder{
+    background-color: black;
+    color: white;
+    border: 1px solid black;
+}
+.Colum_bmt_rojo{
+    background-color: red;
+    color: white;
+    border: 1px solid white;
+    height: 40px;
+    font-size: 12px ;
+}
+.Colum_bmt_rojo2{
+    background-color: red;
+    color: white;
+    border: 1px solid white;
+    font-size: 13px ;
+}
+.Colum_bmt_rojo3{
+    background-color: #963634;
+    color: white;
+    border: 1px solid white;
+    font-size: 13px ;
+}
+.Colum_bmt_blue{
+    background-color: #1F497D;
+    color: white;
+    border: 1px solid white;
+    height: 40px;
+    font-size: 12px ;
+
+}
+.Colum_bmt_blue2{
+    background-color: #1F497D;
+    color: white;
+    border: 1px solid white;
+    font-size: 13px ;
+}
+.filas_bmt_celete{
+    background-color: #B8CCE4;
+    color: black;
+    font-size: 12px ;
+    font-weight:normal;
+}
+.filas_bmt_gris{
+    background-color: #d7d6d8;
+    color: black;
+    font-size: 12px ;
+    font-weight:normal;
+}
+.filas_bmt_verde{
+    background-color: #92d050;
+    color: black;
+    font-size: 12px ;
+    font-weight:normal;
+}
+.filas_bmt_verde_claro{
+    background-color: #C4D79B;
+    color: black;
+    font-size: 12px ;
+    font-weight:normal;
+}
+.filas_bmt_red{
+    background-color: red;
+    color: black;
+    font-size: 12px ;
+    font-weight:normal;
+}
+.filas_bmt_white{
+    background-color: white;
+    color: black;
+    font-size: 12px ;
+    font-weight:normal;
+}
+.filas_PPTO_AliceBlue{
+    background-color: #f0f8ff;
+    font-weight:normal;
+}
+.filas_PPTO_LightPink{
+    background-color: #ffb6c1;
+    font-weight:normal;
+}
+.filas_PPTO_LightSkyBlue{
+    background-color: #87cefa;
+    font-weight:normal;
+}
+
+/*Estados*/
+.EstadoCompraConfirmadaPI{
+    background-color: #ee7600;
+    color: #f5f5f5;
+}
+.EstadoPendienteGeneracionOC{
+    background-color: #F0FFFF;
+    color: #00008b;
+}
+.EstadoPendienteAprobacionsinMatch{
+    background-color: #008000;
+    color: #ffffff;
+}
+.EstadoAprobado{
+    background-color: #add8e6;
+    color: #00008b;
+}
+.Estadocorrecionpi{
+    background-color: #cd5c5c;
+    color: #f5f5f5;
+}
+.EstadoEliminado{
+    background-color: #cd5c5c;
+    color: #ffffff;
+}

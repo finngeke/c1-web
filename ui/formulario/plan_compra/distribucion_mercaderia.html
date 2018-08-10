@@ -1,0 +1,269 @@
+<link rel="stylesheet" href="{{@BASE}}/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.css">
+<link rel="stylesheet" href="{{@BASE}}/bower_components/datatables.net-bs/css/dataTables.bootstrap.css">
+<link rel="stylesheet" href="{{@BASE}}/bower_components/datatables.net-fixedcolumns-bs/css/fixedColumns.bootstrap.css">
+<link rel="stylesheet" type="text/css" href="{{@JQUERY}}ui/formulario/plan_compra/css/distribucion_mercaderia.css">
+<section class="content-header">
+	<h1>
+		{{@nombre_form}}
+	</h1>
+	<ol class="breadcrumb">
+		<li><a href="#"><i class="fa fa-dashboard"></i> Main</a></li>
+		<li class="active">{{@nombre_form}}</li>
+	</ol>
+</section>
+<section class="content animated fadeInDown">
+	<div class="row">
+		<div class="box-body">
+			<button id="btn-save" class="btn btn-app btn_guardar_distribucion"><i class="fa fa-save"></i>Guardar
+			</button>
+			<button id="btn-aprove" class="btn btn-app btn_aprobar_distribucion"><i class="fa fa-thumbs-up"></i>Aprobar
+			</button>
+			<a id="btn-salir" href="plan_compra?codigo={{@SESSION.COD_TEMPORADA}}" class="btn btn-app"><i class="fa fa-sign-out"></i> Salir</a>
+		</div>
+	</div>
+	<!-- grilla -->
+	<!--<div class="row" style="overflow-x:hidden; overflow-y:visible;">-->
+	<div class="row">
+		<!-- left column -->
+		<div class="col-md-12">
+			<div class="box box-primary">
+				<div class="box-body">
+					<!--<div class="box-body" style="overflow-x:hidden; overflow-y:visible; max-height:600px;">-->
+					<table id="tabla_principal" class="table table-bordered table-striped tabla_smaller" style="width: 100%;font-size: 10px;">
+						<thead>
+							<tr>
+								<th style="text-align:center;vertical-align:middle;" rowspan="2">#</th>
+								<th style="text-align:center;vertical-align:middle;" rowspan="2">Cod. Temporada</th>
+								<th style="text-align:center;vertical-align:middle;" rowspan="2">Temporada</th>
+								<th style="text-align:center;vertical-align:middle;" rowspan="2">N° Estilo</th>
+								<th style="text-align:center;vertical-align:middle;" rowspan="2">Estilo</th>
+								<th style="text-align:center;vertical-align:middle;" rowspan="2">Color</th>
+								<th style="text-align:center;vertical-align:middle;" rowspan="2">Ventana</th>
+								<th style="text-align:center;vertical-align:middle;" rowspan="2">Evento</th>
+								<th style="text-align:center;vertical-align:middle;" rowspan="2">Curva Reparto</th>
+								<th style="text-align:center;vertical-align:middle;" rowspan="2">N° Curvas x Caja</th>
+								<th style="text-align:center;vertical-align:middle;" rowspan="2">Q Cajas Embarcadas</th>
+								<th style="text-align:center;vertical-align:middle;" rowspan="2">Diferencia Cajas</th>
+								<repeat group="{{@sucursales}}" value="{{@sucursal}}">
+									<th style="text-align:center;vertical-align:middle;" colspan="2">
+										<strong>{{@sucursal.codSucursal}}</strong> - {{@sucursal.sucursal}}
+									</th>
+								</repeat>
+								<th style="text-align:center;vertical-align:middle;" rowspan="2">Demora</th>
+							</tr>
+							<tr>
+								<repeat group="{{@sucursales}}" value="{{@sucursal}}">
+									<th style="text-align:center">Cantidad</th>
+									<th style="text-align:center">Demora</th>
+								</repeat>
+							</tr>
+						</thead>
+						<tbody>
+							<repeat group="{{@detalle}}" value="{{@fila}}">
+								<tr>
+									<td style="text-align:center">{{@fila.idFila}}</td>
+									<td style="text-align:center">{{@fila.codTemporada}}</td>
+									<td style="text-align:center">{{@fila.temporada}}</td>
+									<td style="text-align:center">{{@fila.codEstilo}}</td>
+									<td style="text-align:center">{{@fila.estilo}}</td>
+									<td style="text-align:center">{{@fila.color}}</td>
+									<td style="text-align:center">{{@fila.ventana}}</td>
+									<td style="text-align:center">{{@fila.evento}}</td>
+									<td style="text-align:center">{{@fila.curvaReparto}}</td>
+									<td style="text-align:center">{{@fila.curvasCajas}}</td>
+									<td style="text-align:center">
+										<span class="embarcadas" type="number" data-fila="{{@fila.idFila}}">{{@fila.cajasEmbarcadas}}</span>
+									</td>
+									<td style="text-align:center">
+										<span class="diferencia" type="number" data-fila="{{@fila.idFila}}">{{@fila.diferencia}}</span>
+									</td>
+									<repeat group="{{@fila.sucursales}}" value="{{@sucursal}}">
+										<check if="{{ @sucursal.habilitada == '1' }}">
+											<true>
+												<td style="text-align:center;">
+													<input type="number" class="cajas-sucursal" style="width: 60px;" min="0" data-min="0" data-fila="{{@fila.idFila}}" data-sucursal="{{@sucursal.codSucursal}}" data-temporada="{{@fila.codTemporada}}" data-depto="{{@fila.codDepto}}" data-idcolor3="{{@fila.idColor3}}" data-estilo="{{@fila.codEstilo}}" data-value="{{@sucursal.cantidad}}" value="{{@sucursal.cantidad}}">
+												</td>
+												<td style="text-align:center;">
+													<check if="{{@sucursal.codSucursal!=10039}}">
+														<input type="text" class="demora-sucursal" style="width: 80px;" data-fila="{{@fila.idFila}}" data-sucursal="{{@sucursal.codSucursal}}" value="{{@sucursal.fechaDemora}}">
+													</check>
+												</td>
+											</true>
+											<false>
+												<td style="text-align:center;">&nbsp;</td>
+												<td style="text-align:center;">&nbsp;</td>
+											</false>
+										</check>
+									</repeat>
+									<td style="text-align:center">
+										<input type="text" class="demora-fila" data-fila="{{@fila.idFila}}">
+									</td>
+								</tr>
+							</repeat>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<script src="{{@BASE}}/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.js"></script>
+<script src="{{@BASE}}/bower_components/bootstrap-datepicker/dist/locales/bootstrap-datepicker.es.min.js"></script>
+<!-- DataTables -->
+<script src="{{@BASE}}/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="{{@BASE}}/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="{{@BASE}}/bower_components/datatables.net-fixedcolumns/js/dataTables.fixedColumns.min.js"></script>
+<script src="{{@BASE}}/bower_components/datatables.net-fixedcolumns-bs/js/dataTables.fixedColumns.min.js"></script>
+<script>
+	function habilitarBoton() {
+		$('#btn-save').html('<i class="fa fa-save"></i>Guardar').prop('disabled', false);
+		$('#btn-aprove').prop('disabled', false);
+		$('#btn-salir').prop('disabled', false);
+	}
+
+	function deshabilitarBoton() {
+		$('#btn-save').html('<i class="fa fa-spinner fa-2x fa-spin"></i>Guardando').prop('disabled', true);
+		$('#btn-aprove').prop('disabled', true);
+		$('#btn-salir').prop('disabled', true);
+	}
+
+	function iniciarAprobar() {
+		$('#btn-save').prop('disabled', true);
+		$('#btn-aprove').html('<i class="fa fa-spinner fa-2x fa-spin"></i>Aprobando').prop('disabled', true);
+		$('#btn-salir').prop('disabled', true);
+	}
+
+	function terminarAprobar() {
+		$('#btn-save').prop('disabled', false);
+		$('#btn-aprove').html('<i class="fa fa-thumbs-up"></i>Aprobar').prop('disabled', false);
+		$('#btn-salir').prop('disabled', false);
+	}
+
+	$(function() {
+		habilitarBoton();
+
+		$('#tabla_principal').DataTable({
+			scrollY: "280px",
+			scrollX: true,
+			scrollCollapse: true,
+			paging: false,
+			searching: false,
+			ordering: false,
+			info: false,
+			fixedColumns: {
+				leftColumns: 12
+			}
+		});
+
+		var opciones = {
+			autoclose: true,
+			clearBtn: true,
+			daysOfWeekDisabled: [0, 1, 2, 4, 5, 6],
+			format: 'dd-mm-yyyy',
+			language: 'es',
+			startDate: '1d',
+			orientation: 'bottom'
+		};
+		$('.demora-fila').datepicker(opciones).on('changeDate', function() {
+			var fila = $(this).data('fila');
+			$('.demora-sucursal[data-fila=' + fila + ']').val($(this).val());
+		}).on('clearDate', function() {
+			var fila = $(this).data('fila');
+			$('.demora-sucursal[data-fila=' + fila + ']').val('');
+		});
+		$('.demora-sucursal').datepicker(opciones);
+		$('.cajas-sucursal').change(function() {
+			var fila = $(this).data('fila');
+			var valorA = parseInt($(this).data('value'));
+			var valorN = parseInt($(this).val());
+			var embarcadas = parseInt($(".embarcadas[data-fila='" + fila + "']").html());
+			var diferencia = parseInt($(".diferencia[data-fila='" + fila + "']").html());
+			var suma = 0;
+			$(".cajas-sucursal[data-fila='" + fila + "']").each(function() {
+				suma += parseInt($(this).val());
+			});
+			if (suma > embarcadas) {
+				alert('El valor ingresado supera las cajas embarcadas');
+				$(this).val(valorA).focus();
+			} else {
+				diferencia = embarcadas - suma;
+				$(this).data('value', valorN).focus();
+				$(".diferencia[data-fila='" + fila + "']").html(diferencia);
+			}
+		});
+		$('#btn-save').click(function(e) {
+			e.preventDefault();
+			deshabilitarBoton();
+			var sucursales = [];
+			$('.cajas-sucursal').each(function() {
+				var fila = parseInt($(this).data('fila'));
+				var codTemporada = parseInt($(this).data('temporada'));
+				var depDepto = $(this).data('depto');
+				var idColor3 = parseInt($(this).data('idcolor3'));
+				var nroEstilo = $(this).data('estilo');
+				var codSucursal = parseInt($(this).data('sucursal'));
+				var cantidad = parseInt($(this).val());
+				var demora = (codSucursal != 10039) ? $(".demora-sucursal[data-fila='" + fila + "'][data-sucursal='" + codSucursal + "']").val() : "";
+				if (cantidad > 0) {
+					sucursales.push({
+						"codTemporada": codTemporada,
+						"depDepto": depDepto,
+						"idColor3": idColor3,
+						"nroEstilo": nroEstilo,
+						"codSucursal": codSucursal,
+						"cantidad": cantidad,
+						"demora": demora
+					});
+				}
+			})
+			if (sucursales.length > 0) {
+				var data = {
+					'sucursales': sucursales
+				};
+				$.post('guardar_distribucion_tienda', data).done(function(data) {
+					alert('Datos guardados correctamente');
+					//$(location).attr('href', "plan_compra?codigo={{@SESSION.COD_TEMPORADA}}");
+				}).fail(function(data, status, error) {
+					console.log(data);
+					alert('Ha ocurrido un error al guardar los datos');
+				}).always(function() {
+					habilitarBoton();
+				});
+			}
+		});
+
+		$('#btn-aprove').click(function(e) {
+			e.preventDefault();
+			iniciarAprobar();
+
+			$('.cajas-sucursal').each(function() {
+				var fila = parseInt($(this).data('fila'));
+				var diferencia = parseInt($(".diferencia[data-fila='" + fila + "']").html());
+
+				if (diferencia > 0) {
+					alert('Debe asignar todas las cajas antes de aprobar la distribución');
+					terminarAprobar();
+					return;
+				}
+			});
+
+			var data = {
+				"cod_temporada": "{{@SESSION.COD_TEMPORADA}}",
+				"po_number": "{{@SESSION.PO_NUMBER}}",
+				"nro_contenedor": "{{@SESSION.NRO_CONTENEDOR}}",
+				"login": "{{@SESSION.login}}"
+			};
+			$.post('aprobar_distribucion_tienda', data).done(function(data) {
+				alert(data.mensaje);
+				if (data.estado) {
+					$(location).attr('href', "plan_compra?codigo={{@SESSION.COD_TEMPORADA}}");
+				}
+			}).fail(function(data, status, error) {
+				console.log(data);
+				alert('Ha ocurrido un error al guardar los datos');
+			}).always(function() {
+				terminarAprobar();
+			});
+		});
+	});
+</script>

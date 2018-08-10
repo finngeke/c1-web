@@ -1,0 +1,42 @@
+<table id="lista_funcionarios" class="table table-bordered table-striped tabla_smaller list_usuarios">
+    <thead>
+        <tr>
+            <th>DEPARTAMENTO</th>
+            <th>PAIS</th>
+            <th>VIA</th>
+            <th>MONEDA</th>
+            <th>FACTOR</th>
+            <th>A</th>
+            <th>B</th>
+            <th>C</th>
+            <th>D</th>
+            <th>E</th>
+            <th>F</th>
+            <th>G</th>
+            <th>H</th>
+            <th>I</th>
+        </tr>
+    </thead>
+    <tbody>
+    
+        <repeat group="{{ @Lista_FactorEstimado }}" value="{{ @Lista_FactorEstimado }}">
+         <tr class="filas" data-factorest="{{ utf8_encode(@Lista_FactorEstimado['DEP_DEPTO']) }}${{utf8_encode(@Lista_FactorEstimado['COD_PAIS'])}}${{utf8_encode(@Lista_FactorEstimado['COD_VIA']) }}${{ utf8_encode(@Lista_FactorEstimado['COD_MONEDA']) }}${{ utf8_encode(@Lista_FactorEstimado['FACTOR_DOL']) }}">
+         <th class="comuna_especial text-center">{{@Lista_FactorEstimado['DEP_DESCRIPCION']}}</th>
+         <th class="comuna_especial text-center">{{@Lista_FactorEstimado['NOM_PAIS']}}</th>
+         <th class="comuna_especial text-center">{{@Lista_FactorEstimado['NOM_VIA']}}</th> 
+         <th class="comuna_especial text-center">{{@Lista_FactorEstimado['NOM_MONEDA']}}</th> 
+         <th class="comuna_especial text-center">{{@Lista_FactorEstimado['FACTOR_DOL']}}</th>
+         <th class="comuna_especial text-center">{{@Lista_FactorEstimado['A']}}</th>
+         <th class="comuna_especial text-center">{{@Lista_FactorEstimado['B']}}</th>
+         <th class="comuna_especial text-center">{{@Lista_FactorEstimado['C']}}</th>
+         <th class="comuna_especial text-center">{{@Lista_FactorEstimado['D']}}</th>
+         <th class="comuna_especial text-center">{{@Lista_FactorEstimado['E']}}</th>
+         <th class="comuna_especial text-center">{{@Lista_FactorEstimado['F']}}</th>
+         <th class="comuna_especial text-center">{{@Lista_FactorEstimado['G']}}</th>
+         <th class="comuna_especial text-center">{{@Lista_FactorEstimado['H']}}</th>
+         <th class="comuna_especial text-center">{{@Lista_FactorEstimado['I']}}</th>
+         </tr>
+        </repeat>   
+
+</tbody>
+</table>

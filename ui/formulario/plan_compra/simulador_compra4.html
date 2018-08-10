@@ -1,0 +1,947 @@
+
+
+<link rel="stylesheet" type="text/css" href="{{@JQUERY}}ui/formulario/plan_compra/css/plan_compra_grilla.css">
+<link rel="stylesheet" href="{{@BASE}}/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
+
+<section class="content-header">
+	<ol class="breadcrumb">
+
+		<button class="btn btn-app guarda_proforma" data-tooltip="tooltip" data-placement="top" title="Guarda Proforma">
+			<i class="fa fa-save"></i> Guardar Proforma
+		</button>
+		
+		<button class="btn btn-app importar_bmt" data-tooltip="tooltip" data-toggle="modal" data-target="#importar_bmt" data-placement="top" title="Importar Archivo">
+			<i class="fa fa-cloud-upload"></i> Importar Archivo
+		</button>
+		
+		<button class="btn btn-app exportar_archivo" data-tooltip="tooltip" data-toggle="modal" data-target="#exportar_archivo" data-placement="top" title="Exportar Archivo">
+			<i class="fa fa-file-excel-o"></i> Descarga Excel
+		</button>
+		
+		<!--<a class="btn btn-app eliminar_bmt" data-target="#elimina_bmt" data-tooltip="tooltip" data-toggle="modal" title="Eliminar BMT">
+			<i class="fa fa-trash"></i> Eliminar
+		</a>-->
+		
+		<a class="btn btn-app actualiza_grid" data-target="#actualiza_grilla" data-toggle="modal" data-tooltip="tooltip" title="Actualizar Grilla" data-placement="top">
+			<i class="fa fa-repeat"></i> Actualizar
+		</a>
+		
+		<a href="#" id="btn_salir_main" class="btn btn-app" data-toggle="tooltip" data-placement="top" title="Volver al MAIN.">
+			<i class="fa fa-sign-out"></i> Salir
+		</a>
+	</ol>
+	<h1 class="bmt">{{@nombre_form}} Temporada :
+		<b><span id="span_temporada" name="span_temporada">{{@depto_form}}</span></b> -
+		<span id="span_tempo" name="span_tempo">{{@NOM_TEMPORADA_CORTO}}</span></h1>
+	<span id="version_app" style="display: none">{{@VERSION}}</span>
+
+</section>
+<!-- Contenido Principal (Tabla Presupuesto y Grilla) -->
+<section class="content">
+	<div class="row">
+		<!-- left column -->
+		<div class="col-md-12">
+            <div id="div_contenedor_tabla1" class="box box-primary">
+				<div class="box-body">
+					
+					<!-- ###############################################################################################################################################-->
+					<div class="table-responsive">
+						<!-- fin div tabla responsiva -->
+						<table class="table table-bordered table-striped tabla_smaller tabla1" id="tabla1" name="tabla1" style="width:100%;white-space:nowrap;font-size: 10px; ">
+							<thead>
+								<tr>
+									<th colspan="1" style="text-align:center;"></th>
+									<th colspan="10" style="text-align:center;">Compra Costo (CH)</th>
+									<th colspan="10" style="text-align:center;">Compra Retail (CH)</th>
+									<th colspan="10" style="text-align:center;">Embarque (%)</th>
+								</tr>
+								<tr>
+									<th id="tipo">Tipo</th>
+									<th id="cc_a">A</th>
+									<th id="cc_b">B</th>
+									<th id="cc_c">C</th>
+									<th id="cc_d">D</th>
+									<th id="cc_e">E</th>
+									<th id="cc_f">F</th>
+									<th id="cc_g">G</th>
+									<th id="cc_h">H</th>
+									<th id="cc_i">I</th>
+									<th id="cc_total">TOTAL</th>
+									<th id="cr_a">A</th>
+									<th id="cr_b">B</th>
+									<th id="cr_c">C</th>
+									<th id="cr_d">D</th>
+									<th id="cr_e">E</th>
+									<th id="cr_f">F</th>
+									<th id="cr_g">G</th>
+									<th id="cr_h">H</th>
+									<th id="cr_i">I</th>
+									<th id="cr_total">TOTAL</th>
+									<th id="e_a">A</th>
+									<th id="e_b">B</th>
+									<th id="e_c">C</th>
+									<th id="e_d">D</th>
+									<th id="e_e">E</th>
+									<th id="e_f">F</th>
+									<th id="e_g">G</th>
+									<th id="e_h">H</th>
+									<th id="e_i">I</th>
+									<th id="e_total">TOTAL</th>
+								</tr>
+							</thead>
+							<tbody>
+								
+								<tr class="">
+									<F3:repeat group="{{@GRILLA_CABECERA}}" key="{{@key}}" value="{{@val}}">
+										<td>{{@val}}</td>
+									</F3:repeat>
+								</tr>
+								
+								<tr>
+									<F3:repeat group="{{@TABLA1_CONSUMO}}" key="{{@key}}" value="{{@val}}">
+										<td>{{@val}}</td>
+									</F3:repeat>
+								</tr>
+								
+								<tr>
+									<F3:repeat group="{{@TABLA1_TOTAL}}" key="{{@key}}" value="{{@val}}">
+										<td>{{@val}}</td>
+									</F3:repeat>
+								</tr>
+							
+							</tbody>
+						</table>
+						<!-- fin div tabla responsiva -->
+					</div>
+					<!-- ###############################################################################################################################################-->
+				
+				</div>
+				<!-- /.box-body -->
+				
+				<check if="{{ isset(@mensaje) }}">
+					<ul class="todo-list ui-sortable">
+						<li style="padding: 4px;background-color: rgba(255, 255, 0, 0.49);">
+                            <span class="handle ui-sortable-handle">
+                                <i class="fa fa-ellipsis-v"></i>
+                                <i class="fa fa-ellipsis-v"></i>
+                            </span>
+							<small class="label label-{{@mensaje.icon}}">
+								<i class="fa fa-clock-o"></i> {{@mensaje.header}}
+							</small>
+							<span class="text">{{@mensaje.message}}</span>
+						</li>
+					</ul>
+				</check>
+			</div>
+			
+			<div class="box box-primary">
+				<div id="btn_flotantes" style="position: absolute;margin-left: 5px;margin-top: 5px;z-index: 1;">
+					<button id="btn_esconder_tabla1" type="button" class="btn btn-primary btn-xs" alt="Mostrar/Ocultar" title="Mostrar/Ocultar">
+						<i class="fa fa-angle-up"></i></button>
+					<button id="btn_mostrar_tabla1" type="button" class="btn btn-primary btn-xs" alt="Mostrar/Ocultar" title="Mostrar/Ocultar" style="display: none">
+						<i class="fa fa-angle-down"></i></button>
+				</div>
+				<!-- /.box-header -->
+				<div class="box-body">
+					
+					<!-- ###############################################################################################################################################-->
+					<div class="table-responsive">
+						<!-- fin div tabla responsiva -->
+						<table class="table table-bordered table-striped tabla_smaller tabla2" id="tabla2" name="tabla2" style="white-space:nowrap;font-size: 10px; ">
+							<thead>
+								<tr>
+									<th colspan="19" style="text-align:center;">Definición por Estilos</th>
+									<th colspan="5" style="text-align:center;">Definición por Opción/Color</th>
+									<th colspan="2" style="text-align:center;">Definición Generales</th>
+									<th colspan="7" style="text-align:center;">Definición de Tallas</th>
+									<th colspan="5" style="text-align:center;">Definición de Unidades</th>
+									<th colspan="3" style="text-align:center;">Definición de Tiendas</th>
+									<th colspan="6" style="text-align:center;">Curvas por Tipo de Tienda</th>
+									<th colspan="4" style="text-align:center;">Definición de Procedencia</th>
+									<th colspan="3" style="text-align:center;">Precio Blanco CH.</th>
+									<th colspan="8" style="text-align:center;">Definición de Costo Unitario</th>
+									<th colspan="4" style="text-align:center;">Costo Total</th>
+									<th colspan="6" style="text-align:center;">Ciclo de Vida</th>
+									<th colspan="4" style="text-align:center;">Definición de Proveedores</th>
+									<th colspan="13" style="text-align:center;">Gestión In Season</th>
+									<th colspan="1" style="text-align:center;">Estados</th>
+								</tr>
+								<tr>
+									<th>&nbsp;</th>
+									<th id="id">ID</th>
+									<th id="g_compra">G. Compra</th>
+									<th id="temp">Temp</th>
+									<th id="linea">Línea</th>
+									<th id="sublinea">SubLínea</th>
+									<th id="marca">Marca</th>
+									<th id="estilo">Estilo</th>
+									<th id="estilo_corto">Estilo Corto</th>
+									<th id="cod_corp">Cod. Corp</th>
+									<th id="desc">Descrip.</th>
+									<th id="desc_internet">Descrip. Internet</th>
+									<th id="composicion">Composición</th>
+									<th id="coleccion">Colección</th>
+									<th id="evento">Evento</th>
+									<th id="estilo_vida">Estilo Vida</th>
+									<th id="calidad">Calidad</th>
+									<th id="ocacion_uso">Ocación Uso</th>
+									<th id="piramide_mix">Piramide Mix</th>
+									<th id="ventana">Ventana</th>
+									<th id="rank_vta">Rank Vta</th>
+									<th id="ciclo_vida">Ciclo Vida</th>
+									<th id="color">Color</th>
+									<th id="hist">Hist</th>
+									<th id="tipo_producto">Tipo Producto</th>
+									<th id="tipo_exhibicion">Tipo Exhibición</th>
+									<th id="tallas">Tallas</th>
+									<th id="Tipo_Empaque">Tipo Empaque</th>
+									<th id="compra_ini">% Compra Ini</th>
+									<th id="compra_ajust">% Compra Ajust</th>
+									<th id="ajuste_compra">Ajuste Compra</th>
+									<th id="curva">Curva</th>
+									<th id="curva_min">Curva Min</th>
+									<th id="uni_ini">Uni Ini</th>
+									<th id="uni_ajust">Uni Ajust</th>
+									<th id="uni_final">Uni Final</th>
+									<th id="mstr_pack">MtrPack</th>
+									<th id="n_cajas">Nº Cajas</th>
+									<th id="cluster">Cluster</th>
+									<th id="formato">Formato</th>
+									<th id="tdas">Tdas</th>
+									<th id="a">A</th>
+									<th id="b">B</th>
+									<th id="c">C</th>
+									<th id="i">I</th>
+									<th id="primera_carga">Primera Carga</th>
+									<th id="tiendas">% Tiendas</th>
+									<th id="proced">Proced</th>
+									<th id="via">Vía</th>
+									<th id="pais">País</th>
+									<th id="viaje">Viaje</th>
+									<th id="mkup">Mkup</th>
+									<th id="precio_blanco">Precio Blanco</th>
+									<th id="gm">GM</th>
+									<th id="moneda">Moneda</th>
+									<th id="target">Target</th>
+									<th id="fob">FOB</th>
+									<th id="insp">Insp</th>
+									<th id="rfid">RFID</th>
+									<th id="royalty">Royalty (%)</th>
+									<th id="costo_uni_final_usd">Costo Unitarios Final US$</th>
+									<th id="costo_uni_final_pesos">Costo Unitario Final Pesos</th>
+									<th id="total_target_usd">Total Target US$</th>
+									<th id="total_fob_usd">Total FOB US$</th>
+									<th id="costo_total_pesos">Costo Total Pesos</th>
+									<th id="total_retail_pesos">Total Retail Pesos (Sin IVA)</th>
+									<th id="debut_reorder">Debut/Reorder</th>
+									<th id="sem_ini">Sem Ini</th>
+									<th id="sem_fin">Sem Fin</th>
+									<th id="sem_ciclo_vida">Semanas Ciclo Vida</th>
+									<th id="agot_obj">Agot Obj</th>
+									<th id="semanas_liquidacion">Semanas Liquidación</th>
+									<th id="proveedor">Proveedor</th>
+									<th id="razon_social">Razon Social</th>
+									<th id="trader">Trader</th>
+									<th id="cod_sku_proveedor">Cod. SKU Proveedor</th>
+									<th id="cod_padre">Cod. Padre</th>
+									<th id="proforma">Proforma</th>
+									<th id="detalle_error_pi">D</th>
+									<th id="archivo">Archivo</th>
+									<th id="pi">PI</th>
+									<th id="estilo_pmm">Estilo PPM</th>
+									<th id="estado_match">Estado Match</th>
+									<th id="n_oc">Nº OC</th>
+									<th id="estado_oc">Estado OC</th>
+									<th id="fecha_embarque">Fecha Embarque</th>
+									<th id="fecha_eta">Fecha ETA</th>
+									<th id="fecha_recepcion_cd">Fecha Recepción CD</th>
+									<th id="dias_atraso_cd">Días Atraso CD</th>
+									<th id="estado_opcion">Estado Opción</th>
+									<th style="display: none"></th>
+									<th style="display: none"></th>
+									<th style="display: none"></th>
+									<th style="display: none"></th>
+									<th style="display: none"></th>
+								</tr>
+							</thead>
+							<tbody>
+							</tbody>
+							<tfoot>
+								<tr>
+
+            <th><button id="btn_limpiar_filtro_sim_comp" type="button" class="btn btn-primary btn-xs" alt="limpiar" title="Limpiar"> <i class="fa fa-refresh"></i></button></th>
+            <th >ID</th>
+            <th >G. Compra</th>
+            <th >Temp</th>
+            <th >Línea</th>
+            <th >SubLínea</th>
+            <th >Marca</th>
+            <th >Estilo</th>
+            <th >Estilo Corto</th>
+            <th >Cod. Corp</th>
+            <th >Descrip.</th>
+            <th >Descrip. Internet</th>
+            <th >Composición</th>
+            <th >Colección</th>
+            <th >Evento</th>
+									<th>Estilo Vida</th>
+									<th>Calidad</th>
+            <th >Ocación Uso</th>
+									<th>Piramide Mix</th>
+            <th >Ventana</th>
+            <th >Rank Vta</th>
+            <th >Ciclo Vida</th>
+            <th >Color</th>
+            <th style="visibility: hidden">Hist</th>
+            <th >Tipo Producto</th>
+            <th >Tipo Exhibición</th>
+            <th >Tallas</th>
+            <th >Tipo Empaque</th>
+            <th >% Compra Ini</th>
+            <th >% Compra Ajust</th>
+            <th  style="visibility: hidden">Ajuste Compra</th>
+            <th >Curva</th>
+            <th >Curva Min</th>
+            <th >Uni Ini</th>
+            <th >Uni Ajust</th>
+            <th >Uni Final</th>
+            <th >MtrPack</th>
+            <th style="visibility: hidden">Nº Cajas</th>
+            <th >Cluster</th>
+            <th >Formato</th>
+            <th >Tdas</th>
+            <th >A</th>
+									<th>B</th>
+									<th>C</th>
+            <th >I</th>
+									<th>Primera Carga</th>
+            <th >% Tiendas</th>
+            <th >Proced</th>
+            <th >Vía</th>
+            <th >País</th>
+            <th >Viaje</th>
+									<th>Mkup</th>
+            <th >Precio Blanco</th>
+            <th >GM</th>
+            <th >Moneda</th>
+            <th >Target</th>
+            <th >FOB</th>
+            <th >Insp</th>
+            <th >RFID</th>
+            <th >Royalty (%)</th>
+            <th >Costo Unitarios Final US$</th>
+            <th >Costo Unitario Final Pesos</th>
+            <th >Total Target US$</th>
+									<th>Total FOB US$</th>
+            <th >Costo Total Pesos</th>
+            <th >Total Retail Pesos (Sin IVA)</th>
+            <th >Debut/Reorder</th>
+            <th >Sem Ini</th>
+            <th >Sem Fin</th>
+            <th >Semanas Ciclo Vida</th>
+            <th >Agot Obj</th>
+            <th >Semanas Liquidación</th>
+            <th >Proveedor</th>
+            <th >Razon Social</th>
+            <th >Trader</th>
+            <th >Cod. SKU Proveedor</th>
+            <th >Cod. Padre</th>
+            <th>Proforma</th>
+            <th style="visibility:hidden ">D</th>
+            <th style="visibility:hidden ">Archivo</th>
+            <th style="visibility:hidden ">PI</th>
+            <th >Estilo PPM</th>
+            <th >Estado Match</th>
+            <th >Nº OC</th>
+            <th >Estado OC</th>
+            <th >Fecha Embarque</th>
+            <th >Fecha ETA</th>
+            <th >Fecha Recepción CD</th>
+            <th >Días Atraso CD</th>
+            <th >Estado Opción</th>
+									<th style="display: none"></th>
+									<th style="display: none"></th>
+									<th style="display: none"></th>
+									<th style="display: none"></th>
+									<th style="display: none"></th>
+								</tr>
+							</tfoot>
+</table>
+<!-- fin div tabla responsiva -->
+</div>
+<!-- ###############################################################################################################################################-->
+
+				</div>
+				<!-- /.box-body -->
+			</div>
+
+		</div>
+		<!--/.col (left) -->
+	</div>
+	<!-- /.row -->
+
+</section>
+
+<!-- Comienzo de los PopUp de menú costado y botones grilla -->
+<div id="elimina_bmt" class="modal fade" role="dialog" data-keyboard="false" data-backdrop="static">
+	<div class="modal-dialog">
+		<!-- Modal content-->
+		<div class="modal-content borde_especial">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Confirmación de usuario</h4>
+			</div>
+			<div class="modal-body">
+				
+				<p>¿Está seguro de que desea eliminar el registro de la BMT [<span class="registro"></span>] ?</p>
+				<b>IMPORTANTE :</b> <span>No se puede eliminar los registros BMT si estan en estado Final.</span>
+			
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cerrar</button>
+				<button type="button" class="btn btn-danger elimina_bmt" data-dismiss="modal">Eliminar BMT</button>
+			</div>
+		</div>
+	
+	</div>
+</div>
+
+<div id="importar_bmt" class="modal fade" role="dialog" data-keyboard="false" data-backdrop="static">
+	<form method="post" enctype="multipart/form-data" class="form_import_bmt" id="form_import_bmt" action="guardar/archivoAssorment">
+		<div class="modal-dialog">
+			<!-- Modal content-->
+			<div class="modal-content borde_especial">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Importar Archivo Assortment/BMT </h4>
+				</div>
+				<div class="modal-body">
+					<div>
+						<label for="tipos_import">Tipo Archivo:</label>
+						<select class="FORM-CONTROL" id="tipos_import" name="tipos_import">
+							<option value="1">Assortment</option>
+							<option value="2">BMT</option>
+						</select>
+					</div>
+
+                    <br> <input type="file" name="user_file" id="user_file" class="file btn btn-primary" data-toggle="modal" > <!--required--></br>
+					<b>IMPORTANTE :</b> <span>El archivo debe estar en formato Excel (.xls o .xlsx)</span></div>
+
+                <ul class="todo-list ui-sortable"  id="mensaje_error_pop" style="display: none">
+					<li style="padding: 4px;background-color: rgba(255, 255, 0, 0.49);">
+                            <span class="handle ui-sortable-handle">
+                                <i class="fa fa-ellipsis-v"></i>
+                                <i class="fa fa-ellipsis-v"></i>
+                            </span>
+                        <small class="material-icons" style="font-size:20px;color:red"><i class="fa fa-exclamation-circle" ></i></small>
+                        <span class="text" id = "_errorImportar" ></span>
+
+					</li>
+				</ul>
+
+				<div class="modal-footer">
+					<label id="Insertados_validacion"></label>
+					<!--<button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cerrar</button>-->
+                    <div class="loading" style="display: none"><i class='fa fa-spinner fa-2x fa-spin' style="color:#537a7b"></i><span id="seguimiento"> Importando Archivo</span> <span id="count" style="display: none">0</span></div>
+                    <input type="submit" class="btn btn-primary carga_bmt"  id = "btn_import" value="Cargar">
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
+
+<div id="exportar_archivo" class="modal fade" role="dialog" data-keyboard="false" data-backdrop="static">
+	<form method="post" enctype="multipart/form-data" class="form_export_bmt" action="exporta_excel">
+		<div class="modal-dialog">
+			
+			<div class="modal-content borde_especial">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Exportar Archivo Assortment/C1/BMT </h4>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						
+						<div class="col-md-12" id="selec_export_tipoarchivo">
+							<label for="tipos_export">Tipo Archivo:</label>
+							<select class="FORM-CONTROL" id="tipos_export" name="tipos_export">
+								<option value="0">Seleccione</option>
+								<option value="1">Assortment</option>
+								<option value="2">C1</option>
+								<option value="3">BMT</option>
+								<option value="4">Opciones por estado</option>
+							</select>
+						</div>
+						
+						<div class="col-md-12">&nbsp;</div>
+						
+						<div id="assorment_export">
+						
+						</div>
+						
+						<div class="col-md-6" id="depto_selec" style="display:none;">
+							<table class="table-responsive" id="depto_tabla_selec" border="2" align="center">
+								<thead>
+									<tr>
+										<td> Seleccione</td>
+										<td> Codigo</td>
+										<td> Departamento</td>
+									</tr>
+								</thead>
+								<tbody>
+								
+								</tbody>
+							</table>
+						</div>
+						
+						<div id="body_export" style="display: none">
+							<table class="table-responsive" id="bmt_export">
+								<thead>
+									<td colspan="2"><label class="titulo" id="titulo" for="tipos">Grupo Compra:</label>
+									</td>
+								</thead>
+								
+								<tbody></tbody>
+							</table>
+						</div>
+						
+						<!-- ########################################## DIV DONDE CARGARAN LOS ESTADOS ############################-->
+						<div class="col-md-6" id="depto_selec_opcion" style="display:none;">
+							<table class="table-responsive" id="depto_tabla_selec_opcion" border="2" align="center">
+								<thead>
+									<tr>
+										<td> Seleccione</td>
+										<td> Estado</td>
+									</tr>
+								</thead>
+								
+								<tbody>
+								</tbody>
+							</table>
+						</div>
+						<!-- ########################################## FIN DIV DONDE CARGARAN LOS Estados ############################-->
+					
+					</div>
+					<div class="modal-footer">
+						<!--<button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cerrar</button>-->
+						<div class="loading" style="display: none">
+							<i class='fa fa-spinner fa-2x fa-spin '></i>Exportando Archivo
+						</div>
+						<!--<input type="text" name="depto_excel_bmt" id="depto_excel_bmt" value="{{@depto_form}}-{{@NOM_TEMPORADA_CORTO}}">-->
+						<input type="submit" class="btn btn-primary" id="btn_exportar" value="Exportar" disabled>
+						<!--<a class="btn btn-primary btn_export" href="exporta_excel">Exportar</a>-->
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
+
+<div id="actualiza_grilla" class="modal fade" role="dialog" data-keyboard="false" data-backdrop="static">
+	<div class="modal-dialog modal-dialog-center" style="width: 320px;">
+		<!-- Modal content-->
+		<div class="modal-content borde_especial">
+			
+			<div class="modal-body">
+				<div class="loading text-center">
+					<i class='fa fa-spinner fa-2x fa-spin '></i> Actualizando Grilla del Simulador
+				</div>
+			
+			</div>
+		
+		</div>
+	
+	</div>
+</div>
+
+<div id="carga_pi" name="carga_pi" class="modal fade" role="dialog" data-keyboard="false" data-backdrop="static">
+	<form method="POST" enctype="multipart/form-data" class="form_carga_pi" id="form_carga_pi" name="form_carga_pi" action="guardar/archivo_pi" target="_self">
+		<div class="modal-dialog">
+			<div class="modal-content borde_especial">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Carga Archivo PI</h4>
+				</div>
+				<div class="modal-body">
+					<input type="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" name="send_archivop_pi" id="send_archivop_pi" class="btn" data-toggle="modal" onchange="verificaFormatoArchivo(this);">
+					<input type="text" name="send_archivo_estado_c1" id="send_archivo_estado_c1" value="" style="visibility: hidden">
+					<input type="text" name="send_archivo_id_color" id="send_archivo_id_color" value="" style="visibility: hidden">
+					<input type="text" name="send_archivo_proforma" id="send_archivo_proforma" value="" style="visibility: hidden">
+					<input type="text" name="send_archivo_filas" id="send_archivo_filas" value="" style="visibility: hidden">
+				</div>
+				<div class="modal-footer">
+					<div class="loading" style="display: none">
+						<i class='fa fa-spinner fa-2x fa-spin '></i> Importando Archivo
+					</div>
+					<input type="submit" class="btn btn-primary carga_pi" value="Cargar PI">
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
+
+<div id="despliega_hitorial" name="despliega_hitorial" class="modal fade" role="dialog" data-keyboard="false" data-backdrop="static">
+	<div class="modal-dialog">
+		<div class="modal-content borde_especial">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Historial</h4>
+			</div>
+			<div class="modal-body">
+				<div class='row'>
+					<div class='col-md-4'><b>Estilo:</b>
+						<input type="text" id="despliega_hitorial_estilo" name="despliega_hitorial_estilo" class="form-control input-sm" disabled>
+					</div>
+					<div class='col-md-4'><b>Ventana:</b>
+						<input type="text" id="despliega_hitorial_ventana" name="despliega_hitorial_ventana" class="form-control input-sm" disabled>
+					</div>
+					<!--<div class='col-md-4'>&nbsp;<input type="button" id="despliega_hitorial_excel" name="despliega_hitorial_excel" class="form-control input-sm" value="Descarga Excel"></div>-->
+					
+					<div class='col-md-4'><b>Color:</b>
+						<input type="text" id="despliega_hitorial_color" name="despliega_hitorial_color" class="form-control input-sm" disabled>
+					</div>
+					<div class='col-md-4'><b>Cod. Padre:</b>
+						<input type="text" id="despliega_hitorial_cpadre" name="despliega_hitorial_cpadre" class="form-control input-sm" disabled>
+					</div>
+					<div class='col-md-4'>&nbsp;</div>
+				
+				</div>
+				<div class='row'>
+					<div class='col-md-12'><br></div>
+				</div>
+				<div class='row'>
+					<div class='col-md-12'>
+						<div class="table-responsive" style="height:300px;" id="despliega_hitorial_tabla_excel">
+							<table class="table table-bordered table-striped tabla_smaller despliega_hitorial_tabla" id="despliega_hitorial_tabla">
+								<thead>
+									<tr>
+										<th>Fecha</th>
+										<th>Hora</th>
+										<th>Usuario</th>
+										<th>Estado</th>
+									</tr>
+								</thead>
+								<tbody>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="despliega_ajust" name="despliega_ajust" class="modal fade" role="dialog" data-keyboard="false" data-backdrop="static">
+	<div class="modal-dialog">
+		<div class="modal-content borde_especial ">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title text-center">Ajuste de Compra</h4>
+			</div>
+			<div class="modal-body">
+				<table class="table table-bordered table-striped tabla_smaller tablajustcom" id="tablajustcom">
+					<thead>
+						<tr>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="despliega_n_cajas" name="despliega_n_cajas" class="modal fade" role="dialog" data-keyboard="false" data-backdrop="static">
+	<div class="modal-dialog">
+		<div class="modal-content borde_especial ">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title text-center">Ajuste N° Cajas</h4>
+			</div>
+			<div class="modal-body">
+				<table class="table table-bordered table-striped tabla_smaller tablajustcom" id="tablajustN_Cajas">
+					<thead>
+					
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="despliega_detalle_error" name="despliega_detalle_error" class="modal fade" role="dialog" data-keyboard="false" data-backdrop="static">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content borde_especial">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Comentario</h4>
+			</div>
+			<div class="modal-body">
+				<div class='col-md-12'>
+					<textarea id="detalle_comentario_sol_coreccion" name="detalle_comentario_sol_coreccion" class="form-control" rows="5" readonly></textarea>
+				</div>
+				<div class="modal-footer"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="popup_loading_match" name="popup_loading_match" class="modal fade" role="dialog" data-keyboard="false" data-backdrop="static">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content borde_especial">
+			<div class="modal-header">
+				<button type="button" class="close" onClick="window.location.reload()">&times;</button>
+				<h4 class="modal-title">Validación</h4>
+			</div>
+			<div class="modal-body">
+				<div class='row'>
+					<div class='col-md-12'>&nbsp;
+						<table class="table table-bordered table-striped tabla_smaller">
+							<thead>
+								<tr>
+									<th style="text-align: center;">VERIFICANDO</th>
+									<th style="text-align: center;">ESTADO</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>OC Linkeada:</td>
+									<td style="text-align: center;">
+										<span id="popup_match_paso_oclinkeada" class="fa fa-refresh"></span></td>
+								</tr>
+								<tr>
+									<td>Cargar PMM:</td>
+									<td style="text-align: center;">
+										<span id="popup_match_paso_cargarpmm" class="fa fa-refresh"></span></td>
+								</tr>
+								<tr>
+									<td>Cargar PLAN:</td>
+									<td style="text-align: center;">
+										<span id="popup_match_paso_cargarplan" class="fa fa-refresh"></span></td>
+								</tr>
+								<tr>
+									<td>PLAN v/s PMM:</td>
+									<td style="text-align: center;">
+										<span id="popup_match_paso_planvspmm" class="fa fa-refresh"></span></td>
+								</tr>
+								<tr>
+									<td>Verifica Errores:</td>
+									<td style="text-align: center;">
+										<span id="popup_match_paso_existeerror" class="fa fa-refresh"></span></td>
+								</tr>
+								<tr>
+									<td>Puede Editar:</td>
+									<td style="text-align: center;">
+										<span id="popup_match_paso_puedeeditar" class="fa fa-refresh"></span></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="match_oc" name="match_oc" class="modal fade" role="dialog" data-keyboard="false" data-backdrop="static">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content borde_especial">
+			<div class="modal-header">
+				<button type="button" class="close" onClick="window.location.reload()">&times;</button>
+				<h4 class="modal-title">Proceso de Match</h4>
+			</div>
+			<div class="modal-body">
+				<div class='row'>
+					
+					
+					<div class='col-md-4' style="white-space:nowrap;font-size: 10px;">Orden de Compra:
+						<input type="text" id="txt_match_oc" name="txt_match_oc" value="" disabled></div>
+					<div class='col-md-4' style="white-space:nowrap;font-size: 10px;">PI:
+						<input type="text" id="txt_match_pi" name="txt_match_pi" value="" disabled></div>
+					<div class='col-md-4' style="text-align: right;">
+						<input type="button" class="btn btn-primary btn_actualizar_match" style="font-size: 10px;" id="btn_actualizar_match" name="btn_actualizar_match" value="Actualizar">
+					</div>
+					
+					<div class='col-md-12'>&nbsp;</div>
+					
+					<div class='col-md-6'>
+						<div class="table-responsive" style="height:400px;">
+							<table class="table table-bordered table-striped tabla_smaller match_tabla_pmm" style="white-space:nowrap;font-size: 10px;" id="match_tabla_pmm">
+								<thead>
+									<tr>
+										<th colspan="10" style="text-align:center;">PMM</th>
+									</tr>
+									<tr>
+										<th style="visibility: hidden">ID</th>
+										<th>PI</th>
+										<th>Cod. Línea</th>
+										<th>Línea</th>
+										<th>Cod. Subinea</th>
+										<th>Sublinea</th>
+										<th>Estilo</th>
+										<th>Nª Estilo</th>
+										<th>Color</th>
+										<th>Cod. Color</th>
+									</tr>
+								</thead>
+								<tbody>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div class='col-md-6'>
+						<div class="table-responsive" style="height:400px;">
+							<table class="table table-bordered table-striped tabla_smaller match_tabla_plan" style="white-space:nowrap;font-size: 10px;" id="match_tabla_plan">
+								<thead>
+									<tr>
+										<th colspan="9" style="text-align:center;">PLAN</th>
+									</tr>
+									<tr>
+										<th>ID</th>
+										<th>Proforma</th>
+										<th>Cod. Línea</th>
+										<th>Línea</th>
+										<th>Cod. Subinea</th>
+										<th>Sublinea</th>
+										<th>Estilo</th>
+										<th>Color</th>
+										<th>Cod. Color</th>
+										<th style="visibility: hidden"></th><!--Valor Linea-->
+										<th style="visibility: hidden"></th><!--Valor SubLinea-->
+										<th style="visibility: hidden"></th><!--Valor Color-->
+										<th style="visibility: hidden"></th><!--Valor Estilo-->
+										<th style="visibility: hidden"></th><!--Correlativo-->
+										<th style="visibility: hidden"></th><!--Updated-->
+									</tr>
+								</thead>
+								<tbody>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					
+					<div class='col-md-12'>&nbsp;</div>
+					
+					<div class="modal-footer">
+						<div class="loading" style="display: none">
+							<i class='fa fa-spinner fa-2x fa-spin '></i> Generando el match...
+						</div>
+						<button type="button" class="btn btn-primary btn_generar_match_oc" id="btn_generar_match_oc" name="btn_generar_match_oc">Generar Match</button>
+					</div>
+				
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="solic_correccion_comentario" name="solic_correccion_comentario" class="modal fade" role="dialog" data-keyboard="false" data-backdrop="static">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content borde_especial">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Comentario</h4>
+			</div>
+			<div class="modal-body">
+				<div class='col-md-4' style="white-space:nowrap;font-size: 10px;text-align: left;">Proforma:
+					<input type="text" id="proforma_solic_comentario" name="proforma_solic_comentario" value="" disabled>
+				</div>
+				<div class='col-md-12'>&nbsp;</div>
+				<div class='col-md-12'>
+					<textarea id="comentario_sol_coreccion" name="comentario_sol_coreccion" class="form-control" rows="5"></textarea>
+				</div>
+				<input type="hidden" id="id_color3_solic_comentario" name="id_color3_solic_comentario" value="">
+				<div class='col-md-12'>&nbsp;</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary btn_solic_correccion_comentario" id="btn_solic_correccion_comentario" name="btn_solic_correccion_comentario">Agregar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="pop_up_usuario_quitar" class="modal fade" role="alert" data-keyboard="false" data-backdrop="static">
+
+        <div class="modal-dialog">
+
+            <div class="modal-content borde_especial">
+
+                <div class="modal-header">
+
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+                    <center>
+
+                        <h4 class="modal-title"> {{ @nombre }}</h4>
+                        <h4 class="modal-title"> Su Session ah expirado... Cerrará en 50 segundos</h4>
+
+                    </center>
+
+                </div>
+
+            </div>
+
+        </div>
+
+</div>
+
+<div id="popup_usario_expirado" class="modal fade" role="alert" data-keyboard="false" data-backdrop="static">
+
+        <div class="modal-dialog">
+
+            <div class="modal-content borde_especial">
+
+                <div class="modal-header">
+
+                    <center>
+
+                        <h4 class="modal-title"> {{ @nombre }} Su Session se esta cerrando.</h4>
+                        <div class="loader" id="loader"></div>
+
+                    </center>
+
+                </div>
+
+            </div>
+
+        </div>
+
+</div>
+
+<div id="popup_cargando_simulador_compra_4" class="modal fade" role="alert" data-keyboard="false" data-backdrop="static">
+
+    <div class="modal-dialog">
+
+        <div class="modal-content borde_especial">
+
+            <div class="modal-header">
+
+                <center>
+
+                    <div class="loader" id="loader_simulador_compra_4"></div>
+
+                </center>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Include de los menús del costado -->
+<include href="{{ @tipo_ventana_llegada }}" />
+<include href="{{ @tipo_ppto_costo }}" />
+<include href="{{ @tipo_ppto_retail }}" />
+<include href="{{ @tipo_tienda }}" />
+<include href="{{ @tipo_formato }}" />
+
+<!-- Llamados a los JS -->
+<script src="{{@JQUERY}}ui/formulario/plan_compra/js/simulador_compra4.js"></script>
+<script src="{{@JQUERY}}ui/formulario/plan_compra/js/table2excelrps.js"></script>
+<script src="{{@BASE}}/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>

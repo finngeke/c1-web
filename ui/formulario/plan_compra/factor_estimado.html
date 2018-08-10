@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+
+-->
+<link rel="stylesheet" href="{{@JQUERY}}ui/formulario/plan_compra/css/factor_estimado.css">
+
+<section class="content-header">
+    <h1>
+        {{@nombre_form}} <b>{{@depto_form}}</b>
+
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="inicio"><i class="fa fa-dashboard"></i> Main</a></li>
+        <li class="active">Mantendedor de {{@nombre_form}}</li>
+    </ol>
+    <check if="{{ isset(@mensaje) }}">   
+        <div class="box-body">
+            <ul class="todo-list ui-sortable">
+
+                <li class="">
+                    <span class="handle ui-sortable-handle">
+                        <i class="fa fa-ellipsis-v"></i>
+                        <i class="fa fa-ellipsis-v"></i>
+                    </span>
+                    <small class="label label-{{@mensaje.icon}}"><i class="fa fa-clock-o"></i> {{@mensaje.header}}</small>
+                    <span class="text">{{@mensaje.message}}</span>
+
+
+            </ul>
+        </div>
+    </check>  
+
+</section>
+
+<!-- Main content -->
+<section class="content animated fadeInDown">
+    <!-- form start -->
+    <form role="form" method="post" class="form_factor_Estimado" action="guardar/factorestimado">
+        <input type="hidden" id="login" name="login" >
+        <input type="hidden" id="factor" name="factor" >
+        <div class="row">
+            <div class="box-body">
+                <button id="btn_grabar_factor_estimado" class="btn btn-app button_form"><i class="fa fa-save"></i>Grabar </button>
+                <a id="btn_eliminar_factor_estimado" class="btn btn-app disabled eliminar_usuario" data-toggle="modal" data-target="#elimina_factor"><i class="fa fa-trash"></i> Eliminar</a>
+                <a class="btn btn-app replicar_factor" data-toggle="modal" data-target="#replicar_factor"><i class="fa fa-share-square"></i> Replicar</a>
+                <a class="btn btn-app" href="exporta_factor"><i class="fa fa-cloud-download"></i> Exportar</a>
+                <a class="btn btn-app limpiar_form"><i class="fa fa-repeat"></i> Limpiar</a>
+                <a href="plan_compra?codigo={{@SESSION.COD_TEMPORADA}}" class="btn btn-app"><i class="fa fa-sign-out"></i> Salir</a>
+            </div>
+        </div>
+
+        <div class="row" style="overflow-x:hidden;
+             overflow-y:visible;
+             height:500px;">
+            <!-- left column -->
+            <div class="col-md-12">
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        Formulario
+                    </div>
+
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-sm-1"></div>
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <label for="departamento">Departamento:</label>
+                                    <div class="input-group input-group-sm" name = "depto" required >
+                                        {{strtoupper (@departamento->setAtributos(["class"=>"form-control departamento"])->setNombre("departamento")->getHTML())}}         
+
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="pais">País:</label>
+                                    <div class="input-group input-group-sm">
+                                        {{strtoupper (@parametros->setAtributos(["class"=>"form-control pais"])->setNombre("parametros")->getHTML())}}
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <label for="via">Vía:</label>
+                                    <div class="input-group input-group-sm">
+                                        {{strtoupper (@via->setAtributos(["class"=>"form-control via"])->setNombre("via")->getHTML())}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tipo_moneda">Tipo de Moneda:</label>
+                                    <div class="input-group input-group-sm">
+                                        {{strtoupper (@tipo_moneda->setAtributos(["class"=>"form-control tipo_moneda"])->setNombre("tipo_moneda")->getHTML())}}
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <label for="Factor">Factor:</label>
+                                    <input type="text" class="form-control" id="FACTOR_DOL" name="FACTOR_DOL" required  placeholder="0.00" >
+                                </div>
+                                <div class="form-group">
+                                    <label for="tipo_cambio">Tipo de Cambio:</label>  
+                                    <a id="btn_tipo_de_cambio_modificar" class="btn btn-success btn-flat"  data-toggle="modal" data-target="#agrega_tipo_cambio" >Modificar</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                    <hr>
+                </div>
+
+                <div class="box box-primary">
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <table id="lista_funcionarios" class="table table-bordered table-striped tabla_smaller_especial list_usuarios">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th class=" text-center">Departamento</th>
+                                    <th class=" text-center">País</th>
+                                    <th class=" text-center">Vía</th>
+                                    <th class=" text-center">Moneda</th>
+                                    <th class=" text-center">Factor</th> 
+                                    <th style="text-align:center">A</th>
+                                    <th style="text-align:center">B</th>
+                                    <th style="text-align:center">C</th>
+                                    <th style="text-align:center">D</th>
+                                    <th style="text-align:center">E</th>
+                                    <th style="text-align:center">F</th>
+                                    <th style="text-align:center">G</th>
+                                    <th style="text-align:center">H</th>
+                                    <th style="text-align:center">I</th>                                    
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- /.box-header                         -->
+                            <repeat group="{{ @Lista_FactorEstimado }}" value="{{ @Lista_FactorEstimado }}">
+                                <tr class="filas" data-factorest="{{ utf8_encode(@Lista_FactorEstimado['DEP_DEPTO']) }}${{utf8_encode(@Lista_FactorEstimado['COD_PAIS'])}}${{utf8_encode(@Lista_FactorEstimado['COD_VIA']) }}${{ utf8_encode(@Lista_FactorEstimado['COD_MONEDA']) }}${{ utf8_encode(@Lista_FactorEstimado['FACTOR_DOL']) }}">
+
+                                    <th class="comuna_especial text-center" style="width: 5px;"><input type="radio" class="fila" width="10px" height="10px" ></th>
+                                    <th class="comuna_especial text-center">{{@Lista_FactorEstimado['DEP_DESCRIPCION']}}</th>
+                                    <th class="comuna_especial text-center">{{@Lista_FactorEstimado['NOM_PAIS']}}</th>
+                                    <th class="comuna_especial text-center">{{@Lista_FactorEstimado['NOM_VIA']}}</th> 
+                                    <th class="comuna_especial text-center">{{@Lista_FactorEstimado['NOM_MONEDA']}}</th> 
+                                    <th class="comuna_especial text-center">{{@Lista_FactorEstimado['FACTOR_DOL']}}</th>
+                                    <th class="text-center" name="va[]">{{@Lista_FactorEstimado['A']}} </th>
+                                    <th class="text-center" name="vb[]" >{{@Lista_FactorEstimado['B']}}</th>
+                                    <th class="text-center" name="vc[]" >{{@Lista_FactorEstimado['C']}}</th>
+                                    <th class="text-center" name="vd[]" >{{@Lista_FactorEstimado['D']}}</th>
+                                    <th class="text-center" name="ve[]" >{{@Lista_FactorEstimado['E']}}</th>
+                                    <th class="text-center" name="vf[]" >{{@Lista_FactorEstimado['F']}}</th>
+                                    <th class="text-center" name="vg[]" >{{@Lista_FactorEstimado['G']}}</th>
+                                    <th class="text-center" name="vh[]" >{{@Lista_FactorEstimado['H']}}</th>
+                                    <th class="text-center" name="vi[]" >{{@Lista_FactorEstimado['I']}}</th>
+                                </tr>
+                            </repeat>
+                            </tbody>
+                        </table>
+                        <br>    
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+
+            </div>
+            <!--/.col (left) -->
+        </div>
+        <!-- /.row -->
+    </form>
+</section>
+
+
+<!-- btn tipo cambio -->
+<div id="agrega_tipo_cambio" class="modal fade" role="dialog" data-keyboard="false" data-backdrop="static">
+    <form role="form" method="post" class="form_tipo_cambio" action="guardar/tipo_cambio"> <!-- acction validacion formulario-->
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content borde_especial">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Tipo de Cambio</h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="box box-primary">
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <table id="lista_funcionarios" class="table table-bordered table-striped tabla_smaller_especial list_usuarios">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">Moneda</th> 
+                                        <th style="text-align:center" class = "TxtboxTipocambio">A</th>
+                                        <th style="text-align:center">B</th>
+                                        <th style="text-align:center">C</th>
+                                        <th style="text-align:center">D</th>
+                                        <th style="text-align:center">E</th>
+                                        <th style="text-align:center">F</th>
+                                        <th style="text-align:center">G</th>
+                                        <th style="text-align:center">H</th>
+                                        <th style="text-align:center">I</th>                                    
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                <repeat group="{{ @Lista_TipoCambio }}" value="{{ @Lista_TipoCambio }}">
+                                    <tr class="filas" data-factorest="{{ utf8_encode(@Lista_TipoCambio['COD_TIP_MON']) }}">
+                                    <input type="hidden" name="moneda[]" value="{{@Lista_TipoCambio['COD_TIP_MON']}}">
+                                    <th class="comuna_especial text-center" style=""  >{{@Lista_TipoCambio['NOM_TIP_MON']}}</th>
+                                    <th style="text-align:center">
+                                        <input type="number" class = "TxtboxTipocambio" name="a[]" value ="{{@Lista_TipoCambio['A']}}"  required></th>
+                                    <th style="text-align:center">
+                                        <input type="number" class = "TxtboxTipocambio" name="b[]" value ="{{@Lista_TipoCambio['B']}}" required></th>
+                                    <th style="text-align:center">
+                                        <input type="number" class = "TxtboxTipocambio" name="c[]" value ="{{@Lista_TipoCambio['C']}}" required></th>
+                                    <th style="text-align:center">
+                                        <input type="number" class = "TxtboxTipocambio" name="d[]" value ="{{@Lista_TipoCambio['D']}}" required></th>
+                                    <th style="text-align:center">
+                                        <input type="number" class = "TxtboxTipocambio" name="e[]" value ="{{@Lista_TipoCambio['E']}}" required></th>
+                                    <th style="text-align:center">
+                                        <input type="number" class = "TxtboxTipocambio" name="f[]" value ="{{@Lista_TipoCambio['F']}}" required></th>
+                                    <th style="text-align:center">
+                                        <input type="number" class = "TxtboxTipocambio" name="g[]" value ="{{@Lista_TipoCambio['G']}}" required></th>
+                                    <th style="text-align:center">
+                                        <input type="number" class = "TxtboxTipocambio" name="h[]" value ="{{@Lista_TipoCambio['H']}}" required></th>
+                                    <th style="text-align:center">
+                                        <input type="number" class = "TxtboxTipocambio" name="i[]" value ="{{@Lista_TipoCambio['I']}}" required></th>
+                                    </tr>
+                                </repeat>               
+                                </tbody>
+                            </table>
+                            <br>    
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cerrar</button>
+                    <button id="guardar_tipo_cambio" class="btn btn-primary"  >Guardar</button>
+                </div>
+            </div>
+
+        </div>
+    </form>
+</div>
+
+<!-- btn eliminar -->
+<div id="elimina_factor" class="modal fade" role="dialog" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content borde_especial">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Confirmación de usuario</h4>
+            </div>
+            <div class="modal-body">
+                <p>¿Está seguro de que desea eliminar el registro del factor[<span class="registro"></span>] ?</p>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-danger elimina_factor" data-dismiss="modal">Eliminar</button>
+            </div>
+        </div>
+
+    </div>  
+</div>
+
+
+<!-- btn replicar -->
+<div id="replicar_factor" class="modal fade" role="dialog" data-keyboard="false" data-backdrop="static">
+    <form role="form" method="post" class="form_tipo_cambio" action="guardar/recalcular" >   
+   
+        
+        <div class="modal-dialog">
+           
+            <!-- Modal content-->
+            <div class="modal-content borde_especial">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Replicar Factor Estimado</h4>
+                <h1></h1>
+
+                <label for="Temporadas">Temporadas:</label>
+                <div class="input-group input-group-sm" name = "tempo" required >  
+                    {{strtoupper (@lis_tempo->setAtributos(["class"=>"form-control lis_tempo"])->setNombre("lis_tempo")->setOptionNulo('Seleccione Temporada')->getHTML())}}
+                </div>
+    
+            </div>
+            <div class="modal-body" style="overflow-x:hidden; overflow-y:visible;height:180px;">
+                    <div class="box box-primary">
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <table id="lista_funcionarios" class="table table-bordered table-striped tabla_smaller_especial list_factores">
+                             <thead>
+                                    <tr>
+                                        <th class="text-center">Departamento</th>
+                                        <th class="text-center">País</th> 
+                                        <th class="text-center">Vía</th> 
+                                        <th class="text-center">Moneda</th> 
+                                        <th class="text-center">Factor</th>                                    
+                                    </tr>
+                             </thead>
+                             <tbody>
+                             <!--<label>Vista Previa..</label> -->
+                             <font size=1.5>Vista Previa..</font>
+                                <repeat group="{{ @Lista_FactorEst }}" value="{{ @Lista_FactorEst }}">
+                                <tr class="filas" data-factorest="{{ utf8_encode(@Lista_FactorEst['DEP_DEPTO']) }}${{utf8_encode(@Lista_FactorEstimado['COD_PAIS'])}}${{utf8_encode(@Lista_FactorEstimado['COD_VIA']) }}${{ utf8_encode(@Lista_FactorEstimado['COD_MONEDA']) }}${{ utf8_encode(@Lista_FactorEstimado['FACTOR_DOL']) }}">
+
+                                    <th class="comuna_especial text-center">{{@Lista_FactorEst['DEP_DESCRIPCION']}}</th>
+                                    <th class="comuna_especial text-center">{{@Lista_FactorEst['NOM_PAIS']}}</th>
+                                    <th class="comuna_especial text-center">{{@Lista_FactorEst['NOM_VIA']}}</th> 
+                                    <th class="comuna_especial text-center">{{@Lista_FactorEst['NOM_MONEDA']}}</th> 
+                                    <th class="comuna_especial text-center">{{@Lista_FactorEst['FACTOR_DOL']}}</th>
+
+                                </tr>
+                               </repeat>   
+                             </tbody>
+                            </table>
+                            <br>    
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+               
+            </div>
+                
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary guarda_replicar" data-dismiss="modal" disabled >Guardar</button>
+            </div>
+            </div>
+
+        </div>
+    </form>
+</div>
+
+
+<include href="{{ @tipo_deptomarca }}" />
+
+
+<!-- DataTables -->
+<script src="{{@BASE}}/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="{{@BASE}}/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="{{@JQUERY}}ui/formulario/plan_compra/js/factor_estimado.js"></script>

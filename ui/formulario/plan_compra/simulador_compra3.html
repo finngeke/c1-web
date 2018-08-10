@@ -1,0 +1,251 @@
+
+
+
+<section class="content-header">
+    <ol class="breadcrumb">
+        <button class="btn btn-app importar_bmt"  data-tooltip="tooltip"  data-toggle="modal" data-target="#importar_bmt" data-placement="top" title="Importar BMT">
+            <i class="fa fa-cloud-download"></i> Load </button>
+
+        <a class="btn btn-app eliminar_bmt" data-target="#elimina_bmt" data-tooltip="tooltip" data-toggle="modal" title="Eliminar BMT">
+            <i class="fa fa-trash"></i> Eliminar
+        </a>
+
+        <a class="btn btn-app actualiza_grid" data-target="#actualiza_grilla" data-toggle="modal" data-tooltip="tooltip" title="Actualizar Grilla" data-placement="top">
+            <i class="fa fa-repeat"></i> actulizar
+        </a>
+
+        <a href="plan_compra?codigo={{@COD_TEMPORADA}}" class="btn btn-app" data-toggle="tooltip" data-placement="top" title="Volver al MAIN.">
+            <i class="fa fa-sign-out"></i> Salir
+        </a>
+    </ol>
+    <h1 class="bmt">{{@nombre_form}} Temporada : <b>{{@depto_form}}</b> - {{@NOM_TEMPORADA_CORTO}}</h1>
+
+</section>
+<!-- Main content -->
+<section class="content">
+    <div class="row" >
+        <!-- left column -->
+        <div class="col-md-12">
+            <div class="box box-primary">
+                <div class="box-body">
+
+                    <!-- aquí la primera grilla -->
+
+                </div>
+                <!-- /.box-body -->
+
+                <check if="{{ isset(@mensaje) }}">  
+                    <ul class="todo-list ui-sortable">
+                        <li style="padding: 4px;background-color: rgba(255, 255, 0, 0.49);">
+                            <span class="handle ui-sortable-handle">
+                                <i class="fa fa-ellipsis-v"></i>
+                                <i class="fa fa-ellipsis-v"></i>
+                            </span>
+                            <small class="label label-{{@mensaje.icon}}"><i class="fa fa-clock-o"></i> {{@mensaje.header}}</small>
+                            <span class="text">{{@mensaje.message}}</span>
+
+
+                        </li>
+                    </ul>
+                </check> 
+            </div>
+
+            <div class="box box-primary" style="overflow-x:hidden;
+                 overflow-y:visible;
+                 height:500px;">
+
+                <!-- /.box-header -->
+                <div class="box-body">
+
+<!-- ###############################################################################################################################################-->
+ <div class="table-responsive" style="height: 400px;">
+<!-- fin div tabla responsiva -->
+
+     <table class="table table-bordered table-condensed small" id="tabla2" name="tabla2">
+<thead>
+                        <tr>
+                            <th id="g_compra">G. Compra</th>
+                            <th id="temp">Temp</th>
+                            <th id="linea">Línea</th>
+                            <th id="sublinea">SubLínea</th>
+                            <th id="marca">Marca</th>
+                            <th id="estilo">Estilo</th>
+                            <th id="cod_corp">Cod. Corp</th>
+                            <th id="desc">Descrip.</th>
+                            <th id="desc_internet">Descrip. Internet</th>
+                            <th id="composicion">Composición</th>
+                            <th id="coleccion">Colección</th>
+                            <th id="evento">Evento</th>
+                            <th id="estilo_vida">Estilo Vida</th>
+                            <th id="calidad">Calidad</th>
+                            <th id="ocacion_uso">Ocación Uso</th>
+                            <th id="piramide_mix">Piramide Mix</th>
+                            <th id="ventana">Ventana</th>
+                            <th id="rank_vta">Rank Vta</th>
+                            <th id="ciclo_vida">Ciclo Vida</th>
+                            <th id="color">Color</th>
+                            <th id="hist">Hist</th>
+                            <th id="tipo_producto">Tipo Producto</th>
+                            <th id="tipo_exhibicion">Tipo Exhibición</th>
+                            <th id="tallas">Tallas</th>
+                            <th id="compra_ini">% Compra Ini</th>
+                            <th id="compra_ajust">% Compra Ajust</th>
+                            <th id="ajuste_compra">Ajuste Compra</th>
+                            <th id="curva">Curva</th>
+                            <th id="curva_min">Curva Min</th>
+                            <th id="uni_ini">Uni Ini</th>
+                            <th id="uni_ajust">Uni Ajust</th>
+                            <th id="uni_final">Uni Final</th>
+                            <th id="mstr_pack">MtrPack</th>
+                            <th id="n_cajas">Nº Cajas</th>
+                            <th id="cluster">Cluster</th>
+                            <th id="formato">Formato</th>
+                            <th id="tdas">Tdas</th>
+                            <th id="a">A</th>
+                            <th id="b">B</th>
+                            <th id="c">C</th>
+                            <th id="i">I</th>
+                            <th id="primera_carga">Primera Carga</th>
+                            <th id="tiendas">% Tiendas</th>
+                            <th id="proced">Proced</th>
+                            <th id="via">Vía</th>
+                            <th id="pais">País</th>
+                            <th id="viaje">Viaje</th>
+                            <th id="mkup">Mkup</th>
+                            <th id="precio_blanco">Precio Blanco</th>
+                            <th id="gm">GM</th>
+                            <th id="moneda">Moneda</th>
+                            <th id="target">Target</th>
+                            <th id="fob">FOB</th>
+                            <th id="insp">Insp</th>
+                            <th id="rfid">RFID</th>
+                            <th id="royalty">Royalty (%)</th>
+                            <th id="costo_uni_final_usd">Costo Unitarios Final US$</th>
+                            <th id="costo_uni_final_pesos">Costo Unitario Final Pesos</th>
+                            <th id="total_target_usd">Total Target US$</th>
+                            <th id="total_fob_usd">Total FOB US$</th>
+                            <th id="costo_total_pesos">Costo Total Pesos</th>
+                            <th id="total_retail_pesos">Total Retail Pesos (Sin IVA)</th>
+                            <th id="debut_reorder">Debut/Reorder</th>
+                            <th id="sem_ini">Sem Ini</th>
+                            <th id="sem_fin">Sem Fin</th>
+                            <th id="sem_ciclo_vida">Semanas Ciclo Vida</th>
+                            <th id="agot_obj">Agot Obj</th>
+                            <th id="semanas_liquidacion">Semanas Liquidación</th>
+                            <th id="proveedor">Proveedor</th>
+                            <th id="razon_social">Razon Social</th>
+                            <th id="trader">Trader</th>
+                            <th id="cod_sku_proveedor">Cod. SKU Proveedor</th>
+                            <th id="cod_padre">Cod. Padre</th>
+                            <th id="proforma">Proforma</th>
+                            <th id="archivo">Archivo</th>
+                            <th id="pi">PI</th>
+                            <th id="estilo_pmm">Estilo PPM</th>
+                            <th id="estado_match">Estado Match</th>
+                            <th id="n_oc">Nº OC</th>
+                            <th id="estado_oc">Estado OC</th>
+                            <th id="fecha_embarque">Fecha Embarque</th>
+                            <th id="fecha_eta">Fecha ETA</th>
+                            <th id="fecha_recepcion_cd">Fecha Recepción CD</th>
+                            <th id="dias_atraso_cd">Días Atraso CD</th>
+                            <th id="estado_opcion">Estado Opción</th>
+                        </tr>
+ </thead>
+<tbody>
+
+</tbody>
+                    </table>
+
+<!-- fin div tabla responsiva -->
+</div>
+
+                    
+                    
+<!-- ###############################################################################################################################################-->
+                </div>
+                <!-- /.box-body -->
+            </div>
+
+        </div>
+        <!--/.col (left) -->
+    </div>
+    <!-- /.row -->
+
+</section>
+
+<div id="elimina_bmt" class="modal fade" role="dialog" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content borde_especial">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Confirmación de usuario</h4>
+            </div>
+            <div class="modal-body">
+
+                <p>¿Está seguro de que desea eliminar el registro de la BMT [<span class="registro"></span>] ?</p>
+                <b>IMPORTANTE :</b> <span>No se puede eliminar los registros BMT si estan en estado Final.</span>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-danger elimina_bmt" data-dismiss="modal">Eliminar BMT</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="importar_bmt" class="modal fade" role="dialog" data-keyboard="false" data-backdrop="static">
+    <form method="post" enctype="multipart/form-data" class="form_import_bmt" action="guardar/archivo_bmt">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content borde_especial">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Importar Archivo Assortment/BMT  </h4>
+                </div>
+                <div class="modal-body">
+                    <div >
+                     <label for="tipos">Tipo Archivo:</label>
+                    <select class="FORM-CONTROL" id="tipos" name="tipos">
+                        <option value="1">Assortment</option>
+                        <option value="2">BMT</option>
+                    </select>
+                    </div>
+
+                    <br> <input type="file" name="user_file" class="file"> <!--required--></br>
+                    <b>IMPORTANTE :</b> <span>El archivo debe estar en formato Excel (.xls o .xlsx)</span></div>
+                <div class="modal-footer">
+                    <!--<button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cerrar</button>-->
+                    <div class="loading" style="display: none"><i class='fa fa-spinner fa-2x fa-spin '></i> Importando Archivo</div>
+                    <input type="submit" class="btn btn-primary carga_bmt"  value="Cargar">
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div id="actualiza_grilla" class="modal fade" role="dialog" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-center" style="width: 320px;">
+        <!-- Modal content-->
+        <div class="modal-content borde_especial">
+
+            <div class="modal-body">
+                <div class="loading text-center">
+                    <i class='fa fa-spinner fa-2x fa-spin '></i> Actualizando Grilla del Simulador
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+<include href="{{ @tipo_ventana_llegada }}" />
+<include href="{{ @tipo_ppto_costo }}" />
+<include href="{{ @tipo_ppto_retail }}" />
+<include href="{{ @tipo_tienda }}" />
+<include href="{{ @tipo_formato }}" />
+
+<script src="{{@JQUERY}}ui/formulario/plan_compra/js/simulador_compra3.js"></script>

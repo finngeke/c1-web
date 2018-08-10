@@ -1,0 +1,82 @@
+.morris-hover{position:absolute;z-index:1090;}.morris-hover.morris-default-style{border-radius:10px;padding:6px;color:#f9f9f9;background:rgba(0, 0, 0, 0.8);border:solid 2px rgba(0, 0, 0, 0.9);font-weight: 600;font-size:14px;text-align:center;}.morris-hover.morris-default-style .morris-hover-row-label{font-weight:bold;margin:0.25em 0;}
+.morris-hover.morris-default-style .morris-hover-point{white-space:nowrap;margin:0.1em 0;}
+
+.table > thead > tr > td.panne,
+.table > tbody > tr > td.panne,
+.table > tfoot > tr > td.panne,
+.table > thead > tr > th.panne,
+.table > tbody > tr > th.panne,
+.table > tfoot > tr > th.panne,
+.table > thead > tr.panne > td,
+.table > tbody > tr.panne > td,
+.table > tfoot > tr.panne > td,
+.table > thead > tr.panne > th,
+.table > tbody > tr.panne > th,
+.table > tfoot > tr.panne > th {
+  background-color: #FBD7D7;
+ 
+}
+.table-hover > tbody > tr > td.panne:hover,
+.table-hover > tbody > tr > th.panne:hover,
+.table-hover > tbody > tr.panne:hover > td,
+.table-hover > tbody > tr.panne:hover > th {
+  background-color: #FBD7D7;
+}
+.priori_solicitud {
+    background: url(../images/ico/priori.png);
+    background-repeat: no-repeat;
+    filter:Alpha(opacity=0); 
+    background-position: center;
+    width: 16px;
+    height: 16px;
+    border: none; 
+    text-align: center;
+    display:block; margin: 0 auto;
+
+}
+.luz.on{
+    color: #000;
+   
+}
+.luz{
+    color: #000;
+ 
+ 
+}
+
+.muy_alta {
+    background: url(muy_alta.png);
+    background-repeat: no-repeat;
+    filter:Alpha(opacity=0); 
+    background-position: center;
+    width: 16px;
+    height: 16px;
+    border: none; 
+    text-align: center;
+    display:block; margin: 0 auto;
+
+}
+.alta {
+    background: url(alta.png);
+    background-repeat: no-repeat;
+    filter:Alpha(opacity=0); 
+    background-position: center;
+    width: 16px;
+    height: 16px;
+    border: none; 
+    text-align: center;
+    display:block; margin: 0 auto;
+
+}
+.normal {
+    background: url(normal.png);
+    background-repeat: no-repeat;
+    filter:Alpha(opacity=0); 
+    background-position: center;
+    width: 16px;
+    height: 16px;
+    border: none; 
+    text-align: center;
+    display:block; margin: 0 auto;
+
+}

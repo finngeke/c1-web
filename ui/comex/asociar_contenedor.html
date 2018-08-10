@@ -1,0 +1,216 @@
+<link rel="stylesheet" href="{{@BASE}}/bower_components/datatables.net-bs/css/dataTables.bootstrap.css">
+<section class="content-header">
+	<h1>
+		ENVIAR INFORMACION A COMEX - {{@nombre_form}}
+	</h1>
+	<ol class="breadcrumb">
+		<li><a href="inicio"><i class="fa fa-dashboard"></i> Main</a></li>
+		<li class="active">{{@nombre_form}}</li>
+	</ol>
+</section>
+<!-- Main content -->
+<section class="content animated fadeInDown">
+	<check if="{{ isset(@mensaje) }}">
+		<div class="alert alert-{{@mensaje.icon}}" role="alert">
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				<span aria-hidden="true">&times;</span></button>
+			<strong>{{@mensaje.header}}:</strong> {{@mensaje.message|raw}}
+		</div>
+	</check>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="box box-primary">
+				<div class="box-body" style="font-size: 0.8em;">
+					<h3>Complete la información del embarque</h3>
+					<form class="form-horizontal" method="post" action="guardar_contenedor">
+						<input id="cod_proveedor" name="cod_proveedor" type="hidden" value="{{ @cod_proveedor }}">
+						<input id="nro_factura" name="nro_factura" type="hidden" value="{{ @nro_factura }}">
+						<div class="form-group">
+							<label for="viaTransporte" class="col-sm-2 control-label">Vía de Transporte</label>
+							<div class="col-sm-3">
+								<select class="form-control" id="viaTransporte" name="viaTransporte">
+									<option value="" selected>Seleccione una opción</option>
+									<option value="A">Aéreo</option>
+									<option value="M">Marítimo</option>
+									<option value="T">Terrestre</option>
+								</select>
+							</div>
+							<label for="nroContenedor" class="col-sm-2 control-label">Nro. Contenedor</label>
+							<div class="col-sm-3">
+								<input type="text" class="form-control" id="nroContenedor" name="nroContenedor" placeholder="Nro. Contenedor">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="tipoContenedor" class="col-sm-2 control-label">Tipo Contenedor</label>
+							<div class="col-sm-3">
+								<select class="form-control" id="tipoContenedor" name="tipoContenedor">
+									<option value="" selected>Seleccione una opción</option>
+									<option value="20.DRY">20.DRY</option>
+									<option value="40.DRY">40.DRY</option>
+									<option value="40HC">40HC</option>
+									<option value="20GOH">20GOH</option>
+									<option value="40GOH">40GOH</option>
+									<option value="FLATRACK">FLATRACK</option>
+									<option value="REEFER">REEFER</option>
+									<option value="20GP">20GP</option>
+									<option value="40GP">40GP</option>
+									<option value="40HQ">40HQ</option>
+									<option value="40RFU">40RFU</option>
+								</select>
+							</div>
+							<label for="bl" class="col-sm-2 control-label">B/L</label>
+							<div class="col-sm-3">
+								<input type="text" class="form-control" id="bl" name="bl" placeholder="B/L">
+							</div>
+						</div>
+						<table class="table table-bordered table-striped" style="width:100%;white-space:nowrap; font-size: 0.8em;">
+							<thead>
+								<tr>
+									<th style="text-align:center;vertical-align:middle;">LPN</th>
+									<th style="text-align:center;vertical-align:middle;">Nro. Contenedor</th>
+									<th style="text-align:center;vertical-align:middle;">Tipo Contenedor</th>
+									<th style="text-align:center;vertical-align:middle;">B/L</th>
+									<th style="text-align:center;vertical-align:middle;">Vía Transporte</th>
+									<th style="text-align:center;vertical-align:middle;">
+										<input type="checkbox" class="check-all"></th>
+							</thead>
+							<tbody>
+								<repeat group="{{@data}}" value="{{@item}}">
+									<tr>
+										<td style="text-align:center;vertical-align:middle;">{{@item[0]}}</td>
+										<td style="text-align:center;vertical-align:middle;">{{@item[1]}}</td>
+										<td style="text-align:center;vertical-align:middle;">{{@item[2]}}</td>
+										<td style="text-align:center;vertical-align:middle;">{{@item[3]}}</td>
+										<td style="text-align:center;vertical-align:middle;">{{@item[4]}}</td>
+										<td style="text-align:center;vertical-align:middle;">
+											<input type="checkbox" name="lpn[]" value="{{@item[0]}}"></td>
+									</tr>
+								</repeat>
+							</tbody>
+						</table>
+						<div class="form-group">
+							<div class="col-sm-offset-2 col-sm-4">
+								<button type="submit" class="btn btn-primary">Guardar</button>
+								<a href="enviar_comex?cod_proveedor={{@cod_proveedor}}&nro_factura={{@nro_factura}}" class="btn btn-success">Enviar a comex</a>
+								<a href="comex" class="btn btn-default">Volver</a>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<!-- DataTables -->
+<script src="{{@BASE}}/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="{{@BASE}}/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<!-- Validate -->
+<script src="{{@JQUERY}}ui/proveedor/js/jquery.validate.min.js"></script>
+<script src="{{@JQUERY}}ui/proveedor/js/additional-methods.min.js"></script>
+<script>
+	$(function() {
+		$('#nroContenedor').prop('readonly', false).val('');
+		$('#tipoContenedor').attr('disabled', false).val('');
+
+		var table = $('.table').DataTable({
+			scrollY: "150px",
+			scrollX: true,
+			scrollCollapse: true,
+			paging: false,
+			searching: true,
+			ordering: true,
+			info: false
+		});
+		/*table.columns().every(function() {
+			var that = this;
+			$('input', this.footer()).on('keyup change', function() {
+				if (that.search() !== this.value) {
+					that.search(this.value).draw();
+				}
+			});
+		});*/
+		$('.check-all').click(function() {
+			$('input:checkbox').not(this).prop('checked', this.checked);
+		});
+		jQuery.extend(jQuery.validator.messages, {
+			required: "Este campo es obligatorio.",
+			remote: "Por favor, corrija el valor.",
+			email: "Por favor, ingrese una dirección de correo válida.",
+			url: "Por favor, ingrese una URL válida.",
+			date: "Por favor, ingrese una fecha válid.",
+			dateISO: "Por favor, ingrese una fecha válid (ISO).",
+			number: "Por favor, ingrese un número válido.",
+			digits: "Por favor, ingrese sólo números.",
+			creditcard: "Por favor, ingrese un número de tarjeta de crédito válido.",
+			equalTo: "Por favor, ingere el mismo valor.",
+			accept: "Por favor, ingrese un valor con una extensión válida.",
+			maxlength: jQuery.validator.format("Por favor, no ingrese más de {0} caracteres."),
+			minlength: jQuery.validator.format("Por favor, ingrese al menos {0} caracteres."),
+			rangelength: jQuery.validator.format("Por favor, ingrese un valor entre {0} y {1} caracteres de largo."),
+			range: jQuery.validator.format("Por favor, ingrese un valor entre {0} y {1}."),
+			max: jQuery.validator.format("Por favor, ingrese un valor menor o igual que {0}."),
+			min: jQuery.validator.format("Por favor, ingrese un valor mayor o igual que {0}.")
+		});
+		$('.form-horizontal').validate({
+			rules: {
+				viaTransporte: {
+					required: true
+				},
+				nroContenedor: {
+					required: {
+						depends: function(element) {
+							return $('#viaTransporte').val() == 'M';
+						}
+					}
+				},
+				tipoContenedor: {
+					required: {
+						depends: function(element) {
+							return ($('#viaTransporte').val() == 'M') && $('#nroContenedor').val() != "0";
+						}
+					}
+				},
+				bl: {
+					required: true
+				}
+			},
+			success: "valid",
+			errorElement: 'div',
+			errorPlacement: function(error, element) {
+				error.insertAfter(element).addClass("help-block");
+			},
+			highlight: function(element) {
+				$(element).parent().addClass("has-error");
+			},
+			unhighlight: function(element) {
+				$(element).parent().removeClass("has-error");
+			}
+		});
+		$('.btn-success').click(function(e) {
+			e.preventDefault();
+			if (confirm('Si envía a COMEX no podrá volver a editar. ¿Desea continuar?')) {
+				window.location.href = $(this).attr('href');
+			}
+		});
+		$('#viaTransporte').change(function() {
+			var via = $(this).val();
+			if (via == 'A') {
+				$('#nroContenedor').prop('readonly', true).val('#AER#');
+				$('#tipoContenedor').attr('disabled', true).val('');
+			} else if (via == 'T') {
+				$('#nroContenedor').prop('readonly', true).val('#TER#');
+				$('#tipoContenedor').attr('disabled', true).val('');
+			} else {
+				$('#nroContenedor').prop('readonly', false).val('');
+				$('#tipoContenedor').attr('disabled', false).val('');
+			}
+		});
+		$('#nroContenedor').change(function() {
+			if ($(this).val() == "0") {
+				$('#tipoContenedor').attr('disabled', true).val('');
+			} else {
+				$('#tipoContenedor').attr('disabled', false).val('');
+			}
+		})
+	});
+</script>

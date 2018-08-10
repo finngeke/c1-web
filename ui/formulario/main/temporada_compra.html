@@ -1,0 +1,168 @@
+<include href="{{ @temporada }}" />
+
+<!-- Lib DataTables -->
+<link rel="stylesheet" href="{{@BASE}}/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
+
+<!-- Cabecera Modulo -->
+<section class="content-header">
+    <h1>
+        Mantenedor de <b>{{@nombre_form}}</b>
+
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="inicio"><i class="fa fa-dashboard"></i> Main</a></li>
+        <li class="active">Mantendedor de {{@nombre_form}}</li>
+    </ol>
+    <check if="{{ isset(@mensaje) }}">   
+        <div class="box-body">
+            <ul class="todo-list ui-sortable">
+
+                <li class="">
+                    <span class="handle ui-sortable-handle">
+                        <i class="fa fa-ellipsis-v"></i>
+                        <i class="fa fa-ellipsis-v"></i>
+                    </span>
+                    <small class="label label-{{@mensaje.icon}}"><i class="fa fa-clock-o"></i> {{@mensaje.header}}</small>
+                    <span class="text">{{@mensaje.message}}</span>
+                </li>
+
+            </ul>
+        </div>
+    </check>  
+
+</section>
+<!-- Main content -->
+<section class="content animated fadeInDown">
+    <!-- form start -->
+    <form role="form" method="post" class="form_temporada" action="guardar/temporada" id="form_guarda_temporada">
+
+        <input type="hidden" id="cod_temp" name="cod_temp">
+        <input type="hidden" id="corto_temp" name="corto_temp">
+        <div class="row">
+            <div class="box-body">
+                <button class="btn btn-app button_form" id="button_guarda_temporada"><i class="fa fa-save"></i>Guardar </button>
+                <a class="btn btn-app disabled eliminar_temporada" data-toggle="modal" data-target="#elimina_temporada"><i class="fa fa-refresh"></i> Cambia Estado</a>
+                <a class="btn btn-app disabled quitar_temporada" data-toggle="modal" data-target="#quitar_temporada"><i class="fa fa-trash-o"></i> Quitar</a>
+                <a class="btn btn-app limpiar_form"><i class="fa fa-repeat"></i> Limpiar</a>
+                <a href="inicio" class="btn btn-app"><i class="fa fa-sign-out"></i> Salir</a>
+            </div>
+        </div>
+
+        <div class="row" style="overflow-x:hidden;
+             overflow-y:visible;
+             height:500px;">
+            <!-- left column -->
+            <div class="col-md-12">
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <b>Ingreso / Actualización</b> de Temporadas
+                    </div>
+
+                    <div class="box-body">
+
+                        <div class="row">
+                            <div class="col-sm-1"></div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label for="nombre_corto">Nombre Corto:</label>
+                                    <select class="form-control" id="nombre_corto" name="nombre_corto">
+                                        <option value="OI">OI</option>
+                                        <option value="PV">PV</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <label for="anno">&nbsp;</label>
+                                    <select class="form-control" id="anno" name="anno"></select>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-5">
+                                <div class="form-group">
+                                    <label for="description">Descripción</label>
+                                    <input type="text" class="form-control" id="description" name="descripcion" required placeholder="Ingrese una descripción">
+                                    <input type="hidden" class="form-control" id="estado_hidden" name="estado_hidden">
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- /.box-body -->
+
+                    <hr>
+                </div>
+
+                <div class="box box-primary">
+                    <div class="box-header with-border">Lista de Temporadas</div>
+
+                    <div class="box-body">
+                        <table id="lista_temporada" class="table table-bordered table-striped tabla_smaller">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <!--<th>Código</th>-->
+                                    <th id="nombre_temporada_id">Temporada</th>
+                                    <th>Descripción</th>
+                                    <!--<th>Fecha Creación</th>-->
+                                    <!--<th>BMT</th>-->
+                                    <th>Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <repeat group="{{ @Lista_temporadas }}" value="{{ @Lista_temporadas }}">
+                                <tr class="filas" data-temporada="{{ utf8_encode(@Lista_temporadas['COD_TEMPORADA']) }}${{utf8_encode(@Lista_temporadas['NOM_TEMPORADA_CORTO']) }}${{ utf8_encode(@Lista_temporadas['NOM_TEMPORADA']) }}">
+                                    <td><input type="radio" class="fila" name="carga_temporada" value="{{ utf8_encode(@Lista_temporadas['COD_TEMPORADA']) }}"></td>
+                                    <!--<td>{{utf8_encode(@Lista_temporadas['COD_TEMPORADA'])}}</td>-->
+                                    <td id="nombre_temporada_id">{{@Lista_temporadas['NOM_TEMPORADA_CORTO']}}</td>
+                                    <td>{{@Lista_temporadas['NOM_TEMPORADA']}}</td>
+                                    <!--<td>{{@Lista_temporadas['FEC_CRE']}}</td>-->
+                                    <!--<td>{{@Lista_temporadas['NOM_TEMPORADA_BMT']}}</td>-->
+                                    <td>
+                                        <check if="{{ @Lista_temporadas['COD_EST_TEMP'] == 1 }}">
+                                            <true><div>INACTIVO</div></true>
+                                            <false><div>ACTIVO</div></false>
+                                        </check>
+                                    </td>
+                                </tr>
+                            </repeat>
+                            </tbody>
+                        </table>
+                        <br>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+
+            </div>
+            <!--/.col (left) -->
+        </div>
+        <!-- /.row -->
+    </form>
+</section>
+
+<!-- Ventana modal de confirmación de eliminación -->
+<div id="elimina_temporada" class="modal fade" role="dialog" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content borde_especial">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Confirmación de usuario</h4>
+            </div>
+            <div class="modal-body">
+                <p>¿Cambiar estado de la temporada de compra "<span class="registro"></span>"?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-danger elimina_temporada" data-dismiss="modal">Cambiar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- DataTables -->
+<script src="{{@BASE}}/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="{{@BASE}}/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="{{@JQUERY}}ui/formulario/main/js/temporada_compra.js"></script>
+

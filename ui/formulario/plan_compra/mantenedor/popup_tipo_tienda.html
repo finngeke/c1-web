@@ -1,0 +1,89 @@
+
+<div id="selecciona_popup" class="modal fade" role="dialog" data-keyboard="false" data-backdrop="static">
+    <input type="hidden" value="{{@depto}}" class="depto">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content borde_especial">
+            <div class="modal-header">
+               <button type="button" id="cerrar_btn_popup_x" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title titulo_mantenedor"></h4><span id="span_cambio_recorrido_marca"></span>
+            </div>
+            <div class="modal-body cuerpo_tipo_tienda">
+<!-- COMIENZO CONTENIDO -->
+
+<div class='row'>
+<div class='col-md-2'><b>Marcas: </b></div>
+<div class='col-md-4'><select id="MARCAS" name="MARCAS"><option value="">SELECCIONE</option></select></div>
+<div class='col-md-3'><b>Tipo Tienda: </b></div>
+<div class='col-md-3'><select id="TIENDAS" name="TIENDAS"><option value="">SELECCIONE</option></select></div>
+</div>
+
+<div class='container-fluid'>&nbsp;</div>
+<div class='row'>
+<div class='col-md-5'>
+    <select class="form-control DISPONIBLE" id="DISPONIBLE" name="DISPONIBLE"></select><span id="span_disponible"></span>
+</div>
+<div class='col-md-2 col-centered'>
+    <button id="btn_agregar_tipo_tienda" class='btn btn-default btn-sm btn-block agregar'> > </button>
+    <br>
+    <button id="btn_quitar_tipo_tienda" class='btn btn-default btn-sm btn-block quitar'> < </button>
+    <br>
+    <br>
+    <br>
+    <br>
+    <button type="button" id="btn_replicar_popup_tipo_tienda" class="btn btn-default btn-sm btn-block">Replicar</button>
+
+</div>
+<div class='col-md-5'>
+    <select class="form-control ASIGNADO" id="ASIGNADO" name="ASIGNADO"></select><span id="span_asignado"></span>
+</div>
+</div>
+
+<!-- Aquí cargamos la temprorada que fue enviada al momento de cargar la ventana (Desde seleccionar depto) cuando el sistema valida que tenga presupuestos y tiendas-->
+<input type="hidden" name="select_depto_mant_tipo_tienda_hidden" id="select_depto_mant_tipo_tienda_hidden" value="">
+
+<div class='col-md-12'>&nbsp;</div>
+
+                <!-- Modal -->
+                <div class="modal fade" id="replicarTiendaModal" role="dialog">
+                    <div class="modal-dialog">
+                        <!-- Contenido del Modal -->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Replicar</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class='row'>
+                                    <div class='col-md-3'><b>Temporada: </b></div>
+                                    <div class='col-md-7'><select id="REPLICAR_TIENDA_TEMPORADA" name="REPLICAR_TIENDA_TEMPORADA"></select></div>
+                                </div>
+                                <div class='row'>
+                                    <div class='col-md-3'><b>Departamento: </b></div>
+                                    <div class='col-md-7'><input type="text" class="form-control REPLICAR_TIENDA_DEPARTAMENTO" name="REPLICAR_TIENDA_DEPARTAMENTO" id="REPLICAR_TIENDA_DEPARTAMENTO" value="{{@depto}}" READONLY></div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <div class="loading" style="display: none"><i class='fa fa-spinner fa-2x fa-spin '></i> Guardando tiendas...</div>
+                                <button type="button" class="btn btn-default pull-left btn_cancelar_replicar_tienda" id="btn_cancelar_replicar_tienda" name="btn_cancelar_replicar_tienda">Cancelar</button>
+                                <button type="button" class="btn btn-primary tipo_btn_replicar_tienda" id="tipo_btn_replicar_tienda" name="tipo_btn_replicar_tienda">Replicar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Fin Modal -->
+
+<!-- FIN CONTENIDO -->            
+            </div>
+            <div class="modal-footer">
+                <div class="loading" style="display: none"><i class='fa fa-spinner fa-2x fa-spin '></i> Guardando tiendas...</div>
+                <button type="button" class="btn btn-default pull-left" id="btn_cerrar_popup_tienda" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary tipo_btn" id="tipo_btn" name="tipo_btn">Guardar</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+</div>
+<script src="{{@JQUERY}}ui/formulario/plan_compra/js/popup_tipo_tienda.js"></script>
+
+

@@ -1,0 +1,98 @@
+
+<div id="selecciona_popup_ventana_llegada" class="modal fade" role="dialog" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+        <!-- Modal content-->
+        <div class="modal-content borde_especial">
+            <div class="modal-header">
+               <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title titulo_mantenedor_ventana_llegada"></h4>
+            </div>
+            <div class="modal-body cuerpo_tipo_ventana_llegada">
+<!-- COMIENZO CONTENIDO -->    
+
+<div class='table-responsive'>
+    <!-- Aquí desplegar la tabla de contenidos-->
+    <table class="table table-condensed tabla_ventana_llegada">
+        <thead>
+        <tr>
+            <th style="display: none;">cod_ventana</th>
+            <th class="text-center">Ventana</th>
+            <th class="text-center">Porcentaje</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td class="text-center clase_cod_ventana" style="display: none;">1</td>
+            <td class="text-center">A</td>
+            <td><input type="text" class="form-control text-center input-sm clase_input" id="input_A" name="input_A" value="" onchange="recTotalVentaLlegada()"></td>
+        </tr>
+        <tr>
+            <td class="text-center clase_cod_ventana" style="display: none;">2</td>
+            <td class="text-center">B</td>
+            <td><input type="text" class="form-control text-center input-sm clase_input" id="input_B" name="input_B" value="" onchange="recTotalVentaLlegada()"></td>
+        </tr>
+        <tr>
+            <td class="text-center clase_cod_ventana" style="display: none;">3</td>
+            <td class="text-center">C</td>
+            <td><input type="text" class="form-control text-center input-sm clase_input" id="input_C" name="input_C" value="" onchange="recTotalVentaLlegada()"></td>
+        </tr>
+        <tr>
+            <td class="text-center clase_cod_ventana" style="display: none;">4</td>
+            <td class="text-center">D</td>
+            <td><input type="text" class="form-control text-center input-sm clase_input" id="input_D" name="input_D" value="" onchange="recTotalVentaLlegada()"></td>
+        </tr>
+        <tr>
+            <td class="text-center clase_cod_ventana" style="display: none;">5</td>
+            <td class="text-center">E</td>
+            <td><input type="text" class="form-control text-center input-sm clase_input" id="input_E" name="input_E" value="" onchange="recTotalVentaLlegada()"></td>
+        </tr>
+        <tr>
+            <td class="text-center clase_cod_ventana" style="display: none;">6</td>
+            <td class="text-center">F</td>
+            <td><input type="text" class="form-control text-center input-sm clase_input" id="input_F" name="input_F" value="" onchange="recTotalVentaLlegada()"></td>
+        </tr>
+        <tr>
+            <td class="text-center clase_cod_ventana" style="display: none;">7</td>
+            <td class="text-center">G</td>
+            <td><input type="text" class="form-control text-center input-sm clase_input" id="input_G" name="input_G" value="" onchange="recTotalVentaLlegada()"></td>
+        </tr>
+        <tr>
+            <td class="text-center clase_cod_ventana" style="display: none;">8</td>
+            <td class="text-center">H</td>
+            <td><input type="text" class="form-control text-center input-sm clase_input" id="input_H" name="input_H" value="" onchange="recTotalVentaLlegada()"></td>
+        </tr>
+        <tr>
+            <td class="text-center clase_cod_ventana" style="display: none;">9</td>
+            <td class="text-center">I</td>
+            <td><input type="text" class="form-control text-center input-sm clase_input" id="input_I" name="input_I" value="" onchange="recTotalVentaLlegada()"></td>
+        </tr>
+        <tr>
+            <td style="display: none;">TOTAL</td>
+            <td class="text-center clase_ventana">TOTAL</td>
+            <td><input type="text" class="form-control text-center input-sm clase_input_total" id="input_total" name="input_total" value="" readonly></td>
+        </tr>
+        </tbody>
+    </table>
+    <input type="hidden" name="ventana_llegada_usuario" id="ventana_llegada_usuario" value="{{ @login }}">
+</div>
+
+<!--
+<div class='container-fluid'>
+    <button type="button" class="btn btn-primary btn-xs pull-right">Excel</button>
+</div>
+-->
+<!--<div class='col-md-12'></div>-->
+
+
+
+<!-- FIN CONTENIDO -->            
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary tipo_btn_ventana_llegada" id="tipo_btn_ventana_llegada" name="tipo_btn_ventana_llegada">Guardar</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="{{@JQUERY}}ui/formulario/plan_compra/js/popup_ventana_llegada.js"></script>

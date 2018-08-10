@@ -1,0 +1,416 @@
+<meta charset="UTF-8">
+<link rel="stylesheet" type="text/css" href="{{@JQUERY}}ui/formulario/plan_compra/css/plan_compra_grilla.css">
+<table id="lista_funcionarios" class="table table-bordered table-striped tabla_smaller list_usuarios">
+    <thead>
+
+        <tr style="color:red" >
+            !NOTA: El campo 'ID C1' es el código sistema C1 y se utiliza para importar BMT. Por favor mantener ese código por cada Opción.
+        </tr>
+        <tr></tr><tr></tr><tr></tr><tr></tr><tr></tr><tr></tr><tr></tr><tr></tr><tr></tr>
+        <tr>
+            <th class="Colum_bmt_sinborder"colspan="34"></th>
+            <th class="Colum_bmt_blue2"colspan="75">CHILE</th>
+            <th class="Colum_bmt_rojo2"colspan="74">PERU</th>
+        </tr>
+
+        <tr>
+            <th class="Colum_bmt2"colspan="34" style="text-align:center;"></th>
+            <th class="Colum_bmt_blue2" colspan="2" style="text-align:center;"></th>
+            <th class="Colum_bmt_blue2" colspan="7" style="text-align:center;">HIERARCHI</th>
+            <th class="Colum_bmt_blue2" colspan="6" style="text-align:center;"></th>
+            <th class="Colum_bmt_blue2" colspan="5" style="text-align:center;">PRICE</th>
+            <th class="Colum_bmt_blue2" colspan="10" style="text-align:center;">DELIVERY</th>
+            <th class="Colum_bmt_blue2" colspan="32" style="text-align:center;">SIZE BREAK DOWN AND SIZE RATIO</th>
+            <th class="Colum_bmt_blue2" colspan="5" style="text-align:center;">PACKING</th>
+            <th class="Colum_bmt_blue2" colspan="3" style="text-align:center;">REDORDER</th>
+            <th class="Colum_bmt_blue2" colspan="5" style="text-align:center;">OTHERS</th>
+
+            <th class="Colum_bmt_rojo2" colspan="2" style="text-align:center;"></th>
+            <th class="Colum_bmt_rojo2" colspan="6" style="text-align:center;">HIERARCHI</th>
+            <th class="Colum_bmt_rojo2" colspan="6" style="text-align:center;"></th>
+            <th class="Colum_bmt_rojo2" colspan="5" style="text-align:center;">PRICE</th>
+            <th class="Colum_bmt_rojo2" colspan="10" style="text-align:center;">DELIVERY</th>
+            <th class="Colum_bmt_rojo2" colspan="32" style="text-align:center;">SIZE BREAK DOWN AND SIZE RATIO</th>
+            <th class="Colum_bmt_rojo2" colspan="4" style="text-align:center;">PACKING</th>
+            <th class="Colum_bmt_rojo2" colspan="3" style="text-align:center;">REDORDER</th>
+            <th class="Colum_bmt_rojo2" colspan="6" style="text-align:center;">OTHERS</th>
+        </tr><!--Columnas 1 -->
+
+        <tr>
+            <th class="Colum_bmt_rojo3">ID C1</th>
+            <th class="Colum_bmt">PURCHASE GROUP</th>
+            <th class="Colum_bmt">CORPORATE BUYER NAME</th>
+            <th class="Colum_bmt">DISIGNER NAME</th>
+            <th class="Colum_bmt">PI SEASON</th>
+            <th class="Colum_bmt">COD CORP</th>
+            <th class="Colum_bmt">STYLE NUMBER</th>
+            <th class="Colum_bmt">STYLE NAME</th>
+            <th class="Colum_bmt">SHORT_NAME</th>
+            <th class="Colum_bmt">PHOTOGRAF</th>
+            <th class="Colum_bmt">DESCRIPCION INTERNET</th>
+            <th class="Colum_bmt">COLOR CODE</th>
+            <th class="Colum_bmt">COLOR NAME</th>
+            <th class="Colum_bmt">COLECTION</th>
+            <th class="Colum_bmt">COMPOSITION</th>
+            <th class="Colum_bmt">LINING</th>
+            <th class="Colum_bmt">TYPE OF FABRIC</th>
+            <th class="Colum_bmt">DETAILS</th>
+            <th class="Colum_bmt">BEFORE MEETING REMARKS</th>
+            <th class="Colum_bmt">AFTER MEETING REMARKS</th>
+            <th class="Colum_bmt">PRODUCT DESCRIPTION</th>
+            <th class="Colum_bmt">STYLE GENDER</th>
+            <th class="Colum_bmt">SEASON</th>
+            <th class="Colum_bmt">TARGET VENDOR</th>
+            <th class="Colum_bmt">VENDOR NICK NAME</th>
+            <th class="Colum_bmt">VENDOR CODE</th>
+            <th class="Colum_bmt">COUNTRY OF ORIGIN</th>
+            <th class="Colum_bmt">HKO/NO HKO</th>
+            <th class="Colum_bmt">TARGET COST</th>
+            <th class="Colum_bmt">TARGET BUDGET</th>
+            <th class="Colum_bmt">TOTAL QUANTITY</th>
+            <th class="Colum_bmt">FINAL COST</th>
+            <th class="Colum_bmt">FINAL BUDGET</th>
+            <th class="Colum_bmt">LEAD TIME TYPE</th>
+            <th class="Colum_bmt_blue">LOCAL BUYER</th>
+            <th class="Colum_bmt_blue">LOCAL BRAND</th>
+            <th class="Colum_bmt_blue">DEPARTMENT</th>
+            <th class="Colum_bmt_blue">DEPARTMENT CODE</th>
+            <th class="Colum_bmt_blue">LINE (*)</th>
+            <th class="Colum_bmt_blue">SUBLINE</th>
+            <th class="Colum_bmt_blue">SUBLNE CODE</th>
+            <th class="Colum_bmt_blue">TYPE OF EXHIBITION</th>
+            <th class="Colum_bmt_blue">LIFE CICLE</th>
+            <th class="Colum_bmt_blue">PRODUCT SEASON</th>
+            <th class="Colum_bmt_blue">TYPE OF PRODUCT</th>
+            <th class="Colum_bmt_blue">PYRAMID MIX</th>
+            <th class="Colum_bmt_blue">CHANCE OF USER</th>
+            <th class="Colum_bmt_blue">RANKING OF SALE</th>
+            <th class="Colum_bmt_blue">LIFE STYLE</th>
+            <th class="Colum_bmt_blue">RETAIL PRICE</th>
+            <th class="Colum_bmt_blue">PRICE RANGE</th>
+            <th class="Colum_bmt_blue">2 X RETAIL PRICE</th>
+            <th class="Colum_bmt_blue">ANTES/AHORA</th>
+            <th class="Colum_bmt_blue">EVENTO</th>
+            <th class="Colum_bmt_blue">SHIPMENT MODE</th>
+            <th class="Colum_bmt_blue">VENTANA</th>
+            <th class="Colum_bmt_blue">mm/dd1</th>
+            <th class="Colum_bmt_blue">mm/dd2</th>
+            <th class="Colum_bmt_blue">mm/dd3</th>
+            <th class="Colum_bmt_blue">mm/dd4</th>
+            <th class="Colum_bmt_blue">mm/dd5</th>
+            <th class="Colum_bmt_blue">mm/dd6</th>
+            <th class="Colum_bmt_blue">mm/dd7</th>
+            <th class="Colum_bmt_blue">TOTAL QUANTITY CL</th>
+            <th class="Colum_bmt_blue">CLUSTER</th>
+            <th class="Colum_bmt_blue">SIZE</th>
+            <th class="Colum_bmt_blue">Size %1</th>
+            <th class="Colum_bmt_blue">Size %2</th>
+            <th class="Colum_bmt_blue">Size %3</th>
+            <th class="Colum_bmt_blue">Size %4</th>
+            <th class="Colum_bmt_blue">Size %5</th>
+            <th class="Colum_bmt_blue">Size %6</th>
+            <th class="Colum_bmt_blue">Size %7</th>
+            <th class="Colum_bmt_blue">Size %8</th>
+            <th class="Colum_bmt_blue">Size %9</th>
+            <th class="Colum_bmt_blue">Size %10</th>
+            <th class="Colum_bmt_blue">Size %11</th>
+            <th class="Colum_bmt_blue">Size %12</th>
+            <th class="Colum_bmt_blue">Size %13</th>
+            <th class="Colum_bmt_blue">Size %14</th>
+            <th class="Colum_bmt_blue">Size %15</th>
+            <th class="Colum_bmt_blue">Qty #1</th>
+            <th class="Colum_bmt_blue">Qty #2</th>
+            <th class="Colum_bmt_blue">Qty #3</th>
+            <th class="Colum_bmt_blue">Qty #4</th>
+            <th class="Colum_bmt_blue">Qty #5</th>
+            <th class="Colum_bmt_blue">Qty #6</th>
+            <th class="Colum_bmt_blue">Qty #7</th>
+            <th class="Colum_bmt_blue">Qty #8</th>
+            <th class="Colum_bmt_blue">Qty #9</th>
+            <th class="Colum_bmt_blue">Qty #10</th>
+            <th class="Colum_bmt_blue">Qty #11</th>
+            <th class="Colum_bmt_blue">Qty #12</th>
+            <th class="Colum_bmt_blue">Qty #13</th>
+            <th class="Colum_bmt_blue">Qty #14</th>
+            <th class="Colum_bmt_blue">Qty #15</th>
+            <th class="Colum_bmt_blue">PREPACK</th>
+            <th class="Colum_bmt_blue">HANDLING TYPE</th>
+            <th class="Colum_bmt_rojo3">HANDLING TYPE CD</th>
+            <th class="Colum_bmt_blue">SIZE STICKER</th>
+            <th class="Colum_bmt_blue">UNITS PER BOX</th>
+            <th class="Colum_bmt_blue">REORDER</th>
+            <th class="Colum_bmt_blue">COST LAST PURCHASE</th>
+            <th class="Colum_bmt_blue">VENDOR LAST PURCHASE</th>
+            <th class="Colum_bmt_blue">EXTENDED WARRANTY</th>
+            <th class="Colum_bmt_blue">RFID COST</th>
+            <th class="Colum_bmt_blue">INSPECTION COST</th>
+            <th class="Colum_bmt_blue">ROYALTY</th>
+            <th class="Colum_bmt_blue">SIZE SAMPLE</th>
+            <th class="Colum_bmt_rojo">LOCAL BUYER P</th>
+            <th class="Colum_bmt_rojo">LOCAL BRAND P</th>
+            <th class="Colum_bmt_rojo">DEPARTMENT P</th>
+            <th class="Colum_bmt_rojo">DEPARTMENT CODE P</th>
+            <th class="Colum_bmt_rojo">LINE (*) P</th>
+            <th class="Colum_bmt_rojo">SUBLINE P</th>
+            <th class="Colum_bmt_rojo">SUBLNE CODE P</th>
+            <th class="Colum_bmt_rojo">HIERARCHI P</th>
+            <th class="Colum_bmt_rojo">LIFE CICLE P</th>
+            <th class="Colum_bmt_rojo">PRODUCT SEASON P</th>
+            <th class="Colum_bmt_rojo">PYRAMID MIX P</th>
+            <th class="Colum_bmt_rojo">CHANCE OF USER P</th>
+            <th class="Colum_bmt_rojo">RANKING OF SALE P</th>
+            <th class="Colum_bmt_rojo">LIFE STYLE P</th>
+            <th class="Colum_bmt_rojo">RETAIL PRICE P</th>
+            <th class="Colum_bmt_rojo">PRICE RANGE P</th>
+            <th class="Colum_bmt_rojo">2 X RETAIL PRICE P</th>
+            <th class="Colum_bmt_rojo">ANTES/AHORA P</th>
+            <th class="Colum_bmt_rojo">EVENTO P</th>
+            <th class="Colum_bmt_rojo">SHIPMENT MODE P</th>
+            <th class="Colum_bmt_rojo">VENTANA P</th>
+            <th class="Colum_bmt_rojo">mm/dd1 P</th>
+            <th class="Colum_bmt_rojo">mm/dd2 P</th>
+            <th class="Colum_bmt_rojo">mm/dd3 P</th>
+            <th class="Colum_bmt_rojo">mm/dd4 P</th>
+            <th class="Colum_bmt_rojo">mm/dd5 P</th>
+            <th class="Colum_bmt_rojo">mm/dd6 P</th>
+            <th class="Colum_bmt_rojo">mm/dd7 P</th>
+            <th class="Colum_bmt_rojo">TOTAL QUANTITY P</th>
+            <th class="Colum_bmt_rojo">SIZE TYPE P</th>
+            <th class="Colum_bmt_rojo">SIZE P</th>
+            <th class="Colum_bmt_rojo">Size %1 P</th>
+            <th class="Colum_bmt_rojo">Size %2 P</th>
+            <th class="Colum_bmt_rojo">Size %3 P</th>
+            <th class="Colum_bmt_rojo">Size %4 P</th>
+            <th class="Colum_bmt_rojo">Size %5 P</th>
+            <th class="Colum_bmt_rojo">Size %6 P</th>
+            <th class="Colum_bmt_rojo">Size %7 P</th>
+            <th class="Colum_bmt_rojo">Size %8 P</th>
+            <th class="Colum_bmt_rojo">Size %9 P</th>
+            <th class="Colum_bmt_rojo">Size %10 P</th>
+            <th class="Colum_bmt_rojo">Size %11 P</th>
+            <th class="Colum_bmt_rojo">Size %12 P</th>
+            <th class="Colum_bmt_rojo">Size %13 P</th>
+            <th class="Colum_bmt_rojo">Size %14 P</th>
+            <th class="Colum_bmt_rojo">Size %15 P</th>
+            <th class="Colum_bmt_rojo">Qty #1 P</th>
+            <th class="Colum_bmt_rojo">Qty #2 P</th>
+            <th class="Colum_bmt_rojo">Qty #3 P</th>
+            <th class="Colum_bmt_rojo">Qty #4 P</th>
+            <th class="Colum_bmt_rojo">Qty #5 P</th>
+            <th class="Colum_bmt_rojo">Qty #6 P</th>
+            <th class="Colum_bmt_rojo">Qty #7 P</th>
+            <th class="Colum_bmt_rojo">Qty #8 P</th>
+            <th class="Colum_bmt_rojo">Qty #9 P</th>
+            <th class="Colum_bmt_rojo">Qty #10 P</th>
+            <th class="Colum_bmt_rojo">Qty #11 P</th>
+            <th class="Colum_bmt_rojo">Qty #12 P</th>
+            <th class="Colum_bmt_rojo">Qty #13 P</th>
+            <th class="Colum_bmt_rojo">Qty #14 P</th>
+            <th class="Colum_bmt_rojo">Qty #15 P</th>
+            <th class="Colum_bmt_rojo">PREPACK P</th>
+            <th class="Colum_bmt_rojo">HANDLING TYPE P</th>
+            <th class="Colum_bmt_rojo">SIZE STICKER P</th>
+            <th class="Colum_bmt_rojo">UNITS PER BOX P</th>
+            <th class="Colum_bmt_rojo">REORDER P</th>
+            <th class="Colum_bmt_rojo">COST LAST PURCHASE P</th>
+            <th class="Colum_bmt_rojo">VENDOR LAST PURCHASE P</th>
+            <th class="Colum_bmt_rojo">EXTENDED WARRANTY P</th>
+            <th class="Colum_bmt_rojo">INSPECTION NEEDED P</th>
+            <th class="Colum_bmt_rojo">INSPECTION COST P</th>
+            <th class="Colum_bmt_rojo">ROYALTY P</th>
+            <th class="Colum_bmt_rojo">PERU DUMPING P</th>
+            <th class="Colum_bmt_rojo">SIZE SAMPLE P</th>
+        </tr><!--Columnas 2 -->
+    </thead>
+    <tbody>
+    <repeat group="{{@Lista_bmt}}" value="{{@Lista_bmt}}">
+        <tr class="filas">
+            <th class="filas_bmt_gris">{{@Lista_bmt['ID C1']}}</th>
+            <th class="filas_bmt_celete">{{@Lista_bmt['PURCHASE GROUP']}}</th>
+            <th class="filas_bmt_celete">{{@Lista_bmt['CORPORATE BUYER NAME']}}</th>
+            <th class="filas_bmt_celete">{{@Lista_bmt['DISIGNER NAME']}}</th>
+            <th class="filas_bmt_celete">{{@Lista_bmt['PI SEASON']}}</th>
+            <th class="filas_bmt_celete">{{@Lista_bmt['COD CORP']}}</th>
+            <th class="filas_bmt_celete">{{@Lista_bmt['STYLE NUMBER']}}</th>
+            <th class="filas_bmt_verde">{{@Lista_bmt['STYLE NAME']}}</th>
+            <th class="filas_bmt_celete">{{@Lista_bmt['SHORT_NAME']}}</th>
+            <th class="filas_bmt_celete">{{@Lista_bmt['PHOTOGRAF']}}</th>
+            <th class="filas_bmt_celete">{{@Lista_bmt['DESCRIPCION INTERNET']}}</th>
+            <th class="filas_bmt_white">{{@Lista_bmt['COLOR CODE']}}</th>
+            <th class="filas_bmt_celete">{{@Lista_bmt['COLOR NAME']}}</th>
+            <th class="filas_bmt_celete">{{@Lista_bmt['COLECTION']}}</th>
+            <th class="filas_bmt_celete">{{@Lista_bmt['COMPOSITION']}}</th>
+            <th class="filas_bmt_celete">{{@Lista_bmt['LINING']}}</th>
+            <th class="filas_bmt_celete">{{@Lista_bmt['TYPE OF FABRIC']}}</th>
+            <th class="filas_bmt_celete">{{@Lista_bmt['DETAILS']}}</th>
+            <th class="filas_bmt_celete">{{@Lista_bmt['BEFORE MEETING REMARKS']}}</th>
+            <th class="filas_bmt_celete">{{@Lista_bmt['AFTER MEETING REMARKS']}}</th>
+            <th class="filas_bmt_celete">{{@Lista_bmt['PRODUCT DESCRIPTION']}}</th>
+            <th class="filas_bmt_celete">{{@Lista_bmt['STYLE GENDER']}}</th>
+            <th class="filas_bmt_celete">{{@Lista_bmt['SEASON']}}</th>
+            <th class="filas_bmt_celete">{{@Lista_bmt['TARGET VENDOR']}}</th>
+            <th class="filas_bmt_celete">{{@Lista_bmt['VENDOR NICK NAME']}}</th>
+            <th class="filas_bmt_white">{{@Lista_bmt['VENDOR CODE']}}</th>
+            <th class="filas_bmt_celete">{{@Lista_bmt['COUNTRY OF ORIGIN']}}</th>
+            <th class="filas_bmt_celete">{{@Lista_bmt['HKO/NO HKO']}}</th>
+            <th class="filas_bmt_celete">{{@Lista_bmt['TARGET COST']}}</th>
+            <th class="filas_bmt_white">{{@Lista_bmt['TARGET BUDGET']}}</th>
+            <th class="filas_bmt_white">{{@Lista_bmt['TOTAL QUANTITY']}}</th>
+            <th class="filas_bmt_celete">{{@Lista_bmt['FINAL COST']}}</th>
+            <th class="filas_bmt_white">{{@Lista_bmt['FINAL BUDGET']}}</th>
+            <th class="filas_bmt_celete">{{@Lista_bmt['LEAD TIME TYPE']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['LOCAL BUYER']}}</th>
+            <th class="filas_bmt_celete">{{@Lista_bmt['LOCAL BRAND']}}</th>
+            <th class="filas_bmt_white">{{@Lista_bmt['DEPARTMENT']}}</th>
+            <th class="filas_bmt_celete">{{@Lista_bmt['DEPARTMENT CODE']}}</th>
+            <th class="filas_bmt_white">{{@Lista_bmt['LINE (*)']}}</th>
+            <th class="filas_bmt_white">{{@Lista_bmt['SUBLINE']}}</th>
+            <th class="filas_bmt_red">{{@Lista_bmt['SUBLNE CODE']}}</th>
+            <th class="filas_bmt_celete">{{@Lista_bmt['TYPE OF EXHIBITION']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['LIFE CICLE']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['PRODUCT SEASON']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['TYPE OF PRODUCT']}}</th>
+            <th class="filas_bmt_celete">{{@Lista_bmt['PYRAMID MIX']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['CHANCE OF USER']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['RANKING OF SALE']}}</th>
+            <th class="filas_bmt_celete">{{@Lista_bmt['LIFE STYLE']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['RETAIL PRICE']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['PRICE RANGE']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['2 X RETAIL PRICE']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['ANTES/AHORA']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['EVENTO']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['SHIPMENT MODE']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['VENTANA']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['mm/dd1']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['mm/dd2']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['mm/dd3']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['mm/dd4']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['mm/dd5']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['mm/dd6']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['mm/dd7']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['TOTAL QUANTITY CL']}}</th>
+            <th class="filas_bmt_celete">{{@Lista_bmt['CLUSTER']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['SIZE']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['Size %1']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['Size %2']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['Size %3']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['Size %4']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['Size %5']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['Size %6']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['Size %7']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['Size %8']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['Size %9']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['Size %10']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['Size %11']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['Size %12']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['Size %13']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['Size %14']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['Size %15']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['Qty #1']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['Qty #2']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['Qty #3']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['Qty #4']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['Qty #5']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['Qty #6']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['Qty #7']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['Qty #8']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['Qty #9']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['Qty #10']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['Qty #11']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['Qty #12']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['Qty #13']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['Qty #14']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['Qty #15']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['PREPACK']}}</th>
+            <th class="filas_bmt_white">{{@Lista_bmt['HANDLING TYPE']}}</th>
+            <th class="filas_bmt_white">{{@Lista_bmt['HANDLING TYPE CD']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['SIZE STICKER']}}</th>
+            <th class="filas_bmt_white">{{@Lista_bmt['UNITS PER BOX']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['REORDER']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['COST LAST PURCHASE']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['VENDOR LAST PURCHASE']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['EXTENDED WARRANTY']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['RFID COST']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['INSPECTION COST']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['ROYALTY']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['SIZE SAMPLE']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['LOCAL BUYER P']}}</th>
+            <th class="filas_bmt_celete">{{@Lista_bmt['LOCAL BRAND P']}}</th>
+            <th class="filas_bmt_white">{{@Lista_bmt['DEPARTMENT P']}}</th>
+            <th class="filas_bmt_celete">{{@Lista_bmt['DEPARTMENT CODE P']}}</th>
+            <th class="filas_bmt_white">{{@Lista_bmt['LINE (*) P']}}</th>
+            <th class="filas_bmt_white">{{@Lista_bmt['SUBLINE P']}}</th>
+            <th class="filas_bmt_red">{{@Lista_bmt['SUBLNE CODE P']}}</th>
+            <th class="filas_bmt_white">{{@Lista_bmt['HIERARCHI P']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['LIFE CICLE P']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['PRODUCT SEASON P']}}</th>
+            <th class="filas_bmt_celete">{{@Lista_bmt['PYRAMID MIX P']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['CHANCE OF USER P']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['RANKING OF SALE P']}}</th>
+            <th class="filas_bmt_celete">{{@Lista_bmt['LIFE STYLE P']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['RETAIL PRICE P']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['PRICE RANGE P']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['2 X RETAIL PRICE P']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['ANTES/AHORA P']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['EVENTO P']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['SHIPMENT MODE P']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['VENTANA P']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['mm/dd1 P']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['mm/dd2 P']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['mm/dd3 P']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['mm/dd4 P']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['mm/dd5 P']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['mm/dd6 P']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['mm/dd7 P']}}</th>
+            <th class="filas_bmt_white">{{@Lista_bmt['TOTAL QUANTITY P']}}</th>
+            <th class="filas_bmt_celete">{{@Lista_bmt['SIZE TYPE P']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['SIZE P']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['Size %1 P']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['Size %2 P']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['Size %3 P']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['Size %4 P']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['Size %5 P']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['Size %6 P']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['Size %7 P']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['Size %8 P']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['Size %9 P']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['Size %10 P']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['Size %11 P']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['Size %12 P']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['Size %13 P']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['Size %14 P']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['Size %15 P']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['Qty #1 P']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['Qty #2 P']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['Qty #3 P']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['Qty #4 P']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['Qty #5 P']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['Qty #6 P']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['Qty #7 P']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['Qty #8 P']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['Qty #9 P']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['Qty #10 P']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['Qty #11 P']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['Qty #12 P']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['Qty #13 P']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['Qty #14 P']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['Qty #15 P']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['PREPACK P']}}</th>
+            <th class="filas_bmt_white">{{@Lista_bmt['HANDLING TYPE P']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['SIZE STICKER P']}}</th>
+            <th class="filas_bmt_white">{{@Lista_bmt['UNITS PER BOX P']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['REORDER P']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['COST LAST PURCHASE P']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['VENDOR LAST PURCHASE P']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['EXTENDED WARRANTY P']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['INSPECTION NEEDED P']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['INSPECTION COST P']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['ROYALTY P']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['PERU DUMPING P']}}</th>
+            <th class="filas_bmt_verde_claro">{{@Lista_bmt['SIZE SAMPLE P']}}</th>
+        </tr>
+    </repeat>
+
+
+</tbody>
+</table>
