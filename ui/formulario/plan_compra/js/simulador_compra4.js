@@ -739,7 +739,7 @@ $(window).on('load', function () {
             var delay_thead = 3000;
             setTimeout(function () {
 
-                $('#tabla2 tfoot th').each( function () {
+                $('#tfoot_filtro_columna_individual th').each( function () {
                     var title = $(this).text();
                     title = title.replace(/[^a-z0-9\-]/gi,'');
 
@@ -762,6 +762,7 @@ $(window).on('load', function () {
                     columnDefs: [
                         { "type": "html-input", "targets": [77]}
                     ]
+
               });
 
                 tabla2_buscar_columnas.columns().every( function () {
@@ -769,12 +770,10 @@ $(window).on('load', function () {
 
                     $( "#input_filtros_columna_tabla2", this.footer() ).on( 'keyup change', function () {
                         if ( that.search() !== this.value ) {
-                            that
-                                .search(this.value)
-                                .draw();
+                            that.search(this.value).draw();
+                            cal_campos();
                         }
                     });
-
                 // Ocultar campo de búsqueda
                 $('#tabla2_filter').css('display','none');
 
@@ -787,6 +786,15 @@ $(window).on('load', function () {
                 });
 
             }, delay_thead);
+
+
+            //delay calcular totales
+            var delay_calculos_totales = 4000;
+            setTimeout(function () {
+                var nFilas = $("#tabla2 tbody tr").length;
+                cal_campos();
+            },delay_calculos_totales);
+
 
             //delay para las validaciones de concurrencia ("pedida")
             var delay_validaciones = 8000;
@@ -2815,9 +2823,120 @@ $('#btn_limpiar_filtro_sim_comp').on('click',function () {
 
     var table = $('#tabla2').DataTable();
     table.search('').columns().search('').draw();
+    cal_campos();
 });
 
+function cal_campos() {
 
+    var sum_unid_ini = 0;
+    var sum_unid_ajust = 0;
+    var sum_unid_final = 0;
+
+    var sum_primera_carga = 0;
+
+    const noTruncarDecimales = {maximumFractionDigits: 2};
+    const noTruncarDecimales2 = {maximumFractionDigits: 0};
+
+    var sum_costo_unitario_final_us = 0;
+    var sum_costo_unitario_final_pesos = 0;
+    var sum_total_target_us = 0;
+    var sum_total_fob_us = 0;
+    var sum_costo_total_pesos = 0;
+    var sum_total_retail_pesos_sin_iva = 0;
+
+    var cal_costo_costo_unit_final_pesos = 0;
+    var cal_costos_unitarios_final_us = 0;
+    var total_fob_sin_costo = 0;
+
+    var cal_fob = 0 ;
+    var cal_target = 0 ;
+    var cal_precio_blanco = 0;
+    var cal_mkup = 0;
+    var cal_tienda = 0;
+
+    $("#tabla2 > tbody >tr").each(function () {
+
+        if ($(this).find("td:eq(90)").html() != 24) {
+            sum_unid_ini += parseInt($(this).find("td:eq(33)").html()); //SUM
+            sum_unid_ajust += parseInt($(this).find("td:eq(34)").html()); //SUM
+            sum_unid_final += parseInt($(this).find("td:eq(35)").html());// SUM
+
+            sum_primera_carga += parseInt($(this).find("td:eq(45)").html());//SUM
+
+            total_fob_sin_costo += (parseFloat($(this).find("td:eq(35)").html()) * parseFloat($(this).find("td:eq(56)").html()));
+
+            sum_costo_unitario_final_us += parseInt($(this).find("td:eq(60)").html());//CAL (costo_total_fob_us/unid_final)
+            sum_costo_unitario_final_pesos += parseInt($(this).find("td:eq(61)").html());//CAL (sum_costo_total_pesos/unid_final)
+
+            sum_total_target_us += parseFloat($(this).find("td:eq(62)").html());//SUM
+            sum_total_fob_us += parseFloat($(this).find("td:eq(63)").html());//SUM
+            sum_costo_total_pesos += parseInt($(this).find("td:eq(64)").html());//SUM
+            sum_total_retail_pesos_sin_iva += parseInt($(this).find("td:eq(65)").html());//SUM
+        }
+    });
+
+
+    //calcular Columna "Costo unitario Final pesos"
+    cal_costo_costo_unit_final_pesos = sum_costo_total_pesos/sum_unid_final;
+    cal_costo_costo_unit_final_pesos = cal_costo_costo_unit_final_pesos.toLocaleString('es', noTruncarDecimales);
+
+    //Calcular columna "Costo Unitarios Final Us" = sum(total fob us) / sum(uni final)
+    cal_costos_unitarios_final_us = sum_total_fob_us/sum_unid_final;
+    cal_costos_unitarios_final_us = cal_costos_unitarios_final_us.toLocaleString('es', noTruncarDecimales);
+
+    //calcular columna "FOB"  (total FOB sin costo) = sum(unid fin * fob)
+    // (total FOB sin costo) /sum (unid fin)
+    cal_fob = total_fob_sin_costo/sum_unid_final;
+    cal_fob = cal_fob.toLocaleString('es', noTruncarDecimales);
+
+    //calcular columna "target" = sum(total target) / sum(unid fin)
+    cal_target = sum_total_target_us/sum_unid_final;
+    cal_target = cal_target.toLocaleString('es', noTruncarDecimales);
+
+    //calular columna "precio blanco" = sum(total ret sin iva) / sum(unid fin)
+    cal_precio_blanco = ((sum_total_retail_pesos_sin_iva/sum_unid_final)*1.19);
+    cal_precio_blanco = cal_precio_blanco.toLocaleString('es', noTruncarDecimales2);
+
+    //calcular mkup =sum(total ret sin iva) / sum(total costo pesos)
+    cal_mkup = sum_total_retail_pesos_sin_iva/sum_costo_total_pesos;
+    cal_mkup =  cal_mkup.toLocaleString('es', noTruncarDecimales);
+
+    //cal % tienda  = sum(primera_carga) / sum(unid fin)
+    cal_tienda = (sum_primera_carga/sum_unid_final)*100;
+    cal_tienda = cal_tienda.toLocaleString('es', noTruncarDecimales);
+
+    //seteo a formato miles para sumas totales
+    sum_unid_ini = sum_unid_ini.toLocaleString('es', noTruncarDecimales);
+    sum_unid_ajust = sum_unid_ajust.toLocaleString('es', noTruncarDecimales);
+    sum_unid_final = sum_unid_final.toLocaleString('es', noTruncarDecimales);
+
+    sum_primera_carga = sum_primera_carga.toLocaleString('es', noTruncarDecimales);
+
+    sum_total_fob_us = sum_total_fob_us.toLocaleString('es', noTruncarDecimales);
+    sum_total_target_us = sum_total_target_us.toLocaleString('es', noTruncarDecimales);
+    sum_total_retail_pesos_sin_iva = sum_total_retail_pesos_sin_iva.toLocaleString('es', noTruncarDecimales);
+    sum_costo_total_pesos = sum_costo_total_pesos.toLocaleString('es', noTruncarDecimales);
+
+    $('#campo_total_uni_ini').html(sum_unid_ini);
+    $('#campo_total_uni_ajust').html(sum_unid_ajust);
+    $('#campo_total_uni_final').html(sum_unid_final);
+
+    $('#campo_total_primera_carga').html(sum_primera_carga);
+    $('#campo_total_tiendas').html(cal_tienda+"%");
+
+    $('#campo_total_mkup').html(cal_mkup);
+    $('#campo_total_precio_blanco').html(cal_precio_blanco);
+
+    $('#campo_total_target').html(cal_target);
+    $('#campo_total_fob').html(cal_fob);
+
+    $('#campo_total_costo_unitario_final_us').html(cal_costos_unitarios_final_us);
+    $('#campo_total_costo_unitario_final_pesos').html(cal_costo_costo_unit_final_pesos);
+    $('#campo_total_target_us').html(sum_total_target_us);
+    $('#campo_total_fob_us').html(sum_total_fob_us);
+    $('#campo_total_costo_total_pesos').html(sum_costo_total_pesos);
+    $('#campo_total_retail_pesos_sin_iva').html(sum_total_retail_pesos_sin_iva);
+}
 
 
 
