@@ -33,8 +33,14 @@
 			return $data;
 		}
 		
-		public static function obtenerEncabezadoArchivo($cod_proveedor, $nro_factura, $nro_envio) {
-			$sql = "BEGIN PLC_PKG_COMEX.PRC_ENCABEZADO_ARCHIVO($cod_proveedor, '$nro_factura', $nro_envio, :data); END;";
+		public static function actualizarNroEnvio($cod_proveedor, $nro_factura, $nro_envio){
+			$sql = "BEGIN PLC_PKG_COMEX.PRC_ACTUALIZAR_NRO_ENVIO($cod_proveedor, '$nro_factura', $nro_envio, :data); END;";
+			$data = \database::getInstancia()->getConsulta($sql);
+			return $data;
+		}
+		
+		public static function obtenerEncabezadoArchivo($cod_proveedor, $nro_factura) {
+			$sql = "BEGIN PLC_PKG_COMEX.PRC_ENCABEZADO_ARCHIVO($cod_proveedor, '$nro_factura', :data); END;";
 			$data = \database::getInstancia()->getConsultaSP($sql, 1);
 			return $data;
 		}

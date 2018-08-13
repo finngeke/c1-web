@@ -52,9 +52,8 @@
 			$f3->set('nombre_form', 'Paso 1');
 			$f3->set('data', \comex\comex::listarFacturasAprobadas());
 			$f3->set('contenido', 'comex/inicio.html');
-			$f3->set('temporada', 'formulario/main/temporada.html');
-			$f3->set('proveedor', 'formulario/main/proveedor.html');
-			echo Template::instance()->render('layout_inicio.php');
+			//echo Template::instance()->render('layout_inicio.php');
+			echo Template::instance()->render('layout_comex.php');
 		}
 		
 		public function asociar_contenedor($f3) {
@@ -67,9 +66,8 @@
 			$f3->set('data', \comex\comex::listarLPNS($cod_proveedor, $nro_factura));
 			$f3->set('nombre_form', 'Paso 2');
 			$f3->set('contenido', 'comex/asociar_contenedor.html');
-			$f3->set('temporada', 'formulario/main/temporada.html');
-			$f3->set('proveedor', 'formulario/main/proveedor.html');
-			echo Template::instance()->render('layout_inicio.php');
+			//echo Template::instance()->render('layout_inicio.php');
+			echo Template::instance()->render('layout_comex.php');
 		}
 		
 		public function guardar_contenedor($f3) {
@@ -111,6 +109,8 @@
 				$date = new DateTime("now", new DateTimeZone("America/Santiago"));
 				$nro_envio = floatval($date->format('YmdHis'));
 				$archivos = [];
+				// Actualiza el nro. de envío
+				\comex\comex::actualizarNroEnvio($cod_proveedor, $nro_factura, $nro_envio);
 				// Genera el archivo de detalle
 				$detalles = \comex\comex::obtenerDetalleArchivo($cod_proveedor, $nro_factura);
 				$nombre = "IDC$nro_envio";
@@ -135,7 +135,7 @@
 				file_put_contents("$local_path/$nombre", $contenido);
 				$archivos[] = array("nombre" => $nombre, "filas" => $filas);
 				// Genera el archivo de encabezado
-				$facturas = \comex\comex::obtenerEncabezadoArchivo($cod_proveedor, $nro_factura, $nro_envio);
+				$facturas = \comex\comex::obtenerEncabezadoArchivo($cod_proveedor, $nro_factura);
 				$nombre = "IEC$nro_envio";
 				$contenido = "";
 				$filas = 0;
