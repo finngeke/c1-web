@@ -209,7 +209,12 @@
 			return \database::getInstancia()->getConsultaSP($sql, 1);
 		}
 		
-		public static function obtener_detalle_asn_sesion($nro_embarque) {
+		public static function obtener_cabecera_asn_sesion($nro_embarque){
+			$sql = "SELECT ASN_NUMBER FROM PLC_ASN_CABECERA WHERE (NRO_EMBARQUE = $nro_embarque) ORDER BY ASN_NUMBER";
+			return \database::getInstancia()->getFilas($sql);
+		}
+		
+		public static function obtener_detalle_asn_sesion($nro_embarque, $asn_number) {
 			$sql = "SELECT
 						10095 AS SUCURSAL
 						, NRO_FACTURA
@@ -223,6 +228,7 @@
 					FROM PLC_ASN_DETALLE
 					WHERE
 						(NRO_EMBARQUE = $nro_embarque)
+						AND (ASN_NUMBER = $asn_number)
 					GROUP BY
 						NRO_FACTURA
 						, ASN_NUMBER
@@ -243,11 +249,19 @@
 			return \database::getInstancia()->getConsultaSP($sql, 1);
 		}
 		
-		public static function archivar_asn($nro_embarque, $id_sesion) {
+		public static function guardar_sesion_asn($nro_embarque, $asn_number, $id_sesion){
+			$sql = "UPDATE PLC_ASN_CABECERA SET
+						ID_SESION = $id_sesion
+					WHERE
+						(NRO_EMBARQUE = $nro_embarque)
+						AND (ASN_NUMBER = $asn_number)";
+			return \database::getInstancia()->getConsulta($sql);
+		}
+		
+		public static function archivar_asn($nro_embarque) {
 			$sql = "UPDATE PLC_ASN_CABECERA SET
 						ENVIADO = 1
 						, FECHA_ENVIO = SYSDATE
-						, ID_SESION = $id_sesion
 					WHERE
 						(NRO_EMBARQUE = $nro_embarque)";
 			return \database::getInstancia()->getConsulta($sql);

@@ -430,133 +430,60 @@ class ControlFormularioCompra extends Control {
         $f3->set('contenido', 'formulario/plan_compra/fecha_recepcion.html'); //llamas al formulario html
         echo Template::instance()->render('layout_simulador.php');
     }
-		
-		public function distribucion_mercaderia($f3) {
-			ControlFormularioMain::cargaMain($f3); //variable de perfilamiento.
-			$detalle = [];
-			$codTemporada = $f3->get('SESSION.COD_TEMPORADA');
-			$poNumber = $f3->get('GET.poNumber');
-			$f3->set('SESSION.PO_NUMBER', $poNumber);
-			$nroContenedor = $f3->get('GET.nroContenedor');
-			$f3->set('SESSION.NRO_CONTENEDOR', $nroContenedor);
-			$login = $f3->get('SESSION.login');
-			$data = \simulador_compra\distribucion_mercaderia::listaSucursales();
-			foreach ($data as $row) {
-				$detalleSucursales[] = array(
-					"codSucursal" => $row[0],
-					"sucursal" => $row[1]
-				);
-			}
-			$f3->set('sucursales', $detalleSucursales);
-			$data = \simulador_compra\distribucion_mercaderia::detalleContenedor($codTemporada, $poNumber, $nroContenedor, $login);
-			foreach ($data as $row) {
-				$sucursales = [];
-				foreach ($detalleSucursales as $sucursal) {
-					$habilitada = \simulador_compra\distribucion_mercaderia::detalleContenedoresSucursales($codTemporada, $poNumber, $nroContenedor, $row[3], $login, $sucursal["codSucursal"], $row[12]);
-					$cantidad = ($habilitada[0][4] > 0) ? $habilitada[0][4] : $habilitada[0][3];
-					$sucursales[] = array(
-						"codSucursal" => $sucursal['codSucursal'],
-						"sucursal" => $sucursal['sucursal'],
-						"habilitada" => $habilitada[0][2],
-						"cantidad" => $cantidad,
-						"fechaDemora" => $habilitada[0][5]
-					);
-				}
-				
-				$prioridad = \simulador_compra\distribucion_mercaderia::listaSucursalesPrioridad($row[1], $row[10]);
-				$cajasT = $row[11];
-				$cajas = $cajasT;
-				foreach ($prioridad as $p) {
-					for ($i = 0; $i < count($sucursales); $i++) {
-						if ($sucursales[$i]['codSucursal'] == $p[0] && $sucursales[$i]['habilitada'] == "1") {
-							//echo $p[0] . ": ". $cajas . "<br>";
-							//TODO: Rescatar la información de las cajas si ya se guardó previamente la distribución
-							$c = $sucursales[$i]['cantidad'];
-							if ($c > $cajas) {
-								$c = $cajas;
-							}
-							$sucursales[$i]['cantidad'] = $c;
-							$cajas -= $c;
-							break;
-						}
-					}
-				}
-				$detalle[] = array(
-					"idFila" => $row[0],
-					"codTemporada" => $row[1],
-					"temporada" => $row[2],
-					"codDepto" => $row[10],
-					"codEstilo" => $row[3],
-					"estilo" => $row[4],
-					"color" => $row[5],
-					"ventana" => $row[6],
-					"evento" => $row[7],
-					"curvaReparto" => $row[8],
-					"curvasCajas" => $row[9],
-					"cajasEmbarcadas" => $cajasT,
-					"diferencia" => $cajas,
-					"sucursales" => $sucursales,
-					"idColor3" => $row[12]
-				);
-			}
-			$f3->set('detalle', $detalle);
-			$f3->set('nombre_form', 'Distribución de Mercadería'); //Parametros por cada formulario
-			$f3->set('contenido', 'formulario/plan_compra/distribucion_mercaderia.html'); //llamas al formulario html
-			echo Template::instance()->render('layout_simulador.php');
-		}
-		
-		public function prioridades_tienda($f3) {
-			ControlFormularioMain::cargaMain($f3); //variable de perfilamiento.
-			$departamento = \jerarquia\departamento::getdepartamentSorted();
-			array_unshift($departamento, array(
-				"DEP_DEPTO" => "",
-				"0" => "",
-				"DEP_DESCRIPCION" => "Seleccione un departamento",
-				"1" => "Seleccione un departamento"
-			));
-			$select = new html\select($departamento, 'DEP_DEPTO', 'DEP_DESCRIPCION');
-			$f3->set('departamento', $select);
-			$f3->set('nombre_form', 'Mantenedor de prioridades por tienda'); //Parametros por cada formulario
-			$f3->set('contenido', 'formulario/plan_compra/prioridades_tienda.html'); //llamas al formulario html
-			echo Template::instance()->render('layout_simulador.php');
-		}
-		
-		public function bajada_embarque($f3) {
-			ControlFormularioMain::cargaMain($f3); //variable de perfilamiento.
-			$codTemporada = $f3->get('SESSION.COD_TEMPORADA');
-			$data = \simulador_compra\distribucion_mercaderia::listar_bajada_embarque($codTemporada);
-			$f3->set('data', $data);
-			$f3->set('nombre_form', 'Bajada de Embarque'); //Parametros por cada formulario
-			$f3->set('contenido', 'formulario/plan_compra/bajada_embarque.html'); //llamas al formulario html
-			echo Template::instance()->render('layout_simulador.php');
-		}
-		
-		public function generar_archivos($f3) {
-			$etapa = "generarArchivos";
-			try {
-				$archivos = [];
-				$ctr = [];
-				$local_path = "../archivos/bajada_embarque";
-				$remote_path = "/Odbms/sdi/itfwms2006/asn_imp_c1/datos";
-				$host = $f3->get('FTP_HOST');
-				$port = $f3->get('FTP_PORT');
-				$timeout = $f3->get('FTP_TIMEOUT');
-				$user = $f3->get('FTP_USER');
-				$pass = $f3->get('FTP_PASSWORD');
-				
-				$date = new DateTime("now", new DateTimeZone("America/Santiago"));
-				$host_inpt_id = $date->format('ymdHi');
-				$id_archivo = str_pad($date->format('YmdHis'), 17, "0", STR_PAD_LEFT);
-				$nro_embarque = $f3->get('GET.nro_embarque');
-				
-				// Crear el detalle de ASN
-				$etapa = "generarASN";
-				$data = \simulador_compra\distribucion_mercaderia::generar_asn($nro_embarque, $id_archivo);
-				
-				// APERTURA DE SESIÓN
+	
+	public function prioridades_tienda($f3) {
+		ControlFormularioMain::cargaMain($f3); //variable de perfilamiento.
+		$departamento = \jerarquia\departamento::getdepartamentSorted();
+		array_unshift($departamento, array(
+			"DEP_DEPTO" => "",
+			"0" => "",
+			"DEP_DESCRIPCION" => "Seleccione un departamento",
+			"1" => "Seleccione un departamento"
+		));
+		$select = new html\select($departamento, 'DEP_DEPTO', 'DEP_DESCRIPCION');
+		$f3->set('departamento', $select);
+		$f3->set('nombre_form', 'Mantenedor de prioridades por tienda'); //Parametros por cada formulario
+		$f3->set('contenido', 'formulario/plan_compra/prioridades_tienda.html'); //llamas al formulario html
+		echo Template::instance()->render('layout_simulador.php');
+	}
+	
+	public function bajada_embarque($f3) {
+		ControlFormularioMain::cargaMain($f3); //variable de perfilamiento.
+		$codTemporada = $f3->get('SESSION.COD_TEMPORADA');
+		$data = \simulador_compra\distribucion_mercaderia::listar_bajada_embarque($codTemporada);
+		$f3->set('data', $data);
+		$f3->set('nombre_form', 'Bajada de Embarque'); //Parametros por cada formulario
+		$f3->set('contenido', 'formulario/plan_compra/bajada_embarque.html'); //llamas al formulario html
+		echo Template::instance()->render('layout_simulador.php');
+	}
+	
+	public function generar_archivos($f3) {
+		$etapa = "generarArchivos";
+		try {
+			$archivos = [];
+			$ctr = [];
+			$local_path = "../archivos/bajada_embarque";
+			$remote_path = "/Odbms/sdi/itfwms2006/asn_imp_c1/datos";
+			$host = $f3->get('FTP_HOST');
+			$port = $f3->get('FTP_PORT');
+			$timeout = $f3->get('FTP_TIMEOUT');
+			$user = $f3->get('FTP_USER');
+			$pass = $f3->get('FTP_PASSWORD');
+			
+			$date = new DateTime("now", new DateTimeZone("America/Santiago"));
+			$host_inpt_id = $date->format('ymdHi');
+			$id_archivo = str_pad($date->format('YmdHis'), 17, "0", STR_PAD_LEFT);
+			$nro_embarque = $f3->get('GET.nro_embarque');
+			
+			// Crear el detalle de ASN
+			$etapa = "generarASN";
+			$data = \simulador_compra\distribucion_mercaderia::generar_asn($nro_embarque, $id_archivo);
+			
+			// APERTURA DE SESIÓN
+			$asns = \simulador_compra\distribucion_mercaderia::obtener_cavecera_asn_sesion($nro_embarque);
+			foreach ($asns as $asn) {
 				$etapa = "detalleASNSesion";
-				$data = \simulador_compra\distribucion_mercaderia::obtener_detalle_asn_sesion($nro_embarque);
-				
+				$data = \simulador_compra\distribucion_mercaderia::obtener_detalle_asn_sesion($nro_embarque, $asn[0]);
 				$detalleSesionRecibo = [];
 				foreach ($data as $item) {
 					$v_sucursal = $item[0];
@@ -566,8 +493,8 @@ class ControlFormularioCompra extends Control {
 					$v_numeroOC = $item[4];
 					$v_sku = $item[5];
 					$v_contenedor = $item[6];
-					$v_valorUnitarioFactura = $item[7];
-					$v_cantidadEmbarcada = $item[8];
+					$v_valorUnitarioFactura = \LibraryHelper::convertNumber($item[7]);
+					$v_cantidadEmbarcada = \LibraryHelper::convertNumber($item[8]);
 					$detalleSesionRecibo[] = array(
 						"sucursal" => "$v_sucursal",
 						"numeroFactura" => "$v_numeroFactura",
@@ -576,8 +503,8 @@ class ControlFormularioCompra extends Control {
 						"numeroOC" => "$v_numeroOC",
 						"SKU" => "$v_sku",
 						"contenedor" => "$v_contenedor",
-						"valorUnitarioFactura" => "$v_valorUnitarioFactura",
-						"cantidadEmbarcada" => "$v_cantidadEmbarcada"
+						"valorUnitarioFactura" => $v_valorUnitarioFactura,
+						"cantidadEmbarcada" => $v_cantidadEmbarcada
 					);
 				}
 				$json = json_encode($detalleSesionRecibo, JSON_PRETTY_PRINT);
@@ -592,158 +519,159 @@ class ControlFormularioCompra extends Control {
 				
 				$etapa = "abrirSesion";
 				$response = \broker::post($json, $curlopt_url, $curlopt_port);
-				$id_sesion = 0;
 				
 				if (strtoupper($response->Body->fault->faultString) != "OK") {
 					$msj = $response->Body->fault->faultString;
 					header("Content-Type: application/json");
-					echo json_encode(array("estado" => 0, "mensaje" => "No se pudo aperturar la sesión: $msj"), JSON_PRETTY_PRINT);
+					echo json_encode(array("estado" => -2, "mensaje" => "No se pudo aperturar la sesión: $msj"), JSON_PRETTY_PRINT);
 					exit();
 				} else {
 					$id_sesion = $response->Body->sessionid;
+					\simulador_compra\distribucion_mercaderia::guardar_sesion_asn($nro_embarque, $asn[0], $id_sesion);
 				}
-				
-				// Procesa el archivo de CITAS
-				$etapa = "generarArchivoCITA";
-				$data = \simulador_compra\distribucion_mercaderia::generar_archivo_cita($nro_embarque, $id_archivo);
-				$id_archivo = $data[0][16];
-				$cita = "";
-				$r = 0;
-				foreach ($data as $item) {
-					$aux = [];
-					for ($i = 0; $i < count($item) - 1; $i++) {
-						$aux[] = $item[$i];
-					}
-					$cita .= implode('|', array_values($aux)) . "\n";
-					$r++;
-				}
-				$file_name = "IAS$id_archivo";
-				file_put_contents("$local_path/$file_name", $cita);
-				$archivos[] = $file_name;
-				$ctr[] = array("file_name" => $file_name, "registros" => $r);
-				
-				// Procesa el archivo ASN_HDR
-				$etapa = "generarArchivoASN_HDR";
-				$data = \simulador_compra\distribucion_mercaderia::generar_archivo_asn_hdr($nro_embarque, $host_inpt_id);
-				$asn = "";
-				$r = 0;
-				foreach ($data as $item) {
-					$asn .= implode('|', array_values($item)) . "\n";
-					$r++;
-				}
-				$file_name = "IAH$id_archivo";
-				file_put_contents("$local_path/$file_name", $asn);
-				$archivos[] = $file_name;
-				$ctr[] = array("file_name" => $file_name, "registros" => $r);
-				
-				// Procesa el archivo ASN_DTL
-				$etapa = "generarArchivoASN_DTL";
-				$data = \simulador_compra\distribucion_mercaderia::generar_archivo_asn_dtl($nro_embarque, $host_inpt_id);
-				$asn = "";
-				$r = 0;
-				foreach ($data as $item) {
-					$asn .= implode('|', array_values($item)) . "\n";
-					$r++;
-				}
-				$file_name = "IAD$id_archivo";
-				file_put_contents("$local_path/$file_name", $asn);
-				$archivos[] = $file_name;
-				$ctr[] = array("file_name" => $file_name, "registros" => $r);
-				
-				// Procesa el archivo LPN_HDR
-				$etapa = "generarArchivoLPN_HDR";
-				$data = \simulador_compra\distribucion_mercaderia::generar_archivo_lpn_hdr($nro_embarque, $host_inpt_id);
-				$lpn = "";
-				$r = 0;
-				foreach ($data as $item) {
-					$lpn .= implode('|', array_values($item)) . "\n";
-					$r++;
-				}
-				$file_name = "ICH$id_archivo";
-				file_put_contents("$local_path/$file_name", $lpn);
-				$archivos[] = $file_name;
-				$ctr[] = array("file_name" => $file_name, "registros" => $r);
-				
-				// Procesa el archivo LPN_DTL
-				$etapa = "generarArchivoLPN_DTL";
-				$data = \simulador_compra\distribucion_mercaderia::generar_archivo_lpn_dtl($nro_embarque, $host_inpt_id);
-				$lpn = "";
-				$r = 0;
-				foreach ($data as $item) {
-					$lpn .= implode('|', array_values($item)) . "\n";
-					$r++;
-				}
-				$file_name = "ICD$id_archivo";
-				file_put_contents("$local_path/$file_name", $lpn);
-				$archivos[] = $file_name;
-				$ctr[] = array("file_name" => $file_name, "registros" => $r);
-				
-				// Procesa el archivo DISTRO
-				$etapa = "generarArchivoDISTRO";
-				$data = \simulador_compra\distribucion_mercaderia::generar_archivo_distro($nro_embarque, $host_inpt_id);
-				$distro = "";
-				$r = 0;
-				foreach ($data as $item) {
-					$distro .= implode('|', array_values($item)) . "\n";
-					$r++;
-				}
-				$file_name = "ISD$id_archivo";
-				file_put_contents("$local_path/$file_name", $distro);
-				$archivos[] = $file_name;
-				$ctr[] = array("file_name" => $file_name, "registros" => $r);
-				
-				// Procesa el archivo CANCELACION
-				$etapa = "generarArchivoCANCELACION";
-				$cancelacion = "";
-				$r = 0;
-				$file_name = "ICL$id_archivo";
-				file_put_contents("$local_path/$file_name", $cancelacion);
-				$archivos[] = $file_name;
-				$ctr[] = array("file_name" => $file_name, "registros" => $r);
-				
-				// Procesa el archivo CONTROL
-				$etapa = "generarArchivoCONTROL";
-				$control = "";
-				foreach ($ctr as $item) {
-					$control .= implode(' ', array_values($item)) . "\n";
-				}
-				$file_name = "CMX$id_archivo.CTR";
-				file_put_contents("$local_path/$file_name", $control);
-				$archivos[] = $file_name;
-				
-				$etapa = "conectarFTP";
-				$ftp = ftp_connect($host, $port, $timeout);
-				$login = ftp_login($ftp, $user, $pass);
-				if ((!$ftp) || (!$login)) {
-					header("Content-Type: application/json");
-					echo json_encode(array("estado" => -1, "mensaje" => "Error de conexión con el FTP"), JSON_PRETTY_PRINT);
-					exit();
-				} else {
-					$etapa = "enviarArchivos";
-					foreach ($archivos as $archivo) {
-						$remote_file = "$remote_path/$archivo";
-						$source_file = "$local_path/$archivo";
-						if (!ftp_put($ftp, $remote_file, $source_file, FTP_BINARY)) {
-							ftp_close($ftp);
-							header("Content-Type: application/json");
-							echo json_encode(array("estado" => -2, "mensaje" => "No se pudo procesar el archivo de cita"), JSON_PRETTY_PRINT);
-							exit();
-						}
-					}
-				}
-				ftp_close($ftp);
-				
-				//TODO: Actualiza el embarque
-				$etapa = "archivarASN";
-				$data = \simulador_compra\distribucion_mercaderia::archivar_asn($nro_embarque, $id_sesion);
-				
-				header("Content-Type: application/json");
-				echo json_encode(array("estado" => 0, "mensaje" => "Archivo cargado"), JSON_PRETTY_PRINT);
-			} catch (Exception $e) {
-				header("Content-Type: application/json");
-				echo json_encode(array("estado" => $e->getCode(), "mensaje" => $e->getMessage(), "etapa" => $etapa), JSON_PRETTY_PRINT);
 			}
+			
+			// Procesa el archivo de CITAS
+			$etapa = "generarArchivoCITA";
+			$data = \simulador_compra\distribucion_mercaderia::generar_archivo_cita($nro_embarque, $id_archivo);
+			$id_archivo = $data[0][16];
+			$cita = "";
+			$r = 0;
+			foreach ($data as $item) {
+				$aux = [];
+				for ($i = 0; $i < count($item) - 1; $i++) {
+					$aux[] = $item[$i];
+				}
+				$cita .= implode('|', array_values($aux)) . "\n";
+				$r++;
+			}
+			$file_name = "IAS$id_archivo";
+			file_put_contents("$local_path/$file_name", $cita);
+			$archivos[] = $file_name;
+			$ctr[] = array("file_name" => $file_name, "registros" => $r);
+			
+			// Procesa el archivo ASN_HDR
+			$etapa = "generarArchivoASN_HDR";
+			$data = \simulador_compra\distribucion_mercaderia::generar_archivo_asn_hdr($nro_embarque, $host_inpt_id);
+			$asn = "";
+			$r = 0;
+			foreach ($data as $item) {
+				$asn .= implode('|', array_values($item)) . "\n";
+				$r++;
+			}
+			$file_name = "IAH$id_archivo";
+			file_put_contents("$local_path/$file_name", $asn);
+			$archivos[] = $file_name;
+			$ctr[] = array("file_name" => $file_name, "registros" => $r);
+			
+			// Procesa el archivo ASN_DTL
+			$etapa = "generarArchivoASN_DTL";
+			$data = \simulador_compra\distribucion_mercaderia::generar_archivo_asn_dtl($nro_embarque, $host_inpt_id);
+			$asn = "";
+			$r = 0;
+			foreach ($data as $item) {
+				$asn .= implode('|', array_values($item)) . "\n";
+				$r++;
+			}
+			$file_name = "IAD$id_archivo";
+			file_put_contents("$local_path/$file_name", $asn);
+			$archivos[] = $file_name;
+			$ctr[] = array("file_name" => $file_name, "registros" => $r);
+			
+			// Procesa el archivo LPN_HDR
+			$etapa = "generarArchivoLPN_HDR";
+			$data = \simulador_compra\distribucion_mercaderia::generar_archivo_lpn_hdr($nro_embarque, $host_inpt_id);
+			$lpn = "";
+			$r = 0;
+			foreach ($data as $item) {
+				$lpn .= implode('|', array_values($item)) . "\n";
+				$r++;
+			}
+			$file_name = "ICH$id_archivo";
+			file_put_contents("$local_path/$file_name", $lpn);
+			$archivos[] = $file_name;
+			$ctr[] = array("file_name" => $file_name, "registros" => $r);
+			
+			// Procesa el archivo LPN_DTL
+			$etapa = "generarArchivoLPN_DTL";
+			$data = \simulador_compra\distribucion_mercaderia::generar_archivo_lpn_dtl($nro_embarque, $host_inpt_id);
+			$lpn = "";
+			$r = 0;
+			foreach ($data as $item) {
+				$lpn .= implode('|', array_values($item)) . "\n";
+				$r++;
+			}
+			$file_name = "ICD$id_archivo";
+			file_put_contents("$local_path/$file_name", $lpn);
+			$archivos[] = $file_name;
+			$ctr[] = array("file_name" => $file_name, "registros" => $r);
+			
+			// Procesa el archivo DISTRO
+			$etapa = "generarArchivoDISTRO";
+			$data = \simulador_compra\distribucion_mercaderia::generar_archivo_distro($nro_embarque, $host_inpt_id);
+			$distro = "";
+			$r = 0;
+			foreach ($data as $item) {
+				$distro .= implode('|', array_values($item)) . "\n";
+				$r++;
+			}
+			$file_name = "ISD$id_archivo";
+			file_put_contents("$local_path/$file_name", $distro);
+			$archivos[] = $file_name;
+			$ctr[] = array("file_name" => $file_name, "registros" => $r);
+			
+			// Procesa el archivo CANCELACION
+			$etapa = "generarArchivoCANCELACION";
+			$cancelacion = "";
+			$r = 0;
+			$file_name = "ICL$id_archivo";
+			file_put_contents("$local_path/$file_name", $cancelacion);
+			$archivos[] = $file_name;
+			$ctr[] = array("file_name" => $file_name, "registros" => $r);
+			
+			// Procesa el archivo CONTROL
+			$etapa = "generarArchivoCONTROL";
+			$control = "";
+			foreach ($ctr as $item) {
+				$control .= implode(' ', array_values($item)) . "\n";
+			}
+			$file_name = "CMX$id_archivo.CTR";
+			file_put_contents("$local_path/$file_name", $control);
+			$archivos[] = $file_name;
+			
+			$etapa = "conectarFTP";
+			$ftp = ftp_connect($host, $port, $timeout);
+			$login = ftp_login($ftp, $user, $pass);
+			if ((!$ftp) || (!$login)) {
+				header("Content-Type: application/json");
+				echo json_encode(array("estado" => -1, "mensaje" => "Error de conexión con el FTP"), JSON_PRETTY_PRINT);
+				exit();
+			} else {
+				$etapa = "enviarArchivos";
+				foreach ($archivos as $archivo) {
+					$remote_file = "$remote_path/$archivo";
+					$source_file = "$local_path/$archivo";
+					if (!ftp_put($ftp, $remote_file, $source_file, FTP_BINARY)) {
+						ftp_close($ftp);
+						header("Content-Type: application/json");
+						echo json_encode(array("estado" => -2, "mensaje" => "No se pudo procesar el archivo de cita"), JSON_PRETTY_PRINT);
+						exit();
+					}
+				}
+			}
+			ftp_close($ftp);
+			
+			//TODO: Actualiza el embarque
+			$etapa = "archivarASN";
+			$data = \simulador_compra\distribucion_mercaderia::archivar_asn($nro_embarque);
+			
+			header("Content-Type: application/json");
+			echo json_encode(array("estado" => 0, "mensaje" => "Archivo cargado"), JSON_PRETTY_PRINT);
+		} catch (Exception $e) {
+			header("Content-Type: application/json");
+			echo json_encode(array("estado" => $e->getCode(), "mensaje" => $e->getMessage(), "etapa" => $etapa), JSON_PRETTY_PRINT);
 		}
+	}
 		
     public function beforeRoute($f3) {
         if ($f3->exists('SESSION.login') == false) {
