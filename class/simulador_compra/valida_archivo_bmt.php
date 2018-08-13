@@ -481,6 +481,7 @@ class valida_archivo_bmt extends \parametros {
                     $val = FALSE;
                     $filarow = $filarow . strval($i + 1) . ",";
                 }else{ $total = 0;
+
                     foreach ($arraypocentaje as $var){
                         $total += $var;
                     }
@@ -824,7 +825,7 @@ class valida_archivo_bmt extends \parametros {
                             , $rows[$i][$nom_columnas["Grupo de compra"]]
                             , $ventanas
                             , $rows[$i][$nom_columnas["Tipo exhibicion"]]
-                            , $rows[$i][$nom_columnas["Tipo Producto"]]
+                            , $rows[$i][$nom_columnas["Tipo Producto"]] 
                             , $debut
                             , $rows[$i][$nom_columnas["Temporada"]]
                             , $rows[$i][$nom_columnas["Precio"]]
