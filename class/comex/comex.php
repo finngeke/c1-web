@@ -34,7 +34,7 @@
 		}
 		
 		public static function actualizarNroEnvio($cod_proveedor, $nro_factura, $nro_envio){
-			$sql = "BEGIN PLC_PKG_COMEX.PRC_ACTUALIZAR_NRO_ENVIO($cod_proveedor, '$nro_factura', $nro_envio, :data); END;";
+			$sql = "BEGIN PLC_PKG_COMEX.PRC_ACTUALIZAR_NRO_ENVIO($cod_proveedor, '$nro_factura', $nro_envio); END;";
 			$data = \database::getInstancia()->getConsulta($sql);
 			return $data;
 		}

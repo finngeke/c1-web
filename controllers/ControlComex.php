@@ -163,7 +163,7 @@
 				$login = ftp_login($ftp, $user, $pass);
 				if ((!$ftp) || (!$login)) {
 					$f3->set('SESSION.error', "No se pudo establecer la conexión con el FTP");
-					$f3->reroute("/invoices?cod_proveedor=$cod_proveedor");
+					$f3->reroute("/asociar_contenedor?cod_proveedor=$cod_proveedor&nro_factura=$nro_factura");
 				} else {
 					foreach ($archivos as $archivo) {
 						$remote_file = "$remote_path/" . $archivo['nombre'];
