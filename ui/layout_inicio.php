@@ -164,7 +164,7 @@
                         <li id="modulo_session_validar_tipo_usuario">
                             <a href="ver_sesiones">
                                 <i class="fa fa-users"></i> <span>Sesiones Activas</span>
-                                <span class="pull-right-container"><small class="label pull-right bg-green">{{@activas}}</small></span>
+                                <!--<span class="pull-right-container"><small class="label pull-right bg-green">{{@activas}}</small></span>-->
                             </a>
                         </li>
 					<li id="modulo_temporada_compra_validar_tipo_usuario"><a href="temporada_compra"><i class="fa fa-calendar"></i><span> Temporada de Compra</span></a>
