@@ -553,7 +553,7 @@ class ControlFormularioCompra extends Control {
 				$etapa = "generarASN";
 				$data = \simulador_compra\distribucion_mercaderia::generar_asn($nro_embarque, $id_archivo);
 				
-				// APERTURA DE SESSIÓN
+				// APERTURA DE SESIÓN
 				$etapa = "detalleASNSesion";
 				$data = \simulador_compra\distribucion_mercaderia::obtener_detalle_asn_sesion($nro_embarque);
 				
