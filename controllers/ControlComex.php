@@ -82,7 +82,7 @@
 						$prefijo = substr($lpn, 0, 3);
 						$po_number = intval(substr($lpn, 3, 8));
 						$lpn_number = intval(substr($lpn, 11, 8));
-						\comex\comex::actualizarLPNS($nroContenedor, $tipoContenedor, $bl, $viaTransporte, $nro_factura, $po_number, $lpn_number, $prefijo);
+						\comex\comex::actualizarLPNS(strtoupper($nroContenedor), $tipoContenedor, $bl, $viaTransporte, $nro_factura, $po_number, $lpn_number, $prefijo);
 					}
 				}
 				$f3->set('SESSION.success', "Información almacenada correctamente.");
@@ -107,22 +107,6 @@
 				$date = new DateTime("now", new DateTimeZone("America/Santiago"));
 				$nro_envio = floatval($date->format('YmdHis'));
 				$archivos = [];
-				// Genera el archivo de encabezado
-				$facturas = \comex\comex::obtenerEncabezadoArchivo($cod_proveedor, $nro_factura, $nro_envio);
-				$nombre = "IEC$nro_envio";
-				$contenido = "";
-				$filas = 0;
-				foreach ($facturas as $factura) {
-					$contenido .= $factura[0] . "|";
-					$contenido .= $factura[1] . "|";
-					$contenido .= $factura[2] . "|";
-					$contenido .= $factura[3] . "|";
-					$contenido .= \LibraryHelper::convertNumber($factura[4]) . "|";
-					$contenido .= \LibraryHelper::convertNumber($factura[5]) . "\n";
-					$filas++;
-				}
-				file_put_contents("$local_path/$nombre", $contenido);
-				$archivos[] = array("nombre" => $nombre, "filas" => $filas);
 				// Genera el archivo de detalle
 				$detalles = \comex\comex::obtenerDetalleArchivo($cod_proveedor, $nro_factura);
 				$nombre = "IDC$nro_envio";
@@ -142,6 +126,22 @@
 					$contenido .= \LibraryHelper::convertNumber($detalle[10]) . "|";
 					$contenido .= $detalle[11] . "|";
 					$contenido .= $detalle[12] . "\n";
+					$filas++;
+				}
+				file_put_contents("$local_path/$nombre", $contenido);
+				$archivos[] = array("nombre" => $nombre, "filas" => $filas);
+				// Genera el archivo de encabezado
+				$facturas = \comex\comex::obtenerEncabezadoArchivo($cod_proveedor, $nro_factura, $nro_envio);
+				$nombre = "IEC$nro_envio";
+				$contenido = "";
+				$filas = 0;
+				foreach ($facturas as $factura) {
+					$contenido .= $factura[0] . "|";
+					$contenido .= $factura[1] . "|";
+					$contenido .= $factura[2] . "|";
+					$contenido .= $factura[3] . "|";
+					$contenido .= \LibraryHelper::convertNumber($factura[4]) . "|";
+					$contenido .= \LibraryHelper::convertNumber($factura[5]) . "\n";
 					$filas++;
 				}
 				file_put_contents("$local_path/$nombre", $contenido);
