@@ -52,6 +52,8 @@
 			$f3->set('nombre_form', 'Paso 1');
 			$f3->set('data', \comex\comex::listarFacturasAprobadas());
 			$f3->set('contenido', 'comex/inicio.html');
+			$f3->set('temporada', 'formulario/main/temporada.html');
+			$f3->set('proveedor', 'formulario/main/proveedor.html');
 			echo Template::instance()->render('layout_inicio.php');
 		}
 		
@@ -65,6 +67,8 @@
 			$f3->set('data', \comex\comex::listarLPNS($cod_proveedor, $nro_factura));
 			$f3->set('nombre_form', 'Paso 2');
 			$f3->set('contenido', 'comex/asociar_contenedor.html');
+			$f3->set('temporada', 'formulario/main/temporada.html');
+			$f3->set('proveedor', 'formulario/main/proveedor.html');
 			echo Template::instance()->render('layout_inicio.php');
 		}
 		
