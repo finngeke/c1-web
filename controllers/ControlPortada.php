@@ -23,7 +23,10 @@ class ControlPortada extends Control {
 
         $usr_pwd = str_replace(array('"', '.', '=', "'"), '', $f3->get('POST.clave'));
         $usr_nom = str_replace(array('"', '.', '=', "'"), '', $f3->get('POST.usuario'));
+        $f3->set('SESSION.BD_control_conexion', $f3->get('POST.select_control_conexion'));
+
         $error = false;
+
         $f3->set('mensaje', Control::setMensajePredeterminado($f3->get('error_login')));
         $Funcionario = new usuario\funcionario($usr_nom, $usr_pwd);
         if ($Funcionario->isFuncionario() != true) {

@@ -9,19 +9,19 @@
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
     </div>
     <div class="row">
-        <div class="col-md-6">
+        <!--<div class="col-md-6">
             <div class="checkbox icheck">
                 <label>
                     <input type="checkbox"> Mantener la sesión 
                 </label>
             </div>
-        </div>
+        </div>-->
         <div class="col-md-6">
             <div class="form-group">
-                  <select class="form-control">
-                    <option>PROD</option>
-                    <option>CER</option>
-                    <option>QA</option>
+                  <select id="select_control_conexion" name="select_control_conexion" class="form-control">
+                    <option value="PROD" selected>PROD</option>
+                    <!--<option value="1">CER</option>-->
+                    <option value="QA">QA</option>
                   </select>
                 </div>
         </div>

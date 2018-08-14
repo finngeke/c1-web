@@ -16,7 +16,7 @@ class database
     private $_error = null;
     static private $st = null;
 
-    const ARCHIVO = 'esab';
+     static private $ARCHIVO = null;
 
     /**
      * Constructor de clase
@@ -25,16 +25,23 @@ class database
      */
     public function __construct()
     {
-        if (file_exists(self::ARCHIVO . '.php') == false && file_exists('../' . self::ARCHIVO . '.php') == false && file_exists('../../' . self::ARCHIVO . '.php') == false && file_exists('../../../' . self::ARCHIVO . '.php') == false)
+
+        if($_SESSION['BD_control_conexion'] == 'PROD'){
+            $ARCHIVO = 'esab_PRO';
+        }else {
+            $ARCHIVO ='esab_QA';
+        }
+
+        if (file_exists($ARCHIVO . '.php') == false && file_exists('../' . $ARCHIVO . '.php') == false && file_exists('../../' . $ARCHIVO . '.php') == false && file_exists('../../../' .$ARCHIVO . '.php') == false)
             throw new excepciones\ErrorArchivo;
-        elseif (file_exists(self::ARCHIVO . '.php'))
-            include self::ARCHIVO . '.php';
-        elseif (file_exists('../' . self::ARCHIVO . '.php'))
-            include '../' . self::ARCHIVO . '.php';
-        elseif (file_exists('../../' . self::ARCHIVO . '.php'))
-            include '../../' . self::ARCHIVO . '.php';
-        elseif (file_exists('../../../' . self::ARCHIVO . '.php'))
-            include '../../../' . self::ARCHIVO . '.php';
+        elseif (file_exists($ARCHIVO . '.php'))
+            include $ARCHIVO . '.php';
+        elseif (file_exists('../' . $ARCHIVO . '.php'))
+            include '../' . $ARCHIVO . '.php';
+        elseif (file_exists('../../' . $ARCHIVO . '.php'))
+            include '../../' . $ARCHIVO . '.php';
+        elseif (file_exists('../../../' . $ARCHIVO . '.php'))
+            include '../../../' . $ARCHIVO . '.php';
         $this->conecta(_SERVER_, _USR_, _PWD_, _DB_, _TNSNAMES_);
         return $this;
     }
@@ -247,14 +254,20 @@ class database
      */
     private function conectaBasico()
     {
-        if (file_exists(self::ARCHIVO . '.php') == FALSE && file_exists('../' . self::ARCHIVO . '.php') == FALSE && file_exists('../../' . self::ARCHIVO . '.php') == FALSE)
-            throw new Exception('Archivo de conexi&oacute;n no existe: ' . self::ARCHIVO . '.php');
-        elseif (file_exists(self::ARCHIVO . '.php'))
-            include self::ARCHIVO . '.php';
-        elseif (file_exists('../' . self::ARCHIVO . '.php'))
-            include '../' . self::ARCHIVO . '.php';
-        elseif (file_exists('../../' . self::ARCHIVO . '.php'))
-            include '../../' . self::ARCHIVO . '.php';
+        if($_SESSION['BD_control_conexion'] == 'PROD'){
+            $ARCHIVO = 'esab';
+        }else {
+            $ARCHIVO ='esab_QA';
+        }
+
+        if (file_exists($ARCHIVO . '.php') == FALSE && file_exists('../' . $ARCHIVO . '.php') == FALSE && file_exists('../../' . $ARCHIVO . '.php') == FALSE)
+            throw new Exception('$ARCHIVO de conexi&oacute;n no existe: ' . $ARCHIVO . '.php');
+        elseif (file_exists($ARCHIVO . '.php'))
+            include $ARCHIVO . '.php';
+        elseif (file_exists('../' . $ARCHIVO . '.php'))
+            include '../' . $ARCHIVO . '.php';
+        elseif (file_exists('../../' . $ARCHIVO . '.php'))
+            include '../../' . $ARCHIVO . '.php';
         if (!$this->conexion_basico = @mssql_connect(_SERVER_, _USR_, _PWD_))
             die("No se ha logrado una conexi&oacute;n al servidor de base de datos");
         if (!mssql_select_db(_DB_))
