@@ -687,7 +687,7 @@ return $data;
 
         curl_setopt_array($curl, array(
             CURLOPT_PORT => "7804",
-            CURLOPT_URL => "http://10.0.156.162:7804/consultaOrdenComprarst/v1/consultaOrdenCompra",
+            CURLOPT_URL => "http://10.0.159.68:7804/consultaOrdenComprarst/v1/consultaOrdenCompra",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,
