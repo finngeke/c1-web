@@ -48,6 +48,7 @@
                     <!--Etiqueta que contiene cronometro -->
                     <p style="display: none">
                         <span id="minutos">0</span>:<span id="segundos">0</span>
+                        <span id="segundos_simulador">0</span>
                     </p>
                     <!-- Navbar Right Menu -->
                     <div class="navbar-custom-menu">
@@ -127,6 +128,7 @@
                                             <span id="flag_top_menu_tipo_usuario" style="display: none"></span>
                                             <span id="flag_top_menu_tipo_usuario_num" style="display: none"></span>
                                             <span id="flag_top_primer_aviso" style="display: none"></span>
+                                            <span id="flag_top_aviso_termino_carga" style="display:none ">0</span>
                                         </p>
                                     </li>
 
@@ -155,7 +157,7 @@
                             <img src="dist/img/avatar_generica.png" class="img-circle" alt="User Image">
                         </div>
                         <div class="pull-left info">
-                            <p>{{ @login }}</p>
+                            <p id="flag_usuario_no_lectura">{{ @login }}</p>
                             <!--<a href="#"><i class="fa fa-circle text-success"></i> Online</a>-->
                         </div>
                     </div>

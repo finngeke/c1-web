@@ -186,6 +186,29 @@ $(window).on('load', function () {
                     }
 
 
+                    //Validar modulo COMEX
+                    verifica_modulo = $.grep(arreglo_modulos_desac,function(e){return e.id_modulo== 24;});
+                    if (verifica_modulo.length > 0){
+                        $('#modulo_comex').remove();
+                    }
+
+                    //VALIDAR BOTONES DEL MODULO DE COMEX
+                    verifica_accion = $.grep(arreglo_accion_desac,function(e){return e.id_accion== 75;});
+                    if (verifica_accion.length > 0){
+                        $("#btn_guardar_modulo_comex").attr("disabled", "disabled");
+                        $("#btn_guardar_modulo_comex").each(function (){
+                            this.style.pointerEvents = 'none';
+                        });
+                    }
+                    verifica_accion = $.grep(arreglo_accion_desac,function(e){return e.id_accion== 76;});
+                    if (verifica_accion.length > 0){
+                        $("#btn_enviar_a_comex").attr("disabled", "disabled");
+                        $("#btn_enviar_a_comex").each(function (){
+                            this.style.pointerEvents = 'none';
+                        });
+                    }
+
+
 
                 });
 

@@ -354,7 +354,6 @@ class permiso_usuario extends \parametros {
         }else{
             return 0;
         }
-        echo $sql;
 
         //$data = \database::getInstancia()->getFilas($sql);
         //echo $data;
@@ -380,7 +379,6 @@ class permiso_usuario extends \parametros {
         }else{
             return 0;
         }
-        echo $sql;
 
         //$data = \database::getInstancia()->getFilas($sql);
         //echo $data;
@@ -394,7 +392,6 @@ class permiso_usuario extends \parametros {
                 and DEP_DEPTO = '".$DEPTO."'
                 and COD_USR = '".$COD_USU."' 
                 ";
-        echo ($sql);
 
         // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
         if (!file_exists('../archivos/log_querys/'.$login)) {

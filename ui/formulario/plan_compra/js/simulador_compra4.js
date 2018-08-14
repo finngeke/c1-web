@@ -8,6 +8,7 @@
 $(function () {
 
     //"use strict";
+    validar_aviso_carga_de_simulador();
     /*ABRE POPUP MODAL PERFIL*/
     $('.eliminar_bmt').on('click', function () {
         $('.registro').html('<b> ' + $('.bmt').html() + ' </b>');
@@ -199,9 +200,12 @@ $(window).on('load', function () {
                             }
 
                         });
-
                         //#########################################################################################
-                        if (flag_cant_usr_session != ''){
+
+
+                            if (flag_cant_usr_session != '') {
+
+                                if ($('#flag_usuario_no_lectura').text() != 'EPACHECO'){
 
                             //Busco si existe un registro asociado al loguin
                             $.getJSON(url_busca_usuario_tabla_session, {DEPTO:depto}, function (data) {
@@ -216,6 +220,7 @@ $(window).on('load', function () {
 
                                 });
                             });
+                                }
 
                         }else {
 
@@ -360,7 +365,11 @@ $(window).on('load', function () {
         // Cargar datos de la grilla 2
         var url_carga_tabla2 = 'ajax_simulador_cbx/llenar_tabla2';
         var flag_tabla2 = 0 ;
+        var flag_cont_registro = 0 ;
         $.getJSON(url_carga_tabla2, function (data) {
+            $.each(data,function () {
+                flag_cont_registro ++;
+            });
             $.each(data, function (i,o) {
                 $('#tabla2').append('<tr>\n' +
                     '<td id="txt_id_radio'+flag_tabla2+'"><input type="radio" id="radio" name="radio" value="'+flag_tabla2+'"></td>\n' +
@@ -461,11 +470,15 @@ $(window).on('load', function () {
                     '<td id="txt_ventava_numero_'+flag_tabla2+'" style="display: none">'+o[86]+'</td>\n' +
                     '<td id="txt_fecha_recep_c1__'+flag_tabla2+'" style="display: none">'+o[87]+'</td>\n' +
                     '</tr>');
-
                 flag_tabla2++;
-
                 // Fin foreach que llena tabla
             });
+            if (flag_cont_registro == 0){
+                $('#flag_top_aviso_termino_carga').html( parseInt($('#flag_top_aviso_termino_carga').html())+1);
+
+            }else if (flag_tabla2 > 0){
+                $('#flag_top_aviso_termino_carga').html( parseInt($('#flag_top_aviso_termino_carga').html())+1);
+            }
          // Fin de carga datos grilla 2
         }).done( function() {
 
@@ -625,8 +638,9 @@ $(window).on('load', function () {
                         var url_llena_array_oc = 'ajax_simulador_cbx/traer_datos_oc';
                         var url_recep_atraso = 'ajax_simulador_cbx/trae_fecharcd_y_dias_atraso';
                         $.getJSON(url_llena_array_oc, {PI:proforma}, function (data) {
-
+//console.log(data);
                             var json = JSON.parse(data);
+                            //var json = JSON.stringify(data); // JavaScript object a string
 
                             if(json.Body.fault.faultCode == 0) {
 
@@ -750,6 +764,7 @@ $(window).on('load', function () {
 
                 var tabla2_buscar_columnas = $('#tabla2').DataTable({
                    // "ordering": false,
+                    //paging: true,
                   paging: false,
                     scrollY: "140px",
                     scrollX: true,
@@ -785,8 +800,10 @@ $(window).on('load', function () {
                     tabla2_buscar_columnas.cell($td).invalidate();
                 });
 
-            }, delay_thead);
+                //-- validar -- que se seteo la datatable
+                $('#flag_top_aviso_termino_carga').html( parseInt($('#flag_top_aviso_termino_carga').html())+1);
 
+            }, delay_thead);
 
             //delay calcular totales
             var delay_calculos_totales = 4000;
@@ -800,7 +817,6 @@ $(window).on('load', function () {
             setTimeout(function () {
                 validar_usuario_recarga_sesion_expirada();
                 Validar_flag_concurrencia_usuario_log();
-                $('#popup_cargando_simulador_compra_4').modal('hide');
             }, delay_validaciones);
         // Fin del done carga tabla 2
         });
@@ -2546,7 +2562,6 @@ $('#form_import_bmt').submit(function(event) {
 
 });
 
-
 function campos_bloquear_tipo_usuario() {
 
     $('#flag_top_menu_tipo_usuario').html('LECTURA');
@@ -2640,6 +2655,9 @@ function campos_bloquear_despues_llenar_tabla(){
             });
         }).done(function (data_modulo) {
 
+            //aumentar flag para validar carga del simulador
+            $('#flag_top_aviso_termino_carga').html( parseInt($('#flag_top_aviso_termino_carga').html())+1);
+
             $.getJSON(url_buscar_accion_estados_desactivado,{ID_TIP_USR:tipo_usuario}, function (data_accion) {
                 $.each(data_accion, function (i, a) {
 
@@ -2672,8 +2690,12 @@ function campos_bloquear_despues_llenar_tabla(){
                     $(".btn_pi_").attr("disabled", "disabled");
                 }
 
+                //aumentar flag para validar carga del simulador
+                $('#flag_top_aviso_termino_carga').html( parseInt($('#flag_top_aviso_termino_carga').html())+1);
             });
+
         });
+
     });
 
 }
@@ -2782,6 +2804,7 @@ function validar_usuario_recarga_sesion_expirada() {
 
     $.getJSON(url_buscar_sesion_activa_usuario_log, {DEPTO: depto}, function (data) {
         if (data == 1) {
+            $('#popup_cargando_simulador_compra_4').modal('hide');
             $('#popup_usario_expirado').modal('show');
 
             var delay_salir_main = 3000;
@@ -2935,7 +2958,39 @@ function cal_campos() {
     $('#campo_total_fob_us').html(sum_total_fob_us);
     $('#campo_total_costo_total_pesos').html(sum_costo_total_pesos);
     $('#campo_total_retail_pesos_sin_iva').html(sum_total_retail_pesos_sin_iva);
+
+    // -- validar -- momento en que termine --
+    $('#flag_top_aviso_termino_carga').html( parseInt($('#flag_top_aviso_termino_carga').html())+1);
 }
 
+function validar_aviso_carga_de_simulador() {
+
+    var contador_seg_carga = 0;
+    var contador_m = 0;
+
+    var seg_carga = document.getElementById("segundos_simulador");
+
+    var cronometro = setInterval(
+        function () {
+
+            if (contador_seg_carga == 31) {
+                contador_seg_carga = 0;
+
+            }
+
+            if (contador_seg_carga == 30) {
+                //Validar flag_top_aviso_termino_carga
+                if ($('#flag_top_aviso_termino_carga').text() == 7){
+
+                    $('#popup_cargando_simulador_compra_4').modal('hide');
+                }
+            }
+
+
+            seg_carga.innerHTML = contador_seg_carga;
+            contador_seg_carga++;
+
+        },1000);
+}
 
 
