@@ -26,7 +26,7 @@ $(window).on('load', function () {
 
                     });
             }).done(function (data_modulo) {
-
+                $('#flag_top_aviso_termino_carga').html( parseInt($('#flag_top_aviso_termino_carga').html())+1);
 
                 $.getJSON(url_buscar_accion_estados_desactivado,{ID_TIP_USR:tipo_usuario}, function (data_accion) {
                     $.each(data_accion, function (i, a) {
@@ -245,7 +245,7 @@ $(window).on('load', function () {
                     if (verifica_accion.length > 0){
                         $("#tipo_btn_ppto_retail").attr("disabled", "disabled");
                     }
-
+                    $('#flag_top_aviso_termino_carga').html( parseInt($('#flag_top_aviso_termino_carga').html())+1);
                 });
 
             });
