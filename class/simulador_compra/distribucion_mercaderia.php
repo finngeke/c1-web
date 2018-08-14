@@ -210,7 +210,7 @@
 		}
 		
 		public static function obtener_cabecera_asn_sesion($nro_embarque){
-			$sql = "SELECT ASN_NUMBER FROM PLC_ASN_CABECERA WHERE (NRO_EMBARQUE = $nro_embarque) ORDER BY ASN_NUMBER";
+			$sql = "SELECT ASN_NUMBER FROM PLC_ASN_CABECERA WHERE (NRO_EMBARQUE = $nro_embarque) AND (COALESCE(ID_SESION, 0) = 0) ORDER BY ASN_NUMBER";
 			return \database::getInstancia()->getFilas($sql);
 		}
 		
