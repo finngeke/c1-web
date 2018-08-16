@@ -638,7 +638,7 @@ $(window).on('load', function () {
                         var url_llena_array_oc = 'ajax_simulador_cbx/traer_datos_oc';
                         var url_recep_atraso = 'ajax_simulador_cbx/trae_fecharcd_y_dias_atraso';
                         $.getJSON(url_llena_array_oc, {PI:proforma}, function (data) {
-//console.log(data);
+console.log(data);
                             var json = JSON.parse(data);
                             //var json = JSON.stringify(data); // JavaScript object a string
 
@@ -772,7 +772,8 @@ $(window).on('load', function () {
                     fixedColumns:true,
                   scrollCollapse: true,
                     "oLanguage": {
-                        "sSearch": "Buscar:"
+                        "sSearch": "Buscar:",
+                        "sZeroRecords" : "No se encontraron registros"
                     },
                     columnDefs: [
                         { "type": "html-input", "targets": [77]}
@@ -786,6 +787,8 @@ $(window).on('load', function () {
                     $( "#input_filtros_columna_tabla2", this.footer() ).on( 'keyup change', function () {
                         if ( that.search() !== this.value ) {
                             that.search(this.value).draw();
+
+                            $('.datatables_empty').remove();
                             cal_campos();
                         }
                     });
@@ -2850,6 +2853,18 @@ $('#btn_limpiar_filtro_sim_comp').on('click',function () {
 
 function cal_campos() {
 
+    var nfilas  = $("#tabla2 tbody tr").length;
+    var nColumnas = $("#tabla2 tbody td").length;
+
+    if (nColumnas == 0){
+        $('.odd').append("<td class='dataTables_empty' style='alignment: center' colspan='90'>No se encontraron registros</td>");
+        $('#span_conteo_registro_tabla2').html("Existen:  "+nColumnas+"  registros");
+        $('#tfoot_totales_campos_calculados').css('display','none');
+    } else {
+        $('#span_conteo_registro_tabla2').html("Existen:  "+nfilas+"  registros");
+        $('#tfoot_totales_campos_calculados').css('display','');
+    }
+
     var sum_unid_ini = 0;
     var sum_unid_ajust = 0;
     var sum_unid_final = 0;
@@ -2894,6 +2909,7 @@ function cal_campos() {
             sum_total_fob_us += parseFloat($(this).find("td:eq(63)").html());//SUM
             sum_costo_total_pesos += parseInt($(this).find("td:eq(64)").html());//SUM
             sum_total_retail_pesos_sin_iva += parseInt($(this).find("td:eq(65)").html());//SUM
+
         }
     });
 
