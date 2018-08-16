@@ -209,7 +209,7 @@
 	<!-- AdminLTE App -->
 	<script src="{{@BASE}}/dist/js/adminlte.js"></script>
 	<!-- Sparkline -->
-	<script src="{{@BASE}}/bower_components/jquery-sparkline/dist/jquery.sparkline.min.js"></script>
+	<!--<script src="{{@BASE}}/bower_components/jquery-sparkline/dist/jquery.sparkline.min.js"></script>-->
 	<!-- jvectormap  -->
 	<!--<script src="{{@BASE}}/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
 	<script src="{{@BASE}}/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>-->
