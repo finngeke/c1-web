@@ -189,36 +189,34 @@ $('.tipo_btn_formatos_nuevo').on('click', function () {
         // Enviar a guardar
          var nuevo_formato = $('.NUEVO_FORMATO').val();
          var url_agrega = 'ajax_simulador_formato/agrega_nuevo_formato';
-         $.get(url_agrega, {NUEVO_FORMATO:nuevo_formato.toUpperCase()});
+         $.get(url_agrega, {NUEVO_FORMATO:nuevo_formato.toUpperCase()}).done(function(){
 
+             // Limpiar BCX de Formato (aun con registros antigüos), luego cargar nuevamente sus items
+             $('.FORMATO').empty();
 
-         // Limpiar BCX de Formato (aun con registros antigüos), luego cargar nuevamente sus items
-        $('.FORMATO').empty();
+             // Recargar el CBX de Formato, luiego de haber ingresado un nuevo registro
+             var url_formato = 'ajax_simulador_formato/obtiene_formato';
+             var toAppend_formato = "";
+             $.getJSON(url_formato, function (data) {
+                 $.each(data, function (i,o) {
+                     toAppend_formato += '<option value=' + o[0] + '>' + o[1]  + '</option>';
+                 });
+                 $('.FORMATO').append(toAppend_formato);
+             });
 
+             // Limpiar el texto del formulario
+             $('#NUEVO_FORMATO').empty();
 
-        // Recargar el CBX de Formato, luiego de haber ingresado un nuevo registro
-        var url_formato = 'ajax_simulador_formato/obtiene_formato';
-        var toAppend_formato = "";
-        $.getJSON(url_formato, function (data) {
-            $.each(data, function (i,o) {
-                toAppend_formato += '<option value=' + o[0] + '>' + o[1]  + '</option>';
-            });
-            $('.FORMATO').append(toAppend_formato);
-        });
+             // Cerrar la ventana modal
+             $("#nuevoFormatoModal").modal("hide");
 
+             // Enviar Alerta cuando se realize la nueva inserción
+             alert("Favor revisar el nuevo formato. \n Si no lo encuentra, recargue página o limpie historial.");
 
-        // Limpiar el texto del formulario
-        $('.NUEVO_FORMATO').empty();
+         // Fin el agregar formato
+         });
 
-
-        // Cerrar la ventana modal
-        $("#nuevoFormatoModal").modal("hide");
-
-
-        // Enviar Alerta cuando se realize la nueva inserción
-        alert("Favor revisar el nuevo formato. \n Si no lo encuentra, recargue página o limpie historial.");
-
-
+    // Fin del else asociado a la existencia previa del formato
     }
 
 
