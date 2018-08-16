@@ -115,6 +115,7 @@
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                     <img src="dist/img/avatar_generica.png" class="user-image" alt="User Image">
                                     <span class="hidden-xs">{{ @nombre }}</span>
+                                    &nbsp;<span id="control_conexion" style="color: red"><b>[{{ @BD_CONEXION }}]</b></span>
 
                                 </a>
 
