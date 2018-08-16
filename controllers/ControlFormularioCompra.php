@@ -556,7 +556,8 @@
 				$asns = \simulador_compra\distribucion_mercaderia::obtener_cabecera_asn_sesion($nro_embarque);
 				foreach ($asns as $asn) {
 					$etapa = "detalleASNSesion";
-					$data = \simulador_compra\distribucion_mercaderia::obtener_detalle_asn_sesion($nro_embarque, $asn[0]);
+					$asn_number = $asn[0];
+					$data = \simulador_compra\distribucion_mercaderia::obtener_detalle_asn_sesion($nro_embarque, $asn_number);
 					$detalleSesionRecibo = [];
 					foreach ($data as $item) {
 						$v_sucursal = $item[0];
@@ -566,8 +567,8 @@
 						$v_numeroOC = $item[4];
 						$v_sku = $item[5];
 						$v_contenedor = $item[6];
-						$v_valorUnitarioFactura = \LibraryHelper::convertNumber($item[7]);
-						$v_cantidadEmbarcada = \LibraryHelper::convertNumber($item[8]);
+						$v_costo = \LibraryHelper::convertNumber($item[7]);
+						$v_cantidadRecibir = \LibraryHelper::convertNumber($item[8]);
 						$detalleSesionRecibo[] = array(
 							"sucursal" => "$v_sucursal",
 							"numeroFactura" => "$v_numeroFactura",
@@ -576,18 +577,17 @@
 							"numeroOC" => "$v_numeroOC",
 							"SKU" => "$v_sku",
 							"contenedor" => "$v_contenedor",
-							"valorUnitarioFactura" => $v_valorUnitarioFactura,
-							"cantidadEmbarcada" => $v_cantidadEmbarcada
+							"cantidadRecibir" => "$v_cantidadRecibir",
+							"costo" => "$v_costo"
 						);
 					}
 					$json = json_encode($detalleSesionRecibo, JSON_PRETTY_PRINT);
-					//$json = "{\"HeaderRply\":{\"servicio\":{\"nombreServicio\":\"string\",\"operacion\":\"string\",\"idTransaccion\":\"string\",\"tipoMensaje\":\"string\",\"tipoTransaccion\":\"string\",\"usuario\":\"string\",\"dominioPais\":\"string\",\"ipOrigen\":\"string\",\"servidor\":\"string\",\"timeStamp\":\"string\"},\"paginacion\":{\"numPagina\":\"string\",\"cantidadregisros\":\"string\",\"totalRegistros\":\"string\"},\"track\":{\"idTrack\":\"string\",\"codSistema\":\"string\",\"codAplicacion\":\"string\",\"componente\":\"string\",\"estado\":\"string\",\"dataLogger\":\"string\",\"flagTracking\":\"string\",\"flagLog\":\"string\"},\"error\":[{\"errorCode\":\"string\",\"errorGlosa\":\"string\"}],\"reproceso\":{\"countReproceso\":\"string\",\"intervaloReintento\":\"string\",\"objetoReproceso\":\"string\"},\"filler\":\"string\"},\"Body\":{\"headerServicio\":{\"version\":\"string\",\"nombre\":\"string\",\"estado\":\"string\",\"fecha\":\"string\",\"hora\":\"string\",\"nroTransaccion\":\"string\",\"sucursal\":\"10095\",\"terminal\":\"string\",\"tipoTransaccion\":\"string\"},\"detalleSesionRecibo\":$json}}";
 					$json = "{\n\t\"HeaderRply\": {\n\t\t\"servicio\": {\n\t\t\t\"nombreServicio\": \"string\",\n\t\t\t\"operacion\": \"string\",\n\t\t\t\"idTransaccion\": \"string\",\n\t\t\t\"tipoMensaje\": \"string\",\n\t\t\t\"tipoTransaccion\": \"string\",\n\t\t\t\"usuario\": \"string\",\n\t\t\t\"dominioPais\": \"string\",\n\t\t\t\"ipOrigen\": \"string\",\n\t\t\t\"servidor\": \"string\",\n\t\t\t\"timeStamp\": \"string\"\n\t\t},\n\t\t\"paginacion\": {\n\t\t\t\"numPagina\": \"string\",\n\t\t\t\"cantidadregisros\": \"string\",\n\t\t\t\"totalRegistros\": \"string\"\n\t\t},\n\t\t\"track\": {\n\t\t\t\"idTrack\": \"string\",\n\t\t\t\"codSistema\": \"string\",\n\t\t\t\"codAplicacion\": \"string\",\n\t\t\t\"componente\": \"string\",\n\t\t\t\"estado\": \"string\",\n\t\t\t\"dataLogger\": \"string\",\n\t\t\t\"flagTracking\": \"string\",\n\t\t\t\"flagLog\": \"string\"\n\t\t},\n\t\t\"error\": [\n\t\t\t{\n\t\t\t\t\"errorCode\": \"string\",\n\t\t\t\t\"errorGlosa\": \"string\"\n\t\t\t}\n\t\t],\n\t\t\"reproceso\": {\n\t\t\t\"countReproceso\": \"string\",\n\t\t\t\"intervaloReintento\": \"string\",\n\t\t\t\"objetoReproceso\": \"string\"\n\t\t},\n\t\t\"filler\": \"string\"\n\t},\n\t\"Body\": {\n\t\t\"headerServicio\": {\n\t\t\t\"version\": \"string\",\n\t\t\t\"nombre\": \"string\",\n\t\t\t\"estado\": \"string\",\n\t\t\t\"fecha\": \"string\",\n\t\t\t\"hora\": \"string\",\n\t\t\t\"nroTransaccion\": \"string\",\n\t\t\t\"sucursal\": \"10095\",\n\t\t\t\"terminal\": \"string\",\n\t\t\t\"tipoTransaccion\": \"string\"\n\t\t},\n\t\t\"detalleSesionRecibo\": $json\n\t}\n}";
 					
 					$curlopt_url = $f3->get('CURLOPT_URL') . "/aperturasesionreciborst/v1/aperturaSesionRecibo";
 					$curlopt_port = $f3->get('CURLOPT_PORT');
 					
-					$filename = "aperturaSesionReciboRequest$nro_embarque.json";
+					$filename = "aperturaSesionReciboRequest" . $nro_embarque . "_COM" . str_pad($asn_number, 6, "0", STR_PAD_LEFT) . ".json";
 					file_put_contents("../archivos/json/$filename", $json);
 					
 					$etapa = "abrirSesion";
@@ -708,7 +708,7 @@
 				foreach ($ctr as $item) {
 					$control .= implode(' ', array_values($item)) . "\n";
 				}
-				$file_name = "CMX$id_archivo.CTR";
+				$file_name = "CMX$id_archivo . CTR";
 				file_put_contents("$local_path/$file_name", $control);
 				$archivos[] = $file_name;
 				
