@@ -108,16 +108,11 @@ var r = confirm("¿Guardar Cambios?");
 
 if (r == true) {
 
-        var formato_seleccionado  = $('.FORMATO').val();
+        var formato_seleccionado  = $('#FORMATO').val();
 
-        if ($('.ASIGNADO_FORMATO option').length == 0) {
+        if ($('#ASIGNADO_FORMATO option').length == 0) {
             alert("No existen items a guardar.");
         } else {
-
-            // Revisar la lògica del quitar ya que los podría quitar todos de una ()
-            // var url_quitar = 'ajax_simulador_formato/quitar_todo_formato';
-            // $.get(url_quitar, {FORMATO:formato_seleccionado});
-
 
             // Quitar los registros
             var url_quitar = 'ajax_simulador_formato/quitar_formato';
@@ -125,14 +120,11 @@ if (r == true) {
                 $.get(url_quitar, {FORMATO:formato_seleccionado,ASIGNADO: $(this).attr('value')});
             });
 
-
             // Agrega Registros
             var url_agrega = 'ajax_simulador_formato/agrega_formato';
             $("#ASIGNADO_FORMATO option").each(function(){
                 $.get(url_agrega, {FORMATO:formato_seleccionado,ASIGNADO: $(this).attr('value')});
             });
-
-
 
         } // Fin del else de verificación
 
