@@ -255,7 +255,7 @@ class database
     private function conectaBasico()
     {
         if($_SESSION['BD_control_conexion'] == 'PROD'){
-            $ARCHIVO = 'esab';
+            $ARCHIVO = 'esab_PRO';
         }else {
             $ARCHIVO ='esab_QA';
         }
