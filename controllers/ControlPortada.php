@@ -29,7 +29,6 @@ class ControlPortada extends Control {
         // Creamos una cookie para la conexion
         setcookie("BD_control_conexion", $f3->get('POST.select_control_conexion'));
 
-
         $error = false;
 
         $f3->set('mensaje', Control::setMensajePredeterminado($f3->get('error_login')));
@@ -43,6 +42,7 @@ class ControlPortada extends Control {
             echo Template::instance()->render('layout_login.php');
             die();
         }
+
         /* echo $Funcionario->getDatosFuncionario()->COD_USR.'<br>';
           echo $Funcionario->getDatosFuncionario()->NOM_USR.'<br>';
           echo $Funcionario->getDatosFuncionario()->ESTADO.'<br>';
@@ -51,6 +51,7 @@ class ControlPortada extends Control {
           echo $Funcionario->getDatosFuncionario()->COD_PAIS.'<br>';
 
           die(); */
+
         setlocale(LC_TIME, 'es_ES', 'Spanish_Spain', 'Spanish');
         $f3->set('SESSION.login', $Funcionario->getDatosFuncionario()->COD_USR);
         $f3->set('SESSION.nombre', $Funcionario->getDatosFuncionario()->NOM_USR);
