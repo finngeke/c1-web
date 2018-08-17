@@ -193,8 +193,8 @@ function cargar_tabla_depto(codigo_usu_permiso) {
                 '<td>'+d[2]+'</td>'+
                 '<td><select id="selec_estado_depto_'+inc_depto_permisos+'" name="selec_estado_depto"  onchange="campo_ajustado('+inc_depto_permisos+');">' +
                 '<option value="0" >No Permitido</option>' +
-                '<option value="1" >Lectura</option>' +
-                '<option value="2" >Lectura y Escritura</option>' +
+                '<!-- <option value="1" >Lectura</option> -->' +
+                '<option value="2" >Permitido</option>' +
                 '</select></td>' +
                 '<td id="col_act_estado_depto_'+inc_depto_permisos+'" style="display: none;"></td>' +
                 '</tr>');
@@ -212,7 +212,11 @@ function cargar_tabla_depto(codigo_usu_permiso) {
                 scrollY: "400px",
                 scrollX: "500px",
                 "info": false,
-                scrollCollapse: true
+                scrollCollapse: true,
+                "oLanguage": {
+                    "sSearch": "Buscar:",
+                    "sZeroRecords" : "No se encontraron registros"
+                }
             });
         },delay_thead);
     });
