@@ -2283,7 +2283,6 @@ $('#btn_actualizar_match').on('click', function () {
                                     return false;
                                 }
 
-
                                 // Fin recorrido segunda tabla
                             });
 
@@ -2297,7 +2296,6 @@ $('#btn_actualizar_match').on('click', function () {
                                 $(this).find("td:eq(0)").css('color', 'black');
                             }
 
-
                             // Fin recorrido primera tabla
                         });
 
@@ -2309,9 +2307,6 @@ $('#btn_actualizar_match').on('click', function () {
                         }
                         // FIN Tablas
 
-
-                        alert("Los cambios han sido realizados. Favor revisar.");
-
                     }, delay);
 
                 } else {
@@ -2320,6 +2315,8 @@ $('#btn_actualizar_match').on('click', function () {
                 }
 
             }
+
+            alert("Favor revisar que los cambios fueron realizados.");
 
         });
 
