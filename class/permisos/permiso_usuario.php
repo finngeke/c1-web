@@ -20,9 +20,7 @@ class permiso_usuario extends \parametros {
         $sql = "SELECT COD_USR, nom_usr, cod_tipusr 
                     FROM plc_usuario 
                     where cod_tipusr = $id_tipo_usuario ";
-
         $data = \database::getInstancia()->getFilas($sql);
-
         return $data;
 
     }
