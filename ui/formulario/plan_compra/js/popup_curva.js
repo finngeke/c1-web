@@ -187,7 +187,7 @@ $('.tipo_btn_curva').click(function () {
 
      // Quitar Ejemplo
     // Sirve si tienes campos del tipo input
-    Este archivo tiene que estr ahi
+    //Este archivo tiene que estr ahi
     /*$(".jexcel tr.item").each(function() {
         var G_COMPRA = $(this).find("input.G_COMPRA").val();
         alert(G_COMPRA);
