@@ -3,6 +3,7 @@
 $f3 = require('../lib/base.php');
 
 $f3->config('../config.ini');
+session_start();
 
 \Template::instance()->extend('mensaje', 'MensajeHelper::render');
 \Template::instance()->extend('msj', 'MensajeHelper::easy');

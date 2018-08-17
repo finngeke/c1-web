@@ -23,11 +23,7 @@ class ControlPortada extends Control {
 
         $usr_pwd = str_replace(array('"', '.', '=', "'"), '', $f3->get('POST.clave'));
         $usr_nom = str_replace(array('"', '.', '=', "'"), '', $f3->get('POST.usuario'));
-        //$f3->set('SESSION.BD_control_conexion', $f3->get('POST.select_control_conexion'));
-        /*session_start();
-        $_SESSION['BD_control_conexion'] = $f3->get('POST.select_control_conexion');*/
-        // Creamos una cookie para la conexion
-        setcookie("BD_control_conexion", $f3->get('POST.select_control_conexion'));
+        $f3->set('SESSION.BD_control_conexion', $f3->get('POST.select_control_conexion'));
 
         $error = false;
 
@@ -72,8 +68,7 @@ class ControlPortada extends Control {
         $f3->clear('SESSION.GLOSA_TEMPORADA');
         $f3->clear('SESSION.COD_TEMPORADA');
         $f3->clear('SESSION.COD_DEPTO');
-        //$f3->clear('SESSION.BD_control_conexion');
-        unset($_COOKIE['BD_control_conexion']);
+        $f3->clear('SESSION.BD_control_conexion');
         $f3->reroute('/');
     }
 }

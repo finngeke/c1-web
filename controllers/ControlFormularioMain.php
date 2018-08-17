@@ -150,7 +150,7 @@ class ControlFormularioMain extends Control {
         $f3->set('nombre', $f3->get('SESSION.nombre'));
         $f3->set('estado', $f3->get('SESSION.estado'));
         $f3->set('correo', $f3->get('SESSION.correo'));
-        $f3->set('BD_CONEXION', $_COOKIE['BD_control_conexion']);
+        $f3->set('BD_CONEXION', $f3->get('SESSION.BD_control_conexion'));
         $f3->set('dia', $f3->get('SESSION.dia'));
         $f3->set('perfil', $Perfil->getDescripcion()->TIPO_USR);
         $f3->set('activas', count(sesiones\activas::getSesionesActivas())); // Pendiente por TIEMPO DE CARGA...
