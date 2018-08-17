@@ -215,14 +215,13 @@
 						"demora": demora
 					});
 				}
-			})
+			});
 			if (sucursales.length > 0) {
 				var data = {
 					'sucursales': sucursales
 				};
 				$.post('guardar_distribucion_tienda', data).done(function(data) {
 					alert('Datos guardados correctamente');
-					//$(location).attr('href', "plan_compra?codigo={{@SESSION.COD_TEMPORADA}}");
 				}).fail(function(data, status, error) {
 					console.log(data);
 					alert('Ha ocurrido un error al guardar los datos');
