@@ -553,6 +553,7 @@
 				$data = \simulador_compra\distribucion_mercaderia::generar_asn($nro_embarque, $id_archivo);
 				
 				// APERTURA DE SESIÓN
+				$etapa = "aperturaSesion";
 				$asns = \simulador_compra\distribucion_mercaderia::obtener_cabecera_asn_sesion($nro_embarque);
 				foreach ($asns as $asn) {
 					$etapa = "detalleASNSesion";
@@ -739,7 +740,7 @@
 				$data = \simulador_compra\distribucion_mercaderia::archivar_asn($nro_embarque);
 				
 				header("Content-Type: application/json");
-				echo json_encode(array("estado" => 0, "mensaje" => "Archivo cargado"), JSON_PRETTY_PRINT);
+				echo json_encode(array("estado" => 0, "mensaje" => "Archivo cargado", "etapa" => $etapa), JSON_PRETTY_PRINT);
 			} catch (Exception $e) {
 				header("Content-Type: application/json");
 				echo json_encode(array("estado" => $e->getCode(), "mensaje" => $e->getMessage(), "etapa" => $etapa), JSON_PRETTY_PRINT);
