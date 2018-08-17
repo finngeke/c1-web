@@ -95,7 +95,7 @@ class ControlFormularioMain extends Control {
         $f3->set('Lista_divisiones', $combo_division);
         $f3->set('contenido', 'formulario/main/lista_master_pack.html');
         $f3->set('temporada', 'formulario/main/temporada.html');
-			$f3->set('proveedor', 'formulario/main/proveedor.html');
+		$f3->set('proveedor', 'formulario/main/proveedor.html');
         $f3->set('tipo_deptomarca', 'formulario/plan_compra/mantenedor/popup_deptomarca.html');
         //echo Template::instance()->render('layout_inicio.php');
         echo Template::instance()->render('layout_simulador.php'); // ( Antes de modificación menú era layout_inicio.php igual que master_pack )
@@ -134,7 +134,7 @@ class ControlFormularioMain extends Control {
         $f3->set('Lista_temporadas', \temporada\temporada::getListaTemporadas());
         $f3->set('contenido', 'formulario/main/temporada_compra.html');
         $f3->set('temporada', 'formulario/main/temporada.html');
-			$f3->set('proveedor', 'formulario/main/proveedor.html');
+        $f3->set('proveedor', 'formulario/main/proveedor.html');
         echo Template::instance()->render('layout_inicio.php');
     }
 	
@@ -150,6 +150,7 @@ class ControlFormularioMain extends Control {
         $f3->set('nombre', $f3->get('SESSION.nombre'));
         $f3->set('estado', $f3->get('SESSION.estado'));
         $f3->set('correo', $f3->get('SESSION.correo'));
+        $f3->set('BD_CONEXION', $_COOKIE['BD_control_conexion']);
         $f3->set('dia', $f3->get('SESSION.dia'));
         $f3->set('perfil', $Perfil->getDescripcion()->TIPO_USR);
         $f3->set('activas', count(sesiones\activas::getSesionesActivas())); // Pendiente por TIEMPO DE CARGA...
