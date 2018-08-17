@@ -19,8 +19,8 @@
         <div class="col-md-6">
             <div class="form-group">
                   <select id="select_control_conexion" name="select_control_conexion" class="form-control">
-                    <option value="PROD" selected>PROD</option>
-                    <!--<option value="1">CER</option>-->
+                    <option value="PROD" selected>PRE PROD</option>
+                    <option value="QAPROD">QA PROD</option>
                     <option value="QA">QA</option>
                   </select>
                 </div>
