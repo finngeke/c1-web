@@ -58,18 +58,73 @@
 		public function prioridades_tienda($f3) {
 			ControlFormularioMain::cargaMain($f3); //variable de perfilamiento.
 			ControlReposicion::cargaMensajes($f3);
-			$departamento = \jerarquia\departamento::getdepartamentSorted();
-			array_unshift($departamento, array(
-				"DEP_DEPTO" => "",
-				"0" => "",
-				"DEP_DESCRIPCION" => "Seleccione un departamento",
-				"1" => "Seleccione un departamento"
-			));
-			$select = new html\select($departamento, 'DEP_DEPTO', 'DEP_DESCRIPCION');
-			$f3->set('departamento', $select);
 			$f3->set('nombre_form', 'Mantenedor de prioridades por tienda'); //Parametros por cada formulario
 			$f3->set('contenido', 'reposicion/prioridades_tienda.html'); //llamas al formulario html
 			echo Template::instance()->render('layout_reposicion.php');
+		}
+		
+		public function obtener_temporadas($f3) {
+			$temporadas = \temporada\temporada::getListaTemporadasBuscar($f3->get("GET.q"));
+			$results = [];
+			foreach ($temporadas as $temporada) {
+				$results[] = array("id" => $temporada["COD_TEMPORADA"], "text" => $temporada["NOM_TEMPORADA_CORTO"]);
+			}
+			header("Content-Type: application/json");
+			echo \JsonHelper::encode(array("results" => $results), JSON_PRETTY_PRINT);
+		}
+		
+		public function obtener_departamentos($f3) {
+			$departamentos = \jerarquia\departamento::getDepartamentoBuscar($f3->get("GET.q"));
+			$results = [];
+			foreach ($departamentos as $departamento) {
+				$results[] = array("id" => $departamento["DEP_DEPTO"], "text" => $departamento["DESCRIPCION"]);
+			}
+			header("Content-Type: application/json");
+			echo \JsonHelper::encode(array("results" => $results), JSON_PRETTY_PRINT);
+		}
+		
+		public function obtener_sucursales_disponibles($f3) {
+			$cod_temporada = $f3->get('GET.cod_temporada');
+			$dep_depto = $f3->get('GET.dep_depto');
+			$data = \reposicion\distribucion::listaSucursalesDisponibles($cod_temporada, $dep_depto);
+			$json = [];
+			foreach ($data as $row) {
+				$json[] = array(
+					"codSucursal" => $row[0],
+					"sucursal" => $row[1]
+				);
+			}
+			header("Content-Type: application/json");
+			echo json_encode($json);
+		}
+		
+		public function obtener_sucursales_seleccionadas($f3) {
+			$cod_temporada = $f3->get('GET.cod_temporada');
+			$dep_depto = $f3->get('GET.dep_depto');
+			$data = \reposicion\distribucion::listaSucursalesSeleccionadas($cod_temporada, $dep_depto);
+			$json = [];
+			foreach ($data as $row) {
+				$json[] = array(
+					"codSucursal" => $row[0],
+					"sucursal" => $row[1]
+				);
+			}
+			header("Content-Type: application/json");
+			echo json_encode($json);
+		}
+		
+		public function guardar_prioridades_tienda($f3) {
+			try {
+				$cod_temporada = $f3->get('POST.cod_temporada');
+				$dep_depto = $f3->get('POST.dep_depto');
+				$sucursales = $f3->get('POST.sucursales');
+				$data = \reposicion\distribucion::guardar_prioridades_tienda($cod_temporada, $dep_depto, $sucursales);
+				header("Content-Type: application/json");
+				echo json_encode(array("success" => true, "message" => $data));
+			} catch (Exception $ex) {
+				header("Content-Type: application/json");
+				echo json_encode(array("success" => false, "message" => $ex->getMessage()));
+			}
 		}
 		
 		public function obtener_contenedores($f3) {
@@ -102,7 +157,7 @@
 			$login = $f3->get('SESSION.login');
 			$detalle = [];
 			$sucursales = [];
-			$data = \simulador_compra\distribucion_mercaderia::listaSucursales();
+			$data = \reposicion\distribucion::listaSucursales();
 			foreach ($data as $row) {
 				$sucursales[] = array(
 					"codSucursal" => $row[0],
