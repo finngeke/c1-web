@@ -29,24 +29,25 @@ class ControlPortada extends Control {
 
         $f3->set('mensaje', Control::setMensajePredeterminado($f3->get('error_login')));
         $Funcionario = new usuario\funcionario($usr_nom, $usr_pwd);
+
         if ($Funcionario->isFuncionario() != true) {
             $f3->set('mensaje[message]', $f3->get('errores.no_data_login'));
             $error = true;
         }
+
         if ($error === true) {
             $f3->set('contenido', 'login.php');
             echo Template::instance()->render('layout_login.php');
             die();
         }
 
-        /* echo $Funcionario->getDatosFuncionario()->COD_USR.'<br>';
-          echo $Funcionario->getDatosFuncionario()->NOM_USR.'<br>';
-          echo $Funcionario->getDatosFuncionario()->ESTADO.'<br>';
-          echo $Funcionario->getDatosFuncionario()->FEC_MOD.'<br>';
-          echo $Funcionario->getDatosFuncionario()->CORREO.'<br>';
-          echo $Funcionario->getDatosFuncionario()->COD_PAIS.'<br>';
+        // Pregunto si el usuario intenta ingresar como: QAPRO,QA ( $f3->get('POST.select_control_conexion') )
+        /*if( ($f3->get('POST.select_control_conexion')=="PROD") && ($Funcionario->getDatosFuncionario()->COD_TIPUSR==99) ){
 
-          die(); */
+        }else{
+            $f3->set('mensaje[message]', $f3->get('errores.no_data_login'));
+            $error = true;
+        }*/
 
         setlocale(LC_TIME, 'es_ES', 'Spanish_Spain', 'Spanish');
         $f3->set('SESSION.login', $Funcionario->getDatosFuncionario()->COD_USR);
@@ -54,6 +55,7 @@ class ControlPortada extends Control {
         $f3->set('SESSION.estado', $Funcionario->getDatosFuncionario()->ESTADO);
         $f3->set('SESSION.cod_perfil', $Funcionario->getDatosFuncionario()->COD_TIPUSR);
         $f3->set('SESSION.correo', $Funcionario->getDatosFuncionario()->CORREO);
+        $f3->set('SESSION.cod_tipusr', $Funcionario->getDatosFuncionario()->COD_TIPUSR);
         $f3->set('SESSION.dia', utf8_encode(strftime('%Y. %B %d. %A')));
         $f3->reroute('/inicio');
     }
@@ -63,6 +65,7 @@ class ControlPortada extends Control {
         $f3->clear('SESSION.nombre');
         $f3->clear('SESSION.estado');
         $f3->clear('SESSION.correo');
+        $f3->clear('SESSION.cod_tipusr');
         $f3->clear('SESSION.dia');
         $f3->clear('SESSION.cod_perfil');
         $f3->clear('SESSION.GLOSA_TEMPORADA');
@@ -71,4 +74,7 @@ class ControlPortada extends Control {
         $f3->clear('SESSION.BD_control_conexion');
         $f3->reroute('/');
     }
+
+
+
 }
