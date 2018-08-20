@@ -10,6 +10,18 @@
 	
 	class distribucion {
 		
+		public static function listaSucursales() {
+			$sql = "SELECT
+						A.SUC_SUCURSAL
+						, A.SUC_NOMBRE
+					FROM GST_MAESUCURS A
+					WHERE
+						(A.SUC_SUCURSAL IN (10000, 10002, 10003, 10004, 10007, 10009, 10010, 10011, 10012, 10014, 10016, 10017, 10018, 10019, 10021, 10022, 10023, 10025, 10026, 10028, 10029, 10032, 10034, 10037, 10039, 10041, 10045, 10046, 10048, 10049, 10051, 10057, 10059, 10067, 10068, 10069, 10071, 10072, 10074, 10076, 10077, 10078, 10079, 10084, 10085, 10088, 10096, 10097, 10098, 10099))
+					ORDER BY A.SUC_SUCURSAL";
+			$data = \database::getInstancia()->getFilas($sql);
+			return $data;
+		}
+		
 		public static function listaSucursalesDisponibles($cod_temporada, $dep_depto) {
 			$sql = "SELECT
 						A.SUC_SUCURSAL
