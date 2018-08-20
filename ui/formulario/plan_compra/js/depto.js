@@ -208,7 +208,7 @@ function redireccDeptoPopUp(event) {
 
                                                         //estos perfiles ingresan como lectura
                                                         if ((flag_cod_tip_usr == 11) || (flag_cod_tip_usr == 4) ||(flag_cod_tip_usr == 7)){
-
+														getjerarquia(depto);
                                             location.href='simulador_compra?depto='+depto;
 
                                                             //el resto de perfiles que no entran de 2
@@ -240,7 +240,7 @@ function redireccDeptoPopUp(event) {
                                                                                 //sino es igual mensaje de alerta de modo lectura
                                                                                 var respuesta = confirm("El usuario "+user_log_depto+" está utilizando el departamento,¿Desea entrar en modo Lectura?");
                                                                                 if (respuesta == true){
-
+																					getjerarquia(depto);
                                                                                     location.href='simulador_compra?depto='+depto;
                                                                                 }else {
                                                                                     alert ("Pongase en contacto con "+user_log_depto+" si desea mdificar el departamento");
@@ -248,6 +248,7 @@ function redireccDeptoPopUp(event) {
                                                                                 }
 
                                                                             }else {
+																				 getjerarquia(depto);
                                                                                 // si es el mismo usuario ingresar directamente
                                                                                 location.href='simulador_compra?depto='+depto;
                                                                             }
@@ -263,6 +264,7 @@ function redireccDeptoPopUp(event) {
 
                                                                                 alert ("Ya existe otro usuario que está utilizando el departamento ");
                                                                             } else {
+																				 getjerarquia(depto);
                                                                                 location.href='simulador_compra?depto='+depto;
                                                                             }
 
@@ -387,7 +389,6 @@ function cargaCBX(depto){
 }
 
 function campos_bloquear_tipo_usuario() {
-
     $('#flag_top_menu_tipo_usuario').html('LECTURA');
 
     //botones del mantenedor de tipo tiendas //
@@ -424,3 +425,14 @@ function campos_bloquear_tipo_usuario() {
     $("#input_total_ppto_retail").attr("disabled", "disabled");
 
 }
+
+function getjerarquia ($depto) {
+    var url_jerarquia = 'importar_archivo/getJerarquia';
+    var jerarquia = "";
+   $.getJSON(url_jerarquia,{Depart:$depto},function (_data) {
+
+
+    });
+
+}
+

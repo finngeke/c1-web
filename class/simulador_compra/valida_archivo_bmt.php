@@ -13,6 +13,7 @@ class valida_archivo_bmt extends \parametros {
 
 #region {*************Metodos Importar Assortment*************}
 
+
     public static function Val_depto($rows,$limite,$nom_columnas,$depto){
         $filarow = "";
         $val = TRUE;
@@ -113,10 +114,9 @@ class valida_archivo_bmt extends \parametros {
         }
         return  $array;
     }
-    public static Function Val_jerarquia($rows,$limite,$nom_columnas,$depto){
+    public static Function Val_jerarquia($rows,$limite,$nom_columnas,$dtjerarquia){
         $filarow = "";
         $val = TRUE;
-        $dtjerarquia = plan_compra::list_jerarquia($depto);
 
         for($i = 3;$i <= $limite; $i++){
             $val2 = false;
