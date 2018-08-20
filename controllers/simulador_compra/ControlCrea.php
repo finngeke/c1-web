@@ -10,7 +10,6 @@
 namespace simulador_compra;
 
 class ControlCrea extends \Control {
-
 public function importar_bmt($f3) {
 
        // print_r($_REQUEST); //varibles que se esta pasando por post del formulario
@@ -443,6 +442,12 @@ public function  SubirAssorment($f3){
         }
     }
 
+public function getJerarquia($f3){
+
+    $rows = plan_compra::list_jerarquia($f3->get('GET.Depart'));
+
+    $_SESSION['dtjerarquia']= $rows;
+}
 
 public function ImportarAssormentValidaciones($f3){
 
@@ -500,6 +505,7 @@ public function ImportarAssormentValidaciones($f3){
 
     $_error = true;
     $_array = [];
+
 
     //Validacion de Columnas.
     $_ERROR2 = valida_archivo_bmt::Val_CamposObligatorio($rows[2],1);
@@ -592,7 +598,7 @@ public function ImportarAssormentValidaciones($f3){
 
     //validacion de jerarquia
     if ($_error == true) {
-        $_ERROR2 = valida_archivo_bmt::Val_jerarquia($rows,$limite,$nom_columnas,$depto);
+        $_ERROR2 = valida_archivo_bmt::Val_jerarquia($rows,$limite,$nom_columnas,$_SESSION['dtjerarquia']);
         if ($_ERROR2["Tipo"] == false ){
             $_array_error = [];
             array_push($_array_error, "false","La combinación Linea y Sublinea no existen PMM: Fila(s): ".$_ERROR2["Error"].".");
@@ -624,7 +630,7 @@ public function ImportarAssormentValidaciones($f3){
 
     //validacion Campos
     if ($_error == true) {
-        $_ERROR2 = valida_archivo_bmt::Val_Campos($rows, $limite, $nom_columnas, $cod_tempo, $depto);
+        $_ERROR2 = valida_archivo_bmt::Val_Campos($rows, $limite, $nom_columnas,$cod_tempo, $depto);
         if ($_ERROR2["Tipo"] == false) {
             $_array_error = [];
             array_push($_array_error, "false","Fila(s):".$_ERROR2["Error"]);
@@ -633,6 +639,7 @@ public function ImportarAssormentValidaciones($f3){
 
         }
     }
+
     //validacion de mstpack
     if ($_error == true) {
     $_ERROR2 = valida_archivo_bmt::val_mstpack($rows,$limite,$nom_columnas,$depto);
@@ -831,21 +838,47 @@ public function ImpAssormAbrirDataVent($f3){
     //$limite = (count($rows)-1);
     //$nom_columnas = array_flip($rows[0]);
 
-    echo json_encode($rows);
+    $_SESSION['dtSeparacionVent']= $rows;
+
+    if ( count($_SESSION['dtSeparacionVent']) > 0){
+       echo 1;
+    }else{
+        echo 0;
+    }
 
 }
+public function ImpAssormCalculos($f3){
 
+        $cod_tempo = $f3->get('SESSION.COD_TEMPORADA');
+        $depto = $f3->get('SESSION.COD_DEPTO');
+        $rows = $_SESSION['dtSeparacionVent'];
+        $Columnas = $rows[0];
+        $login = $f3->get('SESSION.login');
+
+       //cabesera
+        $addcolumnCabezera =  plan_compra::get_columnas_archivos(3);
+
+        foreach ($addcolumnCabezera as $Val){
+            array_push($Columnas,$Val['COLUMNAS']);
+        }
+        $Columnas = array_flip($Columnas);
+
+        //Calculo del curvado y costos + insert PLC_AJUSTES_COMPRA + delete rows
+        $rows = plan_compra::ImpAssorCalculos($rows,$Columnas,$cod_tempo,$depto,$login,$_SESSION['dtjerarquia']);
+
+
+        echo json_encode($rows);
+
+
+    }
 public function InsertarAssormentC1($f3){
 
   $cod_tempo = $f3->get('SESSION.COD_TEMPORADA');
     $depto = $f3->get('SESSION.COD_DEPTO');
     $rows = $_POST['_rows'];
-    $Columnas = array_flip($_POST['_columnas']);
+    $Columnas = $_POST['_columnas'];
     $login = $f3->get('SESSION.login');
 
-    if ($_POST['_delete'] == 1 ){
-        plan_compra::DeleteRowsPlan($cod_tempo,$depto,$rows[$Columnas['Codigo Marca']],$rows[$Columnas['Grupo de compra']]);
-    }
 
     $_ERROR = plan_compra::InsertPlanCompraAssorment2($rows,$Columnas,$cod_tempo,$depto,$login);
 
@@ -857,6 +890,12 @@ public function InsertarAssormentC1($f3){
     }
     echo $_val;
 }
+
+
+
+
+
+
 
 
 public function Mensaje_Guardado($f3){
