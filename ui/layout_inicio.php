@@ -173,6 +173,7 @@
 						<a href="#" id="inicio_popup_temporada" name="inicio_popup_temporada"><i class="fa fa-wpforms"></i><span> Plan de Compra</span></a>
 					</li>
 					<li id="modulo_comex"><a href="comex"><i class="fa fa-archive"></i><span> COMEX</span></a></li>
+					<li id="modulo_distribucion"><a href="reposicion"><i class="fa fa-truck"></i><span> Reposición</span></a></li>
 					<li>
 						<a href="#" id="inicio_popup_proveedor" name="inicio_popup_proveedor"><i class="fa fa-globe"></i>
 							<span>Proveedor</span></a></li>

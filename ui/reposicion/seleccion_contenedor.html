@@ -1,0 +1,30 @@
+<link rel="stylesheet" href="{{@BASE}}/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
+<div id="divContenedor" class="modal fade" role="dialog" data-keyboard="false" data-backdrop="static">
+	<div class="modal-dialog">
+		<div class="modal-content borde_especial">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Accesso a Distribución de Mercadería</h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<table id="tablaContenedores" class="table table-bordered table-striped tabla_smaller">
+						<thead>
+							<tr>
+								<th style="text-align:center">N° Embarque</th>
+								<th style="text-align:center">N° Contenedor</th>
+								<th style="text-align:center">Fecha ETA</th>
+								<th style="text-align:center">Ir</th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="{{@BASE}}/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="{{@BASE}}/bower_components/datatables.net-bs/js/dataTables.bootstrap.js"></script>
+<script src="{{@JQUERY}}ui/reposicion/js/seleccion_contenedor.js"></script>
