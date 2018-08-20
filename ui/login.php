@@ -9,23 +9,15 @@
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
     </div>
     <div class="row">
-        <!--<div class="col-md-6">
-            <div class="checkbox icheck">
-                <label>
-                    <input type="checkbox"> Mantener la sesión 
-                </label>
-            </div>
-        </div>-->
         <div class="col-md-6">
             <div class="form-group">
                   <select id="select_control_conexion" name="select_control_conexion" class="form-control">
                     <option value="PROD" selected>PROD</option>
-                    <option value="QAPRO">QA PROD</option>
+                    <option value="QAPRO">QA CLOUD</option>
                     <option value="QA">QA</option>
                   </select>
                 </div>
         </div>
-        
         <div class="col-md-12">
             <button type="submit" class="btn btn-primary btn-block btn-flat">Iniciar sesión</button>
         </div>

@@ -29,8 +29,8 @@ class database
 
         if($_SESSION["BD_control_conexion"] == "PROD") {
             $ARCHIVO = 'esab_PRO';
-        }elseif($_SESSION["BD_control_conexion"] == "QAPROD") {
-            $ARCHIVO ='esab_QAPROD';
+        }elseif($_SESSION["BD_control_conexion"] == "QAPRO") {
+            $ARCHIVO ='esab_QAPRO';
         }else{
             $ARCHIVO ='esab_QA';
         }
@@ -261,8 +261,8 @@ class database
 
         if($_SESSION["BD_control_conexion"] == "PROD") {
             $ARCHIVO_BASICO = 'esab_PRO';
-        }elseif($_SESSION["BD_control_conexion"] == "QAPROD") {
-            $ARCHIVO_BASICO ='esab_QAPROD';
+        }elseif($_SESSION["BD_control_conexion"] == "QAPRO") {
+            $ARCHIVO_BASICO ='esab_QAPRO';
         }else{
             $ARCHIVO_BASICO ='esab_QA';
         }
