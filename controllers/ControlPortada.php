@@ -45,6 +45,7 @@ class ControlPortada extends Control {
         $f3->set('SESSION.estado', $Funcionario->getDatosFuncionario()->ESTADO);
         $f3->set('SESSION.cod_perfil', $Funcionario->getDatosFuncionario()->COD_TIPUSR);
         $f3->set('SESSION.correo', $Funcionario->getDatosFuncionario()->CORREO);
+        $f3->set('SESSION.cod_tipusr', $Funcionario->getDatosFuncionario()->COD_TIPUSR);
         $f3->set('SESSION.dia', utf8_encode(strftime('%Y. %B %d. %A')));
         $f3->reroute('/inicio');
     }
@@ -54,6 +55,7 @@ class ControlPortada extends Control {
         $f3->clear('SESSION.nombre');
         $f3->clear('SESSION.estado');
         $f3->clear('SESSION.correo');
+        $f3->clear('SESSION.cod_tipusr');
         $f3->clear('SESSION.dia');
         $f3->clear('SESSION.cod_perfil');
         $f3->clear('SESSION.GLOSA_TEMPORADA');
