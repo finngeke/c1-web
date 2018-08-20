@@ -1176,6 +1176,27 @@ return $data;
         // \database::getInstancia()->getConsulta($sql_plc_oc_variacion);
         // \database::getInstancia()->getConsulta($sql_plc_plan_compra_variacion);
 
+        // Quitar Variacion
+        if (!file_exists('../archivos/log_querys/'.$login)) {
+            mkdir('../archivos/log_querys/'.$login, 0775, true);
+        }
+        $stamp = date("Y-m-d_H-i-s");
+        $rand = rand(1, 999);
+        $content = $sql_plc_oc_variacion;
+        $fp = fopen("../archivos/log_querys/".$login."/MATCH-QUITARVARIACION_VARIACION--".$login."-".$stamp." R".$rand.".txt","wb");
+        fwrite($fp,$content);
+        fclose($fp);
+
+        // Quitar New Variacion
+        if (!file_exists('../archivos/log_querys/'.$login)) {
+            mkdir('../archivos/log_querys/'.$login, 0775, true);
+        }
+        $stamp = date("Y-m-d_H-i-s");
+        $rand = rand(1, 999);
+        $content = $sql_plc_plan_compra_variacion;
+        $fp = fopen("../archivos/log_querys/".$login."/MATCH-QUITARVARIACION_NEWVARIACION--".$login."-".$stamp." R".$rand.".txt","wb");
+        fwrite($fp,$content);
+        fclose($fp);
 
         if( (\database::getInstancia()->getConsulta($sql_plc_oc_variacion)) && (\database::getInstancia()->getConsulta($sql_plc_plan_compra_variacion)) ){
             return 1;
@@ -1187,6 +1208,7 @@ return $data;
         // $data = \database::getInstancia()->getConsulta($sql_plc_plan_compra_variacion);
         // return $data;
 
+    // Fin quitar registro variaciòn
     }
 
     // 6 Agregar OC Variación
