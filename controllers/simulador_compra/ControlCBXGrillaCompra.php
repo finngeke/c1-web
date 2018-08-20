@@ -253,6 +253,10 @@ class ControlCBXGrillaCompra extends \Control {
         echo json_encode(\simulador_compra\cbx_grilla_compra::listar_ventana_embarque_llegada($f3->get('SESSION.COD_TEMPORADA'),$f3->get('SESSION.COD_DEPTO'),$f3->get('SESSION.login'),$f3->get('GET.ID_COLOR3'),$f3->get('GET.PROFORMA')));
     }
 
+    public function quita_registro_variacion($f3) {
+        echo \simulador_compra\cbx_grilla_compra::quita_registro_variacion($f3->get('SESSION.COD_TEMPORADA'),$f3->get('SESSION.COD_DEPTO'),$f3->get('SESSION.login'),$f3->get('GET.OC'),$f3->get('GET.PI'));
+    }
+
     public function agregar_oc_variacion($f3) {
         echo \simulador_compra\cbx_grilla_compra::agregar_oc_variacion($f3->get('SESSION.COD_TEMPORADA'),$f3->get('SESSION.COD_DEPTO'),$f3->get('SESSION.login'),$f3->get('GET.OC'),$f3->get('GET.PI'));
     }

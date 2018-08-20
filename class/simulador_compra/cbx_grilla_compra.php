@@ -1157,7 +1157,39 @@ return $data;
 
     }
 
-    // Agregar OC Variación
+    // 5.1 Quitar quita_registro_variacion
+    public static function quita_registro_variacion($temporada, $depto, $login, $oc, $pi) {
+
+        // Variacion (plc_oc_variacion)
+        $sql_plc_oc_variacion = "DELETE FROM PLC_OC_VARIACION
+                                 WHERE ORDEN_DE_COMPRA = $oc
+                                 ";
+
+        // New Variación (plc_plan_compra_variacion)
+        $sql_plc_plan_compra_variacion = "DELETE FROM plc_plan_compra_variacion
+                                          WHERE COD_TEMPORADA = $temporada
+                                          AND DEP_DEPTO = '".$depto."'
+                                          AND ORDEN_DE_COMPRA = $oc
+                                          ";
+
+        // Ejecuto la Query
+        // \database::getInstancia()->getConsulta($sql_plc_oc_variacion);
+        // \database::getInstancia()->getConsulta($sql_plc_plan_compra_variacion);
+
+
+        if( (\database::getInstancia()->getConsulta($sql_plc_oc_variacion)) && (\database::getInstancia()->getConsulta($sql_plc_plan_compra_variacion)) ){
+            return 1;
+        }else{
+            return 0;
+        }
+
+        // Anterior
+        // $data = \database::getInstancia()->getConsulta($sql_plc_plan_compra_variacion);
+        // return $data;
+
+    }
+
+    // 6 Agregar OC Variación
     public static function agregar_oc_variacion($temporada, $depto, $login,$oc,$proforma) {
 
         $sql = "begin PLC_PKG_UTILS.PRC_AGREGAR_OC_VARIACION2('".$oc."','".$proforma."', :error, :data); end;";
@@ -1184,7 +1216,7 @@ return $data;
 
     }
 
-    // Agregar New OC Variación
+    // 7 Agregar New OC Variación
     public static function agregar_new_oc_variacion($temporada, $depto, $login) {
 
         $sql = "insert into plc_plan_compra_variacion
