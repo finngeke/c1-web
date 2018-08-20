@@ -259,6 +259,7 @@ class database
     private function conectaBasico()
     {
 
+        // Llega el tipo de conexiòn que selecciona el usuario
         if($_SESSION["BD_control_conexion"] == "PROD") {
             $ARCHIVO_BASICO = 'esab_PRO';
         }elseif($_SESSION["BD_control_conexion"] == "QAPRO") {

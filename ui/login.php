@@ -11,6 +11,7 @@
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
+                  <!-- Select de tipo de conexión a BD -->
                   <select id="select_control_conexion" name="select_control_conexion" class="form-control">
                     <option value="PROD" selected>PROD</option>
                     <option value="QAPRO">QA CLOUD</option>
