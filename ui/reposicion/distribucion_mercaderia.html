@@ -1,0 +1,334 @@
+<link rel="stylesheet" href="{{@BASE}}/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.css">
+<link rel="stylesheet" href="{{@BASE}}/bower_components/datatables.net-bs/css/dataTables.bootstrap.css">
+<link rel="stylesheet" href="{{@BASE}}/bower_components/datatables.net-fixedcolumns-bs/css/fixedColumns.bootstrap.css">
+<link rel="stylesheet" href="{{@JQUERY}}/ui/reposicion/css/distribucion_mercaderia.css">
+<section class="content-header">
+	<h1>
+		{{@nombre_form}}
+		<span class="text-muted small">(Nro. Embarque: {{@nroEmbarque}} - Nro. Contenedor: {{@nroContenedor}})</span>
+	</h1>
+	<ol class="breadcrumb">
+		<li><a href="inicio"><i class="fa fa-dashboard"></i> Main</a></li>
+		<li><a href="reposicion"> REPOSICION</a></li>
+		<li class="active">{{@nombre_form}}</li>
+	</ol>
+</section>
+<div class="loading">
+	<div class="loader"></div>
+</div>
+<section id="main" class="content animated fadeInDown" style="display:none;">
+	<div class="row">
+		<div class="box-body">
+			<button id="btn-save" class="btn btn-app btn_guardar_distribucion"><i class="fa fa-save"></i>Guardar
+			</button>
+			<button id="btn-aprove" class="btn btn-app btn_aprobar_distribucion"><i class="fa fa-thumbs-up"></i>Aprobar
+			</button>
+			<a id="btn-salir" href="reposicion" class="btn btn-app"><i class="fa fa-sign-out"></i> Salir</a>
+		</div>
+	</div>
+	<!-- grilla -->
+	<!--<div class="row" style="overflow-x:hidden; overflow-y:visible;">-->
+	<div class="row">
+		<!-- left column -->
+		<div class="col-md-12">
+			<div class="box box-primary">
+				<div class="box-body tabla-principal">
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<script src="{{@BASE}}/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.js"></script>
+<script src="{{@BASE}}/bower_components/bootstrap-datepicker/dist/locales/bootstrap-datepicker.es.min.js"></script>
+<!-- DataTables -->
+<script src="{{@BASE}}/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="{{@BASE}}/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="{{@BASE}}/bower_components/datatables.net-fixedcolumns/js/dataTables.fixedColumns.min.js"></script>
+<script src="{{@BASE}}/bower_components/datatables.net-fixedcolumns-bs/js/fixedColumns.bootstrap.js"></script>
+<script>
+	var opcionesTabla = {
+		scrollY: "300px",
+		scrollX: true,
+		scrollCollapse: true,
+		paging: false,
+		searching: false,
+		ordering: false,
+		info: false
+	};
+
+	var opcionesCalendario = {
+		autoclose: true,
+		clearBtn: true,
+		daysOfWeekDisabled: [0, 1, 2, 4, 5, 6],
+		format: 'dd-mm-yyyy',
+		language: 'es',
+		startDate: '1d',
+		orientation: 'bottom'
+	};
+
+	function habilitarBoton() {
+		$('#btn-save').html('<i class="fa fa-save"></i>Guardar').prop('disabled', false);
+		$('#btn-aprove').prop('disabled', false);
+		$('#btn-salir').prop('disabled', false);
+	}
+
+	function deshabilitarBoton() {
+		$('#btn-save').html('<i class="fa fa-spinner fa-2x fa-spin"></i>Guardando').prop('disabled', true);
+		$('#btn-aprove').prop('disabled', true);
+		$('#btn-salir').prop('disabled', true);
+	}
+
+	function iniciarAprobar() {
+		$('#btn-save').prop('disabled', true);
+		$('#btn-aprove').html('<i class="fa fa-spinner fa-2x fa-spin"></i>Aprobando').prop('disabled', true);
+		$('#btn-salir').prop('disabled', true);
+	}
+
+	function terminarAprobar() {
+		$('#btn-save').prop('disabled', false);
+		$('#btn-aprove').html('<i class="fa fa-thumbs-up"></i>Aprobar').prop('disabled', false);
+		$('#btn-salir').prop('disabled', false);
+	}
+
+	function showPage() {
+		$(".loading").css("display", "none");
+		$("#main").css("display", "block");
+		var tabla = $('.table').DataTable(opcionesTabla);
+		new $.fn.dataTable.FixedColumns(tabla, {
+			heightMatch: 'auto',
+			leftColumns: 11
+		});
+		$.fn.dataTable.tables({visible: true, api: true}).fixedColumns().relayout();
+
+		$('.cajas-sucursal').change(function() {
+			var fila = $(this).data('fila');
+			var valorA = parseInt($(this).data('value'));
+			var valorN = parseInt($(this).val());
+			var embarcadas = parseInt($(".embarcadas[data-fila='" + fila + "']").html());
+			var diferencia = parseInt($(".diferencia[data-fila='" + fila + "']").html());
+			var suma = 0;
+			$(".cajas-sucursal[data-fila='" + fila + "']").each(function() {
+				suma += parseInt($(this).val());
+			});
+			if (suma > embarcadas) {
+				alert('El valor ingresado supera las cajas embarcadas');
+				$(this).val(valorA).focus();
+			} else {
+				diferencia = embarcadas - suma;
+				$(this).data('value', valorN).focus();
+				$(".diferencia[data-fila='" + fila + "']").html(diferencia);
+			}
+		});
+
+		$('#btn-save').click(function(e) {
+			e.preventDefault();
+			deshabilitarBoton();
+			var sucursales = [];
+			$('.cajas-sucursal').each(function() {
+				var fila = parseInt($(this).data('fila'));
+				var nroEmbarque = "{{@nroEmbarque}}";
+				var nroContenedor = "{{@nroContenedor}}";
+				var nroEstilo = $(this).data('estilo');
+				var codSucursal = parseInt($(this).data('sucursal'));
+				var cantidad = parseInt($(this).val());
+				var demora = (codSucursal != 10039) ? $(".demora-sucursal[data-fila='" + fila + "'][data-sucursal='" + codSucursal + "']").val() : "";
+				if (cantidad > 0) {
+					sucursales.push({
+						"nroEmbarque": nroEmbarque,
+						"nroContenedor": nroContenedor,
+						"nroEstilo": nroEstilo,
+						"codSucursal": codSucursal,
+						"cantidad": cantidad,
+						"demora": demora
+					});
+				}
+			});
+			if (sucursales.length > 0) {
+				var data = {
+					'sucursales': sucursales
+				};
+				$.post('guardar_distribucion_tienda', data).done(function(data) {
+					alert('Datos guardados correctamente');
+				}).fail(function(data, status, error) {
+					console.log(data);
+					alert('Ha ocurrido un error al guardar los datos');
+				}).always(function() {
+					habilitarBoton();
+				});
+			}
+		});
+
+		$('#btn-aprove').click(function(e) {
+			e.preventDefault();
+			iniciarAprobar();
+
+			$('.cajas-sucursal').each(function() {
+				var fila = parseInt($(this).data('fila'));
+				var diferencia = parseInt($(".diferencia[data-fila='" + fila + "']").html());
+
+				if (diferencia > 0) {
+					alert('Debe asignar todas las cajas antes de aprobar la distribución');
+					terminarAprobar();
+					return;
+				}
+			});
+
+			var data = {
+				"nro_embarque": "{{@nroEmbarque}}",
+				"nro_contenedor": "{{@nroContenedor}}",
+				"login": "{{@SESSION.login}}"
+			};
+			$.post('aprobar_distribucion_tienda', data).done(function(data) {
+				alert(data.mensaje);
+				console.log(data.etapa);
+				if (data.estado) {
+					$(location).attr('href', "reposicion");
+				}
+			}).fail(function(data, status, error) {
+				console.log(data);
+				alert('Ha ocurrido un error al guardar los datos');
+			}).always(function() {
+				terminarAprobar();
+			});
+		});
+	}
+
+	function createTable() {
+		var centro = {'text-align': 'center', 'vertical-align': 'middle'};
+		var derecha = {'text-align': 'right', 'vertical-align': 'middle'};
+		var izquierda = {'text-align': 'left', 'vertical-align': 'middle'};
+		var url = 'cargar_distribucion_mercaderia?nroEmbarque={{@nroEmbarque}}&nroContenedor={{@nroContenedor}}';
+		$('.tabla-principal').empty();
+		var $table = $('<table>').addClass('table table-bordered table-striped tabla_smaller').css({
+			'width': '100%',
+			'font-size': '10px'
+		});
+		$.getJSON(url, function(data) {
+			var $head = $('<thead>');
+			var $tr = $('<tr>').append(
+				$('<th>').text("#").css(centro).attr('rowspan', '2'),
+				$('<th>').text("Cod. Estlo").css(centro).attr('rowspan', '2'),
+				$('<th>').text("Nombre Estilo").css(centro).attr('rowspan', '2'),
+				$('<th>').text("Depto.").css(centro).attr('rowspan', '2'),
+				$('<th>').text("Color").css(centro).attr('rowspan', '2'),
+				$('<th>').text("Ventana").css(centro).attr('rowspan', '2'),
+				$('<th>').text("Evento").css(centro).attr('rowspan', '2'),
+				$('<th>').text("Curva Reparto").css(centro).attr('rowspan', '2'),
+				$('<th>').text("Curvas x Caja").css(centro).attr('rowspan', '2'),
+				$('<th>').text("Cajas Embarcadas").css(centro).attr('rowspan', '2'),
+				$('<th>').text("Diferencia").css(centro).attr('rowspan', '2')
+			);
+			$.each(data.sucursales, function(i, item) {
+				$tr.append($('<th>').text(item.codSucursal + ' - ' + item.sucursal).css(centro).attr('colspan', '3'));
+			});
+			$tr.append($('<th>').text('Demora').css(centro).attr('rowspan', '2'));
+			$head.append($tr);
+			$tr = $('<tr>');
+			$.each(data.sucursales, function(i, item) {
+				$tr.append(
+					$('<th>').text('Cluster').css(centro),
+					$('<th>').text('Cantidad').css(centro),
+					$('<th>').text('Demora').css(centro)
+				);
+			});
+			$head.append($tr);
+			$table.append($head);
+			var $body = $('<tbody>');
+			$.each(data.detalle, function(i, item) {
+				var fila = item.idFila;
+				var codTemporada = item.codTemporada;
+				var depDepto = item.depDepto;
+				var idColor3 = item.idColor3;
+				var codEstilo = item.codEstilo;
+				var $tr = $('<tr>').append(
+					$('<td>').text(fila).css(derecha),
+					$('<td>').text(codEstilo).css(izquierda),
+					$('<td>').text(item.estilo).css(izquierda),
+					$('<td>').text(depDepto).css(izquierda),
+					$('<td>').text(item.color).css(izquierda),
+					$('<td>').text(item.ventana).css(izquierda),
+					$('<td>').text(item.evento).css(izquierda),
+					$('<td>').text(item.curvaReparto).css(centro),
+					$('<td>').text(item.curvasCaja).css(derecha),
+					$('<td>').css(derecha).append($('<span>').addClass('embarcadas').attr({'data-fila': fila}).text(item.cajasEmbarcadas)),
+					$('<td>').css(derecha).append($('<span>').addClass('diferencia').attr({'data-fila': fila}).text(item.diferencia))
+				);
+				$.each(item.sucursales, function(i, item) {
+					$tr.append($('<td>').text(item.cluster).css(centro).addClass('text-danger'));
+					if (item.habilitada == 0) {
+						$tr.append(
+							$('<td>').text('-').css(centro),
+							$('<td>').text('-').css(centro)
+						);
+					} else {
+						$tr.append(
+							$('<td>').css(centro).append(
+								$('<input>')
+									.addClass('cajas-sucursal')
+									.css({'width': '60px'})
+									.attr({
+										'data-min': '0',
+										'data-fila': fila,
+										'data-sucursal': item.codSucursal,
+										'data-temporada': codTemporada,
+										'data-depto': depDepto,
+										'data-idcolor3': idColor3,
+										'data-estilo': codEstilo,
+										'data-value': item.cantidad,
+										'value': item.cantidad
+									})
+							)
+						);
+						if (item.codSucursal != 10039) {
+							$tr.append(
+								$('<td>').css(centro).append(
+									$('<input>')
+										.addClass('demora-sucursal')
+										.css({'width': '80px'})
+										.attr({
+											'data-fila': fila,
+											'data-sucursal': item.codSucursal,
+											'data-temporada': codTemporada,
+											'data-depto': depDepto,
+											'data-idcolor3': idColor3,
+											'data-estilo': codEstilo,
+											'value': item.fechaDemora
+										})
+										.datepicker(opcionesCalendario)
+								)
+							);
+						} else {
+							$tr.append($('<td>').text('N/A').css(centro));
+						}
+					}
+				});
+				$tr.append($('<td>').css(centro).append(
+					$('<input>')
+						.css({'width': '80px'})
+						.addClass('demora-sucursal')
+						.attr({
+							'data-fila': fila
+						})
+						.datepicker(opcionesCalendario)
+						.on('changeDate', function() {
+							var fila = $(this).data('fila');
+							$('.demora-sucursal[data-fila=' + fila + ']').datepicker('update', $(this).datepicker('getDate'));
+						})
+						.on('clearDate', function() {
+							var fila = $(this).data('fila');
+							$('.demora-sucursal[data-fila=' + fila + ']').datepicker('update', '');
+						})
+				));
+				$body.append($tr);
+			});
+			$table.append($body);
+			$('.tabla-principal').append($table);
+			//$table.DataTable(opcionesTabla);
+			showPage();
+		});
+	}
+
+	$(function() {
+		createTable();
+	});
+</script>

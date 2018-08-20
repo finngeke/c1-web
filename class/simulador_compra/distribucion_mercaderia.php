@@ -98,7 +98,7 @@
 						AND (DEP_DEPTO = '$dep_depto')
 						AND (ID_COLOR3 = $id_color3)
 						AND (PREFIJO = 'ICC')
-						AND (COD_TDA IS NULL)
+						--AND (COD_TDA IS NULL)
 					GROUP BY
 						COD_TEMPORADA
 						, DEP_DEPTO
