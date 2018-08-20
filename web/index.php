@@ -11,6 +11,22 @@ session_start();
 if (!$f3->exists("max_file_size"))
     $f3->set("max_file_size", 8);
 
+/* VERIFICA LAS CARPETAS DE ARCHIVO */
+$carpetas[] = '../archivos/Assortments';
+$carpetas[] = '../archivos/bajada_embarque';
+$carpetas[] = '../archivos/bmt';
+$carpetas[] = '../archivos/curva';
+$carpetas[] = '../archivos/factura_comex';
+$carpetas[] = '../archivos/json';
+$carpetas[] = '../archivos/log_querys';
+$carpetas[] = '../archivos/pi';
+
+foreach ($carpetas as $carpeta) {
+	if(!file_exists($carpeta)){
+		mkdir($carpeta);
+	}
+}
+
 /* CONTROL DE RUTERO */
 $f3->route('GET /', 'ControlPortada->portada', 0, 512);
 $f3->route('POST /login', 'ControlPortada->login', 0, 5);
