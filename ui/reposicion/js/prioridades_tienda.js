@@ -19,11 +19,14 @@ function actualizarBadgesSeleccionadas() {
 	$('#badge-seleccionadas').html($('#seleccionadas > li').length);
 }
 
-function cargarListas(depto) {
-	var temp = $('#cod_temporada').val();
-	if (!depto) {
+function cargarListas() {
+	var temp = $('#temporada').val();
+	var depto = $('#departamento').val();
+	if (!depto || !temp) {
 		$('#disponibles').empty();
+		actualizarBadgesDisponibles();
 		$('#seleccionadas').empty();
+		actualizarBadgesSeleccionadas();
 		return;
 	}
 	$.getJSON("obtener_sucursales_disponibles?cod_temporada=" + temp + "&dep_depto=" + depto, function(data) {
@@ -43,18 +46,50 @@ function cargarListas(depto) {
 }
 
 $(function() {
+
+	$('#temporada').select2({
+		ajax: {
+			url: 'obtener_temporadas',
+			dataType: 'json',
+			data: function(params) {
+				return {
+					q: params.term
+				}
+			}
+		},
+		placeholder: 'Seleccione una opción',
+		language: "es",
+		allowClear: true
+	});
+
+	$('#departamento').select2({
+		ajax: {
+			url: 'obtener_departamentos',
+			dataType: 'json',
+			data: function(params) {
+				return {
+					q: params.term
+				}
+			}
+		},
+		placeholder: 'Seleccione una opción',
+		language: "es",
+		allowClear: true
+	});
+
 	habilitarBoton();
 
 	$('#disponibles').empty();
 	$('#seleccionadas').empty();
 
-	//actualizarBadgesDisponibles();
-	//actualizarBadgesSeleccionadas();
-	cargarListas('');
+	cargarListas();
+
+	$('#temporada').change(function() {
+		cargarListas();
+	});
 
 	$('#departamento').change(function() {
-		var depto = $(this).val();
-		cargarListas(depto);
+		cargarListas();
 	});
 
 	$('#disponibles').sortable({
@@ -76,17 +111,24 @@ $(function() {
 	$('#btn-save').click(function(event) {
 		event.preventDefault();
 		deshabilitarBoton();
-		var cod_temporada = $('#cod_temporada').val();
+		var cod_temporada = $('#temporada').val();
 		var dep_depto = $('#departamento').val();
 		var seleccionadas = $('#seleccionadas > li');
 		var sucursales = [];
 		var prioridad = 1;
+		if (cod_temporada === "") {
+			alert('Debe seleccionar una temporada antes de continuar');
+			habilitarBoton();
+			return;
+		}
 		if (dep_depto === "") {
 			alert('Debe seleccionar un departamento antes de continuar');
+			habilitarBoton();
 			return;
 		}
 		if (seleccionadas.length == 0) {
 			if (!confirm("No ha seleccionado ninguna sucursal. Esta acción podría eliminar datos previamente cargados. ¿Desea continuar?")) {
+				habilitarBoton();
 				return;
 			}
 		}
@@ -103,14 +145,13 @@ $(function() {
 			'cod_temporada': cod_temporada,
 			'dep_depto': dep_depto,
 			'sucursales': sucursales
-		}).done(function(data) {
-			alert('Datos guardados correctamente');
-			//notificacionNavegador('C1 Automática', 'Datos guardados correctamente');
-		}).fail(function(error) {
-			console.log(error);
-			alert('Ha ocurrido un error al guardar los datos');
-			//notificacionNavegador('ERROR', 'Ha ocurrido un error al guardar los datos');
-		}).always(function() {
+		}, function(data) {
+			console.log(data.message);
+			if (data.success) {
+				alert('Datos guardados correctamente');
+			} else {
+				alert('Ha ocurrido un error al guardar los datos');
+			}
 			habilitarBoton();
 		});
 	});

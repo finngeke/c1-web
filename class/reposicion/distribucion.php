@@ -10,6 +10,56 @@
 	
 	class distribucion {
 		
+		public static function listaSucursalesDisponibles($cod_temporada, $dep_depto) {
+			$sql = "SELECT
+						A.SUC_SUCURSAL
+						, A.SUC_NOMBRE
+					FROM GST_MAESUCURS A
+					WHERE
+						(A.SUC_SUCURSAL IN (10000, 10002, 10003, 10004, 10007, 10009, 10010, 10011, 10012, 10014, 10016, 10017, 10018, 10019, 10021, 10022, 10023, 10025, 10026, 10028, 10029, 10032, 10034, 10037, 10039, 10041, 10045, 10046, 10048, 10049, 10051, 10057, 10059, 10067, 10068, 10069, 10071, 10072, 10074, 10076, 10077, 10078, 10079, 10084, 10085, 10088, 10096, 10097, 10098, 10099))
+						AND (NOT EXISTS(SELECT * FROM PLC_PRIORIDAD_TIENDA B WHERE (B.COD_TDA = A.SUC_SUCURSAL) AND (B.COD_TEMPORADA = $cod_temporada) AND (B.DEP_DEPTO = '$dep_depto')))
+					ORDER BY A.SUC_SUCURSAL";
+			$data = \database::getInstancia()->getFilas($sql);
+			return $data;
+		}
+		
+		public static function listaSucursalesSeleccionadas($cod_temporada, $dep_depto) {
+			$sql = "SELECT
+						A.SUC_SUCURSAL
+						, A.SUC_NOMBRE
+					FROM GST_MAESUCURS A
+					INNER JOIN PLC_PRIORIDAD_TIENDA B
+						ON A.SUC_SUCURSAL = B.COD_TDA
+					WHERE
+						(A.SUC_SUCURSAL IN (10000, 10002, 10003, 10004, 10007, 10009, 10010, 10011, 10012, 10014, 10016, 10017, 10018, 10019, 10021, 10022, 10023, 10025, 10026, 10028, 10029, 10032, 10034, 10037, 10039, 10041, 10045, 10046, 10048, 10049, 10051, 10057, 10059, 10067, 10068, 10069, 10071, 10072, 10074, 10076, 10077, 10078, 10079, 10084, 10085, 10088, 10096, 10097, 10098, 10099))
+						AND (B.COD_TEMPORADA = $cod_temporada)
+						AND (B.DEP_DEPTO = '$dep_depto')
+					ORDER BY B.PRIORIDAD";
+			$data = \database::getInstancia()->getFilas($sql);
+			return $data;
+		}
+		
+		public static function listaSucursalesPrioridad($cod_temporada, $dep_depto) {
+			$sql = "BEGIN PLC_PKG_DISTRIB_MERCADERIA.PRC_SUCURSALES_PRIORIDAD($cod_temporada, '$dep_depto', :data); END;";
+			$data = \database::getInstancia()->getConsultaSP($sql, 1);
+			return $data;
+		}
+		
+		public static function guardar_prioridades_tienda($cod_temporada, $dep_depto, $sucursales) {
+			$sql = "BEGIN ";
+			$sql .= "DELETE FROM PLC_PRIORIDAD_TIENDA WHERE (COD_TEMPORADA = $cod_temporada) AND (DEP_DEPTO = '$dep_depto'); ";
+			if(count($sucursales)>0) {
+				foreach ($sucursales as $sucursal) {
+					$cod_tda = $sucursal["cod_tda"];
+					$prioridad = $sucursal["prioridad"];
+					$sql .= "INSERT INTO PLC_PRIORIDAD_TIENDA VALUES ($cod_temporada, '$dep_depto', $cod_tda, $prioridad); ";
+				}
+			}
+			$sql .= "END;";
+			\database::getInstancia()->getConsulta($sql);
+			return $sql;
+		}
+		
 		public static function listarContenedores($login) {
 			$sql = "BEGIN PLC_PKG_DISTRIBUCION.PRC_LISTA_CONTENEDORES('$login', :data); END;";
 			$data = \database::getInstancia()->getConsultaSP($sql, 1);

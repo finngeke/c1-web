@@ -16,6 +16,7 @@
 	<!--<link rel="stylesheet" href="{{@BASE}}/bower_components/jvectormap/jquery-jvectormap.css">-->
 	
 	<!-- Theme style -->
+	<link href="{{@BASE}}/bower_components/select2/dist/css/select2.css" rel="stylesheet">
 	<link rel="stylesheet" href="{{@BASE}}/dist/css/AdminLTE.css">
 	<!-- AdminLTE Skins. Choose a skin from the css/skins
 		 folder instead of downloading all of them to reduce the load. -->
@@ -103,6 +104,7 @@
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 								<img src="dist/img/avatar_generica.png" class="user-image" alt="User Image">
 								<span class="hidden-xs">{{ @nombre }}</span>
+								&nbsp;<span id="control_conexion" style="color: red"><b>[{{ @BD_CONEXION }}]</b></span>
 							</a>
 							<ul class="dropdown-menu">
 								<!-- User image -->

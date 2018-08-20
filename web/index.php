@@ -118,19 +118,23 @@ $f3->route('GET /invoices', 'ControlProveedor->invoices');
 $f3->route('GET /approve_invoice', 'ControlProveedor->approve_invoice');
 
 /* DISTRIBUCION DE MERCADERIA */
-$f3->route('GET /distribucion_mercaderia', 'ControlFormularioCompra->distribucion_mercaderia');
-$f3->route('GET /obtener_contenedores', 'simulador_compra\ControlDistribucionMercaderia->obtener_contenedores');
-$f3->route('GET /obtener_detalle_contenedor', 'simulador_compra\ControlDistribucionMercaderia->obtener_detalle_contenedor');
-$f3->route('GET /prioridades_tienda', 'ControlFormularioCompra->prioridades_tienda');
-$f3->route('GET /obtener_sucursales_disponibles', 'simulador_compra\ControlDistribucionMercaderia->obtener_sucursales_disponibles');
-$f3->route('GET /obtener_sucursales_seleccionadas', 'simulador_compra\ControlDistribucionMercaderia->obtener_sucursales_seleccionadas');
-$f3->route('POST /guardar_prioridades_tienda', 'simulador_compra\ControlDistribucionMercaderia->guardar_prioridades_tienda');
-$f3->route('POST /guardar_distribucion_tienda', 'simulador_compra\ControlDistribucionMercaderia->guardar_distribucion_tienda');
-$f3->route('POST /aprobar_distribucion_tienda', 'simulador_compra\ControlDistribucionMercaderia->aprobar_distribucion_tienda');
+$f3->route('GET /reposicion', 'ControlReposicion->inicio');
+$f3->route('GET /prioridades_tienda', 'ControlReposicion->prioridades_tienda');
+$f3->route('GET /obtener_temporadas', 'ControlReposicion->obtener_temporadas');
+$f3->route('GET /obtener_departamentos', 'ControlReposicion->obtener_departamentos');
+$f3->route('GET /obtener_sucursales_disponibles', 'ControlReposicion->obtener_sucursales_disponibles');
+$f3->route('GET /obtener_sucursales_seleccionadas', 'ControlReposicion->obtener_sucursales_seleccionadas');
+$f3->route('POST /guardar_prioridades_tienda', 'ControlReposicion->guardar_prioridades_tienda');
+$f3->route('GET /distribucion_mercaderia', 'ControlReposicion->distribucion_mercaderia');
+$f3->route('GET /obtener_contenedores', 'ControlReposicion->obtener_contenedores');
+$f3->route('GET /cargar_distribucion_mercaderia', 'ControlReposicion->cargar_distribucion_mercaderia');
+$f3->route('GET /detalle_contenedores_sucursales', 'ControlReposicion->detalle_contenedores_sucursales');
+$f3->route('POST /guardar_distribucion_tienda', 'ControlReposicion->guardar_distribucion_tienda');
+$f3->route('POST /aprobar_distribucion_tienda', 'ControlReposicion->aprobar_distribucion_tienda');
 
 /* BAJADA DE EMBARQUE */
-$f3->route('GET /bajada_embarque', 'ControlFormularioCompra->bajada_embarque');
-$f3->route('GET /generar_archivos', 'ControlFormularioCompra->generar_archivos');
+$f3->route('GET /bajada_embarque', 'ControlReposicion->bajada_embarque');
+$f3->route('GET /generar_archivos', 'ControlReposicion->generar_archivos');
 
 /* COMEX*/
 $f3->route('GET /comex', 'ControlComex->inicio');
