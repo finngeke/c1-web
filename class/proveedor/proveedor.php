@@ -10,7 +10,7 @@
 	/**
 	 * Description of tipo_de_tienda
 	 *
-	 * @author José MIguel Candia
+	 * @author José Miguel Candia
 	 */
 	class proveedor {
 		// Carga información del proveedor
@@ -192,27 +192,49 @@
 		}
 		
 		public static function saveLPNDetail($registro) {
-			$sql = "INSERT INTO PLC_DETALLE_LPN VALUES (
-							" . $registro["cod_temporada"] . "
-							, '" . $registro["dep_depto"] . "'
-							, " . $registro["id_color3"] . "
-							, " . $registro["lpn_number"] . "
-							, '" . $registro["nro_variacion"] . "'
-							, '" . $registro["nro_factura"] . "'
-							, '" . $registro["pi_number"] . "'
-							, " . $registro["po_number"] . "
-							, " . $registro["costo"] . "
-							, " . $registro["cantidad"] . "
-							, '" . $registro["prefijo"] . "'
-							, NULL
-							, NULL
-							, NULL
-							, NULL
-							, NULL
-							, NULL
-							, NULL
-							, NULL
-						)";
+			$sql = "INSERT INTO PLC_DETALLE_LPN (
+						COD_TEMPORADA
+						, DEP_DEPTO
+						, ID_COLOR3
+						, LPN_NUMBER
+						, NRO_VARIACION
+						, NRO_FACTURA
+						, PI_NUMBER
+						, PO_NUMBER
+						, COSTO
+						, CANTIDAD
+						, PREFIJO
+						, COD_TDA
+						, FECHA_DEMORA
+						, NRO_CONTENEDOR
+						, TIPO_CONTENEDOR
+						, B_L
+						, VIA_TRANSPORTE
+						, FECHA_ETA
+						, NRO_EMBARQUE
+						, NRO_CITA
+					) VALUES (
+						" . $registro["cod_temporada"] . "
+						, '" . $registro["dep_depto"] . "'
+						, " . $registro["id_color3"] . "
+						, " . $registro["lpn_number"] . "
+						, '" . $registro["nro_variacion"] . "'
+						, '" . $registro["nro_factura"] . "'
+						, '" . $registro["pi_number"] . "'
+						, " . $registro["po_number"] . "
+						, " . $registro["costo"] . "
+						, " . $registro["cantidad"] . "
+						, '" . $registro["prefijo"] . "'
+						, NULL
+						, NULL
+						, NULL
+						, NULL
+						, NULL
+						, NULL
+						, NULL
+						, NULL
+						, NULL
+					)";
 			$data = \database::getInstancia()->getConsulta($sql);
 		}
 		
