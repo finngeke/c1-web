@@ -91,7 +91,8 @@
 											<th style="text-align: right;"><span class="subtotalUnits">0</span></th>
 											<th></th>
 											<th></th>
-											<th style="text-align: center;"><input type="checkbox" class="checkAll"></th>
+											<th style="text-align: center;"><input type="checkbox" class="checkAll">
+											</th>
 										</tr>
 									</tfoot>
 								</table>
@@ -164,13 +165,17 @@
 	}
 
 	function validarMonto(valor) {
-		var suma = sumaMontos() * 1.03;
-		return valor <= suma;
+		var suma = sumaMontos();
+		var superior = suma * 1.03;
+		var inferior = suma * 0.97;
+		return inferior <= valor && valor <= superior;
 	}
 
 	function validarUnidades(valor) {
 		var suma = sumaUnidades();
-		return valor <= suma;
+		var superior = suma * 1.03;
+		var inferior = suma * 0.97;
+		return inferior <= valor && valor <= superior;
 	}
 
 	function validarMismaCarpeta() {
@@ -189,7 +194,7 @@
 	jQuery.validator.addMethod("validarUnidades", function(value, element) {
 		return this.optional(element) || validarUnidades(value);
 	}, 'The total units must not exceed the units of the selected purchase orders');
-	
+
 	$(function() {
 		inicializarForm();
 
