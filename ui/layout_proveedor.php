@@ -13,7 +13,7 @@
 	<!-- Ionicons -->
 	<link rel="stylesheet" href="{{@BASE}}/bower_components/Ionicons/css/ionicons.min.css">
 	<!-- jvectormap -->
-	<link rel="stylesheet" href="{{@BASE}}/bower_components/jvectormap/jquery-jvectormap.css">
+	<!--<link rel="stylesheet" href="{{@BASE}}/bower_components/jvectormap/jquery-jvectormap.css">-->
 	
 	<!-- Theme style -->
 	<link rel="stylesheet" href="{{@BASE}}/dist/css/AdminLTE.css">
@@ -48,12 +48,12 @@
 	<!-- Sparkline -->
 	<!--<script src="{{@BASE}}/bower_components/jquery-sparkline/dist/jquery.sparkline.min.js"></script>-->
 	<!-- jvectormap  -->
-	<script src="{{@BASE}}/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
-	<script src="{{@BASE}}/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+	<!--<script src="{{@BASE}}/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
+	<script src="{{@BASE}}/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>-->
 	<!-- SlimScroll -->
 	<script src="{{@BASE}}/bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
 	<!-- ChartJS -->
-	<script src="{{@BASE}}/bower_components/chart.js/Chart.js"></script>
+	<!--<script src="{{@BASE}}/bower_components/chart.js/Chart.js"></script>-->
 	<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 	<!--<<script src="{{@BASE}}/dist/js/pages/dashboard2.js"></script>-->
 	<!-- AdminLTE for demo purposes -->
