@@ -1209,11 +1209,11 @@ if (respuesta == true) {
 $('.elimina_opcion').on('click', function () {
     var valor_radio = $("input[name='radio']:checked").val();
     var proforma = $("#txt_proforma_"+valor_radio).val();
-    proforma = proforma.replace(/[^a-z0-9\-]/gi,'');
+        proforma = proforma.replace(/[^a-z0-9\-]/gi,'');
     var id_color3 = $("#txt_id_color_"+valor_radio).text();
     var estado_c1 = $("#tabla2 #txt_estadoc1_"+valor_radio).text();
 
-    if( (proforma!=null) && (proforma!=0) && (proforma!="") && (proforma.length>5)){
+    if( (proforma!=null) && (proforma!=0) && (proforma!="") ){ //&& (proforma.length>5)
 
     var respuesta = confirm("¿Quiere realizar los cambios?");
     if (respuesta == true) {
