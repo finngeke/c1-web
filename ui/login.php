@@ -1,7 +1,7 @@
 <h2 class="login-box-msg"><B>C1</B> Automática Web</h2>
 <form action="{{@BASE}}/login" method="POST" class="login">
 	<div class="form-group has-feedback">
-		<input type="text" name="usuario" class="form-control" placeholder="Usuario de Windows" required>
+		<input type="text" name="usuario" class="form-control" placeholder="Usuario" required>
 		<span class="glyphicon glyphicon-user form-control-feedback"></span>
 	</div>
 	<div class="form-group has-feedback">
@@ -19,7 +19,7 @@
 				</select>
 			</div>
 		</div>
-		<div class="col-md-12">
+		<div class="col-md-6">
 			<button type="submit" class="btn btn-primary btn-block btn-flat">Iniciar sesión</button>
 		</div>
 	</div>
