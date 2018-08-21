@@ -556,7 +556,7 @@ $(window).on('load', function () {
 
 
                     var temp_grilla2 = $(this).find("td:eq(3)").text();
-                    if(temp_grilla2 == 2){
+                    if(temp_grilla2 == 3){
                         $(this).find("td:eq(3)").html("Ttemp");
                     }else{
                         var span_temporada = $('#span_tempo').text();
