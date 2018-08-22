@@ -338,7 +338,7 @@
 					if (strtoupper($response->Body->fault->faultString) != "OK") {
 						$msj = $response->Body->fault->faultString;
 						header("Content-Type: application/json");
-						echo json_encode(array("estado" => -2, "mensaje" => "No se pudo aperturar la sesión: $msj"), JSON_PRETTY_PRINT);
+						echo json_encode(array("estado" => -2, "mensaje" => "No se pudo aperturar la sesión: $msj\n\nPor favor intente nuevamente. Si el error persiste, informe al administrador de sistema."), JSON_PRETTY_PRINT);
 						exit();
 					} else {
 						$id_sesion = $response->Body->sessionid;
