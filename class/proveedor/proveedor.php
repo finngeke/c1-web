@@ -204,15 +204,8 @@
 						, COSTO
 						, CANTIDAD
 						, PREFIJO
-						, COD_TDA
-						, FECHA_DEMORA
 						, NRO_CONTENEDOR
-						, TIPO_CONTENEDOR
 						, B_L
-						, VIA_TRANSPORTE
-						, FECHA_ETA
-						, NRO_EMBARQUE
-						, NRO_CITA
 					) VALUES (
 						" . $registro["cod_temporada"] . "
 						, '" . $registro["dep_depto"] . "'
@@ -225,15 +218,8 @@
 						, " . $registro["costo"] . "
 						, " . $registro["cantidad"] . "
 						, '" . $registro["prefijo"] . "'
-						, NULL
-						, NULL
-						, NULL
-						, NULL
-						, NULL
-						, NULL
-						, NULL
-						, NULL
-						, NULL
+						, '" . $registro["nro_contenedor"] . "'
+						, '" . $registro["b_l"] . "'
 					)";
 			$data = \database::getInstancia()->getConsulta($sql);
 		}

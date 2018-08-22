@@ -959,6 +959,8 @@
 						$color = strtoupper(trim($detalle[22]));
 						$skus = \proveedor\proveedor::getSKU($numeroOC, $nro_estilo, $color);
 						$talla = 0;
+						$nro_contenedor = $detalle[27];
+						$bl = $detalle[28];
 						foreach ($skus as $sku) {
 							$talla++;
 							if ($talla <= 17) {
@@ -979,7 +981,9 @@
 											"po_number" => $numeroOC,
 											"costo" => $valorUnitarioFactura,
 											"cantidad" => $cantidadEmbarcada,
-											"prefijo" => strtoupper($detalle[21])
+											"prefijo" => strtoupper($detalle[21]),
+											"nro_contenedor" => $nro_contenedor,
+											"b_l" => $bl
 										);
 									}
 								}
