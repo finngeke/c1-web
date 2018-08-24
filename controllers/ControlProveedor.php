@@ -922,6 +922,7 @@
 				
 				$ftp = ftp_connect($host, $port, $timeout);
 				$login = ftp_login($ftp, $user, $pass);
+				ftp_pasv($ftp, true);
 				if ((!$ftp) || (!$login)) {
 					$f3->set('SESSION.warning', "An error occurred while sending the invoice via FTP: Connection not established with the FTP server");
 					$f3->reroute("/invoices?cod_proveedor=$cod_proveedor");
