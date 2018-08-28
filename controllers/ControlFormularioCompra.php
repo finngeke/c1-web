@@ -11,7 +11,9 @@
 	class ControlFormularioCompra extends Control {
 		
 		public function inicio($f3) {
-			
+
+            unset($_SESSION['session_depto_validar_url']);
+
 			ControlFormularioMain::cargaMain($f3);
 			$f3->set('temporadas', temporada\temporada::getSelect());
 			$temporada = temporada\temporada::getTemporadaCompra($f3->get('GET.codigo'));
@@ -29,6 +31,28 @@
 		}
 		
 		public function simulador_compra($f3) {
+
+
+            //echo parse_url($_SERVER['HTTP_REFERER'], PHP_URL_HOST);
+
+            $depto_entrar = substr($_SERVER['REQUEST_URI'],-4);
+
+            if (isset( $_SESSION['session_depto_validar_url'])){
+                //si tiene algo
+                //segunda validacion si el dpto entrar es igual a la session
+                if ($depto_entrar != $_SESSION['session_depto_validar_url']) {
+                    //matar sesion depto
+                    unset($_SESSION['session_depto_validar_url']);
+                    //redireccionar
+                    header("Location: salir");
+                    //pausar codigo
+                    die();
+                }
+
+            }else{
+                $_SESSION['session_depto_validar_url'] = substr($_SERVER['REQUEST_URI'],-4);
+            }
+
 			
 			ControlFormularioMain::cargaMain($f3);
 			ControlFormularioMain::cargaMensaje($f3);
@@ -350,7 +374,8 @@
 		}
 		
 		public function selecciona_depto($f3) {
-			
+
+            unset($_SESSION['session_depto_validar_url']);
 			ControlFormularioMain::cargaMain($f3);
 			
 			$f3->set('nombre_form', 'SIMULADOR DE COMPRA');
