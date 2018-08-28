@@ -716,6 +716,7 @@
 				$etapa = "conectarFTP";
 				$ftp = ftp_connect($host, $port, $timeout);
 				$login = ftp_login($ftp, $user, $pass);
+				ftp_pasv($ftp, true);
 				if ((!$ftp) || (!$login)) {
 					header("Content-Type: application/json");
 					echo json_encode(array("estado" => -1, "mensaje" => "Error de conexión con el FTP"), JSON_PRETTY_PRINT);

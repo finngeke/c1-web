@@ -161,6 +161,7 @@
 				// Genera el envío
 				$ftp = ftp_connect($host, $port, $timeout);
 				$login = ftp_login($ftp, $user, $pass);
+				ftp_pasv($ftp, true);
 				if ((!$ftp) || (!$login)) {
 					$f3->set('SESSION.error', "No se pudo establecer la conexión con el FTP");
 					$f3->reroute("/asociar_contenedor?cod_proveedor=$cod_proveedor&nro_factura=$nro_factura");
