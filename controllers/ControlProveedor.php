@@ -655,7 +655,8 @@
 						$min_tolerancia = $valor_po * 0.97;
 						$max_tolerancia = $valor_po * 1.03;
 						$valor_pl = number_format(\LibraryHelper::convertNumber($valor), 2, ".", "");
-						if (!($min_tolerancia <= $valor_pl && $valor_pl <= $max_tolerancia)) {
+						//if (!($min_tolerancia <= $valor_pl && $valor_pl <= $max_tolerancia)) {
+						if ($valor_pl >= $max_tolerancia) {
 							unlink($key);
 							$f3->set('SESSION.error', "The total amount in the packing list can not be greater than total amount loaded to purchase order number '$llave'. Please check de file.");
 							$f3->reroute("/invoices?cod_proveedor=$cod_proveedor");
@@ -671,7 +672,8 @@
 						$min_tolerancia = $valor_po * 0.97;
 						$max_tolerancia = $valor_po * 1.03;
 						$valor_pl = number_format(\LibraryHelper::convertNumber($valor), 2, ".", "");
-						if (!($min_tolerancia <= $valor_pl && $valor_pl <= $max_tolerancia)) {
+						//if (!($min_tolerancia <= $valor_pl && $valor_pl <= $max_tolerancia)) {
+						if ($valor_pl >= $max_tolerancia) {
 							unlink($key);
 							$f3->set('SESSION.error', "The quantity of units in the packing list can not be greater than total units loaded to purchase order number '$llave'. Please check de file.");
 							$f3->reroute("/invoices?cod_proveedor=$cod_proveedor");

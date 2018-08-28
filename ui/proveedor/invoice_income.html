@@ -168,14 +168,16 @@
 		var suma = sumaMontos();
 		var superior = suma * 1.03;
 		var inferior = suma * 0.97;
-		return inferior <= valor && valor <= superior;
+		//return inferior <= valor && valor <= superior;
+		return valor <= superior;
 	}
 
 	function validarUnidades(valor) {
 		var suma = sumaUnidades();
 		var superior = suma * 1.03;
 		var inferior = suma * 0.97;
-		return inferior <= valor && valor <= superior;
+		///return inferior <= valor && valor <= superior;
+		return valor <= superior;
 	}
 
 	function validarMismaCarpeta() {
