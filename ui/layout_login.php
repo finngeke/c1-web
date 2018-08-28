@@ -33,7 +33,7 @@
 			<hr>
 			<!--¿No puedes acceder a tu cuenta? <a href="mailto:epacheco@ripley.cl&amp;subject=Problemas con el ingreso C1 Web" >Haz clic aquí </a> -->
 		</div>
-	
+
 	</div>
 	<!-- jQuery 3 -->
 	<script src="{{@BASE}}/bower_components/jquery/dist/jquery.min.js"></script>

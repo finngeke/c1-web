@@ -91,7 +91,7 @@
 							</thead>
 							<tbody>
 								
-								<tr class="">
+								<tr>
 									<F3:repeat group="{{@GRILLA_CABECERA}}" key="{{@key}}" value="{{@val}}">
 										<td>{{@val}}</td>
 									</F3:repeat>
@@ -154,7 +154,7 @@
 							<thead>
 								<tr>
 									<th colspan="19" style="text-align:center;">Definición por Estilos</th>
-									<th colspan="5" style="text-align:center;">Definición por Opción/Color</th>
+									<th colspan="6" style="text-align:center;">Definición por Opción/Color</th>
 									<th colspan="2" style="text-align:center;">Definición Generales</th>
 									<th colspan="7" style="text-align:center;">Definición de Tallas</th>
 									<th colspan="5" style="text-align:center;">Definición de Unidades</th>
@@ -192,6 +192,7 @@
 									<th id="ventana">Ventana</th>
 									<th id="rank_vta">Rank Vta</th>
 									<th id="ciclo_vida">Ciclo Vida</th>
+									<th id="num_emb">Num. Opción</th>
 									<th id="color">Color</th>
 									<th id="hist">Hist</th>
 									<th id="tipo_producto">Tipo Producto</th>
@@ -203,9 +204,11 @@
 									<th id="ajuste_compra">Ajuste Compra</th>
 									<th id="curva">Curva</th>
 									<th id="curva_min">Curva Min</th>
-									<th id="uni_ini">Uni Ini</th>
-									<th id="uni_ajust">Uni Ajust</th>
-									<th id="uni_final">Uni Final</th>
+
+									<th id="uni_ini"><labele>Uni Ini</labele></th>
+									<th id="uni_ajust"><labele>Uni Ajust</labele></th>
+									<th id="uni_final"><labele>Uni Final</labele></th>
+
 									<th id="mstr_pack">MtrPack</th>
 									<th id="n_cajas">Nº Cajas</th>
 									<th id="cluster">Cluster</th>
@@ -215,27 +218,35 @@
 									<th id="b">B</th>
 									<th id="c">C</th>
 									<th id="i">I</th>
-									<th id="primera_carga">Primera Carga</th>
-									<th id="tiendas">% Tiendas</th>
+
+									<th id="primera_carga"><labele>Primera Carga</labele></th>
+									<th id="tiendas"><labele>% Tiendas</labele></th>
+
 									<th id="proced">Proced</th>
 									<th id="via">Vía</th>
 									<th id="pais">País</th>
 									<th id="viaje">Viaje</th>
-									<th id="mkup">Mkup</th>
-									<th id="precio_blanco">Precio Blanco</th>
+
+									<th id="mkup"><labele>Mkup</labele></th>
+									<th id="precio_blanco"><labele>Precio Blanco</labele></th>
+
 									<th id="gm">GM</th>
 									<th id="moneda">Moneda</th>
-									<th id="target">Target</th>
-									<th id="fob">FOB</th>
+
+									<th id="target"><labele>Target</labele></th>
+									<th id="fob"><labele>FOB</labele></th>
+
 									<th id="insp">Insp</th>
 									<th id="rfid">RFID</th>
 									<th id="royalty">Royalty (%)</th>
-									<th id="costo_uni_final_usd">Costo Unitarios Final US$</th>
-									<th id="costo_uni_final_pesos">Costo Unitario Final Pesos</th>
-									<th id="total_target_usd">Total Target US$</th>
-									<th id="total_fob_usd">Total FOB US$</th>
-									<th id="costo_total_pesos">Costo Total Pesos</th>
-									<th id="total_retail_pesos">Total Retail Pesos (Sin IVA)</th>
+
+									<th id="costo_uni_final_usd"><labele>Costo Unitarios Final US</labele></th>
+									<th id="costo_uni_final_pesos"><labele>Costo Unitario Final Pesos</labele></th>
+									<th id="total_target_usd"><labele>Total Target US$</labele></th>
+									<th id="total_fob_usd"><labele>Total FOB US$</labele></th>
+									<th id="costo_total_pesos"><labele>Costo Total Pesos</labele></th>
+									<th id="total_retail_pesos"><labele>Total Retail Pesos (Sin IVA)</labele></th>
+
 									<th id="debut_reorder">Debut/Reorder</th>
 									<th id="sem_ini">Sem Ini</th>
 									<th id="sem_fin">Sem Fin</th>
@@ -287,13 +298,14 @@
             <th >Composición</th>
             <th >Colección</th>
             <th >Evento</th>
-									<th>Estilo Vida</th>
-									<th>Calidad</th>
+			<th>Estilo Vida</th>
+			<th>Calidad</th>
             <th >Ocación Uso</th>
-									<th>Piramide Mix</th>
+			<th>Piramide Mix</th>
             <th >Ventana</th>
             <th >Rank Vta</th>
             <th >Ciclo Vida</th>
+            <th >Num. Opción</th>
             <th >Color</th>
             <th style="visibility: hidden">Hist</th>
             <th >Tipo Producto</th>
@@ -302,7 +314,7 @@
             <th >Tipo Empaque</th>
             <th >% Compra Ini</th>
             <th >% Compra Ajust</th>
-            <th  style="visibility: hidden">Ajuste Compra</th>
+            <th style="visibility: hidden">Ajuste Compra</th>
             <th >Curva</th>
             <th >Curva Min</th>
             <th >Uni Ini</th>
@@ -314,16 +326,16 @@
             <th >Formato</th>
             <th >Tdas</th>
             <th >A</th>
-									<th>B</th>
-									<th>C</th>
+			<th >B</th>
+			<th >C</th>
             <th >I</th>
-									<th>Primera Carga</th>
+			<th >Primera Carga</th>
             <th >% Tiendas</th>
             <th >Proced</th>
             <th >Vía</th>
             <th >País</th>
             <th >Viaje</th>
-									<th>Mkup</th>
+			<th >Mkup</th>
             <th >Precio Blanco</th>
             <th >GM</th>
             <th >Moneda</th>
@@ -335,7 +347,7 @@
             <th >Costo Unitarios Final US$</th>
             <th >Costo Unitario Final Pesos</th>
             <th >Total Target US$</th>
-									<th>Total FOB US$</th>
+			<th >Total FOB US$</th>
             <th >Costo Total Pesos</th>
             <th >Total Retail Pesos (Sin IVA)</th>
             <th >Debut/Reorder</th>
@@ -349,7 +361,7 @@
             <th >Trader</th>
             <th >Cod. SKU Proveedor</th>
             <th >Cod. Padre</th>
-            <th>Proforma</th>
+            <th >Proforma</th>
             <th style="visibility:hidden ">D</th>
             <th style="visibility:hidden ">Archivo</th>
             <th style="visibility:hidden ">PI</th>
@@ -362,18 +374,17 @@
             <th >Fecha Recepción CD</th>
             <th >Días Atraso CD</th>
             <th >Estado Opción</th>
-									<th style="display: none"></th>
-									<th style="display: none"></th>
-									<th style="display: none"></th>
-									<th style="display: none"></th>
-									<th style="display: none"></th>
-								</tr>
-
-
-                            </tfoot>
-                            <tfoot id="tfoot_totales_campos_calculados">
+			<th style="display: none"></th>
+			<th style="display: none"></th>
+			<th style="display: none"></th>
+			<th style="display: none"></th>
+			<th style="display: none"></th>
+			</tr>
+            </tfoot>
+            <tfoot id="tfoot_totales_campos_calculados">
 
                             <tr>
+                                <th></th>
                                 <th></th>
                                 <th></th>
                                 <th></th>
@@ -518,7 +529,7 @@
 			<!-- Modal content-->
 			<div class="modal-content borde_especial">
 				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<button id="btn_salir_popup_import_bmt" type="button" class="close" data-dismiss="modal">&times;</button>
 					<h4 class="modal-title">Importar Archivo Assortment/BMT </h4>
 				</div>
 				<div class="modal-body">
@@ -1020,7 +1031,7 @@
 
 <div id="popup_cargando_simulador_compra_4" class="modal fade" role="alert" data-keyboard="false" data-backdrop="static">
 
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-sm">
 
         <div class="modal-content borde_especial">
 
@@ -1028,7 +1039,82 @@
 
                 <center>
 
-                    <div class="loader" id="loader_simulador_compra_4"></div>
+					<span > Cargando... </span>
+					<br>
+
+					<table  class="table table-bordered table-striped tabla_smaller">
+						<thead>
+							<tr>
+								<td>Cargando Datos </td>
+								<td align="center">Estado </td>
+							</tr>
+						</thead>
+
+						<tbody >
+
+							<tr>
+								<td>Cargando Ventanas de Llegadas</td>
+								<td align="center"><span id="accion_carga_modulo_ventanas_llegada" class="fa fa-refresh"></span></td>
+							</tr>
+
+							<tr>
+								<td>Cargando Ppto Costo</td>
+								<td align="center"><span id="accion_carga_modulo_ppto_costo" class="fa fa-refresh"></span></td>
+							</tr>
+
+							<tr>
+								<td>Cargando Ppto Retail</td>
+								<td align="center"><span id="accion_carga_modulo_ppto_retail" class="fa fa-refresh"></span></td>
+							</tr>
+
+							<tr>
+								<td>Cargando Tiendas</td>
+								<td align="center"><span id="accion_carga_modulo_tienda" class="fa fa-refresh"></span></td>
+							</tr>
+
+							<tr>
+								<td>Cargando Formatos</td>
+								<td align="center"><span id="accion_carga_modulo_formatos" class="fa fa-refresh"></span></td>
+							</tr>
+
+							<tr>
+								<td>Cargando Grilla</td>
+								<td align="center"><span id="accion_carga_datos_tabla2" class="fa fa-refresh"></span></td>
+							</tr>
+
+							<tr>
+								<td>Configurando Formato Grilla </td>
+								<td align="center"><span id="accion_carga_estructura_tabla2" class="fa fa-refresh"></span></td>
+							</tr>
+
+							<tr>
+								<td>Cargando Permisos</td>
+								<td align="center"><span id="accion_carga_permisos_simulador" class="fa fa-refresh"></span></td>
+							</tr>
+
+							<tr>
+								<td>Configurando Permisos</td>
+								<td align="center"><span id="accion_carga_configuracion_permisos_simulador" class="fa fa-refresh"></span></td>
+							</tr>
+
+							<tr>
+								<td>Calculando Totales Grilla</td>
+								<td align="center"><span id="accion_carga_totales_tabla2" class="fa fa-refresh"></span></td>
+							</tr>
+
+							<tr>
+								<td> Ingresando... </td>
+								<td align="center"><span id="accion_carga_completo" class="fa fa-refresh"></span></td>
+							</tr>
+
+
+						</tbody>
+
+						<tfoot></tfoot>
+					</table>
+
+					<div class="loader" id="loader_popup_cargando_simulador" style="width: 10px;height: 10px"></div>
+
 
                 </center>
 

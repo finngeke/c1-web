@@ -65,7 +65,7 @@ class ControlFormularioMain extends Control {
         $f3->set('contenido', 'formulario/main/actualizar_calculos.html');
         $f3->set('temporada', 'formulario/main/temporada.html');
 			$f3->set('proveedor', 'formulario/main/proveedor.html');
-        echo Template::instance()->render('layout_inicio.php');
+        echo Template::instance()->render('layout_simulador.php');
     }
 
     public function master_pack($f3) {

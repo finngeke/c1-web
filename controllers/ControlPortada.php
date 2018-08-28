@@ -69,6 +69,7 @@ class ControlPortada extends Control {
         $f3->clear('SESSION.COD_TEMPORADA');
         $f3->clear('SESSION.COD_DEPTO');
         $f3->clear('SESSION.BD_control_conexion');
+        $f3->clear('SESSION.session_depto_validar_url');
         $f3->reroute('/');
     }
 }

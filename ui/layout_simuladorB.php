@@ -6,6 +6,7 @@
         <meta http-equiv="Pragma" content="no-cache" />
         <meta http-equiv="Expires" content="0" />
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <!-- Bootstrap 3.3.7 -->
         <link rel="stylesheet" href="{{@BASE}}/bower_components/bootstrap/dist/css/bootstrap.css">
         <!-- Font Awesome -->
@@ -113,7 +114,7 @@
                             <!-- User Account: style can be found in dropdown.less -->
                             <li class="dropdown user user-menu">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                    <img src="dist/img/avatar_generica.png" class="user-image" alt="User Image">
+                                    <!--<img src="dist/img/avatar_generica.png" class="user-image" alt="{{ @nombre }}">-->
                                     <span class="hidden-xs">{{ @nombre }}</span>
                                     &nbsp;<span id="control_conexion" style="color: red"><b>[{{ @BD_CONEXION }}]</b></span>
 
@@ -122,7 +123,7 @@
                                 <ul class="dropdown-menu">
                                     <!-- User image -->
                                     <li class="user-header">
-                                        <img src="dist/img/avatar_generica.png" class="img-circle" alt="User Image">
+                                        <img src="dist/img/avatar_generica.png" class="img-circle" alt="{{ @nombre }}">
                                         <p>
                                             {{ @nombre }} <br> <b>{{ @perfil }}</b>
                                             <small>{{ @dia }}</small>

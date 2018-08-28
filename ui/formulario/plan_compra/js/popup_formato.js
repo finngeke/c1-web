@@ -37,7 +37,8 @@ $(".FORMATO").prop('selectedIndex', 0);
 // Para los ListBox seteo el primer item como ya seleccionado
 // $(".DISPONIBLE").prop('selectedIndex', 0);
 // $(".ASIGNADO").prop('selectedIndex', 0);
-    
+    $('#accion_carga_modulo_formatos').removeClass('fa fa-refresh');
+    $('#accion_carga_modulo_formatos').addClass('fa fa-check');
 });
 
 // Al cambiar el estado del select, hay que realizar la búsqueda de los ListBox 
@@ -86,7 +87,7 @@ if(formato_seleccionado != 'NULL'){
       });
 
       $('.DISPONIBLE_FORMATO').append(toAppend_disponible);
-        
+
    });
   
   

@@ -60,7 +60,7 @@ class ControlTipoTienda extends \Control {
             die();
         }
 
-            echo json_encode(\simulador_compra\tipo_de_tienda::getAsignados($f3->get('SESSION.COD_TEMPORADA'),$depto,$f3->get('GET.MARCA'),$f3->get('GET.TIENDA')));
+        echo json_encode(\simulador_compra\tipo_de_tienda::getAsignados($f3->get('SESSION.COD_TEMPORADA'),$depto,$f3->get('GET.MARCA'),$f3->get('GET.TIENDA')));
 
     }
 

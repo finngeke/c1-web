@@ -315,3 +315,6 @@ $('#link_ir_a_home').on('click', function () {
         window.location.href = "inicio";
     });
 });
+
+
+

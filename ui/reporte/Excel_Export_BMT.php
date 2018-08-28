@@ -19,11 +19,10 @@ $hoy = date("Y-m-d H:i:s");
 $objPHPExcel->setActiveSheetIndex(0)
 ->mergeCells('AI12:DE12')
 ->mergeCells('DF12:GA12')
-->mergeCells('A1:GA1')
-->mergeCells('A2:GA2')
-->mergeCells('A3:GA3')
-->mergeCells('A11:GA11')
-->setCellValue('A11','!NOTA: El campo |ID C1| es el código sistema C1 y se utiliza para importar BMT. Por favor mantener ese código por cada Opción.')
+->mergeCells('B1:GA1')
+->mergeCells('B2:GA2')
+->mergeCells('B3:GA3')
+->mergeCells('B11:GA11')
 ->setCellValue('AI12','  CHILE')
 ->setCellValue('DF12','  PERU');
 
@@ -64,7 +63,7 @@ $objPHPExcel->setActiveSheetIndex(0)
 ->setCellValue('FV13','OTHERS');
 
 /*CABESERA 14*/
-$LetraExcelCabecera = array("A14","B14","C14","D14","E14","F14","G14","H14","I14","J14","K14","L14","M14","N14","O14","P14","Q14","R14","S14","T14","U14","V14","W14","X14","Y14","Z14","AA14"	,"AB14"	,"AC14"	,"AD14"	,"AE14"	,"AF14"	,"AG14"	,"AH14"	,"AI14"	,"AJ14"	,"AK14"	,"AL14"	,"AM14"	,"AN14"	,"AO14"	,"AP14"	,"AQ14"	,"AR14"	,"AS14"	,"AT14"	,"AU14"	,"AV14"	,"AW14"	,"AX14"	,"AY14"	,"AZ14","BA14"	,"BB14"	,"BC14"	,"BD14"	,"BE14"	,"BF14"	,"BG14"	,"BH14"	,"BI14"	,"BJ14"	,"BK14"	,"BL14"	,"BM14"	,"BN14"	,"BO14"	,"BP14"	,"BQ14"	,"BR14"	,"BS14"	,"BT14"	,"BU14"	,"BV14"	,"BW14"	,"BX14"	,"BY14"	,"BZ14","CA14"	,"CB14"	,"CC14"	,"CD14"	,"CE14"	,"CF14"	,"CG14"	,"CH14"	,"CI14"	,"CJ14"	,"CK14"	,"CL14"	,"CM14"	,"CN14"	,"CO14"	,"CP14"	,"CQ14"	,"CR14"	,"CS14"	,"CT14"	,"CU14"	,"CV14"	,"CW14"	,"CX14"	,"CY14"	,"CZ14","DA14"	,"DB14"	,"DC14"	,"DD14"	,"DE14"	,"DF14"	,"DG14"	,"DH14"	,"DI14"	,"DJ14"	,"DK14"	,"DL14"	,"DM14"	,"DN14"	,"DO14"	,"DP14"	,"DQ14"	,"DR14"	,"DS14"	,"DT14"	,"DU14"	,"DV14"	,"DW14"	,"DX14"	,"DY14"	,"DZ14","EA14"	,"EB14"	,"EC14"	,"ED14"	,"EE14"	,"EF14"	,"EG14"	,"EH14"	,"EI14"	,"EJ14"	,"EK14"	,"EL14"	,"EM14"	,"EN14"	,"EO14"	,"EP14"	,"EQ14"	,"ER14"	,"ES14"	,"ET14"	,"EU14"	,"EV14"	,"EW14"	,"EX14"	,"EY14"	,"EZ14","FA14"	,"FB14"	,"FC14"	,"FD14"	,"FE14"	,"FF14"	,"FG14"	,"FH14"	,"FI14"	,"FJ14"	,"FK14"	,"FL14"	,"FM14"	,"FN14"	,"FO14"	,"FP14"	,"FQ14"	,"FR14"	,"FS14"	,"FT14"	,"FU14"	,"FV14"	,"FW14"	,"FX14"	,"FY14"	,"FZ14","GA14");
+$LetraExcelCabecera = array("B14","C14","D14","E14","F14","G14","H14","I14","J14","K14","L14","M14","N14","O14","P14","Q14","R14","S14","T14","U14","V14","W14","X14","Y14","Z14","AA14"	,"AB14"	,"AC14"	,"AD14"	,"AE14"	,"AF14"	,"AG14"	,"AH14"	,"AI14"	,"AJ14"	,"AK14"	,"AL14"	,"AM14"	,"AN14"	,"AO14"	,"AP14"	,"AQ14"	,"AR14"	,"AS14"	,"AT14"	,"AU14"	,"AV14"	,"AW14"	,"AX14"	,"AY14"	,"AZ14","BA14"	,"BB14"	,"BC14"	,"BD14"	,"BE14"	,"BF14"	,"BG14"	,"BH14"	,"BI14"	,"BJ14"	,"BK14"	,"BL14"	,"BM14"	,"BN14"	,"BO14"	,"BP14"	,"BQ14"	,"BR14"	,"BS14"	,"BT14"	,"BU14"	,"BV14"	,"BW14"	,"BX14"	,"BY14"	,"BZ14","CA14"	,"CB14"	,"CC14"	,"CD14"	,"CE14"	,"CF14"	,"CG14"	,"CH14"	,"CI14"	,"CJ14"	,"CK14"	,"CL14"	,"CM14"	,"CN14"	,"CO14"	,"CP14"	,"CQ14"	,"CR14"	,"CS14"	,"CT14"	,"CU14"	,"CV14"	,"CW14"	,"CX14"	,"CY14"	,"CZ14","DA14"	,"DB14"	,"DC14"	,"DD14"	,"DE14"	,"DF14"	,"DG14"	,"DH14"	,"DI14"	,"DJ14"	,"DK14"	,"DL14"	,"DM14"	,"DN14"	,"DO14"	,"DP14"	,"DQ14"	,"DR14"	,"DS14"	,"DT14"	,"DU14"	,"DV14"	,"DW14"	,"DX14"	,"DY14"	,"DZ14","EA14"	,"EB14"	,"EC14"	,"ED14"	,"EE14"	,"EF14"	,"EG14"	,"EH14"	,"EI14"	,"EJ14"	,"EK14"	,"EL14"	,"EM14"	,"EN14"	,"EO14"	,"EP14"	,"EQ14"	,"ER14"	,"ES14"	,"ET14"	,"EU14"	,"EV14"	,"EW14"	,"EX14"	,"EY14"	,"EZ14","FA14"	,"FB14"	,"FC14"	,"FD14"	,"FE14"	,"FF14"	,"FG14"	,"FH14"	,"FI14"	,"FJ14"	,"FK14"	,"FL14"	,"FM14"	,"FN14"	,"FO14"	,"FP14"	,"FQ14"	,"FR14"	,"FS14"	,"FT14"	,"FU14"	,"FV14"	,"FW14"	,"FX14"	,"FY14"	,"FZ14","GA14");
 $CabeceraBMT = simulador_compra\plan_compra::get_columnas_archivos(2);
 $_key=1;
 foreach ($LetraExcelCabecera as $letra) {$_key2=1;
@@ -113,19 +112,21 @@ $objPHPExcel->getActiveSheet()->getStyle('DF12:GA12')->getFill()->setFillType(PH
 $objPHPExcel->getActiveSheet()->getStyle('AI12:GA12')->applyFromArray($borders);
 $objPHPExcel->getActiveSheet()->getStyle('AI12:GA12')->applyFromArray($style2);
 $objPHPExcel->getActiveSheet()->getStyle('AI12:GA12')->applyFromArray($styleArray);
-$objPHPExcel->getActiveSheet()->getStyle('A12:AH12')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('0,0,0');//brangraund
+$objPHPExcel->getActiveSheet()->getStyle('B12:AH12')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('0,0,0');//brangraund
 
 $objPHPExcel->getActiveSheet()->getStyle('AI13:DE13')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('1f497d');//brangraund
 $objPHPExcel->getActiveSheet()->getStyle('DF13:GA13')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('ff0000');//brangraund
 $objPHPExcel->getActiveSheet()->getStyle('AI13:GA13')->applyFromArray($borders);
 $objPHPExcel->getActiveSheet()->getStyle('AI13:GA13')->applyFromArray($style);
 $objPHPExcel->getActiveSheet()->getStyle('AI13:GA13')->applyFromArray($styleArray);
-$objPHPExcel->getActiveSheet()->getStyle('A13:AH13')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('0,0,0');//brangraund
+$objPHPExcel->getActiveSheet()->getStyle('B13:AH13')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('0,0,0');//brangraund
 
 $objPHPExcel->getActiveSheet()->getStyle('A14:GA14')->applyFromArray($style);
 $objPHPExcel->getActiveSheet()->getStyle('A14:GA14')->applyFromArray($styleArray);
 $objPHPExcel->getActiveSheet()->getStyle('A14:GA14')->applyFromArray($borders);
-$objPHPExcel->getActiveSheet()->getStyle('A14')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('963634');//brangraund
+//$objPHPExcel->getActiveSheet()->getStyle('A14')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('963634');//brangraund
+
+
 $objPHPExcel->getActiveSheet()->getStyle('CU14')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('963634');//brangraund
 $objPHPExcel->getActiveSheet()->getStyle('B14:AH14')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('0,0,0');//brangraund
 $objPHPExcel->getActiveSheet()->getStyle('AI14:CT14')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('1f497d');//brangraund
@@ -144,7 +145,7 @@ foreach ($array_orden as $columna_letra){
 #region {*************Cuerpo*************}
 
 /*Imprime los datos*/
-$objPHPExcel->getActiveSheet()->fromArray($data, null, 'A15');
+$objPHPExcel->getActiveSheet()->fromArray($data, null, 'B15');
 
 $objPHPExcel->getActiveSheet()->getStyle("BO15:CC".($count))
     ->getNumberFormat()->applyFromArray(
@@ -163,7 +164,7 @@ $objPHPExcel->getActiveSheet()->getStyle('A15:GA'.$count)->applyFromArray($style
 $objPHPExcel->getActiveSheet()->getStyle('A15:GA'.$count)->applyFromArray($style);
 
 /*Colores datos*/
-$objPHPExcel->getActiveSheet()->getStyle('A15:A'.$count)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('D7D6D8');
+$objPHPExcel->getActiveSheet()->getStyle('B15:A'.$count)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('D7D6D8');
 $_Azul = array("B15:G","I15:K","L15:Y","AA15:AC","AF15:AF","AH15:AH","AJ15:AJ","AL15:AL","AP15:AP","AT15:AT","AW15:AW","BM15:BM","DG15:DG","DI15:DI","DP15:DP","DS15:DS","EI15:EI");
 foreach ($_Azul as $rango){
     $objPHPExcel->getActiveSheet()->getStyle($rango.$count)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('B8CCE4');
@@ -177,12 +178,19 @@ foreach ($_Blanco as $rango){
     $objPHPExcel->getActiveSheet()->getStyle($rango.$count)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('FFFFFF');
 }
 
+$objPHPExcel->getActiveSheet()->getStyle('G14')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('963634');//brangraund
+
+$objPHPExcel->getActiveSheet()->getStyle("A12:A".$count)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('FFFFFF');
+$objPHPExcel->getActiveSheet()->getStyle('G15:G15'.$count)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('963634');//ROJO
+
 $objPHPExcel->getActiveSheet()->getStyle('AO15:AO'.$count)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');//ROJO
 $objPHPExcel->getActiveSheet()->getStyle('DL15:DL'.$count)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');//ROJO
 $objPHPExcel->getActiveSheet()->getStyle('H15:H'.$count)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('92D050');//VERD
 $objPHPExcel->getActiveSheet()->getStyle('A1:GX11')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('FFFFFF');//BLANCO
 $objPHPExcel->getActiveSheet()->getStyle('GB1:GX'.$count)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('FFFFFF');//BLANCO
 $objPHPExcel->getActiveSheet()->getStyle('A'.($count+1).':GX'.($count+30))->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('FFFFFF');//BLANCO
+
+
 
 #endregion;
 

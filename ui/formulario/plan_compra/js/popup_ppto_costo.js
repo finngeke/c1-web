@@ -19,9 +19,10 @@ $(window).on('load', function () {
             // Le asignamos el valor al input de total presupuesto
             $('#input_total_ppto_costo').val(o[0]);
         });
+        $('#accion_carga_modulo_ppto_costo').removeClass('fa fa-refresh');
+        $('#accion_carga_modulo_ppto_costo').addClass('fa fa-check');
+
     });
-
-
 
 });
 

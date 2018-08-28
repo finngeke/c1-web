@@ -1,11 +1,5 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 namespace simulador_compra;
 
 /**
@@ -22,7 +16,7 @@ class formato
     {
         $sql = "SELECT COD_SEG, DES_SEG 
                 FROM PLC_FORMATO 
-                WHERE COD_TEMPORADA = " . $temporada . " 
+                WHERE COD_TEMPORADA = $temporada 
                 AND DEP_DEPTO = '" . $depto . "' 
                 ORDER BY COD_SEG
                 ";
@@ -40,7 +34,7 @@ class formato
                  FROM GST_MAESUCURS S
                  WHERE SUC_SUCURSAL NOT IN (SELECT DISTINCT P.COD_TDA AS COD_SUC
                                               FROM   PLC_FORMATOS_TDA P
-                                              WHERE  P.COD_TEMPORADA = " . $temporada . "
+                                              WHERE  P.COD_TEMPORADA = $temporada
                                               AND    P.DEP_DEPTO     = '" . $depto . "'
                                               AND    DECODE( " . $formato . ", 0, 0,P.COD_SEG ) = " . $formato . "
                                               )
@@ -69,7 +63,7 @@ class formato
                 P.COD_TDA                                              AS COD_SUC,
                 INITCAP( TRIM( BOSACC_FUN_OBT_NOM_SUC( P.COD_TDA ) ) ) AS DES_SUC
          FROM   PLC_FORMATOS_TDA P
-         WHERE  P.COD_TEMPORADA = " . $temporada . "
+         WHERE  P.COD_TEMPORADA = $temporada
          AND    P.DEP_DEPTO     = '" . $depto . "'
          AND    DECODE( " . $formato . ", 0, 0,P.COD_SEG ) = " . $formato . "
          ORDER BY 2
@@ -84,7 +78,7 @@ class formato
     // Revisar si despliega tipo de tienda
     public static function getCluster($tempo, $depto)
     {
-        $sql = "begin PLC_PKG_GENERAL.PRC_LISTAR_SEGMENTOS('" . $tempo . "','" . $depto . "', :data); end";
+        $sql = "begin PLC_PKG_GENERAL.PRC_LISTAR_SEGMENTOS($tempo,'" . $depto . "', :data); end";
         $data = \database::getInstancia()->getConsultaSP($sql, 1);
         return $data;
     }
@@ -112,8 +106,6 @@ class formato
             echo 1;
         }
 
-        echo 0;
-
     }
 
     // Quitar Todos
@@ -134,8 +126,6 @@ class formato
         } catch (Exception $ex) {
             echo 1;
         }
-
-        echo 0;
 
     }
 

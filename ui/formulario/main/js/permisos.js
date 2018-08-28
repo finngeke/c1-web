@@ -134,6 +134,8 @@ $('#guardar_permisos_modulo_acciones').on('click', function () {
 
         });
 
+        //Cambiar por cronometro que consulte por el flag ?
+
         var delay_validar_guardado = 5000;
         setTimeout(function (){
             validar_guardado = $('#flag_data_insert_modulos').html();
@@ -281,8 +283,7 @@ function cargar_tabla_modulos(tip_usr) {
                         $('#tr_modulo_' + o[0]).after(
                             '<tr>' +
 
-                            '<td>' + b[2] +
-                            '</td>' +
+                                '<td>' + b[2] + '</td>' +
 
                             '<td>' +
                             '<select id="select_modulo_accion_' + b[0] + '" onchange="campo_flag_acciones(' + o[0] + ',' + b[0] + ')">' +

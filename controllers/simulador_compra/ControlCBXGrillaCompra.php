@@ -192,7 +192,7 @@ class ControlCBXGrillaCompra extends \Control {
 
     // Traer Datos OC cuando existe PROFORMA en la Grilla
     public function traer_datos_oc($f3) {
-        echo json_encode(\simulador_compra\cbx_grilla_compra::traer_datos_oc($f3->get('SESSION.COD_TEMPORADA'),$f3->get('SESSION.COD_DEPTO'),$f3->get('GET.PI')));
+        echo json_encode(\simulador_compra\cbx_grilla_compra::traer_datos_oc($f3->get('SESSION.COD_TEMPORADA'),$f3->get('SESSION.COD_DEPTO'),$f3->get('GET.PI'),$f3->get('CURLOPT_PORT'),$f3->get('CURLOPT_URL')));
     }
 
 // ######################## INICIO TRABAJO CON MATCH ########################
