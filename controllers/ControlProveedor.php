@@ -440,8 +440,8 @@
 					$lastRow = $worksheet->getHighestRow();
 					
 					// Obtiene la información de la factura desde el archivo
-					$invoiceNumber = $worksheet->getCell('B4')->getValue();
-					$invoiceDate = $worksheet->getCell('B5')->getValue();
+					$invoiceNumber = $worksheet->getCell('B4')->getCalculatedValue();
+					$invoiceDate = $worksheet->getCell('B5')->getCalculatedValue();
 					
 					if (trim($invoiceNumber) == "") {
 						unlink($key);
@@ -488,9 +488,9 @@
 					$total_costo = 0;
 					
 					for ($row = 9; $row <= $lastRow; $row++) {
-						$po_number = $worksheet->getCell("C$row")->getValue();
-						$cod_padre = $worksheet->getCell("H$row")->getValue();
-						$color = strtoupper(trim($worksheet->getCell("J$row")->getValue()));
+						$po_number = $worksheet->getCell("C$row")->getCalculatedValue();
+						$cod_padre = $worksheet->getCell("H$row")->getCalculatedValue();
+						$color = strtoupper(trim($worksheet->getCell("J$row")->getCalculatedValue()));
 						
 						if ($po_number == "") {
 							unlink($key);
@@ -515,10 +515,10 @@
 							$f3->reroute("/invoices?cod_proveedor=$cod_proveedor");
 						}
 						$etapa = "setVariables";
-						$pi_number = $worksheet->getCell("B$row")->getValue();
-						$pack_type = $worksheet->getCell("E$row")->getValue();
-						$initial_lpn = $worksheet->getCell("F$row")->getValue();
-						$final_lpn = $worksheet->getCell("G$row")->getValue();
+						$pi_number = $worksheet->getCell("B$row")->getCalculatedValue();
+						$pack_type = $worksheet->getCell("E$row")->getCalculatedValue();
+						$initial_lpn = $worksheet->getCell("F$row")->getCalculatedValue();
+						$final_lpn = $worksheet->getCell("G$row")->getCalculatedValue();
 						
 						if (trim($initial_lpn) == "") {
 							unlink($key);
@@ -568,33 +568,33 @@
 							"id_color3" => $datosPlan[0][2],
 							"cod_proveedor" => $cod_proveedor,
 							"nro_factura" => $invoiceNumber,
-							"container" => $worksheet->getCell("A$row")->getValue(),
+							"container" => $worksheet->getCell("A$row")->getCalculatedValue(),
 							"pi_number" => $pi_number,
 							"po_number" => $po_number,
-							"bl_fcr" => $worksheet->getCell("D$row")->getValue(),
-							"pack_type" => $worksheet->getCell("E$row")->getValue(),
+							"bl_fcr" => $worksheet->getCell("D$row")->getCalculatedValue(),
+							"pack_type" => $worksheet->getCell("E$row")->getCalculatedValue(),
 							"initial_lpn" => $lpn_i,
 							"final_lpn" => $lpn_f,
-							"style_number" => $worksheet->getCell("H$row")->getValue(),
-							"style_description" => $worksheet->getCell("I$row")->getValue(),
-							"color" => $worksheet->getCell("J$row")->getValue(),
-							"size_01" => $worksheet->getCell("K$row")->getValue(),
-							"size_02" => $worksheet->getCell("L$row")->getValue(),
-							"size_03" => $worksheet->getCell("M$row")->getValue(),
-							"size_04" => $worksheet->getCell("N$row")->getValue(),
-							"size_05" => $worksheet->getCell("O$row")->getValue(),
-							"size_06" => $worksheet->getCell("P$row")->getValue(),
-							"size_07" => $worksheet->getCell("Q$row")->getValue(),
-							"size_08" => $worksheet->getCell("R$row")->getValue(),
-							"size_09" => $worksheet->getCell("S$row")->getValue(),
-							"size_10" => $worksheet->getCell("T$row")->getValue(),
-							"size_11" => $worksheet->getCell("U$row")->getValue(),
-							"size_12" => $worksheet->getCell("V$row")->getValue(),
-							"size_13" => $worksheet->getCell("W$row")->getValue(),
-							"size_14" => $worksheet->getCell("X$row")->getValue(),
-							"size_15" => $worksheet->getCell("Y$row")->getValue(),
-							"size_16" => $worksheet->getCell("Z$row")->getValue(),
-							"size_17" => $worksheet->getCell("AA$row")->getValue(),
+							"style_number" => $worksheet->getCell("H$row")->getCalculatedValue(),
+							"style_description" => $worksheet->getCell("I$row")->getCalculatedValue(),
+							"color" => $worksheet->getCell("J$row")->getCalculatedValue(),
+							"size_01" => $worksheet->getCell("K$row")->getCalculatedValue(),
+							"size_02" => $worksheet->getCell("L$row")->getCalculatedValue(),
+							"size_03" => $worksheet->getCell("M$row")->getCalculatedValue(),
+							"size_04" => $worksheet->getCell("N$row")->getCalculatedValue(),
+							"size_05" => $worksheet->getCell("O$row")->getCalculatedValue(),
+							"size_06" => $worksheet->getCell("P$row")->getCalculatedValue(),
+							"size_07" => $worksheet->getCell("Q$row")->getCalculatedValue(),
+							"size_08" => $worksheet->getCell("R$row")->getCalculatedValue(),
+							"size_09" => $worksheet->getCell("S$row")->getCalculatedValue(),
+							"size_10" => $worksheet->getCell("T$row")->getCalculatedValue(),
+							"size_11" => $worksheet->getCell("U$row")->getCalculatedValue(),
+							"size_12" => $worksheet->getCell("V$row")->getCalculatedValue(),
+							"size_13" => $worksheet->getCell("W$row")->getCalculatedValue(),
+							"size_14" => $worksheet->getCell("X$row")->getCalculatedValue(),
+							"size_15" => $worksheet->getCell("Y$row")->getCalculatedValue(),
+							"size_16" => $worksheet->getCell("Z$row")->getCalculatedValue(),
+							"size_17" => $worksheet->getCell("AA$row")->getCalculatedValue(),
 							"n_curves_ctn" => $worksheet->getCell("AB$row")->getCalculatedValue(),
 							"pcs_sets_per_ctn" => $worksheet->getCell("AC$row")->getCalculatedValue(),
 							"n_cartons" => $n_cartons,
