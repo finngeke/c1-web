@@ -1,115 +1,65 @@
-
-
 <section class="content-header">
-    <h1>
-        Temporada de Compra :
-        <b>{{@NOM_TEMPORADA_CORTO}}</b>
-    </h1>
-    <ol class="breadcrumb">
-        <li><a href="inicio"><i class="fa fa-dashboard"></i> Main</a></li>
-        <li class="active">Resumen</li>
-    </ol>
+	<h1>
+		Temporada de Compra :
+		<b>{{@NOM_TEMPORADA_CORTO}}</b>
+	</h1>
+	<ol class="breadcrumb">
+		<li><a href="inicio"><i class="fa fa-dashboard"></i> Main</a></li>
+		<li class="active">Resumen</li>
+	</ol>
 </section>
 <!-- Main content -->
 <section class="content animated fadeInDown" style="overflow-y: auto; max-height: 75%;">
-    <div class="row">
-        <!-- left column -->
-        <div class="col-md-12">
-            <!-- general form elements -->
-            <div class="box box-primary">
-                <!--<div class="box-header with-border">
-                    <h3 class="box-title">Resumen</h3>
-                </div>-->
+	<div class="row">
+		<!-- left column -->
+		<div class="col-md-12">
+			<!-- general form elements -->
+			<div class="box box-primary">
+				<!--<div class="box-header with-border">
+					<h3 class="box-title">Resumen</h3>
+				</div>-->
 				
-                <section class="content c1_fondo">
+				<section class="content c1_fondo">
 					
-                    <div class="row">
-                        <div class="col-md-4">
+					<div class="row">
+						<div class="col-md-4">
 						
-                        </div>
+						</div>
 						
-                        <div class="col-md-4">
-                            <br>
-							
-							
-                            <div id="modulo_factor_estimado" class="info-box bg-yellow ">
-                                <span class="info-box-icon"><i class="fa fa-calculator" style="line-height: 90px;"></i></span>
-                                <a href="factor_estimado">
-                                    <div class="info-box-content modulos">
-                                        <span class="info-box-number">1.- Factor Estimado</span>
-                                        <!--<span class="info-box-text">#n Registros</span>-->
-										
-                                        <div class="progress">
-                                            <div class="progress-bar" style="width: 100%"></div>
-                                        </div>
-                                        <!--<span class="progress-description">
-                                            {{@dia}}
-                                        </span>-->
-                                    </div>
-                                </a>
-                            </div>
-
-                            <!-- /.info-box -->
-
-                            <div id="modulo_fecha_recepcion_cd" class="info-box bg-aqua-active color-palette ">
-                                <span class="info-box-icon"><i class="fa fa-truck" style="line-height: 90px;"></i></span>
-
-                                <div class="info-box-content modulos">
-                                    <a href="fecha_recepcion">
-                                        <span class="info-box-number">2.- Fecha Recep. CD</span>
-                                        <!--<span class="info-box-text">#n Registros</span>-->
-
-                                        <div class="progress">
-                                            <div class="progress-bar" style="width: 100%"></div>
-                                        </div>
-                                        <!--<span class="progress-description">
-                                            20% Cumplimiento
-                                        </span>-->
-                                    </a>
-                                </div>
-                                <!-- /.info-box-content -->
-                            </div>
-
-                            <!-- /.info-box -->
-
-                            <div id="modulo_registro_de_compra" class="info-box bg-purple-active " >
-                                <span class="info-box-icon"><i class="fa fa-shopping-cart" style="line-height: 90px;"></i></span>
-
-                                <div   class="info-box-content modulos" >
-                                    <!--<a href="selecion_depto">-->
-                                    <a href="#" id="tcrc_opcion3_link">
-                                        <span class="info-box-number">3.- Registro de Compra</span>
-                                        <!--<span class="info-box-text">#n Registros</span>-->
-
-
-                                        <div class="progress">
-                                            <div class="progress-bar" style="width: 100%"></div>
-                                        </div>
-                                        <!--<span class="progress-description">
-                                            70% Cumplimiento bmt
-                                        </span>-->
-                                    </a>
-                                </div>
-                                <!-- /.info-box-content -->
-                            </div>
-							
-							<!-- /.info-box -->
-							
-							<div id="modulo_distribucion_mercaderia" class="info-box bg-olive-active ">
-								<span class="info-box-icon"><i class="fa fa-archive" style="line-height: 90px;"></i></span>
-								
-								<div class="info-box-content modulos">
-									<a id="inicio_popup_contenedor" href="#">
-										<!--<a href="selecion_depto" onclick="alert('validar antes de redireccionar');">-->
-										<span class="info-box-number">4.- Distribución de Mercadería</span>
+						<div class="col-md-4">
+							<br>
+							<div id="modulo_factor_estimado" class="info-box bg-yellow ">
+								<span class="info-box-icon"><i class="fa fa-calculator" style="line-height: 90px;"></i></span>
+								<a href="factor_estimado">
+									<div class="info-box-content modulos">
+										<span class="info-box-number">1.- Factor Estimado</span>
 										<!--<span class="info-box-text">#n Registros</span>-->
-										
 										
 										<div class="progress">
 											<div class="progress-bar" style="width: 100%"></div>
-                        </div>
+										</div>
 										<!--<span class="progress-description">
-											70% Cumplimiento bmt
+											{{@dia}}
+										</span>-->
+									</div>
+								</a>
+							</div>
+							
+							<!-- /.info-box -->
+							
+							<div id="modulo_fecha_recepcion_cd" class="info-box bg-aqua-active color-palette ">
+								<span class="info-box-icon"><i class="fa fa-truck" style="line-height: 90px;"></i></span>
+								
+								<div class="info-box-content modulos">
+									<a href="fecha_recepcion">
+										<span class="info-box-number">2.- Fecha Recep. CD</span>
+										<!--<span class="info-box-text">#n Registros</span>-->
+										
+										<div class="progress">
+											<div class="progress-bar" style="width: 100%"></div>
+										</div>
+										<!--<span class="progress-description">
+											20% Cumplimiento
 										</span>-->
 									</a>
 								</div>
@@ -118,13 +68,13 @@
 							
 							<!-- /.info-box -->
 							
-							<div id="modulo_bajada_embarque" class="info-box bg-teal-active ">
-								<span class="info-box-icon"><i class="fa fa-ship" style="line-height: 90px;"></i></span>
+							<div id="modulo_registro_de_compra" class="info-box bg-purple-active ">
+								<span class="info-box-icon"><i class="fa fa-shopping-cart" style="line-height: 90px;"></i></span>
 								
 								<div class="info-box-content modulos">
-									<a href="bajada_embarque">
-										<!--<a href="selecion_depto" onclick="alert('validar antes de redireccionar');">-->
-										<span class="info-box-number">5.- Bajada Embarque</span>
+									<!--<a href="selecion_depto">-->
+									<a href="#" id="tcrc_opcion3_link">
+										<span class="info-box-number">3.- Registro de Compra</span>
 										<!--<span class="info-box-text">#n Registros</span>-->
 										
 										
@@ -138,24 +88,22 @@
 								</div>
 								<!-- /.info-box-content -->
 							</div>
-						</div>
+							
+							<!-- /.info-box -->
+							
+							<div class="col-md-4">
+							
+							</div>
 						
-                        <div class="col-md-4">
-
-                        </div>
-
-
-                    </div>
-
-
-                </section> 
-
-            </div>
-
-        </div>
-        <!--/.col (left) -->
-    </div>
-    <!-- /.row -->
+						
+						</div>
+					</div>
+				</section>
+			</div>
+		</div>
+		<!--/.col (left) -->
+	</div>
+	<!-- /.row -->
 </section>
 
 <!-- /.content -->
