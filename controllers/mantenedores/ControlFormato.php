@@ -22,22 +22,27 @@ class ControlFormato extends \Control {
     
      // Quitar Formato
     public function quitar_formato($f3) {
-       echo \simulador_compra\formato::quitarFormato($f3->get('SESSION.COD_TEMPORADA'),$f3->get('SESSION.COD_DEPTO'),$f3->get('GET.FORMATO'),$f3->get('GET.ASIGNADO'));
+       echo \simulador_compra\formato::quitarFormato($f3->get('SESSION.COD_TEMPORADA'),$f3->get('SESSION.COD_DEPTO'),$f3->get('GET.FORMATO'),$f3->get('GET.ASIGNADO'),$f3->get('SESSION.login'));
+    }
+
+    // Quitar Formato para dejar sin registros
+    public function quitar_formato_noasignados($f3) {
+        echo \simulador_compra\formato::quitar_formato_noasignados($f3->get('SESSION.COD_TEMPORADA'),$f3->get('SESSION.COD_DEPTO'),$f3->get('GET.FORMATO'),$f3->get('GET.ASIGNADO'),$f3->get('SESSION.login'));
     }
 
     // Quitar Todos Formato
     public function quitar_todo_formato($f3) {
-        echo \simulador_compra\formato::quitarTodoFormato($f3->get('SESSION.COD_TEMPORADA'),$f3->get('SESSION.COD_DEPTO'),$f3->get('GET.FORMATO'),$f3->get('GET.ASIGNADO'));
+        echo \simulador_compra\formato::quitarTodoFormato($f3->get('SESSION.COD_TEMPORADA'),$f3->get('SESSION.COD_DEPTO'),$f3->get('GET.FORMATO'),$f3->get('GET.ASIGNADO'),$f3->get('SESSION.login'));
     }
     
     // Guardar Formato
     public function agrega_formato($f3) {
-       echo \simulador_compra\formato::almacenaFormato($f3->get('SESSION.COD_TEMPORADA'),$f3->get('SESSION.COD_DEPTO'),$f3->get('GET.FORMATO'),$f3->get('GET.ASIGNADO'));
+       echo \simulador_compra\formato::almacenaFormato($f3->get('SESSION.COD_TEMPORADA'),$f3->get('SESSION.COD_DEPTO'),$f3->get('GET.FORMATO'),$f3->get('GET.ASIGNADO'),$f3->get('SESSION.login'));
     }
 
     // Guardar Nuevo Formato
     public function agrega_nuevo_formato($f3) {
-        echo \simulador_compra\formato::almacenaNuevoFormato($f3->get('SESSION.COD_TEMPORADA'),$f3->get('SESSION.COD_DEPTO'),$f3->get('GET.NUEVO_FORMATO'));
+        echo \simulador_compra\formato::almacenaNuevoFormato($f3->get('SESSION.COD_TEMPORADA'),$f3->get('SESSION.COD_DEPTO'),$f3->get('GET.NUEVO_FORMATO'),$f3->get('SESSION.login'));
     }
 
     // Llenar ListBox de Formatos (Esta llamada se utiliza luego de agregar un nuevo registro)

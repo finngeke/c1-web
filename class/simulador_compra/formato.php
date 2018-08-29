@@ -2,12 +2,6 @@
 
 namespace simulador_compra;
 
-/**
- * Descripción de formato
- *
- * @author Roberto Pérez 29-03-2018
- */
-
 class formato
 {
 
@@ -23,7 +17,6 @@ class formato
         $data = \database::getInstancia()->getFilas($sql);
         return $data;
     }
-
 
     // Carga ListBox de Disponible
     public static function getDisponibles($temporada, $depto, $formato)
@@ -41,9 +34,6 @@ class formato
                  ORDER BY  INITCAP(TRIM(S.SUC_NOMBRE)) ASC
                  ";
 
-        //echo "<pre>".$sql;
-        //die();
-
         $data = \database::getInstancia()->getFilas($sql);
         $disponibles = array();
         foreach ($data as $val) {
@@ -53,7 +43,6 @@ class formato
 
 
     }
-
 
     // Carga ListBox de Asignados
     public static function getAsignados($temporada, $depto, $formato)
@@ -74,7 +63,6 @@ class formato
 
     }
 
-
     // Revisar si despliega tipo de tienda
     public static function getCluster($tempo, $depto)
     {
@@ -83,82 +71,142 @@ class formato
         return $data;
     }
 
-
     // Quitar 
-    public static function quitarFormato($temporada, $depto, $formato, $asignado)
+    public static function quitarFormato($temporada, $depto, $formato, $asignado,$login)
     {
 
-        //EjecutarNoQuery("PLC_PKG_GENERAL.PRC_DEL_FORMATO_TDA", DAL.codtemporada, xdepartamento, xniv_jer1, xcod_jer1, xcod_seg, xcod_tda)
-        try {
+        $sql = "DELETE FROM plc_formatos_tda
+                WHERE  COD_TEMPORADA  = $temporada
+                AND    DEP_DEPTO      = '" . $depto . "'
+                AND    COD_SEG        = " . $formato . "
+                AND    COD_TDA        = " . $asignado . "
+                ";
 
-            $sql = "DELETE FROM plc_formatos_tda
-                    WHERE  COD_TEMPORADA  = " . $temporada . "
-                    AND    DEP_DEPTO      = '" . $depto . "'
-                    AND    COD_SEG        = " . $formato . "
-                    AND    COD_TDA        = " . $asignado . "
-            ";
+        // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+        if (!file_exists('../archivos/log_querys/'.$login)) {
+            mkdir('../archivos/log_querys/'.$login, 0775, true);
+        }
+        $stamp = date("Y-m-d_H-i-s");
+        $rand = rand(1, 999);
+        $content = $sql;
+        $fp = fopen("../archivos/log_querys/".$login."/MANTENEDORFORMATO-QUITARFORMATO--".$login."-".$stamp." R".$rand.".txt","wb");
+        fwrite($fp,$content);
+        fclose($fp);
 
-            $data = \database::getInstancia()->getConsulta($sql);
+        // $data = \database::getInstancia()->getConsulta($sql);
 
-            echo 0;
-
-        } catch (Exception $ex) {
-            echo 1;
+        if(\database::getInstancia()->getConsulta($sql)){
+            return 1;
+        }else{
+            return 0;
         }
 
+
     }
+
+    // Quitar cuando no hay registros
+    public static function quitar_formato_noasignados($temporada, $depto, $formato, $asignado,$login)
+    {
+
+        $sql = "DELETE FROM plc_formatos_tda
+                WHERE  COD_TEMPORADA  = $temporada
+                AND    DEP_DEPTO      = '" . $depto . "'
+                AND    COD_SEG        = " . $formato . "
+                ";
+
+        // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+        if (!file_exists('../archivos/log_querys/'.$login)) {
+            mkdir('../archivos/log_querys/'.$login, 0775, true);
+        }
+        $stamp = date("Y-m-d_H-i-s");
+        $rand = rand(1, 999);
+        $content = $sql;
+        $fp = fopen("../archivos/log_querys/".$login."/MANTENEDORFORMATO-QUITARFORMATONOASIGNADO--".$login."-".$stamp." R".$rand.".txt","wb");
+        fwrite($fp,$content);
+        fclose($fp);
+
+        // $data = \database::getInstancia()->getConsulta($sql);
+
+        if(\database::getInstancia()->getConsulta($sql)){
+            return 1;
+        }else{
+            return 0;
+        }
+
+
+    }
+
 
     // Quitar Todos
-    public static function quitarTodoFormato($temporada, $depto, $formato, $asignado)
+    public static function quitarTodoFormato($temporada, $depto, $formato, $asignado,$login)
     {
 
-        try {
+        $sql = "DELETE FROM plc_formatos_tda
+                WHERE  COD_TEMPORADA  = " . $temporada . "
+                AND    DEP_DEPTO      = '" . $depto . "'
+                AND    COD_SEG        = " . $formato . "
+        ";
 
-            $sql = "DELETE FROM plc_formatos_tda
-                    WHERE  COD_TEMPORADA  = " . $temporada . "
-                    AND    DEP_DEPTO      = '" . $depto . "'
-                    AND    COD_SEG        = " . $formato . "
-            ";
+        // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+        if (!file_exists('../archivos/log_querys/'.$login)) {
+            mkdir('../archivos/log_querys/'.$login, 0775, true);
+        }
+        $stamp = date("Y-m-d_H-i-s");
+        $rand = rand(1, 999);
+        $content = $sql;
+        $fp = fopen("../archivos/log_querys/".$login."/MANTENEDORFORMATO-QUITARTODOFORMATO--".$login."-".$stamp." R".$rand.".txt","wb");
+        fwrite($fp,$content);
+        fclose($fp);
 
-            $data = \database::getInstancia()->getConsulta($sql);
-            echo 0;
 
-        } catch (Exception $ex) {
-            echo 1;
+        // $data = \database::getInstancia()->getConsulta($sql);
+
+        if(\database::getInstancia()->getConsulta($sql)){
+            return 1;
+        }else{
+            return 0;
         }
 
     }
-
-
 
     // Almacenar
-    public static function almacenaFormato($temporada, $depto, $formato, $asignado)
+    public static function almacenaFormato($temporada, $depto, $formato, $asignado, $login)
     {
 
-        try {
-            $sql = "INSERT INTO PLC_FORMATOS_TDA( 
-                          COD_TEMPORADA ,
-                          DEP_DEPTO     ,
-                          NIV_JER1 ,
-                          COD_JER1,
-                          COD_SEG,
-                          COD_TDA)
-                        VALUES(" . $temporada . ",'" . $depto . "',0,0," . $formato . "," . $asignado . ")
-            ";
+        $sql = "INSERT INTO PLC_FORMATOS_TDA( 
+                      COD_TEMPORADA ,
+                      DEP_DEPTO     ,
+                      NIV_JER1 ,
+                      COD_JER1,
+                      COD_SEG,
+                      COD_TDA)
+                    VALUES(" . $temporada . ",'" . $depto . "',0,0," . $formato . "," . $asignado . ")
+        ";
 
-            $data = \database::getInstancia()->getConsulta($sql);
-            echo 0;
+        // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+        if (!file_exists('../archivos/log_querys/'.$login)) {
+            mkdir('../archivos/log_querys/'.$login, 0775, true);
+        }
+        $stamp = date("Y-m-d_H-i-s");
+        $rand = rand(1, 999);
+        $content = $sql;
+        $fp = fopen("../archivos/log_querys/".$login."/MANTENEDORFORMATO-ALMACENAFORMATO--".$login."-".$stamp." R".$rand.".txt","wb");
+        fwrite($fp,$content);
+        fclose($fp);
 
-        } catch (Exception $ex) {
-            echo 1;
+        // $data = \database::getInstancia()->getConsulta($sql);
+
+        if(\database::getInstancia()->getConsulta($sql)){
+            return 1;
+        }else{
+            return 0;
         }
 
-        echo 0;
+
     }
 
-
     // Almacena Nuevo Formato (Enviado desde el modal)
-    public static function almacenaNuevoFormato($temporada, $depto, $formato)
+    public static function almacenaNuevoFormato($temporada, $depto, $formato, $login)
     {
 
         $sql = "INSERT INTO PLC_Formato  VALUES( "
@@ -169,7 +217,25 @@ class formato
             . $temporada . " AND DEP_DEPTO = '" . $depto . "')," .
             "'" . $formato . "')";
 
-        $data = \database::getInstancia()->getConsulta($sql);
+        // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+        if (!file_exists('../archivos/log_querys/'.$login)) {
+            mkdir('../archivos/log_querys/'.$login, 0775, true);
+        }
+        $stamp = date("Y-m-d_H-i-s");
+        $rand = rand(1, 999);
+        $content = $sql;
+        $fp = fopen("../archivos/log_querys/".$login."/MANTENEDORFORMATO-ALMACENANUEVOFORMATO--".$login."-".$stamp." R".$rand.".txt","wb");
+        fwrite($fp,$content);
+        fclose($fp);
+
+        //$data = \database::getInstancia()->getConsulta($sql);
+
+        if(\database::getInstancia()->getConsulta($sql)){
+            return 1;
+        }else{
+            return 0;
+        }
+
 
     }
 

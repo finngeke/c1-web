@@ -4,7 +4,7 @@
         <!-- Modal content-->
         <div class="modal-content borde_especial">
             <div class="modal-header">
-               <button type="button" class="close" data-dismiss="modal">&times;</button>
+               <button type="button" id="cerrar_btn_popup_formato__x"class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title titulo_mantenedor_formato"></h4>
             </div>
             <div class="modal-body cuerpo_tipo_formato">
@@ -53,7 +53,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <!--<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>-->
+                    <div class="loading_nf" style="display: none"><i class='fa fa-spinner fa-2x fa-spin '></i> Guardando nuevo formato...</div>
                     <button type="button" class="btn btn-default pull-left btn_cancelar_nuevo_formato" id="btn_cancelar_nuevo_formato" name="btn_cancelar_nuevo_formato">Cancelar</button>
                     <button type="button" class="btn btn-primary tipo_btn_formatos_nuevo" id="tipo_btn_formatos_nuevo" name="tipo_btn_formatos_nuevo">Crear</button>
                 </div>
@@ -66,7 +66,8 @@
 <!-- FIN CONTENIDO -->            
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cerrar</button>
+                <div class="loading" style="display: none"><i class='fa fa-spinner fa-2x fa-spin '></i> Guardando formato...</div>
+                <button type="button" class="btn btn-default pull-left" id="btn_cerrar_popup_formato" data-dismiss="modal">Cerrar</button>
                 <button type="button" class="btn btn-primary tipo_btn_formatos" id="tipo_btn_formatos" name="tipo_btn_formatos">Guardar</button>
             </div>
         </div>
