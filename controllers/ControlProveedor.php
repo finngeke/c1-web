@@ -238,38 +238,25 @@
 			$po_number = $f3->get('GET.po_number');
 			$file = "labelData_$po_number.xlsx";
 			$objPHPExcel = new PHPExcel();
-			// Genera los encabezados
-			$objPHPExcel->setActiveSheetIndex(0);
 			$objPHPExcel->getActiveSheet()->setTitle("Label Data");
-			$objPHPExcel->getActiveSheet()->SetCellValue("A1", "");
-			$objPHPExcel->getActiveSheet()->getStyle("A1")->applyFromArray($this->estiloCabeceraP);
-			$objPHPExcel->getActiveSheet()->SetCellValue("B1", "Buyer Information");
-			$objPHPExcel->getActiveSheet()->SetCellValue("A2", "");
-			$objPHPExcel->getActiveSheet()->getStyle("A2")->applyFromArray($this->estiloCabeceraR);
-			$objPHPExcel->getActiveSheet()->SetCellValue("B2", "Ripley Information");
 			// Columnas con datos de Ripley
-			$objPHPExcel->getActiveSheet()->SetCellValue("B4", "N° LPN");
-			$objPHPExcel->getActiveSheet()->SetCellValue("C4", "Packing Type");
-			$objPHPExcel->getActiveSheet()->SetCellValue("D4", "Vendor");
-			$objPHPExcel->getActiveSheet()->SetCellValue("E4", "PO#");
-			$objPHPExcel->getActiveSheet()->getStyle("B4:E4")->applyFromArray($this->estiloCabeceraR);
-			// Columnas con datos del proveedor
-			$objPHPExcel->getActiveSheet()->SetCellValue("F4", "SKU#");
-			$objPHPExcel->getActiveSheet()->SetCellValue("G4", "SKU Description");
-			$objPHPExcel->getActiveSheet()->SetCellValue("H4", "QTY");
-			$objPHPExcel->getActiveSheet()->getStyle("F4:H4")->applyFromArray($this->estiloCabeceraP);
+			$objPHPExcel->getActiveSheet()->SetCellValue("B2", "N° LPN");
+			$objPHPExcel->getActiveSheet()->SetCellValue("C2", "Packing Type");
+			$objPHPExcel->getActiveSheet()->SetCellValue("D2", "Vendor");
+			$objPHPExcel->getActiveSheet()->SetCellValue("E2", "PO#");
+			$objPHPExcel->getActiveSheet()->getStyle("B2:E2")->applyFromArray($this->estiloCabeceraR);
 			// Escribe los datos
 			$data = \proveedor\proveedor::getLabelData($po_number);
-			$r = 5;
-			foreach ($data as $row) {
+			$r = 3;
+			foreach ($data as $val) {
 				for ($x = 2; $x <= 5; $x++) {
 					$c = \LibraryHelper::getColumnNameFromNumber($x);
-					$objPHPExcel->getActiveSheet()->SetCellValue($c . $r, $row[$x - 2]);
+					$objPHPExcel->getActiveSheet()->SetCellValue($c . $r, $val[$x - 2]);
 				}
-				$objPHPExcel->getActiveSheet()->getStyle("B$r:H$r")->applyFromArray($this->estiloCelda);
+				$objPHPExcel->getActiveSheet()->getStyle("B$r:E$r")->applyFromArray($this->estiloCelda);
 				$r++;
 			}
-			for ($i = 2; $i <= 8; $i++) {
+			for ($i = 2; $i <= 5; $i++) {
 				$column = \LibraryHelper::getColumnNameFromNumber($i);
 				$objPHPExcel->getActiveSheet()->getColumnDimension($column)->setAutoSize(true);
 			}
@@ -290,7 +277,7 @@
 			$objPHPExcel->getActiveSheet()->setTitle("Packing List");
 			$objPHPExcel->getActiveSheet()->SetCellValue("A1", "");
 			$objPHPExcel->getActiveSheet()->getStyle("A1")->applyFromArray($this->estiloCabeceraP);
-			$objPHPExcel->getActiveSheet()->SetCellValue("B1", "Buyer Information");
+			$objPHPExcel->getActiveSheet()->SetCellValue("B1", "Vendor Information");
 			$objPHPExcel->getActiveSheet()->SetCellValue("A2", "");
 			$objPHPExcel->getActiveSheet()->getStyle("A2")->applyFromArray($this->estiloCabeceraR);
 			$objPHPExcel->getActiveSheet()->SetCellValue("B2", "Ripley Information");
@@ -359,6 +346,10 @@
 					$objPHPExcel->getActiveSheet()->SetCellValue($c . $r, $row[$i - 1]);
 				}
 				$r++;
+			}
+			for ($c = 1; $c <= 26; $c++) {
+				$columnID = \LibraryHelper::getColumnNameFromNumber($c);
+				$objPHPExcel->getActiveSheet()->getColumnDimension($columnID)->setAutoSize(true);
 			}
 			$objPHPExcel->getActiveSheet()->setSelectedCellByColumnAndRow(0, 1);
 			// Escribe el archivo Excel
@@ -532,24 +523,43 @@
 							$f3->reroute("/invoices?cod_proveedor=$cod_proveedor");
 						}
 						
-						$prefijo = (strtoupper(trim($pack_type)) == "CURVED") ? "ICC" : "ISC";
-						$prefijo_lpn = strtoupper(substr($initial_lpn, 0, 3));
-						if ($prefijo != $prefijo_lpn) {
-							unlink($key);
-							$f3->set('SESSION.error', "The prefix '$prefijo_lpn' of the initial LPN number in row $row does not correspond to pack type. Please check the file and try again.");
-							$f3->reroute("/invoices?cod_proveedor=$cod_proveedor");
-						}
-						$prefijo_lpn = strtoupper(substr($final_lpn, 0, 3));
-						if ($prefijo != $prefijo_lpn) {
-							unlink($key);
-							$f3->set('SESSION.error', "The prefix '$prefijo_lpn' of the final LPN number in row $row does not correspond to pack type. Please check the file and try again.");
-							$f3->reroute("/invoices?cod_proveedor=$cod_proveedor");
+						// Valida que el prefijo coincida con el tipo de empaque
+						if ($f3->get("PL_VALIDAR_PREFIJO_LPN") == 1) {
+							$prefijo = (strtoupper(trim($pack_type)) == "CURVED") ? "ICC" : "ISC";
+							$prefijo_lpn = strtoupper(substr($initial_lpn, 0, 3));
+							if ($prefijo != $prefijo_lpn) {
+								unlink($key);
+								$f3->set('SESSION.error', "The prefix '$prefijo_lpn' of the initial LPN number in row $row does not correspond to pack type. Please check the file and try again.");
+								$f3->reroute("/invoices?cod_proveedor=$cod_proveedor");
+							}
+							$prefijo_lpn = strtoupper(substr($final_lpn, 0, 3));
+							if ($prefijo != $prefijo_lpn) {
+								unlink($key);
+								$f3->set('SESSION.error', "The prefix '$prefijo_lpn' of the final LPN number in row $row does not correspond to pack type. Please check the file and try again.");
+								$f3->reroute("/invoices?cod_proveedor=$cod_proveedor");
+							}
 						}
 						
-						$lpn_i = intval(substr($initial_lpn, 11));
-						$lpn_f = intval(substr($final_lpn, 11));
+						// Valida que el número de OC del LPN coincida con el del archivo
+						if ($f3->get("PL_VALIDAR_OC_LPN") == 1) {
+							$oc_lpn = \LibraryHelper::convertNumber(substr($initial_lpn, 3, 8));
+							if ($po_number != $oc_lpn) {
+								unlink($key);
+								$f3->set('SESSION.error', "The initial LPN number in row $row does not correspond to Purchase Order $po_number. Please check the file and try again.");
+								$f3->reroute("/invoices?cod_proveedor=$cod_proveedor");
+							}
+							$oc_lpn = \LibraryHelper::convertNumber(substr($final_lpn, 3, 8));
+							if ($po_number != $oc_lpn) {
+								unlink($key);
+								$f3->set('SESSION.error', "The final LPN number in row $row does not correspond to Purchase Order $po_number. Please check the file and try again.");
+								$f3->reroute("/invoices?cod_proveedor=$cod_proveedor");
+							}
+						}
+						
+						// Valida que el número de LPNs coincida con el número de cajas
+						$lpn_i = intval(substr($initial_lpn, -8));
+						$lpn_f = intval(substr($final_lpn, -8));
 						$n_cartons = intval($worksheet->getCell("AD$row")->getCalculatedValue());
-						
 						if ($n_cartons != ($lpn_f - $lpn_i + 1)) {
 							unlink($key);
 							$f3->set('SESSION.error', "The number of LPNs in row $row does not match the number of cartons. Please check the file and try again.");
@@ -573,8 +583,8 @@
 							"po_number" => $po_number,
 							"bl_fcr" => $worksheet->getCell("D$row")->getCalculatedValue(),
 							"pack_type" => $worksheet->getCell("E$row")->getCalculatedValue(),
-							"initial_lpn" => $lpn_i,
-							"final_lpn" => $lpn_f,
+							"initial_lpn" => $initial_lpn,
+							"final_lpn" => $final_lpn,
 							"style_number" => $worksheet->getCell("H$row")->getCalculatedValue(),
 							"style_description" => $worksheet->getCell("I$row")->getCalculatedValue(),
 							"color" => $worksheet->getCell("J$row")->getCalculatedValue(),
@@ -833,119 +843,6 @@
 			$f3->reroute("/invoices?cod_proveedor=$cod_proveedor");
 		}
 		
-		private function enviarFacturas($f3, $cod_proveedor, $nro_factura) {
-			$curlopt_url = $f3->get('CURLOPT_URL') . "/facturaComexrst/v1/facturaComex";
-			$curlopt_port = $f3->get('CURLOPT_PORT');
-			try {
-				$facturas = \proveedor\proveedor::getEncabezadoFactura($cod_proveedor, $nro_factura);
-				$numeroEmbarque = count($facturas);
-				foreach ($facturas as $factura) {
-					$numeroCarpeta = $factura[0];
-					$numeroOC = $factura[1];
-					$numeroFactura = $factura[2];
-					$fechaFactura = $factura[3];
-					$montoTotalFactura = \LibraryHelper::convertNumber($factura[4]);
-					$cantidadTotalEmbarcada = \LibraryHelper::convertNumber($factura[5]);
-					$detalleFactura = [];
-					$detalles = \proveedor\proveedor::getDetalleFacturaEnviar($cod_proveedor, $nro_factura, $numeroOC);
-					foreach ($detalles as $detalle) {
-						$sku = trim($detalle[0]);
-						$cantidadEmbarcada = \LibraryHelper::convertNumber($detalle[1]);
-						$valorUnitarioFactura = \LibraryHelper::convertNumber($detalle[2]);
-						if ($cantidadEmbarcada > 0) {
-							$detalleFactura[] = array(
-								"SKU" => $sku,
-								"valorUnitarioFactura" => $valorUnitarioFactura,
-								"cantidadEmbarcada" => $cantidadEmbarcada
-							);
-						}
-					}
-					$detalleFacturaComex = array("detalleFactura" => $detalleFactura);
-					$cabeceraFacturaComex = array(
-						"numeroCarpeta" => $numeroCarpeta,
-						"numeroEmbarque" => $numeroEmbarque,
-						"numeroOC" => $numeroOC,
-						"numeroFactura" => $numeroFactura,
-						"fechaFactura" => $fechaFactura,
-						"montoTotalFactura" => $montoTotalFactura,
-						"cantidadTotalEmbarcada" => $cantidadTotalEmbarcada,
-						"detalleFacturaComex" => $detalleFacturaComex
-					);
-					$json = json_encode($cabeceraFacturaComex, JSON_PRETTY_PRINT);
-					$json = "{\n\t\"HeaderRply\": {\n\t\t\"servicio\": {\n\t\t\t\"nombreServicio\": \"string\",\n\t\t\t\"operacion\": \"string\",\n\t\t\t\"idTransaccion\": \"string\",\n\t\t\t\"tipoMensaje\": \"string\",\n\t\t\t\"tipoTransaccion\": \"string\",\n\t\t\t\"usuario\": \"string\",\n\t\t\t\"dominioPais\": \"string\",\n\t\t\t\"ipOrigen\": \"string\",\n\t\t\t\"servidor\": \"string\",\n\t\t\t\"timeStamp\": \"string\"\n\t\t},\n\t\t\"paginacion\": {\n\t\t\t\"numPagina\": \"string\",\n\t\t\t\"cantidadRegistros\": \"string\",\n\t\t\t\"totalRegistros\": \"string\"\n\t\t},\n\t\t\"track\": {\n\t\t\t\"idTrack\": \"string\",\n\t\t\t\"codSistema\": \"string\",\n\t\t\t\"codAplicacion\": \"string\",\n\t\t\t\"componente\": \"string\",\n\t\t\t\"estado\": \"string\",\n\t\t\t\"dataLogger\": \"string\",\n\t\t\t\"flagTracking\": \"string\",\n\t\t\t\"flagLog\": \"string\"\n\t\t},\n\t\t\"error\": [\n\t\t\t{\n\t\t\t\t\"errorCode\": \"string\",\n\t\t\t\t\"errorGlosa\": \"string\"\n\t\t\t}\n\t\t],\n\t\t\"reproceso\": {\n\t\t\t\"countReproceso\": \"string\",\n\t\t\t\"intervaloReintento\": \"string\",\n\t\t\t\"objetoReproceso\": \"string\"\n\t\t},\n\t\t\"filler\": \"string\"\n\t},\n\t\"Body\": {\n\t\t\"headerServicio\": {\n\t\t\t\"version\": \"string\",\n\t\t\t\"canal\": \"string\",\n\t\t\t\"estado\": \"string\",\n\t\t\t\"comercio\": \"string\",\n\t\t\t\"fecha\": \"string\",\n\t\t\t\"hora\": \"string\",\n\t\t\t\"nroTransaccion\": \"string\",\n\t\t\t\"sucursal\": \"string\",\n\t\t\t\"terminal\": \"string\",\n\t\t\t\"tipoTransaccion\": \"string\",\n\t\t\t\"codigoUsusario\": \"string\",\n\t\t\t\"entidad\": \"string\",\n\t\t\t\"dominioPais\": \"string\"\n\t\t},\n\t\t\"cabeceraFacturaComex\": $json\n\t}\n}";
-					$filename = "facturaComexRequest" . $nro_factura . "_" . $numeroOC . ".json";
-					file_put_contents("../archivos/json/$filename", $json);
-					$response = broker::post($json, $curlopt_url, $curlopt_port);
-					if (strtoupper($response->Body->fault->faultString) == "OK") {
-						// Marcar la factura como enviada
-						\proveedor\proveedor::setDetalleFacturaAprobado($cod_proveedor, $nro_factura, $numeroOC);
-					} else {
-						$faultString = $response->Body->fault->faultString;
-						$f3->set('SESSION.warning', "An error occurred while sending the invoice via API: $faultString (Invoice Number: $nro_factura - PO Number: $numeroOC)");
-						$f3->reroute("/invoices?cod_proveedor=$cod_proveedor");
-					}
-				}
-			} catch (Exception $e) {
-				$f3->set('SESSION.warning', "An error occurred while sending the file via API: " . $e->getMessage());
-				$f3->reroute("/invoices?cod_proveedor=$cod_proveedor");
-			}
-		}
-		
-		private function crearArchivoDetalleLPN($f3, $cod_proveedor, $nro_factura) {
-			try {
-				$local_path = "../archivos/factura_comex";
-				$remote_path = "/Odbms/sdi/itfwms2006/C1_Oc_Lpn/datos";
-				$host = $f3->get('FTP_HOST');
-				$port = $f3->get('FTP_PORT');
-				$timeout = $f3->get('FTP_TIMEOUT');
-				$user = $f3->get('FTP_USER');
-				$pass = $f3->get('FTP_PASSWORD');
-				$date = new DateTime("now", new DateTimeZone("America/Santiago"));
-				$files = [];
-				// Genera el archivo de detalle
-				$lpns = \proveedor\proveedor::getDetalleFacturaEnviarComex($cod_proveedor, $nro_factura);
-				$filas = 0;
-				$contenido = "";
-				foreach ($lpns as $lpn) {
-					$filas++;
-					$contenido .= $lpn[0] . "|" . $lpn[1] . "|" . $lpn[2] . "|" . $lpn[3] . "|" . \LibraryHelper::convertNumber($lpn[4]) . "|" . $lpn[5] . "\n";
-				}
-				$file_name = "IOL" . str_pad($date->format('YmdHis'), 17, "0", STR_PAD_LEFT);
-				file_put_contents("$local_path/$file_name", $contenido);
-				$files[] = array("name" => $file_name, "rows" => $filas);
-				// Genera el archivo de control
-				$contenido = "";
-				foreach ($files as $file) {
-					$contenido .= $file['name'] . " " . $file['rows'] . "\n";
-				}
-				$file_name = "$file_name.CTR";
-				file_put_contents("$local_path/$file_name", $contenido);
-				$files[] = array("name" => $file_name, "rows" => $filas);
-				
-				$ftp = ftp_connect($host, $port, $timeout);
-				$login = ftp_login($ftp, $user, $pass);
-				ftp_pasv($ftp, true);
-				if ((!$ftp) || (!$login)) {
-					$f3->set('SESSION.warning', "An error occurred while sending the invoice via FTP: Connection not established with the FTP server");
-					$f3->reroute("/invoices?cod_proveedor=$cod_proveedor");
-				} else {
-					foreach ($files as $file) {
-						$remote_file = "$remote_path/" . $file['name'];
-						$source_file = "$local_path/" . $file['name'];
-						if (!ftp_put($ftp, $remote_file, $source_file, FTP_BINARY)) {
-							ftp_close($ftp);
-							$f3->set('SESSION.warning', "An error occurred while sending the invoice via FTP.");
-							$f3->reroute("/invoices?cod_proveedor=$cod_proveedor");
-						}
-					}
-				}
-				ftp_close($ftp);
-			} catch (Exception $e) {
-				$f3->set('SESSION.warning', "An error occurred while sending the invoice via FTP: " . $e->getMessage());
-				$f3->reroute("/invoices?cod_proveedor=$cod_proveedor");
-			}
-		}
-		
 		private function crearDetalleLPN($f3, $cod_proveedor, $nro_factura) {
 			$etapa = "generateLPNDetail";
 			try {
@@ -971,13 +868,17 @@
 								$cantidadEmbarcada = \LibraryHelper::convertNumber($detalle[$talla]);
 								$valorUnitarioFactura = \LibraryHelper::convertNumber($detalle[18]);
 								if ($cantidadEmbarcada > 0) {
-									for ($lpn = $detalle[19]; $lpn <= $detalle[20]; $lpn++) {
+									$prefijo = substr($detalle[19], 0, strlen($detalle[19]) - 8);
+									$lpn_i = \LibraryHelper::convertNumber(substr($detalle[19], -8));
+									$lpn_f = \LibraryHelper::convertNumber(substr($detalle[20], -8));
+									for ($lpn = $lpn_i; $lpn <= $lpn_f; $lpn++) {
+										$lpn_new = $prefijo . str_pad($lpn, 8, '0', STR_PAD_LEFT);
 										$etapa = "getSKUInfo_LPN$lpn";
 										$registros[] = array(
 											"cod_temporada" => $detalle[23],
 											"dep_depto" => $detalle[24],
 											"id_color3" => $detalle[25],
-											"lpn_number" => $lpn,
+											"lpn_number" => $lpn_new,
 											"nro_variacion" => $nro_variacion,
 											"nro_factura" => $nro_factura,
 											"pi_number" => $detalle[26],

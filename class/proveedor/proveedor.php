@@ -101,7 +101,7 @@
 		}
 		
 		public static function insertInvoicePL($cod_temporada, $dep_depto, $id_color3, $cod_proveedor, $nro_factura, $container, $pi_number, $po_number, $bl_fcr, $pack_type, $initial_lpn, $final_lpn, $style_number, $style_description, $color, $size_01, $size_02, $size_03, $size_04, $size_05, $size_06, $size_07, $size_08, $size_09, $size_10, $size_11, $size_12, $size_13, $size_14, $size_15, $size_16, $size_17, $n_curves_ctn, $pcs_sets_per_ctn, $n_cartons, $total_pcs_sets, $unit_cost, $subtotal_amount, $gw_per_ctn, $sub_gw, $nw_per_ctn, $sub_nw, $measurement_per_ctn, $sub_volume) {
-			$sql = "INSERT INTO PLC_PACKING_LIST_CARGA VALUES ($cod_temporada, '$dep_depto', $id_color3, $cod_proveedor, '$nro_factura', '$container', '$pi_number', $po_number, '$bl_fcr', '$pack_type', $initial_lpn, $final_lpn, '$style_number', '$style_description', '$color', $size_01, $size_02, $size_03, $size_04, $size_05, $size_06, $size_07, $size_08, $size_09, $size_10, $size_11, $size_12, $size_13, $size_14, $size_15, $size_16, $size_17, $n_curves_ctn, $pcs_sets_per_ctn, $n_cartons, $total_pcs_sets, $unit_cost, $subtotal_amount, $gw_per_ctn, $sub_gw, $nw_per_ctn, $sub_nw, '$measurement_per_ctn', $sub_volume)";
+			$sql = "INSERT INTO PLC_PACKING_LIST_CARGA VALUES ($cod_temporada, '$dep_depto', $id_color3, $cod_proveedor, '$nro_factura', '$container', '$pi_number', $po_number, '$bl_fcr', '$pack_type', '$initial_lpn', '$final_lpn', '$style_number', '$style_description', '$color', $size_01, $size_02, $size_03, $size_04, $size_05, $size_06, $size_07, $size_08, $size_09, $size_10, $size_11, $size_12, $size_13, $size_14, $size_15, $size_16, $size_17, $n_curves_ctn, $pcs_sets_per_ctn, $n_cartons, $total_pcs_sets, $unit_cost, $subtotal_amount, $gw_per_ctn, $sub_gw, $nw_per_ctn, $sub_nw, '$measurement_per_ctn', $sub_volume)";
 			$data = \database::getInstancia()->getConsulta($sql);
 			return $data;
 		}
@@ -210,7 +210,7 @@
 						" . $registro["cod_temporada"] . "
 						, '" . $registro["dep_depto"] . "'
 						, " . $registro["id_color3"] . "
-						, " . $registro["lpn_number"] . "
+						, '" . $registro["lpn_number"] . "'
 						, '" . $registro["nro_variacion"] . "'
 						, '" . $registro["nro_factura"] . "'
 						, '" . $registro["pi_number"] . "'

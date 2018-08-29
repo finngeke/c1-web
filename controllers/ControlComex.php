@@ -81,10 +81,10 @@
 				$lpns = $f3->get('POST.lpn');
 				if ($lpns) {
 					foreach ($lpns as $lpn) {
-						$prefijo = substr($lpn, 0, 3);
-						$po_number = intval(substr($lpn, 3, 8));
-						$lpn_number = intval(substr($lpn, 11, 8));
-						\comex\comex::actualizarLPNS(strtoupper($nroContenedor), $tipoContenedor, $bl, $viaTransporte, $nro_factura, $po_number, $lpn_number, $prefijo);
+						$aux = explode ('|',$lpn);
+						$po_number = intval($aux[1]);
+						$lpn_number = $aux[0];
+						\comex\comex::actualizarLPNS(strtoupper($nroContenedor), $tipoContenedor, $bl, $viaTransporte, $nro_factura, $po_number, $lpn_number);
 					}
 				}
 				$f3->set('SESSION.success', "Información almacenada correctamente.");

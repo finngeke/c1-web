@@ -143,7 +143,7 @@
 					WHERE
 						(NRO_EMBARQUE = $nro_embarque)
 						AND (NRO_CONTENEDOR = '$nro_contenedor')
-						AND (LPN_NUMBER = $lpn_number);
+						AND (LPN_NUMBER = '$lpn_number');
 					UPDATE PLC_DISTRIBUCION SET
 						APROBADA = 1
 						, FECHA_APROBACION = SYSDATE
