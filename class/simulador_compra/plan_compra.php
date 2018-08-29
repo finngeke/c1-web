@@ -2151,7 +2151,7 @@ public static function get_nomcolor2($dtcolor,$cod_color){
         $val = "";
     foreach($dtcolor as $val2){
         if ($val2['COD_COLOR'] == $cod_color){
-            $val = $val2['COD_COLOR'];
+            $val = $val2['NOM_COLOR'];
             break;
         }
     }
