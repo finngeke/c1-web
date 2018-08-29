@@ -273,11 +273,12 @@
 									<th id="fecha_recepcion_cd">Fecha Recepción CD</th>
 									<th id="dias_atraso_cd">Días Atraso CD</th>
 									<th id="estado_opcion">Estado Opción</th>
-									<th style="display: none"></th>
-									<th style="display: none"><labelr>IDCOLOR</labelr></th>
-									<th style="display: none"></th>
-									<th style="display: none"></th>
-									<th style="display: none"></th>
+
+<th style="display: none"><labele>estado c1 opcion</labele></th>
+<th style="display: none"><labelr>IDCOLOR</labelr></th>
+<th style="display: none"></th>
+<th style="display: none"></th>
+<th style="display: none"></th>
 								</tr>
 							</thead>
 							<tbody>
@@ -599,10 +600,10 @@
 						</div>
 						
 						<div class="col-md-6" id="depto_selec" style="display:none;">
-							<table class="table-responsive" id="depto_tabla_selec" border="2" align="center">
+							<table id="depto_tabla_selec" border="1" class="table table-bordered table-striped tabla_smaller table-responsive depto_tabla_selec" style="white-space:nowrap;font-size: 10px;">
 								<thead>
 									<tr>
-										<td> Seleccione</td>
+										<td> Seleccion </td>
 										<td> Codigo</td>
 										<td> Departamento</td>
 									</tr>
@@ -613,11 +614,11 @@
 							</table>
 						</div>
 						
-						<div id="body_export" style="display: none">
-							<table class="table-responsive" id="bmt_export">
+						<div class="col-md-6" id="body_export" style="display: none">
+							<table class="table table-bordered table-striped tabla_smaller table-responsive bmt_export" id="bmt_export">
 								<thead>
-									<td colspan="2"><label class="titulo" id="titulo" for="tipos">Grupo Compra:</label>
-									</td>
+									<td>selec.</td>
+									<td>Grupo Compra</td>
 								</thead>
 								
 								<tbody></tbody>
@@ -626,10 +627,10 @@
 						
 						<!-- ########################################## DIV DONDE CARGARAN LOS ESTADOS ############################-->
 						<div class="col-md-6" id="depto_selec_opcion" style="display:none;">
-							<table class="table-responsive" id="depto_tabla_selec_opcion" border="2" align="center">
+								<table id="depto_tabla_selec_opcion" border="1" class="table table-bordered table-striped tabla_smaller table-responsive depto_tabla_selec_opcion" style="white-space:nowrap;font-size: 10px;">
 								<thead>
 									<tr>
-										<td> Seleccione</td>
+										<td> Seleccion </td>
 										<td> Estado</td>
 									</tr>
 								</thead>
@@ -647,6 +648,8 @@
 							<i class='fa fa-spinner fa-2x fa-spin '></i>Exportando Archivo
 						</div>
 						<!--<input type="text" name="depto_excel_bmt" id="depto_excel_bmt" value="{{@depto_form}}-{{@NOM_TEMPORADA_CORTO}}">-->
+                        <input type="button" class="btn btn-primary" id="btn_seleccionar_todo_depto" value="Selec. Todo" style="alignment: left;display: none" >
+                        <input type="button" class="btn btn-primary" id="btn_limpiar_deptos" value="Limpiar" style="alignment: left;display: none" >
 						<input type="submit" class="btn btn-primary" id="btn_exportar" value="Exportar" disabled>
 						<!--<a class="btn btn-primary btn_export" href="exporta_excel">Exportar</a>-->
 					</div>

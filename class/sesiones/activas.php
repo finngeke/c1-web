@@ -32,7 +32,8 @@ class activas {
              A.USER_LOGIN,
              A.HOST,
              A.FECHA 
-        FROM   PLC_CONCURRENCIA A";
+        FROM   PLC_CONCURRENCIA A
+        ORDER BY fecha desc ";
 
         $data = (object) database::getInstancia()->getFilas($sql);
         return $data;

@@ -393,6 +393,7 @@ return $data;
 
         $sql = "begin PLC_PKG_DESARROLLO.PRC_LISTAR_ESTADOS(" . $temporada . ", :data); end;";
         $data = \database::getInstancia()->getConsultaSP($sql, 1);
+        array_pop($data);
         return $data;
     }
 

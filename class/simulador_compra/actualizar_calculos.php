@@ -20,40 +20,33 @@ class actualizar_calculos {
         return $data;
     }
 
-    public static function traer_datos_para_calcular_query($COD_TEMPORADA,$DEPTO) {
+    public static function traer_datos_para_calcular_query($COD_TEMPORADA,$DEPTO,$UNID) {
 
         $sql = "SELECT 
                 C.ID_COLOR3,      
-                       
                 C.NOM_VENTANA DESCRIPCION,
-                
                 --C.UNID_OPCION_INICIO,     
-                 C.UNIDADES CAN, --  Uni Ini
-            
+                 C.$UNID , --  Uni Ini
                 VIA,
                 PAIS,
-            
                 C.MKUP,  
-                C.PRECIO_BLANCO,   
-                                                             
+                C.PRECIO_BLANCO,                                               
                 COD_TIP_MON,
                 C.COSTO_TARGET,  
                 C.COSTO_FOB,  
                 C.COSTO_INSP, 
                 C.COSTO_RFID,
-                
                 C.COSTO_UNIT,  
                 C.COSTO_UNITS,  
                 C.CST_TOTLTARGET,                                               --(Registro 60)
                 C.COSTO_TOT, 
                 C.COSTO_TOTS,
                 C.RETAIL,
-                C.GMB
-                                                   
+                C.GMB                        
                   FROM PLC_PLAN_COMPRA_COLOR_3 C
                   LEFT JOIN PLC_PLAN_COMPRA_OC O ON C.COD_TEMPORADA = O.COD_TEMPORADA
                   AND C.DEP_DEPTO = O.DEP_DEPTO AND C.ID_COLOR3 = O.ID_COLOR3
-                  WHERE C.COD_TEMPORADA =  " . $COD_TEMPORADA . " AND C.DEP_DEPTO =  '" . $DEPTO . "'   
+                  WHERE C.COD_TEMPORADA = $COD_TEMPORADA AND C.DEP_DEPTO =  '" . $DEPTO . "'   
                   ORDER BY C.ID_COLOR3, C.COD_JER2,C.COD_SUBLIN,C.COD_ESTILO,NVL(COD_COLOR,0) ,C.VENTANA_LLEGADA,C.DEBUT_REODER
               ";
         $data = \database::getInstancia()->getFilas($sql);

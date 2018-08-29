@@ -200,6 +200,7 @@
 	<!-- AdminLTE for demo purposes -->
 	<script src="{{@BASE}}/dist/js/demo.js"></script>
 	<script src="{{@BASE}}/dist/js/notificaciones.js"></script>
+    <script src="{{@JQUERY}}/ui/formulario/main/js/inicio_validar_tipo_modulo_simulador.js"></script>
 	<!--<script src="{{@JQUERY}}/ui/formulario/main/js/inicio_validar_tipo_modulo_simulador.js"></script>-->
 </body>
 </html>

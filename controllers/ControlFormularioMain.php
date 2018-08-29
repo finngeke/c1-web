@@ -62,6 +62,7 @@ class ControlFormularioMain extends Control {
     public function actualizar_calculos($f3) {
         ControlFormularioMain::cargaMain($f3);
         $f3->set('nombre_form', 'ACTUALIZAR CALCULOS');
+        $f3->set('temporada_dev',$f3->get('SESSION.COD_TEMPORADA'));
         $f3->set('contenido', 'formulario/main/actualizar_calculos.html');
         $f3->set('temporada', 'formulario/main/temporada.html');
 			$f3->set('proveedor', 'formulario/main/proveedor.html');

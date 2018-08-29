@@ -38,6 +38,8 @@ $(function() {
 			var flag_exporta_bmt = 0;
 
 			$("#btn_exportar").attr("disabled", "disabled");
+            $("#btn_limpiar_deptos").hide();
+            $("#btn_seleccionar_todo_depto").hide();
 
 			$.getJSON(url_tabla, function(data) {
 				$.each(data, function(i, o) {
@@ -48,6 +50,17 @@ $(function() {
 					flag_exporta_bmt++;
 				});
 
+            }).done(function () {
+                $('#bmt_export').DataTable({
+                    retrieve: true,
+                    destroy: true,
+                    paging: false,
+                    "ordering": false,
+                    "bSort": false,
+                    "searching": false,
+                    "info": false,
+                    scrollCollapse: true
+                });
 			});
 
 		}
@@ -63,6 +76,8 @@ $(function() {
 			var div_body_export_c1 = document.getElementById("body_export");
 			div_body_export_c1.style.display = "none";
 			$("#btn_exportar").attr("disabled", "disabled");
+            $("#btn_limpiar_deptos").show();
+            $("#btn_seleccionar_todo_depto").show();
 
 			/*################################ trabajo de llenar tabla ########################*/
 			var url_llenar_tabla_depto = 'ajax_simulador_cbx/llenar_tabla_depto';
@@ -70,17 +85,30 @@ $(function() {
 			$.getJSON(url_llenar_tabla_depto, function(data) {
 				$.each(data, function(i, o) {
 					$('#depto_tabla_selec').append('<tr>\n' +
-						'<td id="txt_id_check' + flag_llenar_tabla_depto + '"><input type="checkbox"  id="check_depto"  name="check_depto[]" value="' + o[0] + '" onchange="validarc1()"></td>\n' +
-						'<td class="ids" id="txt_id_' + flag_llenar_tabla_depto + '">' + o[0] + '</td>\n' +
-						'<td class="ids" id="txt_id_' + flag_llenar_tabla_depto + '">' + o[1] + '</td>\n' +
+                        '<td id="txt_id_check_c1_'+flag_llenar_tabla_depto+'"><input type="checkbox"  id="check_depto"  name="check_depto[]" value="'+o[0]+'" onchange="validarc1()"></td>\n' +
+                        '<td id="txt_cod_depto_c1_'+flag_llenar_tabla_depto+'">'+o[0]+'</td>\n' +
+                        '<td id="txt_dep_depto_c1_'+flag_llenar_tabla_depto+'">'+o[1]+'</td>\n' +
 						'</tr>');
 					flag_llenar_tabla_depto++;
 				});
+            }).done(function () {
+                $('#depto_tabla_selec').DataTable({
+                    retrieve: true,
+                    destroy: true,
+                    paging: false,
+                    "ordering": false,
+                    "bSort": false,
+                    scrollX: "500px",
+                    "searching": false,
+                    "info": false,
+                    scrollCollapse: true
+                });
 			});
 			/*################################ trabajo de llenar tabla ########################*/
 
+
 		}
-		else if (tipo == 4) {
+        else if (tipo == 4){
 
 			$("#depto_tabla_selec tbody").empty();
 			$("#depto_tabla_selec_opcion tbody").empty();
@@ -94,18 +122,34 @@ $(function() {
 			div_opcion_opcion.style.display = "";
 			var div_body_export_opcion = document.getElementById("body_export");
 			div_body_export_opcion.style.display = "none";
+
+            $("#btn_limpiar_deptos").show();
+            $("#btn_seleccionar_todo_depto").show();
+
 			/*################################ trabajo de llenar tabla op-4  ########################*/
 			var url_llenar_tabla_depto_opcion = 'ajax_simulador_cbx/llenar_tabla_depto';
-			var flag_tabla_depto_opcion = 0;
-			$.getJSON(url_llenar_tabla_depto_opcion, function(data) {
-				$.each(data, function(i, o) {
+            var flag_tabla_depto_opcion = 0 ;
+            $.getJSON(url_llenar_tabla_depto_opcion, function (data) {
+                $.each(data, function (i,o) {
 					$('#depto_tabla_selec').append('<tr>\n' +
-						'<td id="txt_id_check' + flag_tabla_depto_opcion + '"><input type="checkbox"  id="check_depto_estado"  name="check_depto_estado[]" value="' + o[0] + '" onchange="validarc1_estado_depto()"></td>\n' +
-						'<td class="ids" id="txt_id_' + flag_tabla_depto_opcion + '">' + o[0] + '</td>\n' +
-						'<td class="ids" id="txt_id_' + flag_tabla_depto_opcion + '">' + o[1] + '</td>\n' +
+                        '<td id="txt_id_check_op_es'+flag_tabla_depto_opcion+'"><input type="checkbox"  id="check_depto_estado"  name="check_depto_estado[]" value="'+o[0]+'" onchange="validarc1_estado_depto()"></td>\n' +
+                        '<td id="txt_depto_cod_op_es_'+flag_tabla_depto_opcion+'">'+o[0]+'</td>\n' +
+                        '<td id="txt_dep_depto_op_es_'+flag_tabla_depto_opcion+'">'+o[1]+'</td>\n' +
 						'</tr>');
 					flag_tabla_depto_opcion++;
 				});
+            }).done(function () {
+                $('#depto_tabla_selec').DataTable({
+                    retrieve: true,
+                    destroy: true,
+                    paging: false,
+                    "ordering": false,
+                    "bSort": false,
+                    scrollX: "500px",
+                    "searching": false,
+                    "info": false,
+                    scrollCollapse: true
+                });
 			});
 			/*################################ trabajo de llenar tabla op 4 ########################*/
 			var url_llenar_tabla_opcion = 'ajax_simulador_cbx/llenar_tabla_oc';
@@ -113,12 +157,27 @@ $(function() {
 			$.getJSON(url_llenar_tabla_opcion, function(data) {
 				$.each(data, function(i, o) {
 					$('#depto_tabla_selec_opcion').append('<tr>\n' +
-						'<td id="toc_id_check' + flag_llenar_tabla_opcion + '"><input type="checkbox"  id="check_estado"  name="check_estado[]"  value="' + o[0] + '" onchange="validarc1_estado_depto()"></td>\n' +
-						'<td class="ids" id="oc_id_' + flag_llenar_tabla_opcion + '">' + o[1] + '</td>\n' +
+                        '<td id="toc_id_check'+flag_llenar_tabla_opcion+'"><input type="checkbox"  id="check_estado"  name="check_estado[]"  value="'+o[0]+'" onchange="validarc1_estado_depto()"></td>\n' +
+                        '<td id="oc_id_'+flag_llenar_tabla_opcion+'">'+o[1]+'</td>\n' +
 						'</tr>');
 					flag_llenar_tabla_opcion++;
 				});
+            }).done(function () {
+                $('#depto_tabla_selec_opcion').DataTable({
+                    retrieve: true,
+                    destroy: true,
+                    paging: false,
+                    "ordering": false,
+                    "bSort": false,
+                    scrollX: "500px",
+                    "searching": false,
+                    "info": false,
+                    scrollCollapse: true
 			});
+            });
+
+
+
 		}
 		else {
 			$("#btn_exportar").attr("disabled", "disabled");
@@ -132,18 +191,34 @@ $(function() {
 			var div_body_export_assortment = document.getElementById("body_export");
 			div_body_export_assortment.style.display = "none";
 			$("#btn_exportar").attr("disabled", "disabled");
+
+            $("#btn_limpiar_deptos").show();
+            $("#btn_seleccionar_todo_depto").show();
+
 			/*################################ trabajo de llenar tabla ########################*/
 			var url_exp_assortment_llenar_tabla_depto = 'ajax_simulador_cbx/llenar_tabla_depto';
 			var flag_assortment_tabla_depto = 0;
 			$.getJSON(url_exp_assortment_llenar_tabla_depto, function(data) {
 				$.each(data, function(i, o) {
 					$('#depto_tabla_selec').append('<tr>\n' +
-						'<td id="txt_id_check' + flag_assortment_tabla_depto + '"><input type="checkbox"  id="check_depto"  name="check_depto[]" value="' + o[0] + '" onchange="validarc1()"></td>\n' +
-						'<td class="ids" id="txt_id_' + flag_assortment_tabla_depto + '">' + o[0] + '</td>\n' +
-						'<td class="ids" id="txt_id_' + flag_assortment_tabla_depto + '">' + o[1] + '</td>\n' +
+                        '<td id="txt_id_check_assortment'+flag_assortment_tabla_depto+'"><input type="checkbox"  id="check_depto"  name="check_depto[]" value="'+o[0]+'" onchange="validarc1()"></td>\n' +
+                        '<td id="txt_cod_depto_assortment_'+flag_assortment_tabla_depto+'">'+o[0]+'</td>\n' +
+                        '<td id="txt_dep_depto_assortment_'+flag_assortment_tabla_depto+'">'+o[1]+'</td>\n' +
 						'</tr>');
 					flag_assortment_tabla_depto++;
 				});
+            }).done(function () {
+                $('#depto_tabla_selec').DataTable({
+                    retrieve: true,
+                    destroy: true,
+                    paging: false,
+                    "ordering": false,
+                    "bSort": false,
+                    scrollX: "500px",
+                    "searching": false,
+                    "info": false,
+                    scrollCollapse: true
+                });
 			});
 		}
 	});
@@ -3360,28 +3435,50 @@ function cal_campos() {
 			return result;
 		}).index();
 
+    var txt_estado_c1_opcion = elem.filter(
+        function(txt_estado_c1_opcion){
+            var labelText = $(this).find('labele').text();
+            var result = labelText == 'estado c1 opcion';
+            if (result)
+                rIndex = txt_estado_c1_opcion;
+            return result;
+        }).index();
+
 
 	// recorrer tabla para sumar totales
 	$(".tabla2 > tbody >tr").each(function() {
 
 		// 24 Eliminado
+        if ($(this).find("td:eq("+txt_estado_c1_opcion+")").html() != 24) {
 
-		if ($(".tabla2 #txt_estadoc1_" + flag_sum_campos).html() != 24) {
+        //if ($(".tabla2 #txt_estadoc1_"+flag_sum_campos).html() != 24) {
 
-			sum_unid_ini += parseInt($(this).find("td:eq(" + txt_uniini + ")").html()); //SUM
-			sum_unid_ajust += parseInt($(this).find("td:eq(" + txt_uni_ajust + ")").html()); // SUM
-			sum_unid_final += parseInt($(this).find("td:eq(" + txt_uni_final + ")").html()); // SUM
+            sum_unid_ini += parseInt($(this).find("td:eq("+txt_uniini+")").html()); //SUM
+            //sum_unid_ini += parseInt($(".tabla2 #txt_uniini_"+flag_sum_campos).html());
+            sum_unid_ajust += parseInt($(this).find("td:eq("+txt_uni_ajust+")").html()); // SUM
+            //sum_unid_ajust += parseInt($(".tabla2 #txt_uniajust_"+flag_sum_campos).html());
+            sum_unid_final += parseInt($(this).find("td:eq("+txt_uni_final+")").html()); // SUM
+            //sum_unid_final += parseInt($(".tabla2 #txt_unifinal_"+flag_sum_campos).html());
 
-			sum_primera_carga += parseInt($(this).find("td:eq(" + txt_primera_carga + ")").html()); //SUM
+            sum_primera_carga += parseInt($(this).find("td:eq("+txt_primera_carga+")").html());//SUM
+            //sum_primera_carga += parseInt($(".tabla2 #txt_primeracarga_"+flag_sum_campos).html());
 
-			total_fob_sin_costo += (parseFloat($(this).find("td:eq(" + txt_primera_carga + ")").html()) * parseFloat($(this).find("td:eq(" + txt_target + ")").html()));
+            total_fob_sin_costo += (parseFloat($(this).find("td:eq("+txt_primera_carga+")").html()) * parseFloat($(this).find("td:eq("+txt_target+")").html()));
+            //total_fob_sin_costo += (parseFloat($(".tabla2 #txt_primeracarga_"+flag_sum_campos).html()) * parseFloat($(".tabla2 #txt_target_"+flag_sum_campos).html()));
 
-			sum_costo_unitario_final_us += parseInt($(this).find("td:eq(" + txt_costo_unitario_final_us + ")").html()); //CAL (costo_total_fob_us/unid_final)
-			sum_costo_unitario_final_pesos += parseInt($(this).find("td:eq(" + txt_costo_unitario_final_pesos + ")").html()); //CAL (sum_costo_total_pesos/unid_final)
-			sum_total_target_us += parseFloat($(this).find("td:eq(" + txt_total_tarjet_us + ")").html()); //SUM
-			sum_total_fob_us += parseFloat($(this).find("td:eq(" + txt_total_fob_us + ")").html()); //SUM
-			sum_costo_total_pesos += parseInt($(this).find("td:eq(" + txt_costo_total_pesos + ")").html()); //SUM
-			sum_total_retail_pesos_sin_iva += parseInt($(this).find("td:eq(" + txt_costo_total_reatil_pesos + ")").html()); //SUM
+
+            sum_costo_unitario_final_us += parseInt($(this).find("td:eq("+txt_costo_unitario_final_us+")").html());//CAL (costo_total_fob_us/unid_final)
+            //sum_costo_unitario_final_us += parseInt($(".tabla2 #txt_costounitariofinalusd_"+flag_sum_campos).html());//CAL (costo_total_fob_us/unid_final)
+            sum_costo_unitario_final_pesos += parseInt($(this).find("td:eq("+txt_costo_unitario_final_pesos+")").html());//CAL (sum_costo_total_pesos/unid_final)
+            //sum_costo_unitario_final_pesos += parseInt($(".tabla2 #txt_costounitariofinalpeso_"+flag_sum_campos).html());//CAL (sum_costo_total_pesos/unid_final)
+            sum_total_target_us += parseFloat($(this).find("td:eq("+txt_total_tarjet_us+")").html());//SUM
+            //sum_total_target_us += parseFloat($(".tabla2 #txt_totaltargetusd_"+flag_sum_campos).html());//SUM
+            sum_total_fob_us += parseFloat($(this).find("td:eq("+txt_total_fob_us+")").html());//SUM
+            //sum_total_fob_us += parseFloat($(".tabla2 #txt_totalfobusd_"+flag_sum_campos).html());//SUM
+            sum_costo_total_pesos += parseInt($(this).find("td:eq("+txt_costo_total_pesos+")").html());//SUM
+            //sum_costo_total_pesos += parseInt($(".tabla2 #txt_costototalpesos_"+flag_sum_campos).html());//SUM
+            sum_total_retail_pesos_sin_iva += parseInt($(this).find("td:eq("+txt_costo_total_reatil_pesos+")").html());//SUM
+            //sum_total_retail_pesos_sin_iva += parseInt($(".tabla2 #txt_totalretailpesos_"+flag_sum_campos).html());//SUM
 
 
 		}
@@ -3509,7 +3606,31 @@ $('#btn_salir_popup_import_bmt').on('click', function() {
 
 	$('#flag_top_menu_tipo_usuario').html('');
 	Validar_flag_concurrencia_usuario_log();
+   
+});
+
+$("#btn_seleccionar_todo_depto").on("click", function () {
+    $("#btn_exportar").attr("disabled", false);
+
+    $("#depto_tabla_selec tr").each( function() {
+        $(this).find('input:checkbox').prop('checked', true);
+    });
+
+    $("#depto_tabla_selec_opcion tr").each( function() {
+        $(this).find('input:checkbox').prop('checked', true);
+    });
 
 });
 
+$("#btn_limpiar_deptos").on("click", function () {
+    $("#btn_exportar").attr("disabled", true);
+
+    $("#depto_tabla_selec tr").each( function() {
+        $(this).find('input:checkbox').prop('checked', false);
+    });
+
+    $("#depto_tabla_selec_opcion tr").each( function() {
+        $(this).find('input:checkbox').prop('checked', false);
+    });
+});
 

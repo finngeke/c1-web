@@ -21,6 +21,10 @@ $(window).on('load', function () {
     $('#selecciona_depto').modal('show');
 
     $('.lista_deptos').DataTable({
+        "oLanguage": {
+            "sSearch": "Buscar:",
+            "sZeroRecords" : "No se encontraron registros"
+        },
         paging: false,
         scrollY: "200px",
         scrollCollapse: true

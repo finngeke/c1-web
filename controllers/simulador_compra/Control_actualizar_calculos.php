@@ -16,7 +16,7 @@ class Control_actualizar_calculos extends \Control
 
     public function traer_datos_para_calcular_query($f3)
     {
-        echo json_encode(\simulador_compra\actualizar_calculos::traer_datos_para_calcular_query($f3->get('SESSION.COD_TEMPORADA'),($f3->get('GET.DEPTO'))));
+        echo json_encode(\simulador_compra\actualizar_calculos::traer_datos_para_calcular_query($f3->get('SESSION.COD_TEMPORADA'),($f3->get('GET.DEPTO')),($f3->get('GET.UNID'))));
     }
 
     public function traer_factor($f3)

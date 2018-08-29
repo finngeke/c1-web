@@ -6,7 +6,8 @@
 
 $(window).on('load', function () {
 
-    $('#tabla_calculos_actualizados').hide();
+
+    $('#div_cont_tabla_calculos_nuevos').hide();
     var  url_llenar_departamento_actualizar_calculos = 'actualizar_calculos/llenar_departamento_actualizar_calculos';
 
     $.getJSON(url_llenar_departamento_actualizar_calculos,function (data_depto_actualizar_calculo) {
@@ -23,89 +24,92 @@ $(window).on('load', function () {
 //Boton Cargar datos para calcular.
 $('#btn_calcular_actualizar_calculos').on('click',function () {
 
+    $('#accion_cargar_datos_para_calcular').addClass('fa fa-refresh');
+    $('#accion_calcular_datos').addClass('fa fa-refresh');
+
+    var depto_select = $('#select_depto_actualizar_calculos').val();
+    var unidades_selec = $('#select_unid_actualizar_calculos').val();
+
     $('#tabla_calculos_actualizados_nuevos > tbody').empty();
 
-    if ( $('#select_depto_actualizar_calculos').val() != 0){
+    if ( (depto_select != 0) && (unidades_selec != 0) ) {
 
-        $('#popup_carga_actualizar_calculos').modal('show');
-        $('#contador_factor_tipo_cambio').html(0);
+            $('#div_cont_tabla_calculos_nuevos').show();
+            $('#popup_carga_actualizar_calculos').modal('show');
+            $('#contador_factor_tipo_cambio').html(0);
 
-       var depto_select = $('#select_depto_actualizar_calculos').val();
+            $('#tabla_calculos_actualizados_nuevos > tbody').empty();
+            $('#tabla_calculos_actualizados').show();
 
-       $('#tabla_calculos_actualizados_nuevos > tbody').empty();
-       $('#tabla_calculos_actualizados').show();
+            var flag_cont_tabla_calculos = 0;
+            var url_traer_datos_para_calcular_query = 'actualizar_calculos/traer_datos_para_calcular_query';
+            var url_traer_factor = 'actualizar_calculos/traer_factor';
+            var url_traer_tipo_cambio = 'actualizar_calculos/traer_tipo_cambio';
 
-       var flag_cont_tabla_calculos = 0 ;
-       var  url_traer_datos_para_calcular_query = 'actualizar_calculos/traer_datos_para_calcular_query';
-       var  url_traer_factor = 'actualizar_calculos/traer_factor';
-       var  url_traer_tipo_cambio = 'actualizar_calculos/traer_tipo_cambio';
+            $.getJSON(url_traer_datos_para_calcular_query, {DEPTO: depto_select, UNID: unidades_selec}, function (data_calcular_query) {
 
-        $.getJSON(url_traer_datos_para_calcular_query,{DEPTO:depto_select},function (data_calcular_query) {
+                $.each(data_calcular_query, function (i, c) {
+                    $('#tabla_calculos_actualizados_nuevos').append(
+                        '<tr>' +
+                        '<td id="ID_ACTUALIZAR_CALCULOS_' + c[0] + '">' + c[0] + '</td>' +
+                        '<td id="VENTANA_' + c[0] + '">' + c[1] + '</td>' +
+                        '<td id="UNID_' + c[0] + '">' + c[2] + '</td>' +
+                        '<td id="VIA_' + c[0] + '">' + c[3] + '</td>' +
+                        '<td id="PAIS_' + c[0] + '">' + c[4] + '</td>' +
+                        '<td id="MKUP_' + c[0] + '">' + c[5] + '</td>' +
+                        '<td id="P_BLANCO_' + c[0] + '">' + c[6] + '</td>' +
+                        '<td id="MONEDA_' + c[0] + '">' + c[7] + '</td>' +
+                        '<td id="TARGET_' + c[0] + '">' + c[8] + '</td>' +
+                        '<td id="FOB_' + c[0] + '">' + c[9] + '</td>' +
+                        '<td id="COSTO_INSP_' + c[0] + '">' + c[10] + '</td>' +
+                        '<td id="COSTO_RFID' + c[0] + '">' + c[11] + '</td>' +
+                        '<td id="UNID_UNIT_US_' + c[0] + '">' + c[12] + '</td>' +
+                        '<td id="UNID_UNIT_S_' + c[0] + '">' + c[13] + '</td>' +
+                        '<td id="TOTAL_TARGET_' + c[0] + '">' + c[14] + '</td>' +
+                        '<td id="TOTAL_FOB_' + c[0] + '">' + c[15] + '</td>' +
+                        '<td id="COSTO_' + c[0] + '">' + c[16] + '</td>' +
+                        '<td id="RETAIL_' + c[0] + '">' + c[17] + '</td>' +
+                        '<td id="GMB_' + c[0] + '">' + c[18] + '</td>' +
+                        '</tr>');
+                    flag_cont_tabla_calculos++;
+                });
+                carga_factor_calculos(flag_cont_tabla_calculos);
 
-            $.each(data_calcular_query,function (i,c) {
-                $('#tabla_calculos_actualizados_nuevos').append(
+                $.each(data_calcular_query, function (i, c) {
+                    //valida si existe ventana
+                    if ((c[1] != '') || (c[1] != null) || (c[1] != 0)) {
 
-                    '<tr>' +
-                    '<td id="ID_ACTUALIZAR_CALCULOS_'+c[0]+'">'+c[0]+'</td>' +
-                    '<td id="VENTANA_'+c[0]+'">'+c[1]+'</td>' +
-                    '<td id="UNID_'+c[0]+'">'+c[2]+'</td>' +
-                    '<td id="VIA_'+c[0]+'">'+c[3]+'</td>' +
-                    '<td id="PAIS_'+c[0]+'">'+c[4]+'</td>' +
-                    '<td id="MKUP_'+c[0]+'">'+c[5]+'</td>' +
-                    '<td id="P_BLANCO_'+c[0]+'">'+c[6]+'</td>' +
-                    '<td id="MONEDA_'+c[0]+'">'+c[7]+'</td>' +
-                    '<td id="TARGET_'+c[0]+'">'+c[8]+'</td>' +
-                    '<td id="FOB_'+c[0]+'">'+c[9]+'</td>' +
-                    '<td id="COSTO_INSP_'+c[0]+'">'+c[10]+'</td>' +
-                    '<td id="COSTO_RFID'+c[0]+'">'+c[11]+'</td>' +
-                    '<td id="UNID_UNIT_US_'+c[0]+'">'+c[12]+'</td>' +
-                    '<td id="UNID_UNIT_S_'+c[0]+'">'+c[13]+'</td>' +
-                    '<td id="TOTAL_TARGET_'+c[0]+'">'+c[14]+'</td>' +
-                    '<td id="TOTAL_FOB_'+c[0]+'">'+c[15]+'</td>' +
-                    '<td id="COSTO_'+c[0]+'">'+c[16]+'</td>' +
-                    '<td id="RETAIL_'+c[0]+'">'+c[17]+'</td>' +
-                    '<td id="GMB_'+c[0]+'">'+c[18]+'</td>' +
-                    '</tr>');
-                flag_cont_tabla_calculos++;
-            });
-            carga_factor_calculos(flag_cont_tabla_calculos);
-
-            $.each(data_calcular_query,function (i,c) {
-                //valida si existe ventana
-                if ((c[1] != '') || (c[1] != null) || (c[1] != 0) ) {
-
-                    $.getJSON(url_traer_factor, {VENTANA_LLEGADA: c[1], DEPTO: depto_select, PAIS: c[4], VIA: c[3], COD_TIP_MON: c[7]}, function (data_factor) {
-                        if (( data_factor != '') && ( data_factor != null) && ( data_factor != 0) ) {
-                            $('#GMB_' + c[0]).after(
-                                '<td id="FACTOR_' + c[0] + '">' + data_factor[0]['VENTANA_FACTOR'] + '</td>'+
-                                $('#contador_factor_tipo_cambio').html( parseInt($('#contador_factor_tipo_cambio').html())+1)
-                            );
-                        }else {
-                            $.getJSON(url_traer_tipo_cambio, {VENTANA_LLEGADA: c[1], COD_TIP_MON: c[7]}, function (data_tipo_cambio) {
+                        $.getJSON(url_traer_factor, {VENTANA_LLEGADA: c[1], DEPTO: depto_select, PAIS: c[4], VIA: c[3], COD_TIP_MON: c[7]
+                        }, function (data_factor) {
+                            if ((data_factor != '') && (data_factor != null) && (data_factor != 0)) {
                                 $('#GMB_' + c[0]).after(
-                                    '<td id="TIPO_CAMBIO_' + c[0] + '">' + data_tipo_cambio[0]['VENTANA_TIPO_CAMBIO'] + '</td>'+
-                                    $('#contador_factor_tipo_cambio').html( parseInt($('#contador_factor_tipo_cambio').html())+1)
+                                    '<td id="FACTOR_' + c[0] + '">' + data_factor[0]['VENTANA_FACTOR'] + '</td>' +
+                                    $('#contador_factor_tipo_cambio').html(parseInt($('#contador_factor_tipo_cambio').html()) + 1)
                                 );
-                            });
-                        }
-                    });
-                }
-                else{
-                    alert("Hay Registros sin ventanas de llegadas.");
-                }
+                            } else {
+                                $.getJSON(url_traer_tipo_cambio, {VENTANA_LLEGADA: c[1], COD_TIP_MON: c[7]
+                                }, function (data_tipo_cambio) {
+                                    $('#GMB_' + c[0]).after(
+                                        '<td id="TIPO_CAMBIO_' + c[0] + '">' + data_tipo_cambio[0]['VENTANA_TIPO_CAMBIO'] + '</td>' +
+                                        $('#contador_factor_tipo_cambio').html(parseInt($('#contador_factor_tipo_cambio').html()) + 1)
+                                    );
+                                });
+                            }
+                        });
+                    }
+                    else {
+                        alert("Hay Registros sin ventanas de llegadas.");
+                    }
+                });
+
+            }).done(function () {
+                $('#accion_cargar_datos_para_calcular').removeClass('fa fa-refresh');
+                $('#accion_cargar_datos_para_calcular').addClass('fa fa-check');
             });
 
-        }).done(function () {
-            $('#accion_cargar_datos_para_calcular').removeClass('fa fa-refresh');
-            $('#accion_cargar_datos_para_calcular').addClass('fa fa-check');
-        });
-
-
-    } else {
-        alert ("Debe seleccionar un Departamento");
-    }
-
-
+        } else {
+            alert("seleccione unidades y departamento ");
+        }
 
 });
 
@@ -180,7 +184,7 @@ function carga_factor_calculos(flag_cont_tabla_calculos) {
 
                             //Costo total (Total Fob)
                             // Si el fob no es 0  ((fob+insp+rfid)*unidades)
-                            $(this).find("td:eq(15)").html( Math.round(((fob+insp+rfid)*unid)) );
+                            $(this).find("td:eq(15)").html( parseFloat(((fob+insp+rfid)*unid)).toFixed(2) );
 
                         }
 
@@ -202,11 +206,11 @@ function carga_factor_calculos(flag_cont_tabla_calculos) {
                         //total Taget
                         //(target+insp+rfid)*can unidades
                         //aproximar ?
-                        $(this).find("td:eq(14)").html( Math.round((target_gral+insp_gral+rfid_gral)*unid_gral));
+                        $(this).find("td:eq(14)").html( parseFloat((target_gral+insp_gral+rfid_gral)*unid_gral).toFixed(2));
 
                         if ($(this).find("td:eq(7)").html() != 0 ){
-                            $(this).find("td:eq(5)").html( ((precio_blanco_gral/1.19)/costo_total_unitario_pesos).toLocaleString(noTruncarDecimales)); // (precio blanco (7)/1.19)/costo unid $ (14)
-                            $(this).find("td:eq(18)").html(  ((((precio_blanco_gral/1.19)-costo_total_unitario_pesos)/(precio_blanco_gral/1.19))*100).toLocaleString(noTruncarDecimales)   ); // (precio blanco (7)/1.19)/costo unid $ (14)/precio blanco/1.19)
+                            $(this).find("td:eq(5)").html(  parseFloat(((precio_blanco_gral/1.19)/costo_total_unitario_pesos).toLocaleString(noTruncarDecimales)).toFixed(2) ); // (precio blanco (7)/1.19)/costo unid $ (14)
+                            $(this).find("td:eq(18)").html(  parseFloat((((precio_blanco_gral/1.19)-costo_total_unitario_pesos)/(precio_blanco_gral/1.19))*100).toFixed(2)   ); // (precio blanco (7)/1.19)/costo unid $ (14)/precio blanco/1.19)
                         }
 
 
@@ -309,3 +313,15 @@ function validar_update_actualizar_calculos() {
         },1000);
 
 }
+
+$('#btn_salir_main_actualizar_calculos').on('click', function () {
+
+    var span_temp_volver_main_actualizar_calculos = $('#span_temporada_devolver_actualizar_calculos').text();
+    span_temp_volver_main_actualizar_calculos = span_temp_volver_main_actualizar_calculos.replace(/[^a-z0-9\-]/gi,'');
+    var separa_tempo_actualizar_calculos = span_temp_volver_main_actualizar_calculos.split("-");
+
+    var temp_salir_volver_main_actualizar_calculos = separa_tempo_actualizar_calculos[1];
+
+    window.location.href = "plan_compra?codigo="+temp_salir_volver_main_actualizar_calculos;
+
+});

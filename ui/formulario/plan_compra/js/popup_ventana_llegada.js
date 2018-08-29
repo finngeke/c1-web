@@ -38,13 +38,12 @@ $(window).on('load', function () {
         var despliega_input_total = total_porcentaje.toFixed(5);
         $('#input_total').val(despliega_input_total*100);
 
-        $('#accion_carga_modulo_ventanas_llegada').removeClass('fa fa-refresh');
-        $('#accion_carga_modulo_ventanas_llegada').addClass('fa fa-check');
     });
 
     // Recalcular el total y validar el 100%
     recTotalVentaLlegada();
 
+    //codigo para cambiar el icono de ventanas de llegada, del popup de cargando, del simulador
     $('#accion_carga_modulo_ventanas_llegada').removeClass('fa fa-refresh');
     $('#accion_carga_modulo_ventanas_llegada').addClass('fa fa-check');
 

@@ -75,7 +75,11 @@ $(document).ready(function () {
         notificacionNavegador("Control de Cambios", "Se realizo un cambio en BD...");
     });
     $('#lista_funcionarios').DataTable({
-        paging: false
+        paging: false,
+        "oLanguage": {
+            "sSearch": "Buscar:",
+            "sZeroRecords" : "No se encontraron registros"
+        }
     });
 
 });

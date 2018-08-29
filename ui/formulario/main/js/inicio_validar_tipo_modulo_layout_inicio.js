@@ -187,10 +187,12 @@ $(window).on('load', function () {
 
 
                     //Validar modulo COMEX
-                    verifica_modulo = $.grep(arreglo_modulos_desac,function(e){return e.id_modulo== 24;});
-                    if (verifica_modulo.length > 0){
-                        $('#modulo_comex').remove();
-                    }
+                    //se valida segun id de BD
+                    //el id de BD cambia segun la BD a cual conecta (SPAN id = control_conexion de layout)
+                    // se validara el span que contiene la BD
+                    //segun la conexion se preguntara por el id
+                    //esto ocurre tanto como para modulos como para acciones
+
 
                     //VALIDAR BOTONES DEL MODULO DE COMEX
                     verifica_accion = $.grep(arreglo_accion_desac,function(e){return e.id_accion== 75;});
@@ -208,6 +210,52 @@ $(window).on('load', function () {
                         });
                     }
 
+
+                    if ($('#control_conexion').html() == '<b>[QA]</b>' ){
+
+                        //Validar modulo COMEX
+                        verifica_modulo = $.grep(arreglo_modulos_desac,function(e){return e.id_modulo== 41;});
+                        if (verifica_modulo.length > 0){
+                            $('#modulo_comex').remove();
+                        }
+
+                        //Validar modulo REPOSICION
+                        verifica_modulo = $.grep(arreglo_modulos_desac,function(e){return e.id_modulo== 61;});
+                        if (verifica_modulo.length > 0){
+                            $('#modulo_reposicion').remove();
+                        }
+
+                    }
+                    else if ($('#control_conexion').html() == '<b>[QACLOUD]</b>'){
+
+                        //Validar modulo COMEX
+                        verifica_modulo = $.grep(arreglo_modulos_desac,function(e){return e.id_modulo== 24;});
+                        if (verifica_modulo.length > 0){
+                            $('#modulo_comex').remove();
+                        }
+
+                        //Validar modulo REPOSICION
+                        verifica_modulo = $.grep(arreglo_modulos_desac,function(e){return e.id_modulo== 43;});
+                        if (verifica_modulo.length > 0){
+                            $('#modulo_reposicion').remove();
+                        }
+
+                    }
+                    else if ($('#control_conexion').html() == '<b>[PROD]</b>'){
+
+                        //Validar modulo COMEX
+                        verifica_modulo = $.grep(arreglo_modulos_desac,function(e){return e.id_modulo== 24;});
+                        if (verifica_modulo.length > 0){
+                            $('#modulo_comex').remove();
+                        }
+
+                        //Validar modulo REPOSICION
+                        verifica_modulo = $.grep(arreglo_modulos_desac,function(e){return e.id_modulo== 43;});
+                        if (verifica_modulo.length > 0){
+                            $('#modulo_reposicion').remove();
+                        }
+
+                    }
 
 
                 });
