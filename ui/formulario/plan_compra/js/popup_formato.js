@@ -54,9 +54,17 @@ $('.FORMATO').on('change', function() {
     $.fn.cargarListBox(); 
 });
 
-$.fn.cargarListBox = function(){ 
-  //alert( this.value );
-  
+$.fn.cargarListBox = function(){
+
+  // Desplegar el btn de cargando (Cargando...)
+  $('.loading_cargando').fadeIn();
+  // Ocualtar BTN tipo_btn_formatos
+  $('#tipo_btn_formatos').fadeOut();
+  // Ocultar BTN Cerrar
+  $('#btn_cerrar_popup_formato').fadeOut();
+
+
+
   // Limpiar ListBox
   $('.DISPONIBLE_FORMATO').empty();
   $('.ASIGNADO_FORMATO').empty();
@@ -97,7 +105,16 @@ if(formato_seleccionado != 'NULL'){
 
       $('.DISPONIBLE_FORMATO').append(toAppend_disponible);
 
-   });
+   }).done(function(){
+
+      // Ocultar el btn de cargando (Cargando...)
+      $('.loading_cargando').fadeOut();
+      // Desplegar BTN tipo_btn_formatos
+      $('#tipo_btn_formatos').fadeIn();
+      // Desplegar BTN Cerrar
+      $('#btn_cerrar_popup_formato').fadeIn();
+
+  });
   
   
 
@@ -107,9 +124,9 @@ if(formato_seleccionado != 'NULL'){
         $('.tipo_btn_formatos').attr('disabled', 'disabled');
     }
 }
- 
-    
-  
+
+
+
 };
 
 $('.tipo_btn_formatos').on('click', function () {
@@ -199,7 +216,6 @@ $('.btn_cancelar_nuevo_formato').on('click', function () {
 // BTN Crear nuevo formato
 $('.tipo_btn_formatos_nuevo').on('click', function () {
 
-
     var r = confirm("¿Guardar Nuevo Formato?");
 
     if (r == true) {
@@ -214,7 +230,6 @@ $('.tipo_btn_formatos_nuevo').on('click', function () {
 
         // Buscar si existe en el CBX si lo que estoy ingresando ya existe
         // Si lo que me encuentro ingresando es distindo al select
-
         var texto_nuevo  = $('.NUEVO_FORMATO').val();
         var texto_nuevo_formato  =  texto_nuevo.toUpperCase();
 
@@ -232,6 +247,8 @@ $('.tipo_btn_formatos_nuevo').on('click', function () {
         if(contador == 1){
 
             alert("El formato que intenta ingresar, ya existe.");
+
+            $('#NUEVO_FORMATO').empty();
 
             $('#tipo_btn_formatos').fadeIn();
             $('#btn_cerrar_popup_formato').fadeIn();
@@ -279,8 +296,6 @@ $('.tipo_btn_formatos_nuevo').on('click', function () {
                     $('.loading_nf').fadeOut();
 
                 });
-
-
 
             // Fin el agregar formato
             });
