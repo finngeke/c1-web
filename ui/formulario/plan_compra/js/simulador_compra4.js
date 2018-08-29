@@ -19,7 +19,6 @@ $(function() {
 		location.reload();
 	});
 
-
 	//combobox exportar bmt
 	$('#tipos_export').on('change', function() {
 		var tipo = $('#tipos_export').val();//variable que llamo a un combox o un text id html
@@ -172,7 +171,7 @@ $(window).on('load', function() {
 	var version_app = $('#version_app').html();
 
 	var span_depto = $('#span_temporada').text();
-	span_depto = span_depto.replace(/[^a-z0-9\-]/gi, '');
+		span_depto = span_depto.replace(/[^a-z0-9\-]/gi, '');
 	var separa_span_depto = span_depto.split("-");
 	var depto = separa_span_depto[1];
 
@@ -300,7 +299,7 @@ $(window).on('load', function() {
 
 	// Cargar los CBX del modulo
 	var span_temporada = $('#span_temporada').text();
-	span_temporada = span_temporada.replace(/[^a-z0-9\-]/gi, '');
+		span_temporada = span_temporada.replace(/[^a-z0-9\-]/gi, '');
 	var separa_barra_span = span_temporada.split("-");
 
 	cargaCBX(separa_barra_span[1]);
@@ -975,7 +974,8 @@ $(window).on('load', function() {
 				Validar_flag_concurrencia_usuario_log();
 			}, delay_validaciones);
 
-			// Fin del done carga tabla 2
+
+		// Fin del done carga tabla 2
 		});
 
 // ############################################## FIN TRABAJO GRILLA 2 LLENAR GRILLA ##################################################################
