@@ -117,14 +117,6 @@
 			ordering: true,
 			info: false
 		});
-		/*table.columns().every(function() {
-			var that = this;
-			$('input', this.footer()).on('keyup change', function() {
-				if (that.search() !== this.value) {
-					that.search(this.value).draw();
-				}
-			});
-		});*/
 		$('.check-all').click(function() {
 			$('input:checkbox').not(this).prop('checked', this.checked);
 		});
