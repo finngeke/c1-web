@@ -99,6 +99,7 @@ $(function() {
                     "ordering": false,
                     "bSort": false,
                     scrollX: "500px",
+                    scrolly: "500px",
                     "searching": false,
                     "info": false,
                     scrollCollapse: true
@@ -146,6 +147,7 @@ $(function() {
                     "ordering": false,
                     "bSort": false,
                     scrollX: "500px",
+                    scrolly: "500px",
                     "searching": false,
                     "info": false,
                     scrollCollapse: true
@@ -170,6 +172,7 @@ $(function() {
                     "ordering": false,
                     "bSort": false,
                     scrollX: "500px",
+                    scrolly: "500px",
                     "searching": false,
                     "info": false,
                     scrollCollapse: true
@@ -215,6 +218,7 @@ $(function() {
                     "ordering": false,
                     "bSort": false,
                     scrollX: "500px",
+                    scrolly: "500px",
                     "searching": false,
                     "info": false,
                     scrollCollapse: true
@@ -3634,3 +3638,102 @@ $("#btn_limpiar_deptos").on("click", function () {
     });
 });
 
+
+
+//pausar cronometro
+$('#modulo_tipo_tienda').on('click' ,function () {
+    $('#flag_top_menu_tipo_usuario').html('LECTURA');
+});
+
+$('#modulo_formatos').on('click' ,function () {
+    $('#flag_top_menu_tipo_usuario').html('LECTURA');
+});
+
+$('#modulo_tipo_ventana_llegada').on('click' ,function () {
+    $('#flag_top_menu_tipo_usuario').html('LECTURA');
+});
+
+$('#modulo_ppto_costo').on('click' ,function () {
+    $('#flag_top_menu_tipo_usuario').html('LECTURA');
+});
+
+$('#tipo_ppto_retail').on('click' ,function () {
+    $('#flag_top_menu_tipo_usuario').html('LECTURA');
+});
+
+
+
+//reanudar cronometro
+$('#cerrar_btn_popup_x').on('click' ,function () {
+
+    $('#flag_top_menu_tipo_usuario').html('');
+    Validar_flag_concurrencia_usuario_log();
+
+});
+
+$('#btn_cerrar_popup_tienda').on('click' ,function () {
+
+    $('#flag_top_menu_tipo_usuario').html('');
+    Validar_flag_concurrencia_usuario_log();
+
+});
+
+
+$('#cerrar_btn_popup_formato__x').on('click' ,function () {
+
+    $('#flag_top_menu_tipo_usuario').html('');
+    Validar_flag_concurrencia_usuario_log();
+
+});
+
+$('#btn_cerrar_popup_formato').on('click' ,function () {
+
+    $('#flag_top_menu_tipo_usuario').html('');
+    Validar_flag_concurrencia_usuario_log();
+
+});
+
+
+$('#btn_cerrar_popup_ventana_llegada_x').on('click' ,function () {
+
+    $('#flag_top_menu_tipo_usuario').html('');
+    Validar_flag_concurrencia_usuario_log();
+
+});
+
+$('#btn_cerrar_popup_ventana_llegada').on('click' ,function () {
+
+    $('#flag_top_menu_tipo_usuario').html('');
+    Validar_flag_concurrencia_usuario_log();
+
+});
+
+
+$('#btn_cerrar_popup_ppto_costo_x').on('click' ,function () {
+
+    $('#flag_top_menu_tipo_usuario').html('');
+    Validar_flag_concurrencia_usuario_log();
+
+});
+
+$('#btn_cerrar_popup_ppto_costo').on('click' ,function () {
+
+    $('#flag_top_menu_tipo_usuario').html('');
+    Validar_flag_concurrencia_usuario_log();
+
+});
+
+
+$('#btn_cerrar_popup_ppto_retail_x').on('click' ,function () {
+
+    $('#flag_top_menu_tipo_usuario').html('');
+    Validar_flag_concurrencia_usuario_log();
+
+});
+
+$('#btn_cerrar_popup_ppto_retail').on('click' ,function () {
+
+    $('#flag_top_menu_tipo_usuario').html('');
+    Validar_flag_concurrencia_usuario_log();
+
+});

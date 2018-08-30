@@ -41,6 +41,9 @@ $f3->route('GET /usuarios', 'ControlFormularioMain->usuarios');
 $f3->route('POST /guardar/funcionario', 'usuario\ControlCrea->funcionario');
 $f3->route('GET /ajax_funcionario/@tipo [ajax]', 'usuario\ControlAjax->@tipo');
 
+/*Cambiar clave*/
+$f3->route('GET /cambiar_clave/@tipo [ajax]', 'usuario\Control_usuario_cambios->@tipo');
+
 /* PERMISOS */
 $f3->route('GET /ver_sesiones', 'ControlFormularioMain->sesiones_activas');
 $f3->route('GET /permisos', 'ControlFormularioMain->permisos');
@@ -71,9 +74,6 @@ $f3->route('GET /selecion_depto', 'ControlFormularioCompra->selecciona_depto');
 
 /* ACTUALIZAR CALCULOS*/
 $f3->route('GET /actualizar_calculos/@tipo [ajax]', 'simulador_compra\Control_actualizar_calculos->@tipo');
-
-/*Cambiar clave*/
-$f3->route('GET /cambiar_clave/@tipo [ajax]', 'usuario\Control_usuario_cambios->@tipo');
 
 /* MASTER PACK */
 $f3->route('GET /master_pack', 'ControlFormularioMain->master_pack');
