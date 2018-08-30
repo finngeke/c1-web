@@ -1406,7 +1406,7 @@ class valida_archivo_bmt extends \parametros {
                 $val3 = false;
             }
         }
-
+		/*
         //2.-validacion 12 caracteres
         if ($val3 == TRUE){$tipoVal = 2; $_Errorfile = "";
             for($i = 3;$i <= $limite; $i++){
@@ -1466,7 +1466,7 @@ class valida_archivo_bmt extends \parametros {
                 }
             }
         }
-
+		*/
 
         if ($val3 == false ) {
             if($tipoVal == 1){
