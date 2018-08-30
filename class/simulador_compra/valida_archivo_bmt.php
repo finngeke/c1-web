@@ -835,10 +835,10 @@ class valida_archivo_bmt extends \parametros {
             if($i < 2) {
                 $val_delete = $val_delete . $i . ",";
             }else{
-            if ($rows[$i][$nom_columnas['Linea']] == null or
-                $rows[$i][$nom_columnas['Sublinea']] ==  null or
-                $rows[$i][$nom_columnas['Estilo Corto']] ==  null or
-                $rows[$i][$nom_columnas['Color']] ==  null or
+            if ($rows[$i][$nom_columnas['Cod Linea']] == null or
+                $rows[$i][$nom_columnas['Cod Sublinea']] ==  null or
+                $rows[$i][$nom_columnas['Nombre Estilo']] ==  null or
+                $rows[$i][$nom_columnas['Cod Color']] ==  null or
                 $rows[$i][$nom_columnas['Cod Dpto']] ==  null) {
                 $val_delete = $val_delete .$i.",";
             }
