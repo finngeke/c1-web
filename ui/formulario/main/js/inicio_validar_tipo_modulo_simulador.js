@@ -303,6 +303,17 @@ $(window).on('load', function () {
 
 $('#btn_cambiar_clave_lyt_simulador').on('click',function () {
 
+    var url_carga_datos_usuario_cambiar_clave   = 'cambiar_clave/trae_datos_cambio';
+
+    $.getJSON(url_carga_datos_usuario_cambiar_clave,function( data ) {
+
+        $('#input_clave_desde_bd').val(data[0]['CONTRASENIA']);
+        $('#tabla_cambiar_clave').append(
+            '<td align="center" id="td_id_cod_usuario_cambiar_clave">'+data[0]['COD_USR']+'</td>'
+        );
+
+    });
+
     $('#popup_cambiar_clave').modal('show');
 
 });

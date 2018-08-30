@@ -1,20 +1,3 @@
-$(window).on('load', function () {
-
-    //traer datos para mostrar
-
-    var url_carga_datos_usuario_cambiar_clave   = 'cambiar_clave/trae_datos_cambio';
-
-    $.getJSON(url_carga_datos_usuario_cambiar_clave,function( data ) {
-
-        $('#input_clave_desde_bd').val(data[0]['CONTRASENIA']);
-        $('#tabla_cambiar_clave').append(
-            '<td align="center" id="td_id_cod_usuario_cambiar_clave">'+data[0]['COD_USR']+'</td>'
-        );
-
-    });
-
-});
-
 
 $('#input_clave_nueva').on('mouseenter',function(){
     input_clave_nueva.type = "text";
