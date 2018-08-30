@@ -131,6 +131,9 @@
 				var nroEstilo = $(this).data('estilo');
 				var codSucursal = parseInt($(this).data('sucursal'));
 				var cantidad = parseInt($(this).val());
+				var codTemporada = $(this).data('temporada');
+				var depDepto = $(this).data('depto');
+				var idColor3 = $(this).data('idcolor3');
 				var demora = (codSucursal != 10039) ? $(".demora-sucursal[data-fila='" + fila + "'][data-sucursal='" + codSucursal + "']").val() : "";
 				if (cantidad > 0) {
 					sucursales.push({
@@ -139,20 +142,26 @@
 						"nroEstilo": nroEstilo,
 						"codSucursal": codSucursal,
 						"cantidad": cantidad,
-						"demora": demora
+						"demora": demora,
+						"codTemporada": codTemporada,
+						"depDepto": depDepto,
+						"idColor3": idColor3
 					});
 				}
 			});
 			if (sucursales.length > 0) {
 				var data = {
+					'nroEmbarque': "{{@nroEmbarque}}",
+					'nroContenedor': "{{@nroContenedor}}",
 					'sucursales': sucursales
 				};
-				$.post('guardar_distribucion_tienda', data).done(function(data) {
-					alert('Datos guardados correctamente');
-				}).fail(function(data, status, error) {
-					console.log(data);
-					alert('Ha ocurrido un error al guardar los datos');
-				}).always(function() {
+				$.post('guardar_distribucion_tienda', data, function(data, status, error) {
+					if (data.estado == 0) {
+						alert('Datos guardados correctamente');
+					} else {
+						console.log(data.mensaje)
+						alert('Ha ocurrido un error al guardar los datos');
+					}
 					habilitarBoton();
 				});
 			}

@@ -168,7 +168,7 @@
 			foreach ($data as $row) {
 				$cajasT = \LibraryHelper::convertNumber($row[9]);
 				$cajas = $cajasT;
-				$sucs = \reposicion\distribucion::detalleContenedoresSucursales($nroEmbarque, $nroContenedor, $row[2], $login);
+				$sucs = \reposicion\distribucion::detalleContenedoresSucursales($row[10], $row[11], $row[12], $nroEmbarque, $nroContenedor, $row[2], $login);
 				$aux = [];
 				foreach ($sucs as $suc) {
 					$cantidad = (\LibraryHelper::convertNumber($suc[4]) > 0) ? \LibraryHelper::convertNumber($suc[4]) : \LibraryHelper::convertNumber($suc[3]);
@@ -211,10 +211,16 @@
 		}
 		
 		public function guardar_distribucion_tienda($f3) {
-			$sucursales = $f3->get('POST.sucursales');
-			$data = \reposicion\distribucion::guardar_distribucion_tienda($sucursales);
 			header("Content-Type: application/json");
-			echo json_encode($data);
+			try {
+				$nro_embarque = $f3->get('POST.nroEmbarque');
+				$nro_contenedor = $f3->get('POST.nroContenedor');
+				$sucursales = $f3->get('POST.sucursales');
+				$data = \reposicion\distribucion::guardar_distribucion_tienda($nro_embarque, $nro_contenedor, $sucursales);
+				echo json_encode(array("estado" => 0, "mensaje" => "Datos guardados correctamente"));
+			} catch (Exception $ex) {
+				echo json_encode(array("estado" => 1, "mensaje" => $ex->getMessage()));
+			}
 		}
 		
 		public function aprobar_distribucion_tienda($f3) {
@@ -232,19 +238,19 @@
 				$sucursales = \reposicion\distribucion::detalle_distribucion_sucursales($nro_embarque, $nro_contenedor, $login);
 				if ($sucursales) {
 					foreach ($sucursales as $sucursal) {
-						$nro_estilo = $sucursal[2];
-						$cod_tda = $sucursal[3];
-						$cantidad = $sucursal[4];
-						$fecha_demora = $sucursal[5];
+						$cod_temporada = $sucursal[0];
+						$dep_depto = $sucursal[1];
+						$id_color3 = $sucursal[2];
+						$nro_estilo = $sucursal[5];
+						$cod_tda = $sucursal[6];
+						$cantidad = $sucursal[7];
+						$fecha_demora = $sucursal[8];
 						$etapa = "obtenerLPNSDistribucion_$cod_tda";
-						$lpns = \reposicion\distribucion::obtener_lpns_distribucion($nro_embarque, $nro_contenedor, $nro_estilo);
+						$lpns = \reposicion\distribucion::obtener_lpns_distribucion($cod_temporada, $dep_depto, $id_color3, $nro_embarque, $nro_contenedor, $nro_estilo);
 						if ($lpns) {
 							for ($i = 0; $i < $cantidad; $i++) {
 								$lpn_number = $lpns[$i][2];
-								$cod_temporada = $lpns[$i][3];
-								$dep_depto = $lpns[$i][4];
-								$id_color3 = $lpns[$i][5];
-								$data = \reposicion\distribucion::actualizar_lpns_distribucion($nro_embarque, $nro_contenedor, $lpn_number, $cod_tda, $fecha_demora);
+								$data = \reposicion\distribucion::actualizar_lpns_distribucion($cod_temporada, $dep_depto, $id_color3, $nro_embarque, $nro_contenedor, $lpn_number, $cod_tda, $fecha_demora);
 							}
 						}
 					}
