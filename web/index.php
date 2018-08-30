@@ -72,6 +72,9 @@ $f3->route('GET /selecion_depto', 'ControlFormularioCompra->selecciona_depto');
 /* ACTUALIZAR CALCULOS*/
 $f3->route('GET /actualizar_calculos/@tipo [ajax]', 'simulador_compra\Control_actualizar_calculos->@tipo');
 
+/*Cambiar clave*/
+$f3->route('GET /cambiar_clave/@tipo [ajax]', 'usuario\Control_usuario_cambios->@tipo');
+
 /* MASTER PACK */
 $f3->route('GET /master_pack', 'ControlFormularioMain->master_pack');
 $f3->route('GET /lista_master_pack', 'ControlFormularioMain->mantenedor_master_pack');
