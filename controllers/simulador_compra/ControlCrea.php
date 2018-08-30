@@ -486,7 +486,7 @@ public function ImportarAssormentValidaciones($f3){
             if ($column <= 1 ){
                 $cells[] = "s";
             }else {
-                $cells[] = $cell->getValue();
+               $cells[] = $cell->getCalculatedValue();
             }
             $column++;
         }
@@ -710,7 +710,7 @@ public function ImportarAssormentdelrows($f3){
                 if ($column <= 1) {
                     $cells[] = "s";
                 } else {
-                    $cells[] = $cell->getValue();
+                    $cells[] = $cell->getCalculatedValue();
                 }
                 /*if ($column == 29 && $fila >= 14) { // TARGET BUDGET
                     $cells[] = $cell->getCalculatedValue();
@@ -802,7 +802,7 @@ public function ImpAssormAbrirDataVent($f3){
             if ($column <= 1) {
                 $cells[] = "s";
             } else {
-                $cells[] = $cell->getValue();
+                $cells[] = $cell->getCalculatedValue();
             }
             /*if ($column == 29 && $fila >= 14) { // TARGET BUDGET
                 $cells[] = $cell->getCalculatedValue();
@@ -834,7 +834,7 @@ public function ImpAssormAbrirDataVent($f3){
 
 
     //reabrir datos por ventana
-    $rows = valida_archivo_bmt::Separacion_Data_Ventana2($rows,$limite,$nom_columnas);
+    $rows = valida_archivo_bmt::Separacion_Data_Ventana2($rows,$nom_columnas,$cod_tempo,$depto);
     //$limite = (count($rows)-1);
     //$nom_columnas = array_flip($rows[0]);
 

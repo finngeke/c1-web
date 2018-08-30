@@ -257,7 +257,7 @@ class valida_archivo_bmt extends \parametros {
         return  $array;
     }
     public static function Val_Campos($rows,$limite,$nom_columnas,$cod_tempo,$depto,$f3){
-        $filarow = "";
+         $filarow = "";
         $val = TRUE;
 
         /*Validacion temporda del season 1*/ $tipoVal = 1;
@@ -292,9 +292,8 @@ class valida_archivo_bmt extends \parametros {
                 }
             }
         }}
-
         if ($val == TRUE) {
-            /*Validacion RNK VTA */ $tipoVal = 3; $dtrnkventa = plan_compra::list_rnk($f3);
+/*Validacion RNK VTA */ $tipoVal = 3; $dtrnkventa = plan_compra::list_rnk($f3);
             for($i = 3;$i <= $limite; $i++){
                 $val2 = false;
                 if ($rows[$i][$nom_columnas['Ranking de venta']] != null ) {
@@ -310,6 +309,15 @@ class valida_archivo_bmt extends \parametros {
                     }
                 }
         }}
+        if ($val == TRUE) {
+            /*validacion clusterI*/ $tipoVal = 23;
+            for($i = 3;$i <= $limite; $i++){
+                $val2 = false;
+                if ($rows[$i][$nom_columnas['ClusterI']] == null or $rows[$i][$nom_columnas['ClusterI']] == "0" )  {
+                    $val = FALSE;
+                    $filarow = $filarow . strval($i + 1) . ",";
+                }
+            }}
 
         if ($val == TRUE) {
             /*Validacion PIRAMIDE MIX */ $tipoVal = 4; $dtpiramidemix = plan_compra::list_piramidemix($f3);
@@ -328,7 +336,6 @@ class valida_archivo_bmt extends \parametros {
                     }
                 }
             }}
-
         if ($val == TRUE) {
             /*Validacion cluster */ $tipoVal = 5; $dtcluster = plan_compra::list_cluster($cod_tempo,$depto);
             for($i = 3;$i <= $limite; $i++){
@@ -582,7 +589,7 @@ class valida_archivo_bmt extends \parametros {
 
             }
         }
-        if ($val == TRUE){
+        if ($val == TRUE) {
             /*Validacion tdas por formatos*/ $tipoVal = 18;
             $dtclusterformarto = [];
             //-guarda todos cluster -formato
@@ -609,7 +616,7 @@ class valida_archivo_bmt extends \parametros {
                 }
              }
         }
-        if ($val == TRUE){
+        if ($val == TRUE) {
             /*validacion del inner en blanco*/ $tipoVal = 19;
             for($i = 3;$i <= $limite; $i++){
                 if (is_null($rows[$i][$nom_columnas['Inner']]) == true or $rows[$i][$nom_columnas['Inner']] == "" or  $rows[$i][$nom_columnas['Inner']] == "0" ){
@@ -618,8 +625,7 @@ class valida_archivo_bmt extends \parametros {
                 }
             }
         }
-
-        if ($val == TRUE){
+        if ($val == TRUE) {
             /*validacion del inner suma por curva */ $tipoVal = 20;
             for($i = 3;$i <= $limite; $i++){
                 $n_tallas = 0;
@@ -643,8 +649,7 @@ class valida_archivo_bmt extends \parametros {
                 }
             }
         }
-
-        if ($val == TRUE){
+        if ($val == TRUE) {
             /*validacion del n° por cajas no puede estar null */$tipoVal = 21;
             for($i = 3;$i <= $limite; $i++){
                 if (is_null($rows[$i][$nom_columnas['N curvas por caja curvadas']]) == true ){
@@ -653,8 +658,7 @@ class valida_archivo_bmt extends \parametros {
                 }
             }
         }
-
-        if ($val == TRUE){
+        if ($val == TRUE) {
             /*validacion del n° por cajas no puede tener en un solido */$tipoVal = 22;
             for($i = 3;$i <= $limite; $i++){
                if ((strtoupper($rows[$i][$nom_columnas['Tipo de empaque']]) == "SOLIDO") and ($rows[$i][$nom_columnas['N curvas por caja curvadas']] > 0) ){
@@ -753,11 +757,16 @@ class valida_archivo_bmt extends \parametros {
                 $array = array('Tipo' => $val,
                     'Error'=> "(".substr($filarow, 0, - 1).") ->El tipo de empaque Sólido no puede tener N° curvas por cajas curvadas, deben estar en '0'.");
             }
+            elseif ($tipoVal == 23){
+                $array = array('Tipo' => $val,
+                    'Error'=> "(".substr($filarow, 0, - 1).") ->El ClusterI no debe ser nulo o no debe esta en 0.");
+            }
         }else{
             $array = array('Tipo' => $val,
                 'Error'=> $filarow);
         }
         return  $array;
+
 
     }
     public static function val_grupo_compra($rows,$limite,$nom_columnas){
@@ -1013,7 +1022,7 @@ class valida_archivo_bmt extends \parametros {
 
 
         array_push($arrayinsert,$arraycabezera);
-
+		$dtplan_compra =  plan_compra::list_plan_compra_debut($cod_tempo,$depto,$rows[1][$nom_columnas["Grupo de compra"]]);
         $key4 = 0;
         foreach ($rows as $val2) {$key4++;
             if ($key4<>1){
@@ -1041,7 +1050,15 @@ class valida_archivo_bmt extends \parametros {
                             $debut = "REORDER";
                             $ciclovida = "";$tipo_empaque = 'Solido';
                             if ($ventanas == strtoupper($val2[$nom_columnas["Ventana Debut"]])){
-                                $debut ="DEBUT";
+                                 $_existedebut = valida_archivo_bmt::Valida_existe_debutDepto($dtplan_compra,$val2[$nom_columnas["Cod Linea"]]
+                                                                                             ,$val2[$nom_columnas["Cod Sublinea"]]
+                                                                                             ,$val2[$nom_columnas["Nombre Estilo"]]
+                                                                                             ,$val2[$nom_columnas["Cod Color"]]);
+                                if ($_existedebut == true){
+                                    $debut ="REORDER";
+                                }else{
+                                    $debut ="DEBUT";
+                                }
                             }
                             if($debut == "DEBUT"){
                                 $ciclovida =$val2[$nom_columnas["Ciclo de Vida"]];
@@ -1358,6 +1375,19 @@ class valida_archivo_bmt extends \parametros {
 
 
         return $VAL;
+    }
+	 public static function Valida_existe_debutDepto($dt_plan,$linea,$sublinea,$estilo,$color){
+        $_exist = false;
+        foreach ($dt_plan as $val){
+            if (($val["LINEA"] == $linea) and
+                 ($val["COD_SUBLIN"] == $sublinea) and
+                 (strtoupper($val["DES_ESTILO"]) == strtoupper($estilo)) and
+                 ($val["COD_COLOR"]== $color) ){
+                  $_exist = true;
+                   break;
+            }
+        }
+        return $_exist;
     }
 
     public static function ValidaCodOpcion($rows,$limite,$nom_columnas,$temporada){

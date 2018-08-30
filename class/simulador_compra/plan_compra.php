@@ -2162,6 +2162,17 @@ public static function get_nomcolor2($dtcolor,$cod_color){
     #endregion
 
 #region {*************Metodos Importar Assortment v2*************}
+    public static function list_plan_compra_debut($cod_temporada,$depto,$grupo_compra){
+       $sql ="select cod_jer2 linea,cod_sublin,Des_Estilo,cod_color,debut_reoder
+              from plc_plan_compra_color_3
+              where cod_temporada = ".$cod_temporada."
+              and dep_depto = '".$depto."'
+              and grupo_compra <> '".$grupo_compra."'
+              and debut_reoder = 'DEBUT'";
+        $data = \database::getInstancia()->getFilas($sql);
+        return $data;
+
+    }
     Public static function Validacion_tdas_count_formato2($depto,$temporada,$cod_formato){
         $n = 0;
         $sql ="select count(cod_tda) n_tdas 
