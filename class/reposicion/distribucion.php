@@ -118,13 +118,11 @@
 		
 		public static function detalle_distribucion_sucursales($nro_embarque, $nro_contenedor, $login) {
 			$sql = "BEGIN PLC_PKG_DISTRIBUCION.PRC_DETALLE_DISTRIB_SUCURSALES($nro_embarque, '$nro_contenedor', '$login', :data); END;";
-			file_put_contents("../archivos/detalle_distribucion_sucursales.txt", $sql);
 			return \database::getInstancia()->getConsultaSP($sql, 1);
 		}
 		
 		public static function obtener_lpns_distribucion($cod_temporada, $dep_depto, $id_color3, $nro_embarque, $nro_contenedor, $nro_estilo) {
 			$sql = "BEGIN PLC_PKG_DISTRIBUCION.PRC_OBTENER_LPNS_DISTRIB($cod_temporada, '$dep_depto', $id_color3, $nro_embarque, '$nro_contenedor', '$nro_estilo', :data); END;";
-			file_put_contents("../archivos/obtener_lpns_distribucion.txt", $sql);
 			return \database::getInstancia()->getConsultaSP($sql, 1);
 		}
 		
@@ -156,7 +154,6 @@
 						AND (NRO_CONTENEDOR = '$nro_contenedor')
 						AND (COD_TDA = $cod_tda);
 					END;";
-			file_put_contents("../archivos/actualizar_lpns_distribucion.txt", $sql);
 			return \database::getInstancia()->getConsulta($sql);
 		}
 	}
