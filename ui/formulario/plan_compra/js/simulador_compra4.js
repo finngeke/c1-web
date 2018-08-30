@@ -3657,7 +3657,7 @@ $('#modulo_ppto_costo').on('click' ,function () {
     $('#flag_top_menu_tipo_usuario').html('LECTURA');
 });
 
-$('#tipo_ppto_retail').on('click' ,function () {
+$('#modulo_ppto_retail').on('click' ,function () {
     $('#flag_top_menu_tipo_usuario').html('LECTURA');
 });
 
