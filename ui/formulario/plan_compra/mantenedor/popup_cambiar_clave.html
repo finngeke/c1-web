@@ -1,0 +1,65 @@
+
+<div id="popup_cambiar_clave" class="modal fade" role="dialog" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+
+
+
+        <!-- Modal content-->
+        <div class="modal-content borde_especial">
+
+            <div class="modal-header">
+                <button id="btn_salir_popup_cambiar_clave" type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 style="alignment: center">Cambiar Clave</h4>
+            </div>
+
+            <div class="modal-body">
+
+                <div class='table-responsive'>
+
+
+                    <table class=" table-responsive" id="tabla_cambiar_clave" align="center">
+
+                        <thead>
+                            <tr>
+                                <th class="text-center">USUARIO</th>
+                            </tr>
+                        </thead>
+
+                        <tbody></tbody>
+
+                    </table>
+
+                    <center>
+
+                        <br>
+                        <label>Clave anterior</label>
+                        <br>
+                            <input type="password" id="input_clave_anterior">
+                        <br>
+                            <input type="text" id="input_clave_desde_bd" style="display:none ">
+
+                        <br>
+                        <br>
+
+                        <label>Nueva Clave</label>
+                        <br>
+                            <input type="password" id="input_clave_nueva">
+                        <br>
+                        <br>
+                        <br>
+
+                        <button id="btn_actualizar_clave" type="button" class="btn btn-primary" >Actualizar</button>
+                    </center>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+<script src="{{@JQUERY}}ui/formulario/plan_compra/js/popup_cambiar_clave.js"></script>
+
+

@@ -316,5 +316,13 @@ $('#link_ir_a_home').on('click', function () {
     });
 });
 
+$('#btn_cambiar_clave_lyt_simulador_b').on('click',function () {
+
+    $('#popup_cambiar_clave').modal('show');
+
+});
+
+
+
 
 

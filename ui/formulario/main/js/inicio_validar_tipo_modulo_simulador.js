@@ -300,3 +300,10 @@ $(window).on('load', function () {
     });
 //fin del onload //
 });
+
+$('#btn_cambiar_clave_lyt_simulador').on('click',function () {
+
+    $('#popup_cambiar_clave').modal('show');
+
+});
+

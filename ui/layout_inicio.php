@@ -126,6 +126,7 @@
                                     <li class="user-footer">
 
                                         <div class="pull-right">
+                                            <a id="btn_cambiar_clave_lyt_inicio" class="btn btn-default btn-flat">Cambiar Clave</a>
                                             <a href="{{@BASE}}/salir" class="btn btn-default btn-flat">Salir del Sistema</a>
                                         </div>
                                     </li>
@@ -241,7 +242,7 @@
 
             <div class="control-sidebar-bg"></div>
 
-
+            <include href="../ui/formulario/plan_compra/mantenedor/popup_cambiar_clave.html"/>
         </div>
         <!-- ./wrapper -->
 

@@ -188,7 +188,7 @@ $(window).on('load', function () {
 
                     //Validar modulo COMEX
                     //se valida segun id de BD
-                    //el id de BD cambia segun la BD a cual conecta (SPAN id = control_conexion de layout)
+                    //el id de BD cambia segun la BD a cual conecta
                     // se validara el span que contiene la BD
                     //segun la conexion se preguntara por el id
                     //esto ocurre tanto como para modulos como para acciones
@@ -263,6 +263,11 @@ $(window).on('load', function () {
             });
 
     });
-
 //fin del onload //
+});
+
+$('#btn_cambiar_clave_lyt_inicio').on('click',function () {
+
+$('#popup_cambiar_clave').modal('show');
+
 });
