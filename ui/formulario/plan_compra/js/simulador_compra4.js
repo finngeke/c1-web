@@ -1957,6 +1957,9 @@ function matchOC(event) {
 
 	if ($('#flag_top_menu_tipo_usuario').html() != 'LECTURA') {
 
+	    // Se modifica FLAG a código para que el sistema interprete que el usuario que ingresó es de lectura y no verifique concurrencia.
+        $('#flag_top_menu_tipo_usuario').html('LECTURA');
+
 		// Limpiar las clases de revision
 		$("#popup_match_paso_oclinkeada").removeClass("fa fa-check");
 		$("#popup_match_paso_oclinkeada").addClass('fa fa-refresh');
@@ -1971,28 +1974,23 @@ function matchOC(event) {
 		$("#popup_match_paso_puedeeditar").removeClass("fa fa-check");
 		$("#popup_match_paso_puedeeditar").addClass('fa fa-refresh');
 
-
-		// quitar el show que biene, ya que se encuentra abajo
-		// $('#match_oc').modal('show');
-
 		// Existe una cascada grande de acciones, hay que verificar que una se cumpla antes de pasar a la otra
+
 		// 1.- Limpiar la carga de la tabla existente
 		$('#match_tabla_pmm tbody tr').remove();
 		$('#match_tabla_plan tbody tr').remove();
 
-
 		// 2.- Voy a buscar los valores a la tabla
 		var id = $(event.target);
-		id = id.attr('id');
+		    id = id.attr('id');
 		var separa_barra = id.split("_");
 		var orden_compra = $("#tabla2 #txt_noc_" + separa_barra[2]).text();
 		var id_color = $("#tabla2 #txt_id_color_" + separa_barra[2]).text();
 		var proforma = $("#tabla2 #txt_proforma_" + separa_barra[2]).val();
-		proforma = proforma.replace(/[^a-z0-9\-]/gi, '');
+		    proforma = proforma.replace(/[^a-z0-9\-]/gi, '');
 
 		// Buscar Estado del Registro
 		var check_estado_oc = $("#tabla2 #txt_estadoc1_" + separa_barra[2]).text();
-
 
 		if ((orden_compra != 0) && (proforma != "") && (proforma != 0) && (check_estado_oc == 19)) {
 
@@ -2095,10 +2093,16 @@ function matchOC(event) {
 											V_PAIS: pais
 										});
 
+									// Fin del each
 									});
 
+								// Fin del detalle OC
 								}
+
+							// Fin de verificacion de largo del detalle
 							}
+
+						// Fin de FaulCode = 0
 						}
 
 					}).done(function(data) {
@@ -2226,57 +2230,56 @@ function matchOC(event) {
 														var delay = 3000;
 														setTimeout(function() {
 
-															var flag_tabla_plan = 0;
+														var flag_tabla_plan = 0;
 
-// se necesita asignar los select que trae la consulta
-															$("#match_tabla_plan tbody tr").each(function() {
+														// se necesita asignar los select que trae la consulta
+														$("#match_tabla_plan tbody tr").each(function() {
 
-// Obtengo el ID del primer Registro
-																var correlativo = $(this).find("td:eq(13)").html();
-//var correlativo = $("#match_tabla_plan #txt_matchplan_correlativo"+flag_tabla_plan).html();
+                                                        // Obtengo el ID del primer Registro
+														var correlativo = $(this).find("td:eq(13)").html();
+                                                        //var correlativo = $("#match_tabla_plan #txt_matchplan_correlativo"+flag_tabla_plan).html();
 
-																// Tengo el valor de los <td> al pasar por cada <tr>
-																var linea = $(this).find("td:eq(9)").html();
-																//var linea = $("#match_tabla_plan #txt_matchplan_valLinea"+flag_tabla_plan).html();
+														// Tengo el valor de los <td> al pasar por cada <tr>
+														var linea = $(this).find("td:eq(9)").html();
+														//var linea = $("#match_tabla_plan #txt_matchplan_valLinea"+flag_tabla_plan).html();
 
-																// Aquí cargar la sublinea ya que tengo el valor de la linea, luego asignar el select
+														// Aquí cargar la sublinea ya que tengo el valor de la linea, luego asignar el select
+														var sublinea = $(this).find("td:eq(10)").html();
+														//var sublinea = $("#match_tabla_plan #txt_matchplan_valSubLinea"+flag_tabla_plan).html();
+														var color = $(this).find("td:eq(11)").html();
+														//var color = $("#match_tabla_plan #txt_matchplan_valColor"+flag_tabla_plan).html();
+														var estilo = $(this).find("td:eq(12)").html();
+														//var estilo = $("#match_tabla_plan #txt_matchplan_valEstilo"+flag_tabla_plan).html();
 
-																var sublinea = $(this).find("td:eq(10)").html();
-																//var sublinea = $("#match_tabla_plan #txt_matchplan_valSubLinea"+flag_tabla_plan).html();
-																var color = $(this).find("td:eq(11)").html();
-																//var color = $("#match_tabla_plan #txt_matchplan_valColor"+flag_tabla_plan).html();
-																var estilo = $(this).find("td:eq(12)").html();
-																//var estilo = $("#match_tabla_plan #txt_matchplan_valEstilo"+flag_tabla_plan).html();
+														// Asignar el valor de la BD al select
+														$('#txt_matchplan_linea_cbx_' + correlativo).val(linea);
+														$('#txt_matchplan_color_cbx_' + correlativo).val(color);
 
-																// Asignar el valor de la BD al select
-																$('#txt_matchplan_linea_cbx_' + correlativo).val(linea);
-																$('#txt_matchplan_color_cbx_' + correlativo).val(color);
+														// Cargar CBX de SubLínea (Dejar para luego del recorrido de la tabla, se necesita recorrer la tabla)
+														$('#txt_matchplan_sublinea_cbx_' + correlativo).empty();
 
-																// Cargar CBX de SubLínea (Dejar para luego del recorrido de la tabla, se necesita recorrer la tabla)
-																$('#txt_matchplan_sublinea_cbx_' + correlativo).empty();
+														var toAppend_subl = '';
+														var url = 'ajax_simulador_cbx/listar_optionsSubLinea';
+														$.getJSON(url, {ID_LINEA: linea}, function(data) {
+                                                            $.each(data, function(i, o) {
+                                                                toAppend_subl += '<option value=' + o[0].replace(/[^a-z0-9\-]/gi, '') + '><b>' + o[0].replace(/[^a-z0-9\-]/gi, '') + '<b> - ' + o[1].replace(/[^a-z0-9\-]/gi, '') + '</option>';
+                                                            });
+                                                            $('#txt_matchplan_sublinea_cbx_' + correlativo).append(toAppend_subl);
+														}).done(function(data) {
 
-																var toAppend_subl = '';
-																var url = 'ajax_simulador_cbx/listar_optionsSubLinea';
-																$.getJSON(url, {ID_LINEA: linea}, function(data) {
-																	$.each(data, function(i, o) {
-																		toAppend_subl += '<option value=' + o[0].replace(/[^a-z0-9\-]/gi, '') + '><b>' + o[0].replace(/[^a-z0-9\-]/gi, '') + '<b> - ' + o[1].replace(/[^a-z0-9\-]/gi, '') + '</option>';
-																	});
-																	$('#txt_matchplan_sublinea_cbx_' + correlativo).append(toAppend_subl);
-																}).done(function(data) {
+                                                            // Define Tiempo 1 = 1000
+                                                            var delay = 1000;
+                                                            setTimeout(function() {
+                                                                // Asignar el valor de la BD al select
+                                                                $('#txt_matchplan_sublinea_cbx_' + correlativo).val(sublinea);
+                                                            }, delay);
 
-																	// Define Tiempo 1 = 1000
-																	var delay = 1000;
-																	setTimeout(function() {
-																		// Asignar el valor de la BD al select
-																		$('#txt_matchplan_sublinea_cbx_' + correlativo).val(sublinea);
-																	}, delay);
+														// Fin DONE caga CBX sublinea
+														});
 
-																	// Fin DONE caga CBX sublinea
-																});
+														flag_tabla_planflag_tabla_plan++;
 
-																flag_tabla_planflag_tabla_plan++;
-
-															});
+														});
 
 														}, delay);
 
@@ -2315,7 +2318,6 @@ function matchOC(event) {
 																	var color_pmm = $(this).find("td:eq(9)").html();
 
 																	// Para revisión Web
-																	//console.log('LineaPlan:'+linea_plan+' LíneaPMM:'+linea_pmm+' \nSubPlan:'+sublinea_plan+' SubPMM:'+sublinea_pmm+' \nEstiloPlan:'+estilo_plan+' EstiloPMM:'+estilo_pmm+' \nColorPlan:'+color_plan+' ColorPMM:'+color_pmm);
 																	console.log('LineaPlan:' + linea_plan + '\nLíneaPMM:' + linea_pmm + '\nSubPlan:' + sublinea_plan + '\nSubPMM:' + sublinea_pmm + '\nEstiloPlan:' + estilo_plan + '\nEstiloPMM:' + estilo_pmm + '\nColorPlan:' + color_plan + '\nColorPMM:' + color_pmm);
 
 																	if ((linea_plan == linea_pmm) && (sublinea_plan == sublinea_pmm) && (estilo_plan == estilo_pmm) && (color_plan == color_pmm)) {
@@ -2323,10 +2325,8 @@ function matchOC(event) {
 																		return false;
 																	}
 
-
 																	// Fin recorrido segunda tabla
 																});
-
 
 																//Si flag_encuentra_match > 0, coloreo el fondo del ID
 																if (flag_encuentra_match == 0) {
@@ -2337,8 +2337,7 @@ function matchOC(event) {
 																	$(this).find("td:eq(0)").css('color', 'black');
 																}
 
-
-																// Fin recorrido primera tabla
+															// Fin recorrido primera tabla
 															});
 
 															if (flag_encuentra_match == 0) {
@@ -2365,59 +2364,50 @@ function matchOC(event) {
 														}, delay);
 
 
-														// Fin DONE cargar CBX de color
+													// Fin DONE cargar CBX de color
 													});
 
-													// Fin DONE carga CBX Línea
+												// Fin DONE carga CBX Línea
 												});
 
-
-												//aqui estaba el show
-
-
-												// Fin de control de cantidad de registros por tabla PMM v/s PLAN
+											// Fin de control de cantidad de registros por tabla PMM v/s PLAN
 											}
 
-
-											// Fin delay para comenzar a llenar grillas y buscar las diferencias entre tablaas
+										// Fin delay para comenzar a llenar grillas y buscar las diferencias entre tablaas
 										}, delay);
 
-
-										// Fin del DONE llenar tabla plan
+									// Fin del DONE llenar tabla plan
 									});
 
-
-									// Fin else si la tabla PMM tiene datos
+								// Fin else si la tabla PMM tiene datos
 								}
-
 
 							}, delay);
 
-
-							// Fin del DONE llenat tabla PMM
+						// Fin del DONE llenat tabla PMM
 						});
 
-						// Fon del DONE traer datos OC desde WS
+					// Fin del DONE traer datos OC desde WS
 					});
 
-
-					// Fin si la OC se encuentra linkeada
+				// Fin si la OC se encuentra linkeada
 				} else {
 					alert("La OC se encuentra linkeada previamente.");
 					$('#popup_loading_match').modal('toggle');
 					return false;
 				}
 
-
-				//Fin DONE si está linkeada la OC
+			//Fin DONE si está linkeada la OC
 			});
 
 		} else {
 			alert("Para poder realizar el Match, se necesita Proforma, Nº OC y Estado Opción: Pendiente de Aprobación sin Match");
 		}
 
+	// Fin de si el tipo de usuario es distinto a LECTURA
 	}
 
+// Fin del Match OC
 }
 
 function matchCargaSublinea(event) {
