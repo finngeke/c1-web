@@ -999,7 +999,7 @@ class valida_archivo_bmt extends \parametros {
         }
         return $arrayinsert;
     }
-    public static function Separacion_Data_Ventana2($rows,$limite,$nom_columnas){
+    public static function Separacion_Data_Ventana2($rows,$nom_columnas,$cod_tempo,$depto){
 
         $arrayinsert =[];
         $vent = array("VentA","VentB","VentC","VentD","VentE","VentF","VentG","VentH","VentI");
