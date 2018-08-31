@@ -291,6 +291,26 @@ $(window).on('load', function () {
                     //VALIDAR BOTONES DEL MODULO DE BAJADA DE EMBARQUE
 
 
+                    ////VALIDAR MODULO DE ACTUALIZAR CALCULOS
+                    verifica_modulo = $.grep(arreglo_modulos_desac,function(e){return e.id_modulo==26;});
+                    if (verifica_modulo.length > 0){
+                        $('#modulo_actualizar_calculos').remove();
+                    }
+                    verifica_accion = $.grep(arreglo_accion_desac,function(e){return e.id_accion==77;});
+                    if (verifica_accion.length > 0){
+                        $("#btn_calcular_actualizar_calculos").attr("disabled", "disabled");
+                        $("#btn_calcular_actualizar_calculos").each(function (){
+                            this.style.pointerEvents = 'none';
+                        });
+                    }
+                    verifica_accion = $.grep(arreglo_accion_desac,function(e){return e.id_accion==78;});
+                    if (verifica_accion.length > 0){
+                        $("#btn_actualizar_calculos").attr("disabled", "disabled");
+                        $("#btn_actualizar_calculos").each(function (){
+                            this.style.pointerEvents = 'none';
+                        });
+                    }
+
 
 
                 });
