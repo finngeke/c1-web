@@ -24,6 +24,7 @@ $(window).on('load', function () {
                 );
             inc_tipo_usu++;
         });
+
         /* FIN DEL each que llenara los tipos de usuarios */
 
         /*Each por cada tipo de usuaro llenara los usuarios que corresponden*/
@@ -38,15 +39,20 @@ $(window).on('load', function () {
             });
             inc_usu++;
         });
+
         /*FIN DEL EACH que llena los usuarios segun su tipo*/
         $('.tree-toggle').click(function () {
             $(this).parent().children('ul.tree').toggle(200);
         });
         $('.tree-toggle').parent().children('ul.tree').toggle(200);
+
     });
 
     $('#tabla_tipo_usuario').append('</ul>');
     /*############################# FIN DE agregar la etiqueta de ul fuera del ciclo ##################################*/
+
+
+
 
 }); //final de onload
 
@@ -56,6 +62,10 @@ $('#guardar_permisos_usuarios').on('click', function () {
     var validar_guardar_permiso_usuario = 0;
 
     if (respuesta_usuarios_permiso == true) {
+
+        // Limpiamos la búsqueda para que el código recorra la tabla completa
+        var table = $('#tabla_depto_permiso').DataTable();
+        table.search('').draw();
 
         $("#tabla_depto_permiso >tbody >tr").each(function () {
 
@@ -223,6 +233,9 @@ function cargar_tabla_depto(codigo_usu_permiso) {
                     "sZeroRecords" : "No se encontraron registros"
                 }
             });
+
+            $('#tabla_depto_permiso_filter label input').attr ('id', 'filtro_perfil_usuario');
+
         },delay_thead);
 
     });
@@ -336,6 +349,10 @@ function cargar_tabla_modulos(tip_usr) {
                     "bSort": false,
                     scrollCollapse: true
                 });
+
+                //$('body, input[type=search]').addClass('roberto');
+                //$('#tabla_depto_permiso_filter label input').attr ('id', 'filtro_perfil_usuario');
+
             }, delay_thead);
 
         });
@@ -347,5 +364,6 @@ function cargar_tabla_modulos(tip_usr) {
         //alert ("No se pueden modificar los permisos de administrador");
 
     }
+
 }
 
