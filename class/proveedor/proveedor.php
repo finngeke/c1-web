@@ -118,7 +118,7 @@
 		}
 		
 		public static function getSKU($orden_de_compra, $nro_estilo, $color) {
-			$sql = "SELECT
+			$sql = "SELECT DISTINCT
 						TRIM(NRO_VARIACION) AS NRO_VARIACION
 					FROM B
 					WHERE
@@ -130,7 +130,7 @@
 			$data = \database::getInstancia()->getFilas($sql);
 			
 			if (!$data) {
-				$sql = "SELECT
+				$sql = "SELECT DISTINCT
 							B.PRD_LVL_NUMBER AS NRO_VARIACION
 						FROM PRDMSTEE A
 						INNER JOIN PRDMSTEE B
