@@ -118,7 +118,7 @@
 		}
 		
 		public static function getSKU($orden_de_compra, $nro_estilo, $color) {
-			$sql = "SELECT DISTINCT
+			$sql = "SELECT
 						TRIM(NRO_VARIACION) AS NRO_VARIACION
 					FROM B
 					WHERE

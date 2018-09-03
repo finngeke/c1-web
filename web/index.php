@@ -138,7 +138,6 @@ $f3->route('POST /save_pl', 'ControlProveedor->save_pl');
 // Para el envío de packing list a COMEX
 $f3->route('GET /invoices', 'ControlProveedor->invoices');
 $f3->route('GET /approve_invoice', 'ControlProveedor->approve_invoice');
-$f3->route('GET /generar_detalle_lpn', 'ControlProveedor->generar_detalle_lpn');
 
 /* DISTRIBUCION DE MERCADERIA */
 $f3->route('GET /reposicion', 'ControlReposicion->inicio');
