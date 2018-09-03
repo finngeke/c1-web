@@ -24,6 +24,7 @@ $(window).on('load', function () {
                 );
             inc_tipo_usu++;
         });
+
         /* FIN DEL each que llenara los tipos de usuarios */
 
         /*Each por cada tipo de usuaro llenara los usuarios que corresponden*/
@@ -38,15 +39,20 @@ $(window).on('load', function () {
             });
             inc_usu++;
         });
+
         /*FIN DEL EACH que llena los usuarios segun su tipo*/
         $('.tree-toggle').click(function () {
             $(this).parent().children('ul.tree').toggle(200);
         });
         $('.tree-toggle').parent().children('ul.tree').toggle(200);
+
     });
 
     $('#tabla_tipo_usuario').append('</ul>');
     /*############################# FIN DE agregar la etiqueta de ul fuera del ciclo ##################################*/
+
+
+
 
 }); //final de onload
 
@@ -56,6 +62,10 @@ $('#guardar_permisos_usuarios').on('click', function () {
     var validar_guardar_permiso_usuario = 0;
 
     if (respuesta_usuarios_permiso == true) {
+
+        // Limpiamos la búsqueda para que el código recorra la tabla completa
+        var table = $('#tabla_depto_permiso').DataTable();
+        table.search('').draw();
 
         $("#tabla_depto_permiso >tbody >tr").each(function () {
 
@@ -81,9 +91,10 @@ $('#guardar_permisos_usuarios').on('click', function () {
         setTimeout(function () {
             validar_guardar_permiso_usuario =  $('#flag_data_insert_deptos').html();
         if (validar_guardar_permiso_usuario == 1) {
-                alert("Se han guardado los cambios.");
+            alert("Los cambios han sido realizados, favor revisar.");
+            location.reload();
         }else{
-            alert ("Debe modificar un departamento para guardar los cambio.")
+            alert ("Debe modificar un departamento para guardar los cambio.");
         }
         }, delay_guardar_depto);
 
@@ -138,18 +149,20 @@ $('#guardar_permisos_modulo_acciones').on('click', function () {
 
         var delay_validar_guardado = 5000;
         setTimeout(function (){
-            validar_guardado = $('#flag_data_insert_modulos').html();
-        if (validar_guardado == 1) {
-            alert("Se han guardado los cambios.");
-        }else{
-            alert("Debe modificar un estado de modulo/boton para guardar los cambios")
-        }
+                validar_guardado = $('#flag_data_insert_modulos').html();
+            if (validar_guardado == 1) {
+                alert("Los cambios han sido realizados, favor revisar.");
+                location.reload();
+            }else{
+                alert("Debe modificar un estado de modulo/boton para guardar los cambios");
+            }
         }, delay_validar_guardado);
 
 
     }else{
-        alert("no se guardan los cambios");
+        alert("No se han realizado modificaciones.");
     }
+
 });
 
 function campo_ajustado(inc){
@@ -176,10 +189,10 @@ function cargar_tabla_depto(codigo_usu_permiso) {
     $('#tabla_depto_permiso tbody').empty();
 
     var div1 = document.getElementById("div_tabla_depto_permiso");
-    div1.style.display = "";
+        div1.style.display = "";
 
     var div2 = document.getElementById("div_tabla_modulo_acceso");
-    div2.style.display = "none";
+        div2.style.display = "none";
 
     $('#cod_usu_hidden').html(codigo_usu_permiso);
     var cargar_tabla_depto_permisos = 'permiso_usuario/llenar_tabla_depto_permisos';
@@ -220,13 +233,19 @@ function cargar_tabla_depto(codigo_usu_permiso) {
                     "sZeroRecords" : "No se encontraron registros"
                 }
             });
+
+            $('#tabla_depto_permiso_filter label input').attr ('id', 'filtro_perfil_usuario');
+
         },delay_thead);
+
     });
+
 }
 
 function cargar_tabla_modulos(tip_usr) {
 
-    if (tip_usr != 99) {
+    if(tip_usr != 99) {
+
         $('#flag_top_menu_tipo_usuario').html(tip_usr);
 
         $('#guardar_permisos_modulo_acciones').show();
@@ -236,10 +255,10 @@ function cargar_tabla_modulos(tip_usr) {
         $('#tabla_depto_permiso tbody').empty();
 
         var div1 = document.getElementById("div_tabla_depto_permiso");
-        div1.style.display = "none";
+            div1.style.display = "none";
 
         var div2 = document.getElementById("div_tabla_modulo_acceso");
-        div2.style.display = "";
+            div2.style.display = "";
 
         var url_cargar_modulos = 'permiso_usuario/cargar_modulos';
         var url_cargar_modulos_acciones = 'permiso_usuario/cargar_modulos_acciones';
@@ -312,7 +331,6 @@ function cargar_tabla_modulos(tip_usr) {
 
                     });
                 });
-
             });
             /*FIN DEL EACH que llena los botones segun su modulo*/
 
@@ -331,14 +349,21 @@ function cargar_tabla_modulos(tip_usr) {
                     "bSort": false,
                     scrollCollapse: true
                 });
+
+                //$('body, input[type=search]').addClass('roberto');
+                //$('#tabla_depto_permiso_filter label input').attr ('id', 'filtro_perfil_usuario');
+
             }, delay_thead);
+
         });
+
     }else{
 
         $('#tabla_modulo_acceso tbody').empty();
         $('#tabla_depto_permiso tbody').empty();
-        alert ("No se pueden modificar los permisos de administrador");
+        //alert ("No se pueden modificar los permisos de administrador");
 
     }
+
 }
 

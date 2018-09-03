@@ -3185,19 +3185,24 @@
 					array_push($dtTablasSolidoCurvado, $insert);
 					
 					//n°cajas
-					$insert = [];
-					$total = 0;
-					$keytallas = 0;
+					$insert = [];$total = 0;$keytallas = 0;
 					foreach ($tallas2 as $vart) {
 						$parametro95 = round($dtTablaCurvado[2][$keytallas] / $dtTablaCurvado[1][$keytallas] * 100, 3);
+						$decimal = 0;
+						if (is_float($parametro95 ) == true){$division = 0;
+							if ($dtTablasSolidoCurvado[1][$keytallas] <> 0){
+								$division = ($dtTablasSolidoCurvado[1][$keytallas] / $mstpack);
+								$decimal  = (substr($division, strpos($division, "." )));
+							}
+						}
 						if ($parametro95 >= 95 and $dtTablasSolidoCurvado[1][$keytallas] < $mstpack) {
 							array_push($insert, 0);
-						} elseif ($parametro95 < 95 and $dtTablasSolidoCurvado[1][$keytallas] >= (0.3 * $mstpack)) {//Redondeo hacia arriba
-							array_push($insert, ceil($dtTablasSolidoCurvado[1][$keytallas] / $mstpack));
-							$total += ceil($dtTablasSolidoCurvado[1][$keytallas] / $mstpack);
-						} else {
+						} elseif ($parametro95 < 95 and $decimal < 0.3) {//Redondeo hacia abajo
 							array_push($insert, floor($dtTablasSolidoCurvado[1][$keytallas] / $mstpack));
 							$total += floor($dtTablasSolidoCurvado[1][$keytallas] / $mstpack);
+						} else {
+							array_push($insert, ceil($dtTablasSolidoCurvado[1][$keytallas] / $mstpack));
+							$total += ceil($dtTablasSolidoCurvado[1][$keytallas] / $mstpack);
 						}
 						$keytallas += 1;
 					}
