@@ -58,10 +58,13 @@ $(window).on('load', function () {
 
 $('#guardar_permisos_usuarios').on('click', function () {
 
-    var respuesta_usuarios_permiso = confirm("¿Guardar Los cambios de permisos de usuarios?");
+    var respuesta_usuarios_permiso = confirm("¿Guardar Los cambios?");
     var validar_guardar_permiso_usuario = 0;
 
     if (respuesta_usuarios_permiso == true) {
+
+        // Desabilito el BTN guardar
+        //$('#guardar_permisos_usuarios').attr('disable',true);
 
         // Limpiamos la búsqueda para que el código recorra la tabla completa
         var table = $('#tabla_depto_permiso').DataTable();
@@ -90,12 +93,14 @@ $('#guardar_permisos_usuarios').on('click', function () {
         var delay_guardar_depto = 5000;
         setTimeout(function () {
             validar_guardar_permiso_usuario =  $('#flag_data_insert_deptos').html();
-        if (validar_guardar_permiso_usuario == 1) {
-            alert("Los cambios han sido realizados, favor revisar.");
-            location.reload();
-        }else{
-            alert ("Debe modificar un departamento para guardar los cambio.");
-        }
+            if (validar_guardar_permiso_usuario == 1) {
+                alert("Los cambios han sido realizados, favor revisar.");
+                location.reload();
+            }else{
+                alert ("Debe modificar un departamento para guardar los cambios.");
+                // Habilito el BTN guardar
+                //$('#guardar_permisos_usuarios').attr('disable',false);
+            }
         }, delay_guardar_depto);
 
     } else {
@@ -154,7 +159,7 @@ $('#guardar_permisos_modulo_acciones').on('click', function () {
                 alert("Los cambios han sido realizados, favor revisar.");
                 location.reload();
             }else{
-                alert("Debe modificar un estado de modulo/boton para guardar los cambios");
+                alert("Debe modificar un estado de modulo/botón para guardar los cambios");
             }
         }, delay_validar_guardado);
 
