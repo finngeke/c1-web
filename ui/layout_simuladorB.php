@@ -116,7 +116,6 @@
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                     <!--<img src="dist/img/avatar_generica.png" class="user-image" alt="{{ @nombre }}">-->
                                     <span class="hidden-xs">{{ @nombre }}</span>
-                                    &nbsp;<span id="control_conexion" style="color: red"><b>[{{ @BD_CONEXION }}]</b></span>
 
                                 </a>
 
@@ -161,7 +160,8 @@
                         </div>
                         <div class="pull-left info">
                             <p id="flag_usuario_no_lectura">{{ @login }}</p>
-                            <!--<a href="#"><i class="fa fa-circle text-success"></i> Online</a>-->
+                            <a href="#"><i class="fa fa-circle text-success"></i></a>
+                            <span id="control_conexion" style="color: red"><b>[{{ @BD_CONEXION }}]</b></span>
                         </div>
                     </div>
 

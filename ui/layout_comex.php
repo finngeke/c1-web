@@ -143,7 +143,8 @@
 					</div>
 					<div class="pull-left info">
 						<p>{{ @login }}</p>
-						<!--<a href="#"><i class="fa fa-circle text-success"></i> Online</a>-->
+                        <a href="#"><i class="fa fa-circle text-success"></i></a>
+                        <span id="control_conexion" style="color: red"><b>[{{ @BD_CONEXION }}]</b></span>
 					</div>
 				</div>
 				

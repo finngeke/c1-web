@@ -104,7 +104,7 @@
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                     <!--<img src="dist/img/avatar_generica.png" class="user-image" alt="{{ @nombre }}">-->
                                     <span class="hidden-xs">{{ @nombre }}</span>
-                                    &nbsp;<span id="control_conexion" style="color: red"><b>[{{ @BD_CONEXION }}]</b></span>
+
                                 </a>
                                 <ul class="dropdown-menu">
                                     <!-- User image -->
@@ -154,6 +154,7 @@
                         <div class="pull-left info">
                             <p>{{ @login }}</p>
                             <a href="#"><i class="fa fa-circle text-success"></i></a>
+                            <span id="control_conexion" style="color: red"><b>[{{ @BD_CONEXION }}]</b></span>
                         </div>
                     </div>
 
