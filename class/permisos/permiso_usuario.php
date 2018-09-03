@@ -186,7 +186,10 @@ class permiso_usuario extends \parametros {
 //codigo de modulo de permisos validar y asignar permisos//
     public static function cargar_modulos() {
 
-        $sql = "SELECT ID_MODULO,NOMBRE_MODULO FROM PLC_MODULO_ACCESO_TIPO_USR ";
+        $sql = "SELECT ID_MODULO,NOMBRE_MODULO 
+                FROM PLC_MODULO_ACCESO_TIPO_USR 
+                ORDER BY ID_MODULO ASC
+                ";
 
         $data = \database::getInstancia()->getFilas($sql);
         return $data;
