@@ -261,7 +261,7 @@
 					$mensaje = "Debe guardar la distribución antes de aprobarla.";
 				}
 			} catch (Exception $e) {
-				$estado = false;
+				$estado = 0;
 				$mensaje = $e->getMessage();
 			}
 			header("Content-Type: application/json");
@@ -339,7 +339,7 @@
 					file_put_contents("../archivos/json/$filename", $json);
 					
 					$etapa = "abrirSesion";
-					$response = \broker::post($json, $curlopt_url, $curlopt_port);
+					/*$response = \broker::post($json, $curlopt_url, $curlopt_port);
 					
 					if (strtoupper($response->Body->fault->faultString) != "OK") {
 						$msj = $response->Body->fault->faultString;
@@ -349,7 +349,7 @@
 					} else {
 						$id_sesion = $response->Body->sessionid;
 						\reposicion\embarque::guardar_sesion_asn($nro_embarque, $asn[0], $id_sesion);
-					}
+					}*/
 				}
 				
 				// Procesa el archivo de CITAS
@@ -460,7 +460,7 @@
 				file_put_contents("$local_path/$file_name", $control);
 				$archivos[] = $file_name;
 				
-				$etapa = "conectarFTP";
+				/*$etapa = "conectarFTP";
 				$ftp = ftp_connect($host, $port, $timeout);
 				$login = ftp_login($ftp, $user, $pass);
 				ftp_pasv($ftp, true);
@@ -481,11 +481,11 @@
 						}
 					}
 				}
-				ftp_close($ftp);
+				ftp_close($ftp);*/
 				
 				//TODO: Actualiza el embarque
-				$etapa = "archivarASN";
-				$data = \reposicion\embarque::archivar_asn($nro_embarque);
+				/*$etapa = "archivarASN";
+				$data = \reposicion\embarque::archivar_asn($nro_embarque);*/
 				
 				header("Content-Type: application/json");
 				echo json_encode(array("estado" => 0, "mensaje" => "Archivo cargado", "etapa" => $etapa), JSON_PRETTY_PRINT);
