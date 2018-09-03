@@ -113,7 +113,6 @@
 			$sql .= "END;";
 			$data = \database::getInstancia()->getConsulta($sql);
 			return $data;
-			//return $sql;
 		}
 		
 		public static function detalle_distribucion_sucursales($nro_embarque, $nro_contenedor, $login) {

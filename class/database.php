@@ -210,7 +210,8 @@
 					try {
 						return $this->_conexion->query($sql);
 					} catch (\Exception $e) {
-						throw new excepciones\generales\database\ErrorPDO;
+						throw $e;
+						//throw new excepciones\generales\database\ErrorPDO;
 					}
 				}
 				
@@ -233,8 +234,8 @@
 				}
 				return $pdoSt;
 			} catch (\PDOException $e) {
-				
-				throw new excepciones\generales\database\ErrorPreparar;
+				throw $e;
+				//throw new excepciones\generales\database\ErrorPreparar;
 			}
 		}
 		

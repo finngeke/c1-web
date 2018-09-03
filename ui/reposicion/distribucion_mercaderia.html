@@ -159,7 +159,7 @@
 					if (data.estado == 0) {
 						alert('Datos guardados correctamente');
 					} else {
-						console.log(data.mensaje)
+						console.log(data.mensaje);
 						alert('Ha ocurrido un error al guardar los datos');
 					}
 					habilitarBoton();
@@ -187,16 +187,15 @@
 				"nro_contenedor": "{{@nroContenedor}}",
 				"login": "{{@SESSION.login}}"
 			};
-			$.post('aprobar_distribucion_tienda', data).done(function(data) {
-				alert(data.mensaje);
-				console.log(data.etapa);
-				if (data.estado) {
+			$.post('aprobar_distribucion_tienda', data, function(data, status, error) {
+				if (data.estado == 1) {
+					alert(data.mensaje);
 					$(location).attr('href', "reposicion");
+				} else {
+					console.log(data.etapa);
+					console.log(data.mensaje);
+					alert('Ha ocurrido un error al guardar los datos');
 				}
-			}).fail(function(data, status, error) {
-				console.log(data);
-				alert('Ha ocurrido un error al guardar los datos');
-			}).always(function() {
 				terminarAprobar();
 			});
 		});

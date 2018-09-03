@@ -254,10 +254,10 @@
 							}
 						}
 					}
-					$estado = true;
+					$estado = 1;
 					$mensaje = "Distribución aprobada correctamente.";
 				} else {
-					$estado = false;
+					$estado = 0;
 					$mensaje = "Debe guardar la distribución antes de aprobarla.";
 				}
 			} catch (Exception $e) {
