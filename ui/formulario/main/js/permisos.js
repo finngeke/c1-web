@@ -81,7 +81,7 @@ $('#guardar_permisos_usuarios').on('click', function () {
         setTimeout(function () {
             validar_guardar_permiso_usuario =  $('#flag_data_insert_deptos').html();
         if (validar_guardar_permiso_usuario == 1) {
-                alert("Se han guardado los cambios.");
+            alert("Los cambios han sido realizados, favor revisar.");
             location.reload();
         }else{
             alert ("Debe modificar un departamento para guardar los cambio.");
@@ -141,7 +141,7 @@ $('#guardar_permisos_modulo_acciones').on('click', function () {
         setTimeout(function (){
                 validar_guardado = $('#flag_data_insert_modulos').html();
             if (validar_guardado == 1) {
-                alert("Se han guardado los cambios.");
+                alert("Los cambios han sido realizados, favor revisar.");
                 location.reload();
             }else{
                 alert("Debe modificar un estado de modulo/boton para guardar los cambios");
