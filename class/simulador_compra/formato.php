@@ -79,8 +79,9 @@ class formato
                 WHERE  COD_TEMPORADA  = $temporada
                 AND    DEP_DEPTO      = '" . $depto . "'
                 AND    COD_SEG        = " . $formato . "
-                AND    COD_TDA        = " . $asignado . "
                 ";
+
+        //AND    COD_TDA        = " . $asignado . "
 
         // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
         if (!file_exists('../archivos/log_querys/'.$login)) {
