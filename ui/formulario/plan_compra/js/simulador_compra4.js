@@ -27,13 +27,13 @@ $(function() {
 			$("#bmt_export tbody").empty();
 
 			var div1 = document.getElementById("assorment_export");
-			div1.style.display = "none";
+				div1.style.display = "none";
 			var div2 = document.getElementById("depto_selec");
-			div2.style.display = "none";
+				div2.style.display = "none";
 			var div4 = document.getElementById("depto_selec_opcion");
-			div4.style.display = "none";
+				div4.style.display = "none";
 			var div3 = document.getElementById("body_export");
-			div3.style.display = "";
+				div3.style.display = "";
 			var url_tabla = 'ajax_simulador_cbx/checkboxgrupo';
 			var flag_exporta_bmt = 0;
 
@@ -2277,7 +2277,7 @@ function matchOC(event) {
 														// Fin DONE caga CBX sublinea
 														});
 
-														flag_tabla_planflag_tabla_plan++;
+														flag_tabla_plan++;
 
 														});
 
