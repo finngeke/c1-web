@@ -657,7 +657,7 @@
 					}
 					
 					// Valida los costos por PO
-					$etapa = "validatePOAmount";
+					/*$etapa = "validatePOAmount";
 					foreach ($temp_m as $llave => $valor) {
 						//TODO: Busca los montos de la PO
 						$r = \proveedor\proveedor::getInfoPO($llave);
@@ -671,10 +671,10 @@
 							$f3->set('SESSION.error', "The total amount in the packing list can not be greater than total amount loaded to purchase order number '$llave'. Please check de file.");
 							$f3->reroute("/invoices?cod_proveedor=$cod_proveedor");
 						}
-					}
+					}*/
 					
 					// Valida las unidades por PO
-					$etapa = "validatePOQuantity";
+					/*$etapa = "validatePOQuantity";
 					foreach ($temp_u as $llave => $valor) {
 						//TODO: Busca las unidades de la PO
 						$r = \proveedor\proveedor::getInfoPO($llave);
@@ -688,7 +688,7 @@
 							$f3->set('SESSION.error', "The quantity of units in the packing list can not be greater than total units loaded to purchase order number '$llave'. Please check de file.");
 							$f3->reroute("/invoices?cod_proveedor=$cod_proveedor");
 						}
-					}
+					}*/
 					
 					$etapa = "clearInvoicePLData";
 					foreach ($registros as $registro) {
