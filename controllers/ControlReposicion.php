@@ -233,7 +233,20 @@
 				$nro_embarque = $f3->get("POST.nro_embarque");
 				$nro_contenedor = $f3->get("POST.nro_contenedor");
 				$login = $f3->get("SESSION.login");
+				
 				// Valida que que haya guardado previamente la distribución
+				$etapa = "detalleDistribucionSucursales";
+				$sucursales = \reposicion\distribucion::detalle_distribucion_sucursales($nro_embarque, $nro_contenedor, $login);
+				if ($sucursales) {
+					$data = \reposicion\distribucion::distribuir_lpns($nro_embarque, $nro_contenedor, $login);
+					$estado = 1;
+					$mensaje = "Distribución aprobada correctamente.";
+				} else {
+					$estado = 0;
+					$mensaje = "Debe guardar la distribución antes de aprobarla.";
+				}
+				
+				/*// Valida que que haya guardado previamente la distribución
 				$etapa = "detalleDistribucionSucursales";
 				$sucursales = \reposicion\distribucion::detalle_distribucion_sucursales($nro_embarque, $nro_contenedor, $login);
 				if ($sucursales) {
@@ -259,7 +272,7 @@
 				} else {
 					$estado = 0;
 					$mensaje = "Debe guardar la distribución antes de aprobarla.";
-				}
+				}*/
 			} catch (Exception $e) {
 				$estado = 0;
 				$mensaje = $e->getMessage();
