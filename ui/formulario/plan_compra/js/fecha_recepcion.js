@@ -198,9 +198,6 @@ if(conteo_selecc_eliminar == 0){
 
         });
 
-        // Recargar la Pàgina, para ver la tabla con los cambios
-        //location.reload();
-
         // Esperar hasta que todos los REQUEST Ajax terminen, para ejecutar
         $(document).ajaxStop(function () {
             alert("Los cambios han sido realizados.");
