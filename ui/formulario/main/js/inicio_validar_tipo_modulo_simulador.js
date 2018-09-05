@@ -1,6 +1,6 @@
 $(window).on('load', function () {
 
-    var url_busca_cod_tip_usr               = 'permiso_usuario/busca_cod_tip_usr';
+    var url_busca_cod_tip_usr = 'permiso_usuario/busca_cod_tip_usr';
     var url_buscar_modulos_estados_desactivado = 'permiso_usuario/buscar_modulos_estados_desactivado';
     var url_buscar_accion_estados_desactivado = 'permiso_usuario/buscar_accion_estados_descativado';
     var tipo_usuario = '';
@@ -18,15 +18,12 @@ $(window).on('load', function () {
             $.getJSON(url_buscar_modulos_estados_desactivado,{ID_TIP_USR:tipo_usuario}, function (data_modulo) {
                 $.each(data_modulo, function (i, o) {
 
-
                      arreglo_modulos_desac.push({
                          id_modulo:o[0]
                      });
 
-
-                    });
+                });
             }).done(function (data_modulo) {
-
 
                 $.getJSON(url_buscar_accion_estados_desactivado,{ID_TIP_USR:tipo_usuario}, function (data_accion) {
                     $.each(data_accion, function (i, a) {
@@ -38,15 +35,13 @@ $(window).on('load', function () {
                     });
                 }).done(function (data_accion) {
 
-
-
-                    //VALIDAR MODULO DE FACTOR ESTIMADO
+                    // M - VALIDAR MODULO DE FACTOR ESTIMADO
                     var verifica_modulo = $.grep(arreglo_modulos_desac,function(e){return e.id_modulo==5;});
                     if (verifica_modulo.length > 0){
                         $('#modulo_factor_estimado').remove();
                     }
 
-                    //VALIDAR BOTONES DEL MODULO DE FACTOR ESTIMADO
+                    // A - VALIDAR BOTONES DEL MODULO DE FACTOR ESTIMADO
                     var verifica_accion = $.grep(arreglo_accion_desac,function(e){return e.id_accion==11;});
                     if (verifica_accion.length > 0){
                         $("#btn_grabar_factor_estimado").attr("disabled", "disabled");
@@ -92,15 +87,13 @@ $(window).on('load', function () {
 
                     }
 
-
-
-                    // VALIDAR MODULO DE FECHA DE RECEPCION
-                    verifica_modulo = $.grep(arreglo_modulos_desac,function(e){return e.id_modulo==6;});
+                    // M - VALIDAR MODULO DE FECHA DE RECEPCION
+                    /*verifica_modulo = $.grep(arreglo_modulos_desac,function(e){return e.id_modulo==6;});
                     if (verifica_modulo.length > 0){
                         $('#modulo_fecha_recepcion_cd').remove();
-                    }
+                    }*/
 
-                    // VALIDAR BOTONES DEL MODULO DE FECHA DE RECEPCION
+                    // A - VALIDAR BOTONES DEL MODULO DE FECHA DE RECEPCION
                     verifica_accion = $.grep(arreglo_accion_desac,function(e){return e.id_accion==16;});
                     if (verifica_accion.length > 0){
                         $(".btn_guardar_fecha_recepcion").attr("disabled", "disabled");
@@ -111,7 +104,20 @@ $(window).on('load', function () {
                         $(".btn_eliminar_fecha_recepcion").attr("disabled", "disabled");
 
                     }
-                    verifica_accion = $.grep(arreglo_accion_desac,function(e){return e.id_accion==18;});
+
+
+                    // Aquí agregar las validaciones para Acción 48 y 49 de módulo 11 (RPS)
+                    // M - VALIDAR MODULO DE VENTANAS DE LLEGADA
+                    verifica_modulo = $.grep(arreglo_modulos_desac,function(e){return e.id_modulo==11;});
+                    if (verifica_modulo.length > 0){
+                        $('#modulo_tipo_ventana_llegada').remove();
+                    }
+                    // A - VALIDAR BOTONES DEL MODULO DE VENTANAS DE LLEGADA
+                    verifica_accion = $.grep(arreglo_accion_desac,function(e){return e.id_accion==48;});
+                    if (verifica_accion.length > 0){
+                        $("#tipo_btn_ventana_llegada").attr("disabled", "disabled");
+                    }
+                    verifica_accion = $.grep(arreglo_accion_desac,function(e){return e.id_accion==49;});
                     if (verifica_accion.length > 0){
                         $("#input_A").attr("disabled", "disabled");
                         $("#input_B").attr("disabled", "disabled");
@@ -125,21 +131,34 @@ $(window).on('load', function () {
                     }
 
 
-                    //VALIDAR MODULO DE REGISTRO DE COMPRA
+                    // A - La acción 18 está asociada al módulo 6 del "Check quitar fecha recepción" (RPS)
+                    /*verifica_accion = $.grep(arreglo_accion_desac,function(e){return e.id_accion==18;});
+                    if (verifica_accion.length > 0){
+                        $("#input_A").attr("disabled", "disabled");
+                        $("#input_B").attr("disabled", "disabled");
+                        $("#input_C").attr("disabled", "disabled");
+                        $("#input_D").attr("disabled", "disabled");
+                        $("#input_E").attr("disabled", "disabled");
+                        $("#input_F").attr("disabled", "disabled");
+                        $("#input_G").attr("disabled", "disabled");
+                        $("#input_H").attr("disabled", "disabled");
+                        $("#input_I").attr("disabled", "disabled");
+                    }*/
+
+
+                    // M - VALIDAR MODULO DE REGISTRO DE COMPRA
                     verifica_modulo = $.grep(arreglo_modulos_desac,function(e){return e.id_modulo==7;});
                     if (verifica_modulo.length > 0){
                         $('#modulo_registro_de_compra').remove();
                     }
 
-
-
-                    //VALIDAR MODULO DE TIENDAS
+                    // M - VALIDAR MODULO DE TIENDAS
                     verifica_modulo = $.grep(arreglo_modulos_desac,function(e){return e.id_modulo==8;});
                     if (verifica_modulo.length > 0){
                         $('#modulo_tipo_tienda').remove();
                     }
 
-                    //VALIDAR BOTONES DEL MODULO DE TIENDA
+                    // A - VALIDAR BOTONES DEL MODULO DE TIENDA
                     verifica_accion = $.grep(arreglo_accion_desac,function(e){return e.id_accion==33;});
                     if (verifica_accion.length > 0){
                         $("#btn_agregar_tipo_tienda").attr("disabled", "disabled");
@@ -176,16 +195,12 @@ $(window).on('load', function () {
                         });
                     }
 
-
-
-
-
-                    //VALIDAR MODULO DE PRESUPUESTO COSTO
+                    // M - VALIDAR MODULO DE PRESUPUESTO COSTO
                     verifica_modulo = $.grep(arreglo_modulos_desac,function(e){return e.id_modulo==12;});
                     if (verifica_modulo.length > 0){
                         $('#modulo_ppto_costo').remove();
                     }
-                    //VALIDAR BOTNOES DEL MODULO DE PRESUPUESTO COSTO
+                    // A - VALIDAR BOTNOES DEL MODULO DE PRESUPUESTO COSTO
                     verifica_accion = $.grep(arreglo_accion_desac,function(e){return e.id_accion==50;});
                     if (verifica_accion.length > 0){
                         $("#input_total_ppto_costo").attr("disabled", "disabled");
@@ -195,14 +210,12 @@ $(window).on('load', function () {
                         $("#tipo_btn_ppto_costo").attr("disabled", "disabled");
                     }
 
-
-
-                    //VALIDAR MODULO DE PRESUPUESTO RETAIL
+                    // M - VALIDAR MODULO DE PRESUPUESTO RETAIL
                     verifica_modulo = $.grep(arreglo_modulos_desac,function(e){return e.id_modulo==13;});
                     if (verifica_modulo.length > 0){
                         $('#modulo_ppto_retail').remove();
                     }
-                    //VALIDAR BOTONES DEL MODULO DE PRESUPUESTO RETAIL
+                    // A - VALIDAR BOTONES DEL MODULO DE PRESUPUESTO RETAIL
                     verifica_accion = $.grep(arreglo_accion_desac,function(e){return e.id_accion==52;});
                     if (verifica_accion.length > 0){
                         $("#input_total_ppto_retail").attr("disabled", "disabled");
@@ -212,13 +225,12 @@ $(window).on('load', function () {
                         $("#tipo_btn_ppto_retail").attr("disabled", "disabled");
                     }
 
-
-                    //VALIDAR MODULO DE MASTER PACK
+                    // M - VALIDAR MODULO DE MASTER PACK
                     verifica_modulo = $.grep(arreglo_modulos_desac,function(e){return e.id_modulo==14;});
                     if (verifica_modulo.length > 0){
                         $('#modulo_master_pack').remove();
                     }
-                    // VALIDAR BOTONES DEL MODULO DE MASTER PACK
+                    // A - VALIDAR BOTONES DEL MODULO DE MASTER PACK
                     verifica_accion = $.grep(arreglo_accion_desac,function(e){return e.id_accion==54;});
                     if (verifica_accion.length > 0){
                         $("#btn_guardar_master_pack").attr("disabled", "disabled");
@@ -243,12 +255,12 @@ $(window).on('load', function () {
                         $(".cantidad_master").attr("disabled", "disabled");
                     }
 
-                    // VALIDAR MODULO DE DEPARTAMENTO MARCA
+                    // M - VALIDAR MODULO DE DEPARTAMENTO MARCA
                     verifica_modulo = $.grep(arreglo_modulos_desac,function(e){return e.id_modulo==15;});
                     if (verifica_modulo.length > 0){
                         $('#modulo_depto_marca').remove();
                     }
-                    //VALIDAR BOTONES DEL MODULO DE DEPARTAMENTO MARCA
+                    // A - VALIDAR BOTONES DEL MODULO DE DEPARTAMENTO MARCA
                     verifica_accion = $.grep(arreglo_accion_desac,function(e){return e.id_accion==59;});
                     if (verifica_accion.length > 0){
                         $("#deptomarca_agregar").attr("disabled", "disabled");
@@ -264,34 +276,32 @@ $(window).on('load', function () {
                         });
                     }
 
-                    //VALIDAR MODULO DE PRIORIDADES DE TIENDA
+                    // M - VALIDAR MODULO DE PRIORIDADES DE TIENDA
                     verifica_modulo = $.grep(arreglo_modulos_desac,function(e){return e.id_modulo==16;});
                     if (verifica_modulo.length > 0){
                         $('#modulo_prioridades_tienda').remove();
                     }
-                    // VALIDAR BOTONES DEL MODULO DE PRIORIDADES TIENDA
+                    // A - VALIDAR BOTONES DEL MODULO DE PRIORIDADES TIENDA
                     verifica_accion = $.grep(arreglo_accion_desac,function(e){return e.id_accion==61;});
                     if (verifica_accion.length > 0){
                         $("#btn-save").attr("disabled", "disabled");
                     }
 
-                    //VALIDAR MODULO DE DISTRIBUCION DE MERCADERIA
+                    // M - VALIDAR MODULO DE DISTRIBUCION DE MERCADERIA
                     verifica_modulo = $.grep(arreglo_modulos_desac,function(e){return e.id_modulo==17;});
                     if (verifica_modulo.length > 0){
                         $('#modulo_distribucion_mercaderia').remove();
                     }
                     //VALIDAR BOTONES DEL MODULO DE DISTRIBUCION DE MERCADERIA
 
-
-                    //VALIDAR MODULO DE BAJADA DE EMBARQUE
+                    // M - VALIDAR MODULO DE BAJADA DE EMBARQUE
                     verifica_modulo = $.grep(arreglo_modulos_desac,function(e){return e.id_modulo==18;});
                     if (verifica_modulo.length > 0){
                         $('#modulo_bajada_embarque').remove();
                     }
                     //VALIDAR BOTONES DEL MODULO DE BAJADA DE EMBARQUE
 
-
-                    ////VALIDAR MODULO DE ACTUALIZAR CALCULOS
+                    // M - VALIDAR MODULO DE ACTUALIZAR CALCULOS
                     verifica_modulo = $.grep(arreglo_modulos_desac,function(e){return e.id_modulo==26;});
                     if (verifica_modulo.length > 0){
                         $('#modulo_actualizar_calculos').remove();
