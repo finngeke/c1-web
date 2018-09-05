@@ -16,19 +16,21 @@ $(window).on('load', function () {
 
             //llamo a la consulta para saber que modulos estan desabilitados segun su tipo de usuario
             $.getJSON(url_buscar_modulos_estados_desactivado,{ID_TIP_USR:tipo_usuario}, function (data_modulo) {
-                $.each(data_modulo, function (i, o) {
 
+                $.each(data_modulo, function (i, o) {
 
                      arreglo_modulos_desac.push({
                          id_modulo:o[0]
                      });
 
-
                     });
+
             }).done(function (data_modulo) {
+
                 $('#flag_top_aviso_termino_carga').html( parseInt($('#flag_top_aviso_termino_carga').html())+1);
 
                 $.getJSON(url_buscar_accion_estados_desactivado,{ID_TIP_USR:tipo_usuario}, function (data_accion) {
+
                     $.each(data_accion, function (i, a) {
 
                         arreglo_accion_desac.push({
@@ -36,29 +38,46 @@ $(window).on('load', function () {
                         });
 
                     });
+
                 }).done(function (data_accion) {
 
-                    //VALIDAR MODULO DE REGISTRO DE COMPRA
-                    var verifica_modulo = $.grep(arreglo_modulos_desac,function(e){return e.id_modulo==7;});
+                    // M - VALIDAR MODULO DE FECHA DE RECEPCION
+                    var verifica_modulo = $.grep(arreglo_modulos_desac,function(e){return e.id_modulo==6;});
+                    if (verifica_modulo.length > 0){
+                        $('#modulo_fecha_recepcion_cd').remove();
+                    }
+                    // A - VALIDAR BOTONES QUITAR FECHA RECEPCIÓN
+                    var verifica_accion = $.grep(arreglo_accion_desac,function(e){return e.id_accion==18;});
+                    if (verifica_accion.length > 0){
+                        $("#fr_input_A").attr("disabled", "disabled");
+                        $("#fr_input_B").attr("disabled", "disabled");
+                        $("#fr_input_C").attr("disabled", "disabled");
+                        $("#fr_input_D").attr("disabled", "disabled");
+                        $("#fr_input_E").attr("disabled", "disabled");
+                        $("#fr_input_F").attr("disabled", "disabled");
+                        $("#fr_input_G").attr("disabled", "disabled");
+                        $("#fr_input_H").attr("disabled", "disabled");
+                        $("#fr_input_I").attr("disabled", "disabled");
+                    }
+
+
+                    // M - VALIDAR MODULO DE REGISTRO DE COMPRA
+                    verifica_modulo = $.grep(arreglo_modulos_desac,function(e){return e.id_modulo==7;});
                     if (verifica_modulo.length > 0){
                         $('#modulo_registro_de_compra').remove();
                     }
-
-                    // VALIDAR BOTONES DEL MODULO DE REGISTRO DE COMPRA
-                    var verifica_accion = $.grep(arreglo_accion_desac,function(e){return e.id_accion==25;});
+                    // A - VALIDAR BOTONES DEL MODULO DE REGISTRO DE COMPRA
+                    verifica_accion = $.grep(arreglo_accion_desac,function(e){return e.id_accion==25;});
                     if (verifica_accion.length > 0){
                         $(".guarda_proforma").attr("disabled", "disabled");
-
                     }
                     verifica_accion = $.grep(arreglo_accion_desac,function(e){return e.id_accion==26;});
                     if (verifica_accion.length > 0){
                         $(".importar_bmt").attr("disabled", "disabled");
-
                     }
                     verifica_accion = $.grep(arreglo_accion_desac,function(e){return e.id_accion==27;});
                     if (verifica_accion.length > 0){
                         $("#user_file").attr("disabled", "disabled");
-
                     }
                     verifica_accion = $.grep(arreglo_accion_desac,function(e){return e.id_accion==28;});
                     if (verifica_accion.length > 0){
@@ -70,13 +89,12 @@ $(window).on('load', function () {
                     }
 
 
-                    //VALIDAR MODULO DE TIENDAS
+                    // M - VALIDAR MODULO DE TIENDAS
                     verifica_modulo = $.grep(arreglo_modulos_desac,function(e){return e.id_modulo==8;});
                     if (verifica_modulo.length > 0){
                         $('#modulo_tipo_tienda').remove();
                     }
-
-                    //VALIDAR BOTONES DEL MODULO DE TIENDA
+                    // A - VALIDAR BOTONES DEL MODULO DE TIENDA
                     verifica_accion = $.grep(arreglo_accion_desac,function(e){return e.id_accion==33;});
                     if (verifica_accion.length > 0){
                         $("#btn_agregar_tipo_tienda").attr("disabled", "disabled");
@@ -114,15 +132,13 @@ $(window).on('load', function () {
                     }
 
 
-
-                    //VALIDAR MODULO DE FORMATOS
+                    // M - VALIDAR MODULO DE FORMATOS
                     verifica_modulo = $.grep(arreglo_modulos_desac,function(e){return e.id_modulo==9;});
                     if (verifica_modulo.length > 0){
                         $('#modulo_formatos').remove();
 
                     }
-
-                    //VALIDAR BOTONES DEL MODULO DE FORMATOS
+                    // A - VALIDAR BOTONES DEL MODULO DE FORMATOS
                     verifica_accion = $.grep(arreglo_accion_desac,function(e){return e.id_accion==38;});
                     if (verifica_accion.length > 0){
                         $("#modulo_formato_btn_crear_nuevo").attr("disabled", "disabled");
@@ -160,14 +176,12 @@ $(window).on('load', function () {
                     }
 
 
-
-                    //VALIDAR MODULO DE FLUJO DE APROBACION
+                    // M - VALIDAR MODULO DE FLUJO DE APROBACION
                     verifica_modulo = $.grep(arreglo_modulos_desac,function(e){return e.id_modulo==10;});
                     if (verifica_modulo.length > 0){
                         $('#modulo_flujo_aprob').remove();
                     }
-
-                    //VALIDAR LINK DEL FLUJO DE APROBACION
+                    // A - VALIDAR LINK DEL FLUJO DE APROBACION
                     verifica_accion = $.grep(arreglo_accion_desac,function(e){return e.id_accion==43;});
                     if (verifica_accion.length > 0){
                         $(".solicitud_generacion_oc").css({ 'pointer-events': 'none' });
@@ -190,13 +204,12 @@ $(window).on('load', function () {
                     }
 
 
-                    //VALIDAR MODULO DE VENTANAS DE LLEGADA
+                    // M - VALIDAR MODULO DE VENTANAS DE LLEGADA
                     verifica_modulo = $.grep(arreglo_modulos_desac,function(e){return e.id_modulo==11;});
                     if (verifica_modulo.length > 0){
                         $('#modulo_tipo_ventana_llegada').remove();
                     }
-
-                    //VALIDAR BOTONES DEL MODULO DE VENTANAS DE LLEGADA
+                    // A - VALIDAR BOTONES DEL MODULO DE VENTANAS DE LLEGADA
                     verifica_accion = $.grep(arreglo_accion_desac,function(e){return e.id_accion==48;});
                     if (verifica_accion.length > 0){
                         $("#tipo_btn_ventana_llegada").attr("disabled", "disabled");
@@ -215,12 +228,12 @@ $(window).on('load', function () {
                     }
 
 
-                    //VALIDAR MODULO DE PRESUPUESTO COSTO
+                    // M - VALIDAR MODULO DE PRESUPUESTO COSTO
                     verifica_modulo = $.grep(arreglo_modulos_desac,function(e){return e.id_modulo==12;});
                     if (verifica_modulo.length > 0){
                         $('#modulo_ppto_costo').remove();
                     }
-                    //VALIDAR BOTNOES DEL MODULO DE PRESUPUESTO COSTO
+                    // A - VALIDAR BOTNOES DEL MODULO DE PRESUPUESTO COSTO
                     verifica_accion = $.grep(arreglo_accion_desac,function(e){return e.id_accion==50;});
                     if (verifica_accion.length > 0){
                         $("#input_total_ppto_costo").attr("disabled", "disabled");
@@ -231,12 +244,12 @@ $(window).on('load', function () {
                     }
 
 
-                    //VALIDAR MODULO DE PRESUPUESTO RETAIL
+                    // M - VALIDAR MODULO DE PRESUPUESTO RETAIL
                     verifica_modulo = $.grep(arreglo_modulos_desac,function(e){return e.id_modulo==13;});
                     if (verifica_modulo.length > 0){
                         $('#modulo_ppto_retail').remove();
                     }
-                    //VALIDAR BOTONES DEL MODULO DE PRESUPUESTO RETAIL
+                    // A - VALIDAR BOTONES DEL MODULO DE PRESUPUESTO RETAIL
                     verifica_accion = $.grep(arreglo_accion_desac,function(e){return e.id_accion==52;});
                     if (verifica_accion.length > 0){
                         $("#input_total_ppto_retail").attr("disabled", "disabled");
@@ -245,7 +258,10 @@ $(window).on('load', function () {
                     if (verifica_accion.length > 0){
                         $("#tipo_btn_ppto_retail").attr("disabled", "disabled");
                     }
+
                     $('#flag_top_aviso_termino_carga').html( parseInt($('#flag_top_aviso_termino_carga').html())+1);
+
+
                 });
 
             });

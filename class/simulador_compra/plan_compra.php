@@ -2201,7 +2201,7 @@
 					//*-----------------% unid ajustada por mstpack
 					$key = 0;
 					foreach ($tallas2 as $var) {
-						$unid_ajustasxtallas = $unid_ajustasxtallas . strval(round($dtTabla[5][$key], 0)) . "-";
+						$unid_ajustasxtallas = $unid_ajustasxtallas . strval(round($dtTablasolidoFULL[5][$key], 0)) . "-";
 						$key += 1;
 					}
 					foreach ($clusters as $Var2) {
@@ -3373,7 +3373,7 @@
 					//*-----------------% unid ajustada por mstpack
 					$key = 0;
 					foreach ($tallas2 as $var) {
-						$unid_ajustasxtallas = $unid_ajustasxtallas . strval(round($dtTabla[5][$key], 0)) . "-";
+						$unid_ajustasxtallas = $unid_ajustasxtallas . strval(round($dtTablasolidoFULL[5][$key], 0)) . "-";
 						$key += 1;
 					}
 					foreach ($clusters as $Var2) {
@@ -5862,7 +5862,7 @@
 					//*-----------------% unid ajustada por mstpack
 					$key = 0;
 					foreach ($tallas2 as $var) {
-						$unid_ajustasxtallas = $unid_ajustasxtallas . strval(round($dtTabla[5][$key], 0)) . "-";
+						$unid_ajustasxtallas = $unid_ajustasxtallas . strval(round($dtTablasolidoFULL[5][$key], 0)) . "-";
 						$key += 1;
 					}
 					foreach ($clusters as $Var2) {
