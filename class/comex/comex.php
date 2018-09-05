@@ -22,7 +22,7 @@
 		}
 		
 		public static function actualizarLPNS($nro_contenedor, $tipo_contenedor, $b_l, $via_transporte, $nro_factura, $po_number, $lpn_number) {
-			$sql = "BEGIN PLC_PKG_COMEX.PRC_ACTUALIZAR_LPNS('$nro_contenedor', '$tipo_contenedor', '$b_l', '$via_transporte', '$nro_factura', $po_number, $lpn_number); END;";
+			$sql = "BEGIN PLC_PKG_COMEX.PRC_ACTUALIZAR_LPNS('$nro_contenedor', '$tipo_contenedor', '$b_l', '$via_transporte', '$nro_factura', $po_number, '$lpn_number'); END;";
 			$data = \database::getInstancia()->getConsulta($sql);
 			return $data;
 		}
@@ -33,7 +33,7 @@
 			return $data;
 		}
 		
-		public static function actualizarNroEnvio($cod_proveedor, $nro_factura, $nro_envio){
+		public static function actualizarNroEnvio($cod_proveedor, $nro_factura, $nro_envio) {
 			$sql = "BEGIN PLC_PKG_COMEX.PRC_ACTUALIZAR_NRO_ENVIO($cod_proveedor, '$nro_factura', $nro_envio); END;";
 			$data = \database::getInstancia()->getConsulta($sql);
 			return $data;
