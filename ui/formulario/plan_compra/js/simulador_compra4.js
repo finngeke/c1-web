@@ -2226,7 +2226,7 @@ function matchOC(event) {
 														$("#popup_match_paso_cargarplan").addClass('fa fa-check');
 
 
-														// Define Tiempo 1 = 1000
+														// Define Tiempo 1 = 1000 (Para cuando no se carga el CBX de Línea, revisar si es por tiempo)
 														var delay = 4000;
 														setTimeout(function() {
 
