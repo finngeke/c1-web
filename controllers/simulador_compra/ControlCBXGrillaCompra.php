@@ -10,102 +10,102 @@
 	namespace simulador_compra;
 	
 	class ControlCBXGrillaCompra extends \Control {
-		
+
 		// Llenar Tabla2
 		public function llenar_tabla2($f3) {
 			$data = \simulador_compra\cbx_grilla_compra::llenar_tabla2($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'));
 			$json = [];
 			foreach ($data as $val) {
 				$json[] = array(
-					$val["ID_COLOR3"],
-					utf8_encode($val["GRUPO_COMPRA"]),
-					$val["COD_TEMP"],
-                    utf8_encode($val["LINEA"]),
-                    utf8_encode($val["SUBLINEA"]),
-                    utf8_encode($val["MARCA"]),
-                    utf8_encode($val["ESTILO"]),
-					$val["SHORT_NAME"],
-					utf8_encode($val["ID_CORPORATIVO"]),
-					utf8_encode($val["DESCMODELO"]),
-					utf8_encode($val["DESCRIP_INTERNET"]),
-					utf8_encode($val["COMPOSICION"]),
-					utf8_encode($val["COLECCION"]),
-					utf8_encode($val["EVENTO"]),
-					$val["COD_ESTILO_VIDA"],
-					utf8_encode($val["CALIDAD"]),
-					utf8_encode($val["COD_OCASION_USO"]),
-                    utf8_encode($val["COD_PIRAMIX"]),
-                    utf8_encode($val["DESCRIPCION"]),
-                    utf8_encode($val["COD_RANKVTA"]),
-                    utf8_encode($val["LIFE_CYCLE"]),
-					$val["NUM_EMB"],
-					utf8_encode($val["COD_COLOR"]),
-					utf8_encode($val["TIPO_PRODUCTO"]),
-					utf8_encode($val["TIPO_EXHIBICION"]),
-					utf8_encode($val["DESTALLA"]),
-					utf8_encode($val["TIPO_EMPAQUE"]),
-					utf8_encode($val["PORTALLA_1_INI"]),
-					utf8_encode($val["PORTALLA_1"]),
-					utf8_encode($val["CURVATALLA"]),
-					$val["CURVAMIN"],
-					$val["UNID_OPCION_INICIO"],
-					$val["UNID_OPCION_AJUSTADA"],
-					$val["CAN"],
-					$val["MTR_PACK"],
-					$val["CANT_INNER"],
-					$val["SEG_ASIG"],
-					utf8_encode($val["FORMATO"]),
-					$val["TDAS"],
-					$val["A"],
-					$val["B"],
-					$val["C"],
-					$val["I"],
-					$val["UND_ASIG_INI"],
-					$val["ROT"],
-					utf8_encode($val["NOM_PRECEDENCIA"]),
-					utf8_encode($val["NOM_VIA"]),
-					utf8_encode($val["NOM_PAIS"]),
-					utf8_encode($val["VIAJE"]),
-					$val["MKUP"],
-					$val["PRECIO_BLANCO"],
-					$val["GM"],
-					$val["COD_TIP_MON"],
-					$val["COSTO_TARGET"],
-					$val["COSTO_FOB"],
-					$val["COSTO_INSP"],
-					$val["COSTO_RFID"],
-					$val["ROYALTY_POR"],
-					$val["COSTO_UNIT"],
-					$val["COSTO_UNITS"],
-					$val["CST_TOTLTARGET"],
-					$val["COSTO_TOT"],
-					$val["COSTO_TOTS"],
-					utf8_encode($val["RETAIL"]),
-					utf8_encode($val["DEBUT_REODER"]),
-					$val["SEM_INI"],
-					$val["SEM_FIN"],
-					$val["CICLO"],
-					$val["AGOT_OBJ"],
-					$val["SEMLIQ"],
-					utf8_encode($val["ALIAS_PROV"]),
-					utf8_encode($val["COD_PROVEEDOR"]),
-					utf8_encode($val["COD_TRADER"]),
-					utf8_encode($val["CODSKUPROVEEDOR"]),
-					$val["SKU"],
-					utf8_encode($val["PROFORMA"]),
-					$val["ARCHIVO"],
-					$val["ESTILO_PMM"],
-					$val["ESTADO_MATCH"],
-					$val["PO_NUMBER"],
-					$val["ESTADO_OC"],
-					$val["FECHA_EMBARQUE"],
-					$val["FECHA_ETA"],
-					$val["FECHA_RECEPCION"],
-					$val["DIAS_ATRASO"],
-					$val["CODESTADO"],
-					$val["ESTADO_C1"],
-					$val["VENTANA_LLEGADA"],
-					$val["FECHA_RECEPCD_C1"]
+					$val["ID_COLOR3"],                      // 0
+					utf8_encode($val["GRUPO_COMPRA"]),      // 1
+					$val["COD_TEMP"],                       // 2
+                    utf8_encode($val["LINEA"]),             // 3
+                    utf8_encode($val["SUBLINEA"]),          // 4
+                    utf8_encode($val["MARCA"]),             // 5
+                    utf8_encode($val["ESTILO"]),            // 6
+                    utf8_encode($val["SHORT_NAME"]),        // 7
+					utf8_encode($val["ID_CORPORATIVO"]),    // 8
+					utf8_encode($val["DESCMODELO"]),        // 9
+					utf8_encode($val["DESCRIP_INTERNET"]),  // 10
+					utf8_encode($val["COMPOSICION"]),       // 11
+					utf8_encode($val["COLECCION"]),         // 12
+					utf8_encode($val["EVENTO"]),            // 13
+					$val["COD_ESTILO_VIDA"],                // 14
+					utf8_encode($val["CALIDAD"]),           // 15
+					utf8_encode($val["COD_OCASION_USO"]),   // 16
+                    utf8_encode($val["COD_PIRAMIX"]),       // 17
+                    utf8_encode($val["DESCRIPCION"]),       // 18
+                    utf8_encode($val["COD_RANKVTA"]),       // 19
+                    utf8_encode($val["LIFE_CYCLE"]),        // 20
+                    utf8_encode($val["NUM_EMB"]),           // 21
+					utf8_encode($val["COD_COLOR"]),         // 22
+					utf8_encode($val["TIPO_PRODUCTO"]),     // 23
+					utf8_encode($val["TIPO_EXHIBICION"]),   // 24
+					utf8_encode($val["DESTALLA"]),          // 25
+					utf8_encode($val["TIPO_EMPAQUE"]),      // 26
+					utf8_encode($val["PORTALLA_1_INI"]),    // 27
+					utf8_encode($val["PORTALLA_1"]),        // 28
+					utf8_encode($val["CURVATALLA"]),        // 29
+					$val["CURVAMIN"],                       // 30
+					$val["UNID_OPCION_INICIO"],             // 31
+					$val["UNID_OPCION_AJUSTADA"],           // 32
+					$val["CAN"],                            // 33
+					$val["MTR_PACK"],                       // 34
+					$val["CANT_INNER"],                     // 35
+                    utf8_encode($val["SEG_ASIG"]),          // 36
+					utf8_encode($val["FORMATO"]),           // 37
+					$val["TDAS"],                           // 38
+					$val["A"],                              // 39
+					$val["B"],                              // 40
+					$val["C"],                              // 41
+					$val["I"],                              // 42
+					$val["UND_ASIG_INI"],                   // 43
+					$val["ROT"],                            // 44
+					utf8_encode($val["NOM_PRECEDENCIA"]),   // 45
+					utf8_encode($val["NOM_VIA"]),           // 46
+					utf8_encode($val["NOM_PAIS"]),          // 47
+					utf8_encode($val["VIAJE"]),             // 48
+					$val["MKUP"],                           // 49
+					$val["PRECIO_BLANCO"],                  // 50
+					$val["GM"],                             // 51
+					$val["COD_TIP_MON"],                    // 52
+					$val["COSTO_TARGET"],                   // 53
+					$val["COSTO_FOB"],                      // 54
+					$val["COSTO_INSP"],                     // 55
+					$val["COSTO_RFID"],                     // 56
+					$val["ROYALTY_POR"],                    // 57
+					$val["COSTO_UNIT"],                     // 58
+					$val["COSTO_UNITS"],                    // 59
+					$val["CST_TOTLTARGET"],                 // 60
+					$val["COSTO_TOT"],                      // 61
+					$val["COSTO_TOTS"],                     // 62
+					utf8_encode($val["RETAIL"]),            // 63
+					utf8_encode($val["DEBUT_REODER"]),      // 64
+					$val["SEM_INI"],                        // 65
+					$val["SEM_FIN"],                        // 66
+					$val["CICLO"],                          // 67
+					$val["AGOT_OBJ"],                       // 68
+					$val["SEMLIQ"],                         // 69
+					utf8_encode($val["ALIAS_PROV"]),        // 70
+					utf8_encode($val["COD_PROVEEDOR"]),     // 71
+					utf8_encode($val["COD_TRADER"]),        // 72
+					utf8_encode($val["CODSKUPROVEEDOR"]),   // 73
+                    utf8_encode($val["SKU"]),               // 74
+					utf8_encode($val["PROFORMA"]),          // 75
+					$val["ARCHIVO"],                        // 76
+					$val["ESTILO_PMM"],                     // 77
+					$val["ESTADO_MATCH"],                   // 78
+					$val["PO_NUMBER"],                      // 79
+					$val["ESTADO_OC"],                      // 80
+					$val["FECHA_EMBARQUE"],                 // 81
+					$val["FECHA_ETA"],                      // 82
+					$val["FECHA_RECEPCION"],                // 83
+					$val["DIAS_ATRASO"],                    // 84
+					$val["CODESTADO"],                      // 85
+					$val["ESTADO_C1"],                      // 86
+					$val["VENTANA_LLEGADA"],                // 87
+					$val["FECHA_RECEPCD_C1"]                // 88
 				);
 			}
 			header("Content-Type: application/json");
