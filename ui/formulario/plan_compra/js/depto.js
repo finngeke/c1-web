@@ -213,7 +213,7 @@ function redireccDeptoPopUp(event) {
                                                         //estos perfiles ingresan como lectura
                                                         if ((flag_cod_tip_usr == 11) || (flag_cod_tip_usr == 4) ||(flag_cod_tip_usr == 7)){
 														getjerarquia(depto);
-                                            location.href='simulador_compra?depto='+depto;
+                                                        location.href='simulador_compra?depto='+depto;
 
                                                             //el resto de perfiles que no entran de 2
                                                         }else {
