@@ -238,5 +238,10 @@
 			$sql = "SELECT CASE WHEN EXISTS(SELECT * FROM PLC_CARGA_FACTURAS_DTL WHERE (NRO_FACTURA = '$nro_factura') AND (PO_NUMBER = $po_number)) THEN 1 ELSE 0 END AS EXISTE FROM DUAL";
 			return \database::getInstancia()->getFila($sql);
 		}
+		
+		public static function crearDetalleLPN($cod_proveedor, $nro_factura){
+			$sql = "BEGIN PLC_PKG_PROVEEDOR.PRC_PACKING_LIST_LPN($cod_proveedor, '$nro_factura'); END;";
+			return \database::getInstancia()->getConsulta($sql);
+		}
 // Fin de la clase
 	}
