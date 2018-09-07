@@ -4454,7 +4454,8 @@
         $key = 0;
         $dtcolores = plan_compra::list_colores();
 
-        foreach($rows as $val2){ $_i ++;
+        foreach($rows as $val2){
+            $_i ++;
             if ($_i > 1){ //fila 1 es la cabesera
                 if ($_i == 2){//Borrar filas, maximo id_color3
                     plan_compra::DeleteRowsPlan($cod_tempo,$depto,$val2[$nom_columnas['Codigo Marca']],$val2[$nom_columnas['Grupo de compra']]);
@@ -4638,7 +4639,7 @@
       plan_compra::InsertAjustes($logInsert);
 
     return $_Array;
-    }
+    //}
 			$_error = "";
 			$_v = 0;
 			$_Array = [];
@@ -6634,8 +6635,10 @@
 			$array1 = [];
 			$sql = "SELECT *
                   FROM PLC_HISTORIAL_ASSORTMENT
-                  WHERE (COD_TEMPORADA = $tempo) AND (DEP_DEPTO = $depto)
-                  ORDER BY DEP_DEPTO, CODIGO_MARCA";
+                  WHERE COD_TEMPORADA = $tempo 
+                  AND DEP_DEPTO IN ($depto)
+                  ORDER BY DEP_DEPTO, CODIGO_MARCA
+                  ";
 			$data = \database::getInstancia()->getFilas($sql);
 			
 			foreach ($data as $va1) {

@@ -120,10 +120,11 @@
 	$objPHPExcel->getActiveSheet()->getStyle("BP3:CB3")->applyFromArray($estiloMorado);
 	$objPHPExcel->getActiveSheet()->getStyle("CC3:CX3")->applyFromArray($estiloRojo);
 	$objPHPExcel->getActiveSheet()->getStyle("CY3:ER3")->applyFromArray($estiloVerde);
-	
+
 	// Se genera la consulta
 	$row = 4;
 	$assortment = simulador_compra\plan_compra::Export_asorment($cod_temporada, $reemplazo3);
+
 	foreach ($assortment as $item) {
 		$objPHPExcel->getActiveSheet()->SetCellValue("B$row", $item["Cod Dpto"]);
 		$objPHPExcel->getActiveSheet()->SetCellValue("C$row", $item["Dpto"]);

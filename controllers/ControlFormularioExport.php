@@ -10,7 +10,7 @@
 
 class ControlFormularioExport extends Control {
 
-    public function excelFactorEstimado($f3) {
+  public function excelFactorEstimado($f3) {
         
         //echo $f3->get('SESSION.COD_TEMPORADA');
        
@@ -28,7 +28,7 @@ class ControlFormularioExport extends Control {
 
 require_once '../PHPExcel/PHPExcel.php';
 
-       $tipoArchivo = $_POST["tipos_export"];
+        $tipoArchivo = $_POST["tipos_export"];
         $depto = $f3->get('SESSION.COD_DEPTO');
         $Tempo = $f3->get('SESSION.COD_TEMPORADA');
 
@@ -75,14 +75,16 @@ require_once '../PHPExcel/PHPExcel.php';
             $depto_cadena ="";
             $depto_cadena_sql ="";
             foreach($_POST["check_depto"] as $val => $value){
-                $depto_cadena = $depto_cadena.$value."," ;
-                $reemplazo = str_replace ( ",", "'," , $depto_cadena);
-                $reemplazo2 = str_replace ( "D", "'D" , $reemplazo);
-                $reemplazo3 = substr($reemplazo2,0,-1);
+                $depto_cadena = $depto_cadena.$value."," ; // Le adjunta una ,
+                $reemplazo = str_replace ( ",", "'," , $depto_cadena); // Reemplaza , por ',
+                $reemplazo2 = str_replace ( "D", "'D" , $reemplazo); // Teemplaza D por 'D
+                $reemplazo3 = substr($reemplazo2,0,-1); // Quita el último caracter
             }
 
             include '../ui/reporte/excel_asorment.php';
+
       }
+
   }
 
 
@@ -94,7 +96,7 @@ require_once '../PHPExcel/PHPExcel.php';
 
 
 //-------------------------------------------------------------------------
-    public function beforeRoute($f3) {
+  public function beforeRoute($f3) {
 
         if ($f3->exists('SESSION.login') == false) {
             $f3->reroute('/fin-sesion');
