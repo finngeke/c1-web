@@ -227,33 +227,3 @@ $('input#input_G').keydown(function(e) { "use strict"; if ( (e.keyCode == 188) |
 $('input#input_H').keydown(function(e) { "use strict"; if ( (e.keyCode == 188) || (e.keyCode == 32) ) {return false;} });
 $('input#input_I').keydown(function(e) { "use strict"; if ( (e.keyCode == 188) || (e.keyCode == 32) ) {return false;} });
 
-
-// Al hacer click sobre el, muestro el porcentaje
-/*$( "input" ).focus(function() {
-    "use strict";
-    if(this.id != "input_total"){
-        $('#'+this.id).val(this.value/100);
-    }
-});*/
-
-
-// Al salir del input, muestro su valor entero
-/*$( "input" ).focusout(function() {
-    "use strict";
-    if(this.id != "input_total"){
-        //$('#'+this.id).val(this.value*100);
-        $('#'+this.id).val(parseFloat(this.value*100).toFixed(2));
-    }
-    recTotalVentaLlegada();
-});*/
-
-
-// verifica si es nulo o decimal
-/*function test_numero(n){
-    var result = (n - Math.floor(n)) !== 0;
-    if (result){
-        alert("Tiene Decimal");
-    }else{
-        alert("Es un numero entero");
-    }
-}*/
