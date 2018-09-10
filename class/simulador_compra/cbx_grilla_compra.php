@@ -1,21 +1,21 @@
 <?php
-	
-	/**
-	 * CLASS Temporada
-	 * Descripción: Obtiene temporadas de la tabla PLC_TEMPORADA
-	 * Fecha: 2018-02-07
-	 * @author RODRIGO RIOSECO
-	 */
-	
-	namespace simulador_compra;
-	
-	class cbx_grilla_compra extends \parametros {
-		
-		
-		// Llenar la Tabla 2
-		public static function llenar_tabla2b($temporada, $depto) {
-			
-			$sql = "SELECT
+
+/**
+ * CLASS Temporada
+ * Descripción: Obtiene temporadas de la tabla PLC_TEMPORADA
+ * Fecha: 2018-02-07
+ * @author RODRIGO RIOSECO
+ */
+
+namespace simulador_compra;
+
+class cbx_grilla_compra extends \parametros {
+
+
+    // Llenar la Tabla 2
+    public static function llenar_tabla2b($temporada, $depto) {
+
+        $sql = "SELECT
                 C.ID_COLOR3,              -- id
                 C.GRUPO_COMPRA,           -- grupo compra
                 NVL(TEMP,1) COD_TEMP,     -- temp
@@ -270,16 +270,16 @@
                   WHERE C.COD_TEMPORADA =  " . $temporada . " AND C.DEP_DEPTO =  '" . $depto . "'
                   ORDER BY C.ID_COLOR3, C.COD_JER2,C.COD_SUBLIN,C.COD_ESTILO,NVL(COD_COLOR,0) ,C.VENTANA_LLEGADA,C.DEBUT_REODER
               ";
-			
-			$data = \database::getInstancia()->getFilas($sql);
-			
-			return $data;
-			
-		}
-		
-		public static function llenar_tabla2($temporada, $depto) {
-			
-			$sql = "SELECT
+
+        $data = \database::getInstancia()->getFilas($sql);
+
+        return $data;
+
+    }
+
+    public static function llenar_tabla2($temporada, $depto) {
+
+        $sql = "SELECT
                 C.ID_COLOR3,                  -- 0 id
                 C.GRUPO_COMPRA,               -- 1 grupo compra
                 NVL(TEMP,1) COD_TEMP,         -- 2 temp
@@ -302,7 +302,7 @@
                 C.NOM_RNK COD_RANKVTA,           -- 19 rank vta
                 C.NOM_LIFECYCLE LIFE_CYCLE,      -- 20 ciclo vida
                 C.NUM_EMB,                       -- 21 num_emb
-                B.DESCRIPCION COD_COLOR,           -- 22 color
+                C.NOM_COLOR COD_COLOR,           -- 22 color
                 C.TIPO_PRODUCTO,                 -- 23 Tipo Producto
                 C.TIPO_EXHIBICION,               -- 24 Tipo Exhibicion
                 C.DESTALLA,                      -- 25 Tallas
@@ -372,36 +372,35 @@
                 FROM PLC_PLAN_COMPRA_COLOR_3 C
                 LEFT JOIN PLC_PLAN_COMPRA_OC O ON C.COD_TEMPORADA = O.COD_TEMPORADA
 				AND C.DEP_DEPTO = O.DEP_DEPTO AND C.ID_COLOR3 = O.ID_COLOR3
-				INNER JOIN PLC_MAEDIM B ON C.COD_COLOR = B.CODIGO
                 WHERE C.COD_TEMPORADA = $temporada AND C.DEP_DEPTO = '" . $depto . "'
                 ORDER BY C.ID_COLOR3, C.COD_JER2,C.COD_SUBLIN,C.COD_ESTILO,NVL(COD_COLOR,0) ,C.VENTANA_LLEGADA,C.DEBUT_REODER";
-			
-			$data = \database::getInstancia()->getFilas($sql);
-			
-			return $data;
-			
-		}
-		
-		public static function llenar_tabla_depto($temporada) {
-			
-			$sql = "begin PLC_PKG_DESARROLLO.PRC_LISTDEPTXTEMP(" . $temporada . ", :data); end;";
-			$data = \database::getInstancia()->getConsultaSP($sql, 1);
-			return $data;
-		}
-		
-		public static function llenar_tabla_oc($temporada) {
-			
-			$sql = "begin PLC_PKG_DESARROLLO.PRC_LISTAR_ESTADOS(" . $temporada . ", :data); end;";
-			$data = \database::getInstancia()->getConsultaSP($sql, 1);
-			array_pop($data);
-			return $data;
-		}
-		
-		
-		// Parte 2 Tabla 1
-		public static function listar_consumo($temporada, $depto) {
-			
-			$sql = "SELECT PERIODO VENTANA
+
+        $data = \database::getInstancia()->getFilas($sql);
+
+        return $data;
+
+    }
+
+    public static function llenar_tabla_depto($temporada) {
+
+        $sql = "begin PLC_PKG_DESARROLLO.PRC_LISTDEPTXTEMP(" . $temporada . ", :data); end;";
+        $data = \database::getInstancia()->getConsultaSP($sql, 1);
+        return $data;
+    }
+
+    public static function llenar_tabla_oc($temporada) {
+
+        $sql = "begin PLC_PKG_DESARROLLO.PRC_LISTAR_ESTADOS(" . $temporada . ", :data); end;";
+        $data = \database::getInstancia()->getConsultaSP($sql, 1);
+        array_pop($data);
+        return $data;
+    }
+
+
+    // Parte 2 Tabla 1
+    public static function listar_consumo($temporada, $depto) {
+
+        $sql = "SELECT PERIODO VENTANA
                       ,SUM(COSTO) COSTO
                       ,SUM(VTA_CDSCTO) RETAIL
                 FROM plc_plan_compra_color_CIC A
@@ -409,52 +408,52 @@
                 AND A.dep_depto = '" . $depto . "'
                 GROUP BY PERIODO
                 ";
-			
-			$data = \database::getInstancia()->getFilas($sql);
-			
-			//return $data;
-			
-			$json = array();
-			foreach ($data as $val) {
-				array_push($json, ["id" => $val[0], "name" => $val[1]]);
-			}
-			return $json;
-			
-		}
-		
-		// Actualizo Proforma y Estado en plc_plan_compra_color_3 (Se envió Archivo + Proforma)
-		public static function actualizaProformaEstado($temporada, $depto, $proforma, $id_color, $login) {
-			
-			$sql = "UPDATE plc_plan_compra_color_3
+
+        $data = \database::getInstancia()->getFilas($sql);
+
+        //return $data;
+
+        $json = array();
+        foreach ($data as $val) {
+            array_push($json, ["id" => $val[0], "name" => $val[1]]);
+        }
+        return $json;
+
+    }
+
+    // Actualizo Proforma y Estado en plc_plan_compra_color_3 (Se envió Archivo + Proforma)
+    public static function actualizaProformaEstado($temporada, $depto, $proforma, $id_color, $login) {
+
+        $sql = "UPDATE plc_plan_compra_color_3
                 SET proforma = '" . $proforma . "',
                 estado = 18
                 WHERE cod_temporada = $temporada
                 AND dep_depto = '" . $depto . "'
                 AND id_color3 IN ($id_color)
                 ";
-			
-			// Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
-			if (!file_exists('../archivos/log_querys/' . $login)) {
-				mkdir('../archivos/log_querys/' . $login, 0775, true);
-			}
-			$stamp = date("Y-m-d_H-i-s");
-			$rand = rand(1, 999);
-			$content = $sql;
-			$fp = fopen("../archivos/log_querys/" . $login . "/GRILLA2-1d3ACTESTADOYPROFORMA--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
-			fwrite($fp, $content);
-			fclose($fp);
-			
-			
-			$data = \database::getInstancia()->getConsulta($sql);
-			
-			return $data;
-			
-		}
-		
-		// Guardar Historial en plc_plan_compra_historica (Se envió Archivo + Proforma)
-		public static function guardaHistorial($temporada, $depto, $ids_insertar, $login) {
-			
-			$sql = "INSERT INTO plc_plan_compra_historica (temp,dpto,linea,sublinea,marca,estilo,ventana,color,user_login,user_nom,fecha,hora,pi,oc,estado,id_color3,nom_linea,nom_sublinea,nom_marca,nom_ventana,nom_color)
+
+        // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+        if (!file_exists('../archivos/log_querys/' . $login)) {
+            mkdir('../archivos/log_querys/' . $login, 0775, true);
+        }
+        $stamp = date("Y-m-d_H-i-s");
+        $rand = rand(1, 999);
+        $content = $sql;
+        $fp = fopen("../archivos/log_querys/" . $login . "/GRILLA2-1d3ACTESTADOYPROFORMA--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+        fwrite($fp, $content);
+        fclose($fp);
+
+
+        $data = \database::getInstancia()->getConsulta($sql);
+
+        return $data;
+
+    }
+
+    // Guardar Historial en plc_plan_compra_historica (Se envió Archivo + Proforma)
+    public static function guardaHistorial($temporada, $depto, $ids_insertar, $login) {
+
+        $sql = "INSERT INTO plc_plan_compra_historica (temp,dpto,linea,sublinea,marca,estilo,ventana,color,user_login,user_nom,fecha,hora,pi,oc,estado,id_color3,nom_linea,nom_sublinea,nom_marca,nom_ventana,nom_color)
                 SELECT
                       C.COD_TEMPORADA,
                       C.DEP_DEPTO,
@@ -483,28 +482,28 @@
                 WHERE C.COD_TEMPORADA = $temporada AND C.DEP_DEPTO =  '" . $depto . "'
                 AND C.ID_COLOR3 IN ($ids_insertar)
                 ";
-			
-			// Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
-			if (!file_exists('../archivos/log_querys/' . $login)) {
-				mkdir('../archivos/log_querys/' . $login, 0775, true);
-			}
-			$stamp = date("Y-m-d_H-i-s");
-			$rand = rand(1, 999);
-			$content = $sql;
-			$fp = fopen("../archivos/log_querys/" . $login . "/GRILLA2-2d3ARCHIVOYPROFORMAHISTORIAL--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
-			fwrite($fp, $content);
-			fclose($fp);
-			
-			$data = \database::getInstancia()->getConsulta($sql);
-			
-			return $data;
-			
-		}
-		
-		// Guardar en OC plc_plan_compra_oc (Se envió Archivo + Proforma)
-		public static function guardaOc($temporada, $depto, $id_color, $archivo_proforma, $login) {
-			
-			$sql = "INSERT INTO plc_plan_compra_oc (cod_temporada,dep_depto,niv_jer1,cod_jer1,niv_jer2,cod_jer2,item,cod_sublin,cod_estilo,des_estilo,vent_emb,proforma,archivo,id_color3, estado_oc,estilo_pmm)
+
+        // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+        if (!file_exists('../archivos/log_querys/' . $login)) {
+            mkdir('../archivos/log_querys/' . $login, 0775, true);
+        }
+        $stamp = date("Y-m-d_H-i-s");
+        $rand = rand(1, 999);
+        $content = $sql;
+        $fp = fopen("../archivos/log_querys/" . $login . "/GRILLA2-2d3ARCHIVOYPROFORMAHISTORIAL--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+        fwrite($fp, $content);
+        fclose($fp);
+
+        $data = \database::getInstancia()->getConsulta($sql);
+
+        return $data;
+
+    }
+
+    // Guardar en OC plc_plan_compra_oc (Se envió Archivo + Proforma)
+    public static function guardaOc($temporada, $depto, $id_color, $archivo_proforma, $login) {
+
+        $sql = "INSERT INTO plc_plan_compra_oc (cod_temporada,dep_depto,niv_jer1,cod_jer1,niv_jer2,cod_jer2,item,cod_sublin,cod_estilo,des_estilo,vent_emb,proforma,archivo,id_color3, estado_oc,estilo_pmm)
                 SELECT
                       C.COD_TEMPORADA,
                       C.DEP_DEPTO,
@@ -528,102 +527,102 @@
                 WHERE C.COD_TEMPORADA = $temporada AND C.DEP_DEPTO =  '" . $depto . "'
                 AND C.ID_COLOR3 IN ($id_color)
                 ";
-			
-			// Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
-			if (!file_exists('../archivos/log_querys/' . $login)) {
-				mkdir('../archivos/log_querys/' . $login, 0775, true);
-			}
-			$stamp = date("Y-m-d_H-i-s");
-			$rand = rand(1, 999);
-			$content = $sql;
-			$fp = fopen("../archivos/log_querys/" . $login . "/GRILLA2-3d3ARCHIVOYPROFORMAGUARDAOC--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
-			fwrite($fp, $content);
-			fclose($fp);
-			
-			$data = \database::getInstancia()->getConsulta($sql);
-			return $data;
-			
-		}
-		
-		// Guardar Solo Proforma
-		public static function guarda_solo_proforma($temporada, $depto, $login, $proforma, $id_insertar) {
-			
-			$sql = "UPDATE plc_plan_compra_color_3
+
+        // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+        if (!file_exists('../archivos/log_querys/' . $login)) {
+            mkdir('../archivos/log_querys/' . $login, 0775, true);
+        }
+        $stamp = date("Y-m-d_H-i-s");
+        $rand = rand(1, 999);
+        $content = $sql;
+        $fp = fopen("../archivos/log_querys/" . $login . "/GRILLA2-3d3ARCHIVOYPROFORMAGUARDAOC--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+        fwrite($fp, $content);
+        fclose($fp);
+
+        $data = \database::getInstancia()->getConsulta($sql);
+        return $data;
+
+    }
+
+    // Guardar Solo Proforma
+    public static function guarda_solo_proforma($temporada, $depto, $login, $proforma, $id_insertar) {
+
+        $sql = "UPDATE plc_plan_compra_color_3
                 SET proforma = '" . $proforma . "'
                 WHERE cod_temporada = $temporada
                 AND dep_depto = '" . $depto . "'
                 AND id_color3 = $id_insertar
                 ";
-			
-			// Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
-			if (!file_exists('../archivos/log_querys/' . $login)) {
-				mkdir('../archivos/log_querys/' . $login, 0775, true);
-			}
-			$stamp = date("Y-m-d_H-i-s");
-			$rand = rand(1, 999);
-			$content = $sql;
-			$fp = fopen("../archivos/log_querys/" . $login . "/GRILLA2-ACTUALIZASOLOPROFORMA--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
-			fwrite($fp, $content);
-			fclose($fp);
-			
-			$data = \database::getInstancia()->getConsulta($sql);
-			return $data;
-			
-		}
-		
-		// Actualiza Historial
-		public static function actualiza_historial($temporada, $depto, $login, $proforma, $id_insertar) {
-			
-			$sql = "UPDATE plc_plan_compra_historica
+
+        // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+        if (!file_exists('../archivos/log_querys/' . $login)) {
+            mkdir('../archivos/log_querys/' . $login, 0775, true);
+        }
+        $stamp = date("Y-m-d_H-i-s");
+        $rand = rand(1, 999);
+        $content = $sql;
+        $fp = fopen("../archivos/log_querys/" . $login . "/GRILLA2-ACTUALIZASOLOPROFORMA--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+        fwrite($fp, $content);
+        fclose($fp);
+
+        $data = \database::getInstancia()->getConsulta($sql);
+        return $data;
+
+    }
+
+    // Actualiza Historial
+    public static function actualiza_historial($temporada, $depto, $login, $proforma, $id_insertar) {
+
+        $sql = "UPDATE plc_plan_compra_historica
                 SET PI = '" . $proforma . "'
                 WHERE TEMP = $temporada
                 AND DPTO = '" . $depto . "'
                 AND id_color3 = $id_insertar
                 ";
-			
-			// Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
-			if (!file_exists('../archivos/log_querys/' . $login)) {
-				mkdir('../archivos/log_querys/' . $login, 0775, true);
-			}
-			$stamp = date("Y-m-d_H-i-s");
-			$rand = rand(1, 999);
-			$content = $sql;
-			$fp = fopen("../archivos/log_querys/" . $login . "/GRILLA2-ACTUALIZAPROFORMAHISTORIAL--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
-			fwrite($fp, $content);
-			fclose($fp);
-			
-			$data = \database::getInstancia()->getConsulta($sql);
-			return $data;
-			
-		}
-		
-		// Actualiza Estado Opcion según estado OC PMM
-		public static function actualiza_estado_oc_segun_ocpmm($temporada, $depto, $login, $pi, $id_color3, $estado) {
-			
-			// $sql = "begin PLC_PKG_UTILS.PRC_ESTADO_OCPMM($temporada,'".$depto."', :error, :data); end;"; (Contra PMM)
-			$sql = "begin PLC_PKG_UTILS.PRC_ESTADO_OCPMM_2($temporada,'" . $depto . "','" . $pi . "',$id_color3,'" . $estado . "', :error, :data); end;";
-			
-			// Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
-			if (!file_exists('../archivos/log_querys/' . $login)) {
-				mkdir('../archivos/log_querys/' . $login, 0775, true);
-			}
-			$stamp = date("Y-m-d_H-i-s");
-			$rand = rand(1, 999);
-			$content = $sql;
-			$fp = fopen("../archivos/log_querys/" . $login . "/GRILLA2ESTADO20a21-ACTESTADOCSEGUNPMM_BROKER--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
-			fwrite($fp, $content);
-			fclose($fp);
-			
-			$data = \database::getInstancia()->getConsultaSP($sql, 2);
-			return $data;
-			
-		}
-		
-		
-		// Trabajo con Flujo de Aprobación Insert
-		public static function trabaja_flujo_aprobacion_insert($temporada, $depto, $login, $id_coloor3, $estado) {
-			
-			$sql = "INSERT INTO PLC_PLAN_COMPRA_HISTORICA (DPTO,LINEA,SUBLINEA,MARCA,ESTILO,VENTANA,COLOR,USER_LOGIN,USER_NOM,FECHA,HORA,PI,OC,ESTADO,TEMP,ID_COLOR3,NOM_LINEA,NOM_MARCA,NOM_VENTANA,NOM_COLOR,NOM_SUBLINEA)
+
+        // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+        if (!file_exists('../archivos/log_querys/' . $login)) {
+            mkdir('../archivos/log_querys/' . $login, 0775, true);
+        }
+        $stamp = date("Y-m-d_H-i-s");
+        $rand = rand(1, 999);
+        $content = $sql;
+        $fp = fopen("../archivos/log_querys/" . $login . "/GRILLA2-ACTUALIZAPROFORMAHISTORIAL--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+        fwrite($fp, $content);
+        fclose($fp);
+
+        $data = \database::getInstancia()->getConsulta($sql);
+        return $data;
+
+    }
+
+    // Actualiza Estado Opcion según estado OC PMM
+    public static function actualiza_estado_oc_segun_ocpmm($temporada, $depto, $login, $pi, $id_color3, $estado) {
+
+        // $sql = "begin PLC_PKG_UTILS.PRC_ESTADO_OCPMM($temporada,'".$depto."', :error, :data); end;"; (Contra PMM)
+        $sql = "begin PLC_PKG_UTILS.PRC_ESTADO_OCPMM_2($temporada,'" . $depto . "','" . $pi . "',$id_color3,'" . $estado . "', :error, :data); end;";
+
+        // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+        if (!file_exists('../archivos/log_querys/' . $login)) {
+            mkdir('../archivos/log_querys/' . $login, 0775, true);
+        }
+        $stamp = date("Y-m-d_H-i-s");
+        $rand = rand(1, 999);
+        $content = $sql;
+        $fp = fopen("../archivos/log_querys/" . $login . "/GRILLA2ESTADO20a21-ACTESTADOCSEGUNPMM_BROKER--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+        fwrite($fp, $content);
+        fclose($fp);
+
+        $data = \database::getInstancia()->getConsultaSP($sql, 2);
+        return $data;
+
+    }
+
+
+    // Trabajo con Flujo de Aprobación Insert
+    public static function trabaja_flujo_aprobacion_insert($temporada, $depto, $login, $id_coloor3, $estado) {
+
+        $sql = "INSERT INTO PLC_PLAN_COMPRA_HISTORICA (DPTO,LINEA,SUBLINEA,MARCA,ESTILO,VENTANA,COLOR,USER_LOGIN,USER_NOM,FECHA,HORA,PI,OC,ESTADO,TEMP,ID_COLOR3,NOM_LINEA,NOM_MARCA,NOM_VENTANA,NOM_COLOR,NOM_SUBLINEA)
                 SELECT
                         C.DEP_DEPTO,
                         C.COD_JER2 LINEA,         -- linea
@@ -652,95 +651,95 @@
                   WHERE C.COD_TEMPORADA = $temporada AND C.DEP_DEPTO =  '" . $depto . "'
                   AND C.ID_COLOR3 IN ($id_coloor3)
                 ";
-			
-			// Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
-			if (!file_exists('../archivos/log_querys/' . $login)) {
-				mkdir('../archivos/log_querys/' . $login, 0775, true);
-			}
-			$stamp = date("Y-m-d_H-i-s");
-			$rand = rand(1, 999);
-			$content = $sql;
-			$fp = fopen("../archivos/log_querys/" . $login . "/GRILLA2-FLUJOHISTORIALINSERT--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
-			fwrite($fp, $content);
-			fclose($fp);
-			
-			$data = \database::getInstancia()->getConsulta($sql);
-			return $data;
-			
-		}
-		
-		// Trabajo con Flujo de Aprobación Update
-		public static function trabaja_flujo_aprobacion_update($temporada, $depto, $login, $proforma, $estado) {
-			
-			$sql = "begin PLC_PKG_UTILS.PRC_SOLOC($temporada,'" . $depto . "','" . $proforma . "',$estado, :error, :data); end;";
-			
-			// Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
-			if (!file_exists('../archivos/log_querys/' . $login)) {
-				mkdir('../archivos/log_querys/' . $login, 0775, true);
-			}
-			$stamp = date("Y-m-d_H-i-s");
-			$rand = rand(1, 999);
-			$content = $sql;
-			$fp = fopen("../archivos/log_querys/" . $login . "/GRILLA2-FLUJOHISTORIALUPDATE--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
-			fwrite($fp, $content);
-			fclose($fp);
-			
-			$data = \database::getInstancia()->getConsultaSP($sql, 2);
-			return $data;
-			
-		}
-		
-		
-		// Listar el coemntario de la PI que se solcititò modificar
-		public static function busca_comentario_pi($temporada, $depto, $login, $pi) {
-			
-			$sql = "SELECT ERROR_PI,proforma
+
+        // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+        if (!file_exists('../archivos/log_querys/' . $login)) {
+            mkdir('../archivos/log_querys/' . $login, 0775, true);
+        }
+        $stamp = date("Y-m-d_H-i-s");
+        $rand = rand(1, 999);
+        $content = $sql;
+        $fp = fopen("../archivos/log_querys/" . $login . "/GRILLA2-FLUJOHISTORIALINSERT--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+        fwrite($fp, $content);
+        fclose($fp);
+
+        $data = \database::getInstancia()->getConsulta($sql);
+        return $data;
+
+    }
+
+    // Trabajo con Flujo de Aprobación Update
+    public static function trabaja_flujo_aprobacion_update($temporada, $depto, $login, $proforma, $estado) {
+
+        $sql = "begin PLC_PKG_UTILS.PRC_SOLOC($temporada,'" . $depto . "','" . $proforma . "',$estado, :error, :data); end;";
+
+        // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+        if (!file_exists('../archivos/log_querys/' . $login)) {
+            mkdir('../archivos/log_querys/' . $login, 0775, true);
+        }
+        $stamp = date("Y-m-d_H-i-s");
+        $rand = rand(1, 999);
+        $content = $sql;
+        $fp = fopen("../archivos/log_querys/" . $login . "/GRILLA2-FLUJOHISTORIALUPDATE--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+        fwrite($fp, $content);
+        fclose($fp);
+
+        $data = \database::getInstancia()->getConsultaSP($sql, 2);
+        return $data;
+
+    }
+
+
+    // Listar el coemntario de la PI que se solcititò modificar
+    public static function busca_comentario_pi($temporada, $depto, $login, $pi) {
+
+        $sql = "SELECT ERROR_PI,proforma
                 FROM PLC_PLAN_COMPRA_COLOR_3
                 WHERE cod_temporada = $temporada
                 AND dep_depto = '" . $depto . "'
                 AND proforma = '" . $pi . "'
                 ";
-			
-			$data = \database::getInstancia()->getFilas($sql);
-			return $data;
-			
-		}
-		
-		
-		// Buscar si la OC esta con estado 20/21 en PLC_PLAN_COMPRA_COLOR_3
-		public static function busca_existe_proforma($temporada, $depto, $login, $pi) {
-			
-			$sql = "SELECT PROFORMA FROM PLC_PLAN_COMPRA_COLOR_3
+
+        $data = \database::getInstancia()->getFilas($sql);
+        return $data;
+
+    }
+
+
+    // Buscar si la OC esta con estado 20/21 en PLC_PLAN_COMPRA_COLOR_3
+    public static function busca_existe_proforma($temporada, $depto, $login, $pi) {
+
+        $sql = "SELECT PROFORMA FROM PLC_PLAN_COMPRA_COLOR_3
                 WHERE COD_TEMPORADA = $temporada
                 AND DEP_DEPTO = '" . $depto . "'
                 AND PROFORMA = '" . $pi . "'
                 AND ESTADO IN (20,21)
                 ";
-			
-			$data = \database::getInstancia()->getFilas($sql);
-			return $data;
-			
-		}
-		
-		
-		// Buscar si existe archivo en PLC_PLAN_COMPRA_OC
-		public static function busca_existe_archivo($temporada, $depto, $login, $pi) {
-			
-			$sql = "SELECT DISTINCT(ARCHIVO) FROM PLC_PLAN_COMPRA_OC
+
+        $data = \database::getInstancia()->getFilas($sql);
+        return $data;
+
+    }
+
+
+    // Buscar si existe archivo en PLC_PLAN_COMPRA_OC
+    public static function busca_existe_archivo($temporada, $depto, $login, $pi) {
+
+        $sql = "SELECT DISTINCT(ARCHIVO) FROM PLC_PLAN_COMPRA_OC
                 WHERE COD_TEMPORADA = $temporada
                 AND DEP_DEPTO = '" . $depto . "'
                 AND PROFORMA = '" . $pi . "'
                 ";
-			
-			$data = \database::getInstancia()->getFilas($sql);
-			return $data;
-			
-		}
-		
-		// Llenar Tabla llenar_tabla_historial (POPUP de la Grilla)
-		public static function llenar_tabla_historial($temporada, $depto, $id_color3) {
-			
-			$sql = "select   NVL(A.FECHA,''),
+
+        $data = \database::getInstancia()->getFilas($sql);
+        return $data;
+
+    }
+
+    // Llenar Tabla llenar_tabla_historial (POPUP de la Grilla)
+    public static function llenar_tabla_historial($temporada, $depto, $id_color3) {
+
+        $sql = "select   NVL(A.FECHA,''),
                          NVL(A.HORA,''),
                          A.USER_NOM USUARIO,
                          --B.NOM_EST_C1 ESTADO
@@ -752,55 +751,55 @@
                 AND    A.ID_COLOR3 = $id_color3
                 ORDER BY A.FECHA, A.HORA ASC
      ";
-			
-			$data = \database::getInstancia()->getFilas($sql);
-			return $data;
-			
-		}
-		
-		// Llenar Tabla llenar_tabla_historial (POPUP de la Grilla)
-		public static function traer_datos_oc($temporada, $depto, $pi, $puerto, $url) {
-			
-			/*$sql = " SELECT  sts.pmg_stat_name      Nom_Estado
-						,M.PMG_PO_NUMBER        N_OC
-						,M.ECV_NIPI             N_PI
-						,m.fecha_ini_embarque   Fecha_Embarque_pmm
-						,m.fecha_eta            Fecha_Eta
-						,fecha_eta+15           fecha_recepcion
-						,c.vent_emb vent_emb
-						,c.ventana_llegada  ventana_llegada
-						,e.fecha_recepcd as fecha_recepcd_c1
-						,((fecha_eta+15)- e.fecha_recepcd) dias
-					   FROM rpypcree m
-					   LEFT JOIN  pmghdree hdr on  m.pmg_po_number= hdr.PMG_PO_NUMBER
-					   LEFT JOIN pmgstscd sts on sts.pmg_stat_code = hdr.pmg_stat_code
-					   LEFT JOIN PLC_PLAN_COMPRA_COLOR_3 C on C.PROFORMA = M.ECV_NIPI
-					   inner JOIN plc_ventana_emb e on e.cod_ventana = c.vent_emb
-												  and e.cod_temporada = c.cod_temporada
-					   WHERE sts.pmg_stat_code <> 7
-					   AND C.COD_TEMPORADA =  $temporada
-					   AND C.DEP_DEPTO =  '".$depto."'
-					   AND C.PROFORMA <> '0'
-					   AND sts.pmg_stat_name <> 'Cancelada'
-					   GROUP BY sts.pmg_stat_name,M.PMG_PO_NUMBER,M.ECV_NIPI,m.fecha_ini_embarque,m.fecha_eta,fecha_eta+15,c.vent_emb,c.ventana_llegada,e.fecha_recepcd
-					";
-	
-			$data = \database::getInstancia()->getFilas($sql);
-			return $data;*/
-			
-			$curl = curl_init();
-			
-			curl_setopt_array($curl, array(
-				CURLOPT_PORT => $puerto,
-				CURLOPT_URL => $url . "/consultaOrdenComprarst/v1/consultaOrdenCompra",
-				CURLOPT_RETURNTRANSFER => true,
-				CURLOPT_ENCODING => "",
-				CURLOPT_MAXREDIRS => 10,
-				CURLOPT_TIMEOUT => 30,
-				CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-				CURLOPT_CUSTOMREQUEST => "POST",
-				//CURLOPT_POSTFIELDS => "{\n\t\"HeaderRply\": {\n\t\t\"servicio\": {\n\t\t\t\"nombreServicio\": \"string\",\n\t\t\t\"operacion\": \"string\",\n\t\t\t\"idTransaccion\": \"string\",\n\t\t\t\"tipoMensaje\": \"string\",\n\t\t\t\"tipoTransaccion\": \"string\",\n\t\t\t\"usuario\": \"string\",\n\t\t\t\"dominioPais\": \"string\",\n\t\t\t\"ipOrigen\": \"string\",\n\t\t\t\"servidor\": \"string\",\n\t\t\t\"timeStamp\": \"string\"\n\t\t},\n\t\t\"paginacion\": {\n\t\t\t\"numPagina\": \"string\",\n\t\t\t\"cantidadRegistros\": \"string\",\n\t\t\t\"totalRegistros\": \"string\"\n\t\t},\n\t\t\"track\": {\n\t\t\t\"idTrack\": \"string\",\n\t\t\t\"codSistema\": \"string\",\n\t\t\t\"codAplicacion\": \"string\",\n\t\t\t\"componente\": \"string\",\n\t\t\t\"estado\": \"string\",\n\t\t\t\"dataLogger\": \"string\",\n\t\t\t\"flagTracking\": \"string\",\n\t\t\t\"flagLog\": \"string\"\n\t\t},\n\t\t\"error\": [\n\t\t\t{\n\t\t\t\t\"errorCode\": \"string\",\n\t\t\t\t\"errorGlosa\": \"string\"\n\t\t\t}\n\t\t],\n\t\t\"reproceso\": {\n\t\t\t\"countReproceso\": \"string\",\n\t\t\t\"intervaloReintento\": \"string\",\n\t\t\t\"objetoReproceso\": \"string\"\n\t\t},\n\t\t\"filler\": \"string\"\n\t},\n\t\"Body\": {\n\t\t\"headerServicio\": {\n\t\t\t\"version\": \"string\",\n\t\t\t\"canal\": \"string\",\n\t\t\t\"estado\": \"string\",\n\t\t\t\"comercio\": \"string\",\n\t\t\t\"fecha\": \"string\",\n\t\t\t\"hora\": \"string\",\n\t\t\t\"nroTransaccion\": \"string\",\n\t\t\t\"sucursal\": \"string\",\n\t\t\t\"terminal\": \"string\",\n\t\t\t\"tipoTransaccion\": \"string\",\n\t\t\t\"codigoUsusario\": \"string\",\n\t\t\t\"entidad\": \"string\",\n\t\t\t\"dominioPais\": \"string\"\n\t\t},\n\t\t\"ordenCompra\": \"".$po."\",\n\t\t\"numeroPI\": \"".$pi."\"\n\t}\n}",
-				CURLOPT_POSTFIELDS => "{
+
+        $data = \database::getInstancia()->getFilas($sql);
+        return $data;
+
+    }
+
+    // Llenar Tabla llenar_tabla_historial (POPUP de la Grilla)
+    public static function traer_datos_oc($temporada, $depto, $pi, $puerto, $url) {
+
+        /*$sql = " SELECT  sts.pmg_stat_name      Nom_Estado
+                    ,M.PMG_PO_NUMBER        N_OC
+                    ,M.ECV_NIPI             N_PI
+                    ,m.fecha_ini_embarque   Fecha_Embarque_pmm
+                    ,m.fecha_eta            Fecha_Eta
+                    ,fecha_eta+15           fecha_recepcion
+                    ,c.vent_emb vent_emb
+                    ,c.ventana_llegada  ventana_llegada
+                    ,e.fecha_recepcd as fecha_recepcd_c1
+                    ,((fecha_eta+15)- e.fecha_recepcd) dias
+                   FROM rpypcree m
+                   LEFT JOIN  pmghdree hdr on  m.pmg_po_number= hdr.PMG_PO_NUMBER
+                   LEFT JOIN pmgstscd sts on sts.pmg_stat_code = hdr.pmg_stat_code
+                   LEFT JOIN PLC_PLAN_COMPRA_COLOR_3 C on C.PROFORMA = M.ECV_NIPI
+                   inner JOIN plc_ventana_emb e on e.cod_ventana = c.vent_emb
+                                              and e.cod_temporada = c.cod_temporada
+                   WHERE sts.pmg_stat_code <> 7
+                   AND C.COD_TEMPORADA =  $temporada
+                   AND C.DEP_DEPTO =  '".$depto."'
+                   AND C.PROFORMA <> '0'
+                   AND sts.pmg_stat_name <> 'Cancelada'
+                   GROUP BY sts.pmg_stat_name,M.PMG_PO_NUMBER,M.ECV_NIPI,m.fecha_ini_embarque,m.fecha_eta,fecha_eta+15,c.vent_emb,c.ventana_llegada,e.fecha_recepcd
+                ";
+
+        $data = \database::getInstancia()->getFilas($sql);
+        return $data;*/
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_PORT => $puerto,
+            CURLOPT_URL => $url . "/consultaOrdenComprarst/v1/consultaOrdenCompra",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            //CURLOPT_POSTFIELDS => "{\n\t\"HeaderRply\": {\n\t\t\"servicio\": {\n\t\t\t\"nombreServicio\": \"string\",\n\t\t\t\"operacion\": \"string\",\n\t\t\t\"idTransaccion\": \"string\",\n\t\t\t\"tipoMensaje\": \"string\",\n\t\t\t\"tipoTransaccion\": \"string\",\n\t\t\t\"usuario\": \"string\",\n\t\t\t\"dominioPais\": \"string\",\n\t\t\t\"ipOrigen\": \"string\",\n\t\t\t\"servidor\": \"string\",\n\t\t\t\"timeStamp\": \"string\"\n\t\t},\n\t\t\"paginacion\": {\n\t\t\t\"numPagina\": \"string\",\n\t\t\t\"cantidadRegistros\": \"string\",\n\t\t\t\"totalRegistros\": \"string\"\n\t\t},\n\t\t\"track\": {\n\t\t\t\"idTrack\": \"string\",\n\t\t\t\"codSistema\": \"string\",\n\t\t\t\"codAplicacion\": \"string\",\n\t\t\t\"componente\": \"string\",\n\t\t\t\"estado\": \"string\",\n\t\t\t\"dataLogger\": \"string\",\n\t\t\t\"flagTracking\": \"string\",\n\t\t\t\"flagLog\": \"string\"\n\t\t},\n\t\t\"error\": [\n\t\t\t{\n\t\t\t\t\"errorCode\": \"string\",\n\t\t\t\t\"errorGlosa\": \"string\"\n\t\t\t}\n\t\t],\n\t\t\"reproceso\": {\n\t\t\t\"countReproceso\": \"string\",\n\t\t\t\"intervaloReintento\": \"string\",\n\t\t\t\"objetoReproceso\": \"string\"\n\t\t},\n\t\t\"filler\": \"string\"\n\t},\n\t\"Body\": {\n\t\t\"headerServicio\": {\n\t\t\t\"version\": \"string\",\n\t\t\t\"canal\": \"string\",\n\t\t\t\"estado\": \"string\",\n\t\t\t\"comercio\": \"string\",\n\t\t\t\"fecha\": \"string\",\n\t\t\t\"hora\": \"string\",\n\t\t\t\"nroTransaccion\": \"string\",\n\t\t\t\"sucursal\": \"string\",\n\t\t\t\"terminal\": \"string\",\n\t\t\t\"tipoTransaccion\": \"string\",\n\t\t\t\"codigoUsusario\": \"string\",\n\t\t\t\"entidad\": \"string\",\n\t\t\t\"dominioPais\": \"string\"\n\t\t},\n\t\t\"ordenCompra\": \"".$po."\",\n\t\t\"numeroPI\": \"".$pi."\"\n\t}\n}",
+            CURLOPT_POSTFIELDS => "{
                \"HeaderRply\": {
                               \"servicio\": {
                                             \"nombreServicio\": \"string\",
@@ -862,136 +861,136 @@
                               \"numeroPI\": \"" . $pi . "\"
                }
 }",
-				CURLOPT_HTTPHEADER => array(
-					"Content-Type: application/json"
-				),
-			));
-			
-			$response = curl_exec($curl);
-			$err = curl_error($curl);
-			
-			curl_close($curl);
-			if ($err) {
-				return $err;
-			} else {
-				return $response;
-			}
-			
-			
-		}
-		
-		// Trabajando en MATCH llenar tabla PMM
-		public static function llenar_tabla_pmm($temporada, $depto, $login, $oc, $pi) {
-			
-			//  Si hay OC, busca por OC... de lo contrario busca por PI (En SP)
-			/*$sql = "begin PLC_PKG_UTILS.PRC_LISTAR_OCPMM('".$oc."','".$pi."',:data); end;";
-			$data = \database::getInstancia()->getConsultaSP($sql, 1);
-			return $data;*/
-			
-			$sql = "SELECT ORDEN_DE_COMPRA, PI, NOMBRE_LINEA, NOMBRE_SUB_LINEA, NOMBRE_ESTILO, NRO_ESTILO, COLOR, COD_COLOR, NRO_LINEA, NRO_SUB_LINEA
+            CURLOPT_HTTPHEADER => array(
+                "Content-Type: application/json"
+            ),
+        ));
+
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+
+        curl_close($curl);
+        if ($err) {
+            return $err;
+        } else {
+            return $response;
+        }
+
+
+    }
+
+    // Trabajando en MATCH llenar tabla PMM
+    public static function llenar_tabla_pmm($temporada, $depto, $login, $oc, $pi) {
+
+        //  Si hay OC, busca por OC... de lo contrario busca por PI (En SP)
+        /*$sql = "begin PLC_PKG_UTILS.PRC_LISTAR_OCPMM('".$oc."','".$pi."',:data); end;";
+        $data = \database::getInstancia()->getConsultaSP($sql, 1);
+        return $data;*/
+
+        $sql = "SELECT ORDEN_DE_COMPRA, PI, NOMBRE_LINEA, NOMBRE_SUB_LINEA, NOMBRE_ESTILO, NRO_ESTILO, COLOR, COD_COLOR, NRO_LINEA, NRO_SUB_LINEA
               FROM B
               WHERE ORDEN_DE_COMPRA = '" . $oc . "'
               AND PI = '" . $pi . "'
               GROUP BY NOMBRE_ESTILO, NRO_ESTILO, COD_COLOR, ORDEN_DE_COMPRA, PI, NOMBRE_LINEA, NOMBRE_SUB_LINEA, COLOR, NRO_LINEA, NRO_SUB_LINEA
             ";
-			
-			/*
-	
-			SELECT ORDEN_DE_COMPRA, PI, NOMBRE_LINEA, NOMBRE_SUB_LINEA, NOMBRE_ESTILO, NRO_ESTILO, COLOR, COD_COLOR, NRO_LINEA, NRO_SUB_LINEA
-				  FROM B
-				  WHERE ORDEN_DE_COMPRA = '7515218'
-				  AND PI = 'PITEST003'
-				  GROUP BY NOMBRE_ESTILO, NRO_ESTILO, COD_COLOR, ORDEN_DE_COMPRA, PI, NOMBRE_LINEA, NOMBRE_SUB_LINEA, COLOR, NRO_LINEA, NRO_SUB_LINEA
-	
-	
-			*/
-			
-			$data = \database::getInstancia()->getFilas($sql);
-			return $data;
-			
-		}
-		
-		// Trabajando en MATCH llenar tabla PLAN
-		public static function llenar_tabla_plan($temporada, $depto, $login) {
-			
-			$sql = "";
-			
-			$data = \database::getInstancia()->getFilas($sql);
-			return $data;
-			
-		}
-		
-		// Consultar OC Linkeada
-		public static function consultar_oc_linkeada($temporada, $depto, $login, $oc, $pi) {
-			
-			// Devuelve el estado de la OC, para saber si se encuentra linkeada (Funcionando)
-			/*$sql = "begin PLC_PKG_UTILS.PRC_CONSULTAR_OC('" . $oc . "','" . $pi . "',$temporada,'" . $depto . "', :data); end;";
-			$data = \database::getInstancia()->getConsultaSP($sql, 1);
-			return $data;*/
-			
-			// Devuelve el estado de la OC, para saber si se encuentra linkeada (Funcionando)
-			$sql = "SELECT ESTADO_MATCH
+
+        /*
+
+        SELECT ORDEN_DE_COMPRA, PI, NOMBRE_LINEA, NOMBRE_SUB_LINEA, NOMBRE_ESTILO, NRO_ESTILO, COLOR, COD_COLOR, NRO_LINEA, NRO_SUB_LINEA
+              FROM B
+              WHERE ORDEN_DE_COMPRA = '7515218'
+              AND PI = 'PITEST003'
+              GROUP BY NOMBRE_ESTILO, NRO_ESTILO, COD_COLOR, ORDEN_DE_COMPRA, PI, NOMBRE_LINEA, NOMBRE_SUB_LINEA, COLOR, NRO_LINEA, NRO_SUB_LINEA
+
+
+        */
+
+        $data = \database::getInstancia()->getFilas($sql);
+        return $data;
+
+    }
+
+    // Trabajando en MATCH llenar tabla PLAN
+    public static function llenar_tabla_plan($temporada, $depto, $login) {
+
+        $sql = "";
+
+        $data = \database::getInstancia()->getFilas($sql);
+        return $data;
+
+    }
+
+    // Consultar OC Linkeada
+    public static function consultar_oc_linkeada($temporada, $depto, $login, $oc, $pi) {
+
+        // Devuelve el estado de la OC, para saber si se encuentra linkeada (Funcionando)
+        /*$sql = "begin PLC_PKG_UTILS.PRC_CONSULTAR_OC('" . $oc . "','" . $pi . "',$temporada,'" . $depto . "', :data); end;";
+        $data = \database::getInstancia()->getConsultaSP($sql, 1);
+        return $data;*/
+
+        // Devuelve el estado de la OC, para saber si se encuentra linkeada (Funcionando)
+        $sql = "SELECT ESTADO_MATCH
                   FROM PLC_PLAN_COMPRA_OC
                   WHERE PO_NUMBER = '" . $oc . "'
                   AND ESTADO_MATCH = 'Linkeada'
                   AND COD_TEMPORADA = $temporada
                   AND DEP_DEPTO = '" . $depto . "'
             ";
-			$data = \database::getInstancia()->getFilas($sql);
-			return $data;
-			
-			
-		}
-		
-		// Quitar OC Eliminada
-		public static function quitar_oc_cancelada($temporada, $depto, $login, $oc, $pi) {
-			
-			$sql = " DELETE FROM B
+        $data = \database::getInstancia()->getFilas($sql);
+        return $data;
+
+
+    }
+
+    // Quitar OC Eliminada
+    public static function quitar_oc_cancelada($temporada, $depto, $login, $oc, $pi) {
+
+        $sql = " DELETE FROM B
                  WHERE PI = '" . $pi . "'
                  AND orden_de_compra <> '" . $oc . "'
                 ";
-			
-			$data = \database::getInstancia()->getConsulta($sql);
-			return $data;
-			
-		}
-		
-		// Agrega Tabla B OC o PI
-		public static function agrega_tabla_b_ocpi($temporada, $depto, $login, $oc, $pi) {
-			
-			// Funciona (Versión de Escritorio)
-			/*$sql = "begin PLC_PKG_UTILS.PRC_AGREGAR_OCPMM('" . $oc . "','" . $pi . "',:error, :data); end;";
-			$data = \database::getInstancia()->getConsultaSP($sql, 2);
-			return $data;*/
-			
-			$sql = "begin PLC_PKG_UTILS.PRC_AGREGAR_OCPMM2('" . $oc . "','" . $pi . "',:error, :data); end;";
-			$data = \database::getInstancia()->getConsultaSP($sql, 2);
-			return $data;
-			
-		}
-		
-		// Agrega registros que llegan del WS a la Tabla B
-		public static function agrega_registroswsoc_a_tabla_b($temporada, $depto, $login, $oc, $pi, $V_NOMBRE_ESTILO, $V_NRO_ESTILO, $V_ESTADO_ESTILO, $V_NOMBRE_VARIACION, $V_NRO_VARIACION, $V_COLOR, $V_COD_COLOR, $V_NOMBRE_LINEA, $V_NRO_LINEA, $V_NOMBRE_SUB_LINEA, $V_NRO_SUB_LINEA, $V_TEMPORADA, $V_CICLO_VIDA, $V_ESTADO_OC, $V_FECHA_EMBARQUE, $V_FECHA_ETA, $V_UNIDADES, $V_COSTO, $V_MONEDA, $V_PAIS) {
-			
-			/*$sql = "begin PLC_PKG_UTILS.PRC_ADD_OC_B($oc,'".$pi."','".$V_NOMBRE_ESTILO."',$V_NRO_ESTILO,'".$V_ESTADO_ESTILO."','".$V_NOMBRE_VARIACION."',$V_NRO_VARIACION,'".$V_COLOR."',$V_COD_COLOR,'".$V_NOMBRE_LINEA."','".$V_NRO_LINEA."','".$V_NOMBRE_SUB_LINEA."','".$V_NRO_SUB_LINEA."','".$V_TEMPORADA."','".$V_CICLO_VIDA."','".$V_ESTADO_OC."','".$V_FECHA_EMBARQUE."','".$V_FECHA_ETA."','".$V_UNIDADES."',$V_COSTO,'".$V_MONEDA."','".$V_PAIS."',:error, :data); end;";
-	
-			// Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
-			if (!file_exists('../archivos/log_querys/'.$login)) {
-				mkdir('../archivos/log_querys/'.$login, 0775, true);
-			}
-	
-			$stamp = date("Y-m-d_H-i-s");
-			$rand = rand(1, 999);
-			$content = $sql;
-			$fp = fopen("../archivos/log_querys/".$login."/MATCH-REGISTROSWSOCATABLAB--".$login."-".$stamp." R".$rand.".txt","wb");
-			fwrite($fp,$content);
-			fclose($fp);
-	
-			$data = \database::getInstancia()->getConsultaSP($sql, 2);
-			return $data;*/
-			
-			
-			$sql = "INSERT INTO B(
+
+        $data = \database::getInstancia()->getConsulta($sql);
+        return $data;
+
+    }
+
+    // Agrega Tabla B OC o PI
+    public static function agrega_tabla_b_ocpi($temporada, $depto, $login, $oc, $pi) {
+
+        // Funciona (Versión de Escritorio)
+        /*$sql = "begin PLC_PKG_UTILS.PRC_AGREGAR_OCPMM('" . $oc . "','" . $pi . "',:error, :data); end;";
+        $data = \database::getInstancia()->getConsultaSP($sql, 2);
+        return $data;*/
+
+        $sql = "begin PLC_PKG_UTILS.PRC_AGREGAR_OCPMM2('" . $oc . "','" . $pi . "',:error, :data); end;";
+        $data = \database::getInstancia()->getConsultaSP($sql, 2);
+        return $data;
+
+    }
+
+    // Agrega registros que llegan del WS a la Tabla B
+    public static function agrega_registroswsoc_a_tabla_b($temporada, $depto, $login, $oc, $pi, $V_NOMBRE_ESTILO, $V_NRO_ESTILO, $V_ESTADO_ESTILO, $V_NOMBRE_VARIACION, $V_NRO_VARIACION, $V_COLOR, $V_COD_COLOR, $V_NOMBRE_LINEA, $V_NRO_LINEA, $V_NOMBRE_SUB_LINEA, $V_NRO_SUB_LINEA, $V_TEMPORADA, $V_CICLO_VIDA, $V_ESTADO_OC, $V_FECHA_EMBARQUE, $V_FECHA_ETA, $V_UNIDADES, $V_COSTO, $V_MONEDA, $V_PAIS) {
+
+        /*$sql = "begin PLC_PKG_UTILS.PRC_ADD_OC_B($oc,'".$pi."','".$V_NOMBRE_ESTILO."',$V_NRO_ESTILO,'".$V_ESTADO_ESTILO."','".$V_NOMBRE_VARIACION."',$V_NRO_VARIACION,'".$V_COLOR."',$V_COD_COLOR,'".$V_NOMBRE_LINEA."','".$V_NRO_LINEA."','".$V_NOMBRE_SUB_LINEA."','".$V_NRO_SUB_LINEA."','".$V_TEMPORADA."','".$V_CICLO_VIDA."','".$V_ESTADO_OC."','".$V_FECHA_EMBARQUE."','".$V_FECHA_ETA."','".$V_UNIDADES."',$V_COSTO,'".$V_MONEDA."','".$V_PAIS."',:error, :data); end;";
+
+        // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+        if (!file_exists('../archivos/log_querys/'.$login)) {
+            mkdir('../archivos/log_querys/'.$login, 0775, true);
+        }
+
+        $stamp = date("Y-m-d_H-i-s");
+        $rand = rand(1, 999);
+        $content = $sql;
+        $fp = fopen("../archivos/log_querys/".$login."/MATCH-REGISTROSWSOCATABLAB--".$login."-".$stamp." R".$rand.".txt","wb");
+        fwrite($fp,$content);
+        fclose($fp);
+
+        $data = \database::getInstancia()->getConsultaSP($sql, 2);
+        return $data;*/
+
+
+        $sql = "INSERT INTO B(
                      ORDEN_DE_COMPRA
                     ,PI
                     ,NOMBRE_ESTILO
@@ -1037,70 +1036,70 @@
                     ,'" . $V_MONEDA . "'
                     ,'" . $V_PAIS . "')
 ";
-			
-			// Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
-			if (!file_exists('../archivos/log_querys/' . $login)) {
-				mkdir('../archivos/log_querys/' . $login, 0775, true);
-			}
-			
-			$stamp = date("Y-m-d_H-i-s");
-			$rand = rand(1, 999);
-			$content = $sql;
-			$fp = fopen("../archivos/log_querys/" . $login . "/MATCH-REGISTROSWSOCATABLAB--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
-			fwrite($fp, $content);
-			fclose($fp);
-			
-			$data = \database::getInstancia()->getConsulta($sql);
-			return $data;
-			
-			
-		}
-		
-		// Validar que tabla B Cruza con el color 3
-		public static function valida_tablab_cuza_color3($temporada, $depto, $login, $oc, $pi) {
-			
-			$sql = "begin PLC_PKG_UTILS.PRC_LISTAR_OCPMMIN('" . $oc . "','" . $pi . "',$temporada,'" . $depto . "', :data); end;";
-			$data = \database::getInstancia()->getConsultaSP($sql, 1);
-			return $data;
-			
-		}
-		
-		// Validar que tabla B Cruza con el color 3
-		public static function btn_actualizar_match($temporada, $depto, $login, $id_color, $linea, $sublinea, $estilo, $color) {
-			
-			$sql = "begin PLC_PKG_DESARROLLO.PRC_UPDATE_COLOR3_OC($temporada,'" . $depto . "',$id_color, '" . $linea . "', '" . $sublinea . "', '" . $estilo . "', '" . $color . "',:error, :data); end;";
-			
-			// Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
-			if (!file_exists('../archivos/log_querys/' . $login)) {
-				mkdir('../archivos/log_querys/' . $login, 0775, true);
-			}
-			
-			$stamp = date("Y-m-d_H-i-s");
-			$rand = rand(1, 999);
-			$content = $sql;
-			$fp = fopen("../archivos/log_querys/" . $login . "/MATCH-ACTUALIZACAMPOS--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
-			fwrite($fp, $content);
-			fclose($fp);
-			
-			$data = \database::getInstancia()->getConsultaSP($sql, 2);
-			//return $data;
-			
-			if ($data) {
-				return 1;
-			} else {
-				return 0;
-			}
-			
-		}
-		
-		// Listar plan compra color
-		public static function listar_plan_compra_color($temporada, $depto, $login, $proforema) {
-			
-			/*$sql = "begin PLC_PKG_MIGRACION.PRC_GRID_PLAN_COMPRA_COLOR_4($temporada,'".$depto."',0,0, :data); end;";
-			$data = \database::getInstancia()->getConsultaSP($sql, 1);
-			return $data;*/
-			
-			$sql = "SELECT
+
+        // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+        if (!file_exists('../archivos/log_querys/' . $login)) {
+            mkdir('../archivos/log_querys/' . $login, 0775, true);
+        }
+
+        $stamp = date("Y-m-d_H-i-s");
+        $rand = rand(1, 999);
+        $content = $sql;
+        $fp = fopen("../archivos/log_querys/" . $login . "/MATCH-REGISTROSWSOCATABLAB--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+        fwrite($fp, $content);
+        fclose($fp);
+
+        $data = \database::getInstancia()->getConsulta($sql);
+        return $data;
+
+
+    }
+
+    // Validar que tabla B Cruza con el color 3
+    public static function valida_tablab_cuza_color3($temporada, $depto, $login, $oc, $pi) {
+
+        $sql = "begin PLC_PKG_UTILS.PRC_LISTAR_OCPMMIN('" . $oc . "','" . $pi . "',$temporada,'" . $depto . "', :data); end;";
+        $data = \database::getInstancia()->getConsultaSP($sql, 1);
+        return $data;
+
+    }
+
+    // Validar que tabla B Cruza con el color 3
+    public static function btn_actualizar_match($temporada, $depto, $login, $id_color, $linea, $sublinea, $estilo, $color) {
+
+        $sql = "begin PLC_PKG_DESARROLLO.PRC_UPDATE_COLOR3_OC($temporada,'" . $depto . "',$id_color, '" . $linea . "', '" . $sublinea . "', '" . $estilo . "', '" . $color . "',:error, :data); end;";
+
+        // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+        if (!file_exists('../archivos/log_querys/' . $login)) {
+            mkdir('../archivos/log_querys/' . $login, 0775, true);
+        }
+
+        $stamp = date("Y-m-d_H-i-s");
+        $rand = rand(1, 999);
+        $content = $sql;
+        $fp = fopen("../archivos/log_querys/" . $login . "/MATCH-ACTUALIZACAMPOS--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+        fwrite($fp, $content);
+        fclose($fp);
+
+        $data = \database::getInstancia()->getConsultaSP($sql, 2);
+        //return $data;
+
+        if ($data) {
+            return 1;
+        } else {
+            return 0;
+        }
+
+    }
+
+    // Listar plan compra color
+    public static function listar_plan_compra_color($temporada, $depto, $login, $proforema) {
+
+        /*$sql = "begin PLC_PKG_MIGRACION.PRC_GRID_PLAN_COMPRA_COLOR_4($temporada,'".$depto."',0,0, :data); end;";
+        $data = \database::getInstancia()->getConsultaSP($sql, 1);
+        return $data;*/
+
+        $sql = "SELECT
                     C.ID_COLOR3,
                     C.DES_ESTILO ESTILO,
                     C.VENTANA_LLEGADA VENTANA,
@@ -1125,78 +1124,78 @@
                 AND C.ESTADO = 19
                 AND C.PROFORMA = '" . $proforema . "'
                 ";
-			$data = \database::getInstancia()->getFilas($sql);
-			return $data;
-			
-		}
-		
-		// Listar plan compra color
-		public static function generar_match($temporada, $depto, $login, $proforma, $estilo, $codventana, $oc) {
-			
-			$sql = "begin PLC_PKG_UTILS.PRC_GENERAR_MATCH('" . $proforma . "','" . $estilo . "', $codventana,'" . $depto . "',$temporada,'" . $oc . "', :error, :data); end;";
-			
-			// Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
-			if (!file_exists('../archivos/log_querys/' . $login)) {
-				mkdir('../archivos/log_querys/' . $login, 0775, true);
-			}
-			$stamp = date("Y-m-d_H-i-s");
-			$rand = rand(1, 999);
-			$content = $sql;
-			$fp = fopen("../archivos/log_querys/" . $login . "/MATCH-VALIDACIONMATCH--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
-			fwrite($fp, $content);
-			fclose($fp);
-			
-			$data = \database::getInstancia()->getConsultaSP($sql, 2);
-			//return $data;
-			
-			if ($data) {
-				return 1;
-			} else {
-				return 0;
-			}
-			
-		}
-		
-		// Aprobar Opción
-		public static function aprobar_opcion($temporada, $depto, $login, $id_color3, $proforma) {
-			
-			$sql = "begin PLC_PKG_UTILS.PRC_APROBACION_PLAN_2($temporada,'" . $depto . "',$id_color3,'" . $proforma . "', :error, :data); end;";
-			
-			// Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
-			if (!file_exists('../archivos/log_querys/' . $login)) {
-				mkdir('../archivos/log_querys/' . $login, 0775, true);
-			}
-			$stamp = date("Y-m-d_H-i-s");
-			$rand = rand(1, 999);
-			$content = $sql;
-			$fp = fopen("../archivos/log_querys/" . $login . "/MATCH-APROBAROPCION--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
-			fwrite($fp, $content);
-			fclose($fp);
-			
-			$data = \database::getInstancia()->getConsultaSP($sql, 2);
-			//return $data;
-			
-			if ($data) {
-				return 1;
-			} else {
-				return 0;
-			}
-			
-		}
-		
-		// Listar IDCOLOR3 Compra
-		public static function listar_idcolor3_compra($temporada, $depto, $login, $id_color3) {
-			
-			$sql = "begin PLC_PKG_MIGRACION.PRC_LIS_COLOR3_IDCOLOR3($temporada,'" . $depto . "',$id_color3, :data); end;";
-			$data = \database::getInstancia()->getConsultaSP($sql, 1);
-			return $data;
-			
-		}
-		
-		// Insertar Historial
-		public static function insertar_historial($temporada, $depto, $V_LINEA, $V_SUBLINEA, $V_MARCA, $V_ESTILO, $V_VENTANA, $V_COLOR, $V_USER_LOGIN, $V_PI, $V_OC, $V_ESTADO, $V_ID_COLOR3, $V_TIPOINSERT, $V_NOM_LINEA, $V_NOM_SUBLINEA, $V_NOM_MARCA, $V_NOM_VENTANA, $V_NOM_COLOR) {
-			
-			$sql = "INSERT INTO PLC_PLAN_COMPRA_HISTORICA (
+        $data = \database::getInstancia()->getFilas($sql);
+        return $data;
+
+    }
+
+    // Listar plan compra color
+    public static function generar_match($temporada, $depto, $login, $proforma, $estilo, $codventana, $oc) {
+
+        $sql = "begin PLC_PKG_UTILS.PRC_GENERAR_MATCH('" . $proforma . "','" . $estilo . "', $codventana,'" . $depto . "',$temporada,'" . $oc . "', :error, :data); end;";
+
+        // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+        if (!file_exists('../archivos/log_querys/' . $login)) {
+            mkdir('../archivos/log_querys/' . $login, 0775, true);
+        }
+        $stamp = date("Y-m-d_H-i-s");
+        $rand = rand(1, 999);
+        $content = $sql;
+        $fp = fopen("../archivos/log_querys/" . $login . "/MATCH-VALIDACIONMATCH--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+        fwrite($fp, $content);
+        fclose($fp);
+
+        $data = \database::getInstancia()->getConsultaSP($sql, 2);
+        //return $data;
+
+        if ($data) {
+            return 1;
+        } else {
+            return 0;
+        }
+
+    }
+
+    // Aprobar Opción
+    public static function aprobar_opcion($temporada, $depto, $login, $id_color3, $proforma) {
+
+        $sql = "begin PLC_PKG_UTILS.PRC_APROBACION_PLAN_2($temporada,'" . $depto . "',$id_color3,'" . $proforma . "', :error, :data); end;";
+
+        // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+        if (!file_exists('../archivos/log_querys/' . $login)) {
+            mkdir('../archivos/log_querys/' . $login, 0775, true);
+        }
+        $stamp = date("Y-m-d_H-i-s");
+        $rand = rand(1, 999);
+        $content = $sql;
+        $fp = fopen("../archivos/log_querys/" . $login . "/MATCH-APROBAROPCION--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+        fwrite($fp, $content);
+        fclose($fp);
+
+        $data = \database::getInstancia()->getConsultaSP($sql, 2);
+        //return $data;
+
+        if ($data) {
+            return 1;
+        } else {
+            return 0;
+        }
+
+    }
+
+    // Listar IDCOLOR3 Compra
+    public static function listar_idcolor3_compra($temporada, $depto, $login, $id_color3) {
+
+        $sql = "begin PLC_PKG_MIGRACION.PRC_LIS_COLOR3_IDCOLOR3($temporada,'" . $depto . "',$id_color3, :data); end;";
+        $data = \database::getInstancia()->getConsultaSP($sql, 1);
+        return $data;
+
+    }
+
+    // Insertar Historial
+    public static function insertar_historial($temporada, $depto, $V_LINEA, $V_SUBLINEA, $V_MARCA, $V_ESTILO, $V_VENTANA, $V_COLOR, $V_USER_LOGIN, $V_PI, $V_OC, $V_ESTADO, $V_ID_COLOR3, $V_TIPOINSERT, $V_NOM_LINEA, $V_NOM_SUBLINEA, $V_NOM_MARCA, $V_NOM_VENTANA, $V_NOM_COLOR) {
+
+        $sql = "INSERT INTO PLC_PLAN_COMPRA_HISTORICA (
                                              DPTO
                                             ,LINEA
                                             ,SUBLINEA
@@ -1241,108 +1240,108 @@
                                             ,'" . $V_NOM_COLOR . "'
                                             ,'" . $V_NOM_SUBLINEA . "' )
                 ";
-			
-			
-			$data = \database::getInstancia()->getConsulta($sql);
-			return $data;
-			
-			
-		}
-		
-		// Listar Ventana Embarque Llegada
-		public static function listar_ventana_embarque_llegada($temporada, $depto, $login) {
-			
-			$sql = "begin PLC_PKG_PRUEBA.PRC_VENTA_EMBAR_COMPRA($temporada, :data); end;";
-			$data = \database::getInstancia()->getConsultaSP($sql, 1);
-			return $data;
-			
-		}
-		
-		// 5.1 Quitar quita_registro_variacion
-		public static function quita_registro_variacion($temporada, $depto, $login, $oc, $pi) {
-			
-			// Variacion (plc_oc_variacion)
-			$sql_plc_oc_variacion = "DELETE FROM PLC_OC_VARIACION
+
+
+        $data = \database::getInstancia()->getConsulta($sql);
+        return $data;
+
+
+    }
+
+    // Listar Ventana Embarque Llegada
+    public static function listar_ventana_embarque_llegada($temporada, $depto, $login) {
+
+        $sql = "begin PLC_PKG_PRUEBA.PRC_VENTA_EMBAR_COMPRA($temporada, :data); end;";
+        $data = \database::getInstancia()->getConsultaSP($sql, 1);
+        return $data;
+
+    }
+
+    // 5.1 Quitar quita_registro_variacion
+    public static function quita_registro_variacion($temporada, $depto, $login, $oc, $pi) {
+
+        // Variacion (plc_oc_variacion)
+        $sql_plc_oc_variacion = "DELETE FROM PLC_OC_VARIACION
                                  WHERE ORDEN_DE_COMPRA = $oc
                                  ";
-			
-			// New Variación (plc_plan_compra_variacion)
-			$sql_plc_plan_compra_variacion = "DELETE FROM plc_plan_compra_variacion
+
+        // New Variación (plc_plan_compra_variacion)
+        $sql_plc_plan_compra_variacion = "DELETE FROM plc_plan_compra_variacion
                                           WHERE COD_TEMPORADA = $temporada
                                           AND DEP_DEPTO = '" . $depto . "'
                                           AND ORDEN_DE_COMPRA = $oc
                                           ";
-			
-			// Ejecuto la Query
-			// \database::getInstancia()->getConsulta($sql_plc_oc_variacion);
-			// \database::getInstancia()->getConsulta($sql_plc_plan_compra_variacion);
-			
-			// Quitar Variacion
-			if (!file_exists('../archivos/log_querys/' . $login)) {
-				mkdir('../archivos/log_querys/' . $login, 0775, true);
-			}
-			$stamp = date("Y-m-d_H-i-s");
-			$rand = rand(1, 999);
-			$content = $sql_plc_oc_variacion;
-			$fp = fopen("../archivos/log_querys/" . $login . "/MATCH-QUITARVARIACION_VARIACION--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
-			fwrite($fp, $content);
-			fclose($fp);
-			
-			// Quitar New Variacion
-			if (!file_exists('../archivos/log_querys/' . $login)) {
-				mkdir('../archivos/log_querys/' . $login, 0775, true);
-			}
-			$stamp = date("Y-m-d_H-i-s");
-			$rand = rand(1, 999);
-			$content = $sql_plc_plan_compra_variacion;
-			$fp = fopen("../archivos/log_querys/" . $login . "/MATCH-QUITARVARIACION_NEWVARIACION--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
-			fwrite($fp, $content);
-			fclose($fp);
-			
-			if ((\database::getInstancia()->getConsulta($sql_plc_oc_variacion)) && (\database::getInstancia()->getConsulta($sql_plc_plan_compra_variacion))) {
-				return 1;
-			} else {
-				return 0;
-			}
-			
-			// Anterior
-			// $data = \database::getInstancia()->getConsulta($sql_plc_plan_compra_variacion);
-			// return $data;
-			
-			// Fin quitar registro variaciòn
-		}
-		
-		// 6 Agregar OC Variación
-		public static function agregar_oc_variacion($temporada, $depto, $login, $oc, $proforma) {
-			
-			$sql = "begin PLC_PKG_UTILS.PRC_AGREGAR_OC_VARIACION2('" . $oc . "','" . $proforma . "', :error, :data); end;";
-			
-			// Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
-			if (!file_exists('../archivos/log_querys/' . $login)) {
-				mkdir('../archivos/log_querys/' . $login, 0775, true);
-			}
-			$stamp = date("Y-m-d_H-i-s");
-			$rand = rand(1, 999);
-			$content = $sql;
-			$fp = fopen("../archivos/log_querys/" . $login . "/MATCH-AGREGAOCVARIACION--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
-			fwrite($fp, $content);
-			fclose($fp);
-			
-			$data = \database::getInstancia()->getConsultaSP($sql, 2);
-			//return $data;
-			
-			if ($data) {
-				return 1;
-			} else {
-				return 0;
-			}
-			
-		}
-		
-		// 7 Agregar New OC Variación
-		public static function agregar_new_oc_variacion($temporada, $depto, $login) {
-			
-			$sql = "insert into plc_plan_compra_variacion
+
+        // Ejecuto la Query
+        // \database::getInstancia()->getConsulta($sql_plc_oc_variacion);
+        // \database::getInstancia()->getConsulta($sql_plc_plan_compra_variacion);
+
+        // Quitar Variacion
+        if (!file_exists('../archivos/log_querys/' . $login)) {
+            mkdir('../archivos/log_querys/' . $login, 0775, true);
+        }
+        $stamp = date("Y-m-d_H-i-s");
+        $rand = rand(1, 999);
+        $content = $sql_plc_oc_variacion;
+        $fp = fopen("../archivos/log_querys/" . $login . "/MATCH-QUITARVARIACION_VARIACION--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+        fwrite($fp, $content);
+        fclose($fp);
+
+        // Quitar New Variacion
+        if (!file_exists('../archivos/log_querys/' . $login)) {
+            mkdir('../archivos/log_querys/' . $login, 0775, true);
+        }
+        $stamp = date("Y-m-d_H-i-s");
+        $rand = rand(1, 999);
+        $content = $sql_plc_plan_compra_variacion;
+        $fp = fopen("../archivos/log_querys/" . $login . "/MATCH-QUITARVARIACION_NEWVARIACION--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+        fwrite($fp, $content);
+        fclose($fp);
+
+        if ((\database::getInstancia()->getConsulta($sql_plc_oc_variacion)) && (\database::getInstancia()->getConsulta($sql_plc_plan_compra_variacion))) {
+            return 1;
+        } else {
+            return 0;
+        }
+
+        // Anterior
+        // $data = \database::getInstancia()->getConsulta($sql_plc_plan_compra_variacion);
+        // return $data;
+
+        // Fin quitar registro variaciòn
+    }
+
+    // 6 Agregar OC Variación
+    public static function agregar_oc_variacion($temporada, $depto, $login, $oc, $proforma) {
+
+        $sql = "begin PLC_PKG_UTILS.PRC_AGREGAR_OC_VARIACION2('" . $oc . "','" . $proforma . "', :error, :data); end;";
+
+        // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+        if (!file_exists('../archivos/log_querys/' . $login)) {
+            mkdir('../archivos/log_querys/' . $login, 0775, true);
+        }
+        $stamp = date("Y-m-d_H-i-s");
+        $rand = rand(1, 999);
+        $content = $sql;
+        $fp = fopen("../archivos/log_querys/" . $login . "/MATCH-AGREGAOCVARIACION--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+        fwrite($fp, $content);
+        fclose($fp);
+
+        $data = \database::getInstancia()->getConsultaSP($sql, 2);
+        //return $data;
+
+        if ($data) {
+            return 1;
+        } else {
+            return 0;
+        }
+
+    }
+
+    // 7 Agregar New OC Variación
+    public static function agregar_new_oc_variacion($temporada, $depto, $login) {
+
+        $sql = "insert into plc_plan_compra_variacion
                 select p.cod_temporada
                        ,p.dep_depto
                        ,p.niv_jer1
@@ -1408,109 +1407,109 @@
                 inner join plc_oc_variacion v on to_number(p.cod_jer2) = to_number(v.nro_linea) and trim(p.cod_sublin) = trim(v.nro_sub_linea) and upper(trim(p.des_estilo)) = upper(trim(v.nombre_estilo))and trim(p.cod_color) = (v.cod_color)
                 where dep_Depto  = '" . $depto . "'
                 ";
-			
-			if (!file_exists('../archivos/log_querys/' . $login)) {
-				mkdir('../archivos/log_querys/' . $login, 0775, true);
-			}
-			
-			$stamp = date("Y-m-d_H-i-s");
-			$rand = rand(1, 999);
-			$content = $sql;
-			$fp = fopen("../archivos/log_querys/" . $login . "/MATCH-AGREGANEWOCVARIACION--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
-			fwrite($fp, $content);
-			fclose($fp);
-			
-			$data = \database::getInstancia()->getConsulta($sql);
-			//return $data;
-			
-			if ($data) {
-				return 1;
-			} else {
-				return 0;
-			}
-			
-		}
-		
-		// Buscar OC con estado 20
-		public static function busca_oc_estado_20($temporada, $depto, $login) {
-			
-			$sql = "begin PLC_PKG_MIGRACION.PRC_LISTAR_OPCION20($temporada,'" . $depto . "', :data); end;";
-			$data = \database::getInstancia()->getConsultaSP($sql, 1);
-			return $data;
-			
-		}
-		
-		// Busca Estado OC PMM
-		public static function busca_estado_oc_pmm($temporada, $depto, $login, $oc) {
-			
-			$sql = "begin PLC_PKG_MIGRACION.PRC_VALIDACION_OC_PMM('" . $oc . "', :data); end;";
-			$data = \database::getInstancia()->getConsultaSP($sql, 1);
-			return $data;
-			
-		}
-		
-		// Estado 4 OC PMM, Inserto a Historial
-		public static function estado_oc_4_inserta_historial($temporada, $depto, $LINEA, $SUBLINEA, $MARCA, $ESTILO, $VENTANA, $COLOR, $login, $PI, $OC, $ESTADO, $ID_COLOR3, $TIPO_INSERT, $NOM_LINEA, $NOM_SUBLINEA, $NOM_MARCA, $NOM_VENTANA, $NOM_COLOR) {
-			
-			$sql = "begin PLC_PKG_PRUEBA.PRC_ADD_PLAN_HISTORICO($temporada, '" . $depto . "', '" . $LINEA . "','" . $SUBLINEA . "',$MARCA,'" . $ESTILO . "',$VENTANA,$COLOR,'" . $login . "','" . $PI . "',$OC,'" . $ESTADO . "',$ID_COLOR3,$TIPO_INSERT,'" . $NOM_LINEA . "','" . $NOM_SUBLINEA . "','" . $NOM_MARCA . "','" . $NOM_VENTANA . "','" . $NOM_COLOR . "', :error,:data); end;";
-			
-			// Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
-			if (!file_exists('../archivos/log_querys/' . $login)) {
-				mkdir('../archivos/log_querys/' . $login, 0775, true);
-			}
-			
-			$stamp = date("Y-m-d_H-i-s");
-			$rand = rand(1, 999);
-			$content = $sql;
-			$fp = fopen("../archivos/log_querys/" . $login . "/GRID2AHISTORIAL-ESTADOC4INSERTAHISTORIAL--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
-			fwrite($fp, $content);
-			fclose($fp);
-			
-			$data = \database::getInstancia()->getConsultaSP($sql, 2);
-			
-			if ($data) {
-				return 1;
-			} else {
-				return 0;
-			}
-			
-		}
-		
-		// Guarda Comentario del estado PI para flujo "Solicitud Corrección PI"
-		public static function guarda_comentario_estado_pi($temporada, $depto, $login, $comentario, $proforma) {
-			
-			$sql = "UPDATE PLC_PLAN_COMPRA_COLOR_3 A
+
+        if (!file_exists('../archivos/log_querys/' . $login)) {
+            mkdir('../archivos/log_querys/' . $login, 0775, true);
+        }
+
+        $stamp = date("Y-m-d_H-i-s");
+        $rand = rand(1, 999);
+        $content = $sql;
+        $fp = fopen("../archivos/log_querys/" . $login . "/MATCH-AGREGANEWOCVARIACION--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+        fwrite($fp, $content);
+        fclose($fp);
+
+        $data = \database::getInstancia()->getConsulta($sql);
+        //return $data;
+
+        if ($data) {
+            return 1;
+        } else {
+            return 0;
+        }
+
+    }
+
+    // Buscar OC con estado 20
+    public static function busca_oc_estado_20($temporada, $depto, $login) {
+
+        $sql = "begin PLC_PKG_MIGRACION.PRC_LISTAR_OPCION20($temporada,'" . $depto . "', :data); end;";
+        $data = \database::getInstancia()->getConsultaSP($sql, 1);
+        return $data;
+
+    }
+
+    // Busca Estado OC PMM
+    public static function busca_estado_oc_pmm($temporada, $depto, $login, $oc) {
+
+        $sql = "begin PLC_PKG_MIGRACION.PRC_VALIDACION_OC_PMM('" . $oc . "', :data); end;";
+        $data = \database::getInstancia()->getConsultaSP($sql, 1);
+        return $data;
+
+    }
+
+    // Estado 4 OC PMM, Inserto a Historial
+    public static function estado_oc_4_inserta_historial($temporada, $depto, $LINEA, $SUBLINEA, $MARCA, $ESTILO, $VENTANA, $COLOR, $login, $PI, $OC, $ESTADO, $ID_COLOR3, $TIPO_INSERT, $NOM_LINEA, $NOM_SUBLINEA, $NOM_MARCA, $NOM_VENTANA, $NOM_COLOR) {
+
+        $sql = "begin PLC_PKG_PRUEBA.PRC_ADD_PLAN_HISTORICO($temporada, '" . $depto . "', '" . $LINEA . "','" . $SUBLINEA . "',$MARCA,'" . $ESTILO . "',$VENTANA,$COLOR,'" . $login . "','" . $PI . "',$OC,'" . $ESTADO . "',$ID_COLOR3,$TIPO_INSERT,'" . $NOM_LINEA . "','" . $NOM_SUBLINEA . "','" . $NOM_MARCA . "','" . $NOM_VENTANA . "','" . $NOM_COLOR . "', :error,:data); end;";
+
+        // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+        if (!file_exists('../archivos/log_querys/' . $login)) {
+            mkdir('../archivos/log_querys/' . $login, 0775, true);
+        }
+
+        $stamp = date("Y-m-d_H-i-s");
+        $rand = rand(1, 999);
+        $content = $sql;
+        $fp = fopen("../archivos/log_querys/" . $login . "/GRID2AHISTORIAL-ESTADOC4INSERTAHISTORIAL--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+        fwrite($fp, $content);
+        fclose($fp);
+
+        $data = \database::getInstancia()->getConsultaSP($sql, 2);
+
+        if ($data) {
+            return 1;
+        } else {
+            return 0;
+        }
+
+    }
+
+    // Guarda Comentario del estado PI para flujo "Solicitud Corrección PI"
+    public static function guarda_comentario_estado_pi($temporada, $depto, $login, $comentario, $proforma) {
+
+        $sql = "UPDATE PLC_PLAN_COMPRA_COLOR_3 A
                 SET   A.ERROR_PI      = '" . $comentario . "'
                 WHERE A.COD_TEMPORADA = $temporada
                 AND   A.DEP_DEPTO     = '" . $depto . "'
                 AND   A.PROFORMA      = '" . $proforma . "'
                 ";
-			
-			// Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
-			if (!file_exists('../archivos/log_querys/' . $login)) {
-				mkdir('../archivos/log_querys/' . $login, 0775, true);
-			}
-			$stamp = date("Y-m-d_H-i-s");
-			$rand = rand(1, 999);
-			$content = $sql;
-			$fp = fopen("../archivos/log_querys/" . $login . "/FLUJO-COMENTARIOSOLCORRECCIONPI--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
-			fwrite($fp, $content);
-			fclose($fp);
-			
-			$data = \database::getInstancia()->getConsulta($sql);
-			return $data;
-			
-		}
+
+        // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+        if (!file_exists('../archivos/log_querys/' . $login)) {
+            mkdir('../archivos/log_querys/' . $login, 0775, true);
+        }
+        $stamp = date("Y-m-d_H-i-s");
+        $rand = rand(1, 999);
+        $content = $sql;
+        $fp = fopen("../archivos/log_querys/" . $login . "/FLUJO-COMENTARIOSOLCORRECCIONPI--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+        fwrite($fp, $content);
+        fclose($fp);
+
+        $data = \database::getInstancia()->getConsulta($sql);
+        return $data;
+
+    }
 
 
 
 
 // TERMINADO
-		
-		// CBX optionsLinea
-		public static function listar_optionsLinea($temporada, $depto) {
-			
-			$sql = "SELECT TRIM( L.PRD_LVL_NUMBER ) AS LIN_LINEA,
+
+    // CBX optionsLinea
+    public static function listar_optionsLinea($temporada, $depto) {
+
+        $sql = "SELECT TRIM( L.PRD_LVL_NUMBER ) AS LIN_LINEA,
                        TRIM( L.PRD_NAME_FULL ) AS LIN_DESCRIPCION
                 FROM   PRDMSTEE         P,
                        PRDMSTEE         L
@@ -1519,23 +1518,23 @@
                 AND    L.PRD_STATUS = 0
                 ORDER BY 2 ASC
                 ";
-			
-			$data = \database::getInstancia()->getFilas($sql);
-			
-			return $data;
-			
-			/*$json = array();
-			foreach ($data as $val) {
-				array_push($json, ["id" => $val[0], "name" => $val[1]]);
-			}
-			return $json;*/
-			
-		}
-		
-		// CBX optionsSubLinea
-		public static function listar_optionsSubLinea($temporada, $depto, $id_linea) {
-			
-			$sql = "SELECT TRIM( L.PRD_LVL_NUMBER ) AS SLI_SUBLINEA,
+
+        $data = \database::getInstancia()->getFilas($sql);
+
+        return $data;
+
+        /*$json = array();
+        foreach ($data as $val) {
+            array_push($json, ["id" => $val[0], "name" => $val[1]]);
+        }
+        return $json;*/
+
+    }
+
+    // CBX optionsSubLinea
+    public static function listar_optionsSubLinea($temporada, $depto, $id_linea) {
+
+        $sql = "SELECT TRIM( L.PRD_LVL_NUMBER ) AS SLI_SUBLINEA,
                        TRIM( L.PRD_NAME_FULL ) AS SLI_DESCRIPCION
                 FROM   PRDMSTEE         P,
                        PRDMSTEE         L
@@ -1544,279 +1543,279 @@
                 AND    L.PRD_STATUS = 0
                 ORDER BY 2 ASC
                 ";
-			
-			$data = \database::getInstancia()->getFilas($sql);
-			return $data;
-			
-		}
-		
-		// CBX optionsMarca
-		public static function listar_optionsMarca($temporada, $depto) {
-			
-			$data = plan_compra::list_Marcas($depto);
-			
-			return $data;
-			
-			/*$json = array();
-			foreach ($data as $val) {
-				 array_push($json, ["id" => $val[0], "name" => $val[1]]);
-			}
-	 
-			return $json;*/
-			
-		}
-		
-		// CBX optionsColor
-		public static function listar_optionsColor($temporada, $depto) {
-			
-			/*$data = plan_compra::list_colores();
-			return $data;*/
-			
-			$sql = "SELECT
+
+        $data = \database::getInstancia()->getFilas($sql);
+        return $data;
+
+    }
+
+    // CBX optionsMarca
+    public static function listar_optionsMarca($temporada, $depto) {
+
+        $data = plan_compra::list_Marcas($depto);
+
+        return $data;
+
+        /*$json = array();
+        foreach ($data as $val) {
+             array_push($json, ["id" => $val[0], "name" => $val[1]]);
+        }
+
+        return $json;*/
+
+    }
+
+    // CBX optionsColor
+    public static function listar_optionsColor($temporada, $depto) {
+
+        /*$data = plan_compra::list_colores();
+        return $data;*/
+
+        $sql = "SELECT
                 REPLACE(REPLACE(trim(t.codigo),CHR(10),''),CHR(13),'') AS COD_COLOR,
                 convert(REPLACE(REPLACE(INITCAP( t.descripcion),CHR(10),''),CHR(13),''),'utf8','us7ascii') AS NOM_COLOR
                 FROM PLC_MAEDIM T
                 WHERE T.TIPO = 'C'
                 ORDER BY t.descripcion ASC
                 ";
-			$data = \database::getInstancia()->getFilas($sql);
-			return $data;
-			
-			
-			/*$json = array();
-			foreach ($data as $val) {
-				array_push($json, ["id" => $val[0], "name" => $val[1]]);
-			}
-	
-	//preg_replace('/\x{EF}\x{BF}\x{BD}/u', '', iconv(mb_detect_encoding($val[1]), 'UTF-8', $val[1]))])
-	
-			return $json;*/
-			
-		}
-		
-		// CBX optionsTipoExhibicion
-		public static function listar_optionsTipoExhibicion($temporada, $depto) {
-			
-			$data = plan_compra::list_tipoexhibicion();
-			
-			return $data;
-			
-			/*$json = array();
-			foreach ($data as $val) {
-				array_push($json, ["id" => $val[0], "name" => $val[1]]);
-			}
-			return $json;*/
-			
-		}
-		
-		// CBX optionsTipoProducto
-		public static function listar_optionsTipoProducto($temporada, $depto) {
-			
-			$data = plan_compra::list_tipoProducto();
-			
-			return $data;
-			
-			/* $json = array();
-			 foreach ($data as $val) {
-				 array_push($json, ["id" => $val[0], "name" => $val[1]]);
-			 }
-			 return $json;*/
-			
-		}
-		
-		// CBX optionsLifeCicle
-		public static function listar_optionsLifeCicle($temporada, $depto) {
-			
-			$data = plan_compra::list_ciclo_vida();
-			
-			return $data;
-			
-			/*$json = array();
-			foreach ($data as $val) {
-				array_push($json, ["id" => $val[0], "name" => $val[1]]);
-			}
-			return $json;*/
-			
-		}
-		
-		// CBX optionsRankVenta
-		public static function listar_optionsRankVenta($temporada, $depto) {
-			
-			$data = plan_compra::list_rnk();
-			
-			return $data;
-			
-			/*$json = array();
-			foreach ($data as $val) {
-				array_push($json, ["id" => $val[0], "name" => $val[1]]);
-			}
-			return $json;*/
-			
-		}
-		
-		// CBX optionsPiramideMix
-		public static function listar_optionsPiramideMix($temporada, $depto) {
-			
-			$data = plan_compra::list_piramidemix();
-			
-			return $data;
-			
-			/*$json = array();
-			foreach ($data as $val) {
-				array_push($json, ["id" => $val[0], "name" => $val[1]]);
-			}
-			return $json;*/
-			
-		}
-		
-		// CBX optionsCluster
-		public static function listar_optionsCluster($temporada, $depto) {
-			
-			$data = plan_compra::list_cluster($temporada, $depto);
-			
-			return $data;
-			
-			/*$json = array();
-			foreach ($data as $val) {
-				array_push($json, ["id" => $val[0], "name" => $val[1]]);
-			}
-			return $json;*/
-			
-		}
-		
-		// CBX optionsFormato
-		public static function listar_optionsFormato($temporada, $depto) {
-			
-			$data = plan_compra::list_Formato($temporada, $depto);
-			
-			return $data;
-			
-			/*$json = array();
-			foreach ($data as $val) {
-				array_push($json, ["id" => $val[0], "name" => $val[1]]);
-			}
-			return $json;*/
-			
-		}
-		
-		// CBX optionsVia
-		public static function listar_optionsVia($temporada, $depto) {
-			
-			$data = plan_compra::list_via();
-			
-			return $data;
-			
-			/*$json = array();
-			foreach ($data as $val) {
-				array_push($json, ["id" => $val[0], "name" => $val[1]]);
-			}
-			return $json;*/
-			
-		}
-		
-		// CBX optionsPais
-		public static function listar_optionsPais($temporada, $depto) {
-			
-			$data = plan_compra::list_pais();
-			
-			return $data;
-			
-			/*$json = array();
-			foreach ($data as $val) {
-				array_push($json, ["id" => $val[0], "name" => $val[1]]);
-			}
-			return $json;*/
-			
-		}
-		
-		// CBX optionsVentanaLlegada
-		public static function listar_optionsVentanaLlegada($temporada, $depto) {
-			
-			$data = plan_compra::list_ventanas($temporada);
-			
-			return $data;
-			
-			/*$json = array();
-			foreach ($data as $val) {
-				array_push($json, ["id" => $val[0], "name" => $val[1]]);
-			}
-			return $json;*/
-			
-		}
-		
-		// CBX optionsEVida
-		public static function listar_optionsEVida($temporada, $depto) {
-			
-			$data = plan_compra::list_EVida();
-			
-			return $data;
-			
-			/*$json = array();
-			foreach ($data as $val) {
-				array_push($json, ["id" => $val[0], "name" => $val[1]]);
-			}
-			return $json;*/
-			
-		}
-		
-		// CBX optionsMoneda
-		public static function listar_optionsMoneda($temporada, $depto) {
-			
-			$data = plan_compra::list_Moneda();
-			
-			return $data;
-			
-			
-			/*$json = array();
-			foreach ($data as $val) {
-				array_push($json, ["id" => $val[0], "name" => $val[1]]);
-			}
-			return $json;*/
-			
-		}
-		
-		// CBX optionsOcupacionUso
-		public static function listar_optionsOcacionUso($temporada, $depto) {
-			
-			$data = plan_compra::list_OcacionUso();
-			
-			return $data;
-			
-			/*$json = array();
-			foreach ($data as $val) {
-				array_push($json, ["id" => $val[0], "name" => $val[1]]);
-			}
-			return $json;*/
-			
-		}
-		
-		// CBX optionsProveedor
-		public static function listar_optionsProveedor($temporada, $depto) {
-			
-			$data = plan_compra::list_Proveedor();
-			
-			return $data;
-			
-			/*$json = array();
-			foreach ($data as $val) {
-				array_push($json, ["id" => $val[0], "name" => $val[1]]);
-			}
-			return $json;*/
-			
-		}
-		
-		
-		//combobox ajuste compra
-		public static function Combobox_ajust_compra($tempo, $depto, $id_color3, $tallas) {
-			
-			$n_tallas = explode(",", $tallas);
-			$columtallas = "";
-			
-			for ($i = 1; $i <= count($n_tallas); $i++) {
-				$columtallas = $columtallas . "TALLA_" . $i . ",";
-			}
-			$columtallas = substr($columtallas, 0, strlen($columtallas) - 1);
-			$sql = "select COLUMNAS
+        $data = \database::getInstancia()->getFilas($sql);
+        return $data;
+
+
+        /*$json = array();
+        foreach ($data as $val) {
+            array_push($json, ["id" => $val[0], "name" => $val[1]]);
+        }
+
+//preg_replace('/\x{EF}\x{BF}\x{BD}/u', '', iconv(mb_detect_encoding($val[1]), 'UTF-8', $val[1]))])
+
+        return $json;*/
+
+    }
+
+    // CBX optionsTipoExhibicion
+    public static function listar_optionsTipoExhibicion($temporada, $depto) {
+
+        $data = plan_compra::list_tipoexhibicion();
+
+        return $data;
+
+        /*$json = array();
+        foreach ($data as $val) {
+            array_push($json, ["id" => $val[0], "name" => $val[1]]);
+        }
+        return $json;*/
+
+    }
+
+    // CBX optionsTipoProducto
+    public static function listar_optionsTipoProducto($temporada, $depto) {
+
+        $data = plan_compra::list_tipoProducto();
+
+        return $data;
+
+        /* $json = array();
+         foreach ($data as $val) {
+             array_push($json, ["id" => $val[0], "name" => $val[1]]);
+         }
+         return $json;*/
+
+    }
+
+    // CBX optionsLifeCicle
+    public static function listar_optionsLifeCicle($temporada, $depto) {
+
+        $data = plan_compra::list_ciclo_vida();
+
+        return $data;
+
+        /*$json = array();
+        foreach ($data as $val) {
+            array_push($json, ["id" => $val[0], "name" => $val[1]]);
+        }
+        return $json;*/
+
+    }
+
+    // CBX optionsRankVenta
+    public static function listar_optionsRankVenta($temporada, $depto) {
+
+        $data = plan_compra::list_rnk();
+
+        return $data;
+
+        /*$json = array();
+        foreach ($data as $val) {
+            array_push($json, ["id" => $val[0], "name" => $val[1]]);
+        }
+        return $json;*/
+
+    }
+
+    // CBX optionsPiramideMix
+    public static function listar_optionsPiramideMix($temporada, $depto) {
+
+        $data = plan_compra::list_piramidemix();
+
+        return $data;
+
+        /*$json = array();
+        foreach ($data as $val) {
+            array_push($json, ["id" => $val[0], "name" => $val[1]]);
+        }
+        return $json;*/
+
+    }
+
+    // CBX optionsCluster
+    public static function listar_optionsCluster($temporada, $depto) {
+
+        $data = plan_compra::list_cluster($temporada, $depto);
+
+        return $data;
+
+        /*$json = array();
+        foreach ($data as $val) {
+            array_push($json, ["id" => $val[0], "name" => $val[1]]);
+        }
+        return $json;*/
+
+    }
+
+    // CBX optionsFormato
+    public static function listar_optionsFormato($temporada, $depto) {
+
+        $data = plan_compra::list_Formato($temporada, $depto);
+
+        return $data;
+
+        /*$json = array();
+        foreach ($data as $val) {
+            array_push($json, ["id" => $val[0], "name" => $val[1]]);
+        }
+        return $json;*/
+
+    }
+
+    // CBX optionsVia
+    public static function listar_optionsVia($temporada, $depto) {
+
+        $data = plan_compra::list_via();
+
+        return $data;
+
+        /*$json = array();
+        foreach ($data as $val) {
+            array_push($json, ["id" => $val[0], "name" => $val[1]]);
+        }
+        return $json;*/
+
+    }
+
+    // CBX optionsPais
+    public static function listar_optionsPais($temporada, $depto) {
+
+        $data = plan_compra::list_pais();
+
+        return $data;
+
+        /*$json = array();
+        foreach ($data as $val) {
+            array_push($json, ["id" => $val[0], "name" => $val[1]]);
+        }
+        return $json;*/
+
+    }
+
+    // CBX optionsVentanaLlegada
+    public static function listar_optionsVentanaLlegada($temporada, $depto) {
+
+        $data = plan_compra::list_ventanas($temporada);
+
+        return $data;
+
+        /*$json = array();
+        foreach ($data as $val) {
+            array_push($json, ["id" => $val[0], "name" => $val[1]]);
+        }
+        return $json;*/
+
+    }
+
+    // CBX optionsEVida
+    public static function listar_optionsEVida($temporada, $depto) {
+
+        $data = plan_compra::list_EVida();
+
+        return $data;
+
+        /*$json = array();
+        foreach ($data as $val) {
+            array_push($json, ["id" => $val[0], "name" => $val[1]]);
+        }
+        return $json;*/
+
+    }
+
+    // CBX optionsMoneda
+    public static function listar_optionsMoneda($temporada, $depto) {
+
+        $data = plan_compra::list_Moneda();
+
+        return $data;
+
+
+        /*$json = array();
+        foreach ($data as $val) {
+            array_push($json, ["id" => $val[0], "name" => $val[1]]);
+        }
+        return $json;*/
+
+    }
+
+    // CBX optionsOcupacionUso
+    public static function listar_optionsOcacionUso($temporada, $depto) {
+
+        $data = plan_compra::list_OcacionUso();
+
+        return $data;
+
+        /*$json = array();
+        foreach ($data as $val) {
+            array_push($json, ["id" => $val[0], "name" => $val[1]]);
+        }
+        return $json;*/
+
+    }
+
+    // CBX optionsProveedor
+    public static function listar_optionsProveedor($temporada, $depto) {
+
+        $data = plan_compra::list_Proveedor();
+
+        return $data;
+
+        /*$json = array();
+        foreach ($data as $val) {
+            array_push($json, ["id" => $val[0], "name" => $val[1]]);
+        }
+        return $json;*/
+
+    }
+
+
+    //combobox ajuste compra
+    public static function Combobox_ajust_compra($tempo, $depto, $id_color3, $tallas) {
+
+        $n_tallas = explode(",", $tallas);
+        $columtallas = "";
+
+        for ($i = 1; $i <= count($n_tallas); $i++) {
+            $columtallas = $columtallas . "TALLA_" . $i . ",";
+        }
+        $columtallas = substr($columtallas, 0, strlen($columtallas) - 1);
+        $sql = "select COLUMNAS
                     ," . $columtallas . "
                     ,TOTAL
                 from (select COLUMNAS
@@ -1841,25 +1840,25 @@
                         and dep_depto = '" . $depto . "'
                         and Tipo_ajuste = 'Ajuste de Compra')A
                 ORDER BY order_ ASC";
-			
-			$data = \database::getInstancia()->getFilas($sql);
-			return $data;
-		}
-		
-		public static function Combobox_ajust_n_cajas($tempo, $depto, $id_color3, $tallas, $tipo_empaque, $debut_reorder) {
-			
-			
-			$n_tallas = explode(",", $tallas);
-			$columtallas = "";
-			for ($i = 1; $i <= count($n_tallas); $i++) {
-				$columtallas = $columtallas . "TALLA_" . $i . ",";
-			}
-			$columtallas = substr($columtallas, 0, strlen($columtallas) - 1);
-			
-			if ($tipo_empaque == "CURVADO" and $debut_reorder == "DEBUT") {
-				
-				
-				$sql = " select COLUMNAS," . $columtallas . ",TOTAL
+
+        $data = \database::getInstancia()->getFilas($sql);
+        return $data;
+    }
+
+    public static function Combobox_ajust_n_cajas($tempo, $depto, $id_color3, $tallas, $tipo_empaque, $debut_reorder) {
+
+
+        $n_tallas = explode(",", $tallas);
+        $columtallas = "";
+        for ($i = 1; $i <= count($n_tallas); $i++) {
+            $columtallas = $columtallas . "TALLA_" . $i . ",";
+        }
+        $columtallas = substr($columtallas, 0, strlen($columtallas) - 1);
+
+        if ($tipo_empaque == "CURVADO" and $debut_reorder == "DEBUT") {
+
+
+            $sql = " select COLUMNAS," . $columtallas . ",TOTAL
                    from(select COLUMNAS
                                ,TALLA_1,TALLA_2,TALLA_3,TALLA_4,TALLA_5,TALLA_6,TALLA_7,TALLA_8,TALLA_9
                                 ,CASE WHEN COLUMNAS = 'N de curvas x cajas' THEN 1
@@ -1874,9 +1873,9 @@
                  and cod_temporada = " . $tempo . "
                  and dep_depto = '" . $depto . "'
                  and tipo_ajuste in ('Ajuste Curvado','Solido Curvado'))a order by n asc";
-			} ELSEIF ($tipo_empaque == "SOLIDO" and $debut_reorder == "DEBUT") {
-				
-				$sql = "select COLUMNAS," . $columtallas . ",TOTAL
+        } ELSEIF ($tipo_empaque == "SOLIDO" and $debut_reorder == "DEBUT") {
+
+            $sql = "select COLUMNAS," . $columtallas . ",TOTAL
                      from(select COLUMNAS
                                        ,TALLA_1,TALLA_2,TALLA_3,TALLA_4,TALLA_5,TALLA_6,TALLA_7,TALLA_8,TALLA_9
                                        ,CASE WHEN COLUMNAS = 'Unid Ini' THEN 1 WHEN COLUMNAS = 'Primer Reparto' THEN 2
@@ -1888,9 +1887,9 @@
                     and cod_temporada = " . $tempo . "
                     and dep_depto = '" . $depto . "'
                     and tipo_ajuste in ('Ajuste Master Pack'))a order by n asc";
-				
-			} ELSEIF ($tipo_empaque == "SOLIDO" and $debut_reorder == "REORDER") {
-				$sql = "select COLUMNAS," . $columtallas . ",TOTAL
+
+        } ELSEIF ($tipo_empaque == "SOLIDO" and $debut_reorder == "REORDER") {
+            $sql = "select COLUMNAS," . $columtallas . ",TOTAL
                      from(select COLUMNAS
                                        ,TALLA_1,TALLA_2,TALLA_3,TALLA_4,TALLA_5,TALLA_6,TALLA_7,TALLA_8,TALLA_9
                                        ,CASE WHEN COLUMNAS = 'Unid Ini' THEN 1
@@ -1903,97 +1902,97 @@
                     and cod_temporada = " . $tempo . "
                     and dep_depto = '" . $depto . "'
                     and tipo_ajuste in ('Ajuste Master Pack'))a order by n asc";
-			}
-			
-			$data = \database::getInstancia()->getFilas($sql);
-			return $data;
-			
-		}
-		
-		public static function checkbox_list_grupocompraXdepto($tempo, $depto) {
-			$sql = "SELECT DISTINCT GRUPO_COMPRA
+        }
+
+        $data = \database::getInstancia()->getFilas($sql);
+        return $data;
+
+    }
+
+    public static function checkbox_list_grupocompraXdepto($tempo, $depto) {
+        $sql = "SELECT DISTINCT GRUPO_COMPRA
                 FROM PLC_PLAN_COMPRA_COLOR_3
                 WHERE COD_TEMPORADA = " . $tempo . "
                         AND DEP_DEPTO = '" . $depto . "'
                 ORDER BY 1 ASC";
-			$data = \database::getInstancia()->getFilas($sql);
-			return $data;
-		}
-		
-		// ######################## TRABAJO CON ACCESO SIMULADOR DE COMPRA ########################
-		
-		public static function busca_existe_pto_retail($temporada, $depto, $login) {
-			
-			$sql = "SELECT MATI FROM PLC_PPTO_RETAIL
+        $data = \database::getInstancia()->getFilas($sql);
+        return $data;
+    }
+
+    // ######################## TRABAJO CON ACCESO SIMULADOR DE COMPRA ########################
+
+    public static function busca_existe_pto_retail($temporada, $depto, $login) {
+
+        $sql = "SELECT MATI FROM PLC_PPTO_RETAIL
                 WHERE cod_temporada = $temporada
                 AND dep_depto = '" . $depto . "'
                 ";
-			
-			$data = \database::getInstancia()->getFilas($sql);
-			return $data;
-			
-		}
-		
-		public static function busca_existe_pto_embarque($temporada, $depto, $login) {
-			
-			$sql = "SELECT count(*)total FROM PLC_PPTO_EMB
+
+        $data = \database::getInstancia()->getFilas($sql);
+        return $data;
+
+    }
+
+    public static function busca_existe_pto_embarque($temporada, $depto, $login) {
+
+        $sql = "SELECT count(*)total FROM PLC_PPTO_EMB
                 WHERE cod_temporada = $temporada
                 AND dep_depto = '" . $depto . "'
                 ";
-			
-			$data = \database::getInstancia()->getFilas($sql);
-			return $data;
-			
-		}
-		
-		public static function busca_existe_pto_costo($temporada, $depto, $login) {
-			
-			$sql = "SELECT presupuesto FROM PLC_PPTO_COSTO
+
+        $data = \database::getInstancia()->getFilas($sql);
+        return $data;
+
+    }
+
+    public static function busca_existe_pto_costo($temporada, $depto, $login) {
+
+        $sql = "SELECT presupuesto FROM PLC_PPTO_COSTO
                 WHERE cod_temporada = $temporada
                 AND dep_depto = '" . $depto . "'
                 ";
-			$data = \database::getInstancia()->getFilas($sql);
-			return $data;
-			
-		}
-		
-		public static function busca_existe_val_tienda($temporada, $depto, $login) {
-			
-			$sql = "SELECT * FROM PLC_SEGMENTOS_TDA
+        $data = \database::getInstancia()->getFilas($sql);
+        return $data;
+
+    }
+
+    public static function busca_existe_val_tienda($temporada, $depto, $login) {
+
+        $sql = "SELECT * FROM PLC_SEGMENTOS_TDA
                 WHERE COD_TEMPORADA = $temporada
                 AND DEP_DEPTO = '" . $depto . "'
                 AND COD_SEG <> 4
                  ";
-			$data = \database::getInstancia()->getFilas($sql);
-			return $data;
-			
-		}
-		
-		public static function busca_existe_marca($temporada, $depto, $login) {
-			
-			$sql = "SELECT count(*) TOTAL
+        $data = \database::getInstancia()->getFilas($sql);
+        return $data;
+
+    }
+
+    public static function busca_existe_marca($temporada, $depto, $login) {
+
+        $sql = "SELECT count(*) TOTAL
                     FROM PLC_DEPTO_MARCA 
                     WHERE LTRIM(RTRIM(COD_DEPT)) = LTRIM(RTRIM('" . $depto . "'))
                 ";
-			
-			$data = \database::getInstancia()->getFilas($sql);
-			return $data;
-			
-		}
-		
-		
-		// ######################## VISTA OC FECHA RECEPCIÓN Y DIAS ATRASO ########################
-		
-		public static function trae_fecharcd_y_dias_atraso($fecha_esta, $fecha_recep_pmm) {
-			
-			$sql = "begin PLC_PKG_DESARROLLO.PRC_LIS_FECHASOCVISTA('" . $fecha_esta . "', '" . $fecha_recep_pmm . "', :data); end;";
-			
-			$data = \database::getInstancia()->getConsultaSP($sql, 1);
-			
-			return $data;
-			
-		}
+
+        $data = \database::getInstancia()->getFilas($sql);
+        return $data;
+
+    }
+
+
+    // ######################## VISTA OC FECHA RECEPCIÓN Y DIAS ATRASO ########################
+
+    public static function trae_fecharcd_y_dias_atraso($fecha_esta, $fecha_recep_pmm) {
+
+        $sql = "begin PLC_PKG_DESARROLLO.PRC_LIS_FECHASOCVISTA('" . $fecha_esta . "', '" . $fecha_recep_pmm . "', :data); end;";
+
+        $data = \database::getInstancia()->getConsultaSP($sql, 1);
+
+        return $data;
+
+    }
 
 
 // Fin de la Clase
-	}
+}

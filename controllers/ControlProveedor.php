@@ -657,7 +657,7 @@
 					}
 					
 					// Valida los costos por PO
-					/*$etapa = "validatePOAmount";
+					$etapa = "validatePOAmount";
 					foreach ($temp_m as $llave => $valor) {
 						//TODO: Busca los montos de la PO
 						$r = \proveedor\proveedor::getInfoPO($llave);
@@ -671,10 +671,10 @@
 							$f3->set('SESSION.error', "The total amount in the packing list can not be greater than total amount loaded to purchase order number '$llave'. Please check de file.");
 							$f3->reroute("/invoices?cod_proveedor=$cod_proveedor");
 						}
-					}*/
+					}
 					
 					// Valida las unidades por PO
-					/*$etapa = "validatePOQuantity";
+					$etapa = "validatePOQuantity";
 					foreach ($temp_u as $llave => $valor) {
 						//TODO: Busca las unidades de la PO
 						$r = \proveedor\proveedor::getInfoPO($llave);
@@ -688,7 +688,7 @@
 							$f3->set('SESSION.error', "The quantity of units in the packing list can not be greater than total units loaded to purchase order number '$llave'. Please check de file.");
 							$f3->reroute("/invoices?cod_proveedor=$cod_proveedor");
 						}
-					}*/
+					}
 					
 					$etapa = "clearInvoicePLData";
 					foreach ($registros as $registro) {
@@ -697,7 +697,6 @@
 					
 					$etapa = "insertInvoicePL";
 					foreach ($registros as $registro) {
-						$etapa = "insertInvoicePL" . $registro['po_number'] . "_" . $registro['style_number'] . "_" . $registro['color'];
 						\proveedor\proveedor::insertInvoicePL(
 							$registro['cod_temporada'],
 							$registro['dep_depto'],
@@ -714,41 +713,40 @@
 							$registro['style_number'],
 							$registro['style_description'],
 							$registro['color'],
-							\LibraryHelper::convertNumber($registro['size_01']),
-							\LibraryHelper::convertNumber($registro['size_02']),
-							\LibraryHelper::convertNumber($registro['size_03']),
-							\LibraryHelper::convertNumber($registro['size_04']),
-							\LibraryHelper::convertNumber($registro['size_05']),
-							\LibraryHelper::convertNumber($registro['size_06']),
-							\LibraryHelper::convertNumber($registro['size_07']),
-							\LibraryHelper::convertNumber($registro['size_08']),
-							\LibraryHelper::convertNumber($registro['size_09']),
-							\LibraryHelper::convertNumber($registro['size_10']),
-							\LibraryHelper::convertNumber($registro['size_11']),
-							\LibraryHelper::convertNumber($registro['size_12']),
-							\LibraryHelper::convertNumber($registro['size_13']),
-							\LibraryHelper::convertNumber($registro['size_14']),
-							\LibraryHelper::convertNumber($registro['size_15']),
-							\LibraryHelper::convertNumber($registro['size_16']),
-							\LibraryHelper::convertNumber($registro['size_17']),
-							\LibraryHelper::convertNumber($registro['n_curves_ctn']),
-							\LibraryHelper::convertNumber($registro['pcs_sets_per_ctn']),
-							\LibraryHelper::convertNumber($registro['n_cartons']),
-							\LibraryHelper::convertNumber($registro['total_pcs_sets']),
-							\LibraryHelper::convertNumber($registro['unit_cost']),
-							\LibraryHelper::convertNumber($registro['subtotal_amount']),
-							\LibraryHelper::convertNumber($registro['gw_per_ctn']),
-							\LibraryHelper::convertNumber($registro['sub_gw']),
-							\LibraryHelper::convertNumber($registro['nw_per_ctn']),
-							\LibraryHelper::convertNumber($registro['sub_nw']),
+							intval($registro['size_01']),
+							intval($registro['size_02']),
+							intval($registro['size_03']),
+							intval($registro['size_04']),
+							intval($registro['size_05']),
+							intval($registro['size_06']),
+							intval($registro['size_07']),
+							intval($registro['size_08']),
+							intval($registro['size_09']),
+							intval($registro['size_10']),
+							intval($registro['size_11']),
+							intval($registro['size_12']),
+							intval($registro['size_13']),
+							intval($registro['size_14']),
+							intval($registro['size_15']),
+							intval($registro['size_16']),
+							intval($registro['size_17']),
+							intval($registro['n_curves_ctn']),
+							$registro['pcs_sets_per_ctn'],
+							$registro['n_cartons'],
+							$registro['total_pcs_sets'],
+							$registro['unit_cost'],
+							$registro['subtotal_amount'],
+							$registro['gw_per_ctn'],
+							$registro['sub_gw'],
+							$registro['nw_per_ctn'],
+							$registro['sub_nw'],
 							$registro['measurement_per_ctn'],
-							\LibraryHelper::convertNumber($registro['sub_volume'])
+							$registro['sub_volume']
 						);
 					}
 					
 					//TODO: Crear detalle LPN
-					\proveedor\proveedor::crearDetalleLPN($cod_proveedor, $invoiceNumber);
-					//$this::crearDetalleLPN($f3, $cod_proveedor, $invoiceNumber);
+					$this::crearDetalleLPN($f3, $cod_proveedor, $invoiceNumber);
 					
 					/*$curlopt_url = $f3->get('CURLOPT_URL') . "/facturaComexrst/v1/facturaComex";
 					$curlopt_port = $f3->get('CURLOPT_PORT');
@@ -784,9 +782,9 @@
 		public function approve_invoice($f3) {
 			$cod_proveedor = $f3->get('GET.cod_proveedor');
 			$nro_factura = $f3->get('GET.nro_factura');
-			$etapa = "setFacturaAprobada";
+			$etapa = "generateLPNDetail";
 			try {
-				/*$etapa = "getInvoiceHeader";
+				$etapa = "getInvoiceHeader";
 				$facturas = \proveedor\proveedor::getEncabezadoFacturaLPN($cod_proveedor, $nro_factura);
 				$registros = [];
 				foreach ($facturas as $factura) {
@@ -834,7 +832,7 @@
 				foreach ($registros as $registro) {
 					$etapa = "saveLPNDetail_" . $registro["po_number"] . "_" . $registro["nro_variacion"];
 					\proveedor\proveedor::saveLPNDetail($registro);
-				}*/
+				}
 				\proveedor\proveedor::setFacturaAprobada($cod_proveedor, $nro_factura);
 			} catch (Exception $e) {
 				$msj = $e->getMessage();

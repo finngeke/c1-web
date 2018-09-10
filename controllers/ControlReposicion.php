@@ -233,20 +233,7 @@
 				$nro_embarque = $f3->get("POST.nro_embarque");
 				$nro_contenedor = $f3->get("POST.nro_contenedor");
 				$login = $f3->get("SESSION.login");
-				
 				// Valida que que haya guardado previamente la distribución
-				$etapa = "detalleDistribucionSucursales";
-				$sucursales = \reposicion\distribucion::detalle_distribucion_sucursales($nro_embarque, $nro_contenedor, $login);
-				if ($sucursales) {
-					$data = \reposicion\distribucion::distribuir_lpns($nro_embarque, $nro_contenedor, $login);
-					$estado = 1;
-					$mensaje = "Distribución aprobada correctamente.";
-				} else {
-					$estado = 0;
-					$mensaje = "Debe guardar la distribución antes de aprobarla.";
-				}
-				
-				/*// Valida que que haya guardado previamente la distribución
 				$etapa = "detalleDistribucionSucursales";
 				$sucursales = \reposicion\distribucion::detalle_distribucion_sucursales($nro_embarque, $nro_contenedor, $login);
 				if ($sucursales) {
@@ -272,9 +259,9 @@
 				} else {
 					$estado = 0;
 					$mensaje = "Debe guardar la distribución antes de aprobarla.";
-				}*/
+				}
 			} catch (Exception $e) {
-				$estado = 0;
+				$estado = false;
 				$mensaje = $e->getMessage();
 			}
 			header("Content-Type: application/json");
@@ -352,7 +339,7 @@
 					file_put_contents("../archivos/json/$filename", $json);
 					
 					$etapa = "abrirSesion";
-					/*$response = \broker::post($json, $curlopt_url, $curlopt_port);
+					$response = \broker::post($json, $curlopt_url, $curlopt_port);
 					
 					if (strtoupper($response->Body->fault->faultString) != "OK") {
 						$msj = $response->Body->fault->faultString;
@@ -362,7 +349,7 @@
 					} else {
 						$id_sesion = $response->Body->sessionid;
 						\reposicion\embarque::guardar_sesion_asn($nro_embarque, $asn[0], $id_sesion);
-					}*/
+					}
 				}
 				
 				// Procesa el archivo de CITAS
@@ -473,7 +460,7 @@
 				file_put_contents("$local_path/$file_name", $control);
 				$archivos[] = $file_name;
 				
-				/*$etapa = "conectarFTP";
+				$etapa = "conectarFTP";
 				$ftp = ftp_connect($host, $port, $timeout);
 				$login = ftp_login($ftp, $user, $pass);
 				ftp_pasv($ftp, true);
@@ -494,11 +481,11 @@
 						}
 					}
 				}
-				ftp_close($ftp);*/
+				ftp_close($ftp);
 				
 				//TODO: Actualiza el embarque
-				/*$etapa = "archivarASN";
-				$data = \reposicion\embarque::archivar_asn($nro_embarque);*/
+				$etapa = "archivarASN";
+				$data = \reposicion\embarque::archivar_asn($nro_embarque);
 				
 				header("Content-Type: application/json");
 				echo json_encode(array("estado" => 0, "mensaje" => "Archivo cargado", "etapa" => $etapa), JSON_PRETTY_PRINT);

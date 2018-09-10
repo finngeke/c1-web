@@ -1147,6 +1147,7 @@ class valida_archivo_bmt extends \parametros {
             }
         }
         }
+		
         return $arrayinsert;
     }
     public static function existenCamposVacios($fila, $campo, $columnas, $datos) {

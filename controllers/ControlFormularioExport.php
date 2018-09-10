@@ -77,7 +77,7 @@ require_once '../PHPExcel/PHPExcel.php';
             foreach($_POST["check_depto"] as $val => $value){
                 $depto_cadena = $depto_cadena.$value."," ; // Le adjunta una ,
                 $reemplazo = str_replace ( ",", "'," , $depto_cadena); // Reemplaza , por ',
-                $reemplazo2 = str_replace ( "D", "'D" , $reemplazo); // Teemplaza D por 'D
+                $reemplazo2 = str_replace ( "D", "'D" , $reemplazo); // Reemplaza D por 'D
                 $reemplazo3 = substr($reemplazo2,0,-1); // Quita el último caracter
             }
 

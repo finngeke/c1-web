@@ -93,7 +93,7 @@
 		public static function guardar_distribucion_tienda($nro_embarque, $nro_contenedor, $sucursales) {
 			$sql = "BEGIN ";
 			$sql .= "DELETE FROM PLC_DISTRIBUCION WHERE (NRO_EMBARQUE = $nro_embarque) AND (NRO_CONTENEDOR = '$nro_contenedor'); ";
-			//$sql .= "UPDATE PLC_DETALLE_LPN SET COD_TDA = NULL WHERE (NRO_EMBARQUE = $nro_embarque) AND (NRO_CONTENEDOR = '$nro_contenedor'); ";
+			$sql .= "UPDATE PLC_DETALLE_LPN SET COD_TDA = NULL WHERE (NRO_EMBARQUE = $nro_embarque) AND (NRO_CONTENEDOR = '$nro_contenedor'); ";
 			foreach ($sucursales as $sucursal) {
 				$cod_temporada = $sucursal["codTemporada"];
 				$dep_depto = $sucursal["depDepto"];
@@ -154,11 +154,6 @@
 						AND (NRO_CONTENEDOR = '$nro_contenedor')
 						AND (COD_TDA = $cod_tda);
 					END;";
-			return \database::getInstancia()->getConsulta($sql);
-		}
-		
-		public static function distribuir_lpns($nro_embarque, $nro_contenedor, $login) {
-			$sql = "BEGIN PLC_PKG_DISTRIBUCION.PRC_DISTRIBUIR_LPNS($nro_embarque, '$nro_contenedor', '$login'); END;";
 			return \database::getInstancia()->getConsulta($sql);
 		}
 	}
