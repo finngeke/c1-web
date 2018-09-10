@@ -227,6 +227,10 @@ $(function() {
 		}
 	});
 
+	// Tooltip de Mostar/Ocultar Presupuestos
+    $('#btn_esconder_tabla1').tooltip({title: "Ocultar", trigger: "hover", placement: "right"});
+    $('#btn_mostrar_tabla1').tooltip({title: "Desplegar", trigger: "hover", placement: "right"});
+
 });
 
 
@@ -1051,6 +1055,9 @@ $(window).on('load', function() {
 			setTimeout(function() {
 				validar_usuario_recarga_sesion_expirada();
 				Validar_flag_concurrencia_usuario_log();
+                // Ocultar tabla presupuestos
+                carga_tabla1_oculta();
+
 			}, delay_validaciones);
 
 
@@ -3628,3 +3635,11 @@ $("#btn_limpiar_deptos").on("click", function () {
     });
 });
 
+function carga_tabla1_oculta(){
+
+    $('#div_contenedor_tabla1').hide();
+    $('#btn_esconder_tabla1').hide();
+    $('#btn_mostrar_tabla1').show();
+    $('.dataTables_scrollBody').attr('style', 'position: relative; overflow: auto; width: 100%; max-height: 60%;');
+
+}
