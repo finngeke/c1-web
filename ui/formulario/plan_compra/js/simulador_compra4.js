@@ -1660,6 +1660,7 @@ function colorearTRTabla(event) {
     // El ID del TR
     $('#tabla2_tr_id_'+value_radio).find('td').css('background-color','#5f9ea0');
 
+// Fin del colorear TR
 }
 
 $('#despliega_hitorial_excel').on('click', function() {

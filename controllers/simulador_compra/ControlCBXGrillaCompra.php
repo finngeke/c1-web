@@ -11,7 +11,7 @@
 	
 	class ControlCBXGrillaCompra extends \Control {
 
-		// Llenar Tabla2
+		// Llenar Tabla2 (Grilla)
 		public function llenar_tabla2($f3) {
 			$data = \simulador_compra\cbx_grilla_compra::llenar_tabla2($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'));
 			$json = [];
