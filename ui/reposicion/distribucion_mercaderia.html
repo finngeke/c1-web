@@ -191,10 +191,11 @@
 				if (data.estado == 1) {
 					alert(data.mensaje);
 					$(location).attr('href', "reposicion");
+				} else if (data.estado == 0) {
+					alert(data.mensaje);
 				} else {
 					console.log(data.etapa);
-					console.log(data.mensaje);
-					alert('Ha ocurrido un error al guardar los datos');
+					alert('Ha ocurrido un error al aprobar la distribución');
 				}
 				terminarAprobar();
 			});

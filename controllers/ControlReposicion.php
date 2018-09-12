@@ -171,7 +171,12 @@
 				$sucs = \reposicion\distribucion::detalleContenedoresSucursales($row[10], $row[11], $row[12], $nroEmbarque, $nroContenedor, $row[2], $login);
 				$aux = [];
 				foreach ($sucs as $suc) {
+					$habilitada = \LibraryHelper::convertNumber($suc[2]);
+					if ($habilitada) {
 					$cantidad = (\LibraryHelper::convertNumber($suc[4]) > 0) ? \LibraryHelper::convertNumber($suc[4]) : \LibraryHelper::convertNumber($suc[3]);
+					} else {
+						$cantidad = 0;
+					}
 					$c = $cantidad;
 					if ($c > $cajas) {
 						$c = $cajas;
@@ -180,13 +185,35 @@
 					$aux[] = array(
 						"codSucursal" => $suc[0],
 						"sucursal" => utf8_encode($suc[1]),
-						"habilitada" => \LibraryHelper::convertNumber($suc[2]),
+						"habilitada" => $habilitada,
 						"cantidad" => $c,
 						"fechaDemora" => $suc[5],
 						"cluster" => $suc[7]
 					);
 				}
+				
+				$existe = false;
+				for ($i = 0; $i < count($aux); $i++) {
+					if ($aux[$i]['habilitada'] == 1) {
+						$existe = true;
+						break;
+					}
+				}
+				
+				while ($cajas > 0 && $existe) {
+					for ($i = 0; $i < count($aux); $i++) {
+						if ($aux[$i]['habilitada'] == 1) {
+							$aux[$i]['cantidad']++;
+							$cajas--;
+							if ($cajas == 0) {
+								break;
+							}
+						}
+					}
+				}
+				
 				usort($aux, array('ControlReposicion', 'cmp'));
+				
 				$detalle[] = array(
 					"idFila" => $row[0],
 					"departamento" => $row[1],
@@ -235,33 +262,17 @@
 				$login = $f3->get("SESSION.login");
 				// Valida que que haya guardado previamente la distribución
 				$etapa = "detalleDistribucionSucursales";
-				$sucursales = \reposicion\distribucion::detalle_distribucion_sucursales($nro_embarque, $nro_contenedor, $login);
-				if ($sucursales) {
-					foreach ($sucursales as $sucursal) {
-						$cod_temporada = $sucursal[0];
-						$dep_depto = $sucursal[1];
-						$id_color3 = $sucursal[2];
-						$nro_estilo = $sucursal[5];
-						$cod_tda = $sucursal[6];
-						$cantidad = $sucursal[7];
-						$fecha_demora = $sucursal[8];
-						$etapa = "obtenerLPNSDistribucion_$cod_tda";
-						$lpns = \reposicion\distribucion::obtener_lpns_distribucion($cod_temporada, $dep_depto, $id_color3, $nro_embarque, $nro_contenedor, $nro_estilo);
-						if ($lpns) {
-							for ($i = 0; $i < $cantidad; $i++) {
-								$lpn_number = $lpns[$i][2];
-								$data = \reposicion\distribucion::actualizar_lpns_distribucion($cod_temporada, $dep_depto, $id_color3, $nro_embarque, $nro_contenedor, $lpn_number, $cod_tda, $fecha_demora);
-							}
-						}
-					}
+				$habilitar = \reposicion\distribucion::validar_distribucion($nro_embarque, $nro_contenedor);
+				if ($habilitar[0] == 1) {
+					$data = \reposicion\distribucion::distribuir_lpns($nro_embarque, $nro_contenedor, $login);
 					$estado = 1;
 					$mensaje = "Distribución aprobada correctamente.";
 				} else {
 					$estado = 0;
-					$mensaje = "Debe guardar la distribución antes de aprobarla.";
+					$mensaje = "Debe guardar la distribución de TODOS los departamentos en el embarque/contenedor antes de aprobar.";
 				}
 			} catch (Exception $e) {
-				$estado = false;
+				$estado = -1;
 				$mensaje = $e->getMessage();
 			}
 			header("Content-Type: application/json");
@@ -339,7 +350,7 @@
 					file_put_contents("../archivos/json/$filename", $json);
 					
 					$etapa = "abrirSesion";
-					$response = \broker::post($json, $curlopt_url, $curlopt_port);
+					/*$response = \broker::post($json, $curlopt_url, $curlopt_port);
 					
 					if (strtoupper($response->Body->fault->faultString) != "OK") {
 						$msj = $response->Body->fault->faultString;
@@ -349,7 +360,7 @@
 					} else {
 						$id_sesion = $response->Body->sessionid;
 						\reposicion\embarque::guardar_sesion_asn($nro_embarque, $asn[0], $id_sesion);
-					}
+					}*/
 				}
 				
 				// Procesa el archivo de CITAS
@@ -460,7 +471,7 @@
 				file_put_contents("$local_path/$file_name", $control);
 				$archivos[] = $file_name;
 				
-				$etapa = "conectarFTP";
+				/*$etapa = "conectarFTP";
 				$ftp = ftp_connect($host, $port, $timeout);
 				$login = ftp_login($ftp, $user, $pass);
 				ftp_pasv($ftp, true);
@@ -481,11 +492,11 @@
 						}
 					}
 				}
-				ftp_close($ftp);
+				ftp_close($ftp);*/
 				
 				//TODO: Actualiza el embarque
-				$etapa = "archivarASN";
-				$data = \reposicion\embarque::archivar_asn($nro_embarque);
+				/*$etapa = "archivarASN";
+				$data = \reposicion\embarque::archivar_asn($nro_embarque);*/
 				
 				header("Content-Type: application/json");
 				echo json_encode(array("estado" => 0, "mensaje" => "Archivo cargado", "etapa" => $etapa), JSON_PRETTY_PRINT);

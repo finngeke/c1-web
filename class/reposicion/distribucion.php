@@ -93,7 +93,7 @@
 		public static function guardar_distribucion_tienda($nro_embarque, $nro_contenedor, $sucursales) {
 			$sql = "BEGIN ";
 			$sql .= "DELETE FROM PLC_DISTRIBUCION WHERE (NRO_EMBARQUE = $nro_embarque) AND (NRO_CONTENEDOR = '$nro_contenedor'); ";
-			$sql .= "UPDATE PLC_DETALLE_LPN SET COD_TDA = NULL WHERE (NRO_EMBARQUE = $nro_embarque) AND (NRO_CONTENEDOR = '$nro_contenedor'); ";
+			//$sql .= "UPDATE PLC_DETALLE_LPN SET COD_TDA = NULL WHERE (NRO_EMBARQUE = $nro_embarque) AND (NRO_CONTENEDOR = '$nro_contenedor'); ";
 			foreach ($sucursales as $sucursal) {
 				$cod_temporada = $sucursal["codTemporada"];
 				$dep_depto = $sucursal["depDepto"];
@@ -155,5 +155,18 @@
 						AND (COD_TDA = $cod_tda);
 					END;";
 			return \database::getInstancia()->getConsulta($sql);
+		}
+		
+		public static function distribuir_lpns($nro_embarque, $nro_contenedor, $login) {
+			$sql = "BEGIN PLC_PKG_DISTRIBUCION.PRC_DISTRIBUIR_LPNS($nro_embarque, '$nro_contenedor', '$login'); END;";
+			return \database::getInstancia()->getConsulta($sql);
+		}
+		
+		public static function validar_distribucion($nro_embarque, $nro_contenedor) {
+			$sql = "SELECT CASE WHEN COUNT(DISTINCT LPN_NUMBER) <> COALESCE((SELECT SUM(CANTIDAD) FROM PLC_DISTRIBUCION WHERE (NRO_EMBARQUE = A.NRO_EMBARQUE) AND (NRO_CONTENEDOR = A.NRO_CONTENEDOR)), 0) THEN 0 ELSE 1 END AS HABILITAR
+					FROM PLC_DETALLE_LPN A
+					WHERE (A.NRO_EMBARQUE = $nro_embarque) AND (A.NRO_CONTENEDOR = '$nro_contenedor') AND (A.PREFIJO = 'ICC')
+					GROUP BY A.NRO_EMBARQUE, A.NRO_CONTENEDOR";
+			return \database::getInstancia()->getFila($sql);
 		}
 	}
