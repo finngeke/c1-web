@@ -486,8 +486,8 @@ $(window).on('load', function() {
 				});
 
 				$.each(data, function(i, o) {
-					$('#tabla2').append('<tr>\n' +
-						'<td id="txt_id_radio' + flag_tabla2 + '"><input type="radio" id="radio" name="radio" value="' + flag_tabla2 + '"></td>\n' +
+					$('#tabla2').append('<tr id="tabla2_tr_id_'+flag_tabla2+'" class="tabla2_tr_id_">\n' +
+						'<td id="txt_id_radio' + flag_tabla2 + '"><input type="radio" id="radio" name="radio" value="' + flag_tabla2 + '" onclick="colorearTRTabla(event);"></td>\n' +
 						'<td class="ids" id="txt_id_' + flag_tabla2 + '">' + (flag_tabla2 + 1) + '</td>\n' +
 						'<td class="columnas" id="txt_gcompra_' + flag_tabla2 + '">' + o[1] + '</td>\n' +
 						'<td class="columnas" id="cbx_temp_' + flag_tabla2 + '">' + o[2] + '</td>\n' +
@@ -1648,6 +1648,20 @@ function despliegaHistorial(event) {
 
 
 }
+
+function colorearTRTabla(event) {
+
+    // Rescato el value del elemento seleccionado
+    var value_radio = $(event.target);
+        value_radio = value_radio.attr('value');
+
+    // La Clase del TR    
+    $('.tabla2_tr_id_').find('td').css('background-color','');
+    // El ID del TR
+    $('#tabla2_tr_id_'+value_radio).find('td').css('background-color','#5f9ea0');
+
+}
+
 
 $('#despliega_hitorial_excel').on('click', function() {
 
