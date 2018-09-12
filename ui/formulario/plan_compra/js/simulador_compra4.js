@@ -1655,13 +1655,12 @@ function colorearTRTabla(event) {
     var value_radio = $(event.target);
         value_radio = value_radio.attr('value');
 
-    // La Clase del TR    
+    // La Clase del TR (Quitamos background-color antes de volver a colorear uno nuevo)
     $('.tabla2_tr_id_').find('td').css('background-color','');
     // El ID del TR
     $('#tabla2_tr_id_'+value_radio).find('td').css('background-color','#5f9ea0');
 
 }
-
 
 $('#despliega_hitorial_excel').on('click', function() {
 
