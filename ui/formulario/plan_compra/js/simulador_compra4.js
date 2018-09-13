@@ -1666,7 +1666,7 @@ function colorearTRTabla(event) {
     // Agregamos background-color al TR Seleccionado
     $('#tabla2_tr_id_' + value_radio).find('td').css('background-color', '#5f9ea0');
     // Agrega color Blanco al Texto del TR seleccionado
-    $('#tabla2_tr_id_' + value_radio).find('td').css('color', '#FFFFFF');
+    $('#tabla2_tr_id_' + value_radio).find('td').css('color', '#000000');
 
 // Fin del colorear TR
 }
