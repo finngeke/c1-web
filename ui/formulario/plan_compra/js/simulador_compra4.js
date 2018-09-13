@@ -1446,27 +1446,32 @@ $('.crear_modificacion').on('click', function() {
 	var id_color3 = $("#txt_id_color_" + valor_radio).text();
 	var estado_c1 = $("#tabla2 #txt_estadoc1_" + valor_radio).text();
 
+    if(estado_c1 != 24){
 
-	var respuesta = confirm("¿Quiere realizar los cambios?");
+        var respuesta = confirm("¿Quiere realizar los cambios?");
 
-	if (respuesta == true) {
+        if (respuesta == true) {
 
-		// Llamar al INSERT
-		var url_inserta = 'ajax_simulador_cbx/trabaja_flujo_aprobacion_insert';
-		$.getJSON(url_inserta, {ID_COLOR3: id_color3, ESTADO: 0}).done(function(data) {
+            // Llamar al INSERT
+            var url_inserta = 'ajax_simulador_cbx/trabaja_flujo_aprobacion_insert';
+            $.getJSON(url_inserta, {ID_COLOR3: id_color3, ESTADO: 0}).done(function(data) {
 
-			// Llamar al UPDATE
-			var url_actualiza = 'ajax_simulador_cbx/trabaja_flujo_aprobacion_update';
-			$.getJSON(url_actualiza, {PROFORMA: proforma, ESTADO: 3});
+                // Llamar al UPDATE
+                var url_actualiza = 'ajax_simulador_cbx/trabaja_flujo_aprobacion_update';
+                $.getJSON(url_actualiza, {PROFORMA: proforma, ESTADO: 3});
 
-			// Recargar Página
-			location.reload(true);
+                // Recargar Página
+                location.reload(true);
 
-		});
+            });
 
-	} else {
-		alert("No se han Realizado Cambios.");
-	}
+        } else {
+            alert("No se han Realizado Cambios.");
+        }
+
+    }else{
+        alert("No puede modificar una opción eliminada.\n");
+    }
 
 
 });
