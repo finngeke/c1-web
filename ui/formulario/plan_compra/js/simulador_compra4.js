@@ -1659,11 +1659,13 @@ function colorearTRTabla(event) {
     var value_radio = $(event.target);
     value_radio = value_radio.attr('value');
 
-    // La Clase del TR (Quitamos background-color antes de volver a colorear uno nuevo)
+    // Quitamos background-color antes de volver a colorear uno nuevo
     $('.tabla2_tr_id_').find('td').css('background-color', '');
+    // Quita Color Blanco algún Texto de TR seleccionado
     $('.tabla2_tr_id_').find('td').css('color', '');
-    // El ID del TR
+    // Agregamos background-color al TR Seleccionado
     $('#tabla2_tr_id_' + value_radio).find('td').css('background-color', '#5f9ea0');
+    // Agrega color Blanco al Texto del TR seleccionado
     $('#tabla2_tr_id_' + value_radio).find('td').css('color', '#FFFFFF');
 
 // Fin del colorear TR
