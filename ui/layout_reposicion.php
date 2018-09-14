@@ -1,7 +1,7 @@
 <html>
 <head>
 	
-	<title>{{@TITLE}}</title>
+	<title>[{{ @BD_CONEXION }}] - {{@TITLE}}</title>
 	<meta http-equiv='cache-control' content='no-cache'>
 	<meta http-equiv='expires' content='0'>
 	<meta http-equiv='pragma' content='no-cache'>
@@ -177,7 +177,7 @@
 		
 		<footer class="main-footer">
 			<div class="pull-right hidden-xs">
-				<b>Version</b> {{ @VERSION }}
+                <b><span style="color: #FF0000;">[{{ @BD_CONEXION }}]</span></b> - <b>Versión</b> {{ @VERSION }}
 			</div>
 			<strong>Copyright &copy; 2018 RIPLEY Sistemas GESTION + BI BIGDATA.</strong>
 		</footer>

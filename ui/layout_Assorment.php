@@ -3,7 +3,7 @@
 <link rel="stylesheet" href="{{@BASE}}/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
 <head>
 	
-	<title>carga</title>
+	<title>[{{ @BD_CONEXION }}] - carga</title>
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
