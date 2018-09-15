@@ -17,50 +17,50 @@ $hoy = date("Y-m-d H:i:s");
 #region {*************Cabesera*************}
 /*CABESERA 12*/
 $objPHPExcel->setActiveSheetIndex(0)
-->mergeCells('AI12:DE12')
-->mergeCells('DF12:GA12')
-->mergeCells('B1:GA1')
-->mergeCells('B2:GA2')
-->mergeCells('B3:GA3')
-->mergeCells('B11:GA11')
-->setCellValue('AI12','  CHILE')
-->setCellValue('DF12','  PERU');
+    ->mergeCells('AI12:DE12')
+    ->mergeCells('DF12:GA12')
+    ->mergeCells('B1:GA1')
+    ->mergeCells('B2:GA2')
+    ->mergeCells('B3:GA3')
+    ->mergeCells('B11:GA11')
+    ->setCellValue('AI12','  CHILE')
+    ->setCellValue('DF12','  PERU');
 
 /*CABESERA 13*/
 $objPHPExcel->setActiveSheetIndex(0)
-->mergeCells('AI13:AJ13')
-->mergeCells('AK13:AQ13')
-->mergeCells('AR13:AW13')
-->mergeCells('AX13:BB13')
-->mergeCells('BC13:BL13')
-->mergeCells('BM13:CR13')
-->mergeCells('CS13:CW13')
-->mergeCells('CX13:CZ13')
-->mergeCells('DA13:DE13')
-->mergeCells('DF13:DG13')
-->mergeCells('DH13:DM13')
-->mergeCells('DN13:DS13')
-->mergeCells('DT13:DX13')
-->mergeCells('DY13:EH13')
-->mergeCells('EI13:FN13')
-->mergeCells('FO13:FR13')
-->mergeCells('FS13:FU13')
-->mergeCells('FV13:GA13')
+    ->mergeCells('AI13:AJ13')
+    ->mergeCells('AK13:AQ13')
+    ->mergeCells('AR13:AW13')
+    ->mergeCells('AX13:BB13')
+    ->mergeCells('BC13:BL13')
+    ->mergeCells('BM13:CR13')
+    ->mergeCells('CS13:CW13')
+    ->mergeCells('CX13:CZ13')
+    ->mergeCells('DA13:DE13')
+    ->mergeCells('DF13:DG13')
+    ->mergeCells('DH13:DM13')
+    ->mergeCells('DN13:DS13')
+    ->mergeCells('DT13:DX13')
+    ->mergeCells('DY13:EH13')
+    ->mergeCells('EI13:FN13')
+    ->mergeCells('FO13:FR13')
+    ->mergeCells('FS13:FU13')
+    ->mergeCells('FV13:GA13')
 
-->setCellValue('AK13','HIERARCHI')
-->setCellValue('AX13','PRICE')
-->setCellValue('BC13','DELIVERY')
-->setCellValue('BM13','SIZE BREAK DOWN AND SIZE RATIO')
-->setCellValue('CS13','PACKING')
-->setCellValue('CX13','REDORDER')
-->setCellValue('DA13','OTHERS')
-->setCellValue('DH13','HIERARCHI')
-->setCellValue('DT13','PRICE')
-->setCellValue('DY13','DELIVERY')
-->setCellValue('EI13','SIZE BREAK DOWN AND SIZE RATIO')
-->setCellValue('FP13','PACKING')
-->setCellValue('FS13','REDORDER')
-->setCellValue('FV13','OTHERS');
+    ->setCellValue('AK13','HIERARCHI')
+    ->setCellValue('AX13','PRICE')
+    ->setCellValue('BC13','DELIVERY')
+    ->setCellValue('BM13','SIZE BREAK DOWN AND SIZE RATIO')
+    ->setCellValue('CS13','PACKING')
+    ->setCellValue('CX13','REDORDER')
+    ->setCellValue('DA13','OTHERS')
+    ->setCellValue('DH13','HIERARCHI')
+    ->setCellValue('DT13','PRICE')
+    ->setCellValue('DY13','DELIVERY')
+    ->setCellValue('EI13','SIZE BREAK DOWN AND SIZE RATIO')
+    ->setCellValue('FP13','PACKING')
+    ->setCellValue('FS13','REDORDER')
+    ->setCellValue('FV13','OTHERS');
 
 /*CABESERA 14*/
 $LetraExcelCabecera = array("B14","C14","D14","E14","F14","G14","H14","I14","J14","K14","L14","M14","N14","O14","P14","Q14","R14","S14","T14","U14","V14","W14","X14","Y14","Z14","AA14"	,"AB14"	,"AC14"	,"AD14"	,"AE14"	,"AF14"	,"AG14"	,"AH14"	,"AI14"	,"AJ14"	,"AK14"	,"AL14"	,"AM14"	,"AN14"	,"AO14"	,"AP14"	,"AQ14"	,"AR14"	,"AS14"	,"AT14"	,"AU14"	,"AV14"	,"AW14"	,"AX14"	,"AY14"	,"AZ14","BA14"	,"BB14"	,"BC14"	,"BD14"	,"BE14"	,"BF14"	,"BG14"	,"BH14"	,"BI14"	,"BJ14"	,"BK14"	,"BL14"	,"BM14"	,"BN14"	,"BO14"	,"BP14"	,"BQ14"	,"BR14"	,"BS14"	,"BT14"	,"BU14"	,"BV14"	,"BW14"	,"BX14"	,"BY14"	,"BZ14","CA14"	,"CB14"	,"CC14"	,"CD14"	,"CE14"	,"CF14"	,"CG14"	,"CH14"	,"CI14"	,"CJ14"	,"CK14"	,"CL14"	,"CM14"	,"CN14"	,"CO14"	,"CP14"	,"CQ14"	,"CR14"	,"CS14"	,"CT14"	,"CU14"	,"CV14"	,"CW14"	,"CX14"	,"CY14"	,"CZ14","DA14"	,"DB14"	,"DC14"	,"DD14"	,"DE14"	,"DF14"	,"DG14"	,"DH14"	,"DI14"	,"DJ14"	,"DK14"	,"DL14"	,"DM14"	,"DN14"	,"DO14"	,"DP14"	,"DQ14"	,"DR14"	,"DS14"	,"DT14"	,"DU14"	,"DV14"	,"DW14"	,"DX14"	,"DY14"	,"DZ14","EA14"	,"EB14"	,"EC14"	,"ED14"	,"EE14"	,"EF14"	,"EG14"	,"EH14"	,"EI14"	,"EJ14"	,"EK14"	,"EL14"	,"EM14"	,"EN14"	,"EO14"	,"EP14"	,"EQ14"	,"ER14"	,"ES14"	,"ET14"	,"EU14"	,"EV14"	,"EW14"	,"EX14"	,"EY14"	,"EZ14","FA14"	,"FB14"	,"FC14"	,"FD14"	,"FE14"	,"FF14"	,"FG14"	,"FH14"	,"FI14"	,"FJ14"	,"FK14"	,"FL14"	,"FM14"	,"FN14"	,"FO14"	,"FP14"	,"FQ14"	,"FR14"	,"FS14"	,"FT14"	,"FU14"	,"FV14"	,"FW14"	,"FX14"	,"FY14"	,"FZ14","GA14");
@@ -97,7 +97,7 @@ $styleArray = array(
         'color' => array('rgb' => 'FFFFFF'),
         'size'  => 9,
         'name'  => 'Calibri'
-));
+    ));
 $borders = array(
     'borders' => array(
         'allborders' => array(

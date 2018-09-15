@@ -99,6 +99,7 @@ $f3->route('GET /ajax_simulador_cbx/@tipo [ajax]', 'simulador_compra\ControlCBXG
 $f3->route('POST /guardar/archivoAssorment', 'simulador_compra\ControlCrea->SubirAssorment');
 $f3->route('GET /importar_archivo/@tipo [ajax]', 'simulador_compra\ControlCrea->@tipo');
 $f3->route('GET /importar_archivo2', 'simulador_compra\ControlCrea->Mensaje_Guardado');
+$f3->route('GET /importar_archivo3', 'simulador_compra\ControlCrea->Mensaje_GuardadoBMT');
 //$f3->route('GET /importar_archivo_2/@tipo [ajax]', 'simulador_compra\ControlCrea->@tipo');
 $f3->route('POST /importar_archivo_3/@tipo [ajax]', 'simulador_compra\ControlCrea->@tipo');
 
@@ -113,10 +114,7 @@ $f3->route('POST /guardar/factorestimado', 'factor_est\ControlCrea->guardarFacto
 $f3->route('GET /exporta_factor', 'ControlFormularioExport->excelFactorEstimado');
 //$f3->route('GET /exporta_excel/@tipo [ajax]', 'ControlFormularioExport->excelPlanDeCompra->@tipo');
 $f3->route('POST /exporta_excel', 'ControlFormularioExport->excelPlanDeCompra');
-
-
 $f3->route('GET /exporta_ARCHIVO', 'usuario->PRUEBAEXCEL');
-
 $f3->route('GET /exportar_simulador/@tipo [ajax]', 'ControlFormularioExport->@tipo');
 $f3->route('GET /exportar_simulador2', 'simulador\plan_compra');
 

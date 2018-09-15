@@ -119,7 +119,7 @@ class valida_archivo_bmt extends \parametros {
         for($i = 3;$i <= $limite; $i++){
             $val2 = false;
                 $key3 = 0;
-                foreach ($dtjerarquia as $var  )  {//TABLA TIPO DE CAMBIO
+                foreach ($dtjerarquia as $var  )  {
                     if (strval($dtjerarquia[$key3]['LIN_LINEA']) === strval($rows[$i][$nom_columnas['Cod Linea']]) and
                         $dtjerarquia[$key3]['SLI_SUBLINEA'] === $rows[$i][$nom_columnas['Cod Sublinea']]) {
                         $val2 = true;
@@ -257,7 +257,7 @@ class valida_archivo_bmt extends \parametros {
         return  $array;
     }
     public static function Val_Campos($rows,$limite,$nom_columnas,$cod_tempo,$depto,$f3){
-         $filarow = "";
+        $filarow = "";
         $val = TRUE;
 
         /*Validacion temporda del season 1*/ $tipoVal = 1;
@@ -291,7 +291,7 @@ class valida_archivo_bmt extends \parametros {
                     $filarow = $filarow . strval($i + 1) . ",";
                 }
             }
-        }}
+        }}//2 Validacion ciclo de vida
         if ($val == TRUE) {
 /*Validacion RNK VTA */ $tipoVal = 3; $dtrnkventa = plan_compra::list_rnk($f3);
             for($i = 3;$i <= $limite; $i++){
@@ -308,7 +308,7 @@ class valida_archivo_bmt extends \parametros {
                         $filarow = $filarow . strval($i + 1) . ",";
                     }
                 }
-        }}
+        }}//3 Validacion RNK VTA
         if ($val == TRUE) {
             /*validacion clusterI*/ $tipoVal = 23;
             for($i = 3;$i <= $limite; $i++){
@@ -317,8 +317,7 @@ class valida_archivo_bmt extends \parametros {
                     $val = FALSE;
                     $filarow = $filarow . strval($i + 1) . ",";
                 }
-            }}
-
+            }}//4 validacion clusterI no null
         if ($val == TRUE) {
             /*Validacion PIRAMIDE MIX */ $tipoVal = 4; $dtpiramidemix = plan_compra::list_piramidemix($f3);
             for($i = 3;$i <= $limite; $i++){
@@ -335,7 +334,7 @@ class valida_archivo_bmt extends \parametros {
                         $filarow = $filarow . strval($i + 1) . ",";
                     }
                 }
-            }}
+            }}//23 Validacion PIRAMIDE MIX
         if ($val == TRUE) {
             /*Validacion cluster */ $tipoVal = 5; $dtcluster = plan_compra::list_cluster($cod_tempo,$depto);
             for($i = 3;$i <= $limite; $i++){
@@ -350,24 +349,7 @@ class valida_archivo_bmt extends \parametros {
                         $val = FALSE;
                         $filarow = $filarow . strval($i + 1) . ",";
                 }
-            }}
-        if ($val == TRUE) {
-            /*Validacion formato */ $tipoVal = 6; $dtformato = plan_compra::list_Formato($cod_tempo,$depto);
-            for($i = 3;$i <= $limite; $i++){
-                $val2 = false;
-                if ($rows[$i][$nom_columnas['Formato']] != null ) {
-                    $key3 = 0;
-                    foreach ($dtformato as $var)  {
-                        if ($dtformato[$key3]['DESCRIPCION'] == strtoupper($rows[$i][$nom_columnas['Formato']])) {
-                            $val2 = true;break;
-                        }$key3++;
-                    }
-                    if ($val2 == false){
-                        $val = FALSE;
-                        $filarow = $filarow . strval($i + 1) . ",";
-                    }
-                }
-            }}
+            }}//5 Validacion cluster
         if ($val == TRUE) {
             /*Validacion via */ $tipoVal = 7; $dtvia = plan_compra::list_via();
             for($i = 3;$i <= $limite; $i++){
@@ -384,7 +366,7 @@ class valida_archivo_bmt extends \parametros {
                         $filarow = $filarow . strval($i + 1) . ",";
                     }
                 }
-            }}
+            }}//7 Validacion via
         if ($val == TRUE) {
             /*Validacion pais */ $tipoVal = 8; $dtpais =  plan_compra::list_pais();
             for($i = 3;$i <= $limite; $i++){
@@ -401,7 +383,7 @@ class valida_archivo_bmt extends \parametros {
                         $filarow = $filarow . strval($i + 1) . ",";
                     }
                 }
-            }}
+            }}//8 Validacion pais
         if ($val == TRUE) {
             /*Validacion Ventana Debut */ $tipoVal = 9; $ventanas = array("A","B","C","D","E","F","G","H","I");
             for($i = 3;$i <= $limite; $i++){
@@ -415,7 +397,7 @@ class valida_archivo_bmt extends \parametros {
                         $val = FALSE;
                         $filarow = $filarow . strval($i + 1) . ",";
                     }
-            }}
+            }}//9 Validacion Ventana Debut
         if ($val == TRUE) {
             /*Validacion Precio Blanco null*/ $tipoVal = 18;
             for($i = 3;$i <= $limite; $i++){
@@ -424,7 +406,7 @@ class valida_archivo_bmt extends \parametros {
                     $val = FALSE;
                     $filarow = $filarow . strval($i + 1) . ",";
                 }
-            }}
+            }}//
         if ($val == TRUE) {
             /*Validacion Precio Blanco*/ $tipoVal = 10;
             for($i = 3;$i <= $limite; $i++){
@@ -439,7 +421,7 @@ class valida_archivo_bmt extends \parametros {
                         $filarow = $filarow . strval($i + 1) . ",";
                     }
                 }
-            }}
+            }}//
         if ($val == TRUE) {
             /*Validacion Tallas y Curvas*/ $tipoVal = 11;
             for($i = 3;$i <= $limite; $i++){
@@ -459,7 +441,7 @@ class valida_archivo_bmt extends \parametros {
                     $val = FALSE;
                     $filarow = $filarow . strval($i + 1) . ",";
                 }
-            }}
+            }}//
         if ($val == TRUE) {
             /*Validacion tipo empaque*/ $tipoVal = 12;
             for($i = 3;$i <= $limite; $i++){
@@ -470,7 +452,7 @@ class valida_archivo_bmt extends \parametros {
                         $filarow = $filarow . strval($i + 1) . ",";
                     }
                 }
-            }}
+            }}//
         if ($val == TRUE) {
             /*Validacion porcentaje*/ $tipoVal = 13;
             for($i = 3;$i <= $limite; $i++){
@@ -505,7 +487,7 @@ class valida_archivo_bmt extends \parametros {
                     }
                 }
 
-            }}
+            }}//
         if ($val == TRUE) {
             /*Validacion de Unidades*/ $tipoVal = 14;
             for($i = 3;$i <= $limite; $i++){
@@ -519,7 +501,7 @@ class valida_archivo_bmt extends \parametros {
                     $filarow = $filarow . strval($i + 1) . ",";
                 }
 
-            }}
+            }}//
         if ($val == TRUE) {
             /*Validacion short name vacios*/ $tipoVal = 15;
             for($i = 3;$i <= $limite; $i++){
@@ -529,7 +511,7 @@ class valida_archivo_bmt extends \parametros {
                     $val = FALSE;
                     $filarow = $filarow . strval($i + 1) . ",";
                 }
-            }}
+            }}//
         if ($val == TRUE) {
             /*Validacion ID_CORPORTAIVO 10 LEN*/ $tipoVal = 16;
             for($i = 3;$i <= $limite; $i++){
@@ -543,7 +525,7 @@ class valida_archivo_bmt extends \parametros {
                     }
                 }
 
-            }}
+            }}//
         if ($val == TRUE) {
             /*Validacion tdas por cluster*/ $tipoVal = 17;
             $array1 = [];
@@ -588,7 +570,7 @@ class valida_archivo_bmt extends \parametros {
                 }
 
             }
-        }
+        }//
         if ($val == TRUE) {
             /*Validacion tdas por formatos*/ $tipoVal = 18;
             $dtclusterformarto = [];
@@ -615,7 +597,7 @@ class valida_archivo_bmt extends \parametros {
                     }
                 }
              }
-        }
+        }//
         if ($val == TRUE) {
             /*validacion del inner en blanco*/ $tipoVal = 19;
             for($i = 3;$i <= $limite; $i++){
@@ -624,7 +606,7 @@ class valida_archivo_bmt extends \parametros {
                     $filarow = $filarow . strval($i + 1) . ",";
                 }
             }
-        }
+        }//
         if ($val == TRUE) {
             /*validacion del inner suma por curva */ $tipoVal = 20;
             for($i = 3;$i <= $limite; $i++){
@@ -648,7 +630,7 @@ class valida_archivo_bmt extends \parametros {
 
                 }
             }
-        }
+        }//
         if ($val == TRUE) {
             /*validacion del n° por cajas no puede estar null */$tipoVal = 21;
             for($i = 3;$i <= $limite; $i++){
@@ -657,7 +639,7 @@ class valida_archivo_bmt extends \parametros {
                     $filarow = $filarow . strval($i + 1) . ",";
                 }
             }
-        }
+        }//
         if ($val == TRUE) {
             /*validacion del n° por cajas no puede tener en un solido */$tipoVal = 22;
             for($i = 3;$i <= $limite; $i++){
@@ -666,7 +648,7 @@ class valida_archivo_bmt extends \parametros {
                    $filarow = $filarow . strval($i + 1) . ",";
                }
             }
-        }
+        }//
 
         if ($val == FALSE ) {
             if ($tipoVal == 1){
@@ -766,7 +748,6 @@ class valida_archivo_bmt extends \parametros {
                 'Error'=> $filarow);
         }
         return  $array;
-
 
     }
     public static function val_grupo_compra($rows,$limite,$nom_columnas){
@@ -1019,10 +1000,10 @@ class valida_archivo_bmt extends \parametros {
                 }
             }
         }
-
-
         array_push($arrayinsert,$arraycabezera);
-		$dtplan_compra =  plan_compra::list_plan_compra_debut($cod_tempo,$depto,$rows[1][$nom_columnas["Grupo de compra"]]);
+        $dtplan_compra =  plan_compra::list_plan_compra_debut($cod_tempo,$depto,$rows[1][$nom_columnas["Grupo de compra"]]);
+
+
         $key4 = 0;
         foreach ($rows as $val2) {$key4++;
             if ($key4<>1){
@@ -1050,7 +1031,7 @@ class valida_archivo_bmt extends \parametros {
                             $debut = "REORDER";
                             $ciclovida = "";$tipo_empaque = 'Solido';
                             if ($ventanas == strtoupper($val2[$nom_columnas["Ventana Debut"]])){
-                                 $_existedebut = valida_archivo_bmt::Valida_existe_debutDepto($dtplan_compra,$val2[$nom_columnas["Cod Linea"]]
+                                $_existedebut = valida_archivo_bmt::Valida_existe_debutDepto($dtplan_compra,$val2[$nom_columnas["Cod Linea"]]
                                                                                              ,$val2[$nom_columnas["Cod Sublinea"]]
                                                                                              ,$val2[$nom_columnas["Nombre Estilo"]]
                                                                                              ,$val2[$nom_columnas["Cod Color"]]);
@@ -1147,7 +1128,6 @@ class valida_archivo_bmt extends \parametros {
             }
         }
         }
-		
         return $arrayinsert;
     }
     public static function existenCamposVacios($fila, $campo, $columnas, $datos) {
@@ -1377,20 +1357,21 @@ class valida_archivo_bmt extends \parametros {
 
         return $VAL;
     }
-	 public static function Valida_existe_debutDepto($dt_plan,$linea,$sublinea,$estilo,$color){
-        $_exist = false;
+    public static function Valida_existe_debutDepto($dt_plan,$linea,$sublinea,$estilo,$color){
+
+        $_exist = false; $k = 0;
         foreach ($dt_plan as $val){
             if (($val["LINEA"] == $linea) and
                  ($val["COD_SUBLIN"] == $sublinea) and
                  (strtoupper($val["DES_ESTILO"]) == strtoupper($estilo)) and
                  ($val["COD_COLOR"]== $color) ){
                   $_exist = true;
+                    $k = 1;
                    break;
             }
         }
         return $_exist;
     }
-
     public static function ValidaCodOpcion($rows,$limite,$nom_columnas,$temporada){
         $val3 = TRUE; $_mensaje = []; $tipoVal = 0;
         $dtDistinctCodopcion = [];
@@ -1407,7 +1388,7 @@ class valida_archivo_bmt extends \parametros {
                 $val3 = false;
             }
         }
-		/*
+
         //2.-validacion 12 caracteres
         if ($val3 == TRUE){$tipoVal = 2; $_Errorfile = "";
             for($i = 3;$i <= $limite; $i++){
@@ -1467,7 +1448,7 @@ class valida_archivo_bmt extends \parametros {
                 }
             }
         }
-		*/
+
 
         if ($val3 == false ) {
             if($tipoVal == 1){
@@ -1538,6 +1519,7 @@ class valida_archivo_bmt extends \parametros {
                 'Error'=> $filarow);
         }
         return  $array;
+
     }
     public static function Val_deptobmt($rows,$limite,$nom_columnas,$depto){
         $val = false;
@@ -1764,12 +1746,12 @@ class valida_archivo_bmt extends \parametros {
             if($i < 13){
                 $val_delete = $val_delete .$i.",";
             }else{
-                if ($rows[$i][$nom_columnas['ID C1']]           ==  null AND
-                    $rows[$i][$nom_columnas['PURCHASE GROUP']]  ==  null AND
+                if ($rows[$i][$nom_columnas['PURCHASE GROUP']]  ==  null AND
                     $rows[$i][$nom_columnas['LINE (*)']]        ==  null AND
                     $rows[$i][$nom_columnas['SUBLNE CODE']]     ==  null AND
                     $rows[$i][$nom_columnas['STYLE NAME']]      ==  null AND
                     $rows[$i][$nom_columnas['COLOR CODE']]      ==  null AND
+                    $rows[$i][$nom_columnas['OPTION NUMBER']]   ==  null AND
                     $rows[$i][$nom_columnas['VENTANA']]         ==  null ) {
                     $val_delete = $val_delete .$i.",";
                 }
@@ -1788,31 +1770,119 @@ class valida_archivo_bmt extends \parametros {
 
         return $rows;
     }
-    public static function Val_campos_bmt($rows,$limite,$nom_columnas,$depto,$temporada){
-        $filarow = "";$val = true;
-      //$grupo_compra = valida_archivo_bmt::Distinct_Grupo_Compra($rows,$limite,$nom_columnas);
-
-      /*Validacion Style name*/ $tipoVal = 1;
-          for($i = 1;$i <= $limite; $i++){
-             if ($rows[$i][$nom_columnas['STYLE NAME']] == null or $rows[$i][$nom_columnas['STYLE NAME']] == "0" or $rows[$i][$nom_columnas['STYLE NAME']] == ""){
-                 $val = false;
-                 $filarow = $filarow . strval($rows[$i][$nom_columnas['ID_FILAS']]) . ",";
-             }
-          }
-
-      /*Validacion grupo compra null*/
-      if ($val == true){ $tipoVal = 2;
-          for($i = 1;$i <= $limite; $i++){
-              if ($rows[$i][$nom_columnas['PURCHASE GROUP']] == null or $rows[$i][$nom_columnas['PURCHASE GROUP']] == "0" or $rows[$i][$nom_columnas['PURCHASE GROUP']] == ""){
+    public static function Val_campos_bmt($rows,$limite,$nom_columnas,$depto,$temporada,$dtjerarquia){
+        $filarow = ""; $val = true;$_ErrorMsj = "";
+        /*Validacion Id C1
+        if ($val == true){ $tipoVal = 18;$_grup = "";$dtidcolor = [];
+            for($i = 1;$i <= $limite; $i++){$_exist = false;
+                if ($_grup <> $rows[$i][$nom_columnas['PURCHASE GROUP']]){
+                    $dtidcolor = plan_compra::list_Idcolor3x_Grupo($temporada,$depto,$rows[$i][$nom_columnas['PURCHASE GROUP']]);
+                }
+                foreach ($dtidcolor as $var){
+                    if ($var["ID_COLOR3"] == $rows[$i][$nom_columnas['ID C1']]){
+                        $_exist = true; break;
+                    }
+                }
+                if ($_exist == false ){
                     $val = false;
                     $filarow = $filarow . strval($rows[$i][$nom_columnas['ID_FILAS']]) . ",";
-              }
-           }
-      }
+                }
+            }
+        }
+*/
 
-      /*Validacion grupo compra encontrado bd c1*/
-      if ($val == true){ $tipoVal = 3; $dt_grup = plan_compra::list_grupocompraBD($temporada,$depto);
-          for($i = 1;$i <= $limite; $i++){$_exist = false;
+        /*Validacion mas 2 departamento*/
+        if($val == true){
+            $dtduplicado2 = []; $filarow = "";
+            for($i = 1;$i <= $limite; $i++){
+                $_exist1 = false;
+                foreach ($dtduplicado2 as $val3){
+                    if ($val3 == $rows[$i][$nom_columnas['DEPARTMENT CODE']]){
+                        $_exist1 = true; break;
+                    }
+                }
+                if ($_exist1 == false){
+                    array_push($dtduplicado2,$rows[$i][$nom_columnas['DEPARTMENT CODE']]);
+                    $filarow = $filarow . strval($rows[$i][$nom_columnas['ID_FILAS']]) . ",";
+                    $_ErrorMsj = ") -> Existen más de un grupo de compra en el archivo.";
+                }
+
+                if (count($dtduplicado2) > 1){
+                    $val = false;
+                    break;
+                }
+            }
+        }
+
+        /*Validacion Marca <> null*/
+        if ($val == true){$filarow = "";
+            for($i = 1;$i <= $limite; $i++){
+                if ($rows[$i][$nom_columnas['LOCAL BRAND']] == null){
+                    $val = false;
+                    $filarow = $filarow . strval($rows[$i][$nom_columnas['ID_FILAS']]) . ",";
+                    $_ErrorMsj = ") -> La marca no puede ser nulo. .";
+                }
+            }
+        }
+
+        /*Validacion Marca codigo.*/
+        if ($val == true){$data = plan_compra::list_Marcas($depto);$dtpaso = [];$filarow = "";
+            for($i = 1;$i <= $limite; $i++){
+                $key = false;
+                foreach ($dtpaso as $t){
+                    if ($t == $rows[$i][$nom_columnas['LOCAL BRAND']]){
+                        $filarow = $filarow . strval($rows[$i][$nom_columnas['ID_FILAS']]) . ",";
+                        $key= true; break;
+                    }
+                }
+                if($key == false){
+                    $_exist = plan_compra::get_codMarca2($rows[$i][$nom_columnas['LOCAL BRAND']],$data);
+                    if ($_exist == 0){
+                        $val = false;
+                        $filarow = $filarow . strval($rows[$i][$nom_columnas['ID_FILAS']]) . ",";
+                        $_ErrorMsj = ") -> La(s) Marca(s) no se encuentra(n) BD plan. .";
+                    }
+                }
+            }
+        }
+
+        /*Validacion Grupo Compra <> null*/
+        if ($val == true){$filarow = "";
+            for($i = 1;$i <= $limite; $i++){
+                if ($rows[$i][$nom_columnas['PURCHASE GROUP']] == null or $rows[$i][$nom_columnas['PURCHASE GROUP']] == "0" or $rows[$i][$nom_columnas['PURCHASE GROUP']] == ""){
+                    $val = false;
+                    $filarow = $filarow . strval($rows[$i][$nom_columnas['ID_FILAS']]) . ",";
+                    $_ErrorMsj = ") -> El PURCHASE GROUP no puede ser nulo.";
+                }
+            }
+        }
+
+        /*Validacion Grupo Compra 2 mas en el archivo*/
+        if($val == true){$filarow = "";
+            $dtduplicado = [];
+            for($i = 1;$i <= $limite; $i++){
+                $_exist1 = false;
+                foreach ($dtduplicado as $val3){
+                    if ($val3 == $rows[$i][$nom_columnas['PURCHASE GROUP']]){
+                        $_exist1 = true; break;
+                    }
+                }
+                if ($_exist1 == false){
+                    array_push($dtduplicado,$rows[$i][$nom_columnas['PURCHASE GROUP']]);
+                    $filarow = $filarow . strval($rows[$i][$nom_columnas['ID_FILAS']]) . ",";
+                    $_ErrorMsj = ") -> Existen más de un grupo de compra en el archivo.";
+                }
+
+                if (count($dtduplicado) > 1){
+                    $val = false;
+                    break;
+                }
+            }
+        }
+
+        /*Validacion Grupo Compra se encuentra en el plan*/
+        if ($val == true){$dt_grup = plan_compra::list_grupocompraBD($temporada,$depto);$filarow = "";
+            for($i = 1;$i <= $limite; $i++){$_exist = false;
                 foreach ($dt_grup as $vl){
                     if ($rows[$i][$nom_columnas['PURCHASE GROUP']] == $vl["GRUPO_COMPRA"] ){
                         $_exist = true; break;
@@ -1821,30 +1891,100 @@ class valida_archivo_bmt extends \parametros {
                 if ($_exist == false){
                     $val = false;
                     $filarow = $filarow . strval($rows[$i][$nom_columnas['ID_FILAS']]) . ",";
+                    $_ErrorMsj = ") -> El PURCHASE GROUP no se encuentra(n) en el registro de compra.";
                 }
             }
-      }
+        }
 
-      /*Validacion Id C1*/
-      if ($val == true){ $tipoVal = 4;$_grup = "";$dtidcolor = [];
-          for($i = 1;$i <= $limite; $i++){$_exist = false;
-              if ($_grup <> $rows[$i][$nom_columnas['PURCHASE GROUP']]){
-                  $dtidcolor = plan_compra::list_Idcolor3x_Grupo($temporada,$depto,$rows[$i][$nom_columnas['PURCHASE GROUP']]);
-              }
-              foreach ($dtidcolor as $var){
-                  if ($var["ID_COLOR3"] == $rows[$i][$nom_columnas['ID C1']]){
-                      $_exist = true; break;
-                  }
-              }
-              if ($_exist == false ){
-               $val = false;
-               $filarow = $filarow . strval($rows[$i][$nom_columnas['ID_FILAS']]) . ",";
-              }
-          }
-      }
+        /*Validacion jer.. Linea/Sublinea*/
+        if($val == true){$filarow = "";
+            for($i = 1;$i <= $limite; $i++){
+                $_existe2 = false;
+                foreach ($dtjerarquia as $Valor){
+                    if ((strtoupper($rows[$i][$nom_columnas['LINE (*)']]) === strtoupper($Valor['LIN_DESCRIPCION'])) and
+                        (strtoupper($rows[$i][$nom_columnas['SUBLNE CODE']]) === strtoupper($Valor['SLI_SUBLINEA']))){
+                        $_existe2 = true; break;
+                    }
+                }
 
-      /*Validacion Ventana*/
-      if ($val == true) {$tipoVal = 5; $ventanas = array("A","B","C","D","E","F","G","H","I");
+                if ($_existe2 == false){
+                    $val = false;
+                    $filarow = $filarow . strval($rows[$i][$nom_columnas['ID_FILAS']]) . ",";
+                    $_ErrorMsj = ") -> La combinación de Línea(s) y sublinea(s) no se encuentra(n) en PMM.";
+                }
+            }
+        }
+
+        /*Validacion jer.. Style name <> null*/
+        if ($val == true) {$filarow = "";
+            for ($i = 1; $i <= $limite; $i++) {
+                if ($rows[$i][$nom_columnas['STYLE NAME']] == null or $rows[$i][$nom_columnas['STYLE NAME']] == "0" or $rows[$i][$nom_columnas['STYLE NAME']] == "") {
+                    $val = false;
+                    $filarow = $filarow . strval($rows[$i][$nom_columnas['ID_FILAS']]) . ",";
+                    $_ErrorMsj = ") -> El STYLE NAME no puede ser nulo.";
+                }
+            }
+        }
+
+        /*Validacion Codigo de opcion <> null*/
+        if ($val == true){$filarow = "";
+            for($i = 1;$i <= $limite; $i++){
+                if ($rows[$i][$nom_columnas['OPTION NUMBER']] == null or $rows[$i][$nom_columnas['OPTION NUMBER']] == "0" or $rows[$i][$nom_columnas['OPTION NUMBER']] == ""){
+                    $val = false;
+                    $filarow = $filarow . strval($rows[$i][$nom_columnas['ID_FILAS']]) . ",";
+                    $_ErrorMsj = ") -> OPTION NUMBER no puede ser nulo o 0.";
+                }
+            }
+        }
+
+        /*Validacion Codigo de opcion en plan*/
+        if($val == true){$filarow = "";
+            $grupo_compra = $rows[1][$nom_columnas['PURCHASE GROUP']];
+            $dtoptionNumberPlan = plan_compra::List_NOpcion_plan($temporada,$depto,$grupo_compra);$dtexiste = [];
+            for($i = 1;$i <= $limite; $i++){
+                $_paso = false; $exist = false;
+                foreach ($dtexiste as $val2){
+                    if ($rows[$i][$nom_columnas['OPTION NUMBER']] == $val2){
+                        $filarow = $filarow . strval($rows[$i][$nom_columnas['ID_FILAS']]) . ",";
+                        $_paso = true;
+                        break;
+                    }
+                }
+                if ($_paso == false){
+                    foreach ($dtoptionNumberPlan as $val1){
+                        if ($rows[$i][$nom_columnas['OPTION NUMBER']] == $val1['NUM_OPCION']){
+                            $exist = true;
+                            break;
+                        }
+                    }
+                    if ($exist == false){
+                        array_push($dtexiste,$rows[$i][$nom_columnas['OPTION NUMBER']]);
+                        $filarow = $filarow . strval($rows[$i][$nom_columnas['ID_FILAS']]) . ",";
+                        $_ErrorMsj = ") -> OPTION NUMBER no se encuentra en plan de compra.";
+                        $val = false;
+                    }
+                }
+            }
+        }
+
+        /*Validacion jer.. Cod Color*/
+        if ($val == true) {$Colores = plan_compra::list_colores();$filarow = "";
+            for($i = 1;$i <= $limite; $i++){$_existe = false;
+                foreach ($Colores as $var) {
+                    if ($var["COD_COLOR"] == $rows[$i][$nom_columnas['COLOR CODE']]) {
+                        $_existe = true; break;
+                    };
+                }
+                if($_existe == false ){
+                    $val = false;
+                    $filarow = $filarow . strval($rows[$i][$nom_columnas['ID_FILAS']]) . ",";
+                    $_ErrorMsj = ") -> El Cod Color no se encuentra(n) en la BD PMM.";
+                }
+            }
+        }
+
+        /*Validacion jer.. Ventana*/
+        if ($val == true) {$ventanas = array("A","B","C","D","E","F","G","H","I");$filarow = "";
           for($i = 1;$i <= $limite; $i++){$_existe = false;
               foreach ($ventanas as $var) {
                   if ($var == $rows[$i][$nom_columnas['VENTANA']]) {
@@ -1854,28 +1994,63 @@ class valida_archivo_bmt extends \parametros {
               if($_existe == false ){
                   $val = false;
                   $filarow = $filarow . strval($rows[$i][$nom_columnas['ID_FILAS']]) . ",";
+                  $_ErrorMsj = ") -> La VENTANA no se encuentra(n) en la BD C1. Ej= A..I.";
               }
 
           }
       }
 
-      /*Validacion cod Color*/
-      if ($val == true) {$tipoVal = 6; $Colores = plan_compra::list_colores();
-          for($i = 1;$i <= $limite; $i++){$_existe = false;
-                foreach ($Colores as $var) {
-                    if ($var["COD_COLOR"] == $rows[$i][$nom_columnas['COLOR CODE']]) {
-                        $_existe = true; break;
-                    };
-                }
-                if($_existe == false ){
-                    $val = false;
+        /*Validacion count rows archivo vs plan*/
+        if ($val == true) {$filarow = "";$dt = [];
+            for($i = 1;$i <= $limite; $i++){
+                array_push($dt,plan_compra::get_codMarca(strtoupper($rows[$i][$nom_columnas['LOCAL BRAND']]),$depto));
+            }
+            $dt= array_unique($dt);
+            $marcas = "";
+            foreach ($dt as $y){
+                $marcas = $marcas.$y.",";
+            }
+            $marcas = substr($marcas,0,-1);
+
+            $countPlan =plan_compra::countPlan_compra($temporada
+                ,$depto
+                ,$rows[1][$nom_columnas['PURCHASE GROUP']]
+                ,$marcas);
+
+            $countArchivo = count($rows)-1;
+
+            if ($countArchivo <> $countPlan ){
+                $val = false;
+                $filarow = $filarow . 0 . ",";
+                $_ErrorMsj = ") -> No cuadra las cantidades de opciones del (plan compra vs Archivo).";
+            }
+        }
+
+        /*Validacion Validacion si existe opcion en el plan*/
+        if ($val == true) {$filarow = "";
+            for($i = 1;$i <= $limite; $i++){
+
+
+                $v = plan_compra::existe_opcion_plan_compra($temporada
+                    ,$depto
+                    ,$rows[$i][$nom_columnas['PURCHASE GROUP']]
+                    ,plan_compra::get_codMarca(strtoupper($rows[$i][$nom_columnas['LOCAL BRAND']]),$depto)
+                    ,plan_compra::get_codLinea(strtoupper($rows[$i][$nom_columnas['LINE (*)']]),$dtjerarquia)
+                    ,$rows[$i][$nom_columnas['SUBLNE CODE']]
+                    ,$rows[$i][$nom_columnas['STYLE NAME']]
+                    ,$rows[$i][$nom_columnas['VENTANA']]
+                    ,$rows[$i][$nom_columnas['OPTION NUMBER']]
+                    ,$rows[$i][$nom_columnas['COLOR CODE']]);
+                if($v == 0){
                     $filarow = $filarow . strval($rows[$i][$nom_columnas['ID_FILAS']]) . ",";
+                    $_ErrorMsj = ") -> La(s) opcione(s) no se encuentra(n) en el plan de compra.";
+                    $val = false;
                 }
             }
-      }
+        }
 
-      /*Validacion PREPACK*/
-      if ($val == true) {$tipoVal = 7; $PREPACK = array("CURVADO","SOLIDO");
+        /*Validacion Prepack*/
+        if ($val == true) {$PREPACK = array("CURVADO","SOLIDO");$filarow = "";
           for($i = 1;$i <= $limite; $i++){$_existe = false;
                 foreach ($PREPACK as $var) {
                     if ($var == $rows[$i][$nom_columnas['PREPACK']]) {
@@ -1885,26 +2060,13 @@ class valida_archivo_bmt extends \parametros {
                 if($_existe == false ){
                     $val = false;
                     $filarow = $filarow . strval($rows[$i][$nom_columnas['ID_FILAS']]) . ",";
+                    $_ErrorMsj = ") -> El PREPACK tiene que ser CURVADO o SOLIDO.";
                 }
           }
       }
 
-      /*Validacion Unidades*/
-      if ($val == true) {$tipoVal = 8;
-            for($i = 1;$i <= $limite; $i++){
-                if( $rows[$i][$nom_columnas['TOTAL QUANTITY CL']] == 0     or
-                    $rows[$i][$nom_columnas['TOTAL QUANTITY CL']] == null or
-                    $rows[$i][$nom_columnas['TOTAL QUANTITY CL']] == ""   or
-                    $rows[$i][$nom_columnas['TOTAL QUANTITY CL']] == "0"  or
-                    $rows[$i][$nom_columnas['TOTAL QUANTITY CL']] == " "){
-                    $val = false;
-                    $filarow = $filarow . strval($rows[$i][$nom_columnas['ID_FILAS']]) . ",";
-                }
-            }
-      }
-
         /*Validacion Paises*/
-      if ($val == true) {$tipoVal = 9;$Paises= plan_compra::list_pais();
+        if ($val == true) {$Paises= plan_compra::list_pais();$filarow = "";
             for($i = 1;$i <= $limite; $i++){
                 if( $rows[$i][$nom_columnas['COUNTRY OF ORIGIN']] == null or
                     $rows[$i][$nom_columnas['COUNTRY OF ORIGIN']] == ""   or
@@ -1912,6 +2074,7 @@ class valida_archivo_bmt extends \parametros {
                     $rows[$i][$nom_columnas['COUNTRY OF ORIGIN']] == " "){
                     $val = false;
                     $filarow = $filarow . strval($rows[$i][$nom_columnas['ID_FILAS']]) . ",";
+                    $_ErrorMsj = ") -> COUNTRY OF ORIGIN no puede ser nulo o no se encuentra en PMM.";
                 }else{
                     $val2 = false;
                     foreach ($Paises as $var){
@@ -1922,13 +2085,14 @@ class valida_archivo_bmt extends \parametros {
                     if ($val2 == false){
                         $val = false;
                         $filarow = $filarow . strval($rows[$i][$nom_columnas['ID_FILAS']]) . ",";
+                        $_ErrorMsj = ") -> COUNTRY OF ORIGIN no puede ser nulo o no se encuentra en PMM.";
                     }
                 }
             }
       }
 
         /*Validacion VIA*/
-        if ($val == true) {$tipoVal = 10;$VIA= array("MARITIMO","AREA","TERRESTRE");
+        if ($val == true) {$VIA= array("MARITIMO","AREA","TERRESTRE");$filarow = "";
             for($i = 1;$i <= $limite; $i++){
                 if( $rows[$i][$nom_columnas['SHIPMENT MODE']] == null or
                     $rows[$i][$nom_columnas['SHIPMENT MODE']] == ""   or
@@ -1936,6 +2100,7 @@ class valida_archivo_bmt extends \parametros {
                     $rows[$i][$nom_columnas['SHIPMENT MODE']] == " "){
                     $val = false;
                     $filarow = $filarow . strval($rows[$i][$nom_columnas['ID_FILAS']]) . ",";
+                    $_ErrorMsj = ") -> SHIPMENT MODE no puede ser nulo o no se encuentra en BD C1.ej= MARITIMO,AREA,TERRESTRE";
                 }else{
                     $val2 = false;
                     foreach ($VIA as $var){
@@ -1946,13 +2111,14 @@ class valida_archivo_bmt extends \parametros {
                     if ($val2 == false){
                         $val = false;
                         $filarow = $filarow . strval($rows[$i][$nom_columnas['ID_FILAS']]) . ",";
+                        $_ErrorMsj = ") -> SHIPMENT MODE no puede ser nulo o no se encuentra en BD C1.ej= MARITIMO,AREA,TERRESTRE";
                     }
                 }
             }
         }
 
-        /*Validacion CICLO DE VIDA*/
-        if ($val == true) {$tipoVal = 11;$Ciclo_vida= plan_compra::list_ciclo_vida();
+        /*Validacion Ciclo de vida*/
+        if ($val == true) {$Ciclo_vida= plan_compra::list_ciclo_vida();$filarow = "";
             for($i = 1;$i <= $limite; $i++){$val2 = false;
                 if ($rows[$i][$nom_columnas['LIFE CICLE']] != null){
                     foreach ($Ciclo_vida as $var) {
@@ -1963,94 +2129,153 @@ class valida_archivo_bmt extends \parametros {
                     if ($val2 == false){
                         $val = false;
                         $filarow = $filarow . strval($rows[$i][$nom_columnas['ID_FILAS']]) . ",";
+                        $_ErrorMsj = ") -> LIFE CICLE no se encuentra en BD C1.";
                     }
                 }
             }
         }
 
-        /*Validacion porcentaje*/
-        if ($val == true) {$tipoVal = 12;
+        /*Validacion Tallas*/
+        if ($val == true) {$filarow = "";
             for($i = 1;$i <= $limite; $i++){
-                $countTalla= count(explode(",",$rows[$i][$nom_columnas['SIZE']]));
-                $SumPorcent = 0;
-                for ($x = 1; $x <= $countTalla; $x++){
-                    $SumPorcent += $rows[$i][$nom_columnas['Size %'.$x]];
-                }
-                if (($SumPorcent*100) < 99.9){
+                if ($rows[$i][$nom_columnas['SIZE']] == null ){
                     $val = false;
                     $filarow = $filarow . strval($rows[$i][$nom_columnas['ID_FILAS']]) . ",";
-                }elseif(($SumPorcent*100) > 100.1 ){
-                    $val = false;
-                    $filarow = $filarow . strval($rows[$i][$nom_columnas['ID_FILAS']]) . ",";
+                    $_ErrorMsj = ") -> SIZE no tiene que ser nulo.";
                 }
             }
         }
 
-        /*Validacion impusto de costo*/
-        if ($val == true) {$tipoVal = 13;
+        /*Validacion Porcentajes de Compras*/
+        if ($val == true) {$filarow = "";
             for($i = 1;$i <= $limite; $i++){
+                $countTalla= count(explode(",",$rows[$i][$nom_columnas['SIZE']]));
+                $SumPorcent = 0;
+                for ($x = 1; $x <= $countTalla; $x++){
+                        $SumPorcent += $rows[$i][$nom_columnas['Size %'.$x]];
+                }
+
+                if (($SumPorcent) < 99.9){
+                    $val = false;
+                    $filarow = $filarow . strval($rows[$i][$nom_columnas['ID_FILAS']]) . ",";
+                    $_ErrorMsj = ") -> La suma de los porcentajes de compras tiene que sumar 100%.";
+                }elseif(($SumPorcent) > 100.1 ){
+                    $val = false;
+                    $filarow = $filarow . strval($rows[$i][$nom_columnas['ID_FILAS']]) . ",";
+                    $_ErrorMsj = ") -> La suma de los porcentajes de compras tiene que sumar 100%.";
+                }
+            }
+        }
+
+        /*Validacion Costo UNIDADES FINALES */
+        if ($val == true) {$filarow = "";
+            for($i = 1;$i <= $limite; $i++){
+                if ($rows[$i][$nom_columnas['TOTAL QUANTITY CL']] == null or $rows[$i][$nom_columnas['TOTAL QUANTITY CL']] == 0){
+                    $val = false;
+                    $filarow = $filarow . strval($rows[$i][$nom_columnas['ID_FILAS']]) . ",";
+                    $_ErrorMsj = ") -> TOTAL QUANTITY CL tiene que ser mayor que 0.";
+                }
+            }
+        }
+
+        /*Validacion Costo RFID,INSP,FOB <> null*/
+        if ($val == true) {$filarow = "";
+            for($i = 1;$i <= $limite; $i++){
+                if(is_numeric($rows[$i][$nom_columnas['FINAL COST']])) {
+                } else {
+                    $val = false;
+                    $filarow = $filarow . strval($rows[$i][$nom_columnas['ID_FILAS']]) . ",";
+                    $_ErrorMsj = ") -> FINAL COST o RFID COST o INSPECTION COST tienen que ser datos numéricos.";
+                }
+
                 if(is_numeric($rows[$i][$nom_columnas['RFID COST']])) {
                 } else {
                     $val = false;
                     $filarow = $filarow . strval($rows[$i][$nom_columnas['ID_FILAS']]) . ",";
+                    $_ErrorMsj = ") -> FINAL COST o RFID COST o INSPECTION COST tienen que ser datos numéricos.";
                 }
 
                 if(is_numeric($rows[$i][$nom_columnas['INSPECTION COST']])) {
                 } else {
                     $val = false;
                     $filarow = $filarow . strval($rows[$i][$nom_columnas['ID_FILAS']]) . ",";
+                    $_ErrorMsj = ") -> FINAL COST o RFID COST o INSPECTION COST tienen que ser datos numéricos.";
                 }
             }
         }
 
-        if ($val == false ) {
-            if ($tipoVal == 1) {
-                $array = array('Tipo' => $val,
-                    'Error' => "(" . substr($filarow, 0, -1) . ") -> El STYLE NAME no puede ser nulo.");
-            }elseif ($tipoVal == 2){
-                $array = array('Tipo' => $val,
-                    'Error' => "(" . substr($filarow, 0, -1) . ") -> El PURCHASE GROUP no puede ser nulo.");
-            }elseif ($tipoVal == 3){
-                $array = array('Tipo' => $val,
-                    'Error' => "(" . substr($filarow, 0, -1) . ") -> El PURCHASE GROUP no se encuentra(n) en el registro de compra.");
-            }elseif ($tipoVal == 4){
-                $array = array('Tipo' => $val,
-                    'Error' => "(" . substr($filarow, 0, -1) . ") -> El (ID C1) no se encuentra(n) en el registro de compra.");
-            }elseif ($tipoVal == 5){
-                $array = array('Tipo' => $val,
-                    'Error' => "(" . substr($filarow, 0, -1) . ") -> La ventana no se encuentra(n) en la BD C1.");
-            }elseif ($tipoVal == 6){
-                $array = array('Tipo' => $val,
-                    'Error' => "(" . substr($filarow, 0, -1) . ") -> El Cod Color no se encuentra(n) en la BD PMM.");
-            }elseif ($tipoVal == 7){
-                $array = array('Tipo' => $val,
-                    'Error' => "(" . substr($filarow, 0, -1) . ") -> El PREPACK tiene que ser CURVADO o SOLIDO.");
-            }elseif ($tipoVal == 8){
-                $array = array('Tipo' => $val,
-                    'Error' => "(" . substr($filarow, 0, -1) . ") -> TOTAL QUANTITY CL no puede ser nulo o mayor que 0.");
-            }elseif ($tipoVal == 9){
-                $array = array('Tipo' => $val,
-                    'Error' => "(" . substr($filarow, 0, -1) . ") -> COUNTRY OF ORIGIN no puede ser nulo o no se encuentra en PMM.");
-            }elseif ($tipoVal == 10){
-                $array = array('Tipo' => $val,
-                    'Error' => "(" . substr($filarow, 0, -1) . ") -> SHIPMENT MODE no puede ser nulo o no se encuentra en BD C1.");
-            }elseif ($tipoVal == 11){
-                $array = array('Tipo' => $val,
-                    'Error' => "(" . substr($filarow, 0, -1) . ") -> LIFE CICLE no se encuentra en BD C1.");
-            }elseif ($tipoVal == 12){
-                $array = array('Tipo' => $val,
-                    'Error' => "(" . substr($filarow, 0, -1) . ") -> La suma de los porcentajes de compras tiene que sumar 100%.");
-            }elseif ($tipoVal == 13){
-                $array = array('Tipo' => $val,
-                    'Error' => "(" . substr($filarow, 0, -1) . ") -> RFID COST o INSPECTION COST tienen que ser datos numéricos.");
+        /*Validacion Costo FOB <> 0*/
+        if ($val == true) {$filarow = "";
+            for($i = 1;$i <= $limite; $i++){
+                if ($rows[$i][$nom_columnas['FINAL COST']] == 0){
+                    $val = false;
+                    $filarow = $filarow . strval($rows[$i][$nom_columnas['ID_FILAS']]) . ",";
+                    $_ErrorMsj = ") -> FINAL COST tiene que ser mayor que 0.";
+                }
             }
-      }else{
-        $array = array('Tipo' => $val,
-        'Error'=> $filarow);
-      }
+        }
+
+        /*Validacion Costo PRECIO BLANCO <> 0*/
+        if ($val == true) {$filarow = "";
+            for($i = 1;$i <= $limite; $i++){
+                if ($rows[$i][$nom_columnas['RETAIL PRICE']] == null or $rows[$i][$nom_columnas['RETAIL PRICE']] == 0){
+                    $val = false;
+                    $filarow = $filarow . strval($rows[$i][$nom_columnas['ID_FILAS']]) . ",";
+                    $_ErrorMsj = ") -> RETAIL PRICE tiene que ser mayor que 0.";
+                }
+            }
+        }
+
+        /*Validacion PROVEEDOR*/
+        if ($val == true) {$filarow = "";
+            for($i = 1;$i <= $limite; $i++){
+                if ($rows[$i][$nom_columnas['VENDOR NICK NAME']] == null ){
+                    $val = false;
+                    $filarow = $filarow . strval($rows[$i][$nom_columnas['ID_FILAS']]) . ",";
+                    $_ErrorMsj = ") -> VENDOR NICK NAME no tiene que ser nulo..";
+                }
+            }
+        }
+
+
+        if ($val == false ) {
+            $array = array('Tipo' => $val,
+                'Error' => "(" . substr($filarow, 0, -1) .$_ErrorMsj);
+        }else{
+            $array = array('Tipo' => $val,
+            'Error'=> $_ErrorMsj);
+        }
 
     return  $array;
     }
+    public static function del_idcolor3_plan_compra($rows,$limite,$nom_columnas,$depto,$temporada,$grupo_compra,$login){
+
+        $dtid_color3 = plan_compra::list_Idcolor3x_Grupo2($temporada,$depto,$grupo_compra);
+        $_delete = ""; $key = false;
+        $_error = TRUE;
+        //opciones que no se encuentran en el archivo vs plan
+        foreach ($dtid_color3 as $val){
+            $_existe = false;
+            for ($i = 1; $i <= $limite; $i++){
+                if ($rows[$i][$nom_columnas['ID C1']] == $val['ID_COLOR3']){
+                    $_existe = true;
+                    break;
+                }
+            }
+            if ($_existe == false){$key = true;
+                $_delete = $_delete.$val['ID_COLOR3'].",";
+            }
+        }
+
+        if ($key == true){
+            $_delete = substr($_delete, 0, -1);
+            $_error = plan_compra::updateopcioneliminado($temporada,$depto,$grupo_compra,$_delete,$login);
+        }
+
+       return $_error;
+
+    }
+
     public static function Distinct_Grupo_Compra($rows,$limite,$nom_columnas){
 
         $dtgrup = [];

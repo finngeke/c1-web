@@ -425,23 +425,34 @@ public function guarda_pi($f3) {
         $f3->reroute('/simulador_compra?depto=' . $f3->get('SESSION.COD_DEPTO'));
 
     }
+public function SubirAssorment($f3){
 
+    $tipo_archivo = $_POST['tipos_import'];
 
+    if ($tipo_archivo == 1){
+            $nombre_archivo = "Assorment-".$f3->get('SESSION.COD_TEMPORADA')."-".$f3->get('SESSION.COD_DEPTO').".xls";
+            $dir_subida = $f3->get('UPLOADSassorment');
+            //$fichero_subido = $dir_subida . basename($_FILES['send_archivop_pi']['name']);
+            $fichero_subido = $dir_subida . basename($nombre_archivo);
 
-public function  SubirAssorment($f3){
-
-        $nombre_archivo = "Assorment-".$f3->get('SESSION.COD_TEMPORADA')."-".$f3->get('SESSION.COD_DEPTO').".xls";
-        $dir_subida = $f3->get('UPLOADSassorment');
+            if (move_uploaded_file($_FILES['user_file']['tmp_name'], $fichero_subido)) {
+              echo 1;
+            } else {
+              echo 0;
+            }
+    }else{
+        $nombre_archivo = "BMT-".$f3->get('SESSION.COD_TEMPORADA')."-".$f3->get('SESSION.COD_DEPTO').".xls";
+        $dir_subida = $f3->get('UPLOADS');
         //$fichero_subido = $dir_subida . basename($_FILES['send_archivop_pi']['name']);
         $fichero_subido = $dir_subida . basename($nombre_archivo);
 
         if (move_uploaded_file($_FILES['user_file']['tmp_name'], $fichero_subido)) {
-          echo 1;
+            echo 1;
         } else {
-          echo 0;
+            echo 0;
         }
     }
-
+}
 public function getJerarquia($f3){
 
     $rows = plan_compra::list_jerarquia($f3->get('GET.Depart'));
@@ -472,7 +483,6 @@ public function ImportarAssormentValidaciones($f3){
     $fila = 0;
 
     foreach ($worksheet->getRowIterator() AS $row) {
-
         $cellIterator = $row->getCellIterator();
         $cellIterator->setIterateOnlyExistingCells(FALSE); // This loops through all cells,
         $cells = [];
@@ -486,7 +496,7 @@ public function ImportarAssormentValidaciones($f3){
             if ($column <= 1 ){
                 $cells[] = "s";
             }else {
-               $cells[] = $cell->getCalculatedValue();
+                $cells[] = $cell->getCalculatedValue();
             }
             $column++;
         }
@@ -567,7 +577,6 @@ public function ImportarAssormentValidaciones($f3){
             $_error = false;
         }}
 
-
     //validacion existe grupo compra
     if ($_error == true) {
     $_ERROR2 = valida_archivo_bmt::val_grupo_compra_x_estado($cod_tempo,$depto,$rows[3][$nom_columnas['Grupo de compra']],$rows[3][$nom_columnas['Codigo Marca']]);
@@ -587,7 +596,6 @@ public function ImportarAssormentValidaciones($f3){
             array_push($_array, $_array_error);
             $_error = false;
     }}
-
 
     //validacion de jerarquia
     if ($_error == true) {
@@ -643,6 +651,10 @@ public function ImportarAssormentValidaciones($f3){
         }
     }
 
+
+
+
+
     //validacion de mstpack
     if ($_error == true) {
     $_ERROR2 = valida_archivo_bmt::val_mstpack($rows,$limite,$nom_columnas,$depto);
@@ -665,6 +677,9 @@ public function ImportarAssormentValidaciones($f3){
 
         }
     }
+
+
+
 
     //fin de validacion
     if ($_error == true ){
@@ -867,6 +882,7 @@ public function ImpAssormCalculos($f3){
         $rows = plan_compra::ImpAssorCalculos($rows,$Columnas,$cod_tempo,$depto,$login,$_SESSION['dtjerarquia'],$f3);
 
 
+
         echo json_encode($rows);
 
 
@@ -890,22 +906,275 @@ public function InsertarAssormentC1($f3){
     }
     echo $_val;
 }
-
-
-
 public function Mensaje_Guardado($f3){
-
-
-  $f3->set('SESSION.exito', 'Insertado Correctamente');
-    $f3->reroute('/simulador_compra?depto=' . $f3->get('SESSION.COD_DEPTO'));
+        $f3->set('SESSION.exito', 'Insertado Correctamente');
+        $f3->reroute('/simulador_compra?depto=' . $f3->get('SESSION.COD_DEPTO'));
 
 }
 
+public function ImportarBmtValidaciones($f3){
+
+    $cod_tempo = $f3->get('SESSION.COD_TEMPORADA');
+    $depto = $f3->get('SESSION.COD_DEPTO');
+    $login = $f3->get('SESSION.login');
+    #region {*************Extrer Excel*************}
+    error_reporting(E_ALL);
+    ini_set('memory_limit', '-1');
+    ini_set('max_execution_time', 9000000);
+
+    $nombre_archivo = "BMT-".$f3->get('SESSION.COD_TEMPORADA')."-".$f3->get('SESSION.COD_DEPTO').".xls";
+    $dir_subida = $f3->get('UPLOADS').$nombre_archivo;
+
+    $temporada = \temporada\temporada::getTemporadaCompra($cod_tempo)->NOM_TEMPORADA_CORTO;
+    require_once '../class/PHPExcel/IOFactory.php';
+
+    /* LEER BMT*/
+    $objPHPExcel = \PHPExcel_IOFactory::load($dir_subida);
+    $worksheet = $objPHPExcel->getActiveSheet('BMT');
+    $rows = [];
+    $fila = 0;
+
+    //Extracion data del excel
+    foreach ($worksheet->getRowIterator() AS $row) {
+        $cellIterator = $row->getCellIterator();
+        $cellIterator->setIterateOnlyExistingCells(FALSE); // This loops through all cells,
+        $cells = [];
+        $column = 1;
+        $count = 0;
+        foreach ($cellIterator as $cell) {
+            $count += 1;
+            if ($count > 183){
+                break;
+            }
+            if ($column <= 1 ){
+                $cells[] = "s";
+            }else {
+                $cells[] = $cell->getCalculatedValue();
+            }
+            $column++;
+        }
+        $rows[] = $cells;
+        $fila++;
+    }
+    #endregion
+
+    $_error = true;
+    $_array = [];
+    $nom_columnas = [];
+    $limite = 0;
+
+    //Validacion de Columnas.
+    $_ERROR2 = valida_archivo_bmt::Val_CamposObligatorio($rows[13],2);
+    if ($_ERROR2 != "" ){
+        $_array_error = [];
+        array_push($_array_error, "false","No existe(n) en el archivo campo(s): ".$_ERROR2. ".");
+        array_push($_array, $_array_error);
+        $_error = false;
+    }
+
+    //Nueva columna
+    if ($_error == true) {
+        array_push($rows[13], "Unidades");
+        array_push($rows[13], "ID_FILAS");
+        $nom_columnas = array_flip($rows[13]);
+        $limite = (count($rows) - 1);
+        for($i = 14;$i <= $limite; $i++){
+            array_push($rows[$i],0);
+            array_push($rows[$i],$i+1);
+        }
+    }
+
+    //validacion de temporada
+    if ($_error == true){
+        $_ERROR2 = valida_archivo_bmt::Val_Seasonbmt($rows,$limite,$nom_columnas,$temporada);
+        if ($_ERROR2["Tipo"] == false ){
+            $_array_error = [];
+            array_push($_array_error, "false","La temporada del archivo no corresponde a la temporada seleccionada: Fila(s): " . $_ERROR2["Error"]);
+            array_push($_array, $_array_error);
+            $_error = false;
+        }
+    }
+
+    //validacion de depto
+    if ($_error == true) {
+        $_ERROR2 = valida_archivo_bmt::Val_deptobmt($rows, $limite, $nom_columnas, $depto);
+        if ($_ERROR2["Tipo"] == false) {
+            $_array_error = [];
+            array_push($_array_error, "false", "No encuentran datos en el archivo.  Depto: [' . $depto . ']");
+            array_push($_array, $_array_error);
+            $_error = false;
+        }
+    }
+
+    //borrar datos de basura.
+    $rows = valida_archivo_bmt::eliminardatosrowsBMT($rows,$limite,$nom_columnas);
+    $limite = (count($rows)-1);
+
+    //Validaciones rows
+    if ($_error == true) {
+        $_ERROR2 = valida_archivo_bmt::Val_campos_bmt($rows, $limite, $nom_columnas, $depto, $cod_tempo,$_SESSION['dtjerarquia']);
+        if ($_ERROR2["Tipo"] == false) {
+            $_array_error = [];
+            array_push($_array_error, "false","Fila(s):".$_ERROR2["Error"]);
+            array_push($_array, $_array_error);
+            $_error = false;
+        }
+    }
+
+    //fin de validacion
+    if ($_error == true ){
+        $_array_error = [];
+        array_push($_array_error, "True","");
+        array_push($_array, $_array_error);
+        $_error = false;
+    }
+    echo json_encode($_array);
+}
+public function ImportarBmtdelrows($f3){
+
+#region {*************Extrer Excel*************}
+    $cod_tempo = $f3->get('SESSION.COD_TEMPORADA');
+    $depto = $f3->get('SESSION.COD_DEPTO');
+    $login = $f3->get('SESSION.login');
+    #region {*************Extrer Excel*************}
+    error_reporting(E_ALL);
+    ini_set('memory_limit', '-1');
+    ini_set('max_execution_time', 9000000);
+
+    $nombre_archivo = "BMT-".$f3->get('SESSION.COD_TEMPORADA')."-".$f3->get('SESSION.COD_DEPTO').".xls";
+    $dir_subida = $f3->get('UPLOADS').$nombre_archivo;
+
+    $temporada = \temporada\temporada::getTemporadaCompra($cod_tempo)->NOM_TEMPORADA_CORTO;
+    require_once '../class/PHPExcel/IOFactory.php';
+
+    /* LEER BMT*/
+    $objPHPExcel = \PHPExcel_IOFactory::load($dir_subida);
+    $worksheet = $objPHPExcel->getActiveSheet('BMT');
+    $rows = [];
+    $fila = 0;
+
+    //Extracion data del excel
+    foreach ($worksheet->getRowIterator() AS $row) {
+        $cellIterator = $row->getCellIterator();
+        $cellIterator->setIterateOnlyExistingCells(FALSE); // This loops through all cells,
+        $cells = [];
+        $column = 1;
+        $count = 0;
+        foreach ($cellIterator as $cell) {
+            $count += 1;
+            if ($count > 183){
+                break;
+            }
+            if ($column <= 1 ){
+                $cells[] = "s";
+            }else {
+                $cells[] = $cell->getCalculatedValue();
+            }
+            $column++;
+        }
+        $rows[] = $cells;
+        $fila++;
+    }
+    #endregion
+
+    array_push($rows[13], "Unidades");
+    array_push($rows[13], "ID_FILAS");
+    $nom_columnas = array_flip($rows[13]);
+    $limite = (count($rows) - 1);
+    for($i = 14;$i <= $limite; $i++){
+        array_push($rows[$i],0);
+        array_push($rows[$i],$i+1);
+    }
+
+#endregion
+    //borrar datos de basura.
+    $rows = valida_archivo_bmt::eliminardatosrowsBMT($rows,$limite,$nom_columnas);
+     $_SESSION['dtBMT']= $rows;
+
+
+     //borrar historial bmt
+        $Columnas = array_flip($rows[0]); $Marcas = [];
+        $key = 0;
+        foreach ($rows as $t){$key++;
+            if($key <> 1){
+                array_push($Marcas,strtoupper($t[$Columnas['LOCAL BRAND']]));
+            }
+        }
+        $Marcas = array_unique($Marcas);
+        $grupo_compra = $rows[1][$Columnas['PURCHASE GROUP']];;
+        plan_compra::InsertHistoricadelBMT($cod_tempo,$depto,$Marcas,$grupo_compra);
+     echo json_encode($rows);
+    }
+public function ImportarBmtInsHistorial($f3){
+  $cod_tempo = $f3->get('SESSION.COD_TEMPORADA');
+  $rows =  $_POST['_rows'];
+  $Columnas = array_flip($_POST['_columnas']);
+
+    //insert historial bmt
+    $_ERROR = plan_compra::InsertHistorialBmt($rows,$Columnas,$cod_tempo);
+
+    $_val = "";
+    if ($_ERROR["Tipo"] == false ){
+        $_val = "false".",".$_ERROR["Error"];
+    }else{
+        $_val = "True".","."1";
+    }
+
+    echo $_val;
+}
+public function ImpBMTCalculoDebut_reorder($f3){
+
+    $rows = $_SESSION['dtBMT'];
+    $nom_columnas = array_flip($rows[0]);
+    $limite = count($rows)-1;
+    $cod_tempo = $f3->get('SESSION.COD_TEMPORADA');
+    $depto = $f3->get('SESSION.COD_DEPTO');
+
+    //$rows= plan_compra::Calculo_DebutReorderBMT($rows,$limite,$nom_columnas,$cod_tempo,$depto);
+    $_SESSION['dtBMTconReorder']= $rows;
+    echo json_encode($rows);
+}
+public function ImpBMTCalculosCurvado($f3){
+
+    $cod_tempo = $f3->get('SESSION.COD_TEMPORADA');
+    $depto = $f3->get('SESSION.COD_DEPTO');
+    $rows = $_SESSION['dtBMTconReorder'];
+    $nom_columnas = array_flip($rows[0]);
+    $limite = count($rows)-1;
+
+    //$_error = valida_archivo_bmt::del_idcolor3_plan_compra($rows,$limite,$nom_columnas,$depto,$cod_tempo,$rows[1][$nom_columnas['PURCHASE GROUP']],$login);
+    //if ($_error == true) {
+        $rows = plan_compra::ImpBMTCalculos($rows, $limite, $nom_columnas, $cod_tempo, $depto);
+    //}else{
+        //$rows =[];
+    //}
+
+    echo json_encode($rows);
+}
+public function ActualizBmtC1($f3){
+    $cod_tempo = $f3->get('SESSION.COD_TEMPORADA');
+    $depto = $f3->get('SESSION.COD_DEPTO');
+    $rows = $_POST['_rows'];
+    $Columnas = $_POST['_columnas'];
+
+    $_ERROR = plan_compra::ActualizaPlanCompraBMT($rows,$Columnas,$cod_tempo,$depto);
+
+    $_val = "";
+    if ($_ERROR["Tipo"] == false ){
+        $_val = "false".",".$_ERROR["Error"];
+    }else{
+        $_val = "True".","."1";
+    }
+    echo $_val;
+}
+public function Mensaje_GuardadoBMT($f3){
+        $f3->set('SESSION.modifica', 'Actualizado Correctamente');
+        $f3->reroute('/simulador_compra?depto=' . $f3->get('SESSION.COD_DEPTO'));
+    }
 
 public function beforeRoute($f3) {
         if ($f3->exists('SESSION.login') == false) {
             $f3->reroute('/fin-sesion');
         }
     }
-
 }
