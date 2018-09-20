@@ -158,9 +158,15 @@ $('#guardar_permisos_modulo_acciones').on('click', function () {
 
         });
 
-        //Cambiar por cronometro que consulte por el flag ?
 
-        var delay_validar_guardado = 5000;
+        // Nueva función, corrige el guardado... la función comentada recargaba la página antes de terminar si la cantidad de permisos a asignar eran muchos.
+        // Se recarga y entrega el mensaje cuando termina la ejecución de todos los XHR que se realicen
+        $(document).ajaxStop(function () {
+            alert("Los cambios han sido realizados, favor revisar.");
+            location.reload();
+        });
+
+        /*var delay_validar_guardado = 5000;
         setTimeout(function (){
                 validar_guardado = $('#flag_data_insert_modulos').html();
             if (validar_guardado == 1) {
@@ -169,7 +175,7 @@ $('#guardar_permisos_modulo_acciones').on('click', function () {
             }else{
                 alert("Debe modificar un estado de modulo/botón para guardar los cambios");
             }
-        }, delay_validar_guardado);
+        }, delay_validar_guardado);*/
 
 
     }else{
