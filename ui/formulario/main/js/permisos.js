@@ -87,10 +87,18 @@ $('#guardar_permisos_usuarios').on('click', function () {
                     $.getJSON(url_guarda_permiso,{COD_USU:cod_usu,DEP_DEPTO:dep_depto,ESTADO:estado,FLAG:flag},function (data) {
                         $('#flag_data_insert_deptos').html(data);
                     });
+
                 }
         });
 
-        var delay_guardar_depto = 5000;
+        // Nueva función, corrige el guardado... la función comentada recargaba la página antes de terminar si la cantidad de permisos a asignar eran muchos.
+        // Se recarga y entrega el mensaje cuando termina la ejecución de todos los XHR que se realicen
+        $(document).ajaxStop(function () {
+            alert("Los cambios han sido realizados, favor revisar.");
+            location.reload();
+        });
+
+        /*var delay_guardar_depto = 5000;
         setTimeout(function () {
             validar_guardar_permiso_usuario =  $('#flag_data_insert_deptos').html();
             if (validar_guardar_permiso_usuario == 1) {
@@ -101,7 +109,7 @@ $('#guardar_permisos_usuarios').on('click', function () {
                 // Habilito el BTN guardar
                 //$('#guardar_permisos_usuarios').attr('disable',false);
             }
-        }, delay_guardar_depto);
+        }, delay_guardar_depto);*/
 
     } else {
         return false;
