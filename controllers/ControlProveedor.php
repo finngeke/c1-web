@@ -506,10 +506,10 @@
 							$f3->reroute("/invoices?cod_proveedor=$cod_proveedor");
 						}
 						$etapa = "setVariables";
-						$pi_number = $worksheet->getCell("B$row")->getCalculatedValue();
-						$pack_type = $worksheet->getCell("E$row")->getCalculatedValue();
-						$initial_lpn = $worksheet->getCell("F$row")->getCalculatedValue();
-						$final_lpn = $worksheet->getCell("G$row")->getCalculatedValue();
+						$pi_number = trim($worksheet->getCell("B$row")->getCalculatedValue());
+						$pack_type = trim($worksheet->getCell("E$row")->getCalculatedValue());
+						$initial_lpn = trim($worksheet->getCell("F$row")->getCalculatedValue());
+						$final_lpn = trim($worksheet->getCell("G$row")->getCalculatedValue());
 						
 						if (trim($initial_lpn) == "") {
 							unlink($key);
