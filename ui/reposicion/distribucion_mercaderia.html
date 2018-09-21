@@ -124,11 +124,24 @@
 			e.preventDefault();
 			deshabilitarBoton();
 			var sucursales = [];
+			$(".embarcadas").each(function() {
+				var fila = $(this).data('fila');
+				var embarcadas = parseInt($(this).html());
+				var suma = 0;
+				$(".cajas-sucursal[data-fila='" + fila + "']").each(function() {
+					suma += parseInt($(this).val());
+				});
+				if (suma > embarcadas) {
+					alert('El valor ingresado en la fila ' + fila + ' supera las cajas embarcadas');
+					habilitarBoton();
+					return;
+				}
+			});
 			$('.cajas-sucursal').each(function() {
 				var fila = parseInt($(this).data('fila'));
 				var nroEmbarque = "{{@nroEmbarque}}";
 				var nroContenedor = "{{@nroContenedor}}";
-				var nroEstilo = $(this).data('estilo');
+				var nroEstilo = $(this).data('estilo').toString();
 				var codSucursal = parseInt($(this).data('sucursal'));
 				var cantidad = parseInt($(this).val());
 				var codTemporada = $(this).data('temporada');
@@ -213,63 +226,57 @@
 			'font-size': '10px'
 		});
 		$.getJSON(url, function(data) {
-			var $head = $('<thead>');
-			var $tr = $('<tr>').append(
-				$('<th>').text("#").css(centro).attr('rowspan', '2'),
-				$('<th>').text("Cod. Estlo").css(centro).attr('rowspan', '2'),
-				$('<th>').text("Nombre Estilo").css(centro).attr('rowspan', '2'),
-				$('<th>').text("Depto.").css(centro).attr('rowspan', '2'),
-				$('<th>').text("Color").css(centro).attr('rowspan', '2'),
-				$('<th>').text("Ventana").css(centro).attr('rowspan', '2'),
-				$('<th>').text("Evento").css(centro).attr('rowspan', '2'),
-				$('<th>').text("Curva Reparto").css(centro).attr('rowspan', '2'),
-				$('<th>').text("Curvas x Caja").css(centro).attr('rowspan', '2'),
-				$('<th>').text("Cajas Embarcadas").css(centro).attr('rowspan', '2'),
-				$('<th>').text("Diferencia").css(centro).attr('rowspan', '2')
-			);
-			$.each(data.sucursales, function(i, item) {
-				$tr.append($('<th>').text(item.codSucursal + ' - ' + item.sucursal).css(centro).attr('colspan', '3'));
-			});
-			$tr.append($('<th>').text('Demora').css(centro).attr('rowspan', '2'));
-			$head.append($tr);
-			$tr = $('<tr>');
-			$.each(data.sucursales, function(i, item) {
-				$tr.append(
-					$('<th>').text('Cluster').css(centro),
-					$('<th>').text('Cantidad').css(centro),
-					$('<th>').text('Demora').css(centro)
-				);
-			});
-			$head.append($tr);
-			$table.append($head);
-			var $body = $('<tbody>');
-			$.each(data.detalle, function(i, item) {
-				var fila = item.idFila;
-				var codTemporada = item.codTemporada;
-				var depDepto = item.depDepto;
-				var idColor3 = item.idColor3;
-				var codEstilo = item.codEstilo;
+				var $head = $('<thead>');
 				var $tr = $('<tr>').append(
-					$('<td>').text(fila).css(derecha),
-					$('<td>').text(codEstilo).css(izquierda),
-					$('<td>').text(item.estilo).css(izquierda),
-					$('<td>').text(depDepto).css(izquierda),
-					$('<td>').text(item.color).css(izquierda),
-					$('<td>').text(item.ventana).css(izquierda),
-					$('<td>').text(item.evento).css(izquierda),
-					$('<td>').text(item.curvaReparto).css(centro),
-					$('<td>').text(item.curvasCaja).css(derecha),
-					$('<td>').css(derecha).append($('<span>').addClass('embarcadas').attr({'data-fila': fila}).text(item.cajasEmbarcadas)),
-					$('<td>').css(derecha).append($('<span>').addClass('diferencia').attr({'data-fila': fila}).text(item.diferencia))
+					$('<th>').text("#").css(centro).attr('rowspan', '2'),
+					$('<th>').text("Cod. Estlo").css(centro).attr('rowspan', '2'),
+					$('<th>').text("Nombre Estilo").css(centro).attr('rowspan', '2'),
+					$('<th>').text("Depto.").css(centro).attr('rowspan', '2'),
+					$('<th>').text("Color").css(centro).attr('rowspan', '2'),
+					$('<th>').text("Ventana").css(centro).attr('rowspan', '2'),
+					$('<th>').text("Evento").css(centro).attr('rowspan', '2'),
+					$('<th>').text("Curva Reparto").css(centro).attr('rowspan', '2'),
+					$('<th>').text("Curvas x Caja").css(centro).attr('rowspan', '2'),
+					$('<th>').text("Cajas Embarcadas").css(centro).attr('rowspan', '2'),
+					$('<th>').text("Diferencia").css(centro).attr('rowspan', '2')
 				);
-				$.each(item.sucursales, function(i, item) {
-					$tr.append($('<td>').text(item.cluster).css(centro).addClass('text-danger'));
-					if (item.habilitada == 0) {
-						$tr.append(
-							$('<td>').text('-').css(centro),
-							$('<td>').text('-').css(centro)
-						);
-					} else {
+				$.each(data.sucursales, function(i, item) {
+					$tr.append($('<th>').text(item.codSucursal + ' - ' + item.sucursal).css(centro).attr('colspan', '3'));
+				});
+				$tr.append($('<th>').text('Demora').css(centro).attr('rowspan', '2'));
+				$head.append($tr);
+				$tr = $('<tr>');
+				$.each(data.sucursales, function(i, item) {
+					$tr.append(
+						$('<th>').text('Cluster').css(centro),
+						$('<th>').text('Cantidad').css(centro),
+						$('<th>').text('Demora').css(centro)
+					);
+				});
+				$head.append($tr);
+				$table.append($head);
+				var $body = $('<tbody>');
+				$.each(data.detalle, function(i, item) {
+					var fila = item.idFila;
+					var codTemporada = item.codTemporada;
+					var depDepto = item.depDepto;
+					var idColor3 = item.idColor3;
+					var codEstilo = item.codEstilo;
+					var $tr = $('<tr>').append(
+						$('<td>').text(fila).css(derecha),
+						$('<td>').text(codEstilo).css(izquierda),
+						$('<td>').text(item.estilo).css(izquierda),
+						$('<td>').text(depDepto).css(izquierda),
+						$('<td>').text(item.color).css(izquierda),
+						$('<td>').text(item.ventana).css(izquierda),
+						$('<td>').text(item.evento).css(izquierda),
+						$('<td>').text(item.curvaReparto).css(centro),
+						$('<td>').text(item.curvasCaja).css(derecha),
+						$('<td>').css(derecha).append($('<span>').addClass('embarcadas').attr({'data-fila': fila}).text(item.cajasEmbarcadas)),
+						$('<td>').css(derecha).append($('<span>').addClass('diferencia').attr({'data-fila': fila}).text(item.diferencia))
+					);
+					$.each(item.sucursales, function(i, item) {
+						$tr.append($('<td>').text(item.cluster).css(centro).addClass('text-danger'));
 						$tr.append(
 							$('<td>').css(centro).append(
 								$('<input>')
@@ -309,32 +316,33 @@
 						} else {
 							$tr.append($('<td>').text('N/A').css(centro));
 						}
-					}
+					});
+					$tr.append($('<td>').css(centro).append(
+						$('<input>')
+							.css({'width': '80px'})
+							.addClass('demora-sucursal')
+							.attr({
+								'data-fila': fila
+							})
+							.datepicker(opcionesCalendario)
+							.on('changeDate', function() {
+								var fila = $(this).data('fila');
+								$('.demora-sucursal[data-fila=' + fila + ']').datepicker('update', $(this).datepicker('getDate'));
+							})
+							.on('clearDate', function() {
+								var fila = $(this).data('fila');
+								$('.demora-sucursal[data-fila=' + fila + ']').datepicker('update', '');
+							})
+					));
+					$body.append($tr);
 				});
-				$tr.append($('<td>').css(centro).append(
-					$('<input>')
-						.css({'width': '80px'})
-						.addClass('demora-sucursal')
-						.attr({
-							'data-fila': fila
-						})
-						.datepicker(opcionesCalendario)
-						.on('changeDate', function() {
-							var fila = $(this).data('fila');
-							$('.demora-sucursal[data-fila=' + fila + ']').datepicker('update', $(this).datepicker('getDate'));
-						})
-						.on('clearDate', function() {
-							var fila = $(this).data('fila');
-							$('.demora-sucursal[data-fila=' + fila + ']').datepicker('update', '');
-						})
-				));
-				$body.append($tr);
-			});
-			$table.append($body);
-			$('.tabla-principal').append($table);
-			//$table.DataTable(opcionesTabla);
-			showPage();
-		});
+				$table.append($body);
+				$('.tabla-principal').append($table);
+				//$table.DataTable(opcionesTabla);
+				showPage();
+			}
+		)
+		;
 	}
 
 	$(function() {

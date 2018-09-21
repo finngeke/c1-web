@@ -171,42 +171,51 @@
 				$sucs = \reposicion\distribucion::detalleContenedoresSucursales($row[10], $row[11], $row[12], $nroEmbarque, $nroContenedor, $row[2], $login);
 				$aux = [];
 				foreach ($sucs as $suc) {
-					$habilitada = \LibraryHelper::convertNumber($suc[2]);
-					if ($habilitada) {
-					$cantidad = (\LibraryHelper::convertNumber($suc[4]) > 0) ? \LibraryHelper::convertNumber($suc[4]) : \LibraryHelper::convertNumber($suc[3]);
-					} else {
-						$cantidad = 0;
-					}
+					$codSucursal = \LibraryHelper::convertNumber($suc[0]);
+					$sucursal = \LibraryHelper::cleanText($suc[1]);
+					$cantidad = \LibraryHelper::convertNumber($suc[2]);
+					$fechaDemora = $suc[3];
+					$cluster = $suc[4];
 					$c = $cantidad;
 					if ($c > $cajas) {
 						$c = $cajas;
 					}
 					$cajas -= $c;
 					$aux[] = array(
-						"codSucursal" => $suc[0],
-						"sucursal" => utf8_encode($suc[1]),
-						"habilitada" => $habilitada,
+						"codSucursal" => $codSucursal,
+						"sucursal" => $sucursal,
 						"cantidad" => $c,
-						"fechaDemora" => $suc[5],
-						"cluster" => $suc[7]
+						"fechaDemora" => $fechaDemora,
+						"cluster" => $cluster
 					);
 				}
 				
 				$existe = false;
 				for ($i = 0; $i < count($aux); $i++) {
-					if ($aux[$i]['habilitada'] == 1) {
+					if ($aux[$i]['cluster'] != "-") {
 						$existe = true;
 						break;
 					}
 				}
-				
-				while ($cajas > 0 && $existe) {
-					for ($i = 0; $i < count($aux); $i++) {
-						if ($aux[$i]['habilitada'] == 1) {
+				if (!$existe) {
+					while ($cajas > 0) {
+						for ($i = 0; $i < count($aux); $i++) {
 							$aux[$i]['cantidad']++;
 							$cajas--;
 							if ($cajas == 0) {
 								break;
+							}
+						}
+					}
+				} else {
+					while ($cajas > 0) {
+						for ($i = 0; $i < count($aux); $i++) {
+							if ($aux[$i]['cluster'] != "-") {
+								$aux[$i]['cantidad']++;
+								$cajas--;
+								if ($cajas == 0) {
+									break;
+								}
 							}
 						}
 					}
@@ -289,6 +298,7 @@
 		}
 		
 		public function generar_archivos($f3) {
+			ini_set('memory_limit', '1024M');
 			$etapa = "generarArchivos";
 			try {
 				$archivos = [];
@@ -350,7 +360,7 @@
 					file_put_contents("../archivos/json/$filename", $json);
 					
 					$etapa = "abrirSesion";
-					/*$response = \broker::post($json, $curlopt_url, $curlopt_port);
+					$response = \broker::post($json, $curlopt_url, $curlopt_port);
 					
 					if (strtoupper($response->Body->fault->faultString) != "OK") {
 						$msj = $response->Body->fault->faultString;
@@ -360,13 +370,14 @@
 					} else {
 						$id_sesion = $response->Body->sessionid;
 						\reposicion\embarque::guardar_sesion_asn($nro_embarque, $asn[0], $id_sesion);
-					}*/
+					}
 				}
 				
 				// Procesa el archivo de CITAS
 				$etapa = "generarArchivoCITA";
-				$data = \reposicion\embarque::generar_archivo_cita($nro_embarque, $id_archivo);
 				$id_archivo = $data[0][16];
+				$file_name = "IAS$id_archivo";
+				/*$data = \reposicion\embarque::generar_archivo_cita($nro_embarque, $id_archivo);
 				$cita = "";
 				$r = 0;
 				foreach ($data as $item) {
@@ -377,10 +388,10 @@
 					$cita .= implode('|', array_values($aux)) . "\n";
 					$r++;
 				}
-				$file_name = "IAS$id_archivo";
-				file_put_contents("$local_path/$file_name", $cita);
+				file_put_contents("$local_path/$file_name", $cita);*/
 				$archivos[] = $file_name;
-				$ctr[] = array("file_name" => $file_name, "registros" => $r);
+				//$ctr[] = array("file_name" => $file_name, "registros" => $r);
+				//unset($cita);
 				
 				// Procesa el archivo ASN_HDR
 				$etapa = "generarArchivoASN_HDR";
@@ -395,6 +406,7 @@
 				file_put_contents("$local_path/$file_name", $asn);
 				$archivos[] = $file_name;
 				$ctr[] = array("file_name" => $file_name, "registros" => $r);
+				unset($asn);
 				
 				// Procesa el archivo ASN_DTL
 				$etapa = "generarArchivoASN_DTL";
@@ -409,6 +421,7 @@
 				file_put_contents("$local_path/$file_name", $asn);
 				$archivos[] = $file_name;
 				$ctr[] = array("file_name" => $file_name, "registros" => $r);
+				unset($asn);
 				
 				// Procesa el archivo LPN_HDR
 				$etapa = "generarArchivoLPN_HDR";
@@ -423,6 +436,7 @@
 				file_put_contents("$local_path/$file_name", $lpn);
 				$archivos[] = $file_name;
 				$ctr[] = array("file_name" => $file_name, "registros" => $r);
+				unset($lpn);
 				
 				// Procesa el archivo LPN_DTL
 				$etapa = "generarArchivoLPN_DTL";
@@ -437,6 +451,7 @@
 				file_put_contents("$local_path/$file_name", $lpn);
 				$archivos[] = $file_name;
 				$ctr[] = array("file_name" => $file_name, "registros" => $r);
+				unset($lpn);
 				
 				// Procesa el archivo DISTRO
 				$etapa = "generarArchivoDISTRO";
@@ -451,6 +466,7 @@
 				file_put_contents("$local_path/$file_name", $distro);
 				$archivos[] = $file_name;
 				$ctr[] = array("file_name" => $file_name, "registros" => $r);
+				unset($distro);
 				
 				// Procesa el archivo CANCELACION
 				$etapa = "generarArchivoCANCELACION";
@@ -460,6 +476,7 @@
 				file_put_contents("$local_path/$file_name", $cancelacion);
 				$archivos[] = $file_name;
 				$ctr[] = array("file_name" => $file_name, "registros" => $r);
+				unset($cancelacion);
 				
 				// Procesa el archivo CONTROL
 				$etapa = "generarArchivoCONTROL";
@@ -470,8 +487,9 @@
 				$file_name = "CMX$id_archivo.CTR";
 				file_put_contents("$local_path/$file_name", $control);
 				$archivos[] = $file_name;
+				unset($control);
 				
-				/*$etapa = "conectarFTP";
+				$etapa = "conectarFTP";
 				$ftp = ftp_connect($host, $port, $timeout);
 				$login = ftp_login($ftp, $user, $pass);
 				ftp_pasv($ftp, true);
@@ -492,11 +510,11 @@
 						}
 					}
 				}
-				ftp_close($ftp);*/
+				ftp_close($ftp);
 				
 				//TODO: Actualiza el embarque
-				/*$etapa = "archivarASN";
-				$data = \reposicion\embarque::archivar_asn($nro_embarque);*/
+				$etapa = "archivarASN";
+				$data = \reposicion\embarque::archivar_asn($nro_embarque);
 				
 				header("Content-Type: application/json");
 				echo json_encode(array("estado" => 0, "mensaje" => "Archivo cargado", "etapa" => $etapa), JSON_PRETTY_PRINT);

@@ -51,12 +51,6 @@
 			return $data;
 		}
 		
-		public static function listaSucursalesPrioridad($cod_temporada, $dep_depto) {
-			$sql = "BEGIN PLC_PKG_DISTRIB_MERCADERIA.PRC_SUCURSALES_PRIORIDAD($cod_temporada, '$dep_depto', :data); END;";
-			$data = \database::getInstancia()->getConsultaSP($sql, 1);
-			return $data;
-		}
-		
 		public static function guardar_prioridades_tienda($cod_temporada, $dep_depto, $sucursales) {
 			$sql = "BEGIN ";
 			$sql .= "DELETE FROM PLC_PRIORIDAD_TIENDA WHERE (COD_TEMPORADA = $cod_temporada) AND (DEP_DEPTO = '$dep_depto'); ";
@@ -80,20 +74,45 @@
 		
 		public static function detalleContenedor($nro_embarque, $nro_contenedor, $login) {
 			$sql = "BEGIN PLC_PKG_DISTRIBUCION.PRC_DETALLE_CONTENEDOR($nro_embarque, '$nro_contenedor', '$login', :data); END;";
-			$data = \database::getInstancia()->getConsultaSP($sql, 1);
-			return $data;
+			return \database::getInstancia()->getConsultaSP($sql, 1);
 		}
 		
 		public static function detalleContenedoresSucursales($cod_temporada, $dep_depto, $id_color3, $nro_embarque, $nro_contenedor, $cod_padre, $login) {
 			$sql = "BEGIN PLC_PKG_DISTRIBUCION.PRC_SUCURSALES_CONTENEDOR($cod_temporada, '$dep_depto', $id_color3, $nro_embarque, '$nro_contenedor', '$cod_padre', '$login', :data); END;";
-			$data = \database::getInstancia()->getConsultaSP($sql, 1);
-			return $data;
+			return \database::getInstancia()->getConsultaSP($sql, 1);
 		}
 		
 		public static function guardar_distribucion_tienda($nro_embarque, $nro_contenedor, $sucursales) {
+			//$sql .= "DELETE FROM PLC_DISTRIBUCION WHERE (NRO_EMBARQUE = $nro_embarque) AND (NRO_CONTENEDOR = '$nro_contenedor'); ";
+			$delete = [];
+			foreach ($sucursales as $sucursal) {
+				$cod_temporada = $sucursal["codTemporada"];
+				$dep_depto = $sucursal["depDepto"];
+				$id_color3 = $sucursal["idColor3"];
+				$nro_embarque = $sucursal["nroEmbarque"];
+				$nro_contenedor = $sucursal["nroContenedor"];
+				$delete[] = array(
+					"codTemporada" => $cod_temporada,
+					"depDepto" => $dep_depto,
+					"idColor3" => $id_color3,
+					"nroEmbarque" => $nro_embarque,
+					"nroContenedor" => $nro_contenedor
+				);
+			}
+			$delete = array_map("unserialize", array_unique(array_map("serialize", $delete)));
 			$sql = "BEGIN ";
-			$sql .= "DELETE FROM PLC_DISTRIBUCION WHERE (NRO_EMBARQUE = $nro_embarque) AND (NRO_CONTENEDOR = '$nro_contenedor'); ";
-			//$sql .= "UPDATE PLC_DETALLE_LPN SET COD_TDA = NULL WHERE (NRO_EMBARQUE = $nro_embarque) AND (NRO_CONTENEDOR = '$nro_contenedor'); ";
+			foreach ($delete as $item) {
+				$cod_temporada = $item["codTemporada"];
+				$dep_depto = $item["depDepto"];
+				$id_color3 = $item["idColor3"];
+				$nro_embarque = $item["nroEmbarque"];
+				$nro_contenedor = $item["nroContenedor"];
+				$sql .= "DELETE FROM PLC_DISTRIBUCION WHERE (COD_TEMPORADA = $cod_temporada) AND (DEP_DEPTO = '$dep_depto') AND (ID_COLOR3 = $id_color3) AND (NRO_EMBARQUE = $nro_embarque) AND (NRO_CONTENEDOR = '$nro_contenedor'); ";
+			}
+			$sql .= "END;";
+			//file_put_contents('../archivos/delete.sql', $sql);
+			\database::getInstancia()->getConsulta($sql);
+			$sql = "BEGIN ";
 			foreach ($sucursales as $sucursal) {
 				$cod_temporada = $sucursal["codTemporada"];
 				$dep_depto = $sucursal["depDepto"];
@@ -112,6 +131,7 @@
 				$sql .= "INSERT INTO PLC_DISTRIBUCION (COD_TEMPORADA, DEP_DEPTO, ID_COLOR3, NRO_EMBARQUE, NRO_CONTENEDOR, NRO_ESTILO, COD_TDA, CANTIDAD, FECHA_DEMORA) VALUES ($cod_temporada, '$dep_depto', $id_color3, $nro_embarque, '$nro_contenedor', '$nro_estilo', $cod_tda, $cantidad, $fecha_demora); ";
 			}
 			$sql .= "END;";
+			//file_put_contents('../archivos/insert.sql', $sql);
 			$data = \database::getInstancia()->getConsulta($sql);
 			return $data;
 		}
@@ -121,10 +141,10 @@
 			return \database::getInstancia()->getConsultaSP($sql, 1);
 		}
 		
-		public static function obtener_lpns_distribucion($cod_temporada, $dep_depto, $id_color3, $nro_embarque, $nro_contenedor, $nro_estilo) {
+		/*public static function obtener_lpns_distribucion($cod_temporada, $dep_depto, $id_color3, $nro_embarque, $nro_contenedor, $nro_estilo) {
 			$sql = "BEGIN PLC_PKG_DISTRIBUCION.PRC_OBTENER_LPNS_DISTRIB($cod_temporada, '$dep_depto', $id_color3, $nro_embarque, '$nro_contenedor', '$nro_estilo', :data); END;";
 			return \database::getInstancia()->getConsultaSP($sql, 1);
-		}
+		}*/
 		
 		public static function actualizar_lpns_distribucion($cod_temporada, $dep_depto, $id_color3, $nro_embarque, $nro_contenedor, $lpn_number, $cod_tda, $fecha_demora) {
 			if ($fecha_demora === null) {
