@@ -1,4 +1,4 @@
-<include href="{{ @temporada }}" />
+<include href="{{ @temporada }}"/>
 <!-- Lib DataTables -->
 <link rel="stylesheet" href="{{@BASE}}/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
 <link rel="stylesheet" href="{{@BASE}}/bower_components/bootstrap/dist/css/bootstrap.css">
@@ -10,19 +10,24 @@
     </h1>
     <ol class="breadcrumb">
 
-        <button id="guardar_permisos_usuarios" class="btn btn-app"  data-tooltip="tooltip" data-placement="top" title="Guardar Cambios">
-            <i class="fa fa-save"></i> Guardar Cambios </button>
+        <button id="guardar_permisos_usuarios" class="btn btn-app" data-tooltip="tooltip" data-placement="top"
+                title="Guardar Cambios">
+            <i class="fa fa-save"></i> Guardar Cambios
+        </button>
 
-        <button id="guardar_permisos_modulo_acciones" class="btn btn-app"  data-tooltip="tooltip" data-placement="top" title="Guardar Cambios">
-            <i class="fa fa-save"></i> Guardar Cambios </button>
+        <button id="guardar_permisos_modulo_acciones" class="btn btn-app" data-tooltip="tooltip" data-placement="top"
+                title="Guardar Cambios">
+            <i class="fa fa-save"></i> Guardar Cambios
+        </button>
 
-        <a href="inicio" class="btn btn-app regresar" data-toggle="tooltip" data-placement="top" title="Volver al MAIN.">
+        <a href="inicio" class="btn btn-app regresar" data-toggle="tooltip" data-placement="top"
+           title="Volver al MAIN.">
             <i class="fa fa-sign-out"> </i>
         </a>
 
     </ol>
 
-    <check if="{{ isset(@mensaje) }}">   
+    <check if="{{ isset(@mensaje) }}">
         <div class="box-body">
             <ul class="todo-list ui-sortable">
 
@@ -31,9 +36,10 @@
                         <i class="fa fa-ellipsis-v"></i>
                         <i class="fa fa-ellipsis-v"></i>
                     </span>
-                    <small class="label label-{{@mensaje.icon}}"><i class="fa fa-clock-o"></i> {{@mensaje.header}}</small>
+                    <small class="label label-{{@mensaje.icon}}"><i class="fa fa-clock-o"></i> {{@mensaje.header}}
+                    </small>
                     <span class="text">{{@mensaje.message}}</span>
-
+                </li>
             </ul>
 
         </div>
@@ -51,15 +57,16 @@
                     <!--se genera la primera tabla (tipos de usuarios) que contiene los tipos de usuarios y sus respectivos usuatrios -->
                     <div class="col-md-4">
                         <div class="table-responsive">
-                            <table id="tabla_tipo_usuario" class="table table-bordered table-striped tabla_smaller tabla_tipo_usuario">
+                            <table id="tabla_tipo_usuario"
+                                   class="table table-bordered table-striped tabla_smaller tabla_tipo_usuario">
                                 <thead>
-                                     <tr>
-                                        <th>Tipo de usuario</th>
-                                     </tr>
-                                 </thead>
+                                <tr>
+                                    <th>Tipo de usuario</th>
+                                </tr>
+                                </thead>
 
-                                <tbody>
-                                </tbody>
+                                <tbody></tbody>
+
                             </table>
                         </div>
                     </div>
@@ -67,16 +74,18 @@
                     <!--se genera la segunda tabla (tabla depto permisos) que contiene TODOS los departamentos y los permisos asosiadosal usuario -->
                     <div class="col-md-8">
                         <div class="table-responsive" style="display: none" id="div_tabla_depto_permiso">
-                            <table id="tabla_depto_permiso" class="table table-bordered table-striped tabla_smaller tabla_depto_permiso"  name="tabla_depto_permiso">
+                            <table id="tabla_depto_permiso"
+                                   class="table table-bordered table-striped tabla_smaller tabla_depto_permiso"
+                                   name="tabla_depto_permiso">
 
                                 <thead>
-                                    <tr>
-                                        <th>Division</th>
-                                        <th>Cod Depto</th>
-                                        <th>Departamento</th>
-                                        <th>Estado</th>
-                                        <th style="display: none;"></th>
-                                    </tr>
+                                <tr>
+                                    <th>Division</th>
+                                    <th>Cod Depto</th>
+                                    <th>Departamento</th>
+                                    <th>Estado</th>
+                                    <th style="display: none;"></th>
+                                </tr>
                                 </thead>
 
                                 <tbody>
@@ -87,7 +96,9 @@
                         </div>
 
                         <div class="table-responsive" style="display: none" id="div_tabla_modulo_acceso">
-                            <table id="tabla_modulo_acceso" class="table table-bordered table-striped tabla_smaller tabla_modulo_acceso" name="tabla_modulo_acceso">
+                            <table id="tabla_modulo_acceso"
+                                   class="table table-bordered table-striped tabla_smaller tabla_modulo_acceso"
+                                   name="tabla_modulo_acceso">
 
                                 <thead>
                                 <tr>
@@ -97,13 +108,58 @@
                                 </tr>
                                 </thead>
 
-                                <tbody>
-
-                                </tbody>
+                                <tbody></tbody>
 
                             </table>
                         </div>
+
                     </div>
+
+                    <!-- POPUP de espera de guardado de información -->
+                    <div id="popup_guarda_permisos" class="modal fade" role="alert" data-keyboard="false"
+                         data-backdrop="static">
+                        <div class="modal-dialog modal-sm">
+                            <div class="modal-content borde_especial">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Guardando...</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class='row'>
+
+                                        <div class='col-md-12'>
+                                            <div class="loader" id="loader_popup_guarda_permisos"
+                                                 style="width: 90px;height: 90px;margin: 0 auto;"></div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- POPUP de carga de información -->
+                    <div id="popup_carga_permisos" class="modal fade" role="alert" data-keyboard="false"
+                         data-backdrop="static">
+                        <div class="modal-dialog modal-sm">
+                            <div class="modal-content borde_especial">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Cargando...</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class='row'>
+
+                                        <div class='col-md-12'>
+                                            <div class="loader" id="loader_popup_carga_permisos"
+                                                 style="width: 90px;height: 90px;margin: 0 auto;"></div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
                 </div> <!--fin div box body -->
             </div> <!-- fin div box box-primary -->
         </div> <!--fin div col-md-12 -->
