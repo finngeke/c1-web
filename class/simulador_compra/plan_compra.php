@@ -5376,6 +5376,7 @@ return $insert;
                   WHERE COD_TEMPORADA = ".$tempo."
                   and dep_depto IN (".$depto.")
                   ORDER BY DEP_DEPTO,CODIGO_MARCA asc";
+
         $data = \database::getInstancia()->getFilas($sql);
 
         foreach ($data as $va1){
@@ -5480,6 +5481,7 @@ return $insert;
                 ,"VENTG"=> $va1[98]
                 ,"VENTH"=> $va1[99]
                 ,"VENTI"=> $va1[100]
+                ,"COD_OPCION"=> $va1[101]
                 )
             );
         }
@@ -5580,5 +5582,6 @@ return $insert;
         }
         return $array1;
     }
+
 #endregion
 }
