@@ -2162,7 +2162,7 @@ function matchOC(event) {
                         }).done(function (data) {
 
                             // Define Tiempo 1 = 1000 (4 segundos, por si se demora en cargar la tabla anterior)
-                            var delay = 4000;
+                            var delay = 5000;
                             setTimeout(function () {
 
                                 // Como el contador no me toma lo que hay dentro del foreach, cuento las filas que se cargaron en la tabla
@@ -2210,7 +2210,7 @@ function matchOC(event) {
                                         });
                                     }).done(function (data) {
 
-                                        var delay = 4000;
+                                        var delay = 5000;
                                         setTimeout(function () {
 
                                             flag_carga_tabla_plan = $('#match_tabla_plan tbody tr').length;
@@ -2256,7 +2256,7 @@ function matchOC(event) {
 
 
                                                         // Define Tiempo 1 = 1000 (Para cuando no se carga el CBX de Línea, revisar si es por tiempo)
-                                                        var delay = 4000;
+                                                        var delay = 7000;
                                                         setTimeout(function () {
 
                                                             var flag_tabla_plan = 0;
@@ -2321,7 +2321,7 @@ function matchOC(event) {
 
 
                                                         // Define Tiempo 1 = 1000
-                                                        var delay_colorea = 9000;
+                                                        var delay_colorea = 10000;
                                                         setTimeout(function () {
 
                                                             // Este paso estaría ok para el modal
@@ -2385,7 +2385,7 @@ function matchOC(event) {
 
 
                                                         // FIN DEL MODAL DE VALIDACIONES
-                                                        var delay = 8000;
+                                                        var delay = 10000;
                                                         setTimeout(function () {
                                                             // No desplegar el popup hasta pasar por algunas validaciones previas
                                                             $('#match_oc').modal('show');
@@ -2792,7 +2792,7 @@ function verificaFormatoArchivo(sender) {
 }
 
 // Carga Assortment
-$('#form_import_bmt').submit(function(event) {
+$('#form_import_bmt').submit(function (event) {
 
     // Evitar que se envie automáticamente el form
     event.preventDefault();
@@ -2805,275 +2805,279 @@ $('#form_import_bmt').submit(function(event) {
     // Verificar que se está cargando un archivo
     var llega_archivo = $('#user_file').val();
     var tipo_archivo = $('#tipos_import').val();
-    if(llega_archivo.length > 0){
-/*Assortments*/ if (tipo_archivo == 1) {
-                    /*exporto Archivo excel a la carpeta del Assorments  ControlCrea/SubirAssorment*/
-                    $('#seguimiento').html(" Extrayendo Archivo...");
-                    var form = event.target;
-                    var data = new FormData(form);
-                    $.ajax({
-                        url: form.action,
-                        method: form.method,
-                        processData: false,
-                        contentType: false,
-                        data: data,
-                        processData: false,
-                        success: function (data_sube_archivo) {
-                            /*Valida si el archivo se cargo*/
-                            if (data_sube_archivo == 1) {
-                                $('#user_file').val('');
-                                $('.loading').fadeIn();
-                                //$('.carga_bmt').remove();
-                                $('.carga_bmt').hide();
+    if (llega_archivo.length > 0) {
+        /*Assortments*/
+        if (tipo_archivo == 1) {
+            /*exporto Archivo excel a la carpeta del Assorments  ControlCrea/SubirAssorment*/
+            $('#seguimiento').html(" Extrayendo Archivo...");
+            var form = event.target;
+            var data = new FormData(form);
+            $.ajax({
+                url: form.action,
+                method: form.method,
+                processData: false,
+                contentType: false,
+                data: data,
+                processData: false,
+                success: function (data_sube_archivo) {
+                    /*Valida si el archivo se cargo*/
+                    if (data_sube_archivo == 1) {
+                        $('#user_file').val('');
+                        $('.loading').fadeIn();
+                        //$('.carga_bmt').remove();
+                        $('.carga_bmt').hide();
 
-                                /*LLamo a las validadciones del archivo*/
-                                $('#seguimiento').html(" Validando Datos...");
-                                var url_importa_assortment = 'importar_archivo/ImportarAssormentValidaciones';
-                                /*Validaciones*/
-                                $.getJSON(url_importa_assortment, function (data_importar) {
-                                    if (data_importar[0][0] == "false") {
-                                        $('.loading').hide();
-                                        $('.pull-left').show();
+                        /*LLamo a las validadciones del archivo*/
+                        $('#seguimiento').html(" Validando Datos...");
+                        var url_importa_assortment = 'importar_archivo/ImportarAssormentValidaciones';
+                        /*Validaciones*/
+                        $.getJSON(url_importa_assortment, function (data_importar) {
+                            if (data_importar[0][0] == "false") {
+                                $('.loading').hide();
+                                $('.pull-left').show();
 
-                                        $('.carga_bmt').show();
-                                        $('#mensaje_error_pop').show();
-                                        $('#_errorImportar').html(data_importar[0][1]);
-                                    } else {
-                                        var insert_historial = 'importar_archivo/ImportarAssormentdelrows';
-                                        $.getJSON(insert_historial, function (data_insert) {
-                                            var columnas = data_insert[0];
-                                            var key = 0;
-                                            var key2 = 0;
-                                            var count = data_insert.length - 1; // para que no pase por la rows de la cabecera
-                                            $('#seguimiento').html(" Insertando Historial Filas: 0/" + count);
-                                            /*Insert Historial*/
-                                            $.each(data_insert, function (i, o) {
-                                                key2++;
-                                                if (key2 != 1) {
-                                                    key++;
-                                                    var historial = 'importar_archivo_3/ImportarAssormentInsHistorial';
-                                                    $.ajax({
-                                                        url: historial,
-                                                        type: 'POST',
-                                                        data: jQuery.param({_rows: o, _columnas: columnas, _delete: key}),
-                                                        success: function (data2) {
-                                                            var _result = data2.split(",");
-                                                            if (_result[0] == "false") {
-                                                                $('.loading').hide();
-                                                                $('.pull-left').show();
-                                                                $('.carga_bmt').show();
-                                                                $('#mensaje_error_pop').show();
-                                                                $('#_errorImportar').html(_result[1]);
-                                                                return false;
-                                                            } else {
-                                                                var _span1 = $('#count').html();
-                                                                var _int1 = _result[1];
-                                                                var _total1 = Number(_span1) + Number(_int1);
-                                                                $('#seguimiento').html(" Insertando Historial Filas: " + _total1 + "/" + count);
-                                                                $('#count').html(_total1);
-                                                                if (_total1 == count){
-                                                                    $('#seguimiento').html("  Separación de filas por ventana.");
-                                                                    var _data = 'importar_archivo/ImpAssormAbrirDataVent';
-                                                                    $.getJSON(_data, function (_Rowss) {
-                                                                        if (_Rowss == 0) {
-                                                                            $('.loading').hide();
-                                                                            $('.pull-left').show();
-                                                                            $('.carga_bmt').show();
-                                                                            $('#mensaje_error_pop').show();
-                                                                            $('#_errorImportar').html("Error en separador de ventana.");
-                                                                            return false;
-                                                                        } else {
-                                                                            $('#seguimiento').html("  Calculando Curvado y Costos.");
-                                                                            var calculos = 'importar_archivo/ImpAssormCalculos';
-                                                                            $.getJSON(calculos, function (_Rowss) {
+                                $('.carga_bmt').show();
+                                $('#mensaje_error_pop').show();
+                                $('#_errorImportar').html(data_importar[0][1]);
+                            } else {
+                                var insert_historial = 'importar_archivo/ImportarAssormentdelrows';
+                                $.getJSON(insert_historial, function (data_insert) {
+                                    var columnas = data_insert[0];
+                                    var key = 0;
+                                    var key2 = 0;
+                                    var count = data_insert.length - 1; // para que no pase por la rows de la cabecera
+                                    $('#seguimiento').html(" Insertando Historial Filas: 0/" + count);
+                                    /*Insert Historial*/
+                                    $.each(data_insert, function (i, o) {
+                                        key2++;
+                                        if (key2 != 1) {
+                                            key++;
+                                            var historial = 'importar_archivo_3/ImportarAssormentInsHistorial';
+                                            $.ajax({
+                                                url: historial,
+                                                type: 'POST',
+                                                data: jQuery.param({_rows: o, _columnas: columnas, _delete: key}),
+                                                success: function (data2) {
+                                                    var _result = data2.split(",");
+                                                    if (_result[0] == "false") {
+                                                        $('.loading').hide();
+                                                        $('.pull-left').show();
+                                                        $('.carga_bmt').show();
+                                                        $('#mensaje_error_pop').show();
+                                                        $('#_errorImportar').html(_result[1]);
+                                                        return false;
+                                                    } else {
+                                                        var _span1 = $('#count').html();
+                                                        var _int1 = _result[1];
+                                                        var _total1 = Number(_span1) + Number(_int1);
+                                                        $('#seguimiento').html(" Insertando Historial Filas: " + _total1 + "/" + count);
+                                                        $('#count').html(_total1);
+                                                        if (_total1 == count) {
+                                                            $('#seguimiento').html("  Separación de filas por ventana.");
+                                                            var _data = 'importar_archivo/ImpAssormAbrirDataVent';
+                                                            $.getJSON(_data, function (_Rowss) {
+                                                                if (_Rowss == 0) {
+                                                                    $('.loading').hide();
+                                                                    $('.pull-left').show();
+                                                                    $('.carga_bmt').show();
+                                                                    $('#mensaje_error_pop').show();
+                                                                    $('#_errorImportar').html("Error en separador de ventana.");
+                                                                    return false;
+                                                                } else {
+                                                                    $('#seguimiento').html("  Calculando Curvado y Costos.");
+                                                                    var calculos = 'importar_archivo/ImpAssormCalculos';
+                                                                    $.getJSON(calculos, function (_Rowss) {
 
 
-                                                                                var columnas2 = _Rowss[0];
-                                                                                var key3 = 0;
-                                                                                var key4 = 0;
-                                                                                var count2 = _Rowss.length - 1;
-                                                                                $('#count').html(0);
-                                                                                /*Insert C1 Assorment*/
-                                                                                $.each(_Rowss, function (i, o) {
-                                                                                    key3++;
-                                                                                    if (key3 != 1) {
-                                                                                        key4++;
-                                                                                        var _Insert = 'importar_archivo_3/InsertarAssormentC1';
-                                                                                        $('#seguimiento').html(" Insertando Plan de Compra Filas: 0/" + count2);
-                                                                                        $.ajax({
-                                                                                            url: _Insert,
-                                                                                            type: 'POST',
-                                                                                            data: jQuery.param({
-                                                                                                _rows: o,
-                                                                                                _columnas: columnas2,
-                                                                                                _delete: key4
-                                                                                            }),
-                                                                                            success: function (data3) {
-                                                                                                var _result = data3.split(",");
-                                                                                                if (_result[0] == "false") {
-                                                                                                    $('.loading').hide();
-                                                                                                    $('.pull-left').show();
-                                                                                                    $('.carga_bmt').show();
-                                                                                                    $('#mensaje_error_pop').show();
-                                                                                                    $('#_errorImportar').html(_result[1]);
-                                                                                                    return false;
-                                                                                                } else {
-                                                                                                    var _span = $('#count').html();
-                                                                                                    var _int = _result[1];
-                                                                                                    var _total = Number(_span) + Number(_int);
-                                                                                                    $('#seguimiento').html(" Insertando Plan de Compra Filas: " + _total + "/" + count2);
-                                                                                                    $('#count').html(_total);
-                                                                                                    /*Salir*/
-                                                                                                    if (_total == count2) {
-                                                                                                        window.location = "importar_archivo2";
-                                                                                                    }
-                                                                                                }
+                                                                        var columnas2 = _Rowss[0];
+                                                                        var key3 = 0;
+                                                                        var key4 = 0;
+                                                                        var count2 = _Rowss.length - 1;
+                                                                        $('#count').html(0);
+                                                                        /*Insert C1 Assorment*/
+                                                                        $.each(_Rowss, function (i, o) {
+                                                                            key3++;
+                                                                            if (key3 != 1) {
+                                                                                key4++;
+                                                                                var _Insert = 'importar_archivo_3/InsertarAssormentC1';
+                                                                                $('#seguimiento').html(" Insertando Plan de Compra Filas: 0/" + count2);
+                                                                                $.ajax({
+                                                                                    url: _Insert,
+                                                                                    type: 'POST',
+                                                                                    data: jQuery.param({
+                                                                                        _rows: o,
+                                                                                        _columnas: columnas2,
+                                                                                        _delete: key4
+                                                                                    }),
+                                                                                    success: function (data3) {
+                                                                                        var _result = data3.split(",");
+                                                                                        if (_result[0] == "false") {
+                                                                                            $('.loading').hide();
+                                                                                            $('.pull-left').show();
+                                                                                            $('.carga_bmt').show();
+                                                                                            $('#mensaje_error_pop').show();
+                                                                                            $('#_errorImportar').html(_result[1]);
+                                                                                            return false;
+                                                                                        } else {
+                                                                                            var _span = $('#count').html();
+                                                                                            var _int = _result[1];
+                                                                                            var _total = Number(_span) + Number(_int);
+                                                                                            $('#seguimiento').html(" Insertando Plan de Compra Filas: " + _total + "/" + count2);
+                                                                                            $('#count').html(_total);
+                                                                                            /*Salir*/
+                                                                                            if (_total == count2) {
+                                                                                                window.location = "importar_archivo2";
                                                                                             }
-                                                                                        });
+                                                                                        }
                                                                                     }
                                                                                 });
-                                                                            });
-                                                                        }
+                                                                            }
+                                                                        });
                                                                     });
                                                                 }
-                                                            }
+                                                            });
                                                         }
-                                                    });
+                                                    }
                                                 }
                                             });
-                                        });
-                                    }
+                                        }
+                                    });
                                 });
                             }
-                        }
-                    });
-          }
-         /*BMT*/else {
-                    /*exporto Archivo excel a la carpeta del Assorments  ControlCrea/SubirAssorment*/
-                    $('#seguimiento').html(" Extrayendo Archivo...");
-                    var form = event.target;
-                    var data = new FormData(form);
-                    $.ajax({
-                        url: form.action,
-                        method: form.method,
-                        processData: false,
-                        contentType: false,
-                        data: data,
-                        processData: false,
-                        success: function (data_sube_archivo) {
-                            /*Valida si el archivo se cargo*/
-                            if (data_sube_archivo == 1) {
-                                $('#user_file').val('');
-                                $('.loading').fadeIn();
-                                //$('.carga_bmt').remove();
-                                $('.carga_bmt').hide();
-                                /*LLamo a las validadciones del archivo*/
-                                $('#seguimiento').html(" Validando Datos BMT...");
-                                var url_importa_bmt = 'importar_archivo/ImportarBmtValidaciones';
-                                /*Validaciones*/
-                                $.getJSON(url_importa_bmt, function (data_importar) {
-                                    if (data_importar[0][0] == "false") {
-                                        $('.loading').hide();
-                                        $('.pull-left').show();
+                        });
+                    }
+                }
+            });
+        }
+        /*BMT*/ else {
+            /*exporto Archivo excel a la carpeta del Assorments  ControlCrea/SubirAssorment*/
+            $('#seguimiento').html(" Extrayendo Archivo...");
+            var form = event.target;
+            var data = new FormData(form);
+            $.ajax({
+                url: form.action,
+                method: form.method,
+                processData: false,
+                contentType: false,
+                data: data,
+                processData: false,
+                success: function (data_sube_archivo) {
+                    /*Valida si el archivo se cargo*/
+                    if (data_sube_archivo == 1) {
+                        $('#user_file').val('');
+                        $('.loading').fadeIn();
+                        //$('.carga_bmt').remove();
+                        $('.carga_bmt').hide();
+                        /*LLamo a las validadciones del archivo*/
+                        $('#seguimiento').html(" Validando Datos BMT...");
+                        var url_importa_bmt = 'importar_archivo/ImportarBmtValidaciones';
+                        /*Validaciones*/
+                        $.getJSON(url_importa_bmt, function (data_importar) {
+                            if (data_importar[0][0] == "false") {
+                                $('.loading').hide();
+                                $('.pull-left').show();
 
-                                        $('.carga_bmt').show();
-                                        $('#mensaje_error_pop').show();
-                                        $('#_errorImportar').html(data_importar[0][1]);
-                                    }else{
-                                        $('#seguimiento').html(" Extracción de datos...");
-                                        var insert_historialbmt = 'importar_archivo/ImportarBmtdelrows';
-                                        $.getJSON(insert_historialbmt, function (data_insert) {
-                                            var columnas = data_insert[0];
-                                            var key = 0;
-                                            var key2 = 0;
-                                            var count = data_insert.length - 1; // para que no pase por la rows de la cabecera
-                                            $('#seguimiento').html(" Insertando Historial BMT Filas: 0/" + count);
-                                            /*Insert Historial*/
-                                            $.each(data_insert, function (i, o) {
-                                                key2++;
-                                                if (key2 != 1) {
-                                                    key++;
-                                                    var historial = 'importar_archivo_3/ImportarBmtInsHistorial';
-                                                    $.ajax({
-                                                        url: historial,
-                                                        type: 'POST',
-                                                        data: jQuery.param({_rows: o, _columnas: columnas, _delete: key}),
-                                                        success: function (data2) {
-                                                            var _result = data2.split(",");
-                                                            if (_result[0] == "false") {
-                                                                $('.loading').hide();
-                                                                $('.pull-left').show();
-                                                                $('.carga_bmt').show();
-                                                                $('#mensaje_error_pop').show();
-                                                                $('#_errorImportar').html(_result[1]);
-                                                                return false;
-                                                            }else{
-                                                                var _span1 = $('#count').html();
-                                                                var _int1 = _result[1];
-                                                                var _total1 = Number(_span1) + Number(_int1);
-                                                                $('#seguimiento').html(" Insertando Historial BMT Filas: " + _total1 + "/" + count);
-                                                                $('#count').html(_total1);
-                                                                if (_total1 == count){
-                                                                   // $('#seguimiento').html("  Calculando Debut-Reorder.");
-                                                                      $('#seguimiento').html("  Extrayendo de datos Plan.");
-                                                                    var _data = 'importar_archivo/ImpBMTCalculoDebut_reorder';
-                                                                    $.getJSON(_data, function (_Rowss) {
-                                                                        if (_Rowss == 0) {
+                                $('.carga_bmt').show();
+                                $('#mensaje_error_pop').show();
+                                $('#_errorImportar').html(data_importar[0][1]);
+                            } else {
+                                $('#seguimiento').html(" Extracción de datos...");
+                                var insert_historialbmt = 'importar_archivo/ImportarBmtdelrows';
+                                $.getJSON(insert_historialbmt, function (data_insert) {
+                                    var columnas = data_insert[0];
+                                    var key = 0;
+                                    var key2 = 0;
+                                    var count = data_insert.length - 1; // para que no pase por la rows de la cabecera
+                                    $('#seguimiento').html(" Insertando Historial BMT Filas: 0/" + count);
+                                    /*Insert Historial*/
+                                    $.each(data_insert, function (i, o) {
+                                        key2++;
+                                        if (key2 != 1) {
+                                            key++;
+                                            var historial = 'importar_archivo_3/ImportarBmtInsHistorial';
+                                            $.ajax({
+                                                url: historial,
+                                                type: 'POST',
+                                                data: jQuery.param({_rows: o, _columnas: columnas, _delete: key}),
+                                                success: function (data2) {
+                                                    var _result = data2.split(",");
+                                                    if (_result[0] == "false") {
+                                                        $('.loading').hide();
+                                                        $('.pull-left').show();
+                                                        $('.carga_bmt').show();
+                                                        $('#mensaje_error_pop').show();
+                                                        $('#_errorImportar').html(_result[1]);
+                                                        return false;
+                                                    } else {
+                                                        var _span1 = $('#count').html();
+                                                        var _int1 = _result[1];
+                                                        var _total1 = Number(_span1) + Number(_int1);
+                                                        $('#seguimiento').html(" Insertando Historial BMT Filas: " + _total1 + "/" + count);
+                                                        $('#count').html(_total1);
+                                                        if (_total1 == count) {
+                                                            // $('#seguimiento').html("  Calculando Debut-Reorder.");
+                                                            $('#seguimiento').html("  Extrayendo de datos Plan.");
+                                                            var _data = 'importar_archivo/ImpBMTCalculoDebut_reorder';
+                                                            $.getJSON(_data, function (_Rowss) {
+                                                                if (_Rowss == 0) {
+                                                                    $('.loading').hide();
+                                                                    $('.pull-left').show();
+                                                                    $('.carga_bmt').show();
+                                                                    $('#mensaje_error_pop').show();
+                                                                    $('#_errorImportar').html("Error Debut-Reorder.");
+                                                                    return false;
+                                                                } else {
+                                                                    $('#seguimiento').html("  Calculando Curvado y Costos.");
+                                                                    var _data2 = 'importar_archivo/ImpBMTCalculosCurvado';
+                                                                    $.getJSON(_data2, function (_Rowss2) {
+                                                                        if (_Rowss2 == 0) {
                                                                             $('.loading').hide();
                                                                             $('.pull-left').show();
                                                                             $('.carga_bmt').show();
                                                                             $('#mensaje_error_pop').show();
-                                                                            $('#_errorImportar').html("Error Debut-Reorder.");
+                                                                            $('#_errorImportar').html("Error Costos y Curvado.");
                                                                             return false;
-                                                                        }else{
-                                                                            $('#seguimiento').html("  Calculando Curvado y Costos.");
-                                                                            var _data2 = 'importar_archivo/ImpBMTCalculosCurvado';
-                                                                            $.getJSON(_data2, function (_Rowss2) {
-                                                                                if (_Rowss2 == 0) {
-                                                                                    $('.loading').hide();
-                                                                                    $('.pull-left').show();
-                                                                                    $('.carga_bmt').show();
-                                                                                    $('#mensaje_error_pop').show();
-                                                                                    $('#_errorImportar').html("Error Costos y Curvado.");
-                                                                                    return false;
-                                                                                }else{
-                                                                                    var columnasupdate = _Rowss2[0];
-                                                                                    var countupdate = _Rowss2.length - 1;
-                                                                                    $('#seguimiento').html(" Actualizando Plan de compra Filas: 0/" + countupdate);
-                                                                                    var key1 = 0;
-                                                                                    var key3 = 0;
-                                                                                    $('#count').html(0);
-                                                                                    /*ACTUALIZANDO*/
-                                                                                    $.each(_Rowss2, function (i, o) {
-                                                                                        key3++;
-                                                                                        if (key3 != 1) {
-                                                                                            key1++;
-                                                                                            var actualizando = 'importar_archivo_3/ActualizBmtC1';
-                                                                                            $.ajax({url: actualizando,
-                                                                                                    type: 'POST',
-                                                                                                    data: jQuery.param({_rows: o, _columnas: columnasupdate, _delete: key1}),
-                                                                                                    success: function (data3) {
-                                                                                                        var _result = data3.split(",");
-                                                                                                        if (_result[0] == "false") {
-                                                                                                            $('.loading').hide();
-                                                                                                            $('.pull-left').show();
-                                                                                                            $('.carga_bmt').show();
-                                                                                                            $('#mensaje_error_pop').show();
-                                                                                                            $('#_errorImportar').html(_result[1]);
-                                                                                                            return false;
-                                                                                                        }else {
-                                                                                                            var _span = $('#count').html();
-                                                                                                            var _int = _result[1];
-                                                                                                            var _total = Number(_span) + Number(_int);
-                                                                                                            $('#seguimiento').html(" Actualizando Plan de compra Filas: " + _total + "/" + countupdate);
-                                                                                                            $('#count').html(_total);
+                                                                        } else {
+                                                                            var columnasupdate = _Rowss2[0];
+                                                                            var countupdate = _Rowss2.length - 1;
+                                                                            $('#seguimiento').html(" Actualizando Plan de compra Filas: 0/" + countupdate);
+                                                                            var key1 = 0;
+                                                                            var key3 = 0;
+                                                                            $('#count').html(0);
+                                                                            /*ACTUALIZANDO*/
+                                                                            $.each(_Rowss2, function (i, o) {
+                                                                                key3++;
+                                                                                if (key3 != 1) {
+                                                                                    key1++;
+                                                                                    var actualizando = 'importar_archivo_3/ActualizBmtC1';
+                                                                                    $.ajax({
+                                                                                        url: actualizando,
+                                                                                        type: 'POST',
+                                                                                        data: jQuery.param({
+                                                                                            _rows: o,
+                                                                                            _columnas: columnasupdate,
+                                                                                            _delete: key1
+                                                                                        }),
+                                                                                        success: function (data3) {
+                                                                                            var _result = data3.split(",");
+                                                                                            if (_result[0] == "false") {
+                                                                                                $('.loading').hide();
+                                                                                                $('.pull-left').show();
+                                                                                                $('.carga_bmt').show();
+                                                                                                $('#mensaje_error_pop').show();
+                                                                                                $('#_errorImportar').html(_result[1]);
+                                                                                                return false;
+                                                                                            } else {
+                                                                                                var _span = $('#count').html();
+                                                                                                var _int = _result[1];
+                                                                                                var _total = Number(_span) + Number(_int);
+                                                                                                $('#seguimiento').html(" Actualizando Plan de compra Filas: " + _total + "/" + countupdate);
+                                                                                                $('#count').html(_total);
 
-                                                                                                            if (_total == countupdate) {
-                                                                                                                window.location = "importar_archivo3";
-                                                                                                            }
-                                                                                                        }
-                                                                                                    }
-                                                                                            });
+                                                                                                if (_total == countupdate) {
+                                                                                                    window.location = "importar_archivo3";
+                                                                                                }
+                                                                                            }
                                                                                         }
                                                                                     });
                                                                                 }
@@ -3081,19 +3085,21 @@ $('#form_import_bmt').submit(function(event) {
                                                                         }
                                                                     });
                                                                 }
-                                                            }
+                                                            });
                                                         }
-                                                    });
+                                                    }
                                                 }
                                             });
-                                        });
-                                    }
+                                        }
+                                    });
                                 });
                             }
-                        }
-                    });
-                 }
-    }else{
+                        });
+                    }
+                }
+            });
+        }
+    } else {
         alert("Debe ingresar un archivo.");
         return false;
     }
@@ -3798,6 +3804,7 @@ $("#btn_limpiar_deptos").on("click", function () {
     });
 });
 
+// Se utiliza para cargar de forma oculta la tabla de presupuesto
 function carga_tabla1_oculta() {
 
     $('#div_contenedor_tabla1').hide();
