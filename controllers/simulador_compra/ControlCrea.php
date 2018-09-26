@@ -652,9 +652,6 @@ public function ImportarAssormentValidaciones($f3){
     }
 
 
-
-
-
     //validacion de mstpack
     if ($_error == true) {
     $_ERROR2 = valida_archivo_bmt::val_mstpack($rows,$limite,$nom_columnas,$depto);
@@ -1012,7 +1009,7 @@ public function ImportarBmtValidaciones($f3){
 
     //Validaciones rows
     if ($_error == true) {
-        $_ERROR2 = valida_archivo_bmt::Val_campos_bmt($rows, $limite, $nom_columnas, $depto, $cod_tempo,$_SESSION['dtjerarquia']);
+        $_ERROR2 = valida_archivo_bmt::Val_campos_bmt($rows, $limite, $nom_columnas, $depto, $cod_tempo,$_SESSION['dtjerarquia'],$f3);
         if ($_ERROR2["Tipo"] == false) {
             $_array_error = [];
             array_push($_array_error, "false","Fila(s):".$_ERROR2["Error"]);
@@ -1144,7 +1141,7 @@ public function ImpBMTCalculosCurvado($f3){
 
     //$_error = valida_archivo_bmt::del_idcolor3_plan_compra($rows,$limite,$nom_columnas,$depto,$cod_tempo,$rows[1][$nom_columnas['PURCHASE GROUP']],$login);
     //if ($_error == true) {
-        $rows = plan_compra::ImpBMTCalculos($rows, $limite, $nom_columnas, $cod_tempo, $depto);
+        $rows = plan_compra::ImpBMTCalculos($rows, $limite, $nom_columnas, $cod_tempo, $depto,$f3);
     //}else{
         //$rows =[];
     //}

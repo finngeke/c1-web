@@ -1770,7 +1770,7 @@ class valida_archivo_bmt extends \parametros {
 
         return $rows;
     }
-    public static function Val_campos_bmt($rows,$limite,$nom_columnas,$depto,$temporada,$dtjerarquia){
+    public static function Val_campos_bmt($rows,$limite,$nom_columnas,$depto,$temporada,$dtjerarquia,$f3){
         $filarow = ""; $val = true;$_ErrorMsj = "";
         /*Validacion Id C1
         if ($val == true){ $tipoVal = 18;$_grup = "";$dtidcolor = [];
@@ -2049,6 +2049,149 @@ class valida_archivo_bmt extends \parametros {
             }
         }
 
+        /*Validacion Estilo de vida*/
+        if ($val == true) {$filarow = "";
+            $dt = plan_compra::list_estiloVida();
+            for($i = 1;$i <= $limite; $i++){
+                if ($rows[$i][$nom_columnas['LIFE STYLE']] <> null or $rows[$i][$nom_columnas['LIFE STYLE']] <> ""){
+                    $_ex = false;
+                    foreach ($dt as $val4){
+                        if( strtoupper($val4['DESCRIPCION']) == strtoupper($rows[$i][$nom_columnas['LIFE STYLE']])){
+                            $_ex = true;
+                            break;
+                        }
+                    }
+                    if ($_ex == false){
+                        $val = false;
+                        $filarow = $filarow . strval($rows[$i][$nom_columnas['ID_FILAS']]) . ",";
+                        $_ErrorMsj = ") -> El LIFE STYLE(s) no se encuentra(n) BD C1.";
+                    }
+                }
+            }
+        }
+
+        /*Validacion Ocacion de uso*/
+        if ($val == true) {$filarow = "";
+            $dt = plan_compra::list_ocacionuso();
+            for($i = 1;$i <= $limite; $i++){
+                if ($rows[$i][$nom_columnas['CHANCE OF USER']] <> null or $rows[$i][$nom_columnas['CHANCE OF USER']] <> ""){
+                    $_ex = false;
+                    foreach ($dt as $val4){
+                        if( strtoupper($val4['DESCRIPCION']) == strtoupper($rows[$i][$nom_columnas['CHANCE OF USER']])){
+                            $_ex = true;
+                            break;
+                        }
+                    }
+                    if ($_ex == false){
+                        $val = false;
+                        $filarow = $filarow . strval($rows[$i][$nom_columnas['ID_FILAS']]) . ",";
+                        $_ErrorMsj = ") -> El CHANCE OF USER no se encuentra(n) BD C1.";
+                    }
+                }
+            }
+        }
+
+        /*Validacion RNK*/
+        if ($val == true) {$filarow = "";
+            $dt = plan_compra::list_rnk($f3);
+            for($i = 1;$i <= $limite; $i++){
+                if ($rows[$i][$nom_columnas['RANKING OF SALE']] <> null or $rows[$i][$nom_columnas['RANKING OF SALE']] <> ""){
+                    $_ex = false;
+                    foreach ($dt as $val4){
+                        if( strtoupper($val4['DESCRIPCION']) == strtoupper($rows[$i][$nom_columnas['RANKING OF SALE']])){
+                            $_ex = true;
+                            break;
+                        }
+                    }
+                    if ($_ex == false){
+                        $val = false;
+                        $filarow = $filarow . strval($rows[$i][$nom_columnas['ID_FILAS']]) . ",";
+                        $_ErrorMsj = ") -> El RANKING OF SALE no se encuentra(n) BD C1.";
+                    }
+                }
+            }
+        }
+
+        /*Validacion Ciclo de vida*/
+        if ($val == true) {$filarow = "";
+            $dt = plan_compra::list_ciclo_vida();
+            for($i = 1;$i <= $limite; $i++){
+                if ($rows[$i][$nom_columnas['LIFE CICLE']] <> null or $rows[$i][$nom_columnas['LIFE CICLE']] <> ""){
+                    $_ex = false;
+                    foreach ($dt as $val4){
+                        if( strtoupper($val4['DESCRIPCION']) == strtoupper($rows[$i][$nom_columnas['LIFE CICLE']])){
+                            $_ex = true;
+                            break;
+                        }
+                    }
+                    if ($_ex == false){
+                        $val = false;
+                        $filarow = $filarow . strval($rows[$i][$nom_columnas['ID_FILAS']]) . ",";
+                        $_ErrorMsj = ") -> El LIFE CICLE no se encuentra(n) BD C1.";
+                    }
+                }
+            }
+        }
+
+        /*Validacion Tipo Producto*/
+        if ($val == true) {$filarow = "";
+            $dt = plan_compra::list_tipoProducto();
+            for($i = 1;$i <= $limite; $i++){
+                if ($rows[$i][$nom_columnas['TYPE OF PRODUCT']] <> null or $rows[$i][$nom_columnas['TYPE OF PRODUCT']] <> ""){
+                    $_ex = false;
+                    foreach ($dt as $val4){
+                        if( strtoupper($val4['NOM_TIPOPRODUC']) == strtoupper($rows[$i][$nom_columnas['TYPE OF PRODUCT']])){
+                            $_ex = true;
+                            break;
+                        }
+                    }
+                    if ($_ex == false){
+                        $val = false;
+                        $filarow = $filarow . strval($rows[$i][$nom_columnas['ID_FILAS']]) . ",";
+                        $_ErrorMsj = ") -> El TYPE OF PRODUCT no se encuentra(n) BD C1.";
+                    }
+                }
+            }
+        }
+
+        /*Validacion Tipo Producto regular no tiene que tener tipo exhibicion*/
+        if ($val == true) {$filarow = "";
+            for($i = 1;$i <= $limite; $i++){
+                if (strtoupper($rows[$i][$nom_columnas['TYPE OF PRODUCT']])=="REGULAR"){
+                    $_ex = true;
+                    if ($rows[$i][$nom_columnas['TYPE OF EXHIBITION']] <> null or $rows[$i][$nom_columnas['TYPE OF EXHIBITION']] <> ""){
+                        $_ex = false;
+                    }
+                    if ($_ex == false){
+                        $val = false;
+                        $filarow = $filarow . strval($rows[$i][$nom_columnas['ID_FILAS']]) . ",";
+                        $_ErrorMsj = ") -> Los tipos de Productos REGULARES no tiene tipo de Exhibición.";
+                    }
+                }
+            }
+        }
+
+        /*Validacion Tipo exhibicion*/
+        if ($val == true) {$filarow = "";
+            $dt = plan_compra::list_tipoexhibicion();
+            for($i = 1;$i <= $limite; $i++){
+                if ($rows[$i][$nom_columnas['TYPE OF EXHIBITION']] <> null or $rows[$i][$nom_columnas['TYPE OF EXHIBITION']] <> ""){
+                    $_ex = false;
+                    foreach ($dt as $val4){
+                        if( strtoupper($val4['NOM_EXHIBICION']) == strtoupper($rows[$i][$nom_columnas['TYPE OF EXHIBITION']])){
+                            $_ex = true;
+                            break;
+                        }
+                    }
+                    if ($_ex == false){
+                        $val = false;
+                        $filarow = $filarow . strval($rows[$i][$nom_columnas['ID_FILAS']]) . ",";
+                        $_ErrorMsj = ") -> El TYPE OF EXHIBITION no se encuentra(n) BD C1.";
+                    }
+                }
+            }
+        }
+
         /*Validacion Prepack*/
         if ($val == true) {$PREPACK = array("CURVADO","SOLIDO");$filarow = "";
           for($i = 1;$i <= $limite; $i++){$_existe = false;
@@ -2275,7 +2418,6 @@ class valida_archivo_bmt extends \parametros {
        return $_error;
 
     }
-
     public static function Distinct_Grupo_Compra($rows,$limite,$nom_columnas){
 
         $dtgrup = [];
@@ -2288,11 +2430,6 @@ class valida_archivo_bmt extends \parametros {
         $dtgrup = array_unique($dtgrup);
         return $dtgrup;
     }
-
-
-
-
-
 #endregion;
 
 }
