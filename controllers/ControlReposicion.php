@@ -375,9 +375,9 @@
 				
 				// Procesa el archivo de CITAS
 				$etapa = "generarArchivoCITA";
+				$data = \reposicion\embarque::generar_archivo_cita($nro_embarque, $id_archivo);
 				$id_archivo = $data[0][16];
 				$file_name = "IAS$id_archivo";
-				/*$data = \reposicion\embarque::generar_archivo_cita($nro_embarque, $id_archivo);
 				$cita = "";
 				$r = 0;
 				foreach ($data as $item) {
@@ -388,10 +388,10 @@
 					$cita .= implode('|', array_values($aux)) . "\n";
 					$r++;
 				}
-				file_put_contents("$local_path/$file_name", $cita);*/
+				file_put_contents("$local_path/$file_name", $cita);
 				$archivos[] = $file_name;
-				//$ctr[] = array("file_name" => $file_name, "registros" => $r);
-				//unset($cita);
+				$ctr[] = array("file_name" => $file_name, "registros" => $r);
+				unset($cita);
 				
 				// Procesa el archivo ASN_HDR
 				$etapa = "generarArchivoASN_HDR";
