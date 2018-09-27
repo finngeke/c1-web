@@ -373,7 +373,7 @@ public function guarda_pi($f3) {
         $archivo_proforma = $_POST['send_archivo_proforma'];
         $archivo_filas = $_POST['send_archivo_filas'];
 
-        $nombre_archivo = "PI-".$f3->get('SESSION.COD_TEMPORADA')."-".$f3->get('SESSION.COD_DEPTO')."-".$archivo_proforma.".xls";
+        $nombre_archivo = "PI_".$f3->get('SESSION.COD_TEMPORADA')."_".$f3->get('SESSION.COD_DEPTO')."_".$archivo_proforma.".xls";
 
         /*echo "<pre>";
         echo "<br>estado_c1:".$estado_c1;
