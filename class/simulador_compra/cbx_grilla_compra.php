@@ -9,11 +9,13 @@
 
 namespace simulador_compra;
 
-class cbx_grilla_compra extends \parametros {
+class cbx_grilla_compra extends \parametros
+{
 
 
     // Llenar la Tabla 2
-    public static function llenar_tabla2b($temporada, $depto) {
+    public static function llenar_tabla2b($temporada, $depto)
+    {
 
         $sql = "SELECT
                 C.ID_COLOR3,              -- id
@@ -277,7 +279,8 @@ class cbx_grilla_compra extends \parametros {
 
     }
 
-    public static function llenar_tabla2($temporada, $depto) {
+    public static function llenar_tabla2($temporada, $depto)
+    {
 
         $sql = "SELECT
                 C.ID_COLOR3,                  -- 0 id
@@ -381,14 +384,57 @@ class cbx_grilla_compra extends \parametros {
 
     }
 
-    public static function llenar_tabla_depto($temporada) {
+    public static function llenar_edita_grilla($temporada, $depto, $id_color3)
+    {
+
+        $sql = "SELECT
+                  C.GRUPO_COMPRA,               -- 0 grupo compra        
+                  C.NOM_MARCA MARCA,            -- 1 marca
+                  C.NOM_LINEA LINEA,            -- 2 linea
+                  C.NOM_SUBLINEA SUBLINEA,      -- 3 sublinea
+                  C.DES_ESTILO ESTILO,          -- 4 estilo
+                  C.SHORT_NAME,                 -- 5 estilo corto                
+                  C.NOM_VENTANA,                -- 6 ventana          
+                  C.NOM_COLOR COD_COLOR,        -- 7 color                
+                  C.UNIDADES CAN,               -- 8 Uni Final                
+                  C.COSTO_TARGET,               -- 9 Target                
+                  C.COSTO_FOB,                  -- 10 FOB           
+                  C.COSTO_INSP,                 -- 11 Insp
+                  C.COSTO_RFID,                 -- 12 RFID
+                  C.ALIAS_PROV,                 -- 13 Alias Proveedor
+                  
+                  -- Para EL cálculo
+                  C.ID_COLOR3,                  -- 14 id_color3
+                  C.MKUP,                       -- 15 mkup
+                  C.GM,                         -- 16 GM
+                  C.VIA,                        -- 17 NOM_VIA / VIA
+                  C.PAIS,                       -- 18 NOM_PAIS / PAIS
+                  C.VENTANA_LLEGADA,            -- 19 ventana llegada
+                  C.PRECIO_BLANCO               -- 20 Precio Blanco
+            FROM PLC_PLAN_COMPRA_COLOR_3 C
+            LEFT JOIN PLC_PLAN_COMPRA_OC O ON C.COD_TEMPORADA = O.COD_TEMPORADA
+            AND C.DEP_DEPTO = O.DEP_DEPTO AND C.ID_COLOR3 = O.ID_COLOR3
+            WHERE C.COD_TEMPORADA = $temporada AND C.DEP_DEPTO = '" . $depto . "'
+            AND C.ID_COLOR3 IN ($id_color3)
+            ORDER BY C.ID_COLOR3, C.COD_JER2,C.COD_SUBLIN,C.COD_ESTILO,NVL(COD_COLOR,0) ,C.VENTANA_LLEGADA,C.DEBUT_REODER
+            ";
+
+        $data = \database::getInstancia()->getFilas($sql);
+
+        return $data;
+
+    }
+
+    public static function llenar_tabla_depto($temporada)
+    {
 
         $sql = "begin PLC_PKG_DESARROLLO.PRC_LISTDEPTXTEMP(" . $temporada . ", :data); end;";
         $data = \database::getInstancia()->getConsultaSP($sql, 1);
         return $data;
     }
 
-    public static function llenar_tabla_oc($temporada) {
+    public static function llenar_tabla_oc($temporada)
+    {
 
         $sql = "begin PLC_PKG_DESARROLLO.PRC_LISTAR_ESTADOS(" . $temporada . ", :data); end;";
         $data = \database::getInstancia()->getConsultaSP($sql, 1);
@@ -398,7 +444,8 @@ class cbx_grilla_compra extends \parametros {
 
 
     // Parte 2 Tabla 1
-    public static function listar_consumo($temporada, $depto) {
+    public static function listar_consumo($temporada, $depto)
+    {
 
         $sql = "SELECT PERIODO VENTANA
                       ,SUM(COSTO) COSTO
@@ -422,7 +469,8 @@ class cbx_grilla_compra extends \parametros {
     }
 
     // Actualizo Proforma y Estado en plc_plan_compra_color_3 (Se envió Archivo + Proforma)
-    public static function actualizaProformaEstado($temporada, $depto, $proforma, $id_color, $login) {
+    public static function actualizaProformaEstado($temporada, $depto, $proforma, $id_color, $login)
+    {
 
         $sql = "UPDATE plc_plan_compra_color_3
                 SET proforma = '" . $proforma . "',
@@ -451,7 +499,8 @@ class cbx_grilla_compra extends \parametros {
     }
 
     // Guardar Historial en plc_plan_compra_historica (Se envió Archivo + Proforma)
-    public static function guardaHistorial($temporada, $depto, $ids_insertar, $login) {
+    public static function guardaHistorial($temporada, $depto, $ids_insertar, $login)
+    {
 
         $sql = "INSERT INTO plc_plan_compra_historica (temp,dpto,linea,sublinea,marca,estilo,ventana,color,user_login,user_nom,fecha,hora,pi,oc,estado,id_color3,nom_linea,nom_sublinea,nom_marca,nom_ventana,nom_color)
                 SELECT
@@ -501,7 +550,8 @@ class cbx_grilla_compra extends \parametros {
     }
 
     // Guardar en OC plc_plan_compra_oc (Se envió Archivo + Proforma)
-    public static function guardaOc($temporada, $depto, $id_color, $archivo_proforma, $login) {
+    public static function guardaOc($temporada, $depto, $id_color, $archivo_proforma, $login)
+    {
 
         $sql = "INSERT INTO plc_plan_compra_oc (cod_temporada,dep_depto,niv_jer1,cod_jer1,niv_jer2,cod_jer2,item,cod_sublin,cod_estilo,des_estilo,vent_emb,proforma,archivo,id_color3, estado_oc,estilo_pmm)
                 SELECT
@@ -545,7 +595,8 @@ class cbx_grilla_compra extends \parametros {
     }
 
     // Guardar Solo Proforma
-    public static function guarda_solo_proforma($temporada, $depto, $login, $proforma, $id_insertar) {
+    public static function guarda_solo_proforma($temporada, $depto, $login, $proforma, $id_insertar)
+    {
 
         $sql = "UPDATE plc_plan_compra_color_3
                 SET proforma = '" . $proforma . "'
@@ -571,7 +622,8 @@ class cbx_grilla_compra extends \parametros {
     }
 
     // Actualiza Historial
-    public static function actualiza_historial($temporada, $depto, $login, $proforma, $id_insertar) {
+    public static function actualiza_historial($temporada, $depto, $login, $proforma, $id_insertar)
+    {
 
         $sql = "UPDATE plc_plan_compra_historica
                 SET PI = '" . $proforma . "'
@@ -597,7 +649,8 @@ class cbx_grilla_compra extends \parametros {
     }
 
     // Actualiza Estado Opcion según estado OC PMM
-    public static function actualiza_estado_oc_segun_ocpmm($temporada, $depto, $login, $pi, $id_color3, $estado) {
+    public static function actualiza_estado_oc_segun_ocpmm($temporada, $depto, $login, $pi, $id_color3, $estado)
+    {
 
         // $sql = "begin PLC_PKG_UTILS.PRC_ESTADO_OCPMM($temporada,'".$depto."', :error, :data); end;"; (Contra PMM)
         $sql = "begin PLC_PKG_UTILS.PRC_ESTADO_OCPMM_2($temporada,'" . $depto . "','" . $pi . "',$id_color3,'" . $estado . "', :error, :data); end;";
@@ -620,7 +673,8 @@ class cbx_grilla_compra extends \parametros {
 
 
     // Trabajo con Flujo de Aprobación Insert
-    public static function trabaja_flujo_aprobacion_insert($temporada, $depto, $login, $id_coloor3, $estado) {
+    public static function trabaja_flujo_aprobacion_insert($temporada, $depto, $login, $id_coloor3, $estado)
+    {
 
         $sql = "INSERT INTO PLC_PLAN_COMPRA_HISTORICA (DPTO,LINEA,SUBLINEA,MARCA,ESTILO,VENTANA,COLOR,USER_LOGIN,USER_NOM,FECHA,HORA,PI,OC,ESTADO,TEMP,ID_COLOR3,NOM_LINEA,NOM_MARCA,NOM_VENTANA,NOM_COLOR,NOM_SUBLINEA)
                 SELECT
@@ -669,7 +723,8 @@ class cbx_grilla_compra extends \parametros {
     }
 
     // Trabajo con Flujo de Aprobación Update
-    public static function trabaja_flujo_aprobacion_update($temporada, $depto, $login, $proforma, $estado) {
+    public static function trabaja_flujo_aprobacion_update($temporada, $depto, $login, $proforma, $estado)
+    {
 
         $sql = "begin PLC_PKG_UTILS.PRC_SOLOC($temporada,'" . $depto . "','" . $proforma . "',$estado, :error, :data); end;";
 
@@ -691,7 +746,8 @@ class cbx_grilla_compra extends \parametros {
 
 
     // Listar el coemntario de la PI que se solcititò modificar
-    public static function busca_comentario_pi($temporada, $depto, $login, $pi) {
+    public static function busca_comentario_pi($temporada, $depto, $login, $pi)
+    {
 
         $sql = "SELECT ERROR_PI,proforma
                 FROM PLC_PLAN_COMPRA_COLOR_3
@@ -707,7 +763,8 @@ class cbx_grilla_compra extends \parametros {
 
 
     // Buscar si la OC esta con estado 20/21 en PLC_PLAN_COMPRA_COLOR_3
-    public static function busca_existe_proforma($temporada, $depto, $login, $pi) {
+    public static function busca_existe_proforma($temporada, $depto, $login, $pi)
+    {
 
         $sql = "SELECT PROFORMA FROM PLC_PLAN_COMPRA_COLOR_3
                 WHERE COD_TEMPORADA = $temporada
@@ -723,7 +780,8 @@ class cbx_grilla_compra extends \parametros {
 
 
     // Buscar si existe archivo en PLC_PLAN_COMPRA_OC
-    public static function busca_existe_archivo($temporada, $depto, $login, $pi) {
+    public static function busca_existe_archivo($temporada, $depto, $login, $pi)
+    {
 
         $sql = "SELECT DISTINCT(ARCHIVO) FROM PLC_PLAN_COMPRA_OC
                 WHERE COD_TEMPORADA = $temporada
@@ -737,7 +795,8 @@ class cbx_grilla_compra extends \parametros {
     }
 
     // Llenar Tabla llenar_tabla_historial (POPUP de la Grilla)
-    public static function llenar_tabla_historial($temporada, $depto, $id_color3) {
+    public static function llenar_tabla_historial($temporada, $depto, $id_color3)
+    {
 
         $sql = "select   NVL(A.FECHA,''),
                          NVL(A.HORA,''),
@@ -758,7 +817,8 @@ class cbx_grilla_compra extends \parametros {
     }
 
     // Llenar Tabla llenar_tabla_historial (POPUP de la Grilla)
-    public static function traer_datos_oc($temporada, $depto, $pi, $puerto, $url) {
+    public static function traer_datos_oc($temporada, $depto, $pi, $puerto, $url)
+    {
 
         /*$sql = " SELECT  sts.pmg_stat_name      Nom_Estado
                     ,M.PMG_PO_NUMBER        N_OC
@@ -880,7 +940,8 @@ class cbx_grilla_compra extends \parametros {
     }
 
     // Trabajando en MATCH llenar tabla PMM
-    public static function llenar_tabla_pmm($temporada, $depto, $login, $oc, $pi) {
+    public static function llenar_tabla_pmm($temporada, $depto, $login, $oc, $pi)
+    {
 
         //  Si hay OC, busca por OC... de lo contrario busca por PI (En SP)
         /*$sql = "begin PLC_PKG_UTILS.PRC_LISTAR_OCPMM('".$oc."','".$pi."',:data); end;";
@@ -911,7 +972,8 @@ class cbx_grilla_compra extends \parametros {
     }
 
     // Trabajando en MATCH llenar tabla PLAN
-    public static function llenar_tabla_plan($temporada, $depto, $login) {
+    public static function llenar_tabla_plan($temporada, $depto, $login)
+    {
 
         $sql = "";
 
@@ -921,7 +983,8 @@ class cbx_grilla_compra extends \parametros {
     }
 
     // Consultar OC Linkeada
-    public static function consultar_oc_linkeada($temporada, $depto, $login, $oc, $pi) {
+    public static function consultar_oc_linkeada($temporada, $depto, $login, $oc, $pi)
+    {
 
         // Devuelve el estado de la OC, para saber si se encuentra linkeada (Funcionando)
         /*$sql = "begin PLC_PKG_UTILS.PRC_CONSULTAR_OC('" . $oc . "','" . $pi . "',$temporada,'" . $depto . "', :data); end;";
@@ -943,7 +1006,8 @@ class cbx_grilla_compra extends \parametros {
     }
 
     // Quitar OC Eliminada
-    public static function quitar_oc_cancelada($temporada, $depto, $login, $oc, $pi) {
+    public static function quitar_oc_cancelada($temporada, $depto, $login, $oc, $pi)
+    {
 
         $sql = " DELETE FROM B
                  WHERE PI = '" . $pi . "'
@@ -956,7 +1020,8 @@ class cbx_grilla_compra extends \parametros {
     }
 
     // Agrega Tabla B OC o PI
-    public static function agrega_tabla_b_ocpi($temporada, $depto, $login, $oc, $pi) {
+    public static function agrega_tabla_b_ocpi($temporada, $depto, $login, $oc, $pi)
+    {
 
         // Funciona (Versión de Escritorio)
         /*$sql = "begin PLC_PKG_UTILS.PRC_AGREGAR_OCPMM('" . $oc . "','" . $pi . "',:error, :data); end;";
@@ -970,7 +1035,8 @@ class cbx_grilla_compra extends \parametros {
     }
 
     // Agrega registros que llegan del WS a la Tabla B
-    public static function agrega_registroswsoc_a_tabla_b($temporada, $depto, $login, $oc, $pi, $V_NOMBRE_ESTILO, $V_NRO_ESTILO, $V_ESTADO_ESTILO, $V_NOMBRE_VARIACION, $V_NRO_VARIACION, $V_COLOR, $V_COD_COLOR, $V_NOMBRE_LINEA, $V_NRO_LINEA, $V_NOMBRE_SUB_LINEA, $V_NRO_SUB_LINEA, $V_TEMPORADA, $V_CICLO_VIDA, $V_ESTADO_OC, $V_FECHA_EMBARQUE, $V_FECHA_ETA, $V_UNIDADES, $V_COSTO, $V_MONEDA, $V_PAIS) {
+    public static function agrega_registroswsoc_a_tabla_b($temporada, $depto, $login, $oc, $pi, $V_NOMBRE_ESTILO, $V_NRO_ESTILO, $V_ESTADO_ESTILO, $V_NOMBRE_VARIACION, $V_NRO_VARIACION, $V_COLOR, $V_COD_COLOR, $V_NOMBRE_LINEA, $V_NRO_LINEA, $V_NOMBRE_SUB_LINEA, $V_NRO_SUB_LINEA, $V_TEMPORADA, $V_CICLO_VIDA, $V_ESTADO_OC, $V_FECHA_EMBARQUE, $V_FECHA_ETA, $V_UNIDADES, $V_COSTO, $V_MONEDA, $V_PAIS)
+    {
 
         /*$sql = "begin PLC_PKG_UTILS.PRC_ADD_OC_B($oc,'".$pi."','".$V_NOMBRE_ESTILO."',$V_NRO_ESTILO,'".$V_ESTADO_ESTILO."','".$V_NOMBRE_VARIACION."',$V_NRO_VARIACION,'".$V_COLOR."',$V_COD_COLOR,'".$V_NOMBRE_LINEA."','".$V_NRO_LINEA."','".$V_NOMBRE_SUB_LINEA."','".$V_NRO_SUB_LINEA."','".$V_TEMPORADA."','".$V_CICLO_VIDA."','".$V_ESTADO_OC."','".$V_FECHA_EMBARQUE."','".$V_FECHA_ETA."','".$V_UNIDADES."',$V_COSTO,'".$V_MONEDA."','".$V_PAIS."',:error, :data); end;";
 
@@ -1056,7 +1122,8 @@ class cbx_grilla_compra extends \parametros {
     }
 
     // Validar que tabla B Cruza con el color 3
-    public static function valida_tablab_cuza_color3($temporada, $depto, $login, $oc, $pi) {
+    public static function valida_tablab_cuza_color3($temporada, $depto, $login, $oc, $pi)
+    {
 
         $sql = "begin PLC_PKG_UTILS.PRC_LISTAR_OCPMMIN('" . $oc . "','" . $pi . "',$temporada,'" . $depto . "', :data); end;";
         $data = \database::getInstancia()->getConsultaSP($sql, 1);
@@ -1065,7 +1132,8 @@ class cbx_grilla_compra extends \parametros {
     }
 
     // Validar que tabla B Cruza con el color 3
-    public static function btn_actualizar_match($temporada, $depto, $login, $id_color, $linea, $sublinea, $estilo, $color) {
+    public static function btn_actualizar_match($temporada, $depto, $login, $id_color, $linea, $sublinea, $estilo, $color)
+    {
 
         $sql = "begin PLC_PKG_DESARROLLO.PRC_UPDATE_COLOR3_OC($temporada,'" . $depto . "',$id_color, '" . $linea . "', '" . $sublinea . "', '" . $estilo . "', '" . $color . "',:error, :data); end;";
 
@@ -1093,7 +1161,8 @@ class cbx_grilla_compra extends \parametros {
     }
 
     // Listar plan compra color
-    public static function listar_plan_compra_color($temporada, $depto, $login, $proforema) {
+    public static function listar_plan_compra_color($temporada, $depto, $login, $proforema)
+    {
 
         /*$sql = "begin PLC_PKG_MIGRACION.PRC_GRID_PLAN_COMPRA_COLOR_4($temporada,'".$depto."',0,0, :data); end;";
         $data = \database::getInstancia()->getConsultaSP($sql, 1);
@@ -1130,7 +1199,8 @@ class cbx_grilla_compra extends \parametros {
     }
 
     // Listar plan compra color
-    public static function generar_match($temporada, $depto, $login, $proforma, $estilo, $codventana, $oc) {
+    public static function generar_match($temporada, $depto, $login, $proforma, $estilo, $codventana, $oc)
+    {
 
         $sql = "begin PLC_PKG_UTILS.PRC_GENERAR_MATCH('" . $proforma . "','" . $estilo . "', $codventana,'" . $depto . "',$temporada,'" . $oc . "', :error, :data); end;";
 
@@ -1157,7 +1227,8 @@ class cbx_grilla_compra extends \parametros {
     }
 
     // Aprobar Opción
-    public static function aprobar_opcion($temporada, $depto, $login, $id_color3, $proforma) {
+    public static function aprobar_opcion($temporada, $depto, $login, $id_color3, $proforma)
+    {
 
         $sql = "begin PLC_PKG_UTILS.PRC_APROBACION_PLAN_2($temporada,'" . $depto . "',$id_color3,'" . $proforma . "', :error, :data); end;";
 
@@ -1184,7 +1255,8 @@ class cbx_grilla_compra extends \parametros {
     }
 
     // Listar IDCOLOR3 Compra
-    public static function listar_idcolor3_compra($temporada, $depto, $login, $id_color3) {
+    public static function listar_idcolor3_compra($temporada, $depto, $login, $id_color3)
+    {
 
         $sql = "begin PLC_PKG_MIGRACION.PRC_LIS_COLOR3_IDCOLOR3($temporada,'" . $depto . "',$id_color3, :data); end;";
         $data = \database::getInstancia()->getConsultaSP($sql, 1);
@@ -1193,7 +1265,8 @@ class cbx_grilla_compra extends \parametros {
     }
 
     // Insertar Historial
-    public static function insertar_historial($temporada, $depto, $V_LINEA, $V_SUBLINEA, $V_MARCA, $V_ESTILO, $V_VENTANA, $V_COLOR, $V_USER_LOGIN, $V_PI, $V_OC, $V_ESTADO, $V_ID_COLOR3, $V_TIPOINSERT, $V_NOM_LINEA, $V_NOM_SUBLINEA, $V_NOM_MARCA, $V_NOM_VENTANA, $V_NOM_COLOR) {
+    public static function insertar_historial($temporada, $depto, $V_LINEA, $V_SUBLINEA, $V_MARCA, $V_ESTILO, $V_VENTANA, $V_COLOR, $V_USER_LOGIN, $V_PI, $V_OC, $V_ESTADO, $V_ID_COLOR3, $V_TIPOINSERT, $V_NOM_LINEA, $V_NOM_SUBLINEA, $V_NOM_MARCA, $V_NOM_VENTANA, $V_NOM_COLOR)
+    {
 
         $sql = "INSERT INTO PLC_PLAN_COMPRA_HISTORICA (
                                              DPTO
@@ -1249,7 +1322,8 @@ class cbx_grilla_compra extends \parametros {
     }
 
     // Listar Ventana Embarque Llegada
-    public static function listar_ventana_embarque_llegada($temporada, $depto, $login) {
+    public static function listar_ventana_embarque_llegada($temporada, $depto, $login)
+    {
 
         $sql = "begin PLC_PKG_PRUEBA.PRC_VENTA_EMBAR_COMPRA($temporada, :data); end;";
         $data = \database::getInstancia()->getConsultaSP($sql, 1);
@@ -1258,7 +1332,8 @@ class cbx_grilla_compra extends \parametros {
     }
 
     // 5.1 Quitar quita_registro_variacion
-    public static function quita_registro_variacion($temporada, $depto, $login, $oc, $pi) {
+    public static function quita_registro_variacion($temporada, $depto, $login, $oc, $pi)
+    {
 
         // Variacion (plc_oc_variacion)
         $sql_plc_oc_variacion = "DELETE FROM PLC_OC_VARIACION
@@ -1312,7 +1387,8 @@ class cbx_grilla_compra extends \parametros {
     }
 
     // 6 Agregar OC Variación
-    public static function agregar_oc_variacion($temporada, $depto, $login, $oc, $proforma) {
+    public static function agregar_oc_variacion($temporada, $depto, $login, $oc, $proforma)
+    {
 
         $sql = "begin PLC_PKG_UTILS.PRC_AGREGAR_OC_VARIACION2('" . $oc . "','" . $proforma . "', :error, :data); end;";
 
@@ -1339,7 +1415,8 @@ class cbx_grilla_compra extends \parametros {
     }
 
     // 7 Agregar New OC Variación
-    public static function agregar_new_oc_variacion($temporada, $depto, $login) {
+    public static function agregar_new_oc_variacion($temporada, $depto, $login)
+    {
 
         $sql = "insert into plc_plan_compra_variacion
                 select p.cod_temporada
@@ -1431,7 +1508,8 @@ class cbx_grilla_compra extends \parametros {
     }
 
     // Buscar OC con estado 20
-    public static function busca_oc_estado_20($temporada, $depto, $login) {
+    public static function busca_oc_estado_20($temporada, $depto, $login)
+    {
 
         $sql = "begin PLC_PKG_MIGRACION.PRC_LISTAR_OPCION20($temporada,'" . $depto . "', :data); end;";
         $data = \database::getInstancia()->getConsultaSP($sql, 1);
@@ -1440,7 +1518,8 @@ class cbx_grilla_compra extends \parametros {
     }
 
     // Busca Estado OC PMM
-    public static function busca_estado_oc_pmm($temporada, $depto, $login, $oc) {
+    public static function busca_estado_oc_pmm($temporada, $depto, $login, $oc)
+    {
 
         $sql = "begin PLC_PKG_MIGRACION.PRC_VALIDACION_OC_PMM('" . $oc . "', :data); end;";
         $data = \database::getInstancia()->getConsultaSP($sql, 1);
@@ -1449,7 +1528,8 @@ class cbx_grilla_compra extends \parametros {
     }
 
     // Estado 4 OC PMM, Inserto a Historial
-    public static function estado_oc_4_inserta_historial($temporada, $depto, $LINEA, $SUBLINEA, $MARCA, $ESTILO, $VENTANA, $COLOR, $login, $PI, $OC, $ESTADO, $ID_COLOR3, $TIPO_INSERT, $NOM_LINEA, $NOM_SUBLINEA, $NOM_MARCA, $NOM_VENTANA, $NOM_COLOR) {
+    public static function estado_oc_4_inserta_historial($temporada, $depto, $LINEA, $SUBLINEA, $MARCA, $ESTILO, $VENTANA, $COLOR, $login, $PI, $OC, $ESTADO, $ID_COLOR3, $TIPO_INSERT, $NOM_LINEA, $NOM_SUBLINEA, $NOM_MARCA, $NOM_VENTANA, $NOM_COLOR)
+    {
 
         $sql = "begin PLC_PKG_PRUEBA.PRC_ADD_PLAN_HISTORICO($temporada, '" . $depto . "', '" . $LINEA . "','" . $SUBLINEA . "',$MARCA,'" . $ESTILO . "',$VENTANA,$COLOR,'" . $login . "','" . $PI . "',$OC,'" . $ESTADO . "',$ID_COLOR3,$TIPO_INSERT,'" . $NOM_LINEA . "','" . $NOM_SUBLINEA . "','" . $NOM_MARCA . "','" . $NOM_VENTANA . "','" . $NOM_COLOR . "', :error,:data); end;";
 
@@ -1476,7 +1556,8 @@ class cbx_grilla_compra extends \parametros {
     }
 
     // Guarda Comentario del estado PI para flujo "Solicitud Corrección PI"
-    public static function guarda_comentario_estado_pi($temporada, $depto, $login, $comentario, $proforma) {
+    public static function guarda_comentario_estado_pi($temporada, $depto, $login, $comentario, $proforma)
+    {
 
         $sql = "UPDATE PLC_PLAN_COMPRA_COLOR_3 A
                 SET   A.ERROR_PI      = '" . $comentario . "'
@@ -1507,7 +1588,8 @@ class cbx_grilla_compra extends \parametros {
 // TERMINADO
 
     // CBX optionsLinea
-    public static function listar_optionsLinea($temporada, $depto) {
+    public static function listar_optionsLinea($temporada, $depto)
+    {
 
         $sql = "SELECT TRIM( L.PRD_LVL_NUMBER ) AS LIN_LINEA,
                        TRIM( L.PRD_NAME_FULL ) AS LIN_DESCRIPCION
@@ -1532,7 +1614,8 @@ class cbx_grilla_compra extends \parametros {
     }
 
     // CBX optionsSubLinea
-    public static function listar_optionsSubLinea($temporada, $depto, $id_linea) {
+    public static function listar_optionsSubLinea($temporada, $depto, $id_linea)
+    {
 
         $sql = "SELECT TRIM( L.PRD_LVL_NUMBER ) AS SLI_SUBLINEA,
                        TRIM( L.PRD_NAME_FULL ) AS SLI_DESCRIPCION
@@ -1550,7 +1633,8 @@ class cbx_grilla_compra extends \parametros {
     }
 
     // CBX optionsMarca
-    public static function listar_optionsMarca($temporada, $depto) {
+    public static function listar_optionsMarca($temporada, $depto)
+    {
 
         $data = plan_compra::list_Marcas($depto);
 
@@ -1566,7 +1650,8 @@ class cbx_grilla_compra extends \parametros {
     }
 
     // CBX optionsColor
-    public static function listar_optionsColor($temporada, $depto) {
+    public static function listar_optionsColor($temporada, $depto)
+    {
 
         /*$data = plan_compra::list_colores();
         return $data;*/
@@ -1594,7 +1679,8 @@ class cbx_grilla_compra extends \parametros {
     }
 
     // CBX optionsTipoExhibicion
-    public static function listar_optionsTipoExhibicion($temporada, $depto) {
+    public static function listar_optionsTipoExhibicion($temporada, $depto)
+    {
 
         $data = plan_compra::list_tipoexhibicion();
 
@@ -1609,7 +1695,8 @@ class cbx_grilla_compra extends \parametros {
     }
 
     // CBX optionsTipoProducto
-    public static function listar_optionsTipoProducto($temporada, $depto) {
+    public static function listar_optionsTipoProducto($temporada, $depto)
+    {
 
         $data = plan_compra::list_tipoProducto();
 
@@ -1624,7 +1711,8 @@ class cbx_grilla_compra extends \parametros {
     }
 
     // CBX optionsLifeCicle
-    public static function listar_optionsLifeCicle($temporada, $depto) {
+    public static function listar_optionsLifeCicle($temporada, $depto)
+    {
 
         $data = plan_compra::list_ciclo_vida();
 
@@ -1639,7 +1727,8 @@ class cbx_grilla_compra extends \parametros {
     }
 
     // CBX optionsRankVenta
-    public static function listar_optionsRankVenta($temporada, $depto) {
+    public static function listar_optionsRankVenta($temporada, $depto)
+    {
 
         $data = plan_compra::list_rnk();
 
@@ -1654,7 +1743,8 @@ class cbx_grilla_compra extends \parametros {
     }
 
     // CBX optionsPiramideMix
-    public static function listar_optionsPiramideMix($temporada, $depto) {
+    public static function listar_optionsPiramideMix($temporada, $depto)
+    {
 
         $data = plan_compra::list_piramidemix();
 
@@ -1669,7 +1759,8 @@ class cbx_grilla_compra extends \parametros {
     }
 
     // CBX optionsCluster
-    public static function listar_optionsCluster($temporada, $depto) {
+    public static function listar_optionsCluster($temporada, $depto)
+    {
 
         $data = plan_compra::list_cluster($temporada, $depto);
 
@@ -1684,7 +1775,8 @@ class cbx_grilla_compra extends \parametros {
     }
 
     // CBX optionsFormato
-    public static function listar_optionsFormato($temporada, $depto) {
+    public static function listar_optionsFormato($temporada, $depto)
+    {
 
         $data = plan_compra::list_Formato($temporada, $depto);
 
@@ -1699,7 +1791,8 @@ class cbx_grilla_compra extends \parametros {
     }
 
     // CBX optionsVia
-    public static function listar_optionsVia($temporada, $depto) {
+    public static function listar_optionsVia($temporada, $depto)
+    {
 
         $data = plan_compra::list_via();
 
@@ -1714,7 +1807,8 @@ class cbx_grilla_compra extends \parametros {
     }
 
     // CBX optionsPais
-    public static function listar_optionsPais($temporada, $depto) {
+    public static function listar_optionsPais($temporada, $depto)
+    {
 
         $data = plan_compra::list_pais();
 
@@ -1729,7 +1823,8 @@ class cbx_grilla_compra extends \parametros {
     }
 
     // CBX optionsVentanaLlegada
-    public static function listar_optionsVentanaLlegada($temporada, $depto) {
+    public static function listar_optionsVentanaLlegada($temporada, $depto)
+    {
 
         $data = plan_compra::list_ventanas($temporada);
 
@@ -1744,7 +1839,8 @@ class cbx_grilla_compra extends \parametros {
     }
 
     // CBX optionsEVida
-    public static function listar_optionsEVida($temporada, $depto) {
+    public static function listar_optionsEVida($temporada, $depto)
+    {
 
         $data = plan_compra::list_EVida();
 
@@ -1759,7 +1855,8 @@ class cbx_grilla_compra extends \parametros {
     }
 
     // CBX optionsMoneda
-    public static function listar_optionsMoneda($temporada, $depto) {
+    public static function listar_optionsMoneda($temporada, $depto)
+    {
 
         $data = plan_compra::list_Moneda();
 
@@ -1775,7 +1872,8 @@ class cbx_grilla_compra extends \parametros {
     }
 
     // CBX optionsOcupacionUso
-    public static function listar_optionsOcacionUso($temporada, $depto) {
+    public static function listar_optionsOcacionUso($temporada, $depto)
+    {
 
         $data = plan_compra::list_OcacionUso();
 
@@ -1790,7 +1888,8 @@ class cbx_grilla_compra extends \parametros {
     }
 
     // CBX optionsProveedor
-    public static function listar_optionsProveedor($temporada, $depto) {
+    public static function listar_optionsProveedor($temporada, $depto)
+    {
 
         $data = plan_compra::list_Proveedor();
 
@@ -1806,7 +1905,8 @@ class cbx_grilla_compra extends \parametros {
 
 
     //combobox ajuste compra
-    public static function Combobox_ajust_compra($tempo, $depto, $id_color3, $tallas) {
+    public static function Combobox_ajust_compra($tempo, $depto, $id_color3, $tallas)
+    {
 
         $n_tallas = explode(",", $tallas);
         $columtallas = "";
@@ -1845,7 +1945,8 @@ class cbx_grilla_compra extends \parametros {
         return $data;
     }
 
-    public static function Combobox_ajust_n_cajas($tempo, $depto, $id_color3, $tallas, $tipo_empaque, $debut_reorder) {
+    public static function Combobox_ajust_n_cajas($tempo, $depto, $id_color3, $tallas, $tipo_empaque, $debut_reorder)
+    {
 
 
         $n_tallas = explode(",", $tallas);
@@ -1909,7 +2010,8 @@ class cbx_grilla_compra extends \parametros {
 
     }
 
-    public static function checkbox_list_grupocompraXdepto($tempo, $depto) {
+    public static function checkbox_list_grupocompraXdepto($tempo, $depto)
+    {
         $sql = "SELECT DISTINCT GRUPO_COMPRA
                 FROM PLC_PLAN_COMPRA_COLOR_3
                 WHERE COD_TEMPORADA = " . $tempo . "
@@ -1921,7 +2023,8 @@ class cbx_grilla_compra extends \parametros {
 
     // ######################## TRABAJO CON ACCESO SIMULADOR DE COMPRA ########################
 
-    public static function busca_existe_pto_retail($temporada, $depto, $login) {
+    public static function busca_existe_pto_retail($temporada, $depto, $login)
+    {
 
         $sql = "SELECT MATI FROM PLC_PPTO_RETAIL
                 WHERE cod_temporada = $temporada
@@ -1933,7 +2036,8 @@ class cbx_grilla_compra extends \parametros {
 
     }
 
-    public static function busca_existe_pto_embarque($temporada, $depto, $login) {
+    public static function busca_existe_pto_embarque($temporada, $depto, $login)
+    {
 
         $sql = "SELECT count(*)total FROM PLC_PPTO_EMB
                 WHERE cod_temporada = $temporada
@@ -1945,7 +2049,8 @@ class cbx_grilla_compra extends \parametros {
 
     }
 
-    public static function busca_existe_pto_costo($temporada, $depto, $login) {
+    public static function busca_existe_pto_costo($temporada, $depto, $login)
+    {
 
         $sql = "SELECT presupuesto FROM PLC_PPTO_COSTO
                 WHERE cod_temporada = $temporada
@@ -1956,7 +2061,8 @@ class cbx_grilla_compra extends \parametros {
 
     }
 
-    public static function busca_existe_val_tienda($temporada, $depto, $login) {
+    public static function busca_existe_val_tienda($temporada, $depto, $login)
+    {
 
         $sql = "SELECT * FROM PLC_SEGMENTOS_TDA
                 WHERE COD_TEMPORADA = $temporada
@@ -1968,7 +2074,8 @@ class cbx_grilla_compra extends \parametros {
 
     }
 
-    public static function busca_existe_marca($temporada, $depto, $login) {
+    public static function busca_existe_marca($temporada, $depto, $login)
+    {
 
         $sql = "SELECT count(*) TOTAL
                     FROM PLC_DEPTO_MARCA 
@@ -1983,7 +2090,8 @@ class cbx_grilla_compra extends \parametros {
 
     // ######################## VISTA OC FECHA RECEPCIÓN Y DIAS ATRASO ########################
 
-    public static function trae_fecharcd_y_dias_atraso($fecha_esta, $fecha_recep_pmm) {
+    public static function trae_fecharcd_y_dias_atraso($fecha_esta, $fecha_recep_pmm)
+    {
 
         $sql = "begin PLC_PKG_DESARROLLO.PRC_LIS_FECHASOCVISTA('" . $fecha_esta . "', '" . $fecha_recep_pmm . "', :data); end;";
 
@@ -1992,6 +2100,118 @@ class cbx_grilla_compra extends \parametros {
         return $data;
 
     }
+
+
+// ######################## TRABAJO CON GRILLA EDITABLE ########################
+
+    public static function listar_factor($cod_temporada,$depto,$pais,$via,$moneda,$ventana){
+
+        $sql=  "SELECT ".$ventana." FROM PLC_FACTOR_EST F
+                WHERE  F.COD_TEMPORADA   = $cod_temporada
+                AND    F.DEP_DEPTO       = '".$depto."'
+                AND    F.CNTRY_LVL_CHILD = $pais
+                AND    F.COD_VIA         = $via
+                AND    F.COD_TIP_MON     = $moneda
+                ";
+
+        $data = \database::getInstancia()->getFilas($sql);
+        return $data;
+
+    }
+
+    public static function listar_tipocambio($cod_temporada,$depto,$moneda,$ventana){
+
+        $sql=  "SELECT  ".$ventana."
+                FROM   PLC_TIPO_CAMBIO P
+                WHERE  P.COD_TEMPORADA = $cod_temporada
+                AND    P.COD_TIP_MON = $moneda
+                ";
+
+        $data = \database::getInstancia()->getFilas($sql);
+        return $data;
+    }
+
+    // Actualizar grilla en plan_compra_color3
+    public static function actualiza_grilla_plan_compra_color3($temporada, $depto, $login, $ID_COLOR3, $COSTO_FOB, $COSTO_INSP, $COSTO_RFID, $COSTO_UNIT, $COSTO_UNITS, $CST_TOTLTARGET, $COSTO_TOT, $COSTO_TOTS, $MKUP, $GM)
+    {
+
+        $sql = "UPDATE PLC_PLAN_COMPRA_COLOR_3 
+                SET COSTO_FOB = $COSTO_FOB,
+                COSTO_INSP = $COSTO_INSP,
+                COSTO_RFID = $COSTO_RFID,
+                COSTO_UNIT = $COSTO_UNIT,
+                COSTO_UNITS = $COSTO_UNITS,
+                CST_TOTLTARGET = $CST_TOTLTARGET,
+                COSTO_TOT = $COSTO_TOT,
+                COSTO_TOTS = $COSTO_TOTS,
+                MKUP = $MKUP,
+                GM = $GM
+                WHERE 1
+                ";
+
+        echo $sql;
+        die();
+
+        // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+        /*if (!file_exists('../archivos/log_querys/' . $login)) {
+            mkdir('../archivos/log_querys/' . $login, 0775, true);
+        }
+
+        $stamp = date("Y-m-d_H-i-s");
+        $rand = rand(1, 999);
+        $content = $sql;
+        $fp = fopen("../archivos/log_querys/" . $login . "/EDITAGRILLA-PLC_PLAN_COMPRA_COLOR_3--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+        fwrite($fp, $content);
+        fclose($fp);
+
+        $data = \database::getInstancia()->getConsulta($sql);
+        return $data;*/
+
+        if(\database::getInstancia()->getConsulta($sql)){
+            return 1;
+        }else{
+            return 0;
+        }
+
+    }
+
+    // Actualizar grilla en PLC_PLAN_COMPRA_COLOR_CIC
+    public static function actualiza_grilla_plan_compra_color_cic($temporada, $depto, $login, $COSTO)
+    {
+
+        $sql = "UPDATE PLC_PLAN_COMPRA_COLOR_CIC 
+                SET COSTO = $COSTO
+                WHERE 1
+                ";
+
+        echo $sql;
+        die();
+
+        // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+        /*if (!file_exists('../archivos/log_querys/' . $login)) {
+            mkdir('../archivos/log_querys/' . $login, 0775, true);
+        }
+
+        $stamp = date("Y-m-d_H-i-s");
+        $rand = rand(1, 999);
+        $content = $sql;
+        $fp = fopen("../archivos/log_querys/" . $login . "/EDITAGRILLA-PLC_PLAN_COMPRA_COLOR_CIC--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+        fwrite($fp, $content);
+        fclose($fp);
+
+        $data = \database::getInstancia()->getConsulta($sql);
+        return $data;*/
+
+        if(\database::getInstancia()->getConsulta($sql)){
+            return 1;
+        }else{
+            return 0;
+        }
+
+    }
+
+
+
 
 
 // Fin de la Clase
