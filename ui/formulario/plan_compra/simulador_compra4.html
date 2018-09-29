@@ -6,11 +6,19 @@
 <section class="content-header">
 	<ol class="breadcrumb">
 
-		<button class="btn btn-app guarda_proforma" data-tooltip="tooltip" data-placement="top" title="Guarda Proforma">
+        <button class="btn btn-app" id="btn_habilita_grilla" name="btn_habilita_grilla" data-tooltip="tooltip" data-placement="top" title="Habilita Edición" value="1">
+            <i class="fa fa-lock" id="i_habilita_plan"></i> Habilita Edición
+        </button>
+
+        <button class="btn btn-app" id="btn_edita_grilla" name="btn_edita_grilla" data-tooltip="tooltip" data-placement="top" title="Editar Plan" style="display: none;">
+            <i class="fa fa-edit" id="i_edita_plan"></i> Editar Plan
+        </button>
+
+		<button class="btn btn-app guarda_proforma" id="btn_guarda_proforma" data-tooltip="tooltip" data-placement="top" title="Guarda Proforma">
 			<i class="fa fa-save"></i> Guardar Proforma
 		</button>
 		
-		<button class="btn btn-app importar_bmt" data-tooltip="tooltip" data-toggle="modal" data-target="#importar_bmt" data-placement="top" title="Importar Archivo">
+		<button class="btn btn-app importar_bmt" id="btn_importar_bmt" data-tooltip="tooltip" data-toggle="modal" data-target="#importar_bmt" data-placement="top" title="Importar Archivo">
 			<i class="fa fa-cloud-upload"></i> Importar Archivo
 		</button>
 		
@@ -150,7 +158,7 @@
 					<!-- ###############################################################################################################################################-->
 					<div class="table-responsive">
 						<!-- fin div tabla responsiva -->
-						<table class="table table-bordered table-striped tabla_smaller tabla2" id="tabla2" name="tabla2" style="white-space:nowrap;font-size: 10px; ">
+						<table class="table table-bordered table-striped tabla_smaller tabla2" id="tabla2" name="tabla2" style="white-space:nowrap;font-size: 10px;">
 							<thead>
 								<tr>
 									<th colspan="19" style="text-align:center;">Definición por Estilos</th>
@@ -573,7 +581,6 @@
 <div id="exportar_archivo" class="modal fade" role="dialog" data-keyboard="false" data-backdrop="static">
 	<form method="post" enctype="multipart/form-data" class="form_export_bmt" action="exporta_excel">
 		<div class="modal-dialog">
-			
 			<div class="modal-content borde_especial">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -1130,6 +1137,59 @@
     </div>
 
 </div>
+
+<!-- POPUP de Editar Grilla -->
+<div id="popup_edita_grilla" name="popup_edita_grilla" class="modal fade" role="dialog" data-keyboard="false" data-backdrop="static">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content borde_especial">
+			<div class="modal-header">
+				<!--<button type="button" class="close" onClick="window.location.reload()">&times;</button>-->
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Editar Plan de Compra</h4>
+			</div>
+			<div class="modal-body">
+				<div class='row'>
+					<div class='col-md-12'>&nbsp;
+						<table class="table table-bordered table-striped tabla_smaller" id="tabla_edita_grilla" style="font-size: 10px;white-space:nowrap;">
+							<thead>
+							<tr>
+                                <th style="display: none"></th><!-- id_color3 -->
+								<th style="text-align: center;">Grupo Compra</th>
+								<th style="text-align: center;">Marca</th>
+								<th style="text-align: center;">Línea</th>
+								<th style="text-align: center;">SubLines</th>
+								<th style="text-align: center;">Estilo</th>
+								<th style="text-align: center;">Ventana</th>
+								<th style="text-align: center;">Color</th>
+								<th style="text-align: center;">Unidades Finales</th>
+								<th style="text-align: center;">Target</th>
+								<th style="text-align: center;">FOB</th>
+								<th style="text-align: center;">Insp</th>
+								<th style="text-align: center;">RFID</th>
+								<th style="text-align: center;">PROVEEDOR</th>
+								<th style="display: none"></th><!-- mkup -->
+								<th style="display: none"></th><!-- gm -->
+								<th style="display: none"></th><!-- via -->
+								<th style="display: none"></th><!-- país -->
+								<th style="display: none"></th><!-- ventana lleagada -->
+								<th style="display: none"></th><!-- precio blanco -->
+							</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+            <div class="modal-footer">
+                <div class="loading_tabla_edita_grilla" style="display: none"><i class='fa fa-spinner fa-2x fa-spin '></i> Guardando cambios...</div>
+                <button type="button" class="btn btn-primary btn_editar_registros_grilla_editable" id="btn_editar_registros_grilla_editable" name="btn_editar_registros_grilla_editable" style="display: none;">Guardar</button>
+            </div>
+		</div>
+	</div>
+</div>
+
+
 
 <!-- Include de los menús del costado -->
 <include href="{{ @tipo_ventana_llegada }}" />
