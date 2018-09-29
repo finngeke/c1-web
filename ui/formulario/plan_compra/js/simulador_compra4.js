@@ -236,6 +236,8 @@ $(function () {
 // Load
 $(window).on('load', function () {
 
+
+
     $('#popup_cargando_simulador_compra_4').modal('show');
     // codigo que valida el usuario tipo lectura ...
     // se lleva parte de este codigo a depto.js ya que que
@@ -1068,6 +1070,21 @@ $(window).on('load', function () {
         // Fin del done busca OC estado 20
     });
 
+
+
+    // DataTable de la tabla de edición de grilla
+    $('#tabla_edita_grilla').DataTable({
+        "ordering": false,
+        paging: false,
+        searching: false,
+        scrollY: "200px",
+        scrollX: "150px",
+        "info": false,
+        fixedColumns: true
+    });
+
+
+
 // fin de onload
 });
 
@@ -1276,7 +1293,7 @@ function descargaPI(event) {
     var separa_barra_span = span_temporada.split("-");
 
     if (estado_c1 != 0) {
-        var valFileDownloadPath = '../archivos/pi/PI-' + separa_barra_span[0] + '-' + separa_barra_span[1] + '-' + proforma + '.xls';
+        var valFileDownloadPath = '../archivos/pi/PI_' + separa_barra_span[0] + '_' + separa_barra_span[1] + '_' + proforma + '.xls';
         window.open(valFileDownloadPath, '_blank');
     }
 
@@ -3813,3 +3830,375 @@ function carga_tabla1_oculta() {
     $('.dataTables_scrollBody').attr('style', 'position: relative; overflow: auto; width: 100%; max-height: 60%;');
 
 }
+
+// Habilita/Desabilita Grilla
+$('#btn_habilita_grilla').on('click', function () {
+
+    // Obtener el valor del BTN
+    var valor_btn = $('#btn_habilita_grilla').val();
+
+    if (valor_btn == 1) {
+
+        // Transformar radio a checkbox
+        $("#tabla2 :radio").attr('type', 'checkbox');
+        // Cambio a 2 el valor del BTN
+        $("#btn_habilita_grilla").val(2);
+
+        // Ocultar Guarda Proforma y Importar BTM
+        $("#btn_guarda_proforma").hide();
+        $("#btn_importar_bmt").hide();
+
+        // Bloquear Flujo de Aprobación
+        $("#modulo_flujo_aprob").hide();
+
+        // Icono de candado abierto
+        $("#i_habilita_plan").removeClass('fa fa-lock').addClass('fa fa-unlock');
+
+        // Desplegar el BTN para levantar popup de edición
+        $("#btn_edita_grilla").show();
+
+        // Los elementos que tengan campos eliminados no se deben seleccionar
+
+    } else {
+
+        // Transformar checkbox a radio
+        $("#tabla2 input:checkbox").attr('type', 'radio');
+        // Dejo todos los radiobuttons como no seleccionados
+        $(":radio").prop('checked', false);
+        // Cambio a 1 el valor del BTN
+        $("#btn_habilita_grilla").val(1);
+
+        // Desplegar Guarda Proforma y Importar BTM
+        $("#btn_guarda_proforma").show();
+        $("#btn_importar_bmt").show();
+
+        // Habilitar Flujo de Aprobación
+        $("#modulo_flujo_aprob").show();
+
+        // Icono de candado cerrado
+        $("#i_habilita_plan").removeClass('fa fa-unlock').addClass('fa fa-lock');
+
+        // Ocultar el BTN para levantar popup de edición
+        $("#btn_edita_grilla").hide();
+
+        // Los elementos que tengan campos eliminados no se deben seleccionar (habilitar nuevamente)
+
+    }
+
+
+
+});
+
+// Editar Grilla
+$('#btn_edita_grilla').on('click', function () {
+
+    // eliminar los registros de la tabla, generados en otra consulta previa
+    $("#tabla_edita_grilla >tbody >tr").remove();
+
+    // 1.- Antes de levantar el POPUP, verificar que existen elementos seleccionados
+    var elementos_seleccionados = $( "#tabla2 input:checked" ).length;
+
+    if(elementos_seleccionados>0){
+
+        // 1.1 Declaro variable para almaceanr registros
+        var almacena_opciones = "";
+
+        // 2.- Almacenos todos los valores seleccionados (id_color3)
+        $("#tabla2 input:checkbox:checked").each(function() {
+            //alert($("#txt_id_color_"+$(this).val()).text());
+            // con el $(this).val() voy a buscar el id_color3 para concatenarlo
+            almacena_opciones = almacena_opciones + $("#txt_id_color_"+$(this).val()).text()+',';
+            //almacena_opciones = almacena_opciones + $(this).val() +',';
+            //alert($(this).val());
+        });
+
+        // Quitar la coma del final al string de almacena_opciones
+        var largo_string = almacena_opciones.length;
+        var id_color3 =  almacena_opciones.substr(0,(parseInt(largo_string)-1));
+
+        // 3.- Levanto el POPUP
+        $("#popup_edita_grilla").modal('show');
+
+        // 4.- Realizo un listar según los IDs que me llegan (Despliego)
+        // Cargar datos de la grilla 2
+        var url_edita_grilla = 'ajax_simulador_cbx/llenar_edita_grilla';
+        var flag_tabla_edita = 0;
+        var flag_cont_registro = 0;
+
+        var dataString = "ID_COLOR3="+id_color3;
+
+        $.ajax({
+            type: "GET",
+            url: url_edita_grilla,
+            data: dataString,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+
+            success: function (data) {
+                // Contar los registros que me llegan
+                $.each(data, function () {
+                    flag_cont_registro++;
+                });
+
+                // Datos de la tabla
+                $.each(data, function (i, o) {
+                    $('#tabla_edita_grilla').append(
+                        '<tr id="tablaedita_tr_id_' + flag_tabla_edita + '" class="tablaedita_tr_id_' + o[14] + '">\n' +
+                        '<td id="id_idcolor3_' + o[14] + '" style="display: none">' + o[14] + '</td>\n' +
+                        '<td id="id_grupo_compra_' + o[14] + '" class="id_grupo_compra_' + o[14] + '">' + o[0] + '</td>\n' +
+                        '<td id="id_marca_' + o[14] + '">' + o[1] + '</td>\n' +
+                        '<td id="id_linea_' + o[14] + '">' + o[2] + '</td>\n' +
+                        '<td id="id_sublinea_' + o[14] + '">' + o[3] + '</td>\n' +
+                        '<td id="id_estilo_' + o[14] + '">' + o[4] + '</td>\n' +
+                        '<td id="id_ventana_' + o[14] + '">' + o[6] + '</td>\n' +
+                        '<td id="id_color_' + o[14] + '">' + o[7] + '</td>\n' +
+                        '<td id="id_unidades_finales_' + o[14] + '">' + o[8] + '</td>\n' +
+                        '<td id="id_target_' + o[14] + '"><input type="text" id="txt_target_' + o[14] + '" name="txt_target_' + o[14] + '" value="'+o[9]+'" size="3"></td>\n' +
+                        '<td id="id_fob_' + o[14] + '"><input type="text" id="txt_fob_' + o[14] + '" name="txt_fob_' + o[14] + '" value="' + o[10] + '" size="3"></td>\n' +
+                        '<td id="id_insp_' + o[14] + '"><input type="text" id="txt_insp_' + o[14] + '" name="txt_insp_' + o[14] + '" value="' + o[11] + '" size="3"></td>\n' +
+                        '<td id="id_rfid_' + o[14] + '"><input type="text" id="txt_rfid_' + o[14] + '" name="txt_rfid_' + o[14] + '" value="' + o[12] + '" size="3"></td>\n' +
+                        '<td id="id_aliasproveedor_' + o[14] + '"><input type="text" id="txt_aliasproveedor_' + o[14] + '" name="txt_aliasproveedor_' + o[14] + '" value="' + o[13] + '" size="20"></td>\n' +
+                        '<td id="id_mkup_' + o[14] + '" style="display: none">' + o[15] + '</td>\n' +
+                        '<td id="id_gm_' + o[14] + '" style="display: none">' + o[16] + '</td>\n' +
+                        '<td id="id_via_' + o[14] + '" style="display: none">' + o[17] + '</td>\n' +
+                        '<td id="id_pais_' + o[14] + '" style="display: none">' + o[18] + '</td>\n' +
+                        '<td id="id_ventana_llegada_' + o[14] + '" style="display: none">' + o[19] + '</td>\n' +
+                        '<td id="id_precio_blanco_' + o[14] + '" style="display: none">' + o[20] + '</td>\n' +
+                        '</tr>');
+                    flag_tabla_edita++;
+                    // Fin foreach que llena tabla
+                });
+
+                if (flag_cont_registro > 0) {
+
+                   $("#btn_editar_registros_grilla_editable").show();
+
+                }
+
+            }, error: function (jqXHR, textStatus, errorThrown) {
+                console.log("Error: " + textStatus + " errorThrown: " + errorThrown);
+            }
+
+        }).done(function () {
+            // algo aqui
+        });
+
+    }else{
+        alert("Seleccione al menos un registro para editar");
+    }
+
+
+
+
+// fin del btn editar
+});
+
+// Botón actualizar del editar grilla
+$('#btn_editar_registros_grilla_editable').on('click', function () {
+
+
+    // Voy a buscar los valores del factor
+    var url_get_factor = 'ajax_simulador_cbx/listar_factor';
+    var url_get_tipocambio = 'ajax_simulador_cbx/listar_tipocambio';
+
+    var total_fob_usd = "";
+    var total_target_usd = "";
+    var costo_unitario_final_usd = "";
+
+
+    $("#tabla_edita_grilla tbody tr").each(function () {
+
+        var id_color3 = $(this).find("td:eq(0)").text();
+
+        var target = $("#tabla_edita_grilla #txt_target_" + id_color3).val();
+            if(target.substring(0,1)=="."){
+                target = "0"+target;
+            }
+        var fob = $("#tabla_edita_grilla #txt_fob_" + id_color3).val();
+            if(fob.substring(0,1)=="."){
+                fob = "0"+fob;
+            }
+        var insp = $("#tabla_edita_grilla #txt_insp_" + id_color3).val();
+            if(insp.substring(0,1)=="."){
+                insp = "0"+insp;
+            }
+        var rfid = $("#tabla_edita_grilla #txt_rfid_" + id_color3).val();
+            if(rfid.substring(0,1)=="."){
+                rfid = "0"+rfid;
+            }
+        var provedor = $("#tabla_edita_grilla #txt_aliasproveedor_" + id_color3).val();
+        var precio_blanco = $("#tabla_edita_grilla #id_precio_blanco_" + id_color3).text();
+
+        var ventana_num = $("#tabla_edita_grilla #id_ventana_llegada_" + id_color3).text();
+        var ventana_text = $("#tabla_edita_grilla #id_ventana_" + id_color3).text();
+
+        var mkup = $("#tabla_edita_grilla #id_mkup_" + id_color3).text();
+        var gm = $("#tabla_edita_grilla #id_gm_" + id_color3).text();
+        var via = $("#tabla_edita_grilla #id_via_" + id_color3).text();
+        var pais = $("#tabla_edita_grilla #id_pais_" + id_color3).text();
+        var unidades_finales = $("#tabla_edita_grilla #id_unidades_finales_" + id_color3).text();
+
+        // variables de error
+        var error_costo_unitario_final_usd = 0;
+        var error_factor = 0;
+        var error_tipocambio = 0;
+
+        // Voy a buscar factor y tipocambio, para poder haccer los calculos
+        var factor = "";
+        var tipocambio = "";
+
+        // Factor (Lalo dice que siempre es 2)
+        var dataString_factor = "PAIS="+pais+"&VIA="+via+"&MONEDA=2&VENTANA="+ventana_text;
+        $.ajax({
+            type: "GET",
+            url: url_get_factor,
+            data: dataString_factor,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+
+            success: function (data) {
+
+                // Datos de la tabla
+                $.each(data, function (i, o) {
+                    factor = parseFloat(o[0]);
+                // Fin foreach busca factor
+                });
+
+            }, error: function (jqXHR, textStatus, errorThrown) {
+                console.log("Error: " + textStatus + " errorThrown: " + errorThrown);
+                error_factor=1;
+                alert("Error al obtener Factor para realizar los cálculos, intente nuevamente.");
+            }
+
+        }).done(function () {
+
+            // Buscar tipo de cambio
+            var dataString_tipocambio = "MONEDA=2&VENTANA="+ventana_text;
+            $.ajax({
+                type: "GET",
+                url: url_get_tipocambio,
+                data: dataString_tipocambio,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+
+                success: function (data) {
+
+                    // Datos de la tabla
+                    $.each(data, function (i, o) {
+                        tipocambio = parseFloat(o[0]);
+                     // Fin foreach busca tipocambio
+                    });
+
+                }, error: function (jqXHR, textStatus, errorThrown) {
+                    console.log("Error: " + textStatus + " errorThrown: " + errorThrown);
+                    error_tipocambio=1;
+                    alert("Error al obtener Tipo Cambio para realizar los cálculos, intente nuevamente.");
+                }
+
+            }).done(function () {
+
+                var total_errores = error_costo_unitario_final_usd + error_factor + error_tipocambio;
+
+                if(total_errores==0){
+
+                    // Definir la Ruta de Guardado
+                    var url_PLC_PLAN_COMPRA_COLOR_3 = 'ajax_simulador_cbx/actualiza_grilla_plan_compra_color3';
+                    var url_PLC_PLAN_COMPRA_COLOR_CIC = 'ajax_simulador_cbx/actualiza_grilla_plan_compra_color_cic';
+
+
+
+                    // Calculos
+                    // Costo unitarios final US$ : (Fob o target) + insp + rfid
+                    if(fob.length>0){
+                        costo_unitario_final_usd = parseFloat(fob) + parseFloat(insp) + parseFloat(rfid);
+                        costo_unitario_final_usd = costo_unitario_final_usd.toFixed(2);
+                    }else if(target.length>0){
+                        costo_unitario_final_usd = parseFloat(target) + parseFloat(insp) + parseFloat(rfid);
+                        costo_unitario_final_usd = costo_unitario_final_usd.toFixed(2);
+                    }else{
+                        error_costo_unitario_final_usd = 1;
+                    }
+
+                    // Total Fob US$: Costo unitarios final US$ (total con fob)  * unidades
+                    total_fob_usd = costo_unitario_final_usd * unidades_finales;
+                    // Total Target US$: Costo unitarios final US$ (total con target)  * unidades
+                    total_target_usd = costo_unitario_final_usd * unidades_finales;
+
+                    // Costo unitarios final Pesos :
+                    // si factor > 0  = Costo unitarios final US$ * Factor
+                    // si factor = 0 o no se encuentra factor = Costo unitarios final US$ * Tipo cambio
+                    if(factor>0){
+                        var costo_unitario_final_pesos = costo_unitario_final_usd * factor;
+                        costo_unitario_final_pesos = costo_unitario_final_pesos.toFixed(2);
+                    }else if( (factor<=0) || (factor=="") || (factor==null)  ){
+                        var costo_unitario_final_pesos = costo_unitario_final_usd * tipocambio;
+                        costo_unitario_final_pesos = costo_unitario_final_pesos.toFixed(2);
+                    }
+
+
+                    // Costo Total Pesos : Costo unitarios final Pesos  *  unidades
+                    var costo_total_pesos = costo_unitario_final_pesos * unidades_finales;
+                    costo_total_pesos = costo_total_pesos.toFixed(2);
+                    // Mkup: (Precio blanco /1.19) / Costo unitarios final Pesos  (2 decimales)
+                    var nuevo_mkup = (precio_blanco/1.19) / costo_unitario_final_pesos;
+                    nuevo_mkup = nuevo_mkup.toFixed(2);
+
+                    // GM: ((Precio blanco /1.19)- Costo unitarios final Pesos) /  ((Precio blanco /1.19)*100) (2 decimales)
+                    var nuevo_gm = ((precio_blanco/1.19) - costo_unitario_final_pesos) / ((precio_blanco/1.19)*100);
+
+
+                    // Actualizar PLC_PLAN_COMPRA_COLOR_ url_PLC_PLAN_COMPRA_COLOR_3
+                    var dataString_upd1 = "ID_COLOR3="+id_color3+"&COSTO_FOB="+fob+"&COSTO_INSP="+insp+"&COSTO_RFID="+rfid+"&COSTO_UNIT="+costo_unitario_final_usd+"&COSTO_UNITS="+costo_unitario_final_pesos+"&CST_TOTLTARGET="+total_target_usd+"&COSTO_TOT="+total_fob_usd+"&COSTO_TOTS="+costo_total_pesos+"&MKUP="+nuevo_mkup+"&GM="+nuevo_gm;
+                    $.ajax({
+                        type: "GET",
+                        url: url_PLC_PLAN_COMPRA_COLOR_3,
+                        data: dataString_upd1,
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+
+                        success: function (data) {
+
+                            // Datos de la tabla
+                            $.each(data, function (i, o) {
+
+                            // Fin foreach
+                            });
+
+                        }, error: function (jqXHR, textStatus, errorThrown) {
+                            console.log("Error: " + textStatus + " errorThrown: " + errorThrown);
+                        }
+
+                    }).done(function () {
+                        // algo aqui
+                    });
+
+
+                    // Actualizar PLC_PLAN_COMPRA_COLOR_CIC url_PLC_PLAN_COMPRA_COLOR_CIC
+
+
+
+
+
+                }else{
+                    alert("No hemos podido obtener algunos datos necesarios para realizar los cálculos, intente nuevamente.");
+                }
+
+
+
+
+            // fin del done de busca tipo de cambio
+            });
+
+        });
+
+
+
+
+
+
+
+    });
+
+
+// fin del Botón actualizar del editar grilla
+});
