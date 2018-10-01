@@ -1500,7 +1500,7 @@ $('.elimina_opcion').on('click', function () {
     var id_color3 = $("#txt_id_color_" + valor_radio).text();
     var estado_c1 = $("#tabla2 #txt_estadoc1_" + valor_radio).text();
 
-    if ((proforma != null) && (proforma != 0) && (proforma != "")) { //&& (proforma.length>5)
+    //if ((proforma != null) && (proforma != 0) && (proforma != "")) { //&& (proforma.length>5)
 
         var respuesta = confirm("¿Quiere realizar los cambios?");
         if (respuesta == true) {
@@ -1523,10 +1523,10 @@ $('.elimina_opcion').on('click', function () {
             alert("No se han Realizado Cambios.");
         }
 
-        // Cuando no llega la proforma
-    } else {
+    // Cuando no llega la proforma
+    /*} else {
         alert("No puede cambiar estado si no existe proforma.");
-    }
+    }*/
 
 
 });
