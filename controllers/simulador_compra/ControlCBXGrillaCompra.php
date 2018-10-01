@@ -483,12 +483,13 @@
 
         // Actualizar grilla en PLC_PLAN_COMPRA_COLOR_CIC
         public function actualiza_grilla_plan_compra_color_cic($f3) {
-            echo \simulador_compra\cbx_grilla_compra::actualiza_grilla_plan_compra_color_cic($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $f3->get('GET.COSTO'));
+            echo \simulador_compra\cbx_grilla_compra::actualiza_grilla_plan_compra_color_cic($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $f3->get('GET.ID_COLOR3'), $f3->get('GET.COSTO'));
         }
 
-
-
 // ######################## FIN TRABAJO CON GRILLA EDITABLE ########################
+
+
+
 
 // Termina Clase
 	}
