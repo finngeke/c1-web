@@ -3970,6 +3970,8 @@ $('#btn_edita_grilla').on('click', function () {
 
             // DataTable de la tabla de edición de grilla
             $('#tabla_edita_grilla').DataTable({
+                retrieve: true,
+                destroy: true,
                 "ordering": false,
                 paging: false,
                 searching: false,
