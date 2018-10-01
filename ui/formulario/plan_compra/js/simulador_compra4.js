@@ -1071,20 +1071,6 @@ $(window).on('load', function () {
     });
 
 
-
-    // DataTable de la tabla de edición de grilla
-    $('#tabla_edita_grilla').DataTable({
-        "ordering": false,
-        paging: false,
-        searching: false,
-        scrollY: "200px",
-        scrollX: "150px",
-        "info": false,
-        fixedColumns: true
-    });
-
-
-
 // fin de onload
 });
 
@@ -3981,6 +3967,18 @@ $('#btn_edita_grilla').on('click', function () {
 
         }).done(function () {
             // algo aqui
+
+            // DataTable de la tabla de edición de grilla
+            $('#tabla_edita_grilla').DataTable({
+                "ordering": false,
+                paging: false,
+                searching: false,
+                scrollY: "200px",
+                scrollX: "150px",
+                "info": false,
+                fixedColumns: true
+            });
+
         });
 
     }else{
@@ -3997,7 +3995,7 @@ $('#btn_edita_grilla').on('click', function () {
 $('#btn_editar_registros_grilla_editable').on('click', function () {
 
 
-    $("#loading_tabla_edita_grilla").show();
+    $(".loading_tabla_edita_grilla").show();
     $("#btn_editar_registros_grilla_editable").hide();
 
     // Voy a buscar los valores del factor
