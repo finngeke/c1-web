@@ -2132,7 +2132,7 @@ class cbx_grilla_compra extends \parametros
     }
 
     // Actualizar grilla en plan_compra_color3
-    public static function actualiza_grilla_plan_compra_color3($temporada, $depto, $login, $ID_COLOR3, $COSTO_FOB, $COSTO_INSP, $COSTO_RFID, $COSTO_UNIT, $COSTO_UNITS, $CST_TOTLTARGET, $COSTO_TOT, $COSTO_TOTS, $MKUP, $GM)
+    public static function actualiza_grilla_plan_compra_color3($temporada, $depto, $login, $ID_COLOR3, $COSTO_FOB, $COSTO_INSP, $COSTO_RFID, $COSTO_UNIT, $COSTO_UNITS, $CST_TOTLTARGET, $COSTO_TOT, $COSTO_TOTS, $MKUP, $GM,$PROVEEDOR)
     {
 
         $sql = "UPDATE PLC_PLAN_COMPRA_COLOR_3 
@@ -2145,7 +2145,8 @@ class cbx_grilla_compra extends \parametros
                     COSTO_TOT = $COSTO_TOT,
                     COSTO_TOTS = $COSTO_TOTS,
                     MKUP = $MKUP,
-                    GM = $GM
+                    GM = $GM,
+                    ALIAS_PROV = '".$PROVEEDOR."'
                 WHERE COD_TEMPORADA = $temporada
                     AND DEP_DEPTO = '".$depto."'
                     AND ID_COLOR3 = $ID_COLOR3
