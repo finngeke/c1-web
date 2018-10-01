@@ -3,8 +3,8 @@
 /**
  * CLASS Temporada
  * Descripción: Obtiene temporadas de la tabla PLC_TEMPORADA
- * Fecha: 2018-02-07
- * @author RODRIGO RIOSECO
+ * Fecha: 2018-05-09
+ * @author ROBERTO PéREZ
  */
 
 namespace simulador_compra;
