@@ -2136,24 +2136,23 @@ class cbx_grilla_compra extends \parametros
     {
 
         $sql = "UPDATE PLC_PLAN_COMPRA_COLOR_3 
-                SET COSTO_FOB = $COSTO_FOB,
-                COSTO_INSP = $COSTO_INSP,
-                COSTO_RFID = $COSTO_RFID,
-                COSTO_UNIT = $COSTO_UNIT,
-                COSTO_UNITS = $COSTO_UNITS,
-                CST_TOTLTARGET = $CST_TOTLTARGET,
-                COSTO_TOT = $COSTO_TOT,
-                COSTO_TOTS = $COSTO_TOTS,
-                MKUP = $MKUP,
-                GM = $GM
-                WHERE 1
+                    SET COSTO_FOB = $COSTO_FOB,
+                    COSTO_INSP = $COSTO_INSP,
+                    COSTO_RFID = $COSTO_RFID,
+                    COSTO_UNIT = $COSTO_UNIT,
+                    COSTO_UNITS = $COSTO_UNITS,
+                    CST_TOTLTARGET = $CST_TOTLTARGET,
+                    COSTO_TOT = $COSTO_TOT,
+                    COSTO_TOTS = $COSTO_TOTS,
+                    MKUP = $MKUP,
+                    GM = $GM
+                WHERE COD_TEMPORADA = $temporada
+                    AND DEP_DEPTO = '".$depto."'
+                    AND ID_COLOR3 = $ID_COLOR3
                 ";
 
-        echo $sql;
-        die();
-
         // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
-        /*if (!file_exists('../archivos/log_querys/' . $login)) {
+        if (!file_exists('../archivos/log_querys/' . $login)) {
             mkdir('../archivos/log_querys/' . $login, 0775, true);
         }
 
@@ -2165,7 +2164,7 @@ class cbx_grilla_compra extends \parametros
         fclose($fp);
 
         $data = \database::getInstancia()->getConsulta($sql);
-        return $data;*/
+        return $data;
 
         if(\database::getInstancia()->getConsulta($sql)){
             return 1;
@@ -2176,19 +2175,18 @@ class cbx_grilla_compra extends \parametros
     }
 
     // Actualizar grilla en PLC_PLAN_COMPRA_COLOR_CIC
-    public static function actualiza_grilla_plan_compra_color_cic($temporada, $depto, $login, $COSTO)
+    public static function actualiza_grilla_plan_compra_color_cic($temporada, $depto, $login, $ID_COLOR3, $COSTO)
     {
 
         $sql = "UPDATE PLC_PLAN_COMPRA_COLOR_CIC 
                 SET COSTO = $COSTO
-                WHERE 1
+                WHERE COD_TEMPORADA = $temporada
+                    AND DEP_DEPTO = '".$depto."'
+                    AND ID_COLOR3 = $ID_COLOR3
                 ";
 
-        echo $sql;
-        die();
-
         // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
-        /*if (!file_exists('../archivos/log_querys/' . $login)) {
+        if (!file_exists('../archivos/log_querys/' . $login)) {
             mkdir('../archivos/log_querys/' . $login, 0775, true);
         }
 
@@ -2200,13 +2198,14 @@ class cbx_grilla_compra extends \parametros
         fclose($fp);
 
         $data = \database::getInstancia()->getConsulta($sql);
-        return $data;*/
+        return $data;
 
         if(\database::getInstancia()->getConsulta($sql)){
             return 1;
         }else{
             return 0;
         }
+
 
     }
 
