@@ -4141,11 +4141,12 @@ $('#btn_editar_registros_grilla_editable').on('click', function () {
                     costo_total_pesos = costo_total_pesos.toFixed(2);
                     // Mkup: (Precio blanco /1.19) / Costo unitarios final Pesos  (2 decimales)
                     var nuevo_mkup = (precio_blanco/1.19) / costo_unitario_final_pesos;
-                    nuevo_mkup = nuevo_mkup.toFixed(2);
+                    nuevo_mkup = nuevo_mkup.toFixed(3);
 
                     // GM: ((Precio blanco /1.19)- Costo unitarios final Pesos) /  ((Precio blanco /1.19)*100) (2 decimales)
-                    var nuevo_gm = ((precio_blanco/1.19) - costo_unitario_final_pesos) / ((precio_blanco/1.19)*100);
-
+                    //var nuevo_gm = ((precio_blanco/1.19) - costo_unitario_final_pesos) / ((precio_blanco/1.19)*100);
+                    var nuevo_gm = ((  ((precio_blanco/1.19) - costo_unitario_final_pesos)) /(precio_blanco/1.19))*100 ;
+                    nuevo_gm = nuevo_gm.toFixed(2);
 
                     // Actualizar PLC_PLAN_COMPRA_COLOR_ url_PLC_PLAN_COMPRA_COLOR_3
                     var dataString_upd1 = "ID_COLOR3="+id_color3+"&COSTO_FOB="+fob+"&COSTO_INSP="+insp+"&COSTO_RFID="+rfid+"&COSTO_UNIT="+costo_unitario_final_usd+"&COSTO_UNITS="+costo_unitario_final_pesos+"&CST_TOTLTARGET="+total_target_usd+"&COSTO_TOT="+total_fob_usd+"&COSTO_TOTS="+costo_total_pesos+"&MKUP="+nuevo_mkup+"&GM="+nuevo_gm;
@@ -4158,22 +4159,51 @@ $('#btn_editar_registros_grilla_editable').on('click', function () {
 
                         success: function (data) {
 
-                            // Datos de la tabla
-                            $.each(data, function (i, o) {
-
-                            // Fin foreach
-                            });
-
                         }, error: function (jqXHR, textStatus, errorThrown) {
-                            console.log("Error: " + textStatus + " errorThrown: " + errorThrown);
+                            console.log("COLOR3 Error: " + textStatus + " errorThrown: " + errorThrown);
                         }
 
                     }).done(function () {
-                        // algo aqui
+
+                        // Actualizar PLC_PLAN_COMPRA_COLOR_CIC url_PLC_PLAN_COMPRA_COLOR_CIC
+                        var dataString_upd2 = "ID_COLOR3="+id_color3+"&COSTO="+costo_total_pesos;
+                        $.ajax({
+                            type: "GET",
+                            url: url_PLC_PLAN_COMPRA_COLOR_CIC,
+                            data: dataString_upd2,
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+
+                            success: function (data) {
+
+                                // Datos de la tabla
+                                //$.each(data, function (i, o) {
+
+                                    // Marcar que se realizó correctamente para segir con el recargar página
+
+                                // Fin foreach
+                                //});
+
+                            }, error: function (jqXHR, textStatus, errorThrown) {
+                                console.log("CIC Error: " + textStatus + " errorThrown: " + errorThrown);
+                            }
+
+                        }).done(function () {
+
+                            // Avisar término de updates
+                            alert("Los datos han sido actualizados, favor revisar.");
+                            // Recargar Página
+                            location.reload(true);
+
+                        // Fin del done asociado a la búsqueda de url_PLC_PLAN_COMPRA_COLOR_CIC
+                        });
+
+
+                    // Fin del done asociado a la búsqueda de url_PLC_PLAN_COMPRA_COLOR_3
                     });
 
 
-                    // Actualizar PLC_PLAN_COMPRA_COLOR_CIC url_PLC_PLAN_COMPRA_COLOR_CIC
+
 
 
 
