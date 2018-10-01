@@ -3997,6 +3997,9 @@ $('#btn_edita_grilla').on('click', function () {
 $('#btn_editar_registros_grilla_editable').on('click', function () {
 
 
+    $("#loading_tabla_edita_grilla").show();
+    $("#btn_editar_registros_grilla_editable").hide();
+
     // Voy a buscar los valores del factor
     var url_get_factor = 'ajax_simulador_cbx/listar_factor';
     var url_get_tipocambio = 'ajax_simulador_cbx/listar_tipocambio';
