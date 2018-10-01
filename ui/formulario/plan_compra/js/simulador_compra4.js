@@ -4193,10 +4193,14 @@ $('#btn_editar_registros_grilla_editable').on('click', function () {
 
                         }).done(function () {
 
-                            // Avisar término de updates
-                            alert("Los datos han sido actualizados, favor revisar.");
-                            // Recargar Página
-                            location.reload(true);
+                            // Define Tiempo 1 = 1000
+                            var delay = 5000;
+                            setTimeout(function () {
+                                // Avisar término de updates
+                                alert("Los datos han sido actualizados, favor revisar.");
+                                // Recargar Página
+                                location.reload(true);
+                            }, delay);
 
                         // Fin del done asociado a la búsqueda de url_PLC_PLAN_COMPRA_COLOR_CIC
                         });
