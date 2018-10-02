@@ -1488,6 +1488,8 @@ $('.elimina_opcion').on('click', function () {
 
     //if ((proforma != null) && (proforma != 0) && (proforma != "")) { //&& (proforma.length>5)
 
+    if(estado_c1 != 21){
+
         var respuesta = confirm("¿Quiere realizar los cambios?");
         if (respuesta == true) {
 
@@ -1504,10 +1506,14 @@ $('.elimina_opcion').on('click', function () {
 
             });
 
-
         } else {
             alert("No se han Realizado Cambios.");
         }
+
+    }else{
+        alert("No puede solicitar eliminar una opción ya aprobada.");
+    }
+
 
     // Cuando no llega la proforma
     /*} else {
