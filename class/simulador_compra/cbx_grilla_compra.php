@@ -2146,7 +2146,9 @@ class cbx_grilla_compra extends \parametros
                     COSTO_TOTS = $COSTO_TOTS,
                     MKUP = $MKUP,
                     GM = $GM,
-                    ALIAS_PROV = '".$PROVEEDOR."'
+                    ALIAS_PROV = '".$PROVEEDOR."',
+                    USR_MOD = '".$login."',
+                    FEC_MOD = current_date
                 WHERE COD_TEMPORADA = $temporada
                     AND DEP_DEPTO = '".$depto."'
                     AND ID_COLOR3 = $ID_COLOR3
@@ -2180,7 +2182,9 @@ class cbx_grilla_compra extends \parametros
     {
 
         $sql = "UPDATE PLC_PLAN_COMPRA_COLOR_CIC 
-                SET COSTO = $COSTO
+                SET COSTO = $COSTO,
+                    USR_MOD = '".$login."',
+                    FEC_MOD = current_date
                 WHERE COD_TEMPORADA = $temporada
                     AND DEP_DEPTO = '".$depto."'
                     AND ID_COLOR3 = $ID_COLOR3
