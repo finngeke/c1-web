@@ -4199,14 +4199,7 @@ $('#btn_editar_registros_grilla_editable').on('click', function () {
 
                         }).done(function () {
 
-                            // Define Tiempo 1 = 1000
-                            var delay = 5000;
-                            setTimeout(function () {
-                                // Avisar término de updates
-                                alert("Los datos han sido actualizados, favor revisar.");
-                                // Recargar Página
-                                location.reload(true);
-                            }, delay);
+
 
                         // Fin del done asociado a la búsqueda de url_PLC_PLAN_COMPRA_COLOR_CIC
                         });
@@ -4226,22 +4219,21 @@ $('#btn_editar_registros_grilla_editable').on('click', function () {
                     alert("No hemos podido obtener algunos datos necesarios para realizar los cálculos, intente nuevamente.");
                 }
 
-
-
-
+                
             // fin del done de busca tipo de cambio
             });
 
         });
 
-
-
-
-
-
-
     });
 
+    // Cuando termine de realizar todas las llamadas, ejecutar lo que tiene dentro
+    $(document).ajaxStop(function () {
+        // Avisar término de updates
+        alert("Los datos han sido actualizados, favor revisar.");
+        // Recargar Página
+        location.reload(true);
+    });
 
 // fin del Botón actualizar del editar grilla
 });
