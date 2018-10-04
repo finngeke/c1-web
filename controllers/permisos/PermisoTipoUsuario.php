@@ -15,7 +15,22 @@ class PermisoTipoUsuario extends \Control {
     }
 
     public function llenar_usuario($f3) {
-        echo json_encode(\permisos\permiso_usuario::llenar_usuario($f3->get('GET.ID_TIPO_USUARIO')) );
+
+        // Se modifica por el código que sigue... para evitar el problema con los caracteres especiales
+        //echo json_encode(\permisos\permiso_usuario::llenar_usuario($f3->get('GET.ID_TIPO_USUARIO')) );
+
+        $data = \permisos\permiso_usuario::llenar_usuario($f3->get('GET.ID_TIPO_USUARIO'));
+        $json = [];
+        foreach ($data as $val) {
+            $json[] = array(
+                utf8_encode($val["COD_USR"]),   // String
+                utf8_encode($val["NOM_USR"]),   // String
+                $val["COD_TIPUSR"]              // Int
+            );
+        }
+        header("Content-Type: application/json");
+        echo json_encode($json, JSON_PRETTY_PRINT);
+
     }
 
     public function llenar_tabla_depto_permisos($f3) {
@@ -75,6 +90,7 @@ class PermisoTipoUsuario extends \Control {
             $f3->get('GET.DEPTO'),
             $f3->get('SESSION.login')
            );
+
     }
 
     // Funciones para el modulo de permisos.//
