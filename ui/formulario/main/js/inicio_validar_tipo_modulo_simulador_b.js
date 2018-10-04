@@ -88,6 +88,20 @@ $(window).on('load', function () {
                         $("#tipos_import").attr("disabled", "disabled");
                     }
 
+                    // BTN Edita Grilla en PRO
+                    /*verifica_accion = $.grep(arreglo_accion_desac,function(e){return e.id_accion==95;});
+                    if (verifica_accion.length > 0){
+                        $("#btn_habilita_grilla").attr("disabled", "disabled");
+                        //$("#btn_habilita_grilla").hide();
+                    }*/
+
+                    // BTN Edita Grilla en QA
+                    verifica_accion = $.grep(arreglo_accion_desac,function(e){return e.id_accion==79;});
+                    if (verifica_accion.length > 0){
+                        $("#btn_habilita_grilla").attr("disabled", "disabled");
+                        //$("#btn_habilita_grilla").hide();
+                    }
+
 
                     // M - VALIDAR MODULO DE TIENDAS
                     verifica_modulo = $.grep(arreglo_modulos_desac,function(e){return e.id_modulo==8;});
