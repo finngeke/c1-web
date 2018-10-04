@@ -17,9 +17,11 @@ class permiso_usuario extends \parametros {
 
     public static function llenar_usuario($id_tipo_usuario) {
 
-        $sql = "SELECT COD_USR, nom_usr, cod_tipusr 
-                    FROM plc_usuario 
-                    where cod_tipusr = $id_tipo_usuario ";
+        $sql = "SELECT COD_USR, NOM_USR, COD_TIPUSR 
+                FROM plc_usuario 
+                WHERE cod_tipusr = $id_tipo_usuario 
+                ";
+
         $data = \database::getInstancia()->getFilas($sql);
         return $data;
 
@@ -180,6 +182,28 @@ class permiso_usuario extends \parametros {
 
         $data = \database::getInstancia()->getConsulta($sql);
         return $data;
+    }
+
+    public static function eliminar_toda_concurrencia($login) {
+
+        $sql = "delete from plc_concurrencia 
+                where cod_usr = '".$login."' 
+                ";
+
+        // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+        if (!file_exists('../archivos/log_querys/'.$login)) {
+            mkdir('../archivos/log_querys/'.$login, 0775, true);
+        }
+        $stamp = date("Y-m-d_H-i-s");
+        $rand = rand(1, 999);
+        $content = $sql;
+        $fp = fopen("../archivos/log_querys/".$login."/ELIMINATODACONCURRENCIA--".$login."-".$stamp." R".$rand.".txt","wb");
+        fwrite($fp,$content);
+        fclose($fp);
+
+        $data = \database::getInstancia()->getConsulta($sql);
+        return $data;
+
     }
 
 
