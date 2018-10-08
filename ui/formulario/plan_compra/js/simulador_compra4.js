@@ -1279,7 +1279,7 @@ function descargaPI(event) {
     var separa_barra_span = span_temporada.split("-");
 
     if (estado_c1 != 0) {
-        var valFileDownloadPath = '../archivos/pi/PI_' + separa_barra_span[0] + '_' + separa_barra_span[1] + '_' + proforma + '.xls';
+        var valFileDownloadPath = '../archivos/pi/PI_' + separa_barra_span[0] + '_' + separa_barra_span[1] + '_' + proforma + '.xlsx';
         window.open(valFileDownloadPath, '_blank');
     }
 
@@ -3881,7 +3881,7 @@ $('#btn_habilita_grilla').on('click', function () {
 
 });
 
-// Editar Grilla
+// Editar Grilla / llenar tabla grilla editable
 $('#btn_edita_grilla').on('click', function () {
 
     // eliminar los registros de la tabla, generados en otra consulta previa
@@ -3914,6 +3914,7 @@ $('#btn_edita_grilla').on('click', function () {
         // 4.- Realizo un listar según los IDs que me llegan (Despliego)
         // Cargar datos de la grilla 2
         var url_edita_grilla = 'ajax_simulador_cbx/llenar_edita_grilla';
+        var url_lista_pais = 'ajax_simulador_cbx/listar_pais';
         var flag_tabla_edita = 0;
         var flag_cont_registro = 0;
 
@@ -3927,14 +3928,16 @@ $('#btn_edita_grilla').on('click', function () {
             dataType: "json",
 
             success: function (data) {
+
                 // Contar los registros que me llegan
                 $.each(data, function () {
                     flag_cont_registro++;
                 });
 
-                // Datos de la tabla
+                // Datos de la tabla (Llenar tabla editable)
                 $.each(data, function (i, o) {
                     $('#tabla_edita_grilla').append(
+
                         '<tr id="tablaedita_tr_id_' + flag_tabla_edita + '" class="tablaedita_tr_id_' + o[14] + '">\n' +
                         '<td id="id_idcolor3_' + o[14] + '" style="display: none">' + o[14] + '</td>\n' +
                         '<td id="id_grupo_compra_' + o[14] + '" class="id_grupo_compra_' + o[14] + '">' + o[0] + '</td>\n' +
@@ -3950,6 +3953,8 @@ $('#btn_edita_grilla').on('click', function () {
                         '<td id="id_insp_' + o[14] + '"><input type="text" id="txt_insp_' + o[14] + '" name="txt_insp_' + o[14] + '" value="' + o[11] + '" size="3"></td>\n' +
                         '<td id="id_rfid_' + o[14] + '"><input type="text" id="txt_rfid_' + o[14] + '" name="txt_rfid_' + o[14] + '" value="' + o[12] + '" size="3"></td>\n' +
                         '<td id="id_aliasproveedor_' + o[14] + '"><input type="text" id="txt_aliasproveedor_' + o[14] + '" name="txt_aliasproveedor_' + o[14] + '" value="' + o[13] + '" size="20"></td>\n' +
+                        '<td id="id_via_' + o[14] + '"><select id="txt_via_' + o[14] + '" name="txt_via_' + o[14] + '" class="txt_via_"><option value="1">MARITIMO</option><option value="2">AEREA</option><option value="3">TERRESTRE</option></select></td>\n' +
+                        '<td id="id_pais_' + o[14] + '"><select id="txt_pais_' + o[14] + '" name="txt_pais_' + o[14] + '" class="txt_pais_"></select></td>\n' +
                         '<td id="id_mkup_' + o[14] + '" style="display: none">' + o[15] + '</td>\n' +
                         '<td id="id_gm_' + o[14] + '" style="display: none">' + o[16] + '</td>\n' +
                         '<td id="id_via_' + o[14] + '" style="display: none">' + o[17] + '</td>\n' +
@@ -3958,24 +3963,112 @@ $('#btn_edita_grilla').on('click', function () {
                         '<td id="id_precio_blanco_' + o[14] + '" style="display: none">' + o[20] + '</td>\n' +
                         '</tr>');
                     flag_tabla_edita++;
-                    // Fin foreach que llena tabla
+
+                // Fin foreach que llena tabla
                 });
 
+                // Si el data me trae registros, lleno el CBX de País, luego asigno vía y país
                 if (flag_cont_registro > 0) {
 
+                    // Realizar la búsqueda de países para asignarla a el CBX país
+                    var toAppend_pais = "";
+                    $.ajax({
+                        type: "GET",
+                        url: url_lista_pais,
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (data_pais) {
+
+                            // si la consulta devuelve resultados, completar el o los CBX con clase txt_pais_
+                            $.each(data_pais, function (i, o) {
+                                toAppend_pais += '<option value=' + o[0] + '>' + o[1] + '</option>';
+                            });
+
+                            // Adjuntar país al CBX de país
+                            $('.txt_pais_').append(toAppend_pais);
+
+                            // Asignamos Vía y País
+                            /*$.each(data, function (i,o) {
+
+                                // Vía o[17]
+                                $("#txt_via_"+ o[14]).val(o[17]);
+
+                                // País o[18]
+                                $("#txt_pais_"+ o[14]).val(o[18]);
+
+                            });*/
+
+
+                        }, error: function (jqXHR, textStatus, errorThrown) {
+                            console.log("Error: " + textStatus + " errorThrown: " + errorThrown);
+                        }
+
+                    }).done(function () {
+
+                        // Asignamos Vía y País (Funcionando, pero se utiliza en líneas de código atrás)
+                        $.each(data, function (i,o) {
+
+                            // Vía o[17]
+                            $("#txt_via_"+ o[14]).val(o[17]);
+
+                            // País o[18]
+                            $("#txt_pais_"+ o[14]).val(o[18]);
+
+                        })/*.promise().done(function(data){
+
+                            // DataTable de la tabla de edición de grilla (verificar si agregando el ajaxstop se mejora el despligue de la tabla)
+                            $('#tabla_edita_grilla').DataTable({
+                                retrieve: true,
+                                destroy: true,
+                                "ordering": false,
+                                paging: false,
+                                searching: false,
+                                scrollY: "200px",
+                                scrollX: "150px",
+                                "info": false,
+                                fixedColumns: true
+                            });
+
+                        })*/;
+
+
+                        // Define Tiempo 1 = 1000
+                        var delay = 2000;
+                        setTimeout(function () {
+                            // Acción a Ejecutar
+                            // DataTable de la tabla de edición de grilla (verificar si agregando el ajaxstop se mejora el despligue de la tabla)
+                            $('#tabla_edita_grilla').DataTable({
+                                retrieve: true,
+                                destroy: true,
+                                "ordering": false,
+                                paging: false,
+                                searching: false,
+                                scrollY: "200px",
+                                scrollX: "150px",
+                                "info": false,
+                                fixedColumns: true
+                            });
+                        }, delay);
+
+                    });
+
+
+                    // Desplegar el BTN editar
                    $("#btn_editar_registros_grilla_editable").show();
 
+
+                // Fin del si llegan registros
                 }
 
             }, error: function (jqXHR, textStatus, errorThrown) {
                 console.log("Error: " + textStatus + " errorThrown: " + errorThrown);
             }
 
-        }).done(function () {
-            // algo aqui
+        }).done(function (data) {
 
-            // DataTable de la tabla de edición de grilla
-            $('#tabla_edita_grilla').DataTable({
+            // DataTable de la tabla de edición de grilla (verificar si agregando el ajaxstop se mejora el despligue de la tabla)
+            // Funcionando, pero se mueve más arriba en el código para desplegar bien la estructura de las columnas
+            /*$('#tabla_edita_grilla').DataTable({
                 retrieve: true,
                 destroy: true,
                 "ordering": false,
@@ -3985,15 +4078,13 @@ $('#btn_edita_grilla').on('click', function () {
                 scrollX: "150px",
                 "info": false,
                 fixedColumns: true
-            });
+            });*/
 
         });
 
     }else{
         alert("Seleccione al menos un registro para editar");
     }
-
-
 
 
 // fin del btn editar
@@ -4044,7 +4135,11 @@ $('#btn_editar_registros_grilla_editable').on('click', function () {
         var mkup = $("#tabla_edita_grilla #id_mkup_" + id_color3).text();
         var gm = $("#tabla_edita_grilla #id_gm_" + id_color3).text();
         var via = $("#tabla_edita_grilla #id_via_" + id_color3).text();
+            var nueva_via = $("#tabla_edita_grilla #txt_via_" + id_color3).val();
+            var nuevo_nom_via = $("#tabla_edita_grilla #txt_via_" + id_color3+" option:selected").text();
         var pais = $("#tabla_edita_grilla #id_pais_" + id_color3).text();
+            var nuevo_pais = $("#tabla_edita_grilla #txt_pais_" + id_color3).val();
+            var nuevo_nom_pais = $("#tabla_edita_grilla #txt_pais_" + id_color3+" option:selected").text();
         var unidades_finales = $("#tabla_edita_grilla #id_unidades_finales_" + id_color3).text();
 
         // variables de error
@@ -4055,8 +4150,18 @@ $('#btn_editar_registros_grilla_editable').on('click', function () {
         // Voy a buscar factor y tipocambio, para poder haccer los calculos
         var factor = "";
         var tipocambio = "";
+        var factor_est_campo = "";
 
-        // Factor (Lalo dice que siempre es 2)
+
+        // Si se realizaron cambios en la Vía
+        // (La que llega por BD, es distinta a la que se está leyendo del campo)
+        if(via!=nueva_via){
+            pais = nuevo_pais;
+            via = nueva_via;
+        // Se realizaron cambios en la Vía
+        }
+
+        // Factor (Lalo dice que siempre es 2, jefe manda)
         var dataString_factor = "PAIS="+pais+"&VIA="+via+"&MONEDA=2&VENTANA="+ventana_text;
         $.ajax({
             type: "GET",
@@ -4067,7 +4172,7 @@ $('#btn_editar_registros_grilla_editable').on('click', function () {
 
             success: function (data) {
 
-                // Datos de la tabla
+                // Traigo datos del Factor
                 $.each(data, function (i, o) {
                     factor = parseFloat(o[0]);
                 // Fin foreach busca factor
@@ -4092,7 +4197,7 @@ $('#btn_editar_registros_grilla_editable').on('click', function () {
 
                 success: function (data) {
 
-                    // Datos de la tabla
+                    // Llegan los datos del tipo de cambio
                     $.each(data, function (i, o) {
                         tipocambio = parseFloat(o[0]);
                      // Fin foreach busca tipocambio
@@ -4114,9 +4219,7 @@ $('#btn_editar_registros_grilla_editable').on('click', function () {
                     var url_PLC_PLAN_COMPRA_COLOR_3 = 'ajax_simulador_cbx/actualiza_grilla_plan_compra_color3';
                     var url_PLC_PLAN_COMPRA_COLOR_CIC = 'ajax_simulador_cbx/actualiza_grilla_plan_compra_color_cic';
 
-
-
-                    // Calculos
+                    // Cálculos
                     // Costo unitarios final US$ : (Fob o target) + insp + rfid
                     if(fob.length>0){
                         costo_unitario_final_usd = parseFloat(fob) + parseFloat(insp) + parseFloat(rfid);
@@ -4144,7 +4247,6 @@ $('#btn_editar_registros_grilla_editable').on('click', function () {
                         costo_unitario_final_pesos = costo_unitario_final_pesos.toFixed(2);
                     }
 
-
                     // Costo Total Pesos : Costo unitarios final Pesos  *  unidades
                     var costo_total_pesos = costo_unitario_final_pesos * unidades_finales;
                     costo_total_pesos = costo_total_pesos.toFixed(2);
@@ -4153,12 +4255,19 @@ $('#btn_editar_registros_grilla_editable').on('click', function () {
                     nuevo_mkup = nuevo_mkup.toFixed(3);
 
                     // GM: ((Precio blanco /1.19)- Costo unitarios final Pesos) /  ((Precio blanco /1.19)*100) (2 decimales)
-                    //var nuevo_gm = ((precio_blanco/1.19) - costo_unitario_final_pesos) / ((precio_blanco/1.19)*100);
                     var nuevo_gm = ((  ((precio_blanco/1.19) - costo_unitario_final_pesos)) /(precio_blanco/1.19))*100 ;
                     nuevo_gm = nuevo_gm.toFixed(2);
 
+                    // Si llega Factor factor_est_campo = factor de lo contrario tipocambio = factor_est_campo
+                    // factor / tipocambio
+                    if(factor>0){
+                        factor_est_campo = factor;
+                    }else{
+                        factor_est_campo = tipocambio;
+                    }
+
                     // Actualizar PLC_PLAN_COMPRA_COLOR_ url_PLC_PLAN_COMPRA_COLOR_3
-                    var dataString_upd1 = "ID_COLOR3="+id_color3+"&COSTO_FOB="+fob+"&COSTO_INSP="+insp+"&COSTO_RFID="+rfid+"&COSTO_UNIT="+costo_unitario_final_usd+"&COSTO_UNITS="+costo_unitario_final_pesos+"&CST_TOTLTARGET="+total_target_usd+"&COSTO_TOT="+total_fob_usd+"&COSTO_TOTS="+costo_total_pesos+"&MKUP="+nuevo_mkup+"&GM="+nuevo_gm+"&PROVEEDOR="+provedor;
+                    var dataString_upd1 = "ID_COLOR3="+id_color3+"&COSTO_FOB="+fob+"&COSTO_INSP="+insp+"&COSTO_RFID="+rfid+"&COSTO_UNIT="+costo_unitario_final_usd+"&COSTO_UNITS="+costo_unitario_final_pesos+"&CST_TOTLTARGET="+total_target_usd+"&COSTO_TOT="+total_fob_usd+"&COSTO_TOTS="+costo_total_pesos+"&MKUP="+nuevo_mkup+"&GM="+nuevo_gm+"&PROVEEDOR="+provedor+"&PAIS="+pais+"&VIA="+via+"&FACTOR_EST="+factor_est_campo+"&NOM_VIA="+nuevo_nom_via+"&NOM_PAIS="+nuevo_nom_pais;
                     $.ajax({
                         type: "GET",
                         url: url_PLC_PLAN_COMPRA_COLOR_3,
@@ -4167,7 +4276,7 @@ $('#btn_editar_registros_grilla_editable').on('click', function () {
                         dataType: "json",
 
                         success: function (data) {
-
+                            // Éxito
                         }, error: function (jqXHR, textStatus, errorThrown) {
                             console.log("COLOR3 Error: " + textStatus + " errorThrown: " + errorThrown);
                         }
@@ -4184,22 +4293,14 @@ $('#btn_editar_registros_grilla_editable').on('click', function () {
                             dataType: "json",
 
                             success: function (data) {
-
-                                // Datos de la tabla
-                                //$.each(data, function (i, o) {
-
-                                    // Marcar que se realizó correctamente para segir con el recargar página
-
-                                // Fin foreach
-                                //});
-
+                                // Éxito
                             }, error: function (jqXHR, textStatus, errorThrown) {
                                 console.log("CIC Error: " + textStatus + " errorThrown: " + errorThrown);
                             }
 
                         }).done(function () {
 
-
+                            // Done
 
                         // Fin del done asociado a la búsqueda de url_PLC_PLAN_COMPRA_COLOR_CIC
                         });
@@ -4209,21 +4310,16 @@ $('#btn_editar_registros_grilla_editable').on('click', function () {
                     });
 
 
-
-
-
-
-
-
                 }else{
                     alert("No hemos podido obtener algunos datos necesarios para realizar los cálculos, intente nuevamente.");
                 }
 
-                
+
             // fin del done de busca tipo de cambio
             });
 
         });
+
 
     });
 
@@ -4237,3 +4333,6 @@ $('#btn_editar_registros_grilla_editable').on('click', function () {
 
 // fin del Botón actualizar del editar grilla
 });
+
+
+//.promise().done(function(data){});

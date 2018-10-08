@@ -98,25 +98,25 @@
 								</tr>
 							</thead>
 							<tbody>
-								
+
 								<tr>
 									<F3:repeat group="{{@GRILLA_CABECERA}}" key="{{@key}}" value="{{@val}}">
 										<td>{{@val}}</td>
 									</F3:repeat>
 								</tr>
-								
+
 								<tr>
 									<F3:repeat group="{{@TABLA1_CONSUMO}}" key="{{@key}}" value="{{@val}}">
 										<td>{{@val}}</td>
 									</F3:repeat>
 								</tr>
-								
+
 								<tr>
 									<F3:repeat group="{{@TABLA1_TOTAL}}" key="{{@key}}" value="{{@val}}">
 										<td>{{@val}}</td>
 									</F3:repeat>
 								</tr>
-							
+
 							</tbody>
 						</table>
 						<!-- fin div tabla responsiva -->
@@ -1149,8 +1149,8 @@
 			</div>
 			<div class="modal-body">
 				<div class='row'>
-					<div class='col-md-12'>&nbsp;
-						<table class="table table-bordered table-striped tabla_smaller" id="tabla_edita_grilla" style="font-size: 10px;white-space:nowrap;">
+					<div class="table-responsive">&nbsp;
+						<table class="table table-bordered table-striped tabla_smaller" id="tabla_edita_grilla" style="font-size: 10px;width:100%;white-space:nowrap;">
 							<thead>
 							<tr>
                                 <th style="display: none"></th><!-- id_color3 -->
@@ -1167,6 +1167,8 @@
 								<th style="text-align: center;">Insp</th>
 								<th style="text-align: center;">RFID</th>
 								<th style="text-align: center;">PROVEEDOR</th>
+								<th style="text-align: center;">VÍA</th><!-- predefinida en codigo -->
+								<th style="text-align: center;">PAÍS</th><!-- secarga por query, luego se asigna -->
 								<th style="display: none"></th><!-- mkup -->
 								<th style="display: none"></th><!-- gm -->
 								<th style="display: none"></th><!-- via -->
@@ -1189,7 +1191,7 @@
 	</div>
 </div>
 
-
+//
 
 <!-- Include de los menús del costado -->
 <include href="{{ @tipo_ventana_llegada }}" />

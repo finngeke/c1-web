@@ -2132,7 +2132,7 @@ class cbx_grilla_compra extends \parametros
     }
 
     // Actualizar grilla en plan_compra_color3
-    public static function actualiza_grilla_plan_compra_color3($temporada, $depto, $login, $ID_COLOR3, $COSTO_FOB, $COSTO_INSP, $COSTO_RFID, $COSTO_UNIT, $COSTO_UNITS, $CST_TOTLTARGET, $COSTO_TOT, $COSTO_TOTS, $MKUP, $GM,$PROVEEDOR)
+    public static function actualiza_grilla_plan_compra_color3($temporada, $depto, $login, $ID_COLOR3, $COSTO_FOB, $COSTO_INSP, $COSTO_RFID, $COSTO_UNIT, $COSTO_UNITS, $CST_TOTLTARGET, $COSTO_TOT, $COSTO_TOTS, $MKUP, $GM,$PROVEEDOR,$VIA,$PAIS, $FACTOR_EST,$NOM_VIA,$NOM_PAIS)
     {
 
         $sql = "UPDATE PLC_PLAN_COMPRA_COLOR_3 
@@ -2147,6 +2147,11 @@ class cbx_grilla_compra extends \parametros
                     MKUP = $MKUP,
                     GM = $GM,
                     ALIAS_PROV = '".$PROVEEDOR."',
+                    VIA = $VIA,
+                    PAIS = $PAIS,
+                    NOM_VIA = '".$NOM_VIA."', 
+                    NOM_PAIS = '".$NOM_PAIS."',
+                    FACTOR_EST = $FACTOR_EST,
                     USR_MOD = '".$login."',
                     FEC_MOD = current_date
                 WHERE COD_TEMPORADA = $temporada
@@ -2214,7 +2219,18 @@ class cbx_grilla_compra extends \parametros
 
     }
 
+    // Listar País
+    public static function listar_pais($cod_temporada,$depto){
 
+        $sql =  "SELECT CNTRY_LVL_CHILD,CNTRY_NAME 
+                  FROM plc_pais
+                  ORDER BY CNTRY_NAME ASC
+                ";
+
+        $data = \database::getInstancia()->getFilas($sql);
+        return $data;
+
+    }
 
 
 
