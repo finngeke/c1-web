@@ -746,7 +746,8 @@
 					}
 					
 					//TODO: Crear detalle LPN
-					$this::crearDetalleLPN($f3, $cod_proveedor, $invoiceNumber);
+					\proveedor\proveedor::crearDetalleLPN($cod_proveedor, $invoiceNumber);
+					//$this::crearDetalleLPN($f3, $cod_proveedor, $invoiceNumber);
 					
 					/*$curlopt_url = $f3->get('CURLOPT_URL') . "/facturaComexrst/v1/facturaComex";
 					$curlopt_port = $f3->get('CURLOPT_PORT');
@@ -782,9 +783,9 @@
 		public function approve_invoice($f3) {
 			$cod_proveedor = $f3->get('GET.cod_proveedor');
 			$nro_factura = $f3->get('GET.nro_factura');
-			$etapa = "generateLPNDetail";
+			$etapa = "setFacturaAprobada";
 			try {
-				$etapa = "getInvoiceHeader";
+				/*$etapa = "getInvoiceHeader";
 				$facturas = \proveedor\proveedor::getEncabezadoFacturaLPN($cod_proveedor, $nro_factura);
 				$registros = [];
 				foreach ($facturas as $factura) {
@@ -832,7 +833,7 @@
 				foreach ($registros as $registro) {
 					$etapa = "saveLPNDetail_" . $registro["po_number"] . "_" . $registro["nro_variacion"];
 					\proveedor\proveedor::saveLPNDetail($registro);
-				}
+				}*/
 				\proveedor\proveedor::setFacturaAprobada($cod_proveedor, $nro_factura);
 			} catch (Exception $e) {
 				$msj = $e->getMessage();
