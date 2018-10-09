@@ -4111,18 +4111,26 @@ $('#btn_editar_registros_grilla_editable').on('click', function () {
         var id_color3 = $(this).find("td:eq(0)").text();
 
         var target = $("#tabla_edita_grilla #txt_target_" + id_color3).val();
+		target = target.replace(",", ".");
+        if(target.length==0){target = 0;}
             if(target.substring(0,1)=="."){
                 target = "0"+target;
             }
         var fob = $("#tabla_edita_grilla #txt_fob_" + id_color3).val();
+		fob = fob.replace(",", ".");
+        if(fob.length==0){fob = 0;}
             if(fob.substring(0,1)=="."){
                 fob = "0"+fob;
             }
         var insp = $("#tabla_edita_grilla #txt_insp_" + id_color3).val();
+		insp = insp.replace(",", ".");
+        if(insp.length==0){insp = 0;}
             if(insp.substring(0,1)=="."){
                 insp = "0"+insp;
             }
         var rfid = $("#tabla_edita_grilla #txt_rfid_" + id_color3).val();
+		rfid = rfid.replace(",", ".");
+        if(rfid.length==0){rfid = 0;}
             if(rfid.substring(0,1)=="."){
                 rfid = "0"+rfid;
             }
@@ -4221,30 +4229,33 @@ $('#btn_editar_registros_grilla_editable').on('click', function () {
 
                     // Cálculos
                     // Costo unitarios final US$ : (Fob o target) + insp + rfid
-                    if(fob.length>0){
+                    if(fob>0){
                         costo_unitario_final_usd = parseFloat(fob) + parseFloat(insp) + parseFloat(rfid);
                         costo_unitario_final_usd = costo_unitario_final_usd.toFixed(2);
-                    }else if(target.length>0){
+						total_fob_usd = costo_unitario_final_usd * unidades_finales;
+                    }else{
                         costo_unitario_final_usd = parseFloat(target) + parseFloat(insp) + parseFloat(rfid);
                         costo_unitario_final_usd = costo_unitario_final_usd.toFixed(2);
-                    }else{
+						total_target_usd = costo_unitario_final_usd * unidades_finales;
+                    }/*else{
                         error_costo_unitario_final_usd = 1;
-                    }
+                    }*/
 
                     // Total Fob US$: Costo unitarios final US$ (total con fob)  * unidades
-                    total_fob_usd = costo_unitario_final_usd * unidades_finales;
+						// total_fob_usd = costo_unitario_final_usd * unidades_finales;
                     // Total Target US$: Costo unitarios final US$ (total con target)  * unidades
-                    total_target_usd = costo_unitario_final_usd * unidades_finales;
+						// total_target_usd = costo_unitario_final_usd * unidades_finales;
 
                     // Costo unitarios final Pesos :
                     // si factor > 0  = Costo unitarios final US$ * Factor
                     // si factor = 0 o no se encuentra factor = Costo unitarios final US$ * Tipo cambio
                     if(factor>0){
                         var costo_unitario_final_pesos = costo_unitario_final_usd * factor;
-                        costo_unitario_final_pesos = costo_unitario_final_pesos.toFixed(2);
-                    }else if( (factor<=0) || (factor=="") || (factor==null)  ){
+                        costo_unitario_final_pesos = costo_unitario_final_pesos.toFixed(0);
+                    //}else if( (factor<=0) || (factor=="") || (factor==null)  ){
+					}else{
                         var costo_unitario_final_pesos = costo_unitario_final_usd * tipocambio;
-                        costo_unitario_final_pesos = costo_unitario_final_pesos.toFixed(2);
+                        costo_unitario_final_pesos = costo_unitario_final_pesos.toFixed(0);
                     }
 
                     // Costo Total Pesos : Costo unitarios final Pesos  *  unidades
