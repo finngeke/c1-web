@@ -72,4 +72,5 @@ class ControlPortada extends Control {
         $f3->clear('SESSION.session_depto_validar_url');
         $f3->reroute('/');
     }
+
 }
