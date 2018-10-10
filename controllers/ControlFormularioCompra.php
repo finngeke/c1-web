@@ -6,11 +6,14 @@
 	 * Fecha: 2018-02-15
 	 * @author RODRIGO RIOSECO
 	 * @edita EDUARDO PACHECO
-	 * @edita ROBERTO PÉREZ (23-05-2018)
+	 * @edita ROBERTO PÉREZ (02-10-2018)
 	 */
 	class ControlFormularioCompra extends Control {
 		
 		public function inicio($f3) {
+
+            // Eliminar toda consurrencia del ususario (Luego de seleccionar una temporada)
+            //\permisos\permiso_usuario::eliminar_toda_concurrencia($f3->get('SESSION.login'));
 
             unset($_SESSION['session_depto_validar_url']);
 
@@ -375,6 +378,9 @@
 		
 		public function selecciona_depto($f3) {
 
+            // Eliminar toda consurrencia del ususario (BTN Registro de Compra)
+            //\permisos\permiso_usuario::eliminar_toda_concurrencia($f3->get('SESSION.login'));
+
             unset($_SESSION['session_depto_validar_url']);
 			ControlFormularioMain::cargaMain($f3);
 			
@@ -403,6 +409,10 @@
 		}
 		
 		public function curva_reparto($f3) {
+
+            // Eliminar toda consurrencia del ususario
+            //\permisos\permiso_usuario::eliminar_toda_concurrencia($f3->get('SESSION.login'));
+
 			ControlFormularioMain::cargaMain($f3); //variable de perfilamiento.
 			$f3->set('nombre_form', 'CURVA DE REPARTO'); //Parametros por cada formulario
 			$f3->set('depto_form', 'D125'); //Parametros por cada formulario
@@ -411,6 +421,10 @@
 		}
 		
 		public function factor_estimado($f3) {
+
+            // Eliminar toda consurrencia del ususario
+            //\permisos\permiso_usuario::eliminar_toda_concurrencia($f3->get('SESSION.login'));
+
 			ControlFormularioMain::cargaMain($f3); //variable de perfilamiento.
 			ControlFormularioMain::cargaMensaje($f3);
 			$f3->set('nombre_form', 'Factor Estimado'); //Parametros por cada formulario
@@ -445,6 +459,10 @@
 		}
 		
 		public function fecha_recepcion($f3) {
+
+            // Eliminar toda consurrencia del ususario
+            //\permisos\permiso_usuario::eliminar_toda_concurrencia($f3->get('SESSION.login'));
+
 			ControlFormularioMain::cargaMain($f3); //variable de perfilamiento.
 			$f3->set('nombre_form', 'Fecha de Recepción'); //Parametros por cada formulario
 			$f3->set('depto_form', '-'); //Parametros por cada formulario

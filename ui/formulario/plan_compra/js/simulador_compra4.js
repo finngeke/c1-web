@@ -3955,6 +3955,11 @@ $('#btn_edita_grilla').on('click', function () {
                         '<td id="id_aliasproveedor_' + o[14] + '"><input type="text" id="txt_aliasproveedor_' + o[14] + '" name="txt_aliasproveedor_' + o[14] + '" value="' + o[13] + '" size="20"></td>\n' +
                         '<td id="id_via_' + o[14] + '"><select id="txt_via_' + o[14] + '" name="txt_via_' + o[14] + '" class="txt_via_"><option value="1">MARITIMO</option><option value="2">AEREA</option><option value="3">TERRESTRE</option></select></td>\n' +
                         '<td id="id_pais_' + o[14] + '"><select id="txt_pais_' + o[14] + '" name="txt_pais_' + o[14] + '" class="txt_pais_"></select></td>\n' +
+
+                        '<td id="id_tipo_embarque_' + o[14] + '"><select id="txt_tipo_embarque_' + o[14] + '" name="txt_tipo_embarque_' + o[14] + '" class="txt_tipo_embarque_"><option value="CURVADO">CURVADO</option><option value="SOLIDO">SOLIDO</option></select></td>\n' +
+                        '<td id="id_formato_' + o[14] + '"><select id="txt_formato_' + o[14] + '" name="txt_formato_' + o[14] + '" class="txt_formato_"><option value="PRIME">PRIME</option><option value="SIN FORMATO">SIN FORMATO</option><option value=""></option></select></td>\n' +
+                        '<td id="id_nom_ventana_' + o[14] + '"><select id="txt_nom_ventana_' + o[14] + '" name="txt_nom_ventana_' + o[14] + '" class="txt_nom_ventana_"></select></td>\n' +
+
                         '<td id="id_mkup_' + o[14] + '" style="display: none">' + o[15] + '</td>\n' +
                         '<td id="id_gm_' + o[14] + '" style="display: none">' + o[16] + '</td>\n' +
                         '<td id="id_via_' + o[14] + '" style="display: none">' + o[17] + '</td>\n' +
@@ -4093,7 +4098,6 @@ $('#btn_edita_grilla').on('click', function () {
 // Botón actualizar del editar grilla
 $('#btn_editar_registros_grilla_editable').on('click', function () {
 
-
     $(".loading_tabla_edita_grilla").show();
     $("#btn_editar_registros_grilla_editable").hide();
 
@@ -4101,8 +4105,8 @@ $('#btn_editar_registros_grilla_editable').on('click', function () {
     var url_get_factor = 'ajax_simulador_cbx/listar_factor';
     var url_get_tipocambio = 'ajax_simulador_cbx/listar_tipocambio';
 
-    var total_fob_usd = "";
-    var total_target_usd = "";
+    var total_fob_usd = 0
+    var total_target_usd = 0;
     var costo_unitario_final_usd = "";
 
 
@@ -4229,21 +4233,29 @@ $('#btn_editar_registros_grilla_editable').on('click', function () {
 
                     // Cálculos
                     // Costo unitarios final US$ : (Fob o target) + insp + rfid
-                    if(fob>0){
+                    if(fob > 0){
+
                         costo_unitario_final_usd = parseFloat(fob) + parseFloat(insp) + parseFloat(rfid);
                         costo_unitario_final_usd = costo_unitario_final_usd.toFixed(2);
 						total_fob_usd = costo_unitario_final_usd * unidades_finales;
+                        // alert("FOB - TARGET: " + target+" / FOB: " + fob+" / COF USD: " + costo_unitario_final_usd+" / INSP: " + insp+" / RFID: " + rfid);
+
                     }else{
+
                         costo_unitario_final_usd = parseFloat(target) + parseFloat(insp) + parseFloat(rfid);
                         costo_unitario_final_usd = costo_unitario_final_usd.toFixed(2);
 						total_target_usd = costo_unitario_final_usd * unidades_finales;
+                        // alert("NOFOB - TARGET: " + target+" / FOB: " + fob+" / COF USD: " + costo_unitario_final_usd+" / INSP: " + insp+" / RFID: " + rfid);
+
                     }/*else{
                         error_costo_unitario_final_usd = 1;
                     }*/
 
-                    // Total Fob US$: Costo unitarios final US$ (total con fob)  * unidades
+                    // alert("Total FOB USD: " + total_fob_usd + " Total TARGET USD: "+total_target_usd);
+
+                    // Total Fob US$: Costo unitarios final US$ (total con fob)  * unidades (Funcionando Antes de Comentar)
 						// total_fob_usd = costo_unitario_final_usd * unidades_finales;
-                    // Total Target US$: Costo unitarios final US$ (total con target)  * unidades
+                    // Total Target US$: Costo unitarios final US$ (total con target)  * unidades (Funcionando Antes de Comentar)
 						// total_target_usd = costo_unitario_final_usd * unidades_finales;
 
                     // Costo unitarios final Pesos :
@@ -4251,10 +4263,11 @@ $('#btn_editar_registros_grilla_editable').on('click', function () {
                     // si factor = 0 o no se encuentra factor = Costo unitarios final US$ * Tipo cambio
                     if(factor>0){
                         var costo_unitario_final_pesos = costo_unitario_final_usd * factor;
+                        // costo_unitario_final_pesos = costo_unitario_final_pesos.toFixed(2);
                         costo_unitario_final_pesos = costo_unitario_final_pesos.toFixed(0);
-                    //}else if( (factor<=0) || (factor=="") || (factor==null)  ){
 					}else{
                         var costo_unitario_final_pesos = costo_unitario_final_usd * tipocambio;
+                        // costo_unitario_final_pesos = costo_unitario_final_pesos.toFixed(2);
                         costo_unitario_final_pesos = costo_unitario_final_pesos.toFixed(0);
                     }
 
@@ -4277,7 +4290,7 @@ $('#btn_editar_registros_grilla_editable').on('click', function () {
                         factor_est_campo = tipocambio;
                     }
 
-                    // Actualizar PLC_PLAN_COMPRA_COLOR_ url_PLC_PLAN_COMPRA_COLOR_3
+                    // Actualizar PLC_PLAN_COMPRA_COLOR_ url_PLC_PLAN_COMPRA_COLOR_3                                                                                                                                                                                                                                                                                                                    // +"&TIPO_EMPAQUE="+TIPO_EMPAQUE+"&FORMATO="+FORMATO+"&NOM_VENTANA="+NOM_VENTANA
                     var dataString_upd1 = "ID_COLOR3="+id_color3+"&COSTO_FOB="+fob+"&COSTO_INSP="+insp+"&COSTO_RFID="+rfid+"&COSTO_UNIT="+costo_unitario_final_usd+"&COSTO_UNITS="+costo_unitario_final_pesos+"&CST_TOTLTARGET="+total_target_usd+"&COSTO_TOT="+total_fob_usd+"&COSTO_TOTS="+costo_total_pesos+"&MKUP="+nuevo_mkup+"&GM="+nuevo_gm+"&PROVEEDOR="+provedor+"&PAIS="+pais+"&VIA="+via+"&FACTOR_EST="+factor_est_campo+"&NOM_VIA="+nuevo_nom_via+"&NOM_PAIS="+nuevo_nom_pais;
                     $.ajax({
                         type: "GET",

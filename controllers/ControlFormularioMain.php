@@ -10,6 +10,10 @@
 class ControlFormularioMain extends Control {
 
     public function inicio($f3) {
+
+        // Eliminar toda consurrencia del ususario
+        \permisos\permiso_usuario::eliminar_toda_concurrencia($f3->get('SESSION.login'));
+
         ControlFormularioMain::cargaMain($f3);
         //$f3->set('temporadas', temporada\temporada::getSelect());
         $f3->set('contenido', 'formulario/main/inicio.html');
@@ -19,6 +23,10 @@ class ControlFormularioMain extends Control {
     }
 
     public function usuarios($f3) {
+
+        // Eliminar toda consurrencia del ususario
+        \permisos\permiso_usuario::eliminar_toda_concurrencia($f3->get('SESSION.login'));
+
         ControlFormularioMain::cargaMain($f3);
         ControlFormularioMain::cargaMensaje($f3);
         $f3->set('nombre_form', 'USUARIOS');
@@ -31,6 +39,10 @@ class ControlFormularioMain extends Control {
     }
 
     public function sesiones_activas($f3) {
+
+        // Eliminar toda consurrencia del ususario
+        \permisos\permiso_usuario::eliminar_toda_concurrencia($f3->get('SESSION.login'));
+
         ControlFormularioMain::cargaMain($f3);
         ControlFormularioMain::cargaMensaje($f3);
         $f3->set('nombre_form', 'SESIONES ACTIVAS');
@@ -42,15 +54,24 @@ class ControlFormularioMain extends Control {
     }
 
     public function permisos($f3) {
+
+        // Eliminar toda consurrencia del ususario
+        \permisos\permiso_usuario::eliminar_toda_concurrencia($f3->get('SESSION.login'));
+
         ControlFormularioMain::cargaMain($f3);
         $f3->set('nombre_form', 'PERFILES DE USUARIO');
         $f3->set('contenido', 'formulario/main/permisos.html');
         $f3->set('temporada', 'formulario/main/temporada.html');
 			$f3->set('proveedor', 'formulario/main/proveedor.html');
         echo Template::instance()->render('layout_inicio.php');
+
     }
 
     public function mantenimiento_sistema($f3) {
+
+        // Eliminar toda consurrencia del ususario
+        \permisos\permiso_usuario::eliminar_toda_concurrencia($f3->get('SESSION.login'));
+
         ControlFormularioMain::cargaMain($f3);
         $f3->set('nombre_form', 'MANTENCIÓN DEL SISTEMA');
         $f3->set('contenido', 'formulario/main/mantenimiento_sistema.html');
@@ -60,6 +81,10 @@ class ControlFormularioMain extends Control {
     }
 
     public function actualizar_calculos($f3) {
+
+        // Eliminar toda consurrencia del ususario
+        \permisos\permiso_usuario::eliminar_toda_concurrencia($f3->get('SESSION.login'));
+
         ControlFormularioMain::cargaMain($f3);
         $f3->set('nombre_form', 'ACTUALIZAR CALCULOS');
         $f3->set('temporada_dev',$f3->get('SESSION.COD_TEMPORADA'));
@@ -70,6 +95,10 @@ class ControlFormularioMain extends Control {
     }
 
     public function master_pack($f3) {
+
+        // Eliminar toda consurrencia del ususario
+        \permisos\permiso_usuario::eliminar_toda_concurrencia($f3->get('SESSION.login'));
+
         ControlFormularioMain::cargaMain($f3);
         $f3->set('nombre_form', 'MASTER PACK');
         $division = jerarquia\division::getListaDivisiones();
@@ -86,6 +115,10 @@ class ControlFormularioMain extends Control {
     }
 
     public function mantenedor_master_pack($f3) {
+
+        // Eliminar toda consurrencia del ususario
+        \permisos\permiso_usuario::eliminar_toda_concurrencia($f3->get('SESSION.login'));
+
         ControlFormularioMain::cargaMain($f3);
         $f3->set('nombre_form', 'MASTER PACK');
         $f3->set('filtro', $f3->get('GET.division'));
@@ -102,33 +135,11 @@ class ControlFormularioMain extends Control {
         echo Template::instance()->render('layout_simulador.php'); // ( Antes de modificación menú era layout_inicio.php igual que master_pack )
     }
 
-    /*public static function deptomarca($f3) {
-        $f3->set('tipo_deptomarca', 'formulario/plan_compra/mantenedor/popup_deptomarca.html');
-
-        $formatos = \simulador_compra\formato::getFormatos($f3->get('SESSION.COD_TEMPORADA'),$f3->get('SESSION.COD_DEPTO'));
-
-        foreach($formatos as $val)
-        {
-            $formato[]= array($val[0] => 'CODIGO', $val[1] => 'DESCRIPCION');
-        }
-
-        $select = new html\select($formatos, 0, 1);
-        $f3->set('lis_formato', $select);
-
-        $f3->set('depto', $f3->get('SESSION.COD_DEPTO'));
-        $f3->set('temporada', $f3->get('SESSION.COD_TEMPORADA'));
-
-
-    }*/
-
-    /*public function depto_marca($f3) {
-        ControlFormularioMain::cargaMain($f3);
-        $f3->set('nombre_form', 'DEPARTAMENTO / MARCA');
-        $f3->set('contenido', 'formulario/main/depto_marca.html');
-        echo Template::instance()->render('layout_inicio.php');
-    }*/
-
     public function temporada_compra($f3) {
+
+        // Eliminar toda consurrencia del ususario
+        \permisos\permiso_usuario::eliminar_toda_concurrencia($f3->get('SESSION.login'));
+
         ControlFormularioMain::cargaMain($f3);
         ControlFormularioMain::cargaMensaje($f3);
         $f3->set('nombre_form', 'TEMPORADA DE COMPRA');
@@ -146,6 +157,10 @@ class ControlFormularioMain extends Control {
     }
 
     public static function cargaMain($f3) {
+
+        // Eliminar toda consurrencia del ususario (OJO Aquí puede terminar recargando una y otra vez la página )
+        // \permisos\permiso_usuario::eliminar_toda_concurrencia($f3->get('SESSION.login'));
+
         $Perfil = new usuario\perfil($f3->get('SESSION.cod_perfil'));
         $f3->set('login', $f3->get('SESSION.login'));
         $f3->set('nombre', $f3->get('SESSION.nombre'));

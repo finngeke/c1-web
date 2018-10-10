@@ -403,14 +403,21 @@ class cbx_grilla_compra extends \parametros
                   C.COSTO_RFID,                 -- 12 RFID
                   C.ALIAS_PROV,                 -- 13 Alias Proveedor
                   
-                  -- Para EL cálculo
+                  -- Para los cálculos
                   C.ID_COLOR3,                  -- 14 id_color3
                   C.MKUP,                       -- 15 mkup
                   C.GM,                         -- 16 GM
                   C.VIA,                        -- 17 NOM_VIA / VIA
                   C.PAIS,                       -- 18 NOM_PAIS / PAIS
                   C.VENTANA_LLEGADA,            -- 19 ventana llegada
-                  C.PRECIO_BLANCO               -- 20 Precio Blanco
+                  C.PRECIO_BLANCO,              -- 20 Precio Blanco
+                  
+                  
+                  C.TIPO_EMPAQUE,               -- 21 Tipo Embarque
+                  C.FORMATO,                    -- 22 Formato
+                  C.NOM_VENTANA                 -- 23 Ventana
+                  
+                  
             FROM PLC_PLAN_COMPRA_COLOR_3 C
             LEFT JOIN PLC_PLAN_COMPRA_OC O ON C.COD_TEMPORADA = O.COD_TEMPORADA
             AND C.DEP_DEPTO = O.DEP_DEPTO AND C.ID_COLOR3 = O.ID_COLOR3
@@ -2131,7 +2138,7 @@ class cbx_grilla_compra extends \parametros
         return $data;
     }
 
-    // Actualizar grilla en plan_compra_color3
+    // Actualizar grilla en plan_compra_color3                                                                                                                                                                                             // ,$TIPO_EMPAQUE,$FORMATO,$NOM_VENTANA
     public static function actualiza_grilla_plan_compra_color3($temporada, $depto, $login, $ID_COLOR3, $COSTO_FOB, $COSTO_INSP, $COSTO_RFID, $COSTO_UNIT, $COSTO_UNITS, $CST_TOTLTARGET, $COSTO_TOT, $COSTO_TOTS, $MKUP, $GM,$PROVEEDOR,$VIA,$PAIS, $FACTOR_EST,$NOM_VIA,$NOM_PAIS)
     {
 
@@ -2154,10 +2161,18 @@ class cbx_grilla_compra extends \parametros
                     FACTOR_EST = $FACTOR_EST,
                     USR_MOD = '".$login."',
                     FEC_MOD = current_date
+                    
+                    
                 WHERE COD_TEMPORADA = $temporada
                     AND DEP_DEPTO = '".$depto."'
                     AND ID_COLOR3 = $ID_COLOR3
                 ";
+
+        // Campos de la tercera entrega de la edición de grilla
+        /*,TIPO_EMPAQUE = $TIPO_EMPAQUE,
+        FORMATO = $FORMATO,
+        NOM_VENTANA = $NOM_VENTANA*/
+
 
         // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
         if (!file_exists('../archivos/log_querys/' . $login)) {
@@ -2171,8 +2186,8 @@ class cbx_grilla_compra extends \parametros
         fwrite($fp, $content);
         fclose($fp);
 
-        $data = \database::getInstancia()->getConsulta($sql);
-        return $data;
+        // $data = \database::getInstancia()->getConsulta($sql);
+        // return $data;
 
         if(\database::getInstancia()->getConsulta($sql)){
             return 1;
@@ -2207,8 +2222,8 @@ class cbx_grilla_compra extends \parametros
         fwrite($fp, $content);
         fclose($fp);
 
-        $data = \database::getInstancia()->getConsulta($sql);
-        return $data;
+        // $data = \database::getInstancia()->getConsulta($sql);
+        // return $data;
 
         if(\database::getInstancia()->getConsulta($sql)){
             return 1;
@@ -2232,7 +2247,33 @@ class cbx_grilla_compra extends \parametros
 
     }
 
+    // Busca Formatos Grilla Editar
+    public static function listar_formato_grilla_edita($temporada,$depto){
 
+        $sql =  "select distinct b.des_seg,b.cod_seg
+                    from plc_formatos_tda a
+                    inner join plc_formato b on a.cod_temporada = b.cod_temporada
+                                             and a.dep_depto = b.dep_depto
+                                             and a.cod_seg = b.cod_seg
+                    where a.COD_TEMPORADA = $temporada
+                    and a.DEP_DEPTO = '".$depto."' 
+                    order by 1 asc
+                ";
+
+        $data = \database::getInstancia()->getFilas($sql);
+        return $data;
+
+    }
+
+    // Busca Ventana Grilla Editar
+    public static function listar_ventana_grilla_edita($temporada,$depto){
+
+        $sql =  "SELECT * FROM plc_ventana";
+
+        $data = \database::getInstancia()->getFilas($sql);
+        return $data;
+
+    }
 
 // Fin de la Clase
 }

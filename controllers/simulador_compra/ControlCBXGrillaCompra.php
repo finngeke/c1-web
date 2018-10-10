@@ -477,7 +477,7 @@
         }
 
         // Actualizar grilla en plan_compra_color3
-        public function actualiza_grilla_plan_compra_color3($f3) {
+        public function actualiza_grilla_plan_compra_color3($f3) {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           // , $f3->get('GET.TIPO_EMPAQUE'), $f3->get('GET.FORMATO'), $f3->get('GET.NOM_VENTANA')
             echo \simulador_compra\cbx_grilla_compra::actualiza_grilla_plan_compra_color3($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $f3->get('GET.ID_COLOR3'), $f3->get('GET.COSTO_FOB'), $f3->get('GET.COSTO_INSP'), $f3->get('GET.COSTO_RFID'), $f3->get('GET.COSTO_UNIT'), $f3->get('GET.COSTO_UNITS'), $f3->get('GET.CST_TOTLTARGET'), $f3->get('GET.COSTO_TOT'), $f3->get('GET.COSTO_TOTS'), $f3->get('GET.MKUP'), $f3->get('GET.GM'), $f3->get('GET.PROVEEDOR'), $f3->get('GET.VIA'), $f3->get('GET.PAIS'), $f3->get('GET.FACTOR_EST'), $f3->get('GET.NOM_VIA'), $f3->get('GET.NOM_PAIS'));
         }
 
@@ -486,9 +486,19 @@
             echo \simulador_compra\cbx_grilla_compra::actualiza_grilla_plan_compra_color_cic($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $f3->get('GET.ID_COLOR3'), $f3->get('GET.COSTO'));
         }
 
-        // Busca País
+        // Listar País
         public function listar_pais($f3) {
             echo json_encode(\simulador_compra\cbx_grilla_compra::listar_pais($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO')));
+        }
+
+        // Listar Formatos Grilla Editar
+        public function listar_formato_grilla_edita($f3) {
+            echo json_encode(\simulador_compra\cbx_grilla_compra::listar_formato_grilla_edita($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO')));
+        }
+
+        // Listar Ventana Grilla Editar
+        public function listar_ventana_grilla_edita($f3) {
+            echo json_encode(\simulador_compra\cbx_grilla_compra::listar_ventana_grilla_edita($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO')));
         }
 
 // ######################## FIN TRABAJO CON GRILLA EDITABLE ########################

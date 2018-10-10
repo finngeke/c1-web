@@ -108,6 +108,7 @@ $(window).on('load', function () {
                     if (verifica_modulo.length > 0){
                         $('#modulo_tipo_tienda').remove();
                     }
+
                     // A - VALIDAR BOTONES DEL MODULO DE TIENDA
                     verifica_accion = $.grep(arreglo_accion_desac,function(e){return e.id_accion==33;});
                     if (verifica_accion.length > 0){

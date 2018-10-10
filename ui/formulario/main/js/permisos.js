@@ -11,6 +11,7 @@ $(window).on('load', function () {
     /*############################# se agrega la etiqueta de ul fuera del ciclo ##################################*/
     $('#tabla_tipo_usuario').append('<ul class="nav nav-list">');
 
+    // Se cargan los tipos de usuario
     $.getJSON(cargar_tipo_usuario, function (data) {
 
         /* se inicia el each que llenara los tipos de usuarios */
@@ -319,6 +320,7 @@ function cargar_tabla_modulos(tip_usr) {
         var tipo_usr = $('#flag_top_menu_tipo_usuario').text();
 
         $.getJSON(url_cargar_modulos, function (data) {
+
             $.each(data, function (i, o) {
                 $('#tabla_modulo_acceso').append(
                     '<tr id="tr_modulo_' + o[0] + '">' +
