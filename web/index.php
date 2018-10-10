@@ -9,7 +9,7 @@ session_start();
 \Template::instance()->extend('msj', 'MensajeHelper::easy');
 
 if (!$f3->exists("max_file_size"))
-		$f3->set("max_file_size", 8);
+		$f3->set("max_file_size", 30);
 
 /* VERIFICA LAS CARPETAS DE ARCHIVO */
 $carpetas[] = '../archivos/Assortments';
