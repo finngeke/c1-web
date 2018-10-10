@@ -2,7 +2,7 @@
 
 <!-- Lib DataTables -->
 <link rel="stylesheet" href="{{@BASE}}/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
-
+<link rel="stylesheet" type="text/css" href="{{@JQUERY}}ui/formulario/plan_compra/css/plan_compra_grilla.css">
 <!-- Cabecera Modulo -->
 <section class="content-header">
     <h1>
@@ -47,6 +47,7 @@
                                 <label> Departamento</label>
                                 <select id="select_depto_actualizar_calculos">
                                     <option value="0" selected>Seleccione</option>
+                                    <option value="1">Todos</option>
                                 </select>
 
                                 <label style="margin-left: 20px">Unidades</label>
@@ -95,25 +96,27 @@
                                     <tr>
 
                                         <th>ID</th>
+                                        <th>DEPTO</th>
                                         <th>VENTANA</th>
                                         <th>UNIDADES</th>
                                         <th>VIA</th>
                                         <th>PAIS</th>
-                                        <th>MKUP</th>
+                                        <th bgcolor="#963634" style="color:white">MKUP</th>
                                         <th>P BLANCO</th>
+                                        <th bgcolor="#963634" style="color:white">GMB</th>
                                         <th>MONEDA</th>
+                                        <th>FACTOR</th>
                                         <th>TARGET</th>
                                         <th>FOB</th>
                                         <th>COSTO INSP</th>
                                         <th>COSTO RFID</th>
-                                        <th>COSTO UNITARIO FINAL US</th>
-                                        <th>COSTO UNITARIO FINAL S </th>
-                                        <th>TOTAL TARGET</th>
-                                        <th>TOTAL FOB</th>
-                                        <th>COSTO TOTAL PESOS</th>
+                                        <th bgcolor="#963634" style="color:white">COSTO UNITARIO FINAL US</th>
+                                        <th bgcolor="#963634" style="color:white">COSTO UNITARIO FINAL S </th>
+                                        <th bgcolor="#963634" style="color:white">TOTAL TARGET</th>
+                                        <th bgcolor="#963634" style="color:white">TOTAL FOB</th>
+                                        <th bgcolor="#963634" style="color:white">COSTO TOTAL PESOS</th>
                                         <th>RETAIL</th>
-                                        <th>GMB</th>
-                                        <th>FACTOR</th>
+
 
                                     </tr>
 
@@ -160,11 +163,11 @@
 
                         <tr>
                             <td>Cargando datos para Calcular</td>
-                            <td align="center"><span id="accion_cargar_datos_para_calcular" class="fa fa-refresh"></span></td>
+                            <td align="center"><span id="accion_cargar_datos_para_calcular" class='fa fa-spinner fa-2x fa-spin' style="color:#537a7b"></span></td>
                         </tr>
                         <tr>
                             <td>Calculando datos </td>
-                            <td align="center"><span id="accion_calcular_datos" class="fa fa-refresh"></span></td>
+                            <td align="center"><span id="accion_calcular_datos" class='fa fa-spinner fa-2x fa-spin' style="color:#537a7b"></span></td>
                         </tr>
 
                         </tbody>
@@ -197,7 +200,7 @@
 
                 <center>
 
-                    <span > Actualizando Registros.Por favor no cierre. </span>
+                    <span id="seguimiento"> Actualizando Registros</span> <span id="count" style="display: none">0</span>
                     <div class="loader" id="loader"></div>
                 </center>
 
