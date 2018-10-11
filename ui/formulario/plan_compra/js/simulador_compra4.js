@@ -1308,10 +1308,11 @@ $('.guarda_proforma').on('click', function () {
             // Leemos el campo de
             var cargado = $("#tabla2 #txt_archivo_" + conta_datos_tr).text();
 
+            // Mensaje del BTN "Cargado"
             // alert(cargado);
 
 
-            // Aquì las nuevas condiciones, la que existe enviarla a un elseif
+            // Aquí las nuevas condiciones, la que existe enviarla a un elseif
             //if( (busca_campo_actualizado == "U") && (estado_c1 == 0) && (cargado==1) )
 
 
@@ -4314,6 +4315,8 @@ $('#btn_editar_registros_grilla_editable').on('click', function () {
 
                     // Cálculos
                     // Costo unitarios final US$ : (Fob o target) + insp + rfid
+
+
                     if (fob > 0) {
 
                         costo_unitario_final_usd = parseFloat(fob) + parseFloat(insp) + parseFloat(rfid);
@@ -4329,6 +4332,12 @@ $('#btn_editar_registros_grilla_editable').on('click', function () {
                         // alert("NOFOB - TARGET: " + target+" / FOB: " + fob+" / COF USD: " + costo_unitario_final_usd+" / INSP: " + insp+" / RFID: " + rfid);
 
                     }
+
+                    var costo_unitario_final_usd_target = parseFloat(target) + parseFloat(insp) + parseFloat(rfid);
+                        costo_unitario_final_usd_target = costo_unitario_final_usd_target.toFixed(2);
+                        total_target_usd =  costo_unitario_final_usd_target * unidades_finales;
+
+
                     /*else{
                                             error_costo_unitario_final_usd = 1;
                                         }*/
