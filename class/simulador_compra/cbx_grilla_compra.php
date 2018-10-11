@@ -2139,7 +2139,7 @@ class cbx_grilla_compra extends \parametros
     }
 
     // Actualizar grilla en plan_compra_color3                                                                                                                                                                                             // ,$TIPO_EMPAQUE,$FORMATO,$NOM_VENTANA
-    public static function actualiza_grilla_plan_compra_color3($temporada, $depto, $login, $ID_COLOR3, $COSTO_FOB, $COSTO_INSP, $COSTO_RFID, $COSTO_UNIT, $COSTO_UNITS, $CST_TOTLTARGET, $COSTO_TOT, $COSTO_TOTS, $MKUP, $GM,$PROVEEDOR,$VIA,$PAIS, $FACTOR_EST,$NOM_VIA,$NOM_PAIS)
+    public static function actualiza_grilla_plan_compra_color3($temporada, $depto, $login, $ID_COLOR3, $COSTO_FOB, $COSTO_INSP, $COSTO_RFID, $COSTO_UNIT, $COSTO_UNITS, $CST_TOTLTARGET, $COSTO_TOT, $COSTO_TOTS, $MKUP, $GM,$PROVEEDOR,$VIA,$PAIS, $FACTOR_EST,$NOM_VIA,$NOM_PAIS,$TARGET)
     {
 
         $sql = "UPDATE PLC_PLAN_COMPRA_COLOR_3 
@@ -2160,6 +2160,7 @@ class cbx_grilla_compra extends \parametros
                     NOM_PAIS = '".$NOM_PAIS."',
                     FACTOR_EST = $FACTOR_EST,
                     USR_MOD = '".$login."',
+                    COSTO_TARGET = $TARGET,
                     FEC_MOD = current_date
                     
                     

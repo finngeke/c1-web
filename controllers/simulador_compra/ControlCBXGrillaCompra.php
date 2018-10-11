@@ -481,7 +481,7 @@
 
             $COSTO_UNITS = round($f3->get('GET.COSTO_UNITS'),0);
 		    // , $f3->get('GET.TIPO_EMPAQUE'), $f3->get('GET.FORMATO'), $f3->get('GET.NOM_VENTANA')
-            echo \simulador_compra\cbx_grilla_compra::actualiza_grilla_plan_compra_color3($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $f3->get('GET.ID_COLOR3'), $f3->get('GET.COSTO_FOB'), $f3->get('GET.COSTO_INSP'), $f3->get('GET.COSTO_RFID'), $f3->get('GET.COSTO_UNIT'), $COSTO_UNITS, $f3->get('GET.CST_TOTLTARGET'), $f3->get('GET.COSTO_TOT'), $f3->get('GET.COSTO_TOTS'), $f3->get('GET.MKUP'), $f3->get('GET.GM'), $f3->get('GET.PROVEEDOR'), $f3->get('GET.VIA'), $f3->get('GET.PAIS'), $f3->get('GET.FACTOR_EST'), $f3->get('GET.NOM_VIA'), $f3->get('GET.NOM_PAIS'));
+            echo \simulador_compra\cbx_grilla_compra::actualiza_grilla_plan_compra_color3($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $f3->get('GET.ID_COLOR3'), $f3->get('GET.COSTO_FOB'), $f3->get('GET.COSTO_INSP'), $f3->get('GET.COSTO_RFID'), $f3->get('GET.COSTO_UNIT'), $COSTO_UNITS, $f3->get('GET.CST_TOTLTARGET'), $f3->get('GET.COSTO_TOT'), $f3->get('GET.COSTO_TOTS'), $f3->get('GET.MKUP'), $f3->get('GET.GM'), $f3->get('GET.PROVEEDOR'), $f3->get('GET.VIA'), $f3->get('GET.PAIS'), $f3->get('GET.FACTOR_EST'), $f3->get('GET.NOM_VIA'), $f3->get('GET.NOM_PAIS'), $f3->get('GET.TARGET'));
         }
 
         // Actualizar grilla en PLC_PLAN_COMPRA_COLOR_CIC
