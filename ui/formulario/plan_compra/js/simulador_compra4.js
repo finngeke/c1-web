@@ -237,7 +237,6 @@ $(function () {
 $(window).on('load', function () {
 
 
-
     $('#popup_cargando_simulador_compra_4').modal('show');
     // codigo que valida el usuario tipo lectura ...
     // se lleva parte de este codigo a depto.js ya que que
@@ -1306,6 +1305,15 @@ $('.guarda_proforma').on('click', function () {
             //var proforma  = $(this).find("td:eq(77) input[type='text']").val();
             var proforma = $("#tabla2 #txt_proforma_" + conta_datos_tr).val();
             proforma = proforma.replace(/[^a-z0-9\-]/gi, '');
+            // Leemos el campo de
+            var cargado = $("#tabla2 #txt_archivo_" + conta_datos_tr).text();
+
+            // alert(cargado);
+
+
+            // Aquì las nuevas condiciones, la que existe enviarla a un elseif
+            //if( (busca_campo_actualizado == "U") && (estado_c1 == 0) && (cargado==1) )
+
 
             if ((busca_campo_actualizado == "U") && (estado_c1 == 0)) {
 
@@ -1488,7 +1496,7 @@ $('.elimina_opcion').on('click', function () {
 
     //if ((proforma != null) && (proforma != 0) && (proforma != "")) { //&& (proforma.length>5)
 
-    if(estado_c1 != 21){
+    if (estado_c1 != 21) {
 
         var respuesta = confirm("¿Quiere realizar los cambios?");
         if (respuesta == true) {
@@ -1510,7 +1518,7 @@ $('.elimina_opcion').on('click', function () {
             alert("No se han Realizado Cambios.");
         }
 
-    }else{
+    } else {
         alert("No puede solicitar eliminar una opción ya aprobada.");
     }
 
@@ -3878,7 +3886,6 @@ $('#btn_habilita_grilla').on('click', function () {
     }
 
 
-
 });
 
 // Editar Grilla / llenar tabla grilla editable
@@ -3886,27 +3893,34 @@ $('#btn_edita_grilla').on('click', function () {
 
     // eliminar los registros de la tabla, generados en otra consulta previa
     $("#tabla_edita_grilla >tbody >tr").remove();
+    // Limpiar el TXT de formato
+    $("#txt_formato_").remove();
+    // Limpiar el TXT de Ventana
+    $("#txt_nom_ventana_").remove();
+    // Limpiar el TXT de País
+    $("#txt_pais_").remove();
+
 
     // 1.- Antes de levantar el POPUP, verificar que existen elementos seleccionados
-    var elementos_seleccionados = $( "#tabla2 input:checked" ).length;
+    var elementos_seleccionados = $("#tabla2 input:checked").length;
 
-    if(elementos_seleccionados>0){
+    if (elementos_seleccionados > 0) {
 
         // 1.1 Declaro variable para almaceanr registros
         var almacena_opciones = "";
 
         // 2.- Almacenos todos los valores seleccionados (id_color3)
-        $("#tabla2 input:checkbox:checked").each(function() {
+        $("#tabla2 input:checkbox:checked").each(function () {
             //alert($("#txt_id_color_"+$(this).val()).text());
             // con el $(this).val() voy a buscar el id_color3 para concatenarlo
-            almacena_opciones = almacena_opciones + $("#txt_id_color_"+$(this).val()).text()+',';
+            almacena_opciones = almacena_opciones + $("#txt_id_color_" + $(this).val()).text() + ',';
             //almacena_opciones = almacena_opciones + $(this).val() +',';
             //alert($(this).val());
         });
 
         // Quitar la coma del final al string de almacena_opciones
         var largo_string = almacena_opciones.length;
-        var id_color3 =  almacena_opciones.substr(0,(parseInt(largo_string)-1));
+        var id_color3 = almacena_opciones.substr(0, (parseInt(largo_string) - 1));
 
         // 3.- Levanto el POPUP
         $("#popup_edita_grilla").modal('show');
@@ -3915,10 +3929,12 @@ $('#btn_edita_grilla').on('click', function () {
         // Cargar datos de la grilla 2
         var url_edita_grilla = 'ajax_simulador_cbx/llenar_edita_grilla';
         var url_lista_pais = 'ajax_simulador_cbx/listar_pais';
+        var url_lista_formato = 'ajax_simulador_cbx/listar_formato_grilla_edita';
+        var url_lista_ventana = 'ajax_simulador_cbx/listar_ventana_grilla_edita';
         var flag_tabla_edita = 0;
         var flag_cont_registro = 0;
 
-        var dataString = "ID_COLOR3="+id_color3;
+        var dataString = "ID_COLOR3=" + id_color3;
 
         $.ajax({
             type: "GET",
@@ -3934,10 +3950,9 @@ $('#btn_edita_grilla').on('click', function () {
                     flag_cont_registro++;
                 });
 
-                // Datos de la tabla (Llenar tabla editable)
+                // Datos de la tabla (LLENAR TABLA EDITABLE)
                 $.each(data, function (i, o) {
                     $('#tabla_edita_grilla').append(
-
                         '<tr id="tablaedita_tr_id_' + flag_tabla_edita + '" class="tablaedita_tr_id_' + o[14] + '">\n' +
                         '<td id="id_idcolor3_' + o[14] + '" style="display: none">' + o[14] + '</td>\n' +
                         '<td id="id_grupo_compra_' + o[14] + '" class="id_grupo_compra_' + o[14] + '">' + o[0] + '</td>\n' +
@@ -3948,7 +3963,7 @@ $('#btn_edita_grilla').on('click', function () {
                         '<td id="id_ventana_' + o[14] + '">' + o[6] + '</td>\n' +
                         '<td id="id_color_' + o[14] + '">' + o[7] + '</td>\n' +
                         '<td id="id_unidades_finales_' + o[14] + '">' + o[8] + '</td>\n' +
-                        '<td id="id_target_' + o[14] + '"><input type="text" id="txt_target_' + o[14] + '" name="txt_target_' + o[14] + '" value="'+o[9]+'" size="3"></td>\n' +
+                        '<td id="id_target_' + o[14] + '"><input type="text" id="txt_target_' + o[14] + '" name="txt_target_' + o[14] + '" value="' + o[9] + '" size="3"></td>\n' +
                         '<td id="id_fob_' + o[14] + '"><input type="text" id="txt_fob_' + o[14] + '" name="txt_fob_' + o[14] + '" value="' + o[10] + '" size="3"></td>\n' +
                         '<td id="id_insp_' + o[14] + '"><input type="text" id="txt_insp_' + o[14] + '" name="txt_insp_' + o[14] + '" value="' + o[11] + '" size="3"></td>\n' +
                         '<td id="id_rfid_' + o[14] + '"><input type="text" id="txt_rfid_' + o[14] + '" name="txt_rfid_' + o[14] + '" value="' + o[12] + '" size="3"></td>\n' +
@@ -3957,7 +3972,7 @@ $('#btn_edita_grilla').on('click', function () {
                         '<td id="id_pais_' + o[14] + '"><select id="txt_pais_' + o[14] + '" name="txt_pais_' + o[14] + '" class="txt_pais_"></select></td>\n' +
 
                         '<td id="id_tipo_embarque_' + o[14] + '"><select id="txt_tipo_embarque_' + o[14] + '" name="txt_tipo_embarque_' + o[14] + '" class="txt_tipo_embarque_"><option value="CURVADO">CURVADO</option><option value="SOLIDO">SOLIDO</option></select></td>\n' +
-                        '<td id="id_formato_' + o[14] + '"><select id="txt_formato_' + o[14] + '" name="txt_formato_' + o[14] + '" class="txt_formato_"><option value="PRIME">PRIME</option><option value="SIN FORMATO">SIN FORMATO</option><option value=""></option></select></td>\n' +
+                        '<td id="id_formato_' + o[14] + '"><select id="txt_formato_' + o[14] + '" name="txt_formato_' + o[14] + '" class="txt_formato_"></select></td>\n' +
                         '<td id="id_nom_ventana_' + o[14] + '"><select id="txt_nom_ventana_' + o[14] + '" name="txt_nom_ventana_' + o[14] + '" class="txt_nom_ventana_"></select></td>\n' +
 
                         '<td id="id_mkup_' + o[14] + '" style="display: none">' + o[15] + '</td>\n' +
@@ -3969,12 +3984,70 @@ $('#btn_edita_grilla').on('click', function () {
                         '</tr>');
                     flag_tabla_edita++;
 
-                // Fin foreach que llena tabla
+                    // Fin foreach que llena tabla
                 });
 
-                // Si el data me trae registros, lleno el CBX de País, luego asigno vía y país
+                // Si el data me trae registros, lleno el CBX de País, luego asigno vía y país... se agrega formato y ventana
                 if (flag_cont_registro > 0) {
 
+                    // Buscamos Formato
+                    // Realizar la búsqueda de formatos para asignarlas a el CBX formato
+                    var toAppend_formato = "";
+                    $.ajax({
+                        type: "GET",
+                        url: url_lista_formato,
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (data_formato) {
+
+                            // si la consulta devuelve resultados, completar el o los CBX con clase txt_formato_
+                            $.each(data_formato, function (i, o) {
+                                toAppend_formato += '<option value=' + o[0] + '>' + o[0] + '</option>'; // OJO que la query trae o[1] repetidos con distintos o[0]
+                            });
+
+                            // Adjuntar formato al CBX de formato
+                            $('.txt_formato_').append(toAppend_formato);
+
+
+                        }, error: function (jqXHR, textStatus, errorThrown) {
+                            console.log("Error: " + textStatus + " errorThrown: " + errorThrown);
+                        }
+
+                    }).done(function () {
+                    });
+
+
+
+                    // Buscamos Ventana
+                    // Realizar la búsqueda de formatos para asignarlas a el CBX ventana
+                    var toAppend_ventana = "";
+                    $.ajax({
+                        type: "GET",
+                        url: url_lista_ventana,
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (data_ventana) {
+
+                            // si la consulta devuelve resultados, completar el o los CBX con clase txt_formato_
+                            $.each(data_ventana, function (i, o) {
+                                toAppend_ventana += '<option value=' + o[0] + '>' + o[1] + '</option>';
+                            });
+
+                            // Adjuntar formato al CBX de formato
+                            $('.txt_nom_ventana_').append(toAppend_ventana);
+
+
+                        }, error: function (jqXHR, textStatus, errorThrown) {
+                            console.log("Error: " + textStatus + " errorThrown: " + errorThrown);
+                        }
+
+                    }).done(function () {
+                    });
+
+
+
+
+                    // Buscamos País
                     // Realizar la búsqueda de países para asignarla a el CBX país
                     var toAppend_pais = "";
                     $.ajax({
@@ -4011,13 +4084,13 @@ $('#btn_edita_grilla').on('click', function () {
                     }).done(function () {
 
                         // Asignamos Vía y País (Funcionando, pero se utiliza en líneas de código atrás)
-                        $.each(data, function (i,o) {
+                        $.each(data, function (i, o) {
 
                             // Vía o[17]
-                            $("#txt_via_"+ o[14]).val(o[17]);
+                            $("#txt_via_" + o[14]).val(o[17]);
 
                             // País o[18]
-                            $("#txt_pais_"+ o[14]).val(o[18]);
+                            $("#txt_pais_" + o[14]).val(o[18]);
 
                         })/*.promise().done(function(data){
 
@@ -4037,7 +4110,7 @@ $('#btn_edita_grilla').on('click', function () {
                         })*/;
 
 
-                        // Define Tiempo 1 = 1000
+                        // Se define un tiempo X para cargar las cualidades del DataTable
                         var delay = 2000;
                         setTimeout(function () {
                             // Acción a Ejecutar
@@ -4059,10 +4132,10 @@ $('#btn_edita_grilla').on('click', function () {
 
 
                     // Desplegar el BTN editar
-                   $("#btn_editar_registros_grilla_editable").show();
+                    $("#btn_editar_registros_grilla_editable").show();
 
 
-                // Fin del si llegan registros
+                    // Fin del si llegan registros
                 }
 
             }, error: function (jqXHR, textStatus, errorThrown) {
@@ -4087,7 +4160,7 @@ $('#btn_edita_grilla').on('click', function () {
 
         });
 
-    }else{
+    } else {
         alert("Seleccione al menos un registro para editar");
     }
 
@@ -4115,29 +4188,37 @@ $('#btn_editar_registros_grilla_editable').on('click', function () {
         var id_color3 = $(this).find("td:eq(0)").text();
 
         var target = $("#tabla_edita_grilla #txt_target_" + id_color3).val();
-		target = target.replace(",", ".");
-        if(target.length==0){target = 0;}
-            if(target.substring(0,1)=="."){
-                target = "0"+target;
-            }
+        target = target.replace(",", ".");
+        if (target.length == 0) {
+            target = 0;
+        }
+        if (target.substring(0, 1) == ".") {
+            target = "0" + target;
+        }
         var fob = $("#tabla_edita_grilla #txt_fob_" + id_color3).val();
-		fob = fob.replace(",", ".");
-        if(fob.length==0){fob = 0;}
-            if(fob.substring(0,1)=="."){
-                fob = "0"+fob;
-            }
+        fob = fob.replace(",", ".");
+        if (fob.length == 0) {
+            fob = 0;
+        }
+        if (fob.substring(0, 1) == ".") {
+            fob = "0" + fob;
+        }
         var insp = $("#tabla_edita_grilla #txt_insp_" + id_color3).val();
-		insp = insp.replace(",", ".");
-        if(insp.length==0){insp = 0;}
-            if(insp.substring(0,1)=="."){
-                insp = "0"+insp;
-            }
+        insp = insp.replace(",", ".");
+        if (insp.length == 0) {
+            insp = 0;
+        }
+        if (insp.substring(0, 1) == ".") {
+            insp = "0" + insp;
+        }
         var rfid = $("#tabla_edita_grilla #txt_rfid_" + id_color3).val();
-		rfid = rfid.replace(",", ".");
-        if(rfid.length==0){rfid = 0;}
-            if(rfid.substring(0,1)=="."){
-                rfid = "0"+rfid;
-            }
+        rfid = rfid.replace(",", ".");
+        if (rfid.length == 0) {
+            rfid = 0;
+        }
+        if (rfid.substring(0, 1) == ".") {
+            rfid = "0" + rfid;
+        }
         var provedor = $("#tabla_edita_grilla #txt_aliasproveedor_" + id_color3).val();
         var precio_blanco = $("#tabla_edita_grilla #id_precio_blanco_" + id_color3).text();
 
@@ -4147,11 +4228,11 @@ $('#btn_editar_registros_grilla_editable').on('click', function () {
         var mkup = $("#tabla_edita_grilla #id_mkup_" + id_color3).text();
         var gm = $("#tabla_edita_grilla #id_gm_" + id_color3).text();
         var via = $("#tabla_edita_grilla #id_via_" + id_color3).text();
-            var nueva_via = $("#tabla_edita_grilla #txt_via_" + id_color3).val();
-            var nuevo_nom_via = $("#tabla_edita_grilla #txt_via_" + id_color3+" option:selected").text();
+        var nueva_via = $("#tabla_edita_grilla #txt_via_" + id_color3).val();
+        var nuevo_nom_via = $("#tabla_edita_grilla #txt_via_" + id_color3 + " option:selected").text();
         var pais = $("#tabla_edita_grilla #id_pais_" + id_color3).text();
-            var nuevo_pais = $("#tabla_edita_grilla #txt_pais_" + id_color3).val();
-            var nuevo_nom_pais = $("#tabla_edita_grilla #txt_pais_" + id_color3+" option:selected").text();
+        var nuevo_pais = $("#tabla_edita_grilla #txt_pais_" + id_color3).val();
+        var nuevo_nom_pais = $("#tabla_edita_grilla #txt_pais_" + id_color3 + " option:selected").text();
         var unidades_finales = $("#tabla_edita_grilla #id_unidades_finales_" + id_color3).text();
 
         // variables de error
@@ -4167,14 +4248,14 @@ $('#btn_editar_registros_grilla_editable').on('click', function () {
 
         // Si se realizaron cambios en la Vía
         // (La que llega por BD, es distinta a la que se está leyendo del campo)
-        if(via!=nueva_via){
+        if (via != nueva_via) {
             pais = nuevo_pais;
             via = nueva_via;
-        // Se realizaron cambios en la Vía
+            // Se realizaron cambios en la Vía
         }
 
         // Factor (Lalo dice que siempre es 2, jefe manda)
-        var dataString_factor = "PAIS="+pais+"&VIA="+via+"&MONEDA=2&VENTANA="+ventana_text;
+        var dataString_factor = "PAIS=" + pais + "&VIA=" + via + "&MONEDA=2&VENTANA=" + ventana_text;
         $.ajax({
             type: "GET",
             url: url_get_factor,
@@ -4187,19 +4268,19 @@ $('#btn_editar_registros_grilla_editable').on('click', function () {
                 // Traigo datos del Factor
                 $.each(data, function (i, o) {
                     factor = parseFloat(o[0]);
-                // Fin foreach busca factor
+                    // Fin foreach busca factor
                 });
 
             }, error: function (jqXHR, textStatus, errorThrown) {
                 console.log("Error: " + textStatus + " errorThrown: " + errorThrown);
-                error_factor=1;
+                error_factor = 1;
                 alert("Error al obtener Factor para realizar los cálculos, intente nuevamente.");
             }
 
         }).done(function () {
 
             // Buscar tipo de cambio
-            var dataString_tipocambio = "MONEDA=2&VENTANA="+ventana_text;
+            var dataString_tipocambio = "MONEDA=2&VENTANA=" + ventana_text;
             $.ajax({
                 type: "GET",
                 url: url_get_tipocambio,
@@ -4212,12 +4293,12 @@ $('#btn_editar_registros_grilla_editable').on('click', function () {
                     // Llegan los datos del tipo de cambio
                     $.each(data, function (i, o) {
                         tipocambio = parseFloat(o[0]);
-                     // Fin foreach busca tipocambio
+                        // Fin foreach busca tipocambio
                     });
 
                 }, error: function (jqXHR, textStatus, errorThrown) {
                     console.log("Error: " + textStatus + " errorThrown: " + errorThrown);
-                    error_tipocambio=1;
+                    error_tipocambio = 1;
                     alert("Error al obtener Tipo Cambio para realizar los cálculos, intente nuevamente.");
                 }
 
@@ -4225,7 +4306,7 @@ $('#btn_editar_registros_grilla_editable').on('click', function () {
 
                 var total_errores = error_costo_unitario_final_usd + error_factor + error_tipocambio;
 
-                if(total_errores==0){
+                if (total_errores == 0) {
 
                     // Definir la Ruta de Guardado
                     var url_PLC_PLAN_COMPRA_COLOR_3 = 'ajax_simulador_cbx/actualiza_grilla_plan_compra_color3';
@@ -4233,65 +4314,66 @@ $('#btn_editar_registros_grilla_editable').on('click', function () {
 
                     // Cálculos
                     // Costo unitarios final US$ : (Fob o target) + insp + rfid
-                    if(fob > 0){
+                    if (fob > 0) {
 
                         costo_unitario_final_usd = parseFloat(fob) + parseFloat(insp) + parseFloat(rfid);
                         costo_unitario_final_usd = costo_unitario_final_usd.toFixed(2);
-						total_fob_usd = costo_unitario_final_usd * unidades_finales;
+                        total_fob_usd = costo_unitario_final_usd * unidades_finales;
                         // alert("FOB - TARGET: " + target+" / FOB: " + fob+" / COF USD: " + costo_unitario_final_usd+" / INSP: " + insp+" / RFID: " + rfid);
 
-                    }else{
+                    } else {
 
                         costo_unitario_final_usd = parseFloat(target) + parseFloat(insp) + parseFloat(rfid);
                         costo_unitario_final_usd = costo_unitario_final_usd.toFixed(2);
-						total_target_usd = costo_unitario_final_usd * unidades_finales;
+                        total_target_usd = costo_unitario_final_usd * unidades_finales;
                         // alert("NOFOB - TARGET: " + target+" / FOB: " + fob+" / COF USD: " + costo_unitario_final_usd+" / INSP: " + insp+" / RFID: " + rfid);
 
-                    }/*else{
-                        error_costo_unitario_final_usd = 1;
-                    }*/
+                    }
+                    /*else{
+                                            error_costo_unitario_final_usd = 1;
+                                        }*/
 
                     // alert("Total FOB USD: " + total_fob_usd + " Total TARGET USD: "+total_target_usd);
 
                     // Total Fob US$: Costo unitarios final US$ (total con fob)  * unidades (Funcionando Antes de Comentar)
-						// total_fob_usd = costo_unitario_final_usd * unidades_finales;
+                        // total_fob_usd = costo_unitario_final_usd * unidades_finales;
                     // Total Target US$: Costo unitarios final US$ (total con target)  * unidades (Funcionando Antes de Comentar)
-						// total_target_usd = costo_unitario_final_usd * unidades_finales;
+                        // total_target_usd = costo_unitario_final_usd * unidades_finales;
 
                     // Costo unitarios final Pesos :
                     // si factor > 0  = Costo unitarios final US$ * Factor
                     // si factor = 0 o no se encuentra factor = Costo unitarios final US$ * Tipo cambio
-                    if(factor>0){
+                    if (factor > 0) {
                         var costo_unitario_final_pesos = costo_unitario_final_usd * factor;
                         // costo_unitario_final_pesos = costo_unitario_final_pesos.toFixed(2);
-                        costo_unitario_final_pesos = costo_unitario_final_pesos.toFixed(0);
-					}else{
+                        costo_unitario_final_pesos = costo_unitario_final_pesos.toFixed();
+                    } else {
                         var costo_unitario_final_pesos = costo_unitario_final_usd * tipocambio;
                         // costo_unitario_final_pesos = costo_unitario_final_pesos.toFixed(2);
-                        costo_unitario_final_pesos = costo_unitario_final_pesos.toFixed(0);
+                        costo_unitario_final_pesos = costo_unitario_final_pesos.toFixed();
                     }
 
                     // Costo Total Pesos : Costo unitarios final Pesos  *  unidades
                     var costo_total_pesos = costo_unitario_final_pesos * unidades_finales;
                     costo_total_pesos = costo_total_pesos.toFixed(2);
                     // Mkup: (Precio blanco /1.19) / Costo unitarios final Pesos  (2 decimales)
-                    var nuevo_mkup = (precio_blanco/1.19) / costo_unitario_final_pesos;
+                    var nuevo_mkup = (precio_blanco / 1.19) / costo_unitario_final_pesos;
                     nuevo_mkup = nuevo_mkup.toFixed(3);
 
                     // GM: ((Precio blanco /1.19)- Costo unitarios final Pesos) /  ((Precio blanco /1.19)*100) (2 decimales)
-                    var nuevo_gm = ((  ((precio_blanco/1.19) - costo_unitario_final_pesos)) /(precio_blanco/1.19))*100 ;
+                    var nuevo_gm = ((((precio_blanco / 1.19) - costo_unitario_final_pesos)) / (precio_blanco / 1.19)) * 100;
                     nuevo_gm = nuevo_gm.toFixed(2);
 
                     // Si llega Factor factor_est_campo = factor de lo contrario tipocambio = factor_est_campo
                     // factor / tipocambio
-                    if(factor>0){
+                    if (factor > 0) {
                         factor_est_campo = factor;
-                    }else{
+                    } else {
                         factor_est_campo = tipocambio;
                     }
 
                     // Actualizar PLC_PLAN_COMPRA_COLOR_ url_PLC_PLAN_COMPRA_COLOR_3                                                                                                                                                                                                                                                                                                                    // +"&TIPO_EMPAQUE="+TIPO_EMPAQUE+"&FORMATO="+FORMATO+"&NOM_VENTANA="+NOM_VENTANA
-                    var dataString_upd1 = "ID_COLOR3="+id_color3+"&COSTO_FOB="+fob+"&COSTO_INSP="+insp+"&COSTO_RFID="+rfid+"&COSTO_UNIT="+costo_unitario_final_usd+"&COSTO_UNITS="+costo_unitario_final_pesos+"&CST_TOTLTARGET="+total_target_usd+"&COSTO_TOT="+total_fob_usd+"&COSTO_TOTS="+costo_total_pesos+"&MKUP="+nuevo_mkup+"&GM="+nuevo_gm+"&PROVEEDOR="+provedor+"&PAIS="+pais+"&VIA="+via+"&FACTOR_EST="+factor_est_campo+"&NOM_VIA="+nuevo_nom_via+"&NOM_PAIS="+nuevo_nom_pais;
+                    var dataString_upd1 = "ID_COLOR3=" + id_color3 + "&COSTO_FOB=" + fob + "&COSTO_INSP=" + insp + "&COSTO_RFID=" + rfid + "&COSTO_UNIT=" + costo_unitario_final_usd + "&COSTO_UNITS=" + costo_unitario_final_pesos + "&CST_TOTLTARGET=" + total_target_usd + "&COSTO_TOT=" + total_fob_usd + "&COSTO_TOTS=" + costo_total_pesos + "&MKUP=" + nuevo_mkup + "&GM=" + nuevo_gm + "&PROVEEDOR=" + provedor + "&PAIS=" + pais + "&VIA=" + via + "&FACTOR_EST=" + factor_est_campo + "&NOM_VIA=" + nuevo_nom_via + "&NOM_PAIS=" + nuevo_nom_pais;
                     $.ajax({
                         type: "GET",
                         url: url_PLC_PLAN_COMPRA_COLOR_3,
@@ -4308,7 +4390,7 @@ $('#btn_editar_registros_grilla_editable').on('click', function () {
                     }).done(function () {
 
                         // Actualizar PLC_PLAN_COMPRA_COLOR_CIC url_PLC_PLAN_COMPRA_COLOR_CIC
-                        var dataString_upd2 = "ID_COLOR3="+id_color3+"&COSTO="+costo_total_pesos;
+                        var dataString_upd2 = "ID_COLOR3=" + id_color3 + "&COSTO=" + costo_total_pesos;
                         $.ajax({
                             type: "GET",
                             url: url_PLC_PLAN_COMPRA_COLOR_CIC,
@@ -4326,20 +4408,20 @@ $('#btn_editar_registros_grilla_editable').on('click', function () {
 
                             // Done
 
-                        // Fin del done asociado a la búsqueda de url_PLC_PLAN_COMPRA_COLOR_CIC
+                            // Fin del done asociado a la búsqueda de url_PLC_PLAN_COMPRA_COLOR_CIC
                         });
 
 
-                    // Fin del done asociado a la búsqueda de url_PLC_PLAN_COMPRA_COLOR_3
+                        // Fin del done asociado a la búsqueda de url_PLC_PLAN_COMPRA_COLOR_3
                     });
 
 
-                }else{
+                } else {
                     alert("No hemos podido obtener algunos datos necesarios para realizar los cálculos, intente nuevamente.");
                 }
 
 
-            // fin del done de busca tipo de cambio
+                // fin del done de busca tipo de cambio
             });
 
         });
