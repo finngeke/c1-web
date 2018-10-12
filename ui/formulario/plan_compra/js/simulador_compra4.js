@@ -95,7 +95,7 @@ $(function () {
                 $('#depto_tabla_selec').DataTable({
                     "oLanguage": {
                         "sSearch": "Buscar:",
-                        "sZeroRecords" : "No se encontraron registros"
+                        "sZeroRecords": "No se encontraron registros"
                     },
                     paging: false,
                     scrollY: "200px",
@@ -105,14 +105,14 @@ $(function () {
                          "sSearch": "Buscar:",
                          "sZeroRecords" : "No se encontraron registros"
                      },
-                     retrieve: true,
-                     destroy: true,
-                     paging: false,
-                     "ordering": false,
-                     "bSort": false,
+                    retrieve: true,
+                    destroy: true,
+                    paging: false,
+                    "ordering": false,
+                    "bSort": false,
                       scrollY: "200px",
-                     "searching": false,
-                     "info": false,
+                    "searching": false,
+                    "info": false,
                      scrollCollapse: true*/
                 });
             });
@@ -4029,7 +4029,6 @@ $('#btn_edita_grilla').on('click', function () {
                     });
 
 
-
                     // Buscamos Ventana
                     // Realizar la búsqueda de formatos para asignarlas a el CBX ventana
                     var toAppend_ventana = "";
@@ -4055,8 +4054,6 @@ $('#btn_edita_grilla').on('click', function () {
 
                     }).done(function () {
                     });
-
-
 
 
                     // Buscamos País
@@ -4190,9 +4187,9 @@ $('#btn_editar_registros_grilla_editable').on('click', function () {
     var url_get_factor = 'ajax_simulador_cbx/listar_factor';
     var url_get_tipocambio = 'ajax_simulador_cbx/listar_tipocambio';
 
-    var total_fob_usd = 0
+    var total_fob_usd = 0;
     var total_target_usd = 0;
-    var costo_unitario_final_usd = "";
+    var costo_unitario_final_usd = 0; // era ""
 
 
     $("#tabla_edita_grilla tbody tr").each(function () {
@@ -4253,9 +4250,9 @@ $('#btn_editar_registros_grilla_editable').on('click', function () {
         var error_tipocambio = 0;
 
         // Voy a buscar factor y tipocambio, para poder haccer los calculos
-        var factor = "";
-        var tipocambio = "";
-        var factor_est_campo = "";
+        var factor = 0;
+        var tipocambio = 0;
+        var factor_est_campo = 0;
 
 
         // Si se realizaron cambios en la Vía
@@ -4345,8 +4342,8 @@ $('#btn_editar_registros_grilla_editable').on('click', function () {
                     }
 
                     var costo_unitario_final_usd_target = parseFloat(target) + parseFloat(insp) + parseFloat(rfid);
-                        costo_unitario_final_usd_target = costo_unitario_final_usd_target.toFixed(2);
-                        total_target_usd =  costo_unitario_final_usd_target * unidades_finales;
+                    costo_unitario_final_usd_target = costo_unitario_final_usd_target.toFixed(2);
+                    total_target_usd = costo_unitario_final_usd_target * unidades_finales;
 
 
                     /*else{
@@ -4356,9 +4353,9 @@ $('#btn_editar_registros_grilla_editable').on('click', function () {
                     // alert("Total FOB USD: " + total_fob_usd + " Total TARGET USD: "+total_target_usd);
 
                     // Total Fob US$: Costo unitarios final US$ (total con fob)  * unidades (Funcionando Antes de Comentar)
-                        // total_fob_usd = costo_unitario_final_usd * unidades_finales;
+                    // total_fob_usd = costo_unitario_final_usd * unidades_finales;
                     // Total Target US$: Costo unitarios final US$ (total con target)  * unidades (Funcionando Antes de Comentar)
-                        // total_target_usd = costo_unitario_final_usd * unidades_finales;
+                    // total_target_usd = costo_unitario_final_usd * unidades_finales;
 
                     // Costo unitarios final Pesos :
                     // si factor > 0  = Costo unitarios final US$ * Factor
