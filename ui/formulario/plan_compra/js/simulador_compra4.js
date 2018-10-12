@@ -93,16 +93,27 @@ $(function () {
                 });
             }).done(function () {
                 $('#depto_tabla_selec').DataTable({
-                    retrieve: true,
-                    destroy: true,
+                    "oLanguage": {
+                        "sSearch": "Buscar:",
+                        "sZeroRecords" : "No se encontraron registros"
+                    },
                     paging: false,
-                    "ordering": false,
-                    "bSort": false,
-                    scrollX: "500px",
-                    scrolly: "500px",
-                    "searching": false,
-                    "info": false,
+                    scrollY: "200px",
                     scrollCollapse: true
+
+                    /* "oLanguage": {
+                         "sSearch": "Buscar:",
+                         "sZeroRecords" : "No se encontraron registros"
+                     },
+                     retrieve: true,
+                     destroy: true,
+                     paging: false,
+                     "ordering": false,
+                     "bSort": false,
+                      scrollY: "200px",
+                     "searching": false,
+                     "info": false,
+                     scrollCollapse: true*/
                 });
             });
             /*################################ trabajo de llenar tabla ########################*/

@@ -52,11 +52,27 @@ require_once '../PHPExcel/PHPExcel.php';
           echo Template::instance()->render('layout_excel.php');*/
 
       } elseif ($tipoArchivo == 2) { //c1
-          $depto_cadena ="";
+          $depto_cadena =""; $count1 = 0;
           foreach($_POST["check_depto"] as $val => $value){
               $depto_cadena = $depto_cadena.$value."," ;
         }
-            include '../ui/reporte/cabeceraexcel.php';
+            $dt =  \simulador_compra\cbx_grilla_compra::llenar_tabla_depto($Tempo);
+
+          if (count($dt) == $count1){
+
+             $arreglo_depto = simulador_compra\plan_compra::Exportc1($Tempo, $depto_cadena);
+              //$arreglo_depto= \temporada\Factor_Estimado::getFactor_Estimado($f3->get('SESSION.COD_TEMPORADA'));
+
+              $filename=$Tempo."-"."C1_Consolidada.xls";
+              header("Content-Disposition: attachment; filename=\"$filename\"");
+              header("Content-Type: application/vnd.ms-excel");
+              $f3->set('Lista_Consolidadoc1',$arreglo_depto);
+              $f3->set('contenido', 'reporte/visor_exportarC1.html');
+              echo Template::instance()->render('layout_excel.php');
+
+          }else{
+              include '../ui/reporte/cabeceraexcel.php';
+          }
 
       } elseif ($tipoArchivo == 4) { //c1 por estado
 
