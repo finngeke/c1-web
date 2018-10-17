@@ -628,6 +628,34 @@ class cbx_grilla_compra extends \parametros
 
     }
 
+    // Guardar Solo Proforma Extra (Las Proformas ingresadas luego de guardar, proforma, archivo y/o cambios de estados)
+    public static function guarda_solo_proforma_extra($temporada, $depto, $login, $proforma, $id_insertar, $estado)
+    {
+
+        $sql = "UPDATE plc_plan_compra_color_3
+                SET proforma = '" . $proforma . "',
+                estado_c1 = $estado
+                WHERE cod_temporada = $temporada
+                AND dep_depto = '" . $depto . "'
+                AND id_color3 = $id_insertar
+                ";
+
+        // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+        if (!file_exists('../archivos/log_querys/' . $login)) {
+            mkdir('../archivos/log_querys/' . $login, 0775, true);
+        }
+        $stamp = date("Y-m-d_H-i-s");
+        $rand = rand(1, 999);
+        $content = $sql;
+        $fp = fopen("../archivos/log_querys/" . $login . "/GRILLA2-ACTUALIZASOLOPROFORMAEXTRA--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+        fwrite($fp, $content);
+        fclose($fp);
+
+        $data = \database::getInstancia()->getConsulta($sql);
+        return $data;
+
+    }
+
     // Actualiza Historial
     public static function actualiza_historial($temporada, $depto, $login, $proforma, $id_insertar)
     {
@@ -1016,9 +1044,13 @@ class cbx_grilla_compra extends \parametros
     public static function quitar_oc_cancelada($temporada, $depto, $login, $oc, $pi)
     {
 
-        $sql = " DELETE FROM B
+        /*$sql = " DELETE FROM B
                  WHERE PI = '" . $pi . "'
                  AND orden_de_compra <> '" . $oc . "'
+                ";*/
+
+        $sql = " DELETE FROM B
+                 WHERE orden_de_compra = '" . $oc . "'
                 ";
 
         $data = \database::getInstancia()->getConsulta($sql);
