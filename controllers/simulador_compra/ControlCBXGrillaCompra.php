@@ -273,6 +273,11 @@
 		public function guarda_solo_proforma($f3) {
 			echo \simulador_compra\cbx_grilla_compra::guarda_solo_proforma($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $f3->get('GET.PROFORMA'), $f3->get('GET.ID_INSERTAR'));
 		}
+
+        // guarda_solo_proforma
+        public function guarda_solo_proforma_extra($f3) {
+            echo \simulador_compra\cbx_grilla_compra::guarda_solo_proforma_extra($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $f3->get('GET.PROFORMA'), $f3->get('GET.ID_INSERTAR'));
+        }
 		
 		// Actualiza Historial
 		public function actualiza_historial($f3) {

@@ -629,12 +629,12 @@ class cbx_grilla_compra extends \parametros
     }
 
     // Guardar Solo Proforma Extra (Las Proformas ingresadas luego de guardar, proforma, archivo y/o cambios de estados)
-    public static function guarda_solo_proforma_extra($temporada, $depto, $login, $proforma, $id_insertar, $estado)
+    public static function guarda_solo_proforma_extra($temporada, $depto, $login, $proforma, $id_insertar)
     {
 
         $sql = "UPDATE plc_plan_compra_color_3
                 SET proforma = '" . $proforma . "',
-                estado_c1 = $estado
+                estado_c1 = 18
                 WHERE cod_temporada = $temporada
                 AND dep_depto = '" . $depto . "'
                 AND id_color3 = $id_insertar

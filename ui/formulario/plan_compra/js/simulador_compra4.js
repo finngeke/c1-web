@@ -1039,13 +1039,11 @@ $(window).on('load', function () {
                     // Fin tabla2_buscar_columnas
                 });
 
-
                 $("#tabla2 td input").on('change', function () {
                     var $td = $(this).closest('td');
                     $td.find('input').attr('value', this.value);
                     tabla2_buscar_columnas.cell($td).invalidate();
                 });
-
 
                 $('#flag_top_aviso_termino_carga').html(parseInt($('#flag_top_aviso_termino_carga').html()) + 1);
                 //$('#span_accion_cargando').html('Cargando estructura de la tabla');
@@ -1298,8 +1296,59 @@ function descargaPI(event) {
 // Guarda Proforma
 $('.guarda_proforma').on('click', function () {
 
+    /*var proforma = '123 456 a b  c';
+         proforma = proforma.replace(/[^a-z0-9\-\ ]/gi, '');
+        //proforma = proforma.replace(/[^a-z0-9\-]/gi, '');
+    alert(proforma);*/
+
     var respuesta = confirm("¿Guardar la Proforma Ingresada?");
     if (respuesta == true) {
+
+        // Buscar los estados de los registros que tengan Proforma
+        /*var arr_proforma = [];
+        var conta_datos_tr_proforma = 0;
+
+        // Recorro la Tabla para almacenar en un array los registros de proforma y estado c1 no repetidos
+        $("#tabla2 >tbody >tr").each(function () {
+
+            // 17-10-2018 Eduardo Pacheco (Don Lalo) solicita que el guardado de PI deje ingresar registros con espacios
+            var proforma = $("#tabla2 #txt_proforma_" + conta_datos_tr_proforma).val();
+                proforma = proforma.replace(/[^a-z0-9\-]/gi, '');
+            var estado_c1 = $("#tabla2 #txt_estadoc1_" + conta_datos_tr_proforma).text();
+            var encuentra = 0;
+
+            if( proforma.length>0 ){
+
+                $.each(arr_proforma , function(key, val) {
+                   if(val.proforma == proforma){encuentra = encuentra+1;}
+                });
+
+                if(encuentra==0){
+                    // Almacena todos los elementos en un arreglo
+                    arr_proforma.push({
+                        proforma: proforma,
+                        estado_c1:  estado_c1
+                    });
+                }
+
+            }
+
+        conta_datos_tr_proforma++;
+        // Fin de la tabla
+        });*/
+
+
+        // Aquí recorro el arreglo con registros unicos
+        /*$.each(arr_proforma , function(key, val) {
+            alert(val.proforma +' - '+val.estado_c1);
+        });*/
+
+        // Compra confirmada con PI
+
+        // URL`s de Guardado de Proforma e Historial
+        var url_guarda_proforma_extra = 'ajax_simulador_cbx/guarda_solo_proforma_extra';
+        var url_guarda_proforma = 'ajax_simulador_cbx/guarda_solo_proforma';
+        var url_actualiza_historial = 'ajax_simulador_cbx/actualiza_historial';
 
         // Recorrer la tabla y traer los datos de la proforma a guardar
         var conta_datos_tr = 0;
@@ -1307,47 +1356,48 @@ $('.guarda_proforma').on('click', function () {
 
             // Solo para validar que no me encuentro en las cabeceras (sirve como ID del Campo)
             var correlativo_tabla = conta_datos_tr;
-            //var estado_c1 = $(this).find("td:eq(90)").text();
             var estado_c1 = $("#tabla2 #txt_estadoc1_" + conta_datos_tr).text();
-            //var busca_campo_actualizado = $(this).find("td:eq(92)").text();
             var busca_campo_actualizado = $("#tabla2 #txt_estado_cambio_proforma_" + conta_datos_tr).text();
-            //var id_color  = $(this).find("td:eq(91)").text();
             var id_color = $("#tabla2 #txt_id_color_" + conta_datos_tr).text();
-            //var proforma  = $(this).find("td:eq(77) input[type='text']").val();
             var proforma = $("#tabla2 #txt_proforma_" + conta_datos_tr).val();
             proforma = proforma.replace(/[^a-z0-9\-]/gi, '');
-            // Leemos el campo de
+            // Leemos el campo de edición "U"
             var cargado = $("#tabla2 #txt_archivo_" + conta_datos_tr).text();
 
-            // Mensaje del BTN "Cargado"
-            // alert(cargado);
+            // Primero verifico si el registro se añada a uno ya existente, independiente de su estado.
+            if( (busca_campo_actualizado == "U") && (estado_c1 == 0) && (cargado == 'Cargado.. Upload Upload') ){
 
-
-            // Aquí las nuevas condiciones, la que existe enviarla a un elseif
-            //if( (busca_campo_actualizado == "U") && (estado_c1 == 0) && (cargado==1) )
-
-
-            if ((busca_campo_actualizado == "U") && (estado_c1 == 0)) {
-
-                // Limpio el campo de la proforma de caracteres no deseados
+                // Limpio el campo de la proforma de caracteres no deseados (Asignandole el nuevo sin caracteres especiales y ahora aceptando espacios)
                 $("#tabla2 #txt_proforma_" + correlativo_tabla).val(proforma);
 
                 // Actualizar solo proforma
-                var url_guarda_proforma = 'ajax_simulador_cbx/guarda_solo_proforma';
-                $.getJSON(url_guarda_proforma, {PROFORMA: proforma, ID_INSERTAR: id_color}).done(function (data) {
+                 $.getJSON(url_guarda_proforma_extra, {PROFORMA: proforma, ID_INSERTAR: id_color}).done(function (data) {
 
                     // Actualiza Historial
-                    var url_actualiza_historial = 'ajax_simulador_cbx/actualiza_historial';
                     $.getJSON(url_actualiza_historial, {PROFORMA: proforma, ID_INSERTAR: id_color});
 
                 });
 
-                // Fin del if que considera solo los registros con estado cero y nombre proforma valido
+
+            } else if ( (busca_campo_actualizado == "U") && (estado_c1 == 0) ){
+
+                // Limpio el campo de la proforma de caracteres no deseados (Asignandole el nuevo sin caracteres especiales y ahora aceptando espacios)
+                $("#tabla2 #txt_proforma_" + correlativo_tabla).val(proforma);
+
+                // Actualizar solo proforma
+                $.getJSON(url_guarda_proforma, {PROFORMA: proforma, ID_INSERTAR: id_color}).done(function (data) {
+
+                    // Actualiza Historial
+                    $.getJSON(url_actualiza_historial, {PROFORMA: proforma, ID_INSERTAR: id_color});
+
+                });
+
+            // Fin del if que considera solo los registros con estado cero y nombre proforma valido
             }
 
             conta_datos_tr++;
 
-            // Fin de la tabla
+        // Fin de la tabla
         });
 
         alert("Se han guardado los cambios, favor recargar para revisar.");
@@ -2080,6 +2130,7 @@ function matchOC(event) {
                     // 5.- Eliminar Registros con OC Canceladas
                     var url_elimina_oc_canceladas = 'ajax_simulador_cbx/quitar_oc_cancelada';
                     $.getJSON(url_elimina_oc_canceladas, {OC: orden_compra, PI: proforma});
+
 
 
                     // 6.- Agrega la tabla "B" OC o PI (PLC_PKG_UTILS.PRC_AGREGAR_OCPMM)
