@@ -680,7 +680,8 @@ $(window).on('load', function () {
 
                     //var proforma = $(this).find("td:eq(77) input[type='text']").val();
                     var proforma = $("#tabla2 #txt_proforma_" + $key).val();
-                    proforma = proforma.replace(/[^a-z0-9\-]/gi, '');
+                    //proforma = proforma.replace(/[^a-z0-9\-]/gi, '');
+                    proforma = proforma.replace(/[^a-z0-9\-\ ]/gi, '');
                     //var tipoproducto = $(this).find("td:eq(24)").text();
                     var tipoproducto = $("#tabla2 #cbx_tipoproducto_" + $key).text();
                     //var GMB = ($(this).find("td:eq(52)").text()).replace('%', '');
@@ -796,7 +797,8 @@ $(window).on('load', function () {
                     // Traigo la Proforma
                     //var proforma = $(this).find("td:eq(77) input[type='text']").val();
                     var proforma = $("#tabla2 #txt_proforma_" + flag_tabla_vista_oc_broker).val();
-                    proforma = proforma.replace(/[^a-z0-9\-]/gi, '');
+                    //proforma = proforma.replace(/[^a-z0-9\-]/gi, '');
+                    proforma = proforma.replace(/[^a-z0-9\-\ ]/gi, '');
                     // Traigo el estado, solo para cargar el presupuesto cuando el estado sea 19
                     //var estado_c1 = $(this).find("td:eq(90)").text();
                     var estado_c1 = $("#tabla2 #txt_estadoc1_" + flag_tabla_vista_oc_broker).text();
@@ -1203,7 +1205,8 @@ function cargaArchivo(event) {
     var estado_c1 = $("#tabla2 #txt_estadoc1_" + separa_barra[2]).text();
     var id_color = $("#tabla2 #txt_id_color_" + separa_barra[2]).text();
     var proforma = $("#tabla2 #txt_proforma_" + separa_barra[2]).val();
-    proforma = proforma.replace(/[^a-z0-9\-]/gi, '');
+    //proforma = proforma.replace(/[^a-z0-9\-]/gi, '');
+    proforma = proforma.replace(/[^a-z0-9\-\ ]/gi, '');
 
     if ((estado_c1 == 0) && (proforma != 0) && (proforma != "") && (proforma != "null") && (proforma != null)) {
 
@@ -1280,7 +1283,8 @@ function descargaPI(event) {
     var separa_barra = id_carga_pi.split("_");
     var estado_c1 = $("#tabla2 #txt_estadoc1_" + separa_barra[2]).text();
     var proforma = $("#tabla2 #txt_proforma_" + separa_barra[2]).val();
-    proforma = proforma.replace(/[^a-z0-9\-]/gi, '');
+    //proforma = proforma.replace(/[^a-z0-9\-]/gi, '');
+    proforma = proforma.replace(/[^a-z0-9\-\ ]/gi, '');
 
     var span_temporada = $('#span_temporada').text();
     span_temporada = span_temporada.replace(/[^a-z0-9\-]/gi, '');
@@ -1343,7 +1347,6 @@ $('.guarda_proforma').on('click', function () {
             alert(val.proforma +' - '+val.estado_c1);
         });*/
 
-        // Compra confirmada con PI
 
         // URL`s de Guardado de Proforma e Historial
         var url_guarda_proforma_extra = 'ajax_simulador_cbx/guarda_solo_proforma_extra';
@@ -1360,7 +1363,8 @@ $('.guarda_proforma').on('click', function () {
             var busca_campo_actualizado = $("#tabla2 #txt_estado_cambio_proforma_" + conta_datos_tr).text();
             var id_color = $("#tabla2 #txt_id_color_" + conta_datos_tr).text();
             var proforma = $("#tabla2 #txt_proforma_" + conta_datos_tr).val();
-            proforma = proforma.replace(/[^a-z0-9\-]/gi, '');
+            //proforma = proforma.replace(/[^a-z0-9\-]/gi, '');
+            proforma = proforma.replace(/[^a-z0-9\-\ ]/gi, '');
             // Leemos el campo de edición "U"
             var cargado = $("#tabla2 #txt_archivo_" + conta_datos_tr).text();
 
@@ -1433,7 +1437,8 @@ $('.solicitud_generacion_oc').on('click', function () {
 
     var valor_radio = $("input[name='radio']:checked").val();
     var proforma = $("#txt_proforma_" + valor_radio).val();
-    proforma = proforma.replace(/[^a-z0-9\-]/gi, '');
+    //proforma = proforma.replace(/[^a-z0-9\-]/gi, '');
+    proforma = proforma.replace(/[^a-z0-9\-\ ]/gi, '');
     var id_color3 = $("#txt_id_color_" + valor_radio).text();
     var estado_c1 = $("#tabla2 #txt_estadoc1_" + valor_radio).text();
 
@@ -1476,7 +1481,8 @@ $('.oc_generada').on('click', function () {
 
     var valor_radio = $("input[name='radio']:checked").val();
     var proforma = $("#txt_proforma_" + valor_radio).val();
-    proforma = proforma.replace(/[^a-z0-9\-]/gi, '');
+    //proforma = proforma.replace(/[^a-z0-9\-]/gi, '');
+    proforma = proforma.replace(/[^a-z0-9\-\ ]/gi, '');
     var id_color3 = $("#txt_id_color_" + valor_radio).text();
     var estado_c1 = $("#tabla2 #txt_estadoc1_" + valor_radio).text();
 
@@ -1514,7 +1520,8 @@ $('.crear_modificacion').on('click', function () {
 
     var valor_radio = $("input[name='radio']:checked").val();
     var proforma = $("#txt_proforma_" + valor_radio).val();
-    proforma = proforma.replace(/[^a-z0-9\-]/gi, '');
+    //proforma = proforma.replace(/[^a-z0-9\-]/gi, '');
+    proforma = proforma.replace(/[^a-z0-9\-\ ]/gi, '');
     var id_color3 = $("#txt_id_color_" + valor_radio).text();
     var estado_c1 = $("#tabla2 #txt_estadoc1_" + valor_radio).text();
 
@@ -1552,7 +1559,8 @@ $('.elimina_opcion').on('click', function () {
 
     var valor_radio = $("input[name='radio']:checked").val();
     var proforma = $("#txt_proforma_" + valor_radio).val();
-    proforma = proforma.replace(/[^a-z0-9\-]/gi, '');
+    //proforma = proforma.replace(/[^a-z0-9\-]/gi, '');
+    proforma = proforma.replace(/[^a-z0-9\-\ ]/gi, '');
     var id_color3 = $("#txt_id_color_" + valor_radio).text();
     var estado_c1 = $("#tabla2 #txt_estadoc1_" + valor_radio).text();
 
@@ -1597,7 +1605,8 @@ $('.solicitud_correccion_pi').on('click', function () {
 
     var valor_radio = $("input[name='radio']:checked").val();
     var proforma = $("#txt_proforma_" + valor_radio).val();
-    proforma = proforma.replace(/[^a-z0-9\-]/gi, '');
+    //proforma = proforma.replace(/[^a-z0-9\-]/gi, '');
+    proforma = proforma.replace(/[^a-z0-9\-\ ]/gi, '');
     var id_color3 = $("#txt_id_color_" + valor_radio).text();
     var estado_c1 = $("#tabla2 #txt_estadoc1_" + valor_radio).text();
 
@@ -2030,7 +2039,8 @@ function despliegaDetalleError(event) {
     id = id.attr('id');
     var separa_barra = id.split("_");
     var proforma = $("#txt_proforma_" + separa_barra[3]).val();
-    proforma = proforma.replace(/[^a-z0-9\-]/gi, '');
+    //proforma = proforma.replace(/[^a-z0-9\-]/gi, '');
+    proforma = proforma.replace(/[^a-z0-9\-\ ]/gi, '');
 
     $('#detalle_comentario_sol_coreccion').val('');
 
@@ -2095,7 +2105,8 @@ function matchOC(event) {
         var orden_compra = $("#tabla2 #txt_noc_" + separa_barra[2]).text();
         var id_color = $("#tabla2 #txt_id_color_" + separa_barra[2]).text();
         var proforma = $("#tabla2 #txt_proforma_" + separa_barra[2]).val();
-        proforma = proforma.replace(/[^a-z0-9\-]/gi, '');
+        //proforma = proforma.replace(/[^a-z0-9\-]/gi, '');
+        proforma = proforma.replace(/[^a-z0-9\-\ ]/gi, '');
 
         // Buscar Estado del Registro
         var check_estado_oc = $("#tabla2 #txt_estadoc1_" + separa_barra[2]).text();
@@ -4507,6 +4518,3 @@ $('#btn_editar_registros_grilla_editable').on('click', function () {
 
 // fin del Botón actualizar del editar grilla
 });
-
-
-//.promise().done(function(data){});
