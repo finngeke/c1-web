@@ -10,6 +10,7 @@
 namespace simulador_compra;
 
 class ControlCrea extends \Control {
+
 public function importar_bmt($f3) {
 
        // print_r($_REQUEST); //varibles que se esta pasando por post del formulario
@@ -365,7 +366,6 @@ public function importar_bmt($f3) {
     }
     }
 
-
 public function guarda_pi($f3) {
 
         $estado_c1 = $_POST['send_archivo_estado_c1'];
@@ -425,6 +425,7 @@ public function guarda_pi($f3) {
         $f3->reroute('/simulador_compra?depto=' . $f3->get('SESSION.COD_DEPTO'));
 
     }
+
 public function SubirAssorment($f3){
 
     $tipo_archivo = $_POST['tipos_import'];
@@ -453,6 +454,7 @@ public function SubirAssorment($f3){
         }
     }
 }
+
 public function getJerarquia($f3){
 
     $rows = plan_compra::list_jerarquia($f3->get('GET.Depart'));
@@ -689,6 +691,7 @@ public function ImportarAssormentValidaciones($f3){
      echo json_encode($_array);
 
 }
+
 public function ImportarAssormentdelrows($f3){
 
 #region {*************Extrer Excel*************}
@@ -752,6 +755,7 @@ public function ImportarAssormentdelrows($f3){
         echo json_encode($rows);
 
 }
+
 public function ImportarAssormentInsHistorial($f3){
 
     $cod_tempo = $f3->get('SESSION.COD_TEMPORADA');
@@ -778,6 +782,7 @@ public function ImportarAssormentInsHistorial($f3){
 
     echo $_val;
 }
+
 public function ImpAssormAbrirDataVent($f3){
     $cod_tempo = $f3->get('SESSION.COD_TEMPORADA');
     $depto = $f3->get('SESSION.COD_DEPTO');
@@ -859,6 +864,7 @@ public function ImpAssormAbrirDataVent($f3){
     }
 
 }
+
 public function ImpAssormCalculos($f3){
 
         $cod_tempo = $f3->get('SESSION.COD_TEMPORADA');
@@ -884,6 +890,7 @@ public function ImpAssormCalculos($f3){
 
 
     }
+
 public function InsertarAssormentC1($f3){
 
   $cod_tempo = $f3->get('SESSION.COD_TEMPORADA');
@@ -903,6 +910,7 @@ public function InsertarAssormentC1($f3){
     }
     echo $_val;
 }
+
 public function Mensaje_Guardado($f3){
         $f3->set('SESSION.exito', 'Insertado Correctamente');
         $f3->reroute('/simulador_compra?depto=' . $f3->get('SESSION.COD_DEPTO'));
@@ -1027,6 +1035,7 @@ public function ImportarBmtValidaciones($f3){
     }
     echo json_encode($_array);
 }
+
 public function ImportarBmtdelrows($f3){
 
 #region {*************Extrer Excel*************}
@@ -1102,6 +1111,7 @@ public function ImportarBmtdelrows($f3){
         plan_compra::InsertHistoricadelBMT($cod_tempo,$depto,$Marcas,$grupo_compra);
      echo json_encode($rows);
     }
+
 public function ImportarBmtInsHistorial($f3){
   $cod_tempo = $f3->get('SESSION.COD_TEMPORADA');
   $rows =  $_POST['_rows'];
@@ -1119,6 +1129,7 @@ public function ImportarBmtInsHistorial($f3){
 
     echo $_val;
 }
+
 public function ImpBMTCalculoDebut_reorder($f3){
 
     $rows = $_SESSION['dtBMT'];
@@ -1131,6 +1142,7 @@ public function ImpBMTCalculoDebut_reorder($f3){
     $_SESSION['dtBMTconReorder']= $rows;
     echo json_encode($rows);
 }
+
 public function ImpBMTCalculosCurvado($f3){
 
     $cod_tempo = $f3->get('SESSION.COD_TEMPORADA');
@@ -1148,6 +1160,7 @@ public function ImpBMTCalculosCurvado($f3){
 
     echo json_encode($rows);
 }
+
 public function ActualizBmtC1($f3){
     $cod_tempo = $f3->get('SESSION.COD_TEMPORADA');
     $depto = $f3->get('SESSION.COD_DEPTO');
@@ -1164,6 +1177,7 @@ public function ActualizBmtC1($f3){
     }
     echo $_val;
 }
+
 public function Mensaje_GuardadoBMT($f3){
         $f3->set('SESSION.modifica', 'Actualizado Correctamente');
         $f3->reroute('/simulador_compra?depto=' . $f3->get('SESSION.COD_DEPTO'));
@@ -1174,4 +1188,6 @@ public function beforeRoute($f3) {
             $f3->reroute('/fin-sesion');
         }
     }
+
+// Fin del Controlador
 }
