@@ -678,19 +678,15 @@ $(window).on('load', function () {
                     //var reorder = $(this).find("td:eq(66)").text();
                     var reorder = $("#tabla2 #txt_debutreorder_" + $key).text();
 
-                    //var proforma = $(this).find("td:eq(77) input[type='text']").val();
                     var proforma = $("#tabla2 #txt_proforma_" + $key).val();
                     //proforma = proforma.replace(/[^a-z0-9\-]/gi, '');
                     proforma = proforma.replace(/[^a-z0-9\-\ ]/gi, '');
-                    //var tipoproducto = $(this).find("td:eq(24)").text();
                     var tipoproducto = $("#tabla2 #cbx_tipoproducto_" + $key).text();
-                    //var GMB = ($(this).find("td:eq(52)").text()).replace('%', '');
                     var GMB = ($("#tabla2 #txt_gm_" + $key).text()).replace('%', '');
 
                     // Buscar el estado de eliminado para darles la clase de tachar
                     //var estado = $(this).find("td:eq(89)").text();
                     var estado = $("#tabla2 #cbx_estadoopcion_" + $key).text();
-                    //var archivo_ = $(this).find("td:eq(79)").text();
                     var archivo_ = $("#tabla2 #txt_archivo_" + $key).text();
 
                     //if (archivo_ == "Cargado.. Upload"){

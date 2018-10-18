@@ -653,15 +653,63 @@ class cbx_grilla_compra extends \parametros
         $stamp = date("Y-m-d_H-i-s");
         $rand = rand(1, 999);
         $content = $sql;
-        $fp = fopen("../archivos/log_querys/" . $login . "/GRILLA2-ACTUALIZASOLOPROFORMAEXTRA--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+        $fp = fopen("../archivos/log_querys/" . $login . "/GRILLA2-ACTSOLOPROFORMAEXTRA--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
         fwrite($fp, $content);
         fclose($fp);
 
         $data = \database::getInstancia()->getConsulta($sql);
         //return $data;
 
+        // Si puede actualizar ejecuto la otra consulta
         if($data){
-            return 1;
+
+
+            $sql = "INSERT INTO plc_plan_compra_oc (cod_temporada,dep_depto,niv_jer1,cod_jer1,niv_jer2,cod_jer2,item,cod_sublin,cod_estilo,des_estilo,vent_emb,proforma,archivo,id_color3, estado_oc,estilo_pmm)
+                SELECT
+                      C.COD_TEMPORADA,
+                      C.DEP_DEPTO,
+                      0 NJ1,
+                      0 CJ1,
+                      0 NJ2,
+                      C.COD_JER2,
+                      0 ITEM,
+                      C.COD_SUBLIN,
+                      0 COD_ESTILO,
+                      C.DES_ESTILO,
+                      C.VENTANA_LLEGADA,
+                      '" . $proforma . "',
+                      'Cargado..' ARCHIVO,
+                      C.ID_COLOR3,
+                      '' Estado_oc,
+                      '' estilo_pmm
+                      FROM PLC_PLAN_COMPRA_COLOR_3 C
+                      LEFT JOIN PLC_PLAN_COMPRA_OC O ON C.COD_TEMPORADA = O.COD_TEMPORADA
+                      AND C.DEP_DEPTO = O.DEP_DEPTO AND C.ID_COLOR3 = O.ID_COLOR3
+                WHERE C.COD_TEMPORADA = $temporada AND C.DEP_DEPTO =  '" . $depto . "'
+                AND C.ID_COLOR3 IN ($id_insertar)
+                ";
+
+            // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+            if (!file_exists('../archivos/log_querys/' . $login)) {
+                mkdir('../archivos/log_querys/' . $login, 0775, true);
+            }
+            $stamp = date("Y-m-d_H-i-s");
+            $rand = rand(1, 999);
+            $content = $sql;
+            $fp = fopen("../archivos/log_querys/" . $login . "/GRILLA2-ACTSOLOPROFORMAEXTRAPLAN_COMPRA_OC_--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+            fwrite($fp, $content);
+            fclose($fp);
+
+            $data = \database::getInstancia()->getConsulta($sql);
+            //return $data;
+
+            if($data){
+                return 1;
+            }else{
+                return 0;
+            }
+
+
         }else{
             return 0;
         }
