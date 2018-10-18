@@ -640,7 +640,7 @@ class cbx_grilla_compra extends \parametros
 
         $sql = "UPDATE plc_plan_compra_color_3
                 SET proforma = '" . $proforma . "',
-                estado_c1 = 18
+                estado = 18
                 WHERE cod_temporada = $temporada
                 AND dep_depto = '" . $depto . "'
                 AND id_color3 = $id_insertar
