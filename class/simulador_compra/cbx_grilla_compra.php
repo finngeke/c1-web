@@ -624,7 +624,13 @@ class cbx_grilla_compra extends \parametros
         fclose($fp);
 
         $data = \database::getInstancia()->getConsulta($sql);
-        return $data;
+        //return $data;
+
+        if($data){
+            return 1;
+        }else{
+            return 0;
+        }
 
     }
 
@@ -652,7 +658,13 @@ class cbx_grilla_compra extends \parametros
         fclose($fp);
 
         $data = \database::getInstancia()->getConsulta($sql);
-        return $data;
+        //return $data;
+
+        if($data){
+            return 1;
+        }else{
+            return 0;
+        }
 
     }
 
@@ -679,7 +691,13 @@ class cbx_grilla_compra extends \parametros
         fclose($fp);
 
         $data = \database::getInstancia()->getConsulta($sql);
-        return $data;
+        //return $data;
+
+        if($data){
+            return 1;
+        }else{
+            return 0;
+        }
 
     }
 
