@@ -214,7 +214,7 @@ for ($i=0 ; $i < $cont_estados ;$i++) {
         $objPHPExcel->getActiveSheet()->fromArray($arreglo_estado_22, null, 'A7');
         for ($w = 0; $w <= $count_22-1; $w++) {
             $objPHPExcel->setActiveSheetIndex($i)
-                ->setCellValue('E'.($w+7), '=Hyperlink("https://compra.ripley.com/archivos/pi/PI-'.$Tempo.'-'.$arreglo_estado_22[$w]["COD DEP"].'-'.$arreglo_estado_22[$w]["PI"].'.xls","'.$arreglo_estado_22[$w]["PI"].'")');
+                ->setCellValue('E'.($w+7), '=Hyperlink("https://compra.ripley.com/archivos/pi/PI_'.$Tempo.'_'.$arreglo_estado_22[$w]["COD DEP"].'_'.$arreglo_estado_22[$w]["PI"].'.xlsx","'.$arreglo_estado_22[$w]["PI"].'")');
         }
         $objPHPExcel->setActiveSheetIndex($i)
             ->setCellValue('A1', 'Departamentos :  '.$depto_cadena)
