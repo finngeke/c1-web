@@ -1320,19 +1320,16 @@ $('.guarda_proforma').on('click', function () {
             var cargado = $("#tabla2 #txt_archivo_" + conta_datos_tr).text();
 
             // Primero verifico si el registro se añada a uno ya existente, independiente de su estado.
-            if( (busca_campo_actualizado == "U") && (estado_c1 == 0) && (cargado == 'Cargado.. Upload Upload') ){
+            if( (busca_campo_actualizado == "U") && (estado_c1 == 0) && (cargado == 'Cargado.. Upload Upload') ){//Cargado.. Upload Upload
 
                 // Limpio el campo de la proforma de caracteres no deseados (Asignandole el nuevo sin caracteres especiales y ahora aceptando espacios)
                 $("#tabla2 #txt_proforma_" + correlativo_tabla).val(proforma);
 
                 // Actualizar solo proforma
                  $.getJSON(url_guarda_proforma_extra, {PROFORMA: proforma, ID_INSERTAR: id_color}).done(function (data) {
-
-                    // Actualiza Historial
-                    $.getJSON(url_actualiza_historial, {PROFORMA: proforma, ID_INSERTAR: id_color});
-
+                     // Actualiza Historial
+                     $.getJSON(url_actualiza_historial, {PROFORMA: proforma, ID_INSERTAR: id_color});
                 });
-
 
             } else if ( (busca_campo_actualizado == "U") && (estado_c1 == 0) ){
 
@@ -1341,11 +1338,10 @@ $('.guarda_proforma').on('click', function () {
 
                 // Actualizar solo proforma
                 $.getJSON(url_guarda_proforma, {PROFORMA: proforma, ID_INSERTAR: id_color}).done(function (data) {
-
                     // Actualiza Historial
                     $.getJSON(url_actualiza_historial, {PROFORMA: proforma, ID_INSERTAR: id_color});
-
                 });
+
 
             // Fin del if que considera solo los registros con estado cero y nombre proforma valido
             }
