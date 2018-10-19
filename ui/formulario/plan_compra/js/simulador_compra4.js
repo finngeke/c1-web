@@ -1243,7 +1243,8 @@ function cargaArchivo(event) {
 
             var prof_otros_campos = $(this).find("td:eq(" + txt_id_archivo + ") input[type='text']").val();
             //var prof_otros_campos = $("#tabla2 #txt_proforma_"+txt_id_archivo).val();
-            prof_otros_campos = prof_otros_campos.replace(/[^a-z0-9\-]/gi, '');
+            //prof_otros_campos = prof_otros_campos.replace(/[^a-z0-9\-]/gi, '');
+            prof_otros_campos = prof_otros_campos.replace(/[^a-z0-9\-\ ]/gi, '');
 
             var td_id_color = "";
 
