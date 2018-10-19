@@ -1092,7 +1092,8 @@ function actualizaCampoEstadoProforma(event) {
 
     // 1.- Valor del campo asociado a la PRODORMA con la que estamos tabajando
     var valor_campo = $('#txt_proforma_' + separa_barra[2]).val();
-    valor_campo = valor_campo.replace(/[^a-z0-9\-]/gi, '');
+    // valor_campo = valor_campo.replace(/[^a-z0-9\-]/gi, '');
+    valor_campo = valor_campo.replace(/[^a-z0-9\-\ ]/gi, '');
 
     // 1.1.- Verifico que el estado sea 0 por si el usuario escribe sobre una PI existente
     if ((valor_campo != 0) && (valor_campo != "" && (estado_c1 == 0))) {
@@ -2182,7 +2183,7 @@ function matchOC(event) {
                                 $('#match_tabla_pmm').append(
                                     '<tr>\n' +
                                     '<td id="txt_matchpmm_id' + flag_carga_tabla_pmm + '" style="visibility: hidden"></td>\n' +  // o[0]
-                                    '<td id="txt_matchpmm_pi' + flag_carga_tabla_pmm + '">' + o[1].replace(/[^a-z0-9\-]/gi, '') + '</td>\n' +
+                                    '<td id="txt_matchpmm_pi' + flag_carga_tabla_pmm + '">' + o[1].replace(/[^a-z0-9\-\ ]/gi, '') + '</td>\n' +
                                     '<td id="txt_matchpmm_codlinea' + flag_carga_tabla_pmm + '">' + o[8].replace(/[^a-z0-9\-]/gi, '') + '</td>\n' +
                                     '<td id="txt_matchpmm_linea' + flag_carga_tabla_pmm + '">' + o[2].replace(/[^a-z0-9\-]/gi, '') + '</td>\n' +
                                     '<td id="txt_matchpmm_codsublinea' + flag_carga_tabla_pmm + '">' + o[9].replace(/[^a-z0-9\-]/gi, '') + '</td>\n' +
@@ -2225,7 +2226,7 @@ function matchOC(event) {
                                             $('#match_tabla_plan').append(
                                                 '<tr>\n' +
                                                 '<td id="txt_matchplan_id' + flag_carga_tabla_plan + '">' + o[0] + '</td>\n' +
-                                                '<td id="txt_matchplan_pi' + flag_carga_tabla_plan + '">' + o[1].replace(/[^a-z0-9\-]/gi, '') + '</td>\n' +
+                                                '<td id="txt_matchplan_pi' + flag_carga_tabla_plan + '">' + o[1].replace(/[^a-z0-9\-\ ]/gi, '') + '</td>\n' +
                                                 '<td id="txt_matchplan_codlinea' + flag_carga_tabla_plan + '">' + o[3].replace(/[^a-z0-9\-]/gi, '') + '</td>\n' +
                                                 '<td id="txt_matchplan_linea' + flag_carga_tabla_plan + '"><select id="txt_matchplan_linea_cbx_' + flag_carga_tabla_plan + '" name ="txt_matchplan_linea_cbx' + flag_carga_tabla_plan + '" class="linea_cbx_" onchange="matchCargaSublinea(event);"></select></td>\n' + //'+o[2]+'
                                                 '<td id="txt_matchplan_codsublinea' + flag_carga_tabla_plan + '">' + o[5].replace(/[^a-z0-9\-]/gi, '') + '</td>\n' +
