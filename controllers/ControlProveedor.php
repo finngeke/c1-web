@@ -75,6 +75,10 @@
 		);
 		
 		public static function cargaMain($f3) {
+
+            // Eliminar toda consurrencia del ususario
+            \permisos\permiso_usuario::eliminar_toda_concurrencia($f3->get('SESSION.login'));
+
 			$f3->set('SESSION.COD_PROVEEDOR', $f3->get('GET.cod_proveedor'));
 			$cod_proveedor = $f3->get('SESSION.COD_PROVEEDOR');
 			$proveedor = \proveedor\proveedor::getProveedor($f3->get('SESSION.COD_PROVEEDOR'));

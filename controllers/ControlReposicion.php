@@ -47,6 +47,10 @@
 		}
 		
 		public function inicio($f3) {
+
+            // Eliminar toda consurrencia del ususario
+            \permisos\permiso_usuario::eliminar_toda_concurrencia($f3->get('SESSION.login'));
+
 			ControlFormularioMain::cargaMain($f3);
 			ControlReposicion::cargaMensajes($f3);
 			$f3->set('nombre_form', 'REPOSICION');
@@ -536,4 +540,6 @@
 				$f3->reroute('/fin-sesion');
 			}
 		}
+
+
 	}
