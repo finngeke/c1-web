@@ -1294,6 +1294,9 @@ function descargaPI(event) {
 // Guarda Proforma
 $('.guarda_proforma').on('click', function () {
 
+    // Actualiza la Fecha de la Concurrencia
+    act_fecha_concurrencia();
+
     var respuesta = confirm("¿Guardar la Proforma Ingresada?");
     if (respuesta == true) {
 
@@ -1380,6 +1383,9 @@ $('#form_carga_pi').submit(function (event) {
 
 $('.solicitud_generacion_oc').on('click', function () {
 
+    // Actualiza la Fecha de la Concurrencia
+    act_fecha_concurrencia();
+
     var valor_radio = $("input[name='radio']:checked").val();
     var proforma = $("#txt_proforma_" + valor_radio).val();
     //proforma = proforma.replace(/[^a-z0-9\-]/gi, '');
@@ -1424,6 +1430,9 @@ $('.solicitud_generacion_oc').on('click', function () {
 
 $('.oc_generada').on('click', function () {
 
+    // Actualiza la Fecha de la Concurrencia
+    act_fecha_concurrencia();
+
     var valor_radio = $("input[name='radio']:checked").val();
     var proforma = $("#txt_proforma_" + valor_radio).val();
     //proforma = proforma.replace(/[^a-z0-9\-]/gi, '');
@@ -1463,6 +1472,9 @@ $('.oc_generada').on('click', function () {
 
 $('.crear_modificacion').on('click', function () {
 
+    // Actualiza la Fecha de la Concurrencia
+    act_fecha_concurrencia();
+
     var valor_radio = $("input[name='radio']:checked").val();
     var proforma = $("#txt_proforma_" + valor_radio).val();
     //proforma = proforma.replace(/[^a-z0-9\-]/gi, '');
@@ -1501,6 +1513,9 @@ $('.crear_modificacion').on('click', function () {
 });
 
 $('.elimina_opcion').on('click', function () {
+
+    // Actualiza la Fecha de la Concurrencia
+    act_fecha_concurrencia();
 
     var valor_radio = $("input[name='radio']:checked").val();
     var proforma = $("#txt_proforma_" + valor_radio).val();
@@ -1548,6 +1563,9 @@ $('.elimina_opcion').on('click', function () {
 
 $('.solicitud_correccion_pi').on('click', function () {
 
+    // Actualiza la Fecha de la Concurrencia
+    act_fecha_concurrencia();
+
     var valor_radio = $("input[name='radio']:checked").val();
     var proforma = $("#txt_proforma_" + valor_radio).val();
     //proforma = proforma.replace(/[^a-z0-9\-]/gi, '');
@@ -1588,6 +1606,9 @@ $('.solicitud_correccion_pi').on('click', function () {
 
 // Botón OnClick
 $('#btn_solic_correccion_comentario').on('click', function () {
+
+    // Actualiza la Fecha de la Concurrencia
+    act_fecha_concurrencia();
 
     // Validar que llega id_color3 y proforma, de lo contrario detener ejecución del script
     var id_color3 = $("#id_color3_solic_comentario").val();
@@ -1705,6 +1726,9 @@ function colorearTRTabla(event) {
 }
 
 $('#despliega_hitorial_excel').on('click', function () {
+
+    // Actualiza la Fecha de la Concurrencia
+    act_fecha_concurrencia();
 
     /*var table2excel = new Table2Excel();
     table2excel.export(document.querySelectorAll("table"));
@@ -2503,6 +2527,9 @@ function matchCargaSublinea(event) {
 
 $('#btn_generar_match_oc').on('click', function () {
 
+    // Actualiza la Fecha de la Concurrencia
+    act_fecha_concurrencia();
+
     // Ocualto el btn de actualizar y match
     $('#btn_generar_match_oc').fadeOut();
     $('#btn_actualizar_match').fadeOut();
@@ -2614,6 +2641,9 @@ $('#btn_generar_match_oc').on('click', function () {
 });
 
 $('#btn_actualizar_match').on('click', function () {
+
+    // Actualiza la Fecha de la Concurrencia
+    act_fecha_concurrencia();
 
     var respuesta = confirm("¿Está seguro(a) de actualizar la información?");
     if (respuesta == true) {
@@ -3139,6 +3169,7 @@ $('#form_import_bmt').submit(function (event) {
         alert("Debe ingresar un archivo.");
         return false;
     }
+
 });
 
 function campos_bloquear_tipo_usuario() {
@@ -3294,6 +3325,9 @@ function campos_bloquear_despues_llenar_tabla() {
 
 $('#btn_esconder_tabla1').on('click', function () {
 
+    // Actualiza la Fecha de la Concurrencia
+    act_fecha_concurrencia();
+
     $('#div_contenedor_tabla1').hide();
     $('#btn_esconder_tabla1').hide();
     $('#btn_mostrar_tabla1').show();
@@ -3303,6 +3337,9 @@ $('#btn_esconder_tabla1').on('click', function () {
 });
 
 $('#btn_mostrar_tabla1').on('click', function () {
+
+    // Actualiza la Fecha de la Concurrencia
+    act_fecha_concurrencia();
 
     $('#div_contenedor_tabla1').show();
     $('#btn_esconder_tabla1').show();
@@ -3446,6 +3483,9 @@ function conteo_regresivo() {
 }
 
 $('#btn_limpiar_filtro_sim_comp').on('click', function () {
+
+    // Actualiza la Fecha de la Concurrencia
+    act_fecha_concurrencia();
 
     $('input.filtro').val('');
 
@@ -3804,11 +3844,17 @@ function validar_aviso_carga_de_simulador() {
 
 $('.importar_bmt').on('click', function () {
 
+    // Actualiza la Fecha de la Concurrencia
+    act_fecha_concurrencia();
+
     $('#flag_top_menu_tipo_usuario').html('LECTURA');
 
 });
 
 $('#btn_salir_popup_import_bmt').on('click', function () {
+
+    // Actualiza la Fecha de la Concurrencia
+    act_fecha_concurrencia();
 
     $('#flag_top_menu_tipo_usuario').html('');
     Validar_flag_concurrencia_usuario_log();
@@ -3816,6 +3862,10 @@ $('#btn_salir_popup_import_bmt').on('click', function () {
 });
 
 $("#btn_seleccionar_todo_depto").on("click", function () {
+
+    // Actualiza la Fecha de la Concurrencia
+    act_fecha_concurrencia();
+
     $("#btn_exportar").attr("disabled", false);
 
     $("#depto_tabla_selec tr").each(function () {
@@ -3829,6 +3879,10 @@ $("#btn_seleccionar_todo_depto").on("click", function () {
 });
 
 $("#btn_limpiar_deptos").on("click", function () {
+
+    // Actualiza la Fecha de la Concurrencia
+    act_fecha_concurrencia();
+
     $("#btn_exportar").attr("disabled", true);
 
     $("#depto_tabla_selec tr").each(function () {
@@ -3852,6 +3906,9 @@ function carga_tabla1_oculta() {
 
 // Habilita/Desabilita Grilla
 $('#btn_habilita_grilla').on('click', function () {
+
+    // Actualiza la Fecha de la Concurrencia
+    act_fecha_concurrencia();
 
     // Obtener el valor del BTN
     var valor_btn = $('#btn_habilita_grilla').val();
@@ -3909,6 +3966,9 @@ $('#btn_habilita_grilla').on('click', function () {
 
 // Editar Grilla / llenar tabla grilla editable
 $('#btn_edita_grilla').on('click', function () {
+
+    // Actualiza la Fecha de la Concurrencia
+    act_fecha_concurrencia();
 
     // eliminar los registros de la tabla, generados en otra consulta previa
     $("#tabla_edita_grilla >tbody >tr").remove();
@@ -4187,6 +4247,9 @@ $('#btn_edita_grilla').on('click', function () {
 // Botón actualizar del editar grilla
 $('#btn_editar_registros_grilla_editable').on('click', function () {
 
+    // Actualiza la Fecha de la Concurrencia
+    act_fecha_concurrencia();
+
     $(".loading_tabla_edita_grilla").show();
     $("#btn_editar_registros_grilla_editable").hide();
 
@@ -4463,3 +4526,25 @@ $('#btn_editar_registros_grilla_editable').on('click', function () {
 
 // fin del Botón actualizar del editar grilla
 });
+
+
+function act_fecha_concurrencia(){
+
+    var url_act_fecha_concurrencia = 'ajax_simulador_cbx/actualiza_fecha_concurrencia';
+
+    $.ajax({
+        type: "GET",
+        url: url_act_fecha_concurrencia,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (data_ventana) {
+            // Acción al Ejecutarse correctamente
+            console.log("Se Actualiza Fecha de Concurrencia");
+        }, error: function (jqXHR, textStatus, errorThrown) {
+            console.log("Error: " + textStatus + " errorThrown: " + errorThrown);
+        }
+    }).done(function () {
+        console.log("Se realiza solicitud de Actualización de Fecha en Concurrencia");
+    });
+
+}
