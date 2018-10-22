@@ -1703,6 +1703,9 @@ function solicitud_correccion_pi_funcion(id_color3, proforma) {
 // Otros Botones de la Grilla
 function despliegaHistorial(event) {
 
+    // Actualiza la Fecha de la Concurrencia
+    act_fecha_concurrencia();
+
     // Despliega Modal (Solo si pruedo traer el dato que produce que esta se llene)
     var id = $(event.target);
     id = id.attr('id');
@@ -1791,6 +1794,9 @@ $('#despliega_hitorial_excel').on('click', function () {
 
 function despliegaAjust(event) {
 
+    // Actualiza la Fecha de la Concurrencia
+    act_fecha_concurrencia();
+
     var id = $(event.target);
     id = id.attr('id');
     var separa_barra = id.split("_");
@@ -1846,6 +1852,9 @@ function despliegaAjust(event) {
 }
 
 function despliegaAjustCajas(event) {
+
+    // Actualiza la Fecha de la Concurrencia
+    act_fecha_concurrencia();
 
     var id = $(event.target);
     id = id.attr('id');
@@ -2045,6 +2054,9 @@ function despliegaAjustCajas(event) {
 
 function despliegaDetalleError(event) {
 
+    // Actualiza la Fecha de la Concurrencia
+    act_fecha_concurrencia();
+
     var id = $(event.target);
     id = id.attr('id');
     var separa_barra = id.split("_");
@@ -2082,6 +2094,9 @@ function despliegaDetalleError(event) {
 }
 
 function matchOC(event) {
+
+    // Actualiza la Fecha de la Concurrencia
+    act_fecha_concurrencia();
 
     if ($('#flag_top_menu_tipo_usuario').html() != 'LECTURA') {
 
