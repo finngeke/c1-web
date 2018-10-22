@@ -12,15 +12,27 @@ $(function () {
 
     /*ABRE POPUP MODAL PERFIL*/
     $('.eliminar_bmt').on('click', function () {
+
+        // Actualiza la Fecha de la Concurrencia
+        act_fecha_concurrencia();
+
         $('.registro').html('<b> ' + $('.bmt').html() + ' </b>');
     });
 
     $('.actualiza_grid').on('click', function () {
+
+        // Actualiza la Fecha de la Concurrencia
+        act_fecha_concurrencia();
+
         location.reload();
     });
 
     //combobox exportar bmt
     $('#tipos_export').on('change', function () {
+
+        // Actualiza la Fecha de la Concurrencia
+        act_fecha_concurrencia();
+
         var tipo = $('#tipos_export').val();//variable que llamo a un combox o un text id html
         if (tipo == 3) {
 
@@ -1212,6 +1224,9 @@ function validarc1_estado_depto(event) {
 // Boton de Cargar Archivo
 function cargaArchivo(event) {
 
+    // Actualiza la Fecha de la Concurrencia
+    act_fecha_concurrencia();
+
     // Bloqueo el botón para validar que se sube archivo
     $(".carga_pi").attr("disabled", "disabled");
     $("#send_archivop_pi").val('');
@@ -1291,6 +1306,9 @@ function cargaArchivo(event) {
 
 // Boton Descarga PI
 function descargaPI(event) {
+
+    // Actualiza la Fecha de la Concurrencia
+    act_fecha_concurrencia();
 
     var id_carga_pi = $(event.target);
     id_carga_pi = id_carga_pi.attr('id');
@@ -1383,6 +1401,9 @@ $('.guarda_proforma').on('click', function () {
 
 // Asociado acargar archivo PI
 $('#form_carga_pi').submit(function (event) {
+
+    // Actualiza la Fecha de la Concurrencia
+    act_fecha_concurrencia();
 
     // Evitar que se envie automáticamente el form
     event.preventDefault();
@@ -2879,6 +2900,9 @@ function verificaFormatoArchivo(sender) {
 
 // Carga Assortment
 $('#form_import_bmt').submit(function (event) {
+
+    // Actualiza la Fecha de la Concurrencia
+    act_fecha_concurrencia();
 
     // Evitar que se envie automáticamente el form
     event.preventDefault();
@@ -4546,7 +4570,6 @@ $('#btn_editar_registros_grilla_editable').on('click', function () {
 
 // fin del Botón actualizar del editar grilla
 });
-
 
 function act_fecha_concurrencia(){
 
