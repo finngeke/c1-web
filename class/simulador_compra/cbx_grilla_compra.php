@@ -2374,5 +2374,40 @@ class cbx_grilla_compra extends \parametros
 
     }
 
+    // Actualiza la fecha del registro de concurrencia
+    public static function actualiza_fecha_concurrencia($temporada, $depto, $login)
+    {
+
+        $sql = "UPDATE PLC_CONCURRENCIA
+                SET FECHA = SYSDATE
+                WHERE COD_USR = '".$login."'
+                AND COD_TEMPORADA =  $temporada
+                AND DEP_DEPTO = '".$depto."' 
+                ";
+
+        // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+        if (!file_exists('../archivos/log_querys/' . $login)) {
+            mkdir('../archivos/log_querys/' . $login, 0775, true);
+        }
+        $stamp = date("Y-m-d_H-i-s");
+        $rand = rand(1, 999);
+        $content = $sql;
+        $fp = fopen("../archivos/log_querys/" . $login . "/PERMISO-ACTFECHA--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+        fwrite($fp, $content);
+        fclose($fp);
+
+        $data = \database::getInstancia()->getConsulta($sql);
+
+        if($data){
+            return 0;
+        }else{
+            return 1;
+        }
+
+
+    }
+
+
+
 // Fin de la Clase
 }

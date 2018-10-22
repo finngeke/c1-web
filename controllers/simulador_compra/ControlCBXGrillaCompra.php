@@ -513,6 +513,15 @@
 
 
 
+// ######################## TRABAJO CON CONCURRENCIA ########################
+        // Actualiza la fecha del registro de concurrencia
+        public function actualiza_fecha_concurrencia($f3) {
+            echo \simulador_compra\cbx_grilla_compra::actualiza_fecha_concurrencia($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'));
+        }
+// ######################## FIN TRABAJO CON CONCURRENCIA ########################
+
+
+
 
 // Termina Clase
 	}
