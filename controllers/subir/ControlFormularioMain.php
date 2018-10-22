@@ -20,7 +20,7 @@ class ControlFormularioMain extends Control {
         $f3->set('temporada', 'formulario/main/temporada.html');
         $f3->set('proveedor', 'formulario/main/proveedor.html');
         echo Template::instance()->render('layout_inicio.php');
-
+        
     }
 
     public function usuarios($f3) {
