@@ -116,28 +116,6 @@ class permiso_usuario extends \parametros {
         $existe = (int) \database::getInstancia()->getFila($sql_existe);
 
         if ($existe == 1) {
-
-            $sql_fecha = "UPDATE PLC_CONCURRENCIA
-                            SET FECHA = SYSDATE
-                          WHERE COD_USR = '".$login."'
-                          AND COD_TEMPORADA =  $COD_TEMPORADA
-                          AND DEP_DEPTO = '".$DEPTO."' 
-                            ";
-
-            // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
-            if (!file_exists('../archivos/log_querys/' . $login)) {
-                mkdir('../archivos/log_querys/' . $login, 0775, true);
-            }
-            $stamp = date("Y-m-d_H-i-s");
-            $rand = rand(1, 999);
-            $content = $sql_fecha;
-            $fp = fopen("../archivos/log_querys/" . $login . "/PERMISO-ACTFECHA--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
-            fwrite($fp, $content);
-            fclose($fp);
-
-            $data = \database::getInstancia()->getConsulta($sql_fecha);
-            //return $data;
-
             return 0 ;
 
         }else {
