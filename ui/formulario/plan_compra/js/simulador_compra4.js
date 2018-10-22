@@ -372,22 +372,42 @@ $(window).on('load', function () {
     $('.importar_bmt').tooltip();
 
     $('.tipo_tienda').on('click', function () {
+
+        // Actualiza la Fecha de la Concurrencia
+        act_fecha_concurrencia();
+
         $('#selecciona_popup').modal('show');
     });
 
     $('.tipo_formato').on('click', function () {
+
+        // Actualiza la Fecha de la Concurrencia
+        act_fecha_concurrencia();
+
         $('#selecciona_popup_formato').modal('show');
     });
 
     $('.tipo_ventana_llegada').on('click', function () {
+
+        // Actualiza la Fecha de la Concurrencia
+        act_fecha_concurrencia();
+
         $('#selecciona_popup_ventana_llegada').modal('show');
     });
 
     $('.tipo_ppto_costo').on('click', function () {
+
+        // Actualiza la Fecha de la Concurrencia
+        act_fecha_concurrencia();
+
         $('#selecciona_popup_ppto_costo').modal('show');
     });
 
     $('.tipo_ppto_retail').on('click', function () {
+
+        // Actualiza la Fecha de la Concurrencia
+        act_fecha_concurrencia();
+
         $('#selecciona_popup_ppto_retail').modal('show');
     });
 
