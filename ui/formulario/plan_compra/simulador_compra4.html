@@ -1153,33 +1153,56 @@
 						<table class="table table-bordered table-striped tabla_smaller" id="tabla_edita_grilla" style="font-size: 10px;width:100%;white-space:nowrap;">
 							<thead>
 							<tr>
+								<th colspan="5" style="text-align:center;">Definición por Estilos</th>
+								<th colspan="2" style="text-align:center;">Definición por Opción/Color</th>
+								<th colspan="4" style="text-align:center;">Definición de Tallas</th>
+								<th colspan="2" style="text-align:center;">Definición de Unidades</th>
+								<th colspan="2" style="text-align:center;">Definición de Tiendas</th>
+								<th colspan="4" style="text-align:center;">Curvas por Tdas.</th>
+								<th colspan="2" style="text-align:center;">Procedencia</th>
+								<th colspan="4" style="text-align:center;">Costos</th>
+								<th colspan="1" style="text-align:center;"></th>
+								<th colspan="1" style="text-align:center;"></th>
+							</tr>
+							<tr>
                                 <th style="display: none"></th><!-- id_color3 -->
 								<th style="text-align: center;">Grupo Compra</th>
 								<th style="text-align: center;">Marca</th>
 								<th style="text-align: center;">Línea</th>
 								<th style="text-align: center;">SubLines</th>
 								<th style="text-align: center;">Estilo</th>
-								<th style="text-align: center;">Ventana</th>
+								<th style="text-align: center;">Ventana</th> <!-- Ventana -->
 								<th style="text-align: center;">Color</th>
+								<th style="text-align: center;">Tallas</th>
+								<th style="text-align: center;">Tipo Empaque</th><!-- Tipo Embarque -->
+								<th style="text-align: center;">Porcent Ini</th><!-- Tipo Embarque -->
+								<th style="text-align: center;">Curvas</th>
+								<th style="text-align: center;">Unidades Iniciales</th>
 								<th style="text-align: center;">Unidades Finales</th>
+								<th style="text-align: center;">Cluster</th>
+								<th style="text-align: center;">Formato</th> <!-- Formato -->
+								<th style="text-align: center;">A</th>
+								<th style="text-align: center;">B</th>
+								<th style="text-align: center;">C</th>
+								<th style="text-align: center;">I</th>
+								<th style="text-align: center;">Vía</th><!-- predefinida en codigo -->
+								<th style="text-align: center;">País</th><!-- secarga por query, luego se asigna -->
 								<th style="text-align: center;">Target</th>
-								<th style="text-align: center;">FOB</th>
+								<th style="text-align: center;">Fob</th>
 								<th style="text-align: center;">Insp</th>
-								<th style="text-align: center;">RFID</th>
-								<th style="text-align: center;">PROVEEDOR</th>
-								<th style="text-align: center;">VÍA</th><!-- predefinida en codigo -->
-								<th style="text-align: center;">PAÍS</th><!-- secarga por query, luego se asigna -->
-
-								<th style="text-align: center;">TIPO EMPAQUE</th><!-- Tipo Embarque -->
-								<th style="text-align: center;">FORMATO</th> <!-- Formato -->
-								<th style="text-align: center;">VENTANA</th> <!-- Ventana -->
-
+								<th style="text-align: center;">Rfid</th>
+								<th style="text-align: center;">Proveedor</th>
+								<th style="text-align: center;">Debut Reorder</th>
 								<th style="display: none"></th><!-- mkup -->
 								<th style="display: none"></th><!-- gm -->
 								<th style="display: none"></th><!-- via -->
 								<th style="display: none"></th><!-- país -->
 								<th style="display: none"></th><!-- ventana lleagada -->
 								<th style="display: none"></th><!-- precio blanco -->
+								<th style="display: none"></th><!-- COD_MARCA -->
+								<th style="display: none"></th><!-- N_CURVASXCAJAS -->
+								<th style="display: none"></th><!-- cod_linea -->
+								<th style="display: none"></th><!-- cod_sublinea -->
 							</tr>
 							</thead>
 							<tbody>
@@ -1189,6 +1212,7 @@
 				</div>
 			</div>
             <div class="modal-footer">
+				<div class="cargando_tabla_edita_grilla" style="display: none"><i class='fa fa-spinner fa-2x fa-spin '></i> Cargando datos...</div>
                 <div class="loading_tabla_edita_grilla" style="display: none"><i class='fa fa-spinner fa-2x fa-spin '></i> Guardando cambios...</div>
                 <button type="button" class="btn btn-primary btn_editar_registros_grilla_editable" id="btn_editar_registros_grilla_editable" name="btn_editar_registros_grilla_editable" style="display: none;">Guardar</button>
             </div>

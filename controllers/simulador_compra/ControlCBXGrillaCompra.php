@@ -112,39 +112,56 @@
 			echo json_encode($json, JSON_PRETTY_PRINT);
 		}
 
-        public function llenar_edita_grilla($f3) {
-            $data = \simulador_compra\cbx_grilla_compra::llenar_edita_grilla($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('GET.ID_COLOR3'));
-            $json = [];
-            foreach ($data as $val) {
-                $json[] = array(
-                    utf8_encode($val["GRUPO_COMPRA"]),  // 0    grupo compra
-                    utf8_encode($val["MARCA"]),         // 1    marca
-                    utf8_encode($val["LINEA"]),         // 2    linea
-                    utf8_encode($val["SUBLINEA"]),      // 3    sublinea
-                    utf8_encode($val["ESTILO"]),        // 4    estilo
-                    utf8_encode($val["SHORT_NAME"]),    // 5    estilo corto
-                    utf8_encode($val["NOM_VENTANA"]),   // 6    ventana
-                    utf8_encode($val["COD_COLOR"]),     // 7    color
-                    $val["CAN"],                        // 8    Uni Final
-                    $val["COSTO_TARGET"],               // 9    Target
-                    $val["COSTO_FOB"],                  // 10   FOB
-                    $val["COSTO_INSP"],                 // 11   Insp
-                    $val["COSTO_RFID"],                 // 12   RFID
-                    utf8_encode($val["ALIAS_PROV"]),    // 13   Alias Proveedor
-                    $val["ID_COLOR3"],                  // 14   id_color3
-                    $val["MKUP"],                       // 15   mkup
-                    $val["GM"],                         // 16   GM
-                    $val["VIA"],                        // 17   NOM_VIA / VIA
-                    $val["PAIS"],                       // 18   NOM_PAIS / PAIS
-                    $val["VENTANA_LLEGADA"],            // 19   ventana_llegada
-                    $val["PRECIO_BLANCO"]               // 20   Precio Blanco
-                );
-            }
-
-            header("Content-Type: application/json");
-            echo json_encode($json, JSON_PRETTY_PRINT);
-
+    public function llenar_edita_grilla($f3) {
+        $data = \simulador_compra\cbx_grilla_compra::llenar_edita_grilla($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('GET.ID_COLOR3'));
+        $json = [];
+        foreach ($data as $val) {
+            $json[] = array(
+                utf8_encode($val["GRUPO_COMPRA"]),  // 0    grupo compra
+                utf8_encode($val["MARCA"]),         // 1    marca
+                utf8_encode($val["LINEA"]),         // 2    linea
+                utf8_encode($val["SUBLINEA"]),      // 3    sublinea
+                utf8_encode($val["ESTILO"]),        // 4    estilo
+                utf8_encode($val["SHORT_NAME"]),    // 5    estilo corto
+                utf8_encode($val["NOM_VENTANA"]),   // 6    ventana
+                utf8_encode($val["COD_COLOR"]),     // 7    color
+                $val["CAN"],                        // 8    Uni Final
+                $val["COSTO_TARGET"],               // 9    Target
+                $val["COSTO_FOB"],                  // 10   FOB
+                $val["COSTO_INSP"],                 // 11   Insp
+                $val["COSTO_RFID"],                 // 12   RFID
+                utf8_encode($val["ALIAS_PROV"]),    // 13   Alias Proveedor
+                $val["ID_COLOR3"],                  // 14   id_color3
+                $val["MKUP"],                       // 15   mkup
+                $val["GM"],                         // 16   GM
+                $val["VIA"],                        // 17   NOM_VIA / VIA
+                $val["PAIS"],                       // 18   NOM_PAIS / PAIS
+                $val["VENTANA_LLEGADA"],            // 19   ventana_llegada
+                $val["PRECIO_BLANCO"],              // 20   Precio Blanco
+                $val["UNID_OPCION_INICIO"],         // 21   Unid Inicial
+                $val["CURVATALLA"],                 // 22   CURVA TALLA
+                $val["DESTALLA"],                   // 23   DESTALLA
+                $val["SEG_ASIG"],                   // 24   CLUSTER
+                $val["A"],                          // 25   A
+                $val["B"],                          // 26   B
+                $val["C"],                          // 27   C
+                $val["I"],                          // 28   I
+                $val["FORMATO"],                    // 29   formato
+                $val["DEBUT_REODER"],               // 30   DEBUT_REORDER
+                $val["PORTALLA_1_INI"],             // 31   PORTALLA_1_INI
+                $val["COD_MARCA"],                  // 32   COD MARCA
+                $val["N_CURVASXCAJAS"],             // 33   N_CURVASXCAJAS(CURVADO)
+                $val["COD_JER2"],                   // 34   COD_JER2
+                $val["COD_SUBLIN"],                 // 35   COD_SUBLINEA
+                $val["TIPO_EMPAQUE"]                // 36   Tipo de empaque
+            );
         }
+
+        header("Content-Type: application/json");
+        echo json_encode($json, JSON_PRETTY_PRINT);
+
+    }
+            
 		
 		public function llenar_tabla_depto($f3) {
 			echo json_encode(\simulador_compra\cbx_grilla_compra::llenar_tabla_depto($f3->get('SESSION.COD_TEMPORADA')));
@@ -485,9 +502,36 @@
         public function actualiza_grilla_plan_compra_color3($f3) {
 
             $COSTO_UNITS = round($f3->get('GET.COSTO_UNITS'),0);
-		    // , $f3->get('GET.TIPO_EMPAQUE'), $f3->get('GET.FORMATO'), $f3->get('GET.NOM_VENTANA')
-            echo \simulador_compra\cbx_grilla_compra::actualiza_grilla_plan_compra_color3($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $f3->get('GET.ID_COLOR3'), $f3->get('GET.COSTO_FOB'), $f3->get('GET.COSTO_INSP'), $f3->get('GET.COSTO_RFID'), $f3->get('GET.COSTO_UNIT'), $COSTO_UNITS, $f3->get('GET.CST_TOTLTARGET'), $f3->get('GET.COSTO_TOT'), $f3->get('GET.COSTO_TOTS'), $f3->get('GET.MKUP'), $f3->get('GET.GM'), $f3->get('GET.PROVEEDOR'), $f3->get('GET.VIA'), $f3->get('GET.PAIS'), $f3->get('GET.FACTOR_EST'), $f3->get('GET.NOM_VIA'), $f3->get('GET.NOM_PAIS'), $f3->get('GET.TARGET'));
-        }
+
+
+        /* ECHO ($f3->get('GET.und_ajust')."|".
+            $f3->get('GET.porcent_ajust')."|".
+            $f3->get('GET.n_cajas')."|".
+            $f3->get('GET.primera_carga')."|".
+            $f3->get('GET.tiendas')."|".
+            $f3->get('GET.unida_ajust_xtallas')."|".
+            $f3->get('GET.UNIDADES_FINALES')."|".
+            $f3->get('GET.marca_')."|".
+            $f3->get('GET.cluster_')."|".
+            $f3->get('GET.debut_')."|".
+            $f3->get('GET.tipo_emp_')."|".
+            $f3->get('GET.formatos_')."|".
+            $f3->get('GET.UNIDADES_INICIALES'));*/
+
+         $cluster = str_replace(" ","+",$f3->get('GET.cluster_'));
+
+            echo \simulador_compra\cbx_grilla_compra::actualiza_grilla_plan_compra_color3($f3->get('SESSION.COD_TEMPORADA')
+                , $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $f3->get('GET.ID_COLOR3')
+                , $f3->get('GET.COSTO_FOB'), $f3->get('GET.COSTO_INSP'), $f3->get('GET.COSTO_RFID')
+                , $f3->get('GET.COSTO_UNIT'), $COSTO_UNITS, $f3->get('GET.CST_TOTLTARGET')
+                , $f3->get('GET.COSTO_TOT'), $f3->get('GET.COSTO_TOTS'), $f3->get('GET.MKUP')
+                , $f3->get('GET.GM'), $f3->get('GET.PROVEEDOR'), $f3->get('GET.VIA')
+                , $f3->get('GET.PAIS'), $f3->get('GET.FACTOR_EST'), $f3->get('GET.NOM_VIA')
+                , $f3->get('GET.NOM_PAIS'), $f3->get('GET.TARGET')
+                ,  $f3->get('GET.tipo_emp_'),$f3->get('GET.UNIDADES_INICIALES'),$f3->get('GET.und_ajust'),$f3->get('GET.UNIDADES_FINALES'),
+                $f3->get('GET.porcent_ajust'),$f3->get('GET.tiendas'),$f3->get('GET.formatos_'),$f3->get('GET.n_cajas'),
+                $f3->get('GET.unida_ajust_xtallas'),$f3->get('GET.marca_'),$cluster,$f3->get('GET.debut_'));
+}
 
         // Actualizar grilla en PLC_PLAN_COMPRA_COLOR_CIC
         public function actualiza_grilla_plan_compra_color_cic($f3) {
@@ -509,6 +553,43 @@
             echo json_encode(\simulador_compra\cbx_grilla_compra::listar_ventana_grilla_edita($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO')));
         }
 
+		        // CURVADO CON EDITAR GRILLA
+
+        public function CalculoCurvadoGrilla($f3){
+
+           $dt = \simulador_compra\cbx_grilla_compra::CalculoCurvado($_POST['_tipo_empaque']
+                                                                                ,$_POST['_tallas']
+                                                                                ,$_POST['_curvas']
+                                                                                ,$_POST['_und_iniciales']
+                                                                                ,$_POST['_cluster']
+                                                                                ,$_POST['_formato']
+                                                                                ,$_POST['_A']
+                                                                                ,$_POST['_B']
+                                                                                ,$_POST['_C']
+                                                                                ,$_POST['_I']
+                                                                                ,$_POST['_DEBUT_REODER']
+                                                                                ,$_POST['_PORTALLA_1_INI']
+                                                                                ,$f3->get('SESSION.COD_DEPTO')
+                                                                                ,$f3->get('SESSION.COD_TEMPORADA')
+                                                                                ,$_POST['_marcas']
+                                                                                ,$_POST['_N_CURVASXCAJAS']
+                                                                                ,$_POST['_cod_linea']
+                                                                                ,$_POST['_cod_sublinea']
+                                                                                ,$_POST['_id_color3']
+                                                                                ,1);
+
+
+
+             $varibles = /*0 unid ajust*/$dt[0]."|".
+                                    /*1 porcenajust*/$dt[1]."|".
+                                    /*2 N° CAJAS*/   $dt[2]."|".
+                                    /*3 unidfinal*/$dt[3]."|".
+                                    /*4 primera carga*/$dt[4]."|".
+                                    /*5 $tdas*/$dt[5]."|".
+                                    /*6 unidadesajustXtalla*/$dt[6];
+
+            echo json_encode($varibles);
+        }
 // ######################## FIN TRABAJO CON GRILLA EDITABLE ########################
 
 
