@@ -2959,7 +2959,7 @@ function verificaFormatoArchivoServer(sender) {
         alert("RECUERDE: Los formatos de archivos admitidos son: " + validExts.toString());
         // Desabilitar botón por ID
         $(".carga_pi_server_archivo").attr("disabled", "disabled");
-        $("#send_archivop_pi").val('');
+        $("#send_archivop_pi_server").val('');
     } else {
         // Habilitar botón por ID
         $(".carga_pi_server_archivo").attr("disabled", false);
@@ -4758,7 +4758,9 @@ function act_fecha_concurrencia(){
 }
 
 $("#pi_upload_ajax").on('submit',(function(e) {
+
     e.preventDefault();
+
     $.ajax({
         url: "guardar/archivo_pi_server",
         type: "POST",
@@ -4770,17 +4772,22 @@ $("#pi_upload_ajax").on('submit',(function(e) {
             // Acción antes de enviar
         },success: function(data){
             if(data!='ERROR'){
-                // Todo Correcto
-                alert(data);
+
+                // Ocultar el POPUP
+                $('#carga_pi_archivo').modal('hide');
+
+                // Asignar el texto "Cargado.." y bloquear btn
+
             }else{
                 // Problemas con la subida
-                alert("Error al cargar PI, intente nuevamente.");
+                alert("[SUBIR] Error al cargar PI, intente nuevamente.");
             }
 
 
         },error: function(e){
             // Si existe error en la carga de archivos
-            alert("Error al cargar PI, intente nuevamente.");
+            alert("[EJECUCION] Error al cargar PI, intente nuevamente.");
         }
     });
+
 }));

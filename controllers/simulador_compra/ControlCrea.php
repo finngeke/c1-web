@@ -428,7 +428,7 @@ public function guarda_pi($f3) {
 
 public function guarda_pi_server($f3) {
 
-        $id_color = $_POST['send_archivo_id_color'];
+        $id_color = $_POST['send_archivo_id_color_server'];
         $archivo_proforma = $_POST['send_archivo_proforma_server'];
         $nombre_archivo = "PI_".$f3->get('SESSION.COD_TEMPORADA')."_".$f3->get('SESSION.COD_DEPTO')."_".$archivo_proforma.".xlsx";
 
