@@ -1319,6 +1319,7 @@ function cargaArchivoServer(event) {
     id_carga_pi = id_carga_pi.attr('id');
     var separa_barra = id_carga_pi.split("_");
     var estado_c1 = $("#tabla2 #txt_estadoc1_" + separa_barra[2]).text();
+    var id_color = $("#tabla2 #txt_id_color_" + separa_barra[2]).text();
     var proforma = $("#tabla2 #txt_proforma_" + separa_barra[2]).val();
     proforma = proforma.replace(/[^a-z0-9\-\ ]/gi, '');
 
@@ -1327,6 +1328,7 @@ function cargaArchivoServer(event) {
         // Desplegar el  modal
         $('#carga_pi_archivo').modal('show');
         // Le asigno el estado c1 al input
+        $('#send_archivo_id_color_server').val(id_color);
         $('#send_archivo_proforma_server').val(proforma);
         // Modifico el campo de la proforma y lo limpio de caracteres no deseados
         $("#tabla2 #txt_proforma_" + separa_barra[2]).val(proforma);
@@ -4755,27 +4757,6 @@ function act_fecha_concurrencia(){
 
 }
 
-$("#pi_upload_ajax____").on("submit", function(e){
-    e.preventDefault();
-    var f = $(this);
-    var formData = new FormData(f);
-    formData.append("dato", "valor");
-    //formData.append(f.attr("name"), $(this)[0].files[0]);
-    $.ajax({
-        url: "guardar/archivo_pi_server",
-        type: "POST",
-        dataType: "html",
-        data: formData,
-        cache: false,
-        contentType: false,
-        processData: false
-    }).done(function(data){
-            alert("Done " + data);
-    });
-
-});
-
-
 $("#pi_upload_ajax").on('submit',(function(e) {
     e.preventDefault();
     $.ajax({
@@ -4785,30 +4766,21 @@ $("#pi_upload_ajax").on('submit',(function(e) {
         contentType: false,
         cache: false,
         processData:false,
-        beforeSend : function()
-        {
-            //$("#preview").fadeOut();
-            //$("#err").fadeOut();
-        },
-        success: function(data)
-        {
-            /*if(data=='invalid')
-            {
-                // invalid file format.
-                $("#err").html("Invalid File !").fadeIn();
+        beforeSend : function(){
+            // Acción antes de enviar
+        },success: function(data){
+            if(data!='ERROR'){
+                // Todo Correcto
+                alert(data);
+            }else{
+                // Problemas con la subida
+                alert("Error al cargar PI, intente nuevamente.");
             }
-            else
-            {
-                // view uploaded file.
-                $("#preview").html(data).fadeIn();
-                $("#form")[0].reset();
-            }*/
-            alert("sube algo");
-        },
-        error: function(e)
-        {
-            //$("#err").html(e).fadeIn();
-            alert("no sube nada");
+
+
+        },error: function(e){
+            // Si existe error en la carga de archivos
+            alert("Error al cargar PI, intente nuevamente.");
         }
     });
 }));
