@@ -711,6 +711,33 @@
 	</form>
 </div>
 
+<div id="carga_pi_archivo" name="carga_pi_archivo" class="modal fade" role="dialog" data-keyboard="false" data-backdrop="static">
+
+    <form enctype="multipart/form-data" action="guardar/archivo_pi_server" class="pi_upload_ajax" id="pi_upload_ajax" name="pi_upload_ajax" method="POST">
+        <div class="modal-dialog">
+            <div class="modal-content borde_especial">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Carga Archivo PI</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" name="send_archivop_pi_server" id="send_archivop_pi_server" class="btn" data-toggle="modal" onchange="verificaFormatoArchivoServer(this);">
+                    <input type="text" name="send_archivo_proforma_server" id="send_archivo_proforma_server" value="" style="display: none;">
+                    <br>
+                    <span>Recuerde no ingresar caracteres especiales en el PI Number del archivo que está subiendo (Columna E, Fila 5).</span>
+                </div>
+                <div class="modal-footer">
+                    <div class="loading" style="display: none">
+                        <i class='fa fa-spinner fa-2x fa-spin '></i> Importando Archivo
+                    </div>
+                    <input type="submit" class="btn btn-primary carga_pi_server_archivo" value="Cargar PI">
+                </div>
+            </div>
+        </div>
+    </form>
+
+</div>
+
 <div id="despliega_hitorial" name="despliega_hitorial" class="modal fade" role="dialog" data-keyboard="false" data-backdrop="static">
 	<div class="modal-dialog">
 		<div class="modal-content borde_especial">

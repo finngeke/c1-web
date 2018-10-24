@@ -426,6 +426,26 @@ public function guarda_pi($f3) {
 
     }
 
+public function guarda_pi_server($f3) {
+
+        $archivo_proforma = $_POST['send_archivo_proforma_server'];
+
+        $nombre_archivo = "PI_".$f3->get('SESSION.COD_TEMPORADA')."_".$f3->get('SESSION.COD_DEPTO')."_".$archivo_proforma.".xlsx";
+
+        // Ruta
+        $dir_subida = $f3->get('UPLOADS_PI');
+        $fichero_subido = $dir_subida . basename($nombre_archivo);
+
+        // Si el archivo se subió correctamente, realizo las actualizaciones de los estados
+        if (move_uploaded_file($_FILES['send_archivop_pi_server']['tmp_name'], $fichero_subido)) {
+            return 1;
+        } else {
+            return 0;
+        }
+
+
+    }
+
 public function SubirAssorment($f3){
 
     $tipo_archivo = $_POST['tipos_import'];

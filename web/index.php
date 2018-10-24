@@ -93,6 +93,7 @@ $f3->route('GET /ajax_simulador_ventana_llegada/@tipo [ajax]', 'mantenedores\Con
 $f3->route('GET /ajax_simulador_ppto_costo/@tipo [ajax]', 'mantenedores\ControlPptoCosto->@tipo');
 $f3->route('GET /ajax_simulador_ppto_retail/@tipo [ajax]', 'mantenedores\ControlPptoRetail->@tipo');
 $f3->route('POST /guardar/archivo_pi', 'simulador_compra\ControlCrea->guarda_pi');
+$f3->route('POST /guardar/archivo_pi_server', 'simulador_compra\ControlCrea->guarda_pi_server');
 $f3->route('GET /ajax_simulador_cbx/@tipo [ajax]', 'simulador_compra\ControlCBXGrillaCompra->@tipo');
 $f3->route('POST /ajax_simulador_cbx2/@tipo [ajax]', 'simulador_compra\ControlCBXGrillaCompra->@tipo');
 

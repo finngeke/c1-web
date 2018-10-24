@@ -610,7 +610,7 @@ $(window).on('load', function () {
                         '<td class="txt_cod_padre_" id="txt_codpadre_' + flag_tabla2 + '" onclick="matchOC(event);">' + o[74] + '</td>\n' +
                         '<td class="columnas" id="txt_td_proforma_' + flag_tabla2 + '"><input type="text" id="txt_proforma_' + flag_tabla2 + '" style="font-size: 10px" name="txt_proforma_' + flag_tabla2 + '" class="input-sm txt_proforma_" value="' + o[75] + '" size="9" onchange="actualizaCampoEstadoProforma(event);"></td>\n' +
                         '<td id="detalle_error_pi' + flag_tabla2 + '"><button  id="detalle_error_pi_' + flag_tabla2 + '" name="detalle_error_pi_' + flag_tabla2 + '" style="font-size: 10px" value="E" class="detalle_error_pi_ btn btn-primary btn-sm fa fa-file-text-o errorpi_' + flag_tabla2 + '"  onclick="despliegaDetalleError(event);"></button></td>\n' +
-                        '<td class="columnas" id="txt_archivo_' + flag_tabla2 + '"><span id="txt_archivo_span_' + flag_tabla2 + '">' + o[76] + '</span><button id="txt_archivo_' + flag_tabla2 + '" name="txt_archivo_' + flag_tabla2 + '" class="txt_archivo_ btn btn-primary fa fa-upload btn-sm archivo_' + flag_tabla2 + '" style="font-size: 10px" onclick="cargaArchivo(event);"> Upload</button></td>\n' +
+                        '<td class="columnas" id="txt_archivo_' + flag_tabla2 + '"><span id="txt_archivo_span_' + flag_tabla2 + '">' + o[76] + '</span><button id="txt_archivo_' + flag_tabla2 + '" name="txt_archivo_' + flag_tabla2 + '" class="txt_archivo_ btn btn-primary fa fa-upload btn-sm archivo_' + flag_tabla2 + '" style="font-size: 10px" onclick="cargaArchivoServer(event);"> Upload</button></td>\n' +
                         '<td id="btn_pi_' + flag_tabla2 + '"><button id="btn_pi_' + flag_tabla2 + '" name="btn_pi_' + flag_tabla2 + '" value="Download" class="btn_pi_ btn btn-primary btn-sm fa fa-download pi_' + flag_tabla2 + '" style="font-size: 10px" onclick="descargaPI(event);"> Download</button></td>\n' +
                         '<td id="txt_estiloppm_' + flag_tabla2 + '">' + o[77] + '</td>\n' +
                         '<td id="txt_estadomatch_' + flag_tabla2 + '">' + o[78] + '</td>\n' +
@@ -1303,6 +1303,40 @@ function cargaArchivo(event) {
     }
 
 }
+
+
+// Boton de Cargar Archivo
+function cargaArchivoServer(event) {
+
+    // Actualiza la Fecha de la Concurrencia
+    act_fecha_concurrencia();
+
+    // Bloqueo el botón para validar que se sube archivo
+    $(".carga_pi_server_archivo").attr("disabled", "disabled");
+    $("#send_archivop_pi_server").val('');
+
+    var id_carga_pi = $(event.target);
+    id_carga_pi = id_carga_pi.attr('id');
+    var separa_barra = id_carga_pi.split("_");
+    var estado_c1 = $("#tabla2 #txt_estadoc1_" + separa_barra[2]).text();
+    var proforma = $("#tabla2 #txt_proforma_" + separa_barra[2]).val();
+    proforma = proforma.replace(/[^a-z0-9\-\ ]/gi, '');
+
+    if ((estado_c1 == 0) && (proforma != 0) && (proforma != "") && (proforma != "null") && (proforma != null)) {
+
+        // Desplegar el  modal
+        $('#carga_pi_archivo').modal('show');
+        // Le asigno el estado c1 al input
+        $('#send_archivo_proforma_server').val(proforma);
+        // Modifico el campo de la proforma y lo limpio de caracteres no deseados
+        $("#tabla2 #txt_proforma_" + separa_barra[2]).val(proforma);
+
+    } else {
+        alert("Archivo ya existe o debe ingresar proforma antes de subir la PI.");
+    }
+
+}
+
 
 // Boton Descarga PI
 function descargaPI(event) {
@@ -2912,6 +2946,25 @@ function verificaFormatoArchivo(sender) {
     }
 
 }
+
+function verificaFormatoArchivoServer(sender) {
+
+    var validExts = [".xlsx", ".XLS", ".xls", ".XLSX"];
+    var fileExt = sender.value;
+    fileExt = fileExt.substring(fileExt.lastIndexOf('.'));
+
+    if (validExts.indexOf(fileExt) < 0) {
+        alert("RECUERDE: Los formatos de archivos admitidos son: " + validExts.toString());
+        // Desabilitar botón por ID
+        $(".carga_pi_server_archivo").attr("disabled", "disabled");
+        $("#send_archivop_pi").val('');
+    } else {
+        // Habilitar botón por ID
+        $(".carga_pi_server_archivo").attr("disabled", false);
+    }
+
+}
+
 
 // Carga Assortment
 $('#form_import_bmt').submit(function (event) {
@@ -4701,3 +4754,61 @@ function act_fecha_concurrencia(){
     });
 
 }
+
+$("#pi_upload_ajax____").on("submit", function(e){
+    e.preventDefault();
+    var f = $(this);
+    var formData = new FormData(f);
+    formData.append("dato", "valor");
+    //formData.append(f.attr("name"), $(this)[0].files[0]);
+    $.ajax({
+        url: "guardar/archivo_pi_server",
+        type: "POST",
+        dataType: "html",
+        data: formData,
+        cache: false,
+        contentType: false,
+        processData: false
+    }).done(function(data){
+            alert("Done " + data);
+    });
+
+});
+
+
+$("#pi_upload_ajax").on('submit',(function(e) {
+    e.preventDefault();
+    $.ajax({
+        url: "guardar/archivo_pi_server",
+        type: "POST",
+        data:  new FormData(this),
+        contentType: false,
+        cache: false,
+        processData:false,
+        beforeSend : function()
+        {
+            //$("#preview").fadeOut();
+            //$("#err").fadeOut();
+        },
+        success: function(data)
+        {
+            /*if(data=='invalid')
+            {
+                // invalid file format.
+                $("#err").html("Invalid File !").fadeIn();
+            }
+            else
+            {
+                // view uploaded file.
+                $("#preview").html(data).fadeIn();
+                $("#form")[0].reset();
+            }*/
+            alert("sube algo");
+        },
+        error: function(e)
+        {
+            //$("#err").html(e).fadeIn();
+            alert("no sube nada");
+        }
+    });
+}));
