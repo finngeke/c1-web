@@ -454,10 +454,14 @@ public function guarda_pi_server($f3) {
             // Insertamos en plc_plan_compra_historica
             $insert = \simulador_compra\cbx_grilla_compra::guardaHistorial($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'),$ids_insertar,$f3->get('SESSION.login'));
 
-            //return 1;
-            echo $archivo_proforma;
+            if($insert){
+                echo $archivo_proforma;
+            }else{
+                echo "ERROR";
+            }
+
+
         } else {
-            // return 0;
             echo "ERROR";
         }
 
