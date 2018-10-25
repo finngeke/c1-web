@@ -1325,7 +1325,7 @@ function cargaArchivoServer(event) {
     var campo_archivo_server = $("#tabla2 #txt_archivo_" + separa_barra[2]).text();
 
     // Para subir el archivo no debe tener el texto cargado
-    if ((estado_c1 == 0) && (proforma != 0) && (proforma != "") && (proforma != "null") && (proforma != null)) {
+    if ((estado_c1 == 0) && (proforma != 0) && (proforma != "") && (proforma != "null") && (proforma != null) && (campo_archivo_server != "Cargado.. Upload Upload") ) {
 
         // Desplegar el  modal
         $('#carga_pi_archivo').modal('show');
@@ -4398,8 +4398,9 @@ $('#btn_edita_grilla').on('click', function () {
 // Botón actualizar del editar grilla
 $('#btn_editar_registros_grilla_editable').on('click', function () {
 
-  // Actualiza la Fecha de la Concurrencia
+    // Actualiza la Fecha de la Concurrencia
     act_fecha_concurrencia();
+
     $(".loading_tabla_edita_grilla").show();
     $("#btn_editar_registros_grilla_editable").hide();
 
@@ -4763,6 +4764,9 @@ $("#pi_upload_ajax").on('submit',(function(e) {
 
     e.preventDefault();
 
+    // Actualiza la Fecha de la Concurrencia
+    act_fecha_concurrencia();
+
     $.ajax({
         url: "guardar/archivo_pi_server",
         type: "POST",
@@ -4780,27 +4784,26 @@ $("#pi_upload_ajax").on('submit',(function(e) {
                 var inc_rec_prof = 0;
                 $("#tabla2 > tbody > tr").each(function () {
 
-                    var busca_prof_spec = $(this).find("td:eq(" + inc_rec_prof + ") input[type='text']").val();
+                    var busca_prof_spec = $("#tabla2 #txt_proforma_" + inc_rec_prof).val();
                     busca_prof_spec = busca_prof_spec.replace(/[^a-z0-9\-\ ]/gi, '');
                     var busca_campo_actualizado = $("#tabla2 #txt_estado_cambio_proforma_" + inc_rec_prof).text();
                     var campo_archivo_server = $("#tabla2 #txt_archivo_" + inc_rec_prof).text();
 
-
-                    // Verificar que el campo sea distindo de undefined y espacio (era||)
+                    // Cuando recorra la tabla verificar que la proforma que llega sea igual a la ingresada y que este campo se encuentre editado recientemente (U)
                     if ( (return_proforma == busca_prof_spec) && (busca_campo_actualizado=='U') ) {
-
                         // Agregarle el cargado al BTN
-
-
+                        $("#tabla2 #txt_archivo_span_"+inc_rec_prof).text("Cargado..");
                     }
 
-
                 inc_rec_prof++;
+
+                }).promise().done(function(data){
+
+                    // Ocultar el POPUP, al final el recorrido de la tabla. Mientras el código realiza su pega
+                    $('#carga_pi_archivo').modal('hide');
+
                 });
 
-
-                // Ocultar el POPUP, al final. Mientras el código realiza su pega
-                $('#carga_pi_archivo').modal('hide');
 
             }else{
                 // Problemas con la subida
