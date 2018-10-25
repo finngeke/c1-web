@@ -1131,10 +1131,15 @@ function actualizaCampoEstadoProforma(event) {
     // 1.1 Verificar que la proforma no incluye caracteres especiales
     if(proforma_usuario == valor_campo){
 
+        // Bloquear BTN Guardar Proforma
+        $("#btn_guarda_proforma").attr('disabled',false);
+
         // 1.2.- Verifico que el estado sea 0 por si el usuario escribe sobre una PI existente
         if ((valor_campo != 0) && (valor_campo != "" && (estado_c1 == 0))) {
+            alert('dentro de U');
             $('#txt_estado_cambio_proforma_' + separa_barra[2]).html("U");
         } else {
+            alert('fuera de U');
             $('#txt_estado_cambio_proforma_' + separa_barra[2]).html("");
         }
 
@@ -1194,7 +1199,14 @@ function actualizaCampoEstadoProforma(event) {
 
     // Fin de revisión de caracteres especiales en al proforma
     }else{
-        alert("Recuerde no ingresar caracteres especiales en la Proforma.");
+
+        // Bloquear BTN Guardar Proforma
+        $("#btn_guarda_proforma").attr('disabled',true);
+
+        // Limpiar el registro
+        $('#txt_proforma_' + separa_barra[2]).val('');
+
+        alert("Error en nombre de Proforma, recuerde no ingresar caracteres especiales.");
     }
 
 
@@ -1392,22 +1404,26 @@ $('.guarda_proforma').on('click', function () {
 
     // Antes de realizar cualquier cambio verificar que no existe un nombre de proforma con caracteres extraños
     var cont_check_proforma = 0;
+    var conteo_errores_prof = 0;
     $("#tabla2 >tbody >tr").each(function () {
 
         var proforma = $("#tabla2 #txt_proforma_" + cont_check_proforma).val();
         proforma = proforma.replace(/[^a-z0-9\-\ ]/gi, '');
         var proforma_usuario = $("#tabla2 #txt_proforma_" + cont_check_proforma).val();
-
+        var busca_campo_actualizado = $("#tabla2 #txt_estado_cambio_proforma_" + cont_check_proforma).text();
+alert(proforma+' - '+proforma_usuario+' - '+busca_campo_actualizado);
         // Incluir solo los campos editados?
-        if( proforma != proforma_usuario){
-            cont_check_proforma++;
+        if( (busca_campo_actualizado=='U') && (proforma != proforma_usuario) ){
+            conteo_errores_prof = conteo_errores_prof+1;
         }
+
+        cont_check_proforma++;
 
     // Fin de la tabla que valida que las proformas se encuentren bien ingresadas (Se agrega el promise)
     }).promise().done(function(){
-
-        // Si cont_check_proforma==0 (Todas las proformas sin caracteres especiales) sigo con el resto del código de lo contrario mensaje de caracteres especiales
-        if(cont_check_proforma == 0){
+alert('Conteo: '+conteo_errores_prof);
+        // Si conteo_errores_prof==0 (Todas las proformas sin caracteres especiales) sigo con el resto del código de lo contrario mensaje de caracteres especiales
+        if(conteo_errores_prof == 0){
 
             // URL`s de Guardado de Proforma e Historial
             var url_guarda_proforma_extra = 'ajax_simulador_cbx/guarda_solo_proforma_extra';
@@ -3015,7 +3031,6 @@ function verificaFormatoArchivoServer(sender) {
     }
 
 }
-
 
 // Carga Assortment
 $('#form_import_bmt').submit(function (event) {
