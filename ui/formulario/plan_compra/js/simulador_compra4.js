@@ -1122,71 +1122,85 @@ function actualizaCampoEstadoProforma(event) {
     var separa_barra = id_carga_pi.split("_");
     var estado_c1 = $("#tabla2 #txt_estadoc1_" + separa_barra[2]).text();
 
-    // 1.- Valor del campo asociado a la PRODORMA con la que estamos tabajando
+    // 1.- Valor del campo asociado a la PROFORMA con la que estamos tabajando
     var valor_campo = $('#txt_proforma_' + separa_barra[2]).val();
     // valor_campo = valor_campo.replace(/[^a-z0-9\-]/gi, '');
     valor_campo = valor_campo.replace(/[^a-z0-9\-\ ]/gi, '');
+    var proforma_usuario = $('#txt_proforma_' + separa_barra[2]).val();
 
-    // 1.1.- Verifico que el estado sea 0 por si el usuario escribe sobre una PI existente
-    if ((valor_campo != 0) && (valor_campo != "" && (estado_c1 == 0))) {
-        $('#txt_estado_cambio_proforma_' + separa_barra[2]).html("U");
-    } else {
-        $('#txt_estado_cambio_proforma_' + separa_barra[2]).html("");
-    }
+    // 1.1 Verificar que la proforma no incluye caracteres especiales
+    if(proforma_usuario == valor_campo){
 
-    // 2.- Verificar que el valor del campo ingresado (PROFORMA) no exista previamente con estado mayor a cero (0)
-    var url_act_campo_busca_proforma = 'ajax_simulador_cbx/busca_existe_proforma';
-    var url_act_campo_busca_archivo = 'ajax_simulador_cbx/busca_existe_archivo';
-    var count_pro_existe = 0;
-    var count_archivo_existe = 0;
-
-    $.getJSON(url_act_campo_busca_proforma, {PI: valor_campo}).done(function (data) {
-        $.each(data, function (i, o) {
-            count_pro_existe++;
-        });
-    }).done(function () {
-
-        // Existe la Proforma con estado 20 o 21
-        if (count_pro_existe > 0) {
-            alert("Si olvidó registrar una opción, tiene que Crear Una Modificación de la PI. Si es una nueva PI, el nombre ingresado ya existe.");
-            $('#txt_proforma_' + separa_barra[2]).val('');
+        // 1.2.- Verifico que el estado sea 0 por si el usuario escribe sobre una PI existente
+        if ((valor_campo != 0) && (valor_campo != "" && (estado_c1 == 0))) {
+            $('#txt_estado_cambio_proforma_' + separa_barra[2]).html("U");
         } else {
-
-            // Consultamso por archivo
-            $.getJSON(url_act_campo_busca_archivo, {PI: valor_campo}).done(function (data) {
-                $.each(data, function (i, o) {
-                    count_archivo_existe++;
-                });
-            }).done(function () {
-
-                // Si no existe archivo (0 = Sin Resultados desde la query)
-                if (count_archivo_existe == 0) {
-
-                    // Si no trae archivo de trabajo con la activación de botones
-                    // Activar o desactivar boton de cargar archivo
-                    if (valor_campo != "" && valor_campo != "0" && valor_campo != " " && valor_campo != null) {
-                        $(".archivo_" + separa_barra[2]).attr("disabled", false);
-                    } else {
-                        $(".archivo_" + separa_barra[2]).attr("disabled", true);
-                    }
-
-                    // se quito de aquí la actualización del campo "U"
-
-                    // Si trae archivos deshabilito boton subir archivo y agrago texto cargado
-                } else {
-
-                    // Desabilito Campo
-                    $(".archivo_" + separa_barra[2]).attr("disabled", true);
-                    // Agregar texto Cargado..
-                    $("#txt_archivo_span_" + separa_barra[2]).html('Cargado..');
-
-                }
-
-            });
-
+            $('#txt_estado_cambio_proforma_' + separa_barra[2]).html("");
         }
 
-    });
+        // 2.- Verificar que el valor del campo ingresado (PROFORMA) no exista previamente con estado mayor a cero (0)
+        var url_act_campo_busca_proforma = 'ajax_simulador_cbx/busca_existe_proforma';
+        var url_act_campo_busca_archivo = 'ajax_simulador_cbx/busca_existe_archivo';
+        var count_pro_existe = 0;
+        var count_archivo_existe = 0;
+
+        $.getJSON(url_act_campo_busca_proforma, {PI: valor_campo}).done(function (data) {
+            $.each(data, function (i, o) {
+                count_pro_existe++;
+            });
+        }).done(function () {
+
+            // Existe la Proforma con estado 20 o 21
+            if (count_pro_existe > 0) {
+                alert("Si olvidó registrar una opción, tiene que Crear Una Modificación de la PI. Si es una nueva PI, el nombre ingresado ya existe.");
+                $('#txt_proforma_' + separa_barra[2]).val('');
+            } else {
+
+                // Consultamso por archivo
+                $.getJSON(url_act_campo_busca_archivo, {PI: valor_campo}).done(function (data) {
+                    $.each(data, function (i, o) {
+                        count_archivo_existe++;
+                    });
+                }).done(function () {
+
+                    // Si no existe archivo (0 = Sin Resultados desde la query)
+                    if (count_archivo_existe == 0) {
+
+                        // Si no trae archivo de trabajo con la activación de botones
+                        // Activar o desactivar boton de cargar archivo
+                        if (valor_campo != "" && valor_campo != "0" && valor_campo != " " && valor_campo != null) {
+                            $(".archivo_" + separa_barra[2]).attr("disabled", false);
+                        } else {
+                            $(".archivo_" + separa_barra[2]).attr("disabled", true);
+                        }
+
+                        // se quito de aquí la actualización del campo "U"
+
+                        // Si trae archivos deshabilito boton subir archivo y agrago texto cargado
+                    } else {
+
+                        // Desabilito Campo
+                        $(".archivo_" + separa_barra[2]).attr("disabled", true);
+                        // Agregar texto Cargado..
+                        $("#txt_archivo_span_" + separa_barra[2]).html('Cargado..');
+
+                    }
+
+                });
+
+            }
+
+        });
+
+    // Fin de revisión de caracteres especiales en al proforma
+    }else{
+        alert("Recuerde no ingresar caracteres especiales en la Proforma.");
+    }
+
+
+
+
+
 
 }
 
@@ -1376,60 +1390,93 @@ $('.guarda_proforma').on('click', function () {
     var respuesta = confirm("¿Guardar la Proforma Ingresada?");
     if (respuesta == true) {
 
-        // URL`s de Guardado de Proforma e Historial
-        var url_guarda_proforma_extra = 'ajax_simulador_cbx/guarda_solo_proforma_extra';
-        var url_guarda_proforma = 'ajax_simulador_cbx/guarda_solo_proforma';
-        var url_actualiza_historial = 'ajax_simulador_cbx/actualiza_historial';
+    // Antes de realizar cualquier cambio verificar que no existe un nombre de proforma con caracteres extraños
+    var cont_check_proforma = 0;
+    $("#tabla2 >tbody >tr").each(function () {
 
-        // Recorrer la tabla y traer los datos de la proforma a guardar
-        var conta_datos_tr = 0;
-        $("#tabla2 >tbody >tr").each(function () {
+        var proforma = $("#tabla2 #txt_proforma_" + cont_check_proforma).val();
+        proforma = proforma.replace(/[^a-z0-9\-\ ]/gi, '');
+        var proforma_usuario = $("#tabla2 #txt_proforma_" + cont_check_proforma).val();
 
-            // Solo para validar que no me encuentro en las cabeceras (sirve como ID del Campo)
-            var correlativo_tabla = conta_datos_tr;
-            var estado_c1 = $("#tabla2 #txt_estadoc1_" + conta_datos_tr).text();
-            var busca_campo_actualizado = $("#tabla2 #txt_estado_cambio_proforma_" + conta_datos_tr).text();
-            var id_color = $("#tabla2 #txt_id_color_" + conta_datos_tr).text();
-            var proforma = $("#tabla2 #txt_proforma_" + conta_datos_tr).val();
-            //proforma = proforma.replace(/[^a-z0-9\-]/gi, '');
-            proforma = proforma.replace(/[^a-z0-9\-\ ]/gi, '');
-            // Leemos el campo de edición "U"
-            var cargado = $("#tabla2 #txt_archivo_" + conta_datos_tr).text();
+        // Incluir solo los campos editados?
+        if( proforma != proforma_usuario){
+            cont_check_proforma++;
+        }
 
-            // Primero verifico si el registro se añada a uno ya existente, independiente de su estado.
-            if( (busca_campo_actualizado == "U") && (estado_c1 == 0) && (cargado == 'Cargado.. Upload Upload') ){//Cargado.. Upload Upload
+    // Fin de la tabla que valida que las proformas se encuentren bien ingresadas (Se agrega el promise)
+    }).promise().done(function(){
 
-                // Limpio el campo de la proforma de caracteres no deseados (Asignandole el nuevo sin caracteres especiales y ahora aceptando espacios)
-                $("#tabla2 #txt_proforma_" + correlativo_tabla).val(proforma);
+        // Si cont_check_proforma==0 (Todas las proformas sin caracteres especiales) sigo con el resto del código de lo contrario mensaje de caracteres especiales
+        if(cont_check_proforma == 0){
 
-                // Actualizar solo proforma
-                 $.getJSON(url_guarda_proforma_extra, {PROFORMA: proforma, ID_INSERTAR: id_color}).done(function (data) {
-                     // Actualiza Historial
-                     $.getJSON(url_actualiza_historial, {PROFORMA: proforma, ID_INSERTAR: id_color});
-                });
+            // URL`s de Guardado de Proforma e Historial
+            var url_guarda_proforma_extra = 'ajax_simulador_cbx/guarda_solo_proforma_extra';
+            var url_guarda_proforma = 'ajax_simulador_cbx/guarda_solo_proforma';
+            var url_actualiza_historial = 'ajax_simulador_cbx/actualiza_historial';
 
-            } else if ( (busca_campo_actualizado == "U") && (estado_c1 == 0) ){
+            // Recorrer la tabla y traer los datos de la proforma a guardar
+            var conta_datos_tr = 0;
+            $("#tabla2 >tbody >tr").each(function () {
 
-                // Limpio el campo de la proforma de caracteres no deseados (Asignandole el nuevo sin caracteres especiales y ahora aceptando espacios)
-                $("#tabla2 #txt_proforma_" + correlativo_tabla).val(proforma);
+                // Solo para validar que no me encuentro en las cabeceras (sirve como ID del Campo)
+                var correlativo_tabla = conta_datos_tr;
+                var estado_c1 = $("#tabla2 #txt_estadoc1_" + conta_datos_tr).text();
+                var busca_campo_actualizado = $("#tabla2 #txt_estado_cambio_proforma_" + conta_datos_tr).text();
+                var id_color = $("#tabla2 #txt_id_color_" + conta_datos_tr).text();
+                var proforma = $("#tabla2 #txt_proforma_" + conta_datos_tr).val();
+                //proforma = proforma.replace(/[^a-z0-9\-]/gi, '');
+                proforma = proforma.replace(/[^a-z0-9\-\ ]/gi, '');
+                // Leemos el campo de subir archivo
+                var cargado = $("#tabla2 #txt_archivo_" + conta_datos_tr).text();
 
-                // Actualizar solo proforma
-                $.getJSON(url_guarda_proforma, {PROFORMA: proforma, ID_INSERTAR: id_color}).done(function (data) {
-                    // Actualiza Historial
-                    $.getJSON(url_actualiza_historial, {PROFORMA: proforma, ID_INSERTAR: id_color});
-                });
+                // Primero verifico si el registro se añada a uno ya existente, independiente de su estado.
+                if( (busca_campo_actualizado == "U") && (estado_c1 == 0) && (cargado == 'Cargado.. Upload Upload') ){//Cargado.. Upload Upload
+
+                    // Limpio el campo de la proforma de caracteres no deseados (Asignandole el nuevo sin caracteres especiales y ahora aceptando espacios)
+                    $("#tabla2 #txt_proforma_" + correlativo_tabla).val(proforma);
+
+                    // Actualizar solo proforma
+                    $.getJSON(url_guarda_proforma_extra, {PROFORMA: proforma, ID_INSERTAR: id_color}).done(function (data) {
+                        // Actualiza Historial
+                        $.getJSON(url_actualiza_historial, {PROFORMA: proforma, ID_INSERTAR: id_color});
+                    });
+
+                } else if ( (busca_campo_actualizado == "U") && (estado_c1 == 0) ){
+
+                    // Limpio el campo de la proforma de caracteres no deseados (Asignandole el nuevo sin caracteres especiales y ahora aceptando espacios)
+                    $("#tabla2 #txt_proforma_" + correlativo_tabla).val(proforma);
+
+                    // Actualizar solo proforma
+                    $.getJSON(url_guarda_proforma, {PROFORMA: proforma, ID_INSERTAR: id_color}).done(function (data) {
+                        // Actualiza Historial
+                        $.getJSON(url_actualiza_historial, {PROFORMA: proforma, ID_INSERTAR: id_color});
+                    });
 
 
-            // Fin del if que considera solo los registros con estado cero y nombre proforma valido
-            }
+                    // Fin del if que considera solo los registros con estado cero y nombre proforma valido
+                }
 
-            conta_datos_tr++;
+                conta_datos_tr++;
 
-        // Fin de la tabla
-        });
+                // Fin de la tabla
+            });
 
-        alert("Se han guardado los cambios, favor recargar para revisar.");
-        location.reload(true);
+            alert("Se han guardado los cambios, favor recargar para revisar.");
+            location.reload(true);
+
+            // Fin del else de registros con proforma ok
+        }else{
+            alert("Una o más de las proformas ingresadas contiene caracteres especiales, no se puede realizar el guardado.");
+        }
+
+    });
+
+
+
+
+
+
+
 
     } else {
         return false;
