@@ -431,13 +431,29 @@ public function guarda_pi_server($f3) {
         $id_color = $_POST['send_archivo_id_color_server'];
         $archivo_proforma = $_POST['send_archivo_proforma_server'];
         $nombre_archivo = "PI_".$f3->get('SESSION.COD_TEMPORADA')."_".$f3->get('SESSION.COD_DEPTO')."_".$archivo_proforma.".xlsx";
+        $archivo_filas = $_POST['send_archivo_filas_server'];
 
         // Ruta
         $dir_subida = $f3->get('UPLOADS_PI');
         $fichero_subido = $dir_subida . basename($nombre_archivo);
 
+        $ids_insertar = "";
+        $filas = explode("$", $archivo_filas);
+        foreach($filas as $fil) {
+            $fil_id_color = trim($fil);
+            $ids_insertar .= "'$fil_id_color',";
+        }
+
+        // Aquí se almacenan las ID COLOR con las que se va atrabajar.
+        $ids_insertar = str_replace(",'',","",$ids_insertar);
+
+
         // Si el archivo se subió correctamente, realizo las actualizaciones de los estados
         if (move_uploaded_file($_FILES['send_archivop_pi_server']['tmp_name'], $fichero_subido)) {
+
+            // Insertamos en plc_plan_compra_historica
+            $insert = \simulador_compra\cbx_grilla_compra::guardaHistorial($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'),$ids_insertar,$f3->get('SESSION.login'));
+
             //return 1;
             echo $archivo_proforma;
         } else {

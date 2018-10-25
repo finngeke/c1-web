@@ -1364,6 +1364,45 @@ function cargaArchivoServer(event) {
         // Modifico el campo de la proforma y lo limpio de caracteres no deseados
         $("#tabla2 #txt_proforma_" + separa_barra[2]).val(proforma);
 
+        var string_a_php = "";
+
+        // Me retorna en que numero de columna se encuentra un elemento según su posición
+        var elem_archivo = $('#tabla2 thead tr:last th');
+        var rIndex_archivo;
+        var txt_id_color = elem_archivo.filter(
+            function (txt_id_color) {
+                var labelText = $(this).find('labelr').text();
+                var result = labelText == 'IDCOLOR';
+                if (result)
+                    rIndex_archivo = txt_id_color;
+                return result;
+            }).index();
+
+
+        // Recorrer la tabla y traer los datos de las proformas que tenga un valor igual a las del archivo que se sube
+        $("#tabla2 > tbody > tr").each(function () {
+
+            var prof_otros_campos = $(this).find("td:eq(" + txt_id_archivo + ") input[type='text']").val();
+            //var prof_otros_campos = $("#tabla2 #txt_proforma_"+txt_id_archivo).val();
+            //prof_otros_campos = prof_otros_campos.replace(/[^a-z0-9\-]/gi, '');
+            prof_otros_campos = prof_otros_campos.replace(/[^a-z0-9\-\ ]/gi, '');
+
+            var td_id_color = "";
+
+            // Verificar que el campo sea distindo de undefined y espacio (era||)
+            if ((proforma == prof_otros_campos) && (estado_c1 == 0)) {
+
+                td_id_color = $(this).find("td:eq(" + txt_id_color + ")").text();
+                //td_id_color = $("#tabla2 #txt_id_color_"+txt_id_archivo).text();
+                string_a_php += td_id_color + "$";
+
+                // Fin de buscar si la columna trae datos
+            }
+
+        });
+
+        $('#send_archivo_filas_server').val(string_a_php);
+
     } else {
         alert("Archivo ya existe o debe ingresar proforma antes de subir la PI.");
     }
