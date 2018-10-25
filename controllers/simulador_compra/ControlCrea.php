@@ -439,7 +439,7 @@ public function guarda_pi_server($f3) {
         // Si el archivo se subió correctamente, realizo las actualizaciones de los estados
         if (move_uploaded_file($_FILES['send_archivop_pi_server']['tmp_name'], $fichero_subido)) {
             //return 1;
-            echo $id_color;
+            echo $archivo_proforma;
         } else {
             // return 0;
             echo "ERROR";

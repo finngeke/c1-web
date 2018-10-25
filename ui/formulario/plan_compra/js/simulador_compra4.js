@@ -1322,7 +1322,9 @@ function cargaArchivoServer(event) {
     var id_color = $("#tabla2 #txt_id_color_" + separa_barra[2]).text();
     var proforma = $("#tabla2 #txt_proforma_" + separa_barra[2]).val();
     proforma = proforma.replace(/[^a-z0-9\-\ ]/gi, '');
+    var campo_archivo_server = $("#tabla2 #txt_archivo_" + separa_barra[2]).text();
 
+    // Para subir el archivo no debe tener el texto cargado
     if ((estado_c1 == 0) && (proforma != 0) && (proforma != "") && (proforma != "null") && (proforma != null)) {
 
         // Desplegar el  modal
@@ -4770,13 +4772,35 @@ $("#pi_upload_ajax").on('submit',(function(e) {
         processData:false,
         beforeSend : function(){
             // Acción antes de enviar
-        },success: function(data){
-            if(data!='ERROR'){
+        },success: function(return_proforma){
 
-                // Ocultar el POPUP
-                $('#carga_pi_archivo').modal('hide');
+            if(return_proforma!='ERROR'){
 
                 // Asignar el texto "Cargado.." y bloquear btn
+                var inc_rec_prof = 0;
+                $("#tabla2 > tbody > tr").each(function () {
+
+                    var busca_prof_spec = $(this).find("td:eq(" + inc_rec_prof + ") input[type='text']").val();
+                    busca_prof_spec = busca_prof_spec.replace(/[^a-z0-9\-\ ]/gi, '');
+                    var busca_campo_actualizado = $("#tabla2 #txt_estado_cambio_proforma_" + inc_rec_prof).text();
+                    var campo_archivo_server = $("#tabla2 #txt_archivo_" + inc_rec_prof).text();
+
+
+                    // Verificar que el campo sea distindo de undefined y espacio (era||)
+                    if ( (return_proforma == busca_prof_spec) && (busca_campo_actualizado=='U') ) {
+
+                        // Agregarle el cargado al BTN
+
+
+                    }
+
+
+                inc_rec_prof++;
+                });
+
+
+                // Ocultar el POPUP, al final. Mientras el código realiza su pega
+                $('#carga_pi_archivo').modal('hide');
 
             }else{
                 // Problemas con la subida
