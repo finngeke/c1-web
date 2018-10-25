@@ -1369,6 +1369,16 @@ function cargaArchivoServer(event) {
         // Me retorna en que numero de columna se encuentra un elemento según su posición
         var elem_archivo = $('#tabla2 thead tr:last th');
         var rIndex_archivo;
+
+        var txt_id_archivo = elem_archivo.filter(
+            function (txt_id_archivo) {
+                var labelText = $(this).find('labelr').text();
+                var result = labelText == 'Proforma';
+                if (result)
+                    rIndex_archivo = txt_id_archivo;
+                return result;
+            }).index();
+
         var txt_id_color = elem_archivo.filter(
             function (txt_id_color) {
                 var labelText = $(this).find('labelr').text();
