@@ -3021,7 +3021,7 @@ public static function actualiza_fecha_concurrencia($temporada, $depto, $login)
         // 1.2.2- No Sube archivo (inserto historial,Actualizo plan_compra_color3 estado a 18 y proforma=$proforma)
 
 
-    public static function guarda_proforma_cond1($temporada, $depto, $login, $proforma, $id_insertar)
+    public static function guarda_proforma_cond1($temporada, $depto, $login, $proforma, $id_insertar, $archivo)
     {
 
         $sql_archivo = "SELECT 1 FROM plc_plan_compra_oc
@@ -3111,7 +3111,8 @@ public static function actualiza_fecha_concurrencia($temporada, $depto, $login)
 
                 // Actualizo plan_compra_color3 estado=18 y proforma=$proforma
                 $sql_plan_compra_color_3 = "UPDATE plc_plan_compra_color_3
-                SET estado = 18
+                SET estado = 18,
+                proforma = '" . $proforma . "'
                 WHERE cod_temporada = $temporada
                 AND dep_depto = '" . $depto . "'
                 AND id_color3 = $id_insertar
@@ -3146,68 +3147,22 @@ public static function actualiza_fecha_concurrencia($temporada, $depto, $login)
         }
 
 
-
-
-        /*$sql = "UPDATE plc_plan_compra_color_3
-                SET proforma = '" . $proforma . "'
-                WHERE cod_temporada = $temporada
-                AND dep_depto = '" . $depto . "'
-                AND id_color3 = $id_insertar
-                ";
-
-        // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
-        if (!file_exists('../archivos/log_querys/' . $login)) {
-            mkdir('../archivos/log_querys/' . $login, 0775, true);
-        }
-        $stamp = date("Y-m-d_H-i-s");
-        $rand = rand(1, 999);
-        $content = $sql;
-        $fp = fopen("../archivos/log_querys/" . $login . "/GRILLA2-ACTUALIZASOLOPROFORMA--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
-        fwrite($fp, $content);
-        fclose($fp);
-
-        $data = \database::getInstancia()->getConsulta($sql);
-        //return $data;
-
-        if ($data) {
-            return 1;
-        } else {
-            return 0;
-        }*/
-
     }
 
 
-    public static function guarda_proforma_cond2($temporada, $depto, $login, $proforma, $id_insertar)
+    public static function guarda_proforma_cond2($temporada, $depto, $login, $proforma, $id_insertar, $archivo)
     {
 
-        $sql = "UPDATE plc_plan_compra_color_3
-                SET proforma = '" . $proforma . "',
-                estado = 18
-                WHERE cod_temporada = $temporada
-                AND dep_depto = '" . $depto . "'
-                AND id_color3 = $id_insertar
-                ";
+        // guarda_proforma_cond2
+        // 1.2.1- Sube archivo (Inserto en plan_compra_oc, inserto historial,Actualizo plan_compra_color3 estado a 18)
+        // 1.2.2- No Sube archivo (inserto historial,Actualizo plan_compra_color3 estado a 18 y proforma)
 
-        // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
-        if (!file_exists('../archivos/log_querys/' . $login)) {
-            mkdir('../archivos/log_querys/' . $login, 0775, true);
-        }
-        $stamp = date("Y-m-d_H-i-s");
-        $rand = rand(1, 999);
-        $content = $sql;
-        $fp = fopen("../archivos/log_querys/" . $login . "/GRILLA2-ACTSOLOPROFORMAEXTRA--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
-        fwrite($fp, $content);
-        fclose($fp);
+        if($archivo==1){
 
-        $data = \database::getInstancia()->getConsulta($sql);
-        //return $data;
+            // 1.- Guarda Registro en plc_plan_compra_oc
 
-        // Si puede actualizar ejecuto la otra consulta
-        if ($data) {
-
-
-            $sql = "INSERT INTO plc_plan_compra_oc (cod_temporada,dep_depto,niv_jer1,cod_jer1,niv_jer2,cod_jer2,item,cod_sublin,cod_estilo,des_estilo,vent_emb,proforma,archivo,id_color3, estado_oc,estilo_pmm)
+            // Agrego el registro del archivo en plan_compra_oc
+            $sql_plan_compra_oc = "INSERT INTO plc_plan_compra_oc (cod_temporada,dep_depto,niv_jer1,cod_jer1,niv_jer2,cod_jer2,item,cod_sublin,cod_estilo,des_estilo,vent_emb,proforma,archivo,id_color3, estado_oc,estilo_pmm)
                 SELECT
                       C.COD_TEMPORADA,
                       C.DEP_DEPTO,
@@ -3229,7 +3184,7 @@ public static function actualiza_fecha_concurrencia($temporada, $depto, $login)
                       LEFT JOIN PLC_PLAN_COMPRA_OC O ON C.COD_TEMPORADA = O.COD_TEMPORADA
                       AND C.DEP_DEPTO = O.DEP_DEPTO AND C.ID_COLOR3 = O.ID_COLOR3
                 WHERE C.COD_TEMPORADA = $temporada AND C.DEP_DEPTO =  '" . $depto . "'
-                AND C.ID_COLOR3 IN ($id_insertar)
+                AND C.ID_COLOR3 = $id_insertar
                 ";
 
             // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
@@ -3238,24 +3193,188 @@ public static function actualiza_fecha_concurrencia($temporada, $depto, $login)
             }
             $stamp = date("Y-m-d_H-i-s");
             $rand = rand(1, 999);
-            $content = $sql;
-            $fp = fopen("../archivos/log_querys/" . $login . "/GRILLA2-ACTSOLOPROFORMAEXTRAPLAN_COMPRA_OC_--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+            $content = $sql_plan_compra_oc;
+            $fp = fopen("../archivos/log_querys/" . $login . "/ACTPROFORMA--COND2--INSCOMPRAOC--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
             fwrite($fp, $content);
             fclose($fp);
 
-            $data = \database::getInstancia()->getConsulta($sql);
-            //return $data;
+            $data_plan_compra_oc = \database::getInstancia()->getConsulta($sql_plan_compra_oc);
 
-            if ($data) {
-                return 1;
-            } else {
-                return 0;
+            if($data_plan_compra_oc){
+
+                // 2.- Actualiza plc_plan_compra_color3 estado=18 y proforma = $proforma
+                $sql_plan_compra_color_3 = "UPDATE plc_plan_compra_color_3
+                SET proforma = '" . $proforma . "',
+                estado = 18
+                WHERE cod_temporada = $temporada
+                AND dep_depto = '" . $depto . "'
+                AND id_color3 = $id_insertar
+                ";
+
+                // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+                if (!file_exists('../archivos/log_querys/' . $login)) {
+                    mkdir('../archivos/log_querys/' . $login, 0775, true);
+                }
+                $stamp = date("Y-m-d_H-i-s");
+                $rand = rand(1, 999);
+                $content = $sql_plan_compra_color_3;
+                $fp = fopen("../archivos/log_querys/" . $login . "/ACTPROFORMA--COND2--UPDPLANCOLOR3--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+                fwrite($fp, $content);
+                fclose($fp);
+
+                $data_plan_compra_color_3 = \database::getInstancia()->getConsulta($sql_plan_compra_color_3);
+
+                if($data_plan_compra_color_3){
+
+                    // 3.- Guarda Historial (Incluye el registro + los datos de la PI)
+                    $sql_historial = "INSERT INTO plc_plan_compra_historica (temp,dpto,linea,sublinea,marca,estilo,ventana,color,user_login,user_nom,fecha,hora,pi,oc,estado,id_color3,nom_linea,nom_sublinea,nom_marca,nom_ventana,nom_color)
+                SELECT
+                      C.COD_TEMPORADA,
+                      C.DEP_DEPTO,
+                      C.COD_JER2 LINEA,         -- linea
+                      C.COD_SUBLIN SUBLINEA,    -- sublinea
+                      C.COD_MARCA,              -- marca
+                      C.DES_ESTILO ESTILO,      -- estilo
+                      C.VENTANA_LLEGADA,        -- Ventana
+                      NVL(COD_COLOR,0)COLOR,    -- Color
+                      '" . $login . "',
+                      (SELECT NOM_USR FROM PLC_USUARIO WHERE COD_USR = '" . $login . "'),
+                      (SELECT SUBSTR(TO_CHAR(SYSDATE, 'DD-MM-YYYY'),1,10)N FROM DUAL),
+                      (SELECT TO_CHAR(SYSDATE, 'HH24:MI:SS') FROM DUAL),
+                      '" . $proforma . "',
+                      O.PO_NUMBER,
+                      C.ESTADO,
+                      C.ID_COLOR3,
+                      C.NOM_LINEA LINEA,
+                      C.NOM_SUBLINEA SUBLINEA,
+                      C.NOM_MARCA MARCA,
+                      C.NOM_VENTANA VENTANA,
+                      C.NOM_COLOR COD_COLOR
+                      FROM PLC_PLAN_COMPRA_COLOR_3 C
+                      LEFT JOIN PLC_PLAN_COMPRA_OC O ON C.COD_TEMPORADA = O.COD_TEMPORADA
+                      AND C.DEP_DEPTO = O.DEP_DEPTO AND C.ID_COLOR3 = O.ID_COLOR3
+                WHERE C.COD_TEMPORADA = $temporada AND C.DEP_DEPTO =  '" . $depto . "'
+                AND C.ID_COLOR3 = $id_insertar
+                ";
+
+                    // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+                    if (!file_exists('../archivos/log_querys/' . $login)) {
+                        mkdir('../archivos/log_querys/' . $login, 0775, true);
+                    }
+                    $stamp = date("Y-m-d_H-i-s");
+                    $rand = rand(1, 999);
+                    $content = $sql_historial;
+                    $fp = fopen("../archivos/log_querys/" . $login . "/ACTPROFORMA--COND2--INSERTHISTORIAL--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+                    fwrite($fp, $content);
+                    fclose($fp);
+
+                    $data_historial = \database::getInstancia()->getConsulta($sql_historial);
+
+                    if($data_historial){
+                        return "OK";
+                    }else{
+                        return "ERROR";
+                    }
+
+
+                }else{
+                    return "ERROR";
+                }
+
+
+            }else{
+                return "ERROR";
             }
 
 
-        } else {
-            return 0;
+
+        }else{
+
+            // 1.- Actualiza plc_plan_compra_color3 proforma = $proforma
+            // Actualizo plan_compra_color3 estado=18 y proforma=$proforma
+            $sql_plan_compra_color_3 = "UPDATE plc_plan_compra_color_3
+                SET proforma = '" . $proforma . "'
+                WHERE cod_temporada = $temporada
+                AND dep_depto = '" . $depto . "'
+                AND id_color3 = $id_insertar
+                ";
+
+            // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+            if (!file_exists('../archivos/log_querys/' . $login)) {
+                mkdir('../archivos/log_querys/' . $login, 0775, true);
+            }
+            $stamp = date("Y-m-d_H-i-s");
+            $rand = rand(1, 999);
+            $content = $sql_plan_compra_color_3;
+            $fp = fopen("../archivos/log_querys/" . $login . "/ACTPROFORMA--COND2--UPDPLANCOLOR3--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+            fwrite($fp, $content);
+            fclose($fp);
+
+            $data_plan_compra_color_3 = \database::getInstancia()->getConsulta($sql_plan_compra_color_3);
+
+            // 2.- Guarda Historial
+            if($data_plan_compra_color_3){
+
+                // Guardo Historial
+                $sql_historial = "INSERT INTO plc_plan_compra_historica (temp,dpto,linea,sublinea,marca,estilo,ventana,color,user_login,user_nom,fecha,hora,pi,oc,estado,id_color3,nom_linea,nom_sublinea,nom_marca,nom_ventana,nom_color)
+                SELECT
+                      C.COD_TEMPORADA,
+                      C.DEP_DEPTO,
+                      C.COD_JER2 LINEA,         -- linea
+                      C.COD_SUBLIN SUBLINEA,    -- sublinea
+                      C.COD_MARCA,              -- marca
+                      C.DES_ESTILO ESTILO,      -- estilo
+                      C.VENTANA_LLEGADA,        -- Ventana
+                      NVL(COD_COLOR,0)COLOR,    -- Color
+                      '" . $login . "',
+                      (SELECT NOM_USR FROM PLC_USUARIO WHERE COD_USR = '" . $login . "'),
+                      (SELECT SUBSTR(TO_CHAR(SYSDATE, 'DD-MM-YYYY'),1,10)N FROM DUAL),
+                      (SELECT TO_CHAR(SYSDATE, 'HH24:MI:SS') FROM DUAL),
+                      C.PROFORMA,
+                      O.PO_NUMBER,
+                      C.ESTADO,
+                      C.ID_COLOR3,
+                      C.NOM_LINEA LINEA,
+                      C.NOM_SUBLINEA SUBLINEA,
+                      C.NOM_MARCA MARCA,
+                      C.NOM_VENTANA VENTANA,
+                      C.NOM_COLOR COD_COLOR
+                      FROM PLC_PLAN_COMPRA_COLOR_3 C
+                      LEFT JOIN PLC_PLAN_COMPRA_OC O ON C.COD_TEMPORADA = O.COD_TEMPORADA
+                      AND C.DEP_DEPTO = O.DEP_DEPTO AND C.ID_COLOR3 = O.ID_COLOR3
+                WHERE C.COD_TEMPORADA = $temporada AND C.DEP_DEPTO =  '" . $depto . "'
+                AND C.ID_COLOR3 = $id_insertar
+                ";
+
+                // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+                if (!file_exists('../archivos/log_querys/' . $login)) {
+                    mkdir('../archivos/log_querys/' . $login, 0775, true);
+                }
+                $stamp = date("Y-m-d_H-i-s");
+                $rand = rand(1, 999);
+                $content = $sql_historial;
+                $fp = fopen("../archivos/log_querys/" . $login . "/ACTPROFORMA--COND2--INSERTHISTORIAL--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+                fwrite($fp, $content);
+                fclose($fp);
+
+                $data_historial = \database::getInstancia()->getConsulta($sql_historial);
+
+                if($data_historial){
+                    return "OK";
+                }else{
+                    return "ERROR";
+                }
+
+
+            }else{
+                return "ERROR";
+            }
+
         }
+
+
+
+
 
     }
 

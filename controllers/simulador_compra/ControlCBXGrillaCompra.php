@@ -612,12 +612,12 @@
 
 // ######################## TRABAJO CON NUEVO GUARDADO PI ########################
 
-        public function guarda_proforma_cond1($f3) { //guarda_solo_proforma
-            echo \simulador_compra\cbx_grilla_compra::guarda_proforma_cond1($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $f3->get('GET.PROFORMA'), $f3->get('GET.ID_INSERTAR'));
+        public function guarda_proforma_cond1($f3) {
+            echo \simulador_compra\cbx_grilla_compra::guarda_proforma_cond1($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $f3->get('GET.PROFORMA'), $f3->get('GET.ID_INSERTAR'), $f3->get('GET.ARCHIVO'));
         }
 
-        public function guarda_proforma_cond2($f3) { //guarda_solo_proforma
-            echo \simulador_compra\cbx_grilla_compra::guarda_proforma_cond2($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $f3->get('GET.PROFORMA'), $f3->get('GET.ID_INSERTAR'));
+        public function guarda_proforma_cond2($f3) {
+            echo \simulador_compra\cbx_grilla_compra::guarda_proforma_cond2($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $f3->get('GET.PROFORMA'), $f3->get('GET.ID_INSERTAR'), $f3->get('GET.ARCHIVO'));
         }
 
 // ######################## FIN TRABAJO CON NUEVO GUARDADO PI ########################
