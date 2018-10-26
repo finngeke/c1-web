@@ -1228,12 +1228,23 @@ function validar(event) {
 
 function validarc1(event) {
 
-    if (($("#check_depto:checked").val()) != null) {
-        $("#btn_exportar").attr("disabled", false);
-    } else {
-        $("#btn_exportar").attr("disabled", "disabled");
-    }
+    var _val = true
+    $('input[type=checkbox]').on('change', function (e) {
+        if ($('input[type=checkbox]:checked').length > 5) {
+            $(this).prop('checked', false);
+            alert("Permitido hasta 5 departamentos.");
+            _val = false;
+        }
+    });
 
+
+    if (_val == true){
+        if (($("#check_depto:checked").val()) != null) {
+            $("#btn_exportar").attr("disabled", false);
+        } else {
+            $("#btn_exportar").attr("disabled", "disabled");
+        }
+    }
 }
 
 function validarc1_estado_depto(event) {

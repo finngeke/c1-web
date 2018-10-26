@@ -52,27 +52,49 @@ require_once '../PHPExcel/PHPExcel.php';
           echo Template::instance()->render('layout_excel.php');*/
 
       } elseif ($tipoArchivo == 2) { //c1
-          $depto_cadena =""; $count1 = 0;
-          foreach($_POST["check_depto"] as $val => $value){
-              $depto_cadena = $depto_cadena.$value."," ;
-        }
+                    $depto_cadena = "";$count1 = 0;
+
+            foreach ($_POST["check_depto"] as $val => $value) {
+                $depto_cadena = $depto_cadena . $value . ",";
+                $count1++;
+            }
+
             $dt =  \simulador_compra\cbx_grilla_compra::llenar_tabla_depto($Tempo);
+            if (count($dt) == $count1){
 
-          if (count($dt) == $count1){
+                          $file ="C1_Consolidada_".$Tempo.".xls"; // Decode URL-encoded string
+                          $filepath = "../archivos/c1_consolidada/" . $file;
 
-             $arreglo_depto = simulador_compra\plan_compra::Exportc1($Tempo, $depto_cadena);
-              //$arreglo_depto= \temporada\Factor_Estimado::getFactor_Estimado($f3->get('SESSION.COD_TEMPORADA'));
+                          // Process download
+                          if(file_exists($filepath)) {
+                              header('Content-Description: File Transfer');
+                              header('Content-Type: application/octet-stream');
+                              header('Content-Disposition: attachment; filename="'.$file.'"');
+                              header('Expires: 0');
+                              header('Cache-Control: must-revalidate');
+                              header('Pragma: public');
+                              header('Content-Length: ' . filesize($filepath));
 
-              $filename=$Tempo."-"."C1_Consolidada.xls";
-              header("Content-Disposition: attachment; filename=\"$filename\"");
-              header("Content-Type: application/vnd.ms-excel");
-              $f3->set('Lista_Consolidadoc1',$arreglo_depto);
-              $f3->set('contenido', 'reporte/visor_exportarC1.html');
-              echo Template::instance()->render('layout_excel.php');
+                              flush(); // Flush system output buffer
+                              readfile($filepath);
+                              exit;
+                          }
+            }else{
+               if ($count1 > 5){
+                   $array5 =  explode("," ,$depto_cadena);;
+                   $count =0; $depto_cadena="";
+                   foreach ($array5 as $val){$count++;
+                       $depto_cadena = $depto_cadena . $val . ",";
+                       if ($count == 5){
+                           break;
+                       }
+                   }
+                   include '../ui/reporte/cabeceraexcel.php';
+               }else{
+                   include '../ui/reporte/cabeceraexcel.php';
+               }
 
-          }else{
-              include '../ui/reporte/cabeceraexcel.php';
-          }
+            }
 
       } elseif ($tipoArchivo == 4) { //c1 por estado
 
