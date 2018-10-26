@@ -300,6 +300,11 @@
 		public function actualiza_historial($f3) {
 			echo \simulador_compra\cbx_grilla_compra::actualiza_historial($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $f3->get('GET.PROFORMA'), $f3->get('GET.ID_INSERTAR'));
 		}
+
+        // Agrega Historial al momento de guardar proforma
+        public function guardaHistorial($f3) {
+            echo \simulador_compra\cbx_grilla_compra::guardaHistorial($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('GET.ID_INSERTAR'), $f3->get('SESSION.login'));
+        }
 		
 		// Se actualiza estado Opcion segun estado OC PMM
 		public function actualiza_estado_oc_segun_ocpmm($f3) {
@@ -600,6 +605,22 @@
             echo \simulador_compra\cbx_grilla_compra::actualiza_fecha_concurrencia($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'));
         }
 // ######################## FIN TRABAJO CON CONCURRENCIA ########################
+
+
+
+
+
+// ######################## TRABAJO CON NUEVO GUARDADO PI ########################
+
+        public function guarda_proforma_cond1($f3) { //guarda_solo_proforma
+            echo \simulador_compra\cbx_grilla_compra::guarda_proforma_cond1($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $f3->get('GET.PROFORMA'), $f3->get('GET.ID_INSERTAR'));
+        }
+
+        public function guarda_proforma_cond2($f3) { //guarda_solo_proforma
+            echo \simulador_compra\cbx_grilla_compra::guarda_proforma_cond2($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $f3->get('GET.PROFORMA'), $f3->get('GET.ID_INSERTAR'));
+        }
+
+// ######################## FIN TRABAJO CON NUEVO GUARDADO PI ########################
 
 
 

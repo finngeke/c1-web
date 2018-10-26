@@ -1136,15 +1136,13 @@ function actualizaCampoEstadoProforma(event) {
 
         // 1.2.- Verifico que el estado sea 0 por si el usuario escribe sobre una PI existente
         if ((valor_campo != 0) && (valor_campo != "" && (estado_c1 == 0))) {
-            // alert('dentro de U');
             $('#txt_estado_cambio_proforma_' + separa_barra[2]).html("U");
         } else {
-            // alert('fuera de U');
             $('#txt_estado_cambio_proforma_' + separa_barra[2]).html("");
         }
 
         // 2.- Verificar que el valor del campo ingresado (PROFORMA) no exista previamente con estado mayor a cero (0)
-        var url_act_campo_busca_proforma = 'ajax_simulador_cbx/busca_existe_proforma';
+        var url_act_campo_busca_proforma = 'ajax_simulador_cbx/busca_existe_proforma'; // (Busca por la Proforma coin estado 20/21)
         var url_act_campo_busca_archivo = 'ajax_simulador_cbx/busca_existe_archivo';
         var count_pro_existe = 0;
         var count_archivo_existe = 0;
@@ -1179,9 +1177,7 @@ function actualizaCampoEstadoProforma(event) {
                             $(".archivo_" + separa_barra[2]).attr("disabled", true);
                         }
 
-                        // se quito de aquí la actualización del campo "U"
-
-                        // Si trae archivos deshabilito boton subir archivo y agrago texto cargado
+                     // Si trae archivos deshabilito boton subir archivo y agrago texto cargado
                     } else {
 
                         // Desabilito Campo
@@ -1333,7 +1329,6 @@ function cargaArchivo(event) {
 
 }
 
-
 // Boton de Cargar Archivo
 function cargaArchivoServer(event) {
 
@@ -1364,61 +1359,11 @@ function cargaArchivoServer(event) {
         // Modifico el campo de la proforma y lo limpio de caracteres no deseados
         $("#tabla2 #txt_proforma_" + separa_barra[2]).val(proforma);
 
-        var string_a_php = "";
-
-        // Me retorna en que numero de columna se encuentra un elemento según su posición
-        var elem_archivo = $('#tabla2 thead tr:last th');
-        var rIndex_archivo;
-
-        var txt_id_archivo = elem_archivo.filter(
-            function (txt_id_archivo) {
-                var labelText = $(this).find('labelr').text();
-                var result = labelText == 'Proforma';
-                if (result)
-                    rIndex_archivo = txt_id_archivo;
-                return result;
-            }).index();
-
-        var txt_id_color = elem_archivo.filter(
-            function (txt_id_color) {
-                var labelText = $(this).find('labelr').text();
-                var result = labelText == 'IDCOLOR';
-                if (result)
-                    rIndex_archivo = txt_id_color;
-                return result;
-            }).index();
-
-
-        // Recorrer la tabla y traer los datos de las proformas que tenga un valor igual a las del archivo que se sube
-        $("#tabla2 > tbody > tr").each(function () {
-
-            var prof_otros_campos = $(this).find("td:eq(" + txt_id_archivo + ") input[type='text']").val();
-            //var prof_otros_campos = $("#tabla2 #txt_proforma_"+txt_id_archivo).val();
-            //prof_otros_campos = prof_otros_campos.replace(/[^a-z0-9\-]/gi, '');
-            prof_otros_campos = prof_otros_campos.replace(/[^a-z0-9\-\ ]/gi, '');
-
-            var td_id_color = "";
-
-            // Verificar que el campo sea distindo de undefined y espacio (era||)
-            if ((proforma == prof_otros_campos) && (estado_c1 == 0)) {
-
-                td_id_color = $(this).find("td:eq(" + txt_id_color + ")").text();
-                //td_id_color = $("#tabla2 #txt_id_color_"+txt_id_archivo).text();
-                string_a_php += td_id_color + "$";
-
-                // Fin de buscar si la columna trae datos
-            }
-
-        });
-
-        $('#send_archivo_filas_server').val(string_a_php);
-
     } else {
         alert("Archivo ya existe o debe ingresar proforma antes de subir la PI.");
     }
 
 }
-
 
 // Boton Descarga PI
 function descargaPI(event) {
@@ -1457,6 +1402,7 @@ $('.guarda_proforma').on('click', function () {
     // Antes de realizar cualquier cambio verificar que no existe un nombre de proforma con caracteres extraños
     var cont_check_proforma = 0;
     var conteo_errores_prof = 0;
+
     $("#tabla2 >tbody >tr").each(function () {
 
         var proforma = $("#tabla2 #txt_proforma_" + cont_check_proforma).val();
@@ -1474,13 +1420,14 @@ $('.guarda_proforma').on('click', function () {
     // Fin de la tabla que valida que las proformas se encuentren bien ingresadas (Se agrega el promise)
     }).promise().done(function(){
 
-        // Si conteo_errores_prof==0 (Todas las proformas sin caracteres especiales) sigo con el resto del código de lo contrario mensaje de caracteres especiales
+        // Si conteo_errores_prof==0 (Todas las proformas sin caracteres especiales)
+        // Sigo con el resto del código de lo contrario mensaje de caracteres especiales
         if(conteo_errores_prof == 0){
 
             // URL`s de Guardado de Proforma e Historial
-            var url_guarda_proforma_extra = 'ajax_simulador_cbx/guarda_solo_proforma_extra';
-            var url_guarda_proforma = 'ajax_simulador_cbx/guarda_solo_proforma';
-            var url_actualiza_historial = 'ajax_simulador_cbx/actualiza_historial';
+            var url_guarda_proforma_extra   = 'ajax_simulador_cbx/guarda_solo_proforma_extra';
+            var url_guarda_proforma         = 'ajax_simulador_cbx/guarda_solo_proforma';
+            var url_actualiza_historial     = 'ajax_simulador_cbx/actualiza_historial';
 
             // Recorrer la tabla y traer los datos de la proforma a guardar
             var conta_datos_tr = 0;
@@ -1496,6 +1443,46 @@ $('.guarda_proforma').on('click', function () {
                 proforma = proforma.replace(/[^a-z0-9\-\ ]/gi, '');
                 // Leemos el campo de subir archivo
                 var cargado = $("#tabla2 #txt_archivo_" + conta_datos_tr).text();
+
+                // 1.- Verificar si registro existe (Estado > 0)
+
+                // Limpio el campo de la proforma de caracteres no deseados (Asignandole el nuevo sin caracteres especiales y ahora aceptando espacios)
+                $("#tabla2 #txt_proforma_" + correlativo_tabla).val(proforma);
+
+                // 1.1- Existe PI ( tiene estado>0 )
+                if(estado_c1>0){
+
+
+                    // guarda_proforma_cond1
+                    // 1.1.1- Tiene archivo (Actualizo plan_compra_color3 estado a 18)
+                    // 1.1.2- No Tiene archivo (Inserto en plan_compra_oc, actualizo plan_compra_color3 estado a 18)
+
+
+
+                // 1.2- No existe PI ( tiene estado==0 )
+                }else{
+
+                    // guarda_proforma_cond2
+                    // 1.2.1- Sube archivo (Inserto en plan_compra_oc, inserto historial,Actualizo plan_compra_color3 estado a 18)
+                    // 1.2.2- No Sube archivo (inserto historial,Actualizo plan_compra_color3 estado a 18 y proforma)
+
+                }
+
+
+                // 1.- Verificar si registro existe (Estado > 0)
+
+                // 1.1- Existe PI ( tiene estado>0 )
+
+                    // 1.1.1- Tiene archivo (Actualizo plan_compra_color3 estado a 18)
+
+                    // 1.1.2- No Tiene archivo (Inserto en plan_compra_oc, actualizo plan_compra_color3 estado a 18)
+
+                // 1.2- No existe PI ( tiene estado==0 )
+
+                    // 1.2.1- Sube archivo (Inserto en plan_compra_oc, inserto historial,Actualizo plan_compra_color3 estado a 18)
+
+                    // 1.2.2- No Sube archivo (inserto historial,Actualizo plan_compra_color3 estado a 18)
+
 
                 // Primero verifico si el registro se añada a uno ya existente, independiente de su estado.
                 if( (busca_campo_actualizado == "U") && (estado_c1 == 0) && (cargado == 'Cargado.. Upload Upload') ){//Cargado.. Upload Upload
@@ -1538,12 +1525,6 @@ $('.guarda_proforma').on('click', function () {
         }
 
     });
-
-
-
-
-
-
 
 
     } else {
@@ -4932,3 +4913,58 @@ $("#pi_upload_ajax").on('submit',(function(e) {
     });
 
 }));
+
+function busca_prof_aguardar(){
+
+    var string_a_php = "";
+    var flag_busca_prof = 0;
+    var td_id_color = "";
+
+    // Me retorna en que numero de columna se encuentra un elemento según su posición
+    var elem_archivo = $('#tabla2 thead tr:last th');
+    var rIndex_archivo;
+
+    var txt_id_archivo = elem_archivo.filter(
+        function (txt_id_archivo) {
+            var labelText = $(this).find('labelr').text();
+            var result = labelText == 'Proforma';
+            if (result)
+                rIndex_archivo = txt_id_archivo;
+            return result;
+        }).index();
+
+    var txt_id_color = elem_archivo.filter(
+        function (txt_id_color) {
+            var labelText = $(this).find('labelr').text();
+            var result = labelText == 'IDCOLOR';
+            if (result)
+                rIndex_archivo = txt_id_color;
+            return result;
+        }).index();
+
+
+    // Recorrer la tabla y traer los datos de las proformas que tenga un valor igual a las del archivo que se sube
+    $("#tabla2 > tbody > tr").each(function () {
+
+        var prof_otros_campos = $(this).find("td:eq(" + txt_id_archivo + ") input[type='text']").val();
+        //prof_otros_campos = prof_otros_campos.replace(/[^a-z0-9\-]/gi, '');
+        prof_otros_campos = prof_otros_campos.replace(/[^a-z0-9\-\ ]/gi, '');
+        var estado_c1 = $("#tabla2 #txt_estadoc1_" + flag_busca_prof).text();
+        var busca_campo_actualizado = $("#tabla2 #txt_estado_cambio_proforma_" + flag_busca_prof).text();
+
+        // Verificar que el campo se encuentre actualizado y el estado C1 sea 0
+        if ((busca_campo_actualizado == 'U') && (estado_c1 == 0)) {
+
+            td_id_color = $(this).find("td:eq(" + txt_id_color + ")").text();
+            string_a_php += td_id_color + "$";
+
+            // Fin de buscar si la columna trae datos
+        }
+
+    flag_busca_prof++;
+
+    });
+
+    return string_a_php;
+
+}
