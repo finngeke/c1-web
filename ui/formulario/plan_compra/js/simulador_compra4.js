@@ -1425,9 +1425,7 @@ $('.guarda_proforma').on('click', function () {
         if(conteo_errores_prof == 0){
 
             // URL`s de Guardado de Proforma e Historial
-            var url_guarda_proforma_extra   = 'ajax_simulador_cbx/guarda_solo_proforma_extra';
-            var url_guarda_proforma         = 'ajax_simulador_cbx/guarda_solo_proforma';
-            var url_actualiza_historial     = 'ajax_simulador_cbx/actualiza_historial';
+            var url_act_proforma = 'ajax_simulador_cbx/guarda_proforma_cond1';
 
             // Recorrer la tabla y traer los datos de la proforma a guardar
             var conta_datos_tr = 0;
@@ -1444,80 +1442,53 @@ $('.guarda_proforma').on('click', function () {
                 // Leemos el campo de subir archivo
                 var cargado = $("#tabla2 #txt_archivo_" + conta_datos_tr).text();
 
-                // 1.- Verificar si registro existe (Estado > 0)
-
                 // Limpio el campo de la proforma de caracteres no deseados (Asignandole el nuevo sin caracteres especiales y ahora aceptando espacios)
                 $("#tabla2 #txt_proforma_" + correlativo_tabla).val(proforma);
 
-                // 1.1- Existe PI ( tiene estado>0 )
-                if(estado_c1>0){
+                // 1.1- El estado de la c1=0 puede o no tener PI y/o Archivo
+                if( (estado_c1 == 0) && (busca_campo_actualizado == "U") ){
 
+                    var sube_archivo = 0;
+                    if(cargado == 'Cargado.. Upload Upload'){
+                        sube_archivo = 1;
+                    }
 
                     // guarda_proforma_cond1
-                    // 1.1.1- Tiene archivo (Actualizo plan_compra_color3 estado a 18)
-                    // 1.1.2- No Tiene archivo (Inserto en plan_compra_oc, actualizo plan_compra_color3 estado a 18)
+                    var dataString_factor = "PROFORMA=" + proforma + "&ID_INSERTAR=" + id_color + "&ARCHIVO="+ sube_archivo;
 
+                    $.ajax({
+                        type: "GET",
+                        url: url_act_proforma,
+                        data: dataString_factor,
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (data_proforma) {
 
+                        }, error: function (jqXHR, textStatus, errorThrown) {
+                            console.log("Error: " + textStatus + " errorThrown: " + errorThrown);
+                        }
 
-                // 1.2- No existe PI ( tiene estado==0 )
-                }else{
+                    }).done(function () {
 
-                    // guarda_proforma_cond2
-                    // 1.2.1- Sube archivo (Inserto en plan_compra_oc, inserto historial,Actualizo plan_compra_color3 estado a 18)
-                    // 1.2.2- No Sube archivo (inserto historial,Actualizo plan_compra_color3 estado a 18 y proforma)
-
-                }
-
-
-                // 1.- Verificar si registro existe (Estado > 0)
-
-                // 1.1- Existe PI ( tiene estado>0 )
-
-                    // 1.1.1- Tiene archivo (Actualizo plan_compra_color3 estado a 18)
-
-                    // 1.1.2- No Tiene archivo (Inserto en plan_compra_oc, actualizo plan_compra_color3 estado a 18)
-
-                // 1.2- No existe PI ( tiene estado==0 )
-
-                    // 1.2.1- Sube archivo (Inserto en plan_compra_oc, inserto historial,Actualizo plan_compra_color3 estado a 18)
-
-                    // 1.2.2- No Sube archivo (inserto historial,Actualizo plan_compra_color3 estado a 18)
-
-
-                // Primero verifico si el registro se añada a uno ya existente, independiente de su estado.
-                if( (busca_campo_actualizado == "U") && (estado_c1 == 0) && (cargado == 'Cargado.. Upload Upload') ){//Cargado.. Upload Upload
-
-                    // Limpio el campo de la proforma de caracteres no deseados (Asignandole el nuevo sin caracteres especiales y ahora aceptando espacios)
-                    $("#tabla2 #txt_proforma_" + correlativo_tabla).val(proforma);
-
-                    // Actualizar solo proforma
-                    $.getJSON(url_guarda_proforma_extra, {PROFORMA: proforma, ID_INSERTAR: id_color}).done(function (data) {
-                        // Actualiza Historial
-                        $.getJSON(url_actualiza_historial, {PROFORMA: proforma, ID_INSERTAR: id_color});
-                    });
-
-                } else if ( (busca_campo_actualizado == "U") && (estado_c1 == 0) && (cargado != 'Cargado.. Upload Upload')){
-
-                    // Limpio el campo de la proforma de caracteres no deseados (Asignandole el nuevo sin caracteres especiales y ahora aceptando espacios)
-                    $("#tabla2 #txt_proforma_" + correlativo_tabla).val(proforma);
-
-                    // Actualizar solo proforma
-                    $.getJSON(url_guarda_proforma, {PROFORMA: proforma, ID_INSERTAR: id_color}).done(function (data) {
-                        // Actualiza Historial
-                        $.getJSON(url_actualiza_historial, {PROFORMA: proforma, ID_INSERTAR: id_color});
                     });
 
 
-                    // Fin del if que considera solo los registros con estado cero y nombre proforma valido
+
+
                 }
 
+                // Incremental de los registros de la tabla
                 conta_datos_tr++;
 
-                // Fin de la tabla
+            // Fin de la tabla
+            }).promise().done(function(){
+
+                alert("Se han guardado los cambios... vamos a refrescar la página.");
+                location.reload(true);
+
             });
 
-            alert("Se han guardado los cambios, favor recargar para revisar.");
-            location.reload(true);
+
 
             // Fin del else de registros con proforma ok
         }else{
