@@ -1125,24 +1125,24 @@ function actualizaCampoEstadoProforma(event) {
     // 1.- Valor del campo asociado a la PROFORMA con la que estamos tabajando
     var valor_campo = $('#txt_proforma_' + separa_barra[2]).val();
     // valor_campo = valor_campo.replace(/[^a-z0-9\-]/gi, '');
-    valor_campo = valor_campo.replace(/[^a-z0-9\-\ ]/gi, '');
+    // valor_campo = valor_campo.replace(/[^a-z0-9\-\ ]/gi, ''); (Solicita Eduardo)
+    valor_campo = valor_campo.replace(/[^a-z0-9\-]/gi, '-'); // (Solicita MM y SC, solo acepta caracteres alfanumericos y "-"... de lo contrario se remplazan por "-")
     var proforma_usuario = $('#txt_proforma_' + separa_barra[2]).val();
+    // Busco el valor del campo asociado a identificar cuales campos han dido editados en el momento
+    var busca_campo_actualizado = $("#tabla2 #txt_estado_cambio_proforma_" + separa_barra[2]).text();
 
-    // 1.1 Verificar que la proforma no incluye caracteres especiales
-    if(proforma_usuario == valor_campo){
-
-        // Bloquear BTN Guardar Proforma
-        $("#btn_guarda_proforma").attr('disabled',false);
+        // Habilitar BTN Guardar Proforma
+        // $("#btn_guarda_proforma").attr('disabled',false);
 
         // 1.2.- Verifico que el estado sea 0 por si el usuario escribe sobre una PI existente
-        if ((valor_campo != 0) && (valor_campo != "" && (estado_c1 == 0))) {
+        if ((valor_campo != 0) && (valor_campo != "" && (estado_c1 == 0) )) {
             $('#txt_estado_cambio_proforma_' + separa_barra[2]).html("U");
         } else {
             $('#txt_estado_cambio_proforma_' + separa_barra[2]).html("");
         }
 
-        // 2.- Verificar que el valor del campo ingresado (PROFORMA) no exista previamente con estado mayor a cero (0)
-        var url_act_campo_busca_proforma = 'ajax_simulador_cbx/busca_existe_proforma'; // (Busca por la Proforma coin estado 20/21)
+        // 2.- Verificar que el valor del campo ingresado (PROFORMA) no exista previamente con estado 20 / 21
+        var url_act_campo_busca_proforma = 'ajax_simulador_cbx/busca_existe_proforma';
         var url_act_campo_busca_archivo = 'ajax_simulador_cbx/busca_existe_archivo';
         var count_pro_existe = 0;
         var count_archivo_existe = 0;
@@ -1155,27 +1155,81 @@ function actualizaCampoEstadoProforma(event) {
 
             // Existe la Proforma con estado 20 o 21
             if (count_pro_existe > 0) {
-                alert("Si olvidó registrar una opción, tiene que Crear Una Modificación de la PI. Si es una nueva PI, el nombre ingresado ya existe.");
+
+                alert("Si olvidó registrar una opción, tiene que Crear una Modificación de la PI.");
+                // Dejo el campo de la proforma en blanco
                 $('#txt_proforma_' + separa_barra[2]).val('');
+                // limpiar el campo de editado
+                $("#tabla2 #txt_estado_cambio_proforma_" + separa_barra[2]).text('');
+
+            // Esta proforma no existe con estado 20/21
             } else {
 
-                // Consultamso por archivo
+                // Consultamos si el Archivo fue cargado previamente a la tabla PLC_PLAN_COMPRA_OC (Donde queda registrado el "Cargado..")
                 $.getJSON(url_act_campo_busca_archivo, {PI: valor_campo}).done(function (data) {
                     $.each(data, function (i, o) {
                         count_archivo_existe++;
                     });
                 }).done(function () {
 
-                    // Si no existe archivo (0 = Sin Resultados desde la query)
+                    // Si no existe archivo cargado previamente a la PI que estamos buscando
                     if (count_archivo_existe == 0) {
+
+                        // count_archivo_existe == 0 Me dice que en la BD no hay archivos subidos para esta PI, pero queda aún revisar el despliegue actual de la grilla.
+                        // puedo haber agregado recién una PI, luego archivo... y posteriormente otra pia olvidada, sin haber guardado aún.
+                        var rec_upd_recientes = 0;
+                        var cuenta_is_a_pi_recien_actualizada = 0;
+
+                        $(".tabla2 > tbody >tr").each(function () {
+
+                            var estado_c1_res = $("#tabla2 #txt_estadoc1_" + rec_upd_recientes).text();
+                            var campo_actualizado_res = $("#tabla2 #txt_estado_cambio_proforma_" + rec_upd_recientes).text();
+                            var proforma_res = $('#txt_proforma_' + rec_upd_recientes).val();
+                            proforma_res = proforma_res.replace(/[^a-z0-9\-]/gi, '-');
+                            var archivo_res = $("#tabla2 #txt_archivo_" + rec_upd_recientes).text();
+
+                            if( (valor_campo==proforma_res) && (campo_actualizado_res=='U') && (estado_c1_res==0) && (archivo_res == "Cargado.. Upload Upload") ){
+                                cuenta_is_a_pi_recien_actualizada++;
+                            }
+
+                        // Fin del recorrido de la tabla
+                        });
+
+                        // Si no encuentra que se editó previamente un resgistro asociado a la misma PI y se subió archivo...
+                        if(cuenta_is_a_pi_recien_actualizada==0){
+
+                        // Activar o desactivar boton de cargar archivo
+                        if (valor_campo != "" && valor_campo != "0" && valor_campo != " " && valor_campo != null) {
+                                // Habilito el BTN de Carga de Archivo
+                            $(".archivo_" + separa_barra[2]).attr("disabled", false);
+                        } else {
+                                // Bloqueo el BTN de Carga de Archivo
+                            $(".archivo_" + separa_barra[2]).attr("disabled", true);
+                        }
+
+                        }else{
+
+                        // Desabilito Campo
+                        $(".archivo_" + separa_barra[2]).attr("disabled", true);
+                        // Agregar texto Cargado..
+                        $("#txt_archivo_span_" + separa_barra[2]).html('Cargado..');
+
+                    }
+
+                        // De haber, al registro consultado le tengo que agregar el "Cargado"
+                        // De no haber nada, continuo con el resto
+
 
                         // Si no trae archivo de trabajo con la activación de botones
                         // Activar o desactivar boton de cargar archivo
-                        if (valor_campo != "" && valor_campo != "0" && valor_campo != " " && valor_campo != null) {
+                        /*if (valor_campo != "" && valor_campo != "0" && valor_campo != " " && valor_campo != null) {
+                            // Habilito el BTN de Carga de Archivo
                             $(".archivo_" + separa_barra[2]).attr("disabled", false);
                         } else {
+                            // Bloqueo el BTN de Carga de Archivo
                             $(".archivo_" + separa_barra[2]).attr("disabled", true);
-                        }
+                        }*/
+
 
                      // Si trae archivos deshabilito boton subir archivo y agrago texto cargado
                     } else {
@@ -1185,31 +1239,14 @@ function actualizaCampoEstadoProforma(event) {
                         // Agregar texto Cargado..
                         $("#txt_archivo_span_" + separa_barra[2]).html('Cargado..');
 
-                    }
+    }
 
                 });
 
             }
 
+        // Fin del busca proforma con estado 20/21
         });
-
-    // Fin de revisión de caracteres especiales en al proforma
-    }else{
-
-        // Bloquear BTN Guardar Proforma
-        $("#btn_guarda_proforma").attr('disabled',true);
-
-        // Limpiar el registro
-        $('#txt_proforma_' + separa_barra[2]).val('');
-        // Quitar la U
-        $("#tabla2 #txt_estado_cambio_proforma_" + separa_barra[2]).text('');
-
-        alert("Error en nombre de Proforma, recuerde no ingresar caracteres especiales.");
-
-    }
-
-
-
 
 
 

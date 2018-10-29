@@ -3012,6 +3012,7 @@ public static function actualiza_fecha_concurrencia($temporada, $depto, $login)
 
 // ######################## TRABAJO CON NUEVA CARGA DE PROFORMA ########################
 
+    // Actualmente se utiliza 29102018
     public static function guarda_proforma_cond1($temporada, $depto, $login, $proforma, $id_insertar, $archivo)
     {
 
@@ -3057,6 +3058,11 @@ public static function actualiza_fecha_concurrencia($temporada, $depto, $login)
             fclose($fp);
 
             $data_plan_compra_oc = \database::getInstancia()->getConsulta($sql_plan_compra_oc);
+
+
+            // Aquí voy a buscar todos los registros de plan color 3 que tengan la misma PI (Excluyendo el id_color 3 ya ingresado) y los agrego a plc_plan_compra_oc
+
+
 
             // Si puedo guardar en plc_plan_compra_oc, actualizo plc_plan_compra_color_3
             if($data_plan_compra_oc){
@@ -3147,8 +3153,16 @@ public static function actualiza_fecha_concurrencia($temporada, $depto, $login)
             }
 
 
-
+        // No llega con archivo
         }else{
+
+            // voy a buscra si en plc_plan_compra_oc hay algun registro de esa PI
+
+            // si hay, se inserta registro en plc_plan_compra_oc y se actualiza estado en plc_plan_compra_color_3=18 ... historial
+
+            // si NO hay,
+
+
 
             // 1.- Actualiza plc_plan_compra_color3 proforma = $proforma
             // Actualizo plan_compra_color3 estado=18 y proforma=$proforma

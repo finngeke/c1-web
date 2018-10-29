@@ -5271,8 +5271,6 @@ class plan_compra extends \parametros {
        $array1 = [];
         $sql = "begin PLC_PKG_DESARROLLO.PRC_EXPORTAR_C1_CONSOLIDAD(" . $tempo . ",'" . $depto . ",', :data); end;";
         $data = \database::getInstancia()->getConsultaSP($sql, 1);
-
-
         foreach ($data as $va1){
             array_push($array1,
                 array("Temporada"=> utf8_encode($va1[0])
