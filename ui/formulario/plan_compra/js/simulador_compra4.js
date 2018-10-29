@@ -1197,23 +1197,27 @@ function actualizaCampoEstadoProforma(event) {
                         // Si no encuentra que se editó previamente un resgistro asociado a la misma PI y se subió archivo...
                         if(cuenta_is_a_pi_recien_actualizada==0){
 
-                        // Activar o desactivar boton de cargar archivo
-                        if (valor_campo != "" && valor_campo != "0" && valor_campo != " " && valor_campo != null) {
-                                // Habilito el BTN de Carga de Archivo
-                            $(".archivo_" + separa_barra[2]).attr("disabled", false);
-                        } else {
-                                // Bloqueo el BTN de Carga de Archivo
-                            $(".archivo_" + separa_barra[2]).attr("disabled", true);
-                        }
+                            // Activar o desactivar boton de cargar archivo
+                            if (valor_campo != "" && valor_campo != "0" && valor_campo != " " && valor_campo != null) {
+                                    // Habilito el BTN de Carga de Archivo
+                                $(".archivo_" + separa_barra[2]).attr("disabled", false);
+
+                            } else {
+                                    // Bloqueo el BTN de Carga de Archivo
+                                $(".archivo_" + separa_barra[2]).attr("disabled", true);
+                                // Quitar la "U" de editado?
+
+
+                            }
 
                         }else{
 
-                        // Desabilito Campo
-                        $(".archivo_" + separa_barra[2]).attr("disabled", true);
-                        // Agregar texto Cargado..
-                        $("#txt_archivo_span_" + separa_barra[2]).html('Cargado..');
+                            // Desabilito Campo
+                            $(".archivo_" + separa_barra[2]).attr("disabled", true);
+                            // Agregar texto Cargado..
+                            $("#txt_archivo_span_" + separa_barra[2]).html('Cargado..');
 
-                    }
+                        }
 
                         // De haber, al registro consultado le tengo que agregar el "Cargado"
                         // De no haber nada, continuo con el resto
@@ -1238,7 +1242,7 @@ function actualizaCampoEstadoProforma(event) {
                         // Agregar texto Cargado..
                         $("#txt_archivo_span_" + separa_barra[2]).html('Cargado..');
 
-    }
+                    }
 
                 });
 
