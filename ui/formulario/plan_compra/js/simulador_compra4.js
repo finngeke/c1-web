@@ -4907,9 +4907,10 @@ $("#pi_upload_ajax").on('submit',(function(e) {
                     var campo_archivo_server = $("#tabla2 #txt_archivo_" + inc_rec_prof).text();
 
                     // Cuando recorra la tabla verificar que la proforma que llega sea igual a la ingresada y que este campo se encuentre editado recientemente (U)
-                    if ( (return_proforma == busca_prof_spec) && (busca_campo_actualizado=='U') ) {
+                    if ( (return_proforma == busca_prof_spec)  ) { //&& (busca_campo_actualizado=='U')
                         // Agregarle el cargado al BTN
                         $("#tabla2 #txt_archivo_span_"+inc_rec_prof).text("Cargado..");
+                        alert(inc_rec_prof);
                     }
 
                 inc_rec_prof++;
@@ -4932,6 +4933,7 @@ $("#pi_upload_ajax").on('submit',(function(e) {
             // Si existe error en la carga de archivos
             alert("[EJECUCION] Error al cargar PI, intente nuevamente.");
         }
+
     });
 
 }));
