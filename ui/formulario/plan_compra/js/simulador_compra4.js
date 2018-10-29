@@ -1398,6 +1398,8 @@ function cargaArchivoServer(event) {
     var proforma = $("#tabla2 #txt_proforma_" + separa_barra[2]).val();
     proforma = proforma.replace(/[^a-z0-9\-]/gi, '-');
     var campo_archivo_server = $("#tabla2 #txt_archivo_" + separa_barra[2]).text();
+    // Texto del campo que indica que fue actualizado
+    var campo_actualizado_res = $("#tabla2 #txt_estado_cambio_proforma_" + separa_barra[2]).text();
 
     // Para subir el archivo no debe tener el texto cargado
     if ((estado_c1 == 0) && (proforma != 0) && (proforma != "") && (proforma != "null") && (proforma != null) && (campo_archivo_server != "Cargado.. Upload Upload") ) {
@@ -4903,14 +4905,14 @@ $("#pi_upload_ajax").on('submit',(function(e) {
 
                     var busca_prof_spec = $("#tabla2 #txt_proforma_" + inc_rec_prof).val();
                     busca_prof_spec = busca_prof_spec.replace(/[^a-z0-9\-]/gi, '-');
+                    var estado_c1 = $("#tabla2 #txt_estadoc1_" + inc_rec_prof).text();
                     var busca_campo_actualizado = $("#tabla2 #txt_estado_cambio_proforma_" + inc_rec_prof).text();
                     var campo_archivo_server = $("#tabla2 #txt_archivo_" + inc_rec_prof).text();
 
                     // Cuando recorra la tabla verificar que la proforma que llega sea igual a la ingresada y que este campo se encuentre editado recientemente (U)
-                    if ( (return_proforma == busca_prof_spec)  ) { //&& (busca_campo_actualizado=='U')
+                    if ( (return_proforma == busca_prof_spec) && (estado_c1==0) ) { //&& (busca_campo_actualizado=='U')
                         // Agregarle el cargado al BTN
                         $("#tabla2 #txt_archivo_span_"+inc_rec_prof).text("Cargado..");
-                        alert(inc_rec_prof);
                     }
 
                 inc_rec_prof++;
