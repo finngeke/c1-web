@@ -5014,6 +5014,10 @@ $("#cerrar_modal_carga_archivo_pi").on('click', function () {
     // Actualiza la Fecha de la Concurrencia
     act_fecha_concurrencia();
 
-    
+    // verificar si ya tenia una "U" de editado (revisar quepar a que)
+    // revisar si es necesario, ver la clase gruilla compra
+
+    //alert("dentro del cerrar");
+
 
 });
