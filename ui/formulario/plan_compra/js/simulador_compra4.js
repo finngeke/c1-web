@@ -3083,8 +3083,15 @@ function verificaFormatoArchivoServer(sender) {
         $(".carga_pi_server_archivo").attr("disabled", "disabled");
         $("#send_archivop_pi_server").val('');
     } else {
+
+        // Voy a buscar el ID del campo al que le quiero subir un archivo.
+        var valor_id_color3 = $("#send_archivo_id_color_server").val();
+        // Le agrego la "U" de actualizado al campo que le estoy subiendo el archivo
+        $("#tabla2 #txt_estado_cambio_proforma_" + valor_id_color3).text('U');
+
         // Habilitar botón por ID
         $(".carga_pi_server_archivo").attr("disabled", false);
+
     }
 
 }
@@ -4994,3 +5001,10 @@ function busca_prof_aguardar(){
     return string_a_php;
 
 }
+
+$("#cerrar_modal_carga_archivo_pi").on('click', function () {
+
+
+alert("Cerrar ventana carga PI");
+
+});
