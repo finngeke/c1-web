@@ -1453,7 +1453,7 @@ $('.guarda_proforma').on('click', function () {
     if (respuesta == true) {
 
     // Antes de realizar cualquier cambio verificar que no existe un nombre de proforma con caracteres extraños
-    var cont_check_proforma = 0;
+    /*var cont_check_proforma = 0;
     var conteo_errores_prof = 0;
 
     $("#tabla2 >tbody >tr").each(function () {
@@ -1471,11 +1471,11 @@ $('.guarda_proforma').on('click', function () {
         cont_check_proforma++;
 
     // Fin de la tabla que valida que las proformas se encuentren bien ingresadas (Se agrega el promise)
-    }).promise().done(function(){
+    }).promise().done(function(){*/
 
         // Si conteo_errores_prof==0 (Todas las proformas sin caracteres especiales)
         // Sigo con el resto del código de lo contrario mensaje de caracteres especiales
-        if(conteo_errores_prof == 0){
+        //if(conteo_errores_prof == 0){
 
             // URL`s de Guardado de Proforma e Historial
             var url_act_proforma = 'ajax_simulador_cbx/guarda_proforma_cond1';
@@ -1543,12 +1543,13 @@ $('.guarda_proforma').on('click', function () {
 
 
 
-            // Fin del else de registros con proforma ok
-        }else{
+        // Fin del else de registros con proforma ok
+        /*}else{
             alert("Una o más de las proformas ingresadas contiene caracteres especiales, no se puede realizar el guardado.");
-        }
+        }*/
 
-    });
+    // Fin del promise
+    //});
 
 
     } else {
