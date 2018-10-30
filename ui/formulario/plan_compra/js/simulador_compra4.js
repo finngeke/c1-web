@@ -4211,6 +4211,7 @@ $('#btn_edita_grilla').on('click', function () {
 
   // Actualiza la Fecha de la Concurrencia
     act_fecha_concurrencia();
+
     // eliminar los registros de la tabla, generados en otra consulta previa
     $("#tabla_edita_grilla >tbody >tr").remove();
     // Limpiar el TXT de formato
@@ -4865,6 +4866,7 @@ $('#btn_editar_registros_grilla_editable').on('click', function () {
 // fin del Botón actualizar del editar grilla
 });
 
+// Al momento de abrir un modal o hacer click actualiza la fecha y hora en el cuál el usuario realizó la acción para poder asì luego eliminar las concurrencias con màs de X tiempo
 function act_fecha_concurrencia(){
 
     var url_act_fecha_concurrencia = 'ajax_simulador_cbx/actualiza_fecha_concurrencia';
@@ -4886,6 +4888,7 @@ function act_fecha_concurrencia(){
 
 }
 
+// Función responsable de la carga de la PI
 $("#pi_upload_ajax").on('submit',(function(e) {
 
     e.preventDefault();
@@ -4947,6 +4950,7 @@ $("#pi_upload_ajax").on('submit',(function(e) {
 
 }));
 
+// Revisa en la grilla todas las proformas asociadas a la que se van a guardar
 function busca_prof_aguardar(){
 
     var string_a_php = "";
@@ -5002,9 +5006,12 @@ function busca_prof_aguardar(){
 
 }
 
+// Captura el momento cuando el usuario cierra la ventana del modal de carga de PI
 $("#cerrar_modal_carga_archivo_pi").on('click', function () {
 
+    // Actualiza la Fecha de la Concurrencia
+    act_fecha_concurrencia();
 
-alert("Cerrar ventana carga PI");
+    
 
 });
