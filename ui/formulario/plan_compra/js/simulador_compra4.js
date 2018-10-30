@@ -712,7 +712,7 @@ $(window).on('load', function () {
 
                     var proforma = $("#tabla2 #txt_proforma_" + $key).val();
                     //proforma = proforma.replace(/[^a-z0-9\-]/gi, '');
-                    proforma = proforma.replace(/[^a-z0-9\-]/gi, '-');
+                    proforma = proforma.replace(/[^a-z0-9\-\_]/gi, '-');
                     var tipoproducto = $("#tabla2 #cbx_tipoproducto_" + $key).text();
                     var GMB = ($("#tabla2 #txt_gm_" + $key).text()).replace('%', '');
 
@@ -826,7 +826,7 @@ $(window).on('load', function () {
                     //var proforma = $(this).find("td:eq(77) input[type='text']").val();
                     var proforma = $("#tabla2 #txt_proforma_" + flag_tabla_vista_oc_broker).val();
                     //proforma = proforma.replace(/[^a-z0-9\-]/gi, '');
-                    proforma = proforma.replace(/[^a-z0-9\-]/gi, '-');
+                    proforma = proforma.replace(/[^a-z0-9\-\_]/gi, '-');
                     // Traigo el estado, solo para cargar el presupuesto cuando el estado sea 19
                     //var estado_c1 = $(this).find("td:eq(90)").text();
                     var estado_c1 = $("#tabla2 #txt_estadoc1_" + flag_tabla_vista_oc_broker).text();
@@ -1125,7 +1125,7 @@ function actualizaCampoEstadoProforma(event) {
     // 1.- Valor del campo asociado a la PROFORMA con la que estamos tabajando
     var valor_campo = $('#txt_proforma_' + separa_barra[2]).val();
     // valor_campo = valor_campo.replace(/[^a-z0-9\-]/gi, '');
-    valor_campo = valor_campo.replace(/[^a-z0-9\-]/gi, '-');
+    valor_campo = valor_campo.replace(/[^a-z0-9\-\_]/gi, '-');
     var proforma_usuario = $('#txt_proforma_' + separa_barra[2]).val();
     // Busco el valor del campo asociado a identificar cuales campos han dido editados en el momento
     var busca_campo_actualizado = $("#tabla2 #txt_estado_cambio_proforma_" + separa_barra[2]).text();
@@ -1184,7 +1184,7 @@ function actualizaCampoEstadoProforma(event) {
                             var estado_c1_res = $("#tabla2 #txt_estadoc1_" + rec_upd_recientes).text();
                             var campo_actualizado_res = $("#tabla2 #txt_estado_cambio_proforma_" + rec_upd_recientes).text();
                             var proforma_res = $('#txt_proforma_' + rec_upd_recientes).val();
-                            proforma_res = proforma_res.replace(/[^a-z0-9\-]/gi, '-');
+                            proforma_res = proforma_res.replace(/[^a-z0-9\-\_]/gi, '-');
                             var archivo_res = $("#tabla2 #txt_archivo_" + rec_upd_recientes).text();
 
                             if( (valor_campo==proforma_res) && (campo_actualizado_res=='U') && (estado_c1_res==0) && (archivo_res == "Cargado.. Upload Upload") ){
@@ -1314,7 +1314,7 @@ function cargaArchivo(event) {
     var id_color = $("#tabla2 #txt_id_color_" + separa_barra[2]).text();
     var proforma = $("#tabla2 #txt_proforma_" + separa_barra[2]).val();
     //proforma = proforma.replace(/[^a-z0-9\-]/gi, '');
-    proforma = proforma.replace(/[^a-z0-9\-]/gi, '-');
+    proforma = proforma.replace(/[^a-z0-9\-\_]/gi, '-');
 
     if ((estado_c1 == 0) && (proforma != 0) && (proforma != "") && (proforma != "null") && (proforma != null)) {
 
@@ -1356,7 +1356,7 @@ function cargaArchivo(event) {
             var prof_otros_campos = $(this).find("td:eq(" + txt_id_archivo + ") input[type='text']").val();
             //var prof_otros_campos = $("#tabla2 #txt_proforma_"+txt_id_archivo).val();
             //prof_otros_campos = prof_otros_campos.replace(/[^a-z0-9\-]/gi, '');
-            prof_otros_campos = prof_otros_campos.replace(/[^a-z0-9\-]/gi, '-');
+            prof_otros_campos = prof_otros_campos.replace(/[^a-z0-9\-\_]/gi, '-');
 
             var td_id_color = "";
 
@@ -1396,7 +1396,7 @@ function cargaArchivoServer(event) {
     var estado_c1 = $("#tabla2 #txt_estadoc1_" + separa_barra[2]).text();
     var id_color = $("#tabla2 #txt_id_color_" + separa_barra[2]).text();
     var proforma = $("#tabla2 #txt_proforma_" + separa_barra[2]).val();
-    proforma = proforma.replace(/[^a-z0-9\-]/gi, '-');
+    proforma = proforma.replace(/[^a-z0-9\-\_]/gi, '-');
     var campo_archivo_server = $("#tabla2 #txt_archivo_" + separa_barra[2]).text();
     // Texto del campo que indica que fue actualizado
     var campo_actualizado_res = $("#tabla2 #txt_estado_cambio_proforma_" + separa_barra[2]).text();
@@ -1430,7 +1430,7 @@ function descargaPI(event) {
     var estado_c1 = $("#tabla2 #txt_estadoc1_" + separa_barra[2]).text();
     var proforma = $("#tabla2 #txt_proforma_" + separa_barra[2]).val();
     //proforma = proforma.replace(/[^a-z0-9\-]/gi, '');
-    proforma = proforma.replace(/[^a-z0-9\-]/gi, '-');
+    proforma = proforma.replace(/[^a-z0-9\-\_]/gi, '-');
 
     var span_temporada = $('#span_temporada').text();
     span_temporada = span_temporada.replace(/[^a-z0-9\-]/gi, '');
@@ -1459,7 +1459,7 @@ $('.guarda_proforma').on('click', function () {
     $("#tabla2 >tbody >tr").each(function () {
 
         var proforma = $("#tabla2 #txt_proforma_" + cont_check_proforma).val();
-        proforma = proforma.replace(/[^a-z0-9\-]/gi, '-');
+        proforma = proforma.replace(/[^a-z0-9\-\_]/gi, '-');
         var proforma_usuario = $("#tabla2 #txt_proforma_" + cont_check_proforma).val();
         var busca_campo_actualizado = $("#tabla2 #txt_estado_cambio_proforma_" + cont_check_proforma).text();
 
@@ -1491,7 +1491,7 @@ $('.guarda_proforma').on('click', function () {
                 var id_color = $("#tabla2 #txt_id_color_" + conta_datos_tr).text();
                 var proforma = $("#tabla2 #txt_proforma_" + conta_datos_tr).val();
                 //proforma = proforma.replace(/[^a-z0-9\-]/gi, '');
-                proforma = proforma.replace(/[^a-z0-9\-]/gi, '-');
+                proforma = proforma.replace(/[^a-z0-9\-\_]/gi, '-');
                 // Leemos el campo de subir archivo
                 var cargado = $("#tabla2 #txt_archivo_" + conta_datos_tr).text();
 
@@ -1588,7 +1588,7 @@ $('.solicitud_generacion_oc').on('click', function () {
     var valor_radio = $("input[name='radio']:checked").val();
     var proforma = $("#txt_proforma_" + valor_radio).val();
     //proforma = proforma.replace(/[^a-z0-9\-]/gi, '');
-    proforma = proforma.replace(/[^a-z0-9\-]/gi, '-');
+    proforma = proforma.replace(/[^a-z0-9\-\_]/gi, '-');
     var id_color3 = $("#txt_id_color_" + valor_radio).text();
     var estado_c1 = $("#tabla2 #txt_estadoc1_" + valor_radio).text();
 
@@ -1635,7 +1635,7 @@ $('.oc_generada').on('click', function () {
     var valor_radio = $("input[name='radio']:checked").val();
     var proforma = $("#txt_proforma_" + valor_radio).val();
     //proforma = proforma.replace(/[^a-z0-9\-]/gi, '');
-    proforma = proforma.replace(/[^a-z0-9\-]/gi, '-');
+    proforma = proforma.replace(/[^a-z0-9\-\_]/gi, '-');
     var id_color3 = $("#txt_id_color_" + valor_radio).text();
     var estado_c1 = $("#tabla2 #txt_estadoc1_" + valor_radio).text();
 
@@ -1677,7 +1677,7 @@ $('.crear_modificacion').on('click', function () {
     var valor_radio = $("input[name='radio']:checked").val();
     var proforma = $("#txt_proforma_" + valor_radio).val();
     //proforma = proforma.replace(/[^a-z0-9\-]/gi, '');
-    proforma = proforma.replace(/[^a-z0-9\-]/gi, '-');
+    proforma = proforma.replace(/[^a-z0-9\-\_]/gi, '-');
     var id_color3 = $("#txt_id_color_" + valor_radio).text();
     var estado_c1 = $("#tabla2 #txt_estadoc1_" + valor_radio).text();
 
@@ -1719,7 +1719,7 @@ $('.elimina_opcion').on('click', function () {
     var valor_radio = $("input[name='radio']:checked").val();
     var proforma = $("#txt_proforma_" + valor_radio).val();
     //proforma = proforma.replace(/[^a-z0-9\-]/gi, '');
-    proforma = proforma.replace(/[^a-z0-9\-]/gi, '-');
+    proforma = proforma.replace(/[^a-z0-9\-\_]/gi, '-');
     var id_color3 = $("#txt_id_color_" + valor_radio).text();
     var estado_c1 = $("#tabla2 #txt_estadoc1_" + valor_radio).text();
 
@@ -1768,7 +1768,7 @@ $('.solicitud_correccion_pi').on('click', function () {
     var valor_radio = $("input[name='radio']:checked").val();
     var proforma = $("#txt_proforma_" + valor_radio).val();
     //proforma = proforma.replace(/[^a-z0-9\-]/gi, '');
-    proforma = proforma.replace(/[^a-z0-9\-]/gi, '-');
+    proforma = proforma.replace(/[^a-z0-9\-\_]/gi, '-');
     var id_color3 = $("#txt_id_color_" + valor_radio).text();
     var estado_c1 = $("#tabla2 #txt_estadoc1_" + valor_radio).text();
 
@@ -2220,7 +2220,7 @@ function despliegaDetalleError(event) {
     var separa_barra = id.split("_");
     var proforma = $("#txt_proforma_" + separa_barra[3]).val();
     //proforma = proforma.replace(/[^a-z0-9\-]/gi, '');
-    proforma = proforma.replace(/[^a-z0-9\-]/gi, '-');
+    proforma = proforma.replace(/[^a-z0-9\-\_]/gi, '-');
 
     $('#detalle_comentario_sol_coreccion').val('');
 
@@ -2289,7 +2289,7 @@ function matchOC(event) {
         var id_color = $("#tabla2 #txt_id_color_" + separa_barra[2]).text();
         var proforma = $("#tabla2 #txt_proforma_" + separa_barra[2]).val();
         //proforma = proforma.replace(/[^a-z0-9\-]/gi, '');
-        proforma = proforma.replace(/[^a-z0-9\-]/gi, '-');
+        proforma = proforma.replace(/[^a-z0-9\-\_]/gi, '-');
 
         // Buscar Estado del Registro
         var check_estado_oc = $("#tabla2 #txt_estadoc1_" + separa_barra[2]).text();
@@ -2421,7 +2421,7 @@ function matchOC(event) {
                                 $('#match_tabla_pmm').append(
                                     '<tr>\n' +
                                     '<td id="txt_matchpmm_id' + flag_carga_tabla_pmm + '" style="visibility: hidden"></td>\n' +  // o[0]
-                                    '<td id="txt_matchpmm_pi' + flag_carga_tabla_pmm + '">' + o[1].replace(/[^a-z0-9\-]/gi, '-') + '</td>\n' +
+                                    '<td id="txt_matchpmm_pi' + flag_carga_tabla_pmm + '">' + o[1].replace(/[^a-z0-9\-\_]/gi, '-') + '</td>\n' +
                                     '<td id="txt_matchpmm_codlinea' + flag_carga_tabla_pmm + '">' + o[8].replace(/[^a-z0-9\-]/gi, '') + '</td>\n' +
                                     '<td id="txt_matchpmm_linea' + flag_carga_tabla_pmm + '">' + o[2].replace(/[^a-z0-9\-]/gi, '') + '</td>\n' +
                                     '<td id="txt_matchpmm_codsublinea' + flag_carga_tabla_pmm + '">' + o[9].replace(/[^a-z0-9\-]/gi, '') + '</td>\n' +
@@ -2464,7 +2464,7 @@ function matchOC(event) {
                                             $('#match_tabla_plan').append(
                                                 '<tr>\n' +
                                                 '<td id="txt_matchplan_id' + flag_carga_tabla_plan + '">' + o[0] + '</td>\n' +
-                                                '<td id="txt_matchplan_pi' + flag_carga_tabla_plan + '">' + o[1].replace(/[^a-z0-9\-]/gi, '-') + '</td>\n' +
+                                                '<td id="txt_matchplan_pi' + flag_carga_tabla_plan + '">' + o[1].replace(/[^a-z0-9\-\_]/gi, '-') + '</td>\n' +
                                                 '<td id="txt_matchplan_codlinea' + flag_carga_tabla_plan + '">' + o[3].replace(/[^a-z0-9\-]/gi, '') + '</td>\n' +
                                                 '<td id="txt_matchplan_linea' + flag_carga_tabla_plan + '"><select id="txt_matchplan_linea_cbx_' + flag_carga_tabla_plan + '" name ="txt_matchplan_linea_cbx' + flag_carga_tabla_plan + '" class="linea_cbx_" onchange="matchCargaSublinea(event);"></select></td>\n' + //'+o[2]+'
                                                 '<td id="txt_matchplan_codsublinea' + flag_carga_tabla_plan + '">' + o[5].replace(/[^a-z0-9\-]/gi, '') + '</td>\n' +
@@ -4916,7 +4916,7 @@ $("#pi_upload_ajax").on('submit',(function(e) {
                 $("#tabla2 > tbody > tr").each(function () {
 
                     var busca_prof_spec = $("#tabla2 #txt_proforma_" + inc_rec_prof).val();
-                    busca_prof_spec = busca_prof_spec.replace(/[^a-z0-9\-]/gi, '-');
+                    busca_prof_spec = busca_prof_spec.replace(/[^a-z0-9\-\_]/gi, '-');
                     var estado_c1 = $("#tabla2 #txt_estadoc1_" + inc_rec_prof).text();
                     var busca_campo_actualizado = $("#tabla2 #txt_estado_cambio_proforma_" + inc_rec_prof).text();
                     var campo_archivo_server = $("#tabla2 #txt_archivo_" + inc_rec_prof).text();
@@ -4987,7 +4987,7 @@ function busca_prof_aguardar(){
 
         var prof_otros_campos = $(this).find("td:eq(" + txt_id_archivo + ") input[type='text']").val();
         //prof_otros_campos = prof_otros_campos.replace(/[^a-z0-9\-]/gi, '');
-        prof_otros_campos = prof_otros_campos.replace(/[^a-z0-9\-]/gi, '-');
+        prof_otros_campos = prof_otros_campos.replace(/[^a-z0-9\-\_]/gi, '-');
         var estado_c1 = $("#tabla2 #txt_estadoc1_" + flag_busca_prof).text();
         var busca_campo_actualizado = $("#tabla2 #txt_estado_cambio_proforma_" + flag_busca_prof).text();
 
