@@ -1131,9 +1131,11 @@ function actualizaCampoEstadoProforma(event) {
     var busca_campo_actualizado = $("#tabla2 #txt_estado_cambio_proforma_" + separa_barra[2]).text();
 
         // 1.2.- Verifico que el estado sea 0 por si el usuario escribe sobre una PI existente
-        if ((valor_campo != 0) && (valor_campo != "" && (estado_c1 == 0) )) {
+        if ((valor_campo != 0) && (valor_campo != "" && (valor_campo != null) && (valor_campo != "null") && (valor_campo.length>2) && (estado_c1 == 0) )) {
+            //alert(" ASIGNA - Proforma: " + valor_campo + " Incremental: "+separa_barra[2]);
             $('#txt_estado_cambio_proforma_' + separa_barra[2]).html("U");
         } else {
+            //alert(" ASIGNA - Proforma: " + valor_campo + " Incremental: "+separa_barra[2]);
             $('#txt_estado_cambio_proforma_' + separa_barra[2]).html("");
         }
 
@@ -1413,6 +1415,7 @@ function cargaArchivoServer(event) {
         alert("Archivo ya existe o debe ingresar proforma antes de subir la PI.");
     }
 
+    // Fin de cargaArchivoServer
 }
 
 // Boton Descarga PI
