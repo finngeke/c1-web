@@ -952,7 +952,7 @@ $(window).on('load', function () {
                     transforma_recep_cd = transforma_recep_cd[0] + '-' + transforma_recep_cd[1] + '-' + transforma_recep_cd[2];
 
 
-                    if ((proforma != 'null') && (proforma != null) && (proforma != 0) && (proforma != '') && (estado_c1 == 18 || estado_c1 == 19 || estado_c1 == 22)) {
+                    if ((proforma != 'null') && (proforma != null) && (proforma != 0) && (proforma != '') && (estado_c1 == 22)) {
                         var url_llena_array_oc = 'ajax_simulador_cbx/traer_datos_oc';
                         var url_recep_atraso = 'ajax_simulador_cbx/trae_fecharcd_y_dias_atraso';
 
