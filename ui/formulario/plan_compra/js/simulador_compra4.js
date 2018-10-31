@@ -1116,7 +1116,7 @@ $(window).on('load', function () {
 
 // Si escriben algo en la proforma actualizar el estado de la linea
 function actualizaCampoEstadoProforma(event) {
-alert('Dentro de Actualiza');
+
     var id_carga_pi = $(event.target);
     id_carga_pi = id_carga_pi.attr('id');
     var separa_barra = id_carga_pi.split("_");
@@ -1190,6 +1190,9 @@ alert('Dentro de Actualiza');
                                 cuenta_is_a_pi_recien_actualizada++;
                             }
 
+                            // el incremental se agrega antes de produccion, pero luego de QA
+                        rec_upd_recientes++;
+
                         // Fin del recorrido de la tabla
                         });
 
@@ -1217,20 +1220,6 @@ alert('Dentro de Actualiza');
                             $("#txt_archivo_span_" + separa_barra[2]).html('Cargado..');
 
                         }
-
-                        // De haber, al registro consultado le tengo que agregar el "Cargado"
-                        // De no haber nada, continuo con el resto
-
-
-                        // Si no trae archivo de trabajo con la activación de botones
-                        // Activar o desactivar boton de cargar archivo
-                        /*if (valor_campo != "" && valor_campo != "0" && valor_campo != " " && valor_campo != null) {
-                            // Habilito el BTN de Carga de Archivo
-                            $(".archivo_" + separa_barra[2]).attr("disabled", false);
-                        } else {
-                            // Bloqueo el BTN de Carga de Archivo
-                            $(".archivo_" + separa_barra[2]).attr("disabled", true);
-                        }*/
 
 
                      // Si trae archivos deshabilito boton subir archivo y agrago texto cargado
@@ -1499,7 +1488,7 @@ $('.guarda_proforma').on('click', function () {
                 $("#tabla2 #txt_proforma_" + correlativo_tabla).val(proforma);
 
                 // 1.1- El estado de la c1=0 puede o no tener PI y/o Archivo
-                if( (estado_c1 == 0) && (busca_campo_actualizado == "U") ){
+                if( (estado_c1 == 0) && (busca_campo_actualizado == "U") && (proforma != 0) && (proforma != "") && (proforma != "null") && (proforma != null) && (proforma.length>2) ){
 
                     var sube_archivo = 0;
                     if(cargado == 'Cargado.. Upload Upload'){
