@@ -514,9 +514,7 @@ $(window).on('load', function () {
         var url_carga_tabla2 = 'ajax_simulador_cbx/llenar_tabla2';
         var flag_tabla2 = 0;
         var flag_cont_registro = 0;
-
         $.ajax({
-
             type: "GET",
             url: url_carga_tabla2,
             contentType: "application/json; charset=utf-8",
@@ -524,11 +522,13 @@ $(window).on('load', function () {
 
             success: function (data) {
 
-                $.each(data, function () {
+              /*  $.each(data, function () {
                     flag_cont_registro++;
-                });
-
+                });*/
+                flag_cont_registro = data.length;
                 $.each(data, function (i, o) {
+                    var color_estado = ColoresEstados(o[85]);
+
                     $('#tabla2').append('<tr id="tabla2_tr_id_' + flag_tabla2 + '" class="tabla2_tr_id_">\n' +
                         '<td id="txt_id_radio' + flag_tabla2 + '"><input type="radio" id="radio" name="radio" value="' + flag_tabla2 + '" onclick="colorearTRTabla(event);"></td>\n' +
                         '<td class="ids" id="txt_id_' + flag_tabla2 + '">' + (flag_tabla2 + 1) + '</td>\n' +
@@ -620,13 +620,122 @@ $(window).on('load', function () {
                         '<td id="txt_fechaeta_' + flag_tabla2 + '">' + o[82] + '</td>\n' +
                         '<td id="txt_fecharecepcioncd_' + flag_tabla2 + '">' + o[83] + '</td>\n' +
                         '<td id="txt_diasatrasocd_' + flag_tabla2 + '">' + o[84] + '</td>\n' +
-                        '<td id="cbx_estadoopcion_' + flag_tabla2 + '">' + o[85] + '</td>\n' +
+                        '<td id="cbx_estadoopcion_' + flag_tabla2 + '" class="' + color_estado + '">' + o[85] + '</td>\n' +
                         '<td id="txt_estadoc1_' + flag_tabla2 + '" style="display: none">' + o[86] + '</td>\n' +
                         '<td id="txt_id_color_' + flag_tabla2 + '" style="display: none">' + o[0] + '</td>\n' +
                         '<td id="txt_estado_cambio_proforma_' + flag_tabla2 + '" style="display: none"></td>\n' +
                         '<td id="txt_ventava_numero_' + flag_tabla2 + '" style="display: none">' + o[87] + '</td>\n' +
                         '<td id="txt_fecha_recep_c1__' + flag_tabla2 + '" style="display: none">' + o[88] + '</td>\n' +
                         '</tr>');
+
+                    var proforma = o[75];
+                    proforma = proforma.replace(/[^a-z0-9\-\_]/gi, '-');
+                    var estado = o[85];
+                    var archivo_ = o[76];
+                    var temp_grilla2 = o[2];
+                    var reorder = o[64];
+                    var tipoproducto = o[23];
+                    var GMB = (o[51]).replace('%', '');
+
+                    // 1.- bloqueo de las pi y archivos
+                    if (archivo_ == "Cargado.. Upload Upload") {
+                        $(".pi_" + flag_tabla2).attr("disabled", false);
+                    } else if (estado == "Ingresado" && proforma != 0 && proforma != 'null' && proforma != '') {
+                        $(".archivo_" + flag_tabla2).attr("disabled", false);
+                    }
+
+                    // 2.- Aparece una "s" ya que el despliegue corrige error de texto
+                    if (estado == "Pendiente de Correccisn PI") {
+                        $(".errorpi_" + flag_tabla2).attr("disabled", false);
+                    }
+
+                    // 3.- var temp_grilla2 = $(this).find("td:eq(3)").text();
+                    if (temp_grilla2 == 3) {
+                        //$(this).find("td:eq(3)").html("Ttemp");
+                        $("#tabla2 #cbx_temp_" + flag_tabla2).html("Ttemp");
+                    } else {
+                        var span_temporada = $('#span_tempo').text();
+                        span_temporada = span_temporada.substring(0, 2);
+                        $("#tabla2 #cbx_temp_" + flag_tabla2).html(span_temporada);
+                    }
+
+                    // 4.-  Verificar que reorder no llegue "undefined" o vacio
+                    if (typeof(reorder) != "undefined") {
+                        if (reorder == "REORDER") {
+                            $("#tabla2 #cbx_ciclovida_" + flag_tabla2).addClass('columnasreorder');
+                            $("#tabla2 #cbx_cluster_" + flag_tabla2).addClass('columnasreorder');
+                            $("#tabla2 #cbx_formato_" + flag_tabla2).addClass('columnasreorder');
+                            $("#tabla2 #txt_tdas_" + flag_tabla2).addClass('columnasreorder');
+                            $("#tabla2 #txt_a_" + flag_tabla2).addClass('columnasreorder');
+                            $("#tabla2 #txt_b_" + flag_tabla2).addClass('columnasreorder');
+                            $("#tabla2 #txt_c_" + flag_tabla2).addClass('columnasreorder');
+                            $("#tabla2 #txt_i_" + flag_tabla2).addClass('columnasreorder');
+                            $("#tabla2 #txt_primeracarga_" + flag_tabla2).addClass('columnasreorder');
+                            $("#tabla2 #txt_tiendas_" + flag_tabla2).addClass('columnasreorder');
+                            $("#tabla2 #txt_semfin_" + flag_tabla2).addClass('columnasreorder');
+                            $("#tabla2 #txt_semanasciclovida_" + flag_tabla2).addClass('columnasreorder');
+                            $("#tabla2 #txt_semanasliquidacion_" + flag_tabla2).addClass('columnasreorder');
+                        } else {
+                            $("#tabla2 #txt_debutreorder_" + flag_tabla2).css("color", "red");
+                        }
+                    }
+
+                    // 5.- tipo de productos regulaes
+                    if (tipoproducto == "REGULAR") {
+                        $("#tabla2 #cbx_tipoexhibicion_" + flag_tabla2).addClass('columnasreorder');
+                    }
+
+                    // 6.- gmb color
+                    if (GMB < 0) {
+                        $("#tabla2 #txt_gm_" + flag_tabla2).css("color", "red");
+                    } else if (GMB > 0) {
+                        $("#tabla2 #txt_gm_" + flag_tabla2).css("color", "Blue");
+                    } else {
+                        $("#tabla2 #txt_gm_" + flag_tabla2).css("color", "Gray");
+                    }
+
+                    // 7.- Tachar los campos con estado eliminado
+                    if (estado == "Eliminado") {
+                        $(this).find("td").css('text-decoration', 'line-through');
+                    }
+
+
+                    // 8.- limpiar null
+                    if (archivo_ == null) {
+                        $("#txt_archivo_span_" + flag_tabla2).html('');
+                    }
+                    if (o[77] == null) {
+                        $("#txt_estiloppm_" + flag_tabla2).html('');
+                    }
+                    if (o[78] == null) {
+                        $("#txt_estadomatch_" + flag_tabla2).html('');
+                    }
+                    if (o[79] == null) {
+                        $("#txt_noc_" + flag_tabla2).html('');
+                    }
+                    if (o[80] == null) {
+                        $("#txt_estadooc_" + flag_tabla2).html('');
+                    }
+                    if (o[81] == null) {
+                        $("#txt_fechaembarque_" + flag_tabla2).html('');
+                    }
+                    if (o[82] == null) {
+                        $("#txt_fechaeta_" + flag_tabla2).html('');
+                    }
+                    if (o[83] == null) {
+                        $("#txt_fecharecepcioncd_" + flag_tabla2).html('');
+                    }
+                    if (o[84] == null) {
+                        $("#txt_diasatrasocd_" + flag_tabla2).html('');
+                    }
+
+
+                    //9.- vista OC
+                    // Traigo la Proforma
+
+
+
+                    //termnino
                     flag_tabla2++;
                     // Fin foreach que llena tabla
                 });
@@ -815,210 +924,25 @@ $(window).on('load', function () {
 
             }, delay_color_segun_fila);
 
+//proceso pegado VISTA.
             // Cambiar la lógica, recorrer la tabla y si trae una PI busca los datos del
-            // Define Tiempo 1 = 1000
-            var delay_traer_datos_oc = 6000;
+            // Define Tiempo 1 = 1000 VISTA oc
+  
+
+            // BLOQUEO DE CAMPOS
+            var delay_quitar_null = 1000;
             setTimeout(function () {
-                var flag_tabla_vista_oc_broker = 0;
-                $("#tabla2 >tbody >tr").each(function () {
-
-                    // Traigo la Proforma
-                    //var proforma = $(this).find("td:eq(77) input[type='text']").val();
-                    var proforma = $("#tabla2 #txt_proforma_" + flag_tabla_vista_oc_broker).val();
-                    //proforma = proforma.replace(/[^a-z0-9\-]/gi, '');
-                    proforma = proforma.replace(/[^a-z0-9\-\_]/gi, '-');
-                    // Traigo el estado, solo para cargar el presupuesto cuando el estado sea 19
-                    //var estado_c1 = $(this).find("td:eq(90)").text();
-                    var estado_c1 = $("#tabla2 #txt_estadoc1_" + flag_tabla_vista_oc_broker).text();
-                    /*var id_fila = $(this).find("td:eq(2)").attr("id");
-                            id_fila =  id_fila.split("_");
-                            id_fila = id_fila[2];*/
-                    var id_fila = flag_tabla_vista_oc_broker;
-                    //var fecha_recep_cd_c1 = $(this).find("td:eq(94)").text();
-                    var fecha_recep_cd_c1 = $("#tabla2 #txt_fecha_recep_c1__" + flag_tabla_vista_oc_broker).text();
-                    var transforma_recep_cd = new Date(fecha_recep_cd_c1);
-                    transforma_recep_cd = transforma_recep_cd.toLocaleString();
-                    transforma_recep_cd = transforma_recep_cd.split(" ");
-                    transforma_recep_cd = transforma_recep_cd[0].split("/");
-                    transforma_recep_cd = transforma_recep_cd[0] + '-' + transforma_recep_cd[1] + '-' + transforma_recep_cd[2];
-
-
-                    if ((proforma != 'null') && (proforma != null) && (proforma != 0) && (proforma != '') && (estado_c1 == 18 || estado_c1 == 19 || estado_c1 == 22)) {
-
-                        var url_llena_array_oc = 'ajax_simulador_cbx/traer_datos_oc';
-                        var url_recep_atraso = 'ajax_simulador_cbx/trae_fecharcd_y_dias_atraso';
-                        $.getJSON(url_llena_array_oc, {PI: proforma}, function (data) {
-
-                            var json = JSON.parse(data);
-                            //var json = JSON.stringify(data); // JavaScript object a string
-
-                            if (json.Body.fault.faultCode == 0) {
-
-                                var detalle = json.Body.detalleConsultaOrdenCompra.detalle;
-                                if (detalle.length > 0) {
-                                    if (detalle[0].ordenCompra.length > 0) {
-
-                                        $('#txt_noc_' + id_fila).html(detalle[0].ordenCompra);
-                                        $('#txt_estadooc_' + id_fila).html(detalle[0].estadoOC);
-                                        // Modificar despliegue fecha embarque a dd-mm-aaaa
-                                        var orden_fecha_embarque = detalle[0].fechaEmbarque.split("-");
-                                        orden_fecha_embarque = orden_fecha_embarque[2] + '-' + orden_fecha_embarque[1] + '-' + orden_fecha_embarque[0];
-                                        $('#txt_fechaembarque_' + id_fila).html(orden_fecha_embarque);
-                                        // Modificar despliegue fecha eta a dd-mm-aaaa
-                                        var orden_fecha_eta = detalle[0].fechaEta.split("-");
-                                        orden_fecha_eta = orden_fecha_eta[2] + '-' + orden_fecha_eta[1] + '-' + orden_fecha_eta[0];
-                                        $('#txt_fechaeta_' + id_fila).html(orden_fecha_eta);
-
-                                        //alert('Fecha ETA: '+orden_fecha_eta+' Fecha Recep. PMM: '+transforma_recep_cd);
-
-                                        // Aquí vamos a calcular "Fecha Recepción CD" y "Días de Atraso" (Enviar formato dd/mm/rrrr)
-                                        $.getJSON(url_recep_atraso, {
-                                            FECHA_ESTA: orden_fecha_eta,
-                                            FECHA_RECEP_PMM: transforma_recep_cd
-                                        }, function (data_recep_atraso) {
-                                            $.each(data_recep_atraso, function (i, o) {
-                                                $('#txt_fecharecepcioncd_' + id_fila).html(o[0]);
-                                                $('#txt_diasatrasocd_' + id_fila).html(o[1]);
-                                            });
-                                        });
-
-
-                                    }
-                                }
-                            }
-
-                        });
-
-                        // Fin del IF Proforma
-                    }
-
-                    // Incremental
-                    flag_tabla_vista_oc_broker++;
-                    // Fin de la tabla
-                });
-            }, delay_traer_datos_oc);
-
-            // Aquí el quitar null de las columnas y colorear estados
-            var delay_quitar_null = 2000;
-            setTimeout(function () {
-
-                var id_text_increment = 0;
-                var nColumnas = $("#tabla2 tr:last th").length;
-                $("#tabla2 > tbody >tr").each(function () {
-                    var i = 0;
-
-                    if ($("#txt_archivo_span_" + id_text_increment).html() == 'null') {
-                        $("#txt_archivo_span_" + id_text_increment).html('')
-                    }
-
-                    for (i = 0; i <= nColumnas; i++) {
-
-                        /*
-                            if ($(this).find("td:eq("+i+")").html() == 'null') {
-                                $(this).find("td:eq("+i+")").html('');
-                            }else if($(this).find("td:eq(12)").text() == '0'){
-                                $(this).find("td:eq(12)").html('');
-                            }else if($(this).find("td:eq(13)").text() == '0'){
-                                $(this).find("td:eq(13)").html('');
-                            }else if($(this).find("td:eq(46)").text() == 'null% '){
-                                $(this).find("td:eq(46)").html('');
-                            }else if($(this).find("td:eq(50)").text() == '0'){
-                                $(this).find("td:eq(50)").html('');
-                            }else if($(this).find("td:eq(72)").text() == '0'){
-                                $(this).find("td:eq(72)").html('');
-                            }else if($(this).find("td:eq(73)").text() == '0'){
-                                $(this).find("td:eq(73)").html('');
-                            }else if($(this).find("td:eq(74)").text() == '0'){
-                                $(this).find("td:eq(74)").html('');
-                            }else if($(this).find("td:eq(75)").text() == '0'){
-                                $(this).find("td:eq(75)").html('');
-                            }else if($(this).find("td:eq(77) input[type='text']").val() == 'null'){
-                                $(this).find("td:eq(77) input[type='text']").val('');
-                            }else if($(this).find("td:eq(77) input[type='text']").val() == '0'){
-                                $(this).find("td:eq(77) input[type='text']").val('');
-                            }else if($(this).find("td:eq(89)").text() == 'Ingresado'){
-                                $(this).find("td:eq(89)").addClass('columnas');
-                            }else if($(this).find("td:eq(89)").text() == 'Compra Confirmada con PI'){
-                                $(this).find("td:eq(89)").addClass('EstadoCompraConfirmadaPI');
-                            }else if($(this).find("td:eq(89)").text() == 'Pendiente de Aprobacion sin Match'){
-                                $(this).find("td:eq(89)").addClass('EstadoPendienteAprobacionsinMatch');
-                            }else if($(this).find("td:eq(89)").text() == 'Pendiente de Aprobacion'){
-                                $(this).find("td:eq(89)").addClass('EstadoAprobado');
-                            }else if($(this).find("td:eq(89)").text() == 'Aprobado'){
-                                $(this).find("td:eq(89)").addClass('EstadoAprobado');
-                            }else if($(this).find("td:eq(89)").text() == 'Pendiente Generacion OC'){
-                                $(this).find("td:eq(89)").addClass('EstadoPendienteGeneracionOC');
-                            }else if($(this).find("td:eq(89)").text() == 'Pendiente de Correccisn PI'){
-                                $(this).find("td:eq(89)").addClass('Estadocorrecionpi');
-                            }else if($(this).find("td:eq(89)").text() == 'Eliminado'){
-                                $(this).find("td:eq(89)").addClass('EstadoEliminado');
-                            }
-                            */
-
-
-                        if ($(this).find("td:eq(" + i + ")").html() == 'null') {
-                            $(this).find("td:eq(" + i + ")").html('');
-
-                        } else if ($("#txt_composicion_" + id_text_increment).html() == '0') {
-                            $("#txt_composicion_" + id_text_increment).html('');
-                        } else if ($("#txt_coleccion_" + id_text_increment).text() == '0') {
-                            $("#txt_coleccion_" + id_text_increment).html('');
-                        } else if ($("#txt_tiendas_" + id_text_increment).text() == 'null% ') {
-                            $("#txt_tiendas_" + id_text_increment).html('');
-                        } else if ($("#txt_viaje_" + id_text_increment).text() == '0') {
-                            $("#txt_viaje_" + id_text_increment).html('');
-                        } else if ($("#txt_proveedor_" + id_text_increment).text() == '0') {
-                            $("#txt_proveedor_" + id_text_increment).html('');
-                        } else if ($("#cbx_razonsocial_" + id_text_increment).text() == '0') {
-                            $("#cbx_razonsocial_" + id_text_increment).html('');
-                        } else if ($("#cbx_trader_" + id_text_increment).text() == '0') {
-                            $("#cbx_trader_" + id_text_increment).html('');
-                        } else if ($("#txt_cod_sku_proveedor_" + id_text_increment).text() == '0') {
-                            $("#txt_cod_sku_proveedor_" + id_text_increment).html('');
-                        } else if ($("#txt_proforma_" + id_text_increment).val() == 'null') {
-                            $("#txt_proforma_" + id_text_increment).val('');
-                        } else if ($("#txt_proforma_" + id_text_increment).val() == '0') {
-                            $("#txt_proforma_" + id_text_increment).val('');
-                        } else if ($("#cbx_estadoopcion_" + id_text_increment).text() == 'Ingresado') {
-                            $("#cbx_estadoopcion_" + id_text_increment).addClass('columnas');
-                        } else if ($("#cbx_estadoopcion_" + id_text_increment).text() == 'Compra Confirmada con PI') {
-                            $("#cbx_estadoopcion_" + id_text_increment).addClass('EstadoCompraConfirmadaPI');
-                        } else if ($("#cbx_estadoopcion_" + id_text_increment).text() == 'Pendiente de Aprobacion sin Match') {
-                            $("#cbx_estadoopcion_" + id_text_increment).addClass('EstadoPendienteAprobacionsinMatch');
-                        } else if ($("#cbx_estadoopcion_" + id_text_increment).text() == 'Pendiente de Aprobacion') {
-                            $("#cbx_estadoopcion_" + id_text_increment).addClass('EstadoAprobado');
-                        } else if ($("#cbx_estadoopcion_" + id_text_increment).text() == 'Aprobado') {
-                            $("#cbx_estadoopcion_" + id_text_increment).addClass('EstadoAprobado');
-                        } else if ($("#cbx_estadoopcion_" + id_text_increment).text() == 'Pendiente Generacion OC') {
-                            $("#cbx_estadoopcion_" + id_text_increment).addClass('EstadoPendienteGeneracionOC');
-                        } else if ($("#cbx_estadoopcion_" + id_text_increment).text() == 'Pendiente de Correccisn PI') {
-                            $("#cbx_estadoopcion_" + id_text_increment).addClass('Estadocorrecionpi');
-                        } else if ($("#cbx_estadoopcion_" + id_text_increment).text() == 'Eliminado') {
-                            $("#cbx_estadoopcion_" + id_text_increment).addClass('EstadoEliminado');
-                        }
-
-                        // Fin del for nColumnas
-                    }
-
-                    id_text_increment++;
-
-                });
-
-
                 //txt profroma bloqueado si el usuario es tipo lectura
                 if ($('#flag_top_menu_tipo_usuario').html() == 'LECTURA') {
                     $(".txt_proforma_").attr("disabled", "disabled");
                     $(".txt_archivo_").attr("disabled", "disabled");
                 }
-
                 campos_bloquear_despues_llenar_tabla();
-
             }, delay_quitar_null);
 
-            //aquí se genera un delay para fijar la cabecera
-            var delay_thead = 3000;
+            //aquí se genera un delay para fijar la cabecera filtrado
+            var delay_thead = 2000;
             setTimeout(function () {
-
                 $('#tfoot_filtro_columna_individual th').each(function () {
                     var title = $(this).text();
                     title = title.replace(/[^a-z0-9\-]/gi, '');
@@ -1026,9 +950,7 @@ $(window).on('load', function () {
                     if ((title != 'D') && (title != 'Archivo') && (title != 'Nº Cajas') && (title != 'Hist') && (title != 'Ajuste Compra') && (title != '')) {
                         $(this).html('<input id="input_filtros_columna_tabla2" class="filtro" type="text" placeholder="Filtrar" style="width: 100%"/>');
                     }
-
                 });
-
                 var tabla2_buscar_columnas = $('#tabla2').DataTable({
                     // "ordering": false,
                     // paging: true,
@@ -1053,13 +975,11 @@ $(window).on('load', function () {
                     var that = this;
 
                     $("#input_filtros_columna_tabla2", this.footer()).on('keyup change', function () {
-
                         if (that.search() !== this.value) {
                             that.search(this.value).draw();
                             //$('.datatables_empty').remove();
                             cal_campos();
                         }
-
                         // Fin de tabla2_buscar_columnas
                     });
 
@@ -1068,18 +988,15 @@ $(window).on('load', function () {
 
                     // Fin tabla2_buscar_columnas
                 });
-
                 $("#tabla2 td input").on('change', function () {
                     var $td = $(this).closest('td');
                     $td.find('input').attr('value', this.value);
                     tabla2_buscar_columnas.cell($td).invalidate();
                 });
-
                 $('#flag_top_aviso_termino_carga').html(parseInt($('#flag_top_aviso_termino_carga').html()) + 1);
                 //$('#span_accion_cargando').html('Cargando estructura de la tabla');
                 $('#accion_carga_estructura_tabla2').removeClass('fa fa-refresh');
                 $('#accion_carga_estructura_tabla2').addClass('fa fa-check');
-
                 // Fin delay para filtrar cabecera
             }, delay_thead);
 
@@ -1090,7 +1007,7 @@ $(window).on('load', function () {
             }, delay_calculos_totales);
 
             //delay para las validaciones de concurrencia ("pedida")
-            var delay_validaciones = 8000;
+            var delay_validaciones = 4000;
             setTimeout(function () {
                 validar_usuario_recarga_sesion_expirada();
                 Validar_flag_concurrencia_usuario_log();
@@ -1098,17 +1015,11 @@ $(window).on('load', function () {
                 carga_tabla1_oculta();
 
             }, delay_validaciones);
-
-
             // Fin del done carga tabla 2
         });
-
 // ############################################## FIN TRABAJO GRILLA 2 LLENAR GRILLA ##################################################################
-
         // Fin del done busca OC estado 20
     });
-
-
 // fin de onload
 });
 
@@ -4045,11 +3956,11 @@ function validar_aviso_carga_de_simulador() {
     var cronometro = setInterval(
         function () {
 
-            if (contador_seg_carga == 31) {
+            if (contador_seg_carga == 5) {
                 contador_seg_carga = 0;
             }
 
-            if (contador_seg_carga == 30) {
+            if (contador_seg_carga == 4) {
                 //Validar flag_top_aviso_termino_carga
                 if ($('#flag_top_aviso_termino_carga').text() == 7) {
 
@@ -4057,7 +3968,7 @@ function validar_aviso_carga_de_simulador() {
                     $('#accion_carga_completo').removeClass('fa fa-refresh');
                     $('#accion_carga_completo').addClass('fa fa-check');
 
-                    var delay_salir_main = 2000;
+                    var delay_salir_main = 1000;
                     setTimeout(function () {
                         $('#popup_cargando_simulador_compra_4').modal('hide');
                     }, delay_salir_main);
@@ -4065,8 +3976,6 @@ function validar_aviso_carga_de_simulador() {
                 }
 
             }
-
-
             seg_carga.innerHTML = contador_seg_carga;
             contador_seg_carga++;
 
@@ -4201,7 +4110,6 @@ $('#btn_edita_grilla').on('click', function () {
 
   // Actualiza la Fecha de la Concurrencia
     act_fecha_concurrencia();
-
     // eliminar los registros de la tabla, generados en otra consulta previa
     $("#tabla_edita_grilla >tbody >tr").remove();
     // Limpiar el TXT de formato
@@ -4778,7 +4686,7 @@ $('#btn_editar_registros_grilla_editable').on('click', function () {
                             factor_est_campo = tipocambio;
                         }
 
-                        // Actualizar PLC_PLAN_COMPRA_COLOR_ url_PLC_PLAN_COMPRA_COLOR_3                                                                                                                                                                                                                                                                                                                    // +"&TIPO_EMPAQUE="+TIPO_EMPAQUE+"&FORMATO="+FORMATO+"&NOM_VENTANA="+NOM_VENTANA                                                                                                                                                                                                                                                                                                                           // +"&TIPO_EMPAQUE="+TIPO_EMPAQUE+"&FORMATO="+FORMATO+"&NOM_VENTANA="+NOM_VENTANA
+                        // Actualizar PLC_PLAN_COMPRA_COLOR_ url_PLC_PLAN_COMPRA_COLOR_3                                                                                                                                                                                                                                                                                                                    // +"&TIPO_EMPAQUE="+TIPO_EMPAQUE+"&FORMATO="+FORMATO+"&NOM_VENTANA="+NOM_VENTANA
                         if (fob > 0) {
                             total_fob_usd = (total_fob_usd).toFixed(2)
                         }
@@ -5011,3 +4919,20 @@ $("#cerrar_modal_carga_archivo_pi").on('click', function () {
 
 
 });
+function ColoresEstados(estado) {
+
+    var color="";
+     switch (estado){
+         case "Ingresado": color = "columnas"; break;
+         case "Compra Confirmada con PI'": color = "EstadoCompraConfirmadaPI"; break;
+         case "Pendiente de Aprobacion sin Match": color = "EstadoPendienteAprobacionsinMatch"; break;
+         case "Pendiente de Aprobacion": color = "EstadoAprobado"; break;
+         case "Aprobado": color = "EstadoAprobado"; break;
+         case "Pendiente Generacion OC": color = "EstadoPendienteGeneracionOC"; break;
+         case "Pendiente de Correccisn PI": color = "Estadocorrecionpi"; break;
+         case "Eliminado": color = "EstadoEliminado"; break;
+         default: color = "";
+     }
+
+    return color;
+}
