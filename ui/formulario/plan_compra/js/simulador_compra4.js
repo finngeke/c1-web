@@ -1126,12 +1126,9 @@ function actualizaCampoEstadoProforma(event) {
     var valor_campo = $('#txt_proforma_' + separa_barra[2]).val();
     // valor_campo = valor_campo.replace(/[^a-z0-9\-]/gi, '');
     valor_campo = valor_campo.replace(/[^a-z0-9\-\_]/gi, '-');
-    var proforma_usuario = $('#txt_proforma_' + separa_barra[2]).val();
+    var proforma_usuario = $('#txt_proforma_' + separa_barra[2]).val(); // Texto de la PI, ingresado por el usuario... sin correcciones de caracteres
     // Busco el valor del campo asociado a identificar cuales campos han dido editados en el momento
     var busca_campo_actualizado = $("#tabla2 #txt_estado_cambio_proforma_" + separa_barra[2]).text();
-
-        // Habilitar BTN Guardar Proforma
-        // $("#btn_guarda_proforma").attr('disabled',false);
 
         // 1.2.- Verifico que el estado sea 0 por si el usuario escribe sobre una PI existente
         if ((valor_campo != 0) && (valor_campo != "" && (estado_c1 == 0) )) {
@@ -1175,7 +1172,7 @@ function actualizaCampoEstadoProforma(event) {
                     if (count_archivo_existe == 0) {
 
                         // count_archivo_existe == 0 Me dice que en la BD no hay archivos subidos para esta PI, pero queda aún revisar el despliegue actual de la grilla.
-                        // puedo haber agregado recién una PI, luego archivo... y posteriormente otra pia olvidada, sin haber guardado aún.
+                        // puedo haber agregado recién una PI, luego archivo... y posteriormente otra pi a olvidada, sin haber guardado aún.
                         var rec_upd_recientes = 0;
                         var cuenta_is_a_pi_recien_actualizada = 0;
 
