@@ -927,7 +927,83 @@ $(window).on('load', function () {
 //proceso pegado VISTA.
             // Cambiar la lógica, recorrer la tabla y si trae una PI busca los datos del
             // Define Tiempo 1 = 1000 VISTA oc
-  
+   var delay_traer_datos_oc = 5000;
+            setTimeout(function () {
+                var flag_tabla_vista_oc_broker = 0;
+                $("#tabla2 >tbody >tr").each(function () {
+                    // Traigo la Proforma
+                    //var proforma = $(this).find("td:eq(77) input[type='text']").val();
+                    var proforma = $("#tabla2 #txt_proforma_" + flag_tabla_vista_oc_broker).val();
+                    //proforma = proforma.replace(/[^a-z0-9\-]/gi, '');
+                    proforma = proforma.replace(/[^a-z0-9\-\_]/gi, '-');
+                    // Traigo el estado, solo para cargar el presupuesto cuando el estado sea 19
+                    //var estado_c1 = $(this).find("td:eq(90)").text();
+                    var estado_c1 = $("#tabla2 #txt_estadoc1_" + flag_tabla_vista_oc_broker).text();
+                    /*var id_fila = $(this).find("td:eq(2)").attr("id");
+                            id_fila =  id_fila.split("_");
+                            id_fila = id_fila[2];*/
+                    var id_fila = flag_tabla_vista_oc_broker;
+                    //var fecha_recep_cd_c1 = $(this).find("td:eq(94)").text();
+                    var fecha_recep_cd_c1 = $("#tabla2 #txt_fecha_recep_c1__" + flag_tabla_vista_oc_broker).text();
+                    var transforma_recep_cd = new Date(fecha_recep_cd_c1);
+                    transforma_recep_cd = transforma_recep_cd.toLocaleString();
+                    transforma_recep_cd = transforma_recep_cd.split(" ");
+                    transforma_recep_cd = transforma_recep_cd[0].split("/");
+                    transforma_recep_cd = transforma_recep_cd[0] + '-' + transforma_recep_cd[1] + '-' + transforma_recep_cd[2];
+
+
+                    if ((proforma != 'null') && (proforma != null) && (proforma != 0) && (proforma != '') && (estado_c1 == 18 || estado_c1 == 19 || estado_c1 == 22)) {
+                        var url_llena_array_oc = 'ajax_simulador_cbx/traer_datos_oc';
+                        var url_recep_atraso = 'ajax_simulador_cbx/trae_fecharcd_y_dias_atraso';
+
+                        $.getJSON(url_llena_array_oc, {PI: proforma}, function (data) {
+                            var json = JSON.parse(data);
+                            //var json = JSON.stringify(data); // JavaScript object a string
+
+                            if (json.Body.fault.faultCode == 0) {
+
+                                var detalle = json.Body.detalleConsultaOrdenCompra.detalle;
+                                if (detalle.length > 0) {
+                                    if (detalle[0].ordenCompra.length > 0) {
+                                        $('#txt_noc_' + id_fila).html(detalle[0].ordenCompra);
+                                        $('#txt_estadooc_' + id_fila).html(detalle[0].estadoOC);
+                                        // Modificar despliegue fecha embarque a dd-mm-aaaa
+                                        var orden_fecha_embarque = detalle[0].fechaEmbarque.split("-");
+                                        orden_fecha_embarque = orden_fecha_embarque[2] + '-' + orden_fecha_embarque[1] + '-' + orden_fecha_embarque[0];
+                                        $('#txt_fechaembarque_' + id_fila).html(orden_fecha_embarque);
+                                        // Modificar despliegue fecha eta a dd-mm-aaaa
+                                        var orden_fecha_eta = detalle[0].fechaEta.split("-");
+                                        orden_fecha_eta = orden_fecha_eta[2] + '-' + orden_fecha_eta[1] + '-' + orden_fecha_eta[0];
+                                        $('#txt_fechaeta_' + id_fila).html(orden_fecha_eta);
+
+                                       /* //alert('Fecha ETA: '+orden_fecha_eta+' Fecha Recep. PMM: '+transforma_recep_cd);
+                                        var fecharecepcioncd = "";
+                                        var diasatrasocd = "";
+                                        // Aquí vamos a calcular "Fecha Recepción CD" y "Días de Atraso" (Enviar formato dd/mm/rrrr)
+                                        $.getJSON(url_recep_atraso, {
+                                            FECHA_ESTA: orden_fecha_eta,
+                                            FECHA_RECEP_PMM: transforma_recep_cd
+                                        }, function (data_recep_atraso) {
+                                            $.each(data_recep_atraso, function (i, o) {
+                                                $('#txt_fecharecepcioncd_' + id_fila).html(o[0]);
+                                                fecharecepcioncd = o[0];
+                                                $('#txt_diasatrasocd_' + id_fila).html(o[1]);
+                                                diasatrasocd = o[1];
+                                            });
+                                        });*/
+                                    }
+                                }
+                            }
+
+                        });
+
+                        // Fin del IF Proforma
+                    }
+                    // Incremental
+                    flag_tabla_vista_oc_broker++;
+                    // Fin de la tabla
+                });
+            }, delay_traer_datos_oc);
 
             // BLOQUEO DE CAMPOS
             var delay_quitar_null = 1000;
