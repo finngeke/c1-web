@@ -1422,6 +1422,9 @@ function descargaPI(event) {
 // Guarda Proforma
 $('.guarda_proforma').on('click', function () {
 
+    // Bloquear el BTN de Guardado
+    $("#btn_guarda_proforma").attr('disabled',true);
+
     // Actualiza la Fecha de la Concurrencia
     act_fecha_concurrencia();
 
@@ -4899,6 +4902,10 @@ $("#pi_upload_ajax").on('submit',(function(e) {
                     if ( (return_proforma == busca_prof_spec) && (estado_c1==0) ) { //&& (busca_campo_actualizado=='U')
                         // Agregarle el cargado al BTN
                         $("#tabla2 #txt_archivo_span_"+inc_rec_prof).text("Cargado..");
+
+                        // Al campo lo dejo como actualizado (31102018 Corrige error cargas posteriores de archivo)
+                        $("#tabla2 #txt_estado_cambio_proforma_" + inc_rec_prof).text('U');
+
                     }
 
                 inc_rec_prof++;
@@ -4995,6 +5002,7 @@ $("#cerrar_modal_carga_archivo_pi").on('click', function () {
 
 
 });
+
 function ColoresEstados(estado) {
 
     var color="";
