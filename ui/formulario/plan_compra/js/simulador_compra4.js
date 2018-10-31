@@ -1116,7 +1116,7 @@ $(window).on('load', function () {
 
 // Si escriben algo en la proforma actualizar el estado de la linea
 function actualizaCampoEstadoProforma(event) {
-
+alert('Dentro de Actualiza');
     var id_carga_pi = $(event.target);
     id_carga_pi = id_carga_pi.attr('id');
     var separa_barra = id_carga_pi.split("_");
@@ -1131,7 +1131,7 @@ function actualizaCampoEstadoProforma(event) {
     var busca_campo_actualizado = $("#tabla2 #txt_estado_cambio_proforma_" + separa_barra[2]).text();
 
         // 1.2.- Verifico que el estado sea 0 por si el usuario escribe sobre una PI existente
-        if ((valor_campo != 0) && (valor_campo != "" && (valor_campo != null) && (valor_campo != "null") && (valor_campo.length>2) && (estado_c1 == 0) )) {
+        if ( (valor_campo != 0) && (valor_campo != "") && (valor_campo != null) && (valor_campo != "null") && (valor_campo.length>2) && (estado_c1 == 0) ) {
             //alert(" ASIGNA - Proforma: " + valor_campo + " Incremental: "+separa_barra[2]);
             $('#txt_estado_cambio_proforma_' + separa_barra[2]).html("U");
         } else {
@@ -1197,7 +1197,7 @@ function actualizaCampoEstadoProforma(event) {
                         if(cuenta_is_a_pi_recien_actualizada==0){
 
                             // Activar o desactivar boton de cargar archivo
-                            if (valor_campo != "" && valor_campo != "0" && valor_campo != " " && valor_campo != null) {
+                            if ( (valor_campo != 0) && (valor_campo != "") && (valor_campo != null) && (valor_campo != "null") && (valor_campo.length>2) ) {
                                     // Habilito el BTN de Carga de Archivo
                                 $(".archivo_" + separa_barra[2]).attr("disabled", false);
 
