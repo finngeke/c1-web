@@ -1401,7 +1401,7 @@ function cargaArchivoServer(event) {
     var campo_actualizado_res = $("#tabla2 #txt_estado_cambio_proforma_" + separa_barra[2]).text();
 
     // Para subir el archivo no debe tener el texto cargado
-    if ((estado_c1 == 0) && (proforma != 0) && (proforma != "") && (proforma != "null") && (proforma != null) && (campo_archivo_server != "Cargado.. Upload Upload") ) {
+    if ((estado_c1 == 0) && (proforma != 0) && (proforma != "") && (proforma != "null") && (proforma != null) && (proforma.length>2) && (campo_archivo_server != "Cargado.. Upload Upload") ) {
 
         // Desplegar el  modal
         $('#carga_pi_archivo').modal('show');
