@@ -913,49 +913,6 @@ $(window).on('load', function () {
 
                     for (i = 0; i <= nColumnas; i++) {
 
-                        /*
-                            if ($(this).find("td:eq("+i+")").html() == 'null') {
-                                $(this).find("td:eq("+i+")").html('');
-                            }else if($(this).find("td:eq(12)").text() == '0'){
-                                $(this).find("td:eq(12)").html('');
-                            }else if($(this).find("td:eq(13)").text() == '0'){
-                                $(this).find("td:eq(13)").html('');
-                            }else if($(this).find("td:eq(46)").text() == 'null% '){
-                                $(this).find("td:eq(46)").html('');
-                            }else if($(this).find("td:eq(50)").text() == '0'){
-                                $(this).find("td:eq(50)").html('');
-                            }else if($(this).find("td:eq(72)").text() == '0'){
-                                $(this).find("td:eq(72)").html('');
-                            }else if($(this).find("td:eq(73)").text() == '0'){
-                                $(this).find("td:eq(73)").html('');
-                            }else if($(this).find("td:eq(74)").text() == '0'){
-                                $(this).find("td:eq(74)").html('');
-                            }else if($(this).find("td:eq(75)").text() == '0'){
-                                $(this).find("td:eq(75)").html('');
-                            }else if($(this).find("td:eq(77) input[type='text']").val() == 'null'){
-                                $(this).find("td:eq(77) input[type='text']").val('');
-                            }else if($(this).find("td:eq(77) input[type='text']").val() == '0'){
-                                $(this).find("td:eq(77) input[type='text']").val('');
-                            }else if($(this).find("td:eq(89)").text() == 'Ingresado'){
-                                $(this).find("td:eq(89)").addClass('columnas');
-                            }else if($(this).find("td:eq(89)").text() == 'Compra Confirmada con PI'){
-                                $(this).find("td:eq(89)").addClass('EstadoCompraConfirmadaPI');
-                            }else if($(this).find("td:eq(89)").text() == 'Pendiente de Aprobacion sin Match'){
-                                $(this).find("td:eq(89)").addClass('EstadoPendienteAprobacionsinMatch');
-                            }else if($(this).find("td:eq(89)").text() == 'Pendiente de Aprobacion'){
-                                $(this).find("td:eq(89)").addClass('EstadoAprobado');
-                            }else if($(this).find("td:eq(89)").text() == 'Aprobado'){
-                                $(this).find("td:eq(89)").addClass('EstadoAprobado');
-                            }else if($(this).find("td:eq(89)").text() == 'Pendiente Generacion OC'){
-                                $(this).find("td:eq(89)").addClass('EstadoPendienteGeneracionOC');
-                            }else if($(this).find("td:eq(89)").text() == 'Pendiente de Correccisn PI'){
-                                $(this).find("td:eq(89)").addClass('Estadocorrecionpi');
-                            }else if($(this).find("td:eq(89)").text() == 'Eliminado'){
-                                $(this).find("td:eq(89)").addClass('EstadoEliminado');
-                            }
-                            */
-
-
                         if ($(this).find("td:eq(" + i + ")").html() == 'null') {
                             $(this).find("td:eq(" + i + ")").html('');
 
@@ -1116,6 +1073,9 @@ $(window).on('load', function () {
 
 // Si escriben algo en la proforma actualizar el estado de la linea
 function actualizaCampoEstadoProforma(event) {
+
+    // Habilita el BTN de guarda proforma
+    $("#btn_guarda_proforma").attr('disabled',false);
 
     var id_carga_pi = $(event.target);
     id_carga_pi = id_carga_pi.attr('id');
@@ -1370,6 +1330,9 @@ function cargaArchivo(event) {
 
 // Boton de Cargar Archivo
 function cargaArchivoServer(event) {
+
+    // Habilita el BTN de guarda proforma
+    $("#btn_guarda_proforma").attr('disabled',false);
 
     // Actualiza la Fecha de la Concurrencia
     act_fecha_concurrencia();
