@@ -12,7 +12,6 @@ namespace simulador_compra;
 class cbx_grilla_compra extends \parametros
 {
 
-
     // Llenar la Tabla 2
     public static function llenar_tabla2b($temporada, $depto)
     {

@@ -255,7 +255,6 @@ $(function () {
 
 });
 
-
 // Load
 $(window).on('load', function () {
 

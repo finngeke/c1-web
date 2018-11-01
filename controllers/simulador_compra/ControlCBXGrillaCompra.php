@@ -112,7 +112,7 @@
 			echo json_encode($json, JSON_PRETTY_PRINT);
 		}
 
-    public function llenar_edita_grilla($f3) {
+        public function llenar_edita_grilla($f3) {
         $data = \simulador_compra\cbx_grilla_compra::llenar_edita_grilla($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('GET.ID_COLOR3'));
         $json = [];
         foreach ($data as $val) {
@@ -161,8 +161,7 @@
         echo json_encode($json, JSON_PRETTY_PRINT);
 
     }
-            
-		
+
 		public function llenar_tabla_depto($f3) {
 			echo json_encode(\simulador_compra\cbx_grilla_compra::llenar_tabla_depto($f3->get('SESSION.COD_TEMPORADA')));
 		}

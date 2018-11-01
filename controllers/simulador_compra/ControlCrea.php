@@ -5,6 +5,7 @@
  * Descripción: 
  * Fecha: 2018-02-06
  * @author RODRIGO RIOSECO
+ * @edita ROBERTO PEREZ
  */
 
 namespace simulador_compra;
