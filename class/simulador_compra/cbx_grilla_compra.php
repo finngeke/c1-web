@@ -282,7 +282,7 @@ class cbx_grilla_compra extends \parametros
     public static function llenar_tabla2($temporada, $depto)
     {
 
-              $sql = "SELECT
+        $sql = "SELECT
                 C.ID_COLOR3,                  -- 0 id
                 C.GRUPO_COMPRA,               -- 1 grupo compra
                 NVL(TEMP,1) COD_TEMP,         -- 2 temp
@@ -293,9 +293,9 @@ class cbx_grilla_compra extends \parametros
                 C.SHORT_NAME,                 -- 7 estilo corto
                 C.ID_CORPORATIVO,             -- 8 cod. corp
                 C.DESCMODELO,                 -- 9 descripción
-                C.DESCRIP_INTERNET,           -- 10 Descripción Internet 
-                CASE WHEN C.COMPOSICION = '0' THEN '' ELSE C.COMPOSICION END COMPOSICION ,                -- 11 Composicion        
-                CASE WHEN C.COLECCION = '0' THEN '' ELSE C.COLECCION END COLECCION ,                  -- 12 Colección
+                C.DESCRIP_INTERNET,           -- 10 Descripción Internet
+                C.COMPOSICION,                -- 11 Composicion
+                C.COLECCION,                  -- 12 Colección
                 C.EVENTO,                     -- 13 Evento
                 NOM_ESTILOVIDA COD_ESTILO_VIDA,  -- 14 estilo vida
                 '' CALIDAD,                      -- 15 Calidad
@@ -327,9 +327,8 @@ class cbx_grilla_compra extends \parametros
                 C.C,                             -- 41 C
                 C.I,                             -- 42 I
                 C.UND_ASIG_INI,                  -- 43 Primera Carga
-                CASE WHEN C.ROT IS NULL THEN 0 ELSE C.ROT END ROT,   -- 44 %Tiendas
+                C.ROT,                           -- 44 %Tiendas
                 NOM_PRECEDENCIA,                 -- 45 Proced
-                CASE WHEN NOM_VIA ='0' THEN '' ELSE NOM_VIA END NOM_VIA,
                 NOM_VIA,                         -- 46 Vìa
                 NOM_PAIS,                        -- 47 Paìs
                 C.VIAJE,                         -- 48 Viaje
@@ -354,17 +353,17 @@ class cbx_grilla_compra extends \parametros
                 C.CICLO,                         -- 67 Semanas ciclo via
                 C.AGOT_OBJ,                      -- 68 Agot Obj
                 C.SEMLIQ,                        -- 69 Semanas Liquidacion
-                CASE WHEN C.ALIAS_PROV = '0' THEN '' ELSE C.ALIAS_PROV END ALIAS_PROV,                -- 70 Proveedor
-                CASE WHEN C.COD_PROVEEDOR = '0' THEN '' ELSE C.COD_PROVEEDOR END COD_PROVEEDOR,       -- 71 Razon Social
-                CASE WHEN C.COD_TRADER = '0' THEN '' ELSE C.COD_TRADER END COD_TRADER,                -- 72 Trader
-                CASE WHEN C.CODSKUPROVEEDOR = '0' THEN '' ELSE C.CODSKUPROVEEDOR END CODSKUPROVEEDOR, -- 73 Cod SKU Proveedor
+                C.ALIAS_PROV,                    -- 70 Proveedor
+                C.COD_PROVEEDOR,                 -- 71 Razon Social
+                C.COD_TRADER,                    -- 72 Trader
+                C.CODSKUPROVEEDOR,               -- 73 Cod SKU Proveedor
                 O.COD_PADRE SKU,                 -- 74 Cod Padre
-                CASE WHEN C.PROFORMA IS NULL THEN '' WHEN  C.PROFORMA = '0' THEN '' ELSE C.PROFORMA END PROFORMA,                   -- 75 Proforma
+                C.PROFORMA,                      -- 75 Proforma
                 O.ARCHIVO,                       -- 76 Archivo
-                CASE WHEN  O.ESTILO_PMM IS NULL THEN '' WHEN O.ESTILO_PMM = '0' THEN '' ELSE O.ESTILO_PMM END ESTILO_PMM,            -- 77 Estilo Pmm  
-                CASE WHEN  O.ESTADO_MATCH IS NULL THEN '' WHEN  O.ESTADO_MATCH = '0' THEN '' ELSE O.ESTADO_MATCH END ESTADO_MATCH,   -- 78 Estado Match
+                O.ESTILO_PMM,                    -- 77 Estilo Pmm
+                O.ESTADO_MATCH,                  -- 78 Estado Match
                 O.PO_NUMBER,                     -- 79 N OC
-                CASE WHEN O.ESTADO_OC IS NULL THEN '' WHEN  O.ESTADO_OC = '0' THEN '' ELSE O.ESTADO_OC END ESTADO_OC,               -- 80 Estado OC
+                O.ESTADO_OC,                     -- 80 Estado OC
                 O.FECHA_EMBARQUE,                -- 81 Fecha Embarque
                 O.FECHA_ETA,                     -- 82 Fecha ETA
                 O.FECHA_RECEPCION,               -- 83 Fecha Recepciòn
@@ -375,7 +374,7 @@ class cbx_grilla_compra extends \parametros
                 REPLACE((SELECT DISTINCT FECHA_RECEPCD FROM plc_ventana_emb V WHERE V.cod_temporada = C.COD_TEMPORADA AND V.cod_ventana = C.VENT_EMB),'/','-') FECHA_RECEPCD_C1 -- 88 Fecha recepcion CD
                 FROM PLC_PLAN_COMPRA_COLOR_3 C
                 LEFT JOIN PLC_PLAN_COMPRA_OC O ON C.COD_TEMPORADA = O.COD_TEMPORADA
-                AND C.DEP_DEPTO = O.DEP_DEPTO AND C.ID_COLOR3 = O.ID_COLOR3
+				AND C.DEP_DEPTO = O.DEP_DEPTO AND C.ID_COLOR3 = O.ID_COLOR3
                 WHERE C.COD_TEMPORADA = $temporada AND C.DEP_DEPTO = '" . $depto . "'
                 ORDER BY C.ID_COLOR3, C.COD_JER2,C.COD_SUBLIN,C.COD_ESTILO,NVL(COD_COLOR,0) ,C.VENTANA_LLEGADA,C.DEBUT_REODER";
 
