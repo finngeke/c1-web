@@ -1333,7 +1333,7 @@ function cargaArchivoServer(event) {
 
     // Habilita el BTN de guarda proforma
     $("#btn_guarda_proforma").attr('disabled',false);
-    
+
     // Actualiza la Fecha de la Concurrencia
     act_fecha_concurrencia();
 
