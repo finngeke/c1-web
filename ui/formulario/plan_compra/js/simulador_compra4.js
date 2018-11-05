@@ -5037,19 +5037,21 @@ $('.solicitud_generacion_ocd').on('click', function () {
             $("#tabla2 input:checkbox:checked").each(function () {
 
                 // id_color3
-                var id_color3 = $("#txt_id_color_" + $(this).val()).text();
+                var id_color3 = $("#tabla2 #txt_id_color_" + $(this).val()).text();
                 // estado_c1
                 var estado_c1 = $("#tabla2 #txt_estadoc1_" + $(this).val()).text();
                 // Proforma
-                var proforma = $("#txt_proforma_" + $(this).val()).val();
+                var proforma = $("#tabla2 #txt_proforma_" + $(this).val()).val();
                 proforma = proforma.replace(/[^a-z0-9\-\_]/gi, '-');
 
                 // Verificar Estado C1
-                if(estado_c1==18){
+                if( (estado_c1==18) && (proforma.length>2) && (proforma !='') && (proforma != 'null') && (proforma != null) && (id_color3 != null) ){
 
                     $.getJSON(url, {ID_COLOR3: id_color3, ESTADO_INSERT: 22,PROFORMA: proforma, ESTADO_UPDATE: 1});
 
                 // Fin de la validación de estado
+                }else{
+                    alert("Proforma:"+proforma+", requiere: Compra Confirmada PI.");
                 }
 
             // Fin del each ya seleccionados de la tabla
@@ -5096,19 +5098,21 @@ $('.oc_generadad').on('click', function () {
             $("#tabla2 input:checkbox:checked").each(function () {
 
                 // id_color3
-                var id_color3 = $("#txt_id_color_" + $(this).val()).text();
+                var id_color3 = $("#tabla2 #txt_id_color_" + $(this).val()).text();
                 // estado_c1
                 var estado_c1 = $("#tabla2 #txt_estadoc1_" + $(this).val()).text();
                 // Proforma
-                var proforma = $("#txt_proforma_" + $(this).val()).val();
+                var proforma = $("#tabla2 #txt_proforma_" + $(this).val()).val();
                 proforma = proforma.replace(/[^a-z0-9\-\_]/gi, '-');
 
                 // Verificar Estado C1
-                if(estado_c1==22){
+                if( (estado_c1==22) && (proforma.length>2) && (proforma !='') && (proforma != 'null') && (proforma != null) && (id_color3 != null) ){
 
                     $.getJSON(url, {ID_COLOR3: id_color3, ESTADO_INSERT: 19,PROFORMA: proforma, ESTADO_UPDATE: 2});
 
                 // Fin de la validación de estado
+                }else{
+                    alert("Proforma:"+proforma+", requiere: Pendiente Generacion OC.");
                 }
 
                 // Fin del each ya seleccionados de la tabla
@@ -5155,19 +5159,21 @@ $('.crear_modificaciond').on('click', function () {
             $("#tabla2 input:checkbox:checked").each(function () {
 
                 // id_color3
-                var id_color3 = $("#txt_id_color_" + $(this).val()).text();
+                var id_color3 = $("#tabla2 #txt_id_color_" + $(this).val()).text();
                 // estado_c1
                 var estado_c1 = $("#tabla2 #txt_estadoc1_" + $(this).val()).text();
                 // Proforma
-                var proforma = $("#txt_proforma_" + $(this).val()).val();
+                var proforma = $("#tabla2 #txt_proforma_" + $(this).val()).val();
                 proforma = proforma.replace(/[^a-z0-9\-\_]/gi, '-');
 
                 // Verificar Estado C1
-                if(estado_c1!=24){
+                if( (estado_c1!=24) && (proforma.length>2) && (proforma !='') && (proforma != 'null') && (proforma != null) && (id_color3 != null)){
 
                     $.getJSON(url, {ID_COLOR3: id_color3, ESTADO_INSERT: 0,PROFORMA: proforma, ESTADO_UPDATE: 3});
 
                 // Fin de la validación de estado
+                }else{
+                    alert("No puede modificar una opción eliminada.\n");
                 }
 
                 // Fin del each ya seleccionados de la tabla
@@ -5213,19 +5219,21 @@ $('.elimina_opciond').on('click', function () {
             $("#tabla2 input:checkbox:checked").each(function () {
 
                 // id_color3
-                var id_color3 = $("#txt_id_color_" + $(this).val()).text();
+                var id_color3 = $("#tabla2 #txt_id_color_" + $(this).val()).text();
                 // estado_c1
                 var estado_c1 = $("#tabla2 #txt_estadoc1_" + $(this).val()).text();
                 // Proforma
-                var proforma = $("#txt_proforma_" + $(this).val()).val();
+                var proforma = $("#tabla2 #txt_proforma_" + $(this).val()).val();
                 proforma = proforma.replace(/[^a-z0-9\-\_]/gi, '-');
 
                 // Verificar Estado C1
-                if(estado_c1!=21){
+                if((estado_c1!=21) && (proforma.length>2) && (proforma !='') && (proforma != 'null') && (proforma != null) && (id_color3 != null)){
 
                     $.getJSON(url, {ID_COLOR3: id_color3, ESTADO_INSERT: 24,PROFORMA: proforma, ESTADO_UPDATE: 4});
 
                 // Fin de la validación de estado
+                }else{
+                    alert("No puede solicitar eliminar una opción ya aprobada.");
                 }
 
                 // Fin del each ya seleccionados de la tabla
@@ -5244,87 +5252,6 @@ $('.elimina_opciond').on('click', function () {
         // Si el usuario no acepta realizar cambios
     } else {
         alert("No se han Realizado Cambios.");
-    }
-
-
-});
-
-// Flujo Dinámico Aprobación - Solicitud Corrección PI
-$('.solicitud_correccion_pid').on('click', function () {
-
-    // Sin procesar aun
-
-    // Actualiza la Fecha de la Concurrencia
-    act_fecha_concurrencia();
-
-    var valor_radio = $("input[name='radio']:checked").val();
-    var proforma = $("#txt_proforma_" + valor_radio).val();
-    //proforma = proforma.replace(/[^a-z0-9\-]/gi, '');
-    proforma = proforma.replace(/[^a-z0-9\-\_]/gi, '-');
-    var id_color3 = $("#txt_id_color_" + valor_radio).text();
-    var estado_c1 = $("#tabla2 #txt_estadoc1_" + valor_radio).text();
-
-    var respuesta = confirm("¿Quiere realizar los cambios?");
-    if (respuesta == true) {
-
-        // 22 según C1 escritorio (Pendinte Generación OC)
-        if ((estado_c1 == 22)) {
-
-            // Pregunto si quiere agregar comentario, de lo contrario....paso directamente a las querys
-            var respuesta_comentario = confirm("¿Quiere agregar un comentario?");
-            if (respuesta_comentario == true) {
-
-                $("#id_color3_solic_comentariod").val(id_color3);
-                $("#proforma_solic_comentariod").val(proforma);
-
-                // Levantamso el popup de coemntarios
-                $('#solic_correccion_comentariod').modal('show');
-
-            } else {
-                // Enviamos los datos a guarcar
-                solicitud_correccion_pi_funcion(id_color3, proforma);
-            }
-
-        } else {
-            alert("No se puede solicitar corrección PI, al menos una opción no se encuentra en el estado correcto (22 Pendinte Generación OC).");
-        }
-
-    } else {
-        alert("No se han Realizado Cambios.");
-    }
-
-});
-
-// BTN Guardar del PopUp de Flujo Dinámico de Compra - Solicitud Corrección PI
-$('#btn_solic_correccion_comentariod').on('click', function () {
-
-    // Actualiza la Fecha de la Concurrencia
-    act_fecha_concurrencia();
-
-    // Validar que llega id_color3 y proforma, de lo contrario detener ejecución del script
-    var id_color3 = $("#id_color3_solic_comentario").val();
-    var proforma = $("#proforma_solic_comentario").val();
-    var comentario = $.trim($("#comentario_sol_coreccion").val());
-
-    if ((id_color3 != "") && (id_color3 != null) && (proforma != "") && (proforma != null) && (comentario.length > 2)) {
-
-        // Guardamos el comentario, luego (done) enviamos los datos a guardar.
-        var url_guarda_comentario_solic = 'ajax_simulador_cbx/guarda_comentario_estado_pi';
-        $.getJSON(url_guarda_comentario_solic, {COMENTARIO: comentario, PROFORMA: proforma}).done(function (data) {
-
-            // Enviamos los datos a guardar, despues del done
-            solicitud_correccion_pi_funcion(id_color3, proforma);
-
-            // Se agrega un recargar con delay de 1, por si la funciòn previa no lo hace
-            var delay = 1000;
-            setTimeout(function () {
-                location.reload(true);
-            }, delay);
-
-        });
-
-    } else {
-        alert("Hay campos faltantes, que impiden enviar el comentario.");
     }
 
 
