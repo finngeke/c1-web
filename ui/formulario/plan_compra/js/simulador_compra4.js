@@ -1436,7 +1436,7 @@ function descargaPI(event) {
 
 // Guarda Proforma
 $('.guarda_proforma').on('click', function () {
-    
+
     // Actualiza la Fecha de la Concurrencia
     act_fecha_concurrencia();
 
@@ -4173,6 +4173,7 @@ $('#btn_habilita_grilla').on('click', function () {
 
         // Bloquear Flujo de Aprobación (Se comenta para modo dinámico)
         //  $("#modulo_flujo_aprob").hide();
+        $(".solicitud_correccion_pi").hide();
 
         // Icono de candado abierto
         $("#i_habilita_plan").removeClass('fa fa-lock').addClass('fa fa-unlock');
@@ -4196,7 +4197,8 @@ $('#btn_habilita_grilla').on('click', function () {
         $("#btn_importar_bmt").show();
 
         // Habilitar Flujo de Aprobación
-        $("#modulo_flujo_aprob").show();
+        //$("#modulo_flujo_aprob").show();
+        $(".solicitud_correccion_pi").show();
 
         // Icono de candado cerrado
         $("#i_habilita_plan").removeClass('fa fa-unlock').addClass('fa fa-lock');

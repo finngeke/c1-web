@@ -211,10 +211,10 @@
                                 </span>
                             </a>
                             <ul class="treeview-menu">
-                                <li><a href="#" class="solicitud_generacion_oc"> Solicitud Generación OC</a></li>
-                                <li><a href="#" class="oc_generada"> OC Generada</a></li>
-                                <li><a href="#" class="crear_modificacion"> Crear Modificación</a></li>
-                                <li><a href="#" class="elimina_opcion"> Elimina Opción</a></li>
+                                <li><a href="#" class="solicitud_generacion_ocd"> Solicitud Generación OC</a></li>
+                                <li><a href="#" class="oc_generadad"> OC Generada</a></li>
+                                <li><a href="#" class="crear_modificaciond"> Crear Modificación</a></li>
+                                <li><a href="#" class="elimina_opciond"> Elimina Opción</a></li>
                                 <li><a href="#" class="solicitud_correccion_pi"> Solicitud Corrección PI</a></li>
                             </ul>
                         </li>
