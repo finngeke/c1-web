@@ -1436,15 +1436,15 @@ function descargaPI(event) {
 
 // Guarda Proforma
 $('.guarda_proforma').on('click', function () {
-
-    // Bloquear el BTN de Guardado
-    $("#btn_guarda_proforma").attr('disabled',true);
-
+    
     // Actualiza la Fecha de la Concurrencia
     act_fecha_concurrencia();
 
     var respuesta = confirm("¿Guardar la Proforma Ingresada?");
     if (respuesta == true) {
+
+    // Bloquear el BTN de Guardado
+    $("#btn_guarda_proforma").attr('disabled',true);
 
     // Antes de realizar cualquier cambio verificar que no existe un nombre de proforma con caracteres extraños
     /*var cont_check_proforma = 0;
@@ -1547,6 +1547,10 @@ $('.guarda_proforma').on('click', function () {
 
 
     } else {
+
+        // Habilitar el BTN de Guardado... el usuario no quiere guardar los cambios aún
+        $("#btn_guarda_proforma").attr('disabled',false);
+
         return false;
     }
 
