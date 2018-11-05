@@ -856,6 +856,85 @@ class cbx_grilla_compra extends \parametros
 
     }
 
+    // Trabajo con Flujo Dinámico de Aprobación
+    public static function trabaja_flujo_aprobacion_dinamico($temporada, $depto, $login, $id_color3, $estado_insert, $proforma, $estado_update)
+    {
+
+        $sql_insert = "INSERT INTO PLC_PLAN_COMPRA_HISTORICA (DPTO,LINEA,SUBLINEA,MARCA,ESTILO,VENTANA,COLOR,USER_LOGIN,USER_NOM,FECHA,HORA,PI,OC,ESTADO,TEMP,ID_COLOR3,NOM_LINEA,NOM_MARCA,NOM_VENTANA,NOM_COLOR,NOM_SUBLINEA)
+                SELECT
+                        C.DEP_DEPTO,
+                        C.COD_JER2 LINEA,         -- linea
+                        C.COD_SUBLIN SUBLINEA,    -- sublinea
+                        C.COD_MARCA,              -- marca
+                        C.DES_ESTILO ESTILO,      -- estilo
+                        C.VENTANA_LLEGADA,        -- Ventana
+                        NVL(COD_COLOR,0)COLOR,    -- Color
+                        '" . $login . "',
+                        (SELECT NOM_USR FROM PLC_USUARIO WHERE COD_USR = '" . $login . "'),
+                        (SELECT SUBSTR(TO_CHAR(SYSDATE, 'DD-MM-YYYY'),1,10)N FROM DUAL),
+                        (SELECT TO_CHAR(SYSDATE, 'HH24:MI:SS') FROM DUAL),
+                        C.PROFORMA,
+                        O.PO_NUMBER,
+                        $estado_insert,
+                        C.COD_TEMPORADA,
+                        C.ID_COLOR3,
+                        C.NOM_LINEA LINEA,
+                        C.NOM_MARCA MARCA,
+                        C.NOM_VENTANA VENTANA,
+                        C.NOM_COLOR COD_COLOR,
+                        C.NOM_SUBLINEA SUBLINEA
+                        FROM PLC_PLAN_COMPRA_COLOR_3 C
+                        LEFT JOIN PLC_PLAN_COMPRA_OC O ON C.COD_TEMPORADA = O.COD_TEMPORADA
+                        AND C.DEP_DEPTO = O.DEP_DEPTO AND C.ID_COLOR3 = O.ID_COLOR3
+                  WHERE C.COD_TEMPORADA = $temporada AND C.DEP_DEPTO =  '" . $depto . "'
+                  AND C.ID_COLOR3 = $id_color3
+                ";
+
+        // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+        if (!file_exists('../archivos/log_querys/' . $login)) {
+            mkdir('../archivos/log_querys/' . $login, 0775, true);
+        }
+        $stamp = date("Y-m-d_H-i-s");
+        $rand = rand(1, 999);
+        $content = $sql_insert;
+        $fp = fopen("../archivos/log_querys/" . $login . "/GRILLA2-FLUJOHISTORIALINSERT--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+        fwrite($fp, $content);
+        fclose($fp);
+
+        // Ejecuto la query
+        $data_insert = \database::getInstancia()->getConsulta($sql_insert);
+
+        // Si se ejecuta la consulta
+        if($data_insert){
+
+            $sql_update = "begin PLC_PKG_UTILS.PRC_SOLOC($temporada,'" . $depto . "','" . $proforma . "',$estado_update, :error, :data); end;";
+
+            // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+            if (!file_exists('../archivos/log_querys/' . $login)) {
+                mkdir('../archivos/log_querys/' . $login, 0775, true);
+            }
+            $stamp = date("Y-m-d_H-i-s");
+            $rand = rand(1, 999);
+            $content = $sql_update;
+            $fp = fopen("../archivos/log_querys/" . $login . "/GRILLA2-FLUJOHISTORIALUPDATE--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+            fwrite($fp, $content);
+            fclose($fp);
+
+            $data_update = \database::getInstancia()->getConsultaSP($sql_update, 2);
+
+            if($data_update){
+                return "OK";
+            }else{
+                return "ERROR";
+            }
+
+        // Si la consulta no se puede realizar
+        }else{
+            return "ERROR";
+        }
+
+    // Fin de la clase
+    }
 
     // Listar el coemntario de la PI que se solcititò modificar
     public static function busca_comentario_pi($temporada, $depto, $login, $pi)

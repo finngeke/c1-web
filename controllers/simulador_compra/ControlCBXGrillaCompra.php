@@ -339,6 +339,11 @@
 		public function trabaja_flujo_aprobacion_update($f3) {
 			echo \simulador_compra\cbx_grilla_compra::trabaja_flujo_aprobacion_update($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $f3->get('GET.PROFORMA'), $f3->get('GET.ESTADO'));
 		}
+
+        public function trabaja_flujo_aprobacion_dinamico($f3) {
+            echo \simulador_compra\cbx_grilla_compra::trabaja_flujo_aprobacion_dinamico($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $f3->get('GET.ID_COLOR3'), $f3->get('GET.ESTADO_INSERT'), $f3->get('GET.PROFORMA'), $f3->get('GET.ESTADO_UPDATE'));
+        }
+
 // ######################## FIN Trabajo con flujo de aprobación ########################
 		
 		// Llenar despliega_hitorial_tabla

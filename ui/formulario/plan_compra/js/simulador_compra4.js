@@ -1068,7 +1068,47 @@ $(window).on('load', function () {
 // fin de onload
 });
 
+
 // ############################################ FUNCIONES QUE SON LLAMADAS DE LA GRILLA O POR LOS POPUP QUE SE CARGAN ############################################
+
+// Función Recarga Página
+function delay_reload(segundos){
+
+    setTimeout(function () {
+        // Recargar Página
+        location.reload(true);
+    }, segundos);
+
+}
+
+// Función Limpia Caracteres
+function limpia_caracteres(string){
+
+    return string.replace(/[^a-z0-9\-\_]/gi, '-');
+
+}
+
+// Al momento de abrir un modal o hacer click actualiza la fecha y hora en el cuál el usuario realizó la acción para poder asì luego eliminar las concurrencias con màs de X tiempo
+function act_fecha_concurrencia(){
+
+    var url_act_fecha_concurrencia = 'ajax_simulador_cbx/actualiza_fecha_concurrencia';
+
+    $.ajax({
+        type: "GET",
+        url: url_act_fecha_concurrencia,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (data_ventana) {
+            // Acción al Ejecutarse correctamente
+            console.log("Se Actualiza Fecha de Concurrencia");
+        }, error: function (jqXHR, textStatus, errorThrown) {
+            console.log("Error: " + textStatus + " errorThrown: " + errorThrown);
+        }
+    }).done(function () {
+        console.log("Se realiza solicitud de Actualización de Fecha en Concurrencia");
+    });
+
+}
 
 // Si escriben algo en la proforma actualizar el estado de la linea
 function actualizaCampoEstadoProforma(event) {
@@ -1535,6 +1575,7 @@ $('#form_carga_pi').submit(function (event) {
 
 });
 
+// Flujo Aprobación - Solicitud Generación OC
 $('.solicitud_generacion_oc').on('click', function () {
 
     // Actualiza la Fecha de la Concurrencia
@@ -1582,6 +1623,7 @@ $('.solicitud_generacion_oc').on('click', function () {
 
 });
 
+// Flujo Aprobación - OC Generada
 $('.oc_generada').on('click', function () {
 
     // Actualiza la Fecha de la Concurrencia
@@ -1624,6 +1666,7 @@ $('.oc_generada').on('click', function () {
 
 });
 
+// Flujo Aprobación - Crear Modificación
 $('.crear_modificacion').on('click', function () {
 
     // Actualiza la Fecha de la Concurrencia
@@ -1666,6 +1709,7 @@ $('.crear_modificacion').on('click', function () {
 
 });
 
+// Flujo Aprobación - Elimina Opción
 $('.elimina_opcion').on('click', function () {
 
     // Actualiza la Fecha de la Concurrencia
@@ -1715,6 +1759,7 @@ $('.elimina_opcion').on('click', function () {
 
 });
 
+// Flujo Aprobación - Solicitud Corrección PI
 $('.solicitud_correccion_pi').on('click', function () {
 
     // Actualiza la Fecha de la Concurrencia
@@ -1758,7 +1803,7 @@ $('.solicitud_correccion_pi').on('click', function () {
 
 });
 
-// Botón OnClick
+// BTN Guardar del PopUp de Flujo de Compra - Solicitud Corrección PI
 $('#btn_solic_correccion_comentario').on('click', function () {
 
     // Actualiza la Fecha de la Concurrencia
@@ -3026,6 +3071,7 @@ function verificaFormatoArchivo(sender) {
 
 }
 
+// Verificar el archivo de la PI a subir, nuevo formato
 function verificaFormatoArchivoServer(sender) {
 
     var validExts = [".xlsx", ".XLS", ".xls", ".XLSX"];
@@ -4101,7 +4147,7 @@ function carga_tabla1_oculta() {
 
 }
 
-// Habilita/Desabilita Grilla
+// Habilita/Desabilita Edición de Grilla
 $('#btn_habilita_grilla').on('click', function () {
 
     // Actualiza la Fecha de la Concurrencia
@@ -4121,8 +4167,8 @@ $('#btn_habilita_grilla').on('click', function () {
         $("#btn_guarda_proforma").hide();
         $("#btn_importar_bmt").hide();
 
-        // Bloquear Flujo de Aprobación
-        $("#modulo_flujo_aprob").hide();
+        // Bloquear Flujo de Aprobación (Se comenta para modo dinámico)
+        //  $("#modulo_flujo_aprob").hide();
 
         // Icono de candado abierto
         $("#i_habilita_plan").removeClass('fa fa-lock').addClass('fa fa-unlock');
@@ -4178,6 +4224,7 @@ $('#btn_edita_grilla').on('click', function () {
 
     $(".cargando_tabla_edita_grilla").show();
     $("#btn_editar_registros_grilla_editable").hide();
+
     // 1.- Antes de levantar el POPUP, verificar que existen elementos seleccionados
     var elementos_seleccionados = $("#tabla2 input:checked").length;
 
@@ -4823,28 +4870,6 @@ $('#btn_editar_registros_grilla_editable').on('click', function () {
 // fin del Botón actualizar del editar grilla
 });
 
-// Al momento de abrir un modal o hacer click actualiza la fecha y hora en el cuál el usuario realizó la acción para poder asì luego eliminar las concurrencias con màs de X tiempo
-function act_fecha_concurrencia(){
-
-    var url_act_fecha_concurrencia = 'ajax_simulador_cbx/actualiza_fecha_concurrencia';
-
-    $.ajax({
-        type: "GET",
-        url: url_act_fecha_concurrencia,
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        success: function (data_ventana) {
-            // Acción al Ejecutarse correctamente
-            console.log("Se Actualiza Fecha de Concurrencia");
-        }, error: function (jqXHR, textStatus, errorThrown) {
-            console.log("Error: " + textStatus + " errorThrown: " + errorThrown);
-        }
-    }).done(function () {
-        console.log("Se realiza solicitud de Actualización de Fecha en Concurrencia");
-    });
-
-}
-
 // Función responsable de la carga de la PI
 $("#pi_upload_ajax").on('submit',(function(e) {
 
@@ -4980,3 +5005,324 @@ $("#cerrar_modal_carga_archivo_pi").on('click', function () {
 
 
 });
+
+// ################################################ TRABAJO CON SELECCION DE FLUJO DINAMICO ############################################
+
+// Flujo Dinámico Aprobación - Solicitud Generación OC
+$('.solicitud_generacion_ocd').on('click', function () {
+
+    // Actualiza la Fecha de la Concurrencia
+    act_fecha_concurrencia();
+
+    // URL
+    var url = 'ajax_simulador_cbx/trabaja_flujo_aprobacion_dinamico';
+
+    var respuesta = confirm("¿Quiere realizar los cambios?");
+
+    if (respuesta == true) {
+
+        // 1.- Antes de levantar el POPUP, verificar que existen elementos seleccionados
+        var elementos_seleccionados = $("#tabla2 input:checked").length;
+
+        // 1.0- Si existen elementos seleccionados
+        if (elementos_seleccionados > 0) {
+
+            // Recorro los checkbox seleccionados
+            $("#tabla2 input:checkbox:checked").each(function () {
+
+                // id_color3
+                var id_color3 = $("#txt_id_color_" + $(this).val()).text();
+                // estado_c1
+                var estado_c1 = $("#tabla2 #txt_estadoc1_" + $(this).val()).text();
+                // Proforma
+                var proforma = $("#txt_proforma_" + $(this).val()).val();
+                proforma = proforma.replace(/[^a-z0-9\-\_]/gi, '-');
+
+                // Verificar Estado C1
+                if(estado_c1==18){
+
+                    $.getJSON(url, {ID_COLOR3: id_color3, ESTADO_INSERT: 22,PROFORMA: proforma, ESTADO_UPDATE: 1});
+
+                // Fin de la validación de estado
+                }
+
+            // Fin del each ya seleccionados de la tabla
+            }).promise().done(function(){
+
+                delay_reload(5000);
+
+            });
+
+
+        } else {
+            alert("Seleccione al menos una opción para editar");
+        }
+
+
+    // Si el usuario no acepta realizar cambios
+    } else {
+        alert("No se han Realizado Cambios.");
+    }
+
+
+});
+
+// Flujo Dinámico Aprobación - OC Generada
+$('.oc_generadad').on('click', function () {
+
+    // Actualiza la Fecha de la Concurrencia
+    act_fecha_concurrencia();
+
+    // URL
+    var url = 'ajax_simulador_cbx/trabaja_flujo_aprobacion_dinamico';
+
+    var respuesta = confirm("¿Quiere realizar los cambios?");
+
+    if (respuesta == true) {
+
+        // 1.- Antes de levantar el POPUP, verificar que existen elementos seleccionados
+        var elementos_seleccionados = $("#tabla2 input:checked").length;
+
+        // 1.0- Si existen elementos seleccionados
+        if (elementos_seleccionados > 0) {
+
+            // Recorro los checkbox seleccionados
+            $("#tabla2 input:checkbox:checked").each(function () {
+
+                // id_color3
+                var id_color3 = $("#txt_id_color_" + $(this).val()).text();
+                // estado_c1
+                var estado_c1 = $("#tabla2 #txt_estadoc1_" + $(this).val()).text();
+                // Proforma
+                var proforma = $("#txt_proforma_" + $(this).val()).val();
+                proforma = proforma.replace(/[^a-z0-9\-\_]/gi, '-');
+
+                // Verificar Estado C1
+                if(estado_c1==22){
+
+                    $.getJSON(url, {ID_COLOR3: id_color3, ESTADO_INSERT: 19,PROFORMA: proforma, ESTADO_UPDATE: 2});
+
+                // Fin de la validación de estado
+                }
+
+                // Fin del each ya seleccionados de la tabla
+            }).promise().done(function(){
+
+                delay_reload(5000);
+
+            });
+
+
+        } else {
+            alert("Seleccione al menos una opción para editar");
+        }
+
+
+        // Si el usuario no acepta realizar cambios
+    } else {
+        alert("No se han Realizado Cambios.");
+    }
+
+
+});
+
+// Flujo Dinámico Aprobación - Crear Modificación
+$('.crear_modificaciond').on('click', function () {
+
+    // Actualiza la Fecha de la Concurrencia
+    act_fecha_concurrencia();
+
+    // URL
+    var url = 'ajax_simulador_cbx/trabaja_flujo_aprobacion_dinamico';
+
+    var respuesta = confirm("¿Quiere realizar los cambios?");
+
+    if (respuesta == true) {
+
+        // 1.- Antes de levantar el POPUP, verificar que existen elementos seleccionados
+        var elementos_seleccionados = $("#tabla2 input:checked").length;
+
+        // 1.0- Si existen elementos seleccionados
+        if (elementos_seleccionados > 0) {
+
+            // Recorro los checkbox seleccionados
+            $("#tabla2 input:checkbox:checked").each(function () {
+
+                // id_color3
+                var id_color3 = $("#txt_id_color_" + $(this).val()).text();
+                // estado_c1
+                var estado_c1 = $("#tabla2 #txt_estadoc1_" + $(this).val()).text();
+                // Proforma
+                var proforma = $("#txt_proforma_" + $(this).val()).val();
+                proforma = proforma.replace(/[^a-z0-9\-\_]/gi, '-');
+
+                // Verificar Estado C1
+                if(estado_c1!=24){
+
+                    $.getJSON(url, {ID_COLOR3: id_color3, ESTADO_INSERT: 0,PROFORMA: proforma, ESTADO_UPDATE: 3});
+
+                // Fin de la validación de estado
+                }
+
+                // Fin del each ya seleccionados de la tabla
+            }).promise().done(function(){
+
+                delay_reload(5000);
+
+            });
+
+
+        } else {
+            alert("Seleccione al menos una opción para editar");
+        }
+
+
+        // Si el usuario no acepta realizar cambios
+    } else {
+        alert("No se han Realizado Cambios.");
+    }
+
+});
+
+// Flujo Dinámico Aprobación - Elimina Opción
+$('.elimina_opciond').on('click', function () {
+
+    // Actualiza la Fecha de la Concurrencia
+    act_fecha_concurrencia();
+
+    // URL
+    var url = 'ajax_simulador_cbx/trabaja_flujo_aprobacion_dinamico';
+
+    var respuesta = confirm("¿Quiere realizar los cambios?");
+
+    if (respuesta == true) {
+
+        // 1.- Antes de levantar el POPUP, verificar que existen elementos seleccionados
+        var elementos_seleccionados = $("#tabla2 input:checked").length;
+
+        // 1.0- Si existen elementos seleccionados
+        if (elementos_seleccionados > 0) {
+
+            // Recorro los checkbox seleccionados
+            $("#tabla2 input:checkbox:checked").each(function () {
+
+                // id_color3
+                var id_color3 = $("#txt_id_color_" + $(this).val()).text();
+                // estado_c1
+                var estado_c1 = $("#tabla2 #txt_estadoc1_" + $(this).val()).text();
+                // Proforma
+                var proforma = $("#txt_proforma_" + $(this).val()).val();
+                proforma = proforma.replace(/[^a-z0-9\-\_]/gi, '-');
+
+                // Verificar Estado C1
+                if(estado_c1!=21){
+
+                    $.getJSON(url, {ID_COLOR3: id_color3, ESTADO_INSERT: 24,PROFORMA: proforma, ESTADO_UPDATE: 4});
+
+                // Fin de la validación de estado
+                }
+
+                // Fin del each ya seleccionados de la tabla
+            }).promise().done(function(){
+
+                delay_reload(5000);
+
+            });
+
+
+        } else {
+            alert("Seleccione al menos una opción para editar");
+        }
+
+
+        // Si el usuario no acepta realizar cambios
+    } else {
+        alert("No se han Realizado Cambios.");
+    }
+
+
+});
+
+// Flujo Dinámico Aprobación - Solicitud Corrección PI
+$('.solicitud_correccion_pid').on('click', function () {
+
+    // Sin procesar aun
+
+    // Actualiza la Fecha de la Concurrencia
+    act_fecha_concurrencia();
+
+    var valor_radio = $("input[name='radio']:checked").val();
+    var proforma = $("#txt_proforma_" + valor_radio).val();
+    //proforma = proforma.replace(/[^a-z0-9\-]/gi, '');
+    proforma = proforma.replace(/[^a-z0-9\-\_]/gi, '-');
+    var id_color3 = $("#txt_id_color_" + valor_radio).text();
+    var estado_c1 = $("#tabla2 #txt_estadoc1_" + valor_radio).text();
+
+    var respuesta = confirm("¿Quiere realizar los cambios?");
+    if (respuesta == true) {
+
+        // 22 según C1 escritorio (Pendinte Generación OC)
+        if ((estado_c1 == 22)) {
+
+            // Pregunto si quiere agregar comentario, de lo contrario....paso directamente a las querys
+            var respuesta_comentario = confirm("¿Quiere agregar un comentario?");
+            if (respuesta_comentario == true) {
+
+                $("#id_color3_solic_comentariod").val(id_color3);
+                $("#proforma_solic_comentariod").val(proforma);
+
+                // Levantamso el popup de coemntarios
+                $('#solic_correccion_comentariod').modal('show');
+
+            } else {
+                // Enviamos los datos a guarcar
+                solicitud_correccion_pi_funcion(id_color3, proforma);
+            }
+
+        } else {
+            alert("No se puede solicitar corrección PI, al menos una opción no se encuentra en el estado correcto (22 Pendinte Generación OC).");
+        }
+
+    } else {
+        alert("No se han Realizado Cambios.");
+    }
+
+});
+
+// BTN Guardar del PopUp de Flujo Dinámico de Compra - Solicitud Corrección PI
+$('#btn_solic_correccion_comentariod').on('click', function () {
+
+    // Actualiza la Fecha de la Concurrencia
+    act_fecha_concurrencia();
+
+    // Validar que llega id_color3 y proforma, de lo contrario detener ejecución del script
+    var id_color3 = $("#id_color3_solic_comentario").val();
+    var proforma = $("#proforma_solic_comentario").val();
+    var comentario = $.trim($("#comentario_sol_coreccion").val());
+
+    if ((id_color3 != "") && (id_color3 != null) && (proforma != "") && (proforma != null) && (comentario.length > 2)) {
+
+        // Guardamos el comentario, luego (done) enviamos los datos a guardar.
+        var url_guarda_comentario_solic = 'ajax_simulador_cbx/guarda_comentario_estado_pi';
+        $.getJSON(url_guarda_comentario_solic, {COMENTARIO: comentario, PROFORMA: proforma}).done(function (data) {
+
+            // Enviamos los datos a guardar, despues del done
+            solicitud_correccion_pi_funcion(id_color3, proforma);
+
+            // Se agrega un recargar con delay de 1, por si la funciòn previa no lo hace
+            var delay = 1000;
+            setTimeout(function () {
+                location.reload(true);
+            }, delay);
+
+        });
+
+    } else {
+        alert("Hay campos faltantes, que impiden enviar el comentario.");
+    }
+
+
+});
+
+// ################################################ FIN TRABAJO CON SELECCION DE FLUJO DINAMICO ############################################
+
