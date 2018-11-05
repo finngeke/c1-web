@@ -1255,7 +1255,7 @@ function validar(event) {
 
 function validarc1(event) {
 
-    var _val = true
+    var _val = true;
     $('input[type=checkbox]').on('change', function (e) {
         if ($('input[type=checkbox]:checked').length > 5) {
             $(this).prop('checked', false);
