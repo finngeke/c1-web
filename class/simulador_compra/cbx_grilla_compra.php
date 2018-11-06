@@ -974,14 +974,21 @@ class cbx_grilla_compra extends \parametros
     public static function busca_existe_archivo($temporada, $depto, $login, $pi)
     {
 
-        $sql = "SELECT DISTINCT(ARCHIVO) FROM PLC_PLAN_COMPRA_OC
+        $sql = "SELECT 1 FROM PLC_PLAN_COMPRA_OC
                 WHERE COD_TEMPORADA = $temporada
                 AND DEP_DEPTO = '" . $depto . "'
                 AND PROFORMA = '" . $pi . "'
+                AND ROWNUM <= 1
                 ";
 
         $data = \database::getInstancia()->getFilas($sql);
-        return $data;
+        //return $data;
+
+        if($data){
+            return 1;
+        }else{
+            return 0;
+        }
 
     }
 

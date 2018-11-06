@@ -1172,9 +1172,14 @@ function actualizaCampoEstadoProforma(event) {
 
                 // Consultamos si el Archivo fue cargado previamente a la tabla PLC_PLAN_COMPRA_OC (Donde queda registrado el "Cargado..")
                 $.getJSON(url_act_campo_busca_archivo, {PI: valor_campo}).done(function (data) {
-                    $.each(data, function (i, o) {
+
+                    /*$.each(data, function (i, o) {
                         count_archivo_existe++;
-                    });
+                    });*/
+
+                    count_archivo_existe = data;
+
+
                 }).done(function () {
 
                     // Si no existe archivo cargado previamente a la PI que estamos buscando
