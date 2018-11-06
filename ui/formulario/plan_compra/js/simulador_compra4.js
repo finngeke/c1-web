@@ -637,8 +637,6 @@ $(window).on('load', function () {
 
 
 
-
-                    //var reorder = $(this).find("td:eq(66)").text();
                     var reorder = $("#tabla2 #txt_debutreorder_" + flag_tabla2).text();
 
                     var proforma = $("#tabla2 #txt_proforma_" + flag_tabla2).val();
@@ -651,7 +649,6 @@ $(window).on('load', function () {
                     var estado = $("#tabla2 #cbx_estadoopcion_" + flag_tabla2).text();
                     var archivo_ = $("#tabla2 #txt_archivo_" + flag_tabla2).text();
 
-                    //if (archivo_ == "Cargado.. Upload"){
                     if (archivo_ == "Cargado.. Upload Upload") {
                         $(".pi_" + flag_tabla2).attr("disabled", false);
                     } else if (estado == "Ingresado" && proforma != 0 && proforma != 'null' && proforma != '') {
@@ -716,6 +713,7 @@ $(window).on('load', function () {
                             $(this).find("td").css('text-decoration', 'line-through');
                         }
 
+                    // Fin si reorder es distinto de Indefinido
                     }
 
 
@@ -758,181 +756,7 @@ $(window).on('load', function () {
             $(".btn_pi_").attr("disabled", "disabled");
             $(".detalle_error_pi_").attr("disabled", "disabled");
 
-            /*cambiar los colores segun de la filas */
-            // Define Tiempo 1 = 1000
-            /*var delay_color_segun_fila = 2000;
-            setTimeout(function () {
-                var $key = 0;
-                // Recorrer los TR de una Tabla
-                $("#tabla2 > tbody >tr").each(function () {
-
-                    //var reorder = $(this).find("td:eq(66)").text();
-                    var reorder = $("#tabla2 #txt_debutreorder_" + $key).text();
-
-                    var proforma = $("#tabla2 #txt_proforma_" + $key).val();
-                    proforma = proforma.replace(/[^a-z0-9\-\_]/gi, '-');
-                    var tipoproducto = $("#tabla2 #cbx_tipoproducto_" + $key).text();
-                    var GMB = ($("#tabla2 #txt_gm_" + $key).text()).replace('%', '');
-
-                    // Buscar el estado de eliminado para darles la clase de tachar
-                    //var estado = $(this).find("td:eq(89)").text();
-                    var estado = $("#tabla2 #cbx_estadoopcion_" + $key).text();
-                    var archivo_ = $("#tabla2 #txt_archivo_" + $key).text();
-
-                    //if (archivo_ == "Cargado.. Upload"){
-                    if (archivo_ == "Cargado.. Upload Upload") {
-                        $(".pi_" + $key).attr("disabled", false);
-                    } else if (estado == "Ingresado" && proforma != 0 && proforma != 'null' && proforma != '') {
-                        $(".archivo_" + $key).attr("disabled", false);
-                    }
-
-                    // Aparece una "s" ya que el despliegue corrige error de texto
-                    if (estado == "Pendiente de Correccisn PI") {
-                        $(".errorpi_" + $key).attr("disabled", false);
-                    }
-
-                    //var temp_grilla2 = $(this).find("td:eq(3)").text();
-                    var temp_grilla2 = $("#tabla2 #cbx_temp_" + $key).text();
-
-                    if (temp_grilla2 == 3) {
-                        $("#tabla2 #cbx_temp_" + $key).html("Ttemp");
-                    } else {
-                        var span_temporada = $('#span_tempo').text();
-                        span_temporada = span_temporada.substring(0, 2);
-                        $("#tabla2 #cbx_temp_" + $key).html(span_temporada);
-                    }
-
-                    // Verificar que reorder no llegue "undefined" o vacio
-                    if (typeof(reorder) != "undefined") {
-                        if (reorder == "REORDER") {
-
-                            $("#tabla2 #cbx_ciclovida_" + $key).addClass('columnasreorder');
-
-                            $("#tabla2 #cbx_cluster_" + $key).addClass('columnasreorder');
-                            $("#tabla2 #cbx_formato_" + $key).addClass('columnasreorder');
-                            $("#tabla2 #txt_tdas_" + $key).addClass('columnasreorder');
-                            $("#tabla2 #txt_a_" + $key).addClass('columnasreorder');
-                            $("#tabla2 #txt_b_" + $key).addClass('columnasreorder');
-                            $("#tabla2 #txt_c_" + $key).addClass('columnasreorder');
-                            $("#tabla2 #txt_i_" + $key).addClass('columnasreorder');
-                            $("#tabla2 #txt_primeracarga_" + $key).addClass('columnasreorder');
-                            $("#tabla2 #txt_tiendas_" + $key).addClass('columnasreorder');
-
-                            $("#tabla2 #txt_semfin_" + $key).addClass('columnasreorder');
-                            $("#tabla2 #txt_semanasciclovida_" + $key).addClass('columnasreorder');
-                            $("#tabla2 #txt_semanasliquidacion_" + $key).addClass('columnasreorder');
-
-                        } else {
-                            $("#tabla2 #txt_debutreorder_" + $key).css("color", "red");
-                        }
-
-                        if (tipoproducto == "REGULAR") {
-                            $("#tabla2 #cbx_tipoexhibicion_" + $key).addClass('columnasreorder');
-                        }
-
-                        if (GMB < 0) {
-                            $("#tabla2 #txt_gm_" + $key).css("color", "red");
-                        } else if (GMB > 0) {
-                            $("#tabla2 #txt_gm_" + $key).css("color", "Blue");
-                        } else {
-                            $("#tabla2 #txt_gm_" + $key).css("color", "Gray");
-                        }
-
-                        // Tachar los campos con estado eliminado
-                        if (estado == "Eliminado") {
-                            $(this).find("td").css('text-decoration', 'line-through');
-                        }
-
-                    }
-
-                    $key++;
-                });
-
-            }, delay_color_segun_fila);*/
-
-            // Cambiar la lógica, recorrer la tabla y si trae una PI busca los datos del
-            // Define Tiempo 1 = 1000
-            var delay_traer_datos_oc = 6000;
-            setTimeout(function () {
-                var flag_tabla_vista_oc_broker = 0;
-                $("#tabla2 >tbody >tr").each(function () {
-
-                    // Traigo la Proforma
-                    //var proforma = $(this).find("td:eq(77) input[type='text']").val();
-                    var proforma = $("#tabla2 #txt_proforma_" + flag_tabla_vista_oc_broker).val();
-                    //proforma = proforma.replace(/[^a-z0-9\-]/gi, '');
-                    proforma = proforma.replace(/[^a-z0-9\-\_]/gi, '-');
-                    // Traigo el estado, solo para cargar el presupuesto cuando el estado sea 19
-                    //var estado_c1 = $(this).find("td:eq(90)").text();
-                    var estado_c1 = $("#tabla2 #txt_estadoc1_" + flag_tabla_vista_oc_broker).text();
-                    /*var id_fila = $(this).find("td:eq(2)").attr("id");
-                            id_fila =  id_fila.split("_");
-                            id_fila = id_fila[2];*/
-                    var id_fila = flag_tabla_vista_oc_broker;
-                    //var fecha_recep_cd_c1 = $(this).find("td:eq(94)").text();
-                    var fecha_recep_cd_c1 = $("#tabla2 #txt_fecha_recep_c1__" + flag_tabla_vista_oc_broker).text();
-                    var transforma_recep_cd = new Date(fecha_recep_cd_c1);
-                    transforma_recep_cd = transforma_recep_cd.toLocaleString();
-                    transforma_recep_cd = transforma_recep_cd.split(" ");
-                    transforma_recep_cd = transforma_recep_cd[0].split("/");
-                    transforma_recep_cd = transforma_recep_cd[0] + '-' + transforma_recep_cd[1] + '-' + transforma_recep_cd[2];
-
-
-                    if ((proforma != 'null') && (proforma != null) && (proforma != 0) && (proforma != '') && (estado_c1 == 18 || estado_c1 == 19 || estado_c1 == 22)) {
-
-                        var url_llena_array_oc = 'ajax_simulador_cbx/traer_datos_oc';
-                        var url_recep_atraso = 'ajax_simulador_cbx/trae_fecharcd_y_dias_atraso';
-                        $.getJSON(url_llena_array_oc, {PI: proforma}, function (data) {
-
-                            var json = JSON.parse(data);
-                            //var json = JSON.stringify(data); // JavaScript object a string
-
-                            if (json.Body.fault.faultCode == 0) {
-
-                                var detalle = json.Body.detalleConsultaOrdenCompra.detalle;
-                                if (detalle.length > 0) {
-                                    if (detalle[0].ordenCompra.length > 0) {
-
-                                        $('#txt_noc_' + id_fila).html(detalle[0].ordenCompra);
-                                        $('#txt_estadooc_' + id_fila).html(detalle[0].estadoOC);
-                                        // Modificar despliegue fecha embarque a dd-mm-aaaa
-                                        var orden_fecha_embarque = detalle[0].fechaEmbarque.split("-");
-                                        orden_fecha_embarque = orden_fecha_embarque[2] + '-' + orden_fecha_embarque[1] + '-' + orden_fecha_embarque[0];
-                                        $('#txt_fechaembarque_' + id_fila).html(orden_fecha_embarque);
-                                        // Modificar despliegue fecha eta a dd-mm-aaaa
-                                        var orden_fecha_eta = detalle[0].fechaEta.split("-");
-                                        orden_fecha_eta = orden_fecha_eta[2] + '-' + orden_fecha_eta[1] + '-' + orden_fecha_eta[0];
-                                        $('#txt_fechaeta_' + id_fila).html(orden_fecha_eta);
-
-                                        //alert('Fecha ETA: '+orden_fecha_eta+' Fecha Recep. PMM: '+transforma_recep_cd);
-
-                                        // Aquí vamos a calcular "Fecha Recepción CD" y "Días de Atraso" (Enviar formato dd/mm/rrrr)
-                                        $.getJSON(url_recep_atraso, {
-                                            FECHA_ESTA: orden_fecha_eta,
-                                            FECHA_RECEP_PMM: transforma_recep_cd
-                                        }, function (data_recep_atraso) {
-                                            $.each(data_recep_atraso, function (i, o) {
-                                                $('#txt_fecharecepcioncd_' + id_fila).html(o[0]);
-                                                $('#txt_diasatrasocd_' + id_fila).html(o[1]);
-                                            });
-                                        });
-
-
-                                    }
-                                }
-                            }
-
-                        });
-
-                        // Fin del IF Proforma
-                    }
-
-                    // Incremental
-                    flag_tabla_vista_oc_broker++;
-                    // Fin de la tabla
-                });
-            }, delay_traer_datos_oc);
-
+            
             // Aquí el quitar null de las columnas y colorear estados
             var delay_quitar_null = 2000;
             setTimeout(function () {
