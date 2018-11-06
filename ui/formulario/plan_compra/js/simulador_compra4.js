@@ -634,8 +634,100 @@ $(window).on('load', function () {
                         '<td id="txt_ventava_numero_' + flag_tabla2 + '" style="display: none">' + o[87] + '</td>\n' +
                         '<td id="txt_fecha_recep_c1__' + flag_tabla2 + '" style="display: none">' + o[88] + '</td>\n' +
                         '</tr>');
+
+
+
+
+                    //var reorder = $(this).find("td:eq(66)").text();
+                    var reorder = $("#tabla2 #txt_debutreorder_" + flag_tabla2).text();
+
+                    var proforma = $("#tabla2 #txt_proforma_" + flag_tabla2).val();
+                    proforma = proforma.replace(/[^a-z0-9\-\_]/gi, '-');
+                    var tipoproducto = $("#tabla2 #cbx_tipoproducto_" + flag_tabla2).text();
+                    var GMB = ($("#tabla2 #txt_gm_" + flag_tabla2).text()).replace('%', '');
+
+                    // Buscar el estado de eliminado para darles la clase de tachar
+                    //var estado = $(this).find("td:eq(89)").text();
+                    var estado = $("#tabla2 #cbx_estadoopcion_" + flag_tabla2).text();
+                    var archivo_ = $("#tabla2 #txt_archivo_" + flag_tabla2).text();
+
+                    //if (archivo_ == "Cargado.. Upload"){
+                    if (archivo_ == "Cargado.. Upload Upload") {
+                        $(".pi_" + flag_tabla2).attr("disabled", false);
+                    } else if (estado == "Ingresado" && proforma != 0 && proforma != 'null' && proforma != '') {
+                        $(".archivo_" + flag_tabla2).attr("disabled", false);
+                    }
+
+                    // Aparece una "s" ya que el despliegue corrige error de texto
+                    if (estado == "Pendiente de Correccisn PI") {
+                        $(".errorpi_" + flag_tabla2).attr("disabled", false);
+                    }
+
+                    //var temp_grilla2 = $(this).find("td:eq(3)").text();
+                    var temp_grilla2 = $("#tabla2 #cbx_temp_" + flag_tabla2).text();
+
+                    if (temp_grilla2 == 3) {
+                        $("#tabla2 #cbx_temp_" + flag_tabla2).html("Ttemp");
+                    } else {
+                        var span_temporada = $('#span_tempo').text();
+                        span_temporada = span_temporada.substring(0, 2);
+                        $("#tabla2 #cbx_temp_" + flag_tabla2).html(span_temporada);
+                    }
+
+                    // Verificar que reorder no llegue "undefined" o vacio
+                    if (typeof(reorder) != "undefined") {
+                        if (reorder == "REORDER") {
+
+                            //$( this ).find( "td:eq(21)" ).addClass('columnasreorder');
+                            $("#tabla2 #cbx_ciclovida_" + flag_tabla2).addClass('columnasreorder');
+
+                            $("#tabla2 #cbx_cluster_" + flag_tabla2).addClass('columnasreorder');
+                            $("#tabla2 #cbx_formato_" + flag_tabla2).addClass('columnasreorder');
+                            $("#tabla2 #txt_tdas_" + flag_tabla2).addClass('columnasreorder');
+                            $("#tabla2 #txt_a_" + flag_tabla2).addClass('columnasreorder');
+                            $("#tabla2 #txt_b_" + flag_tabla2).addClass('columnasreorder');
+                            $("#tabla2 #txt_c_" + flag_tabla2).addClass('columnasreorder');
+                            $("#tabla2 #txt_i_" + flag_tabla2).addClass('columnasreorder');
+                            $("#tabla2 #txt_primeracarga_" + flag_tabla2).addClass('columnasreorder');
+                            $("#tabla2 #txt_tiendas_" + flag_tabla2).addClass('columnasreorder');
+
+                            $("#tabla2 #txt_semfin_" + flag_tabla2).addClass('columnasreorder');
+                            $("#tabla2 #txt_semanasciclovida_" + flag_tabla2).addClass('columnasreorder');
+                            $("#tabla2 #txt_semanasliquidacion_" + flag_tabla2).addClass('columnasreorder');
+
+                        } else {
+                            $("#tabla2 #txt_debutreorder_" + flag_tabla2).css("color", "red");
+                        }
+
+                        if (tipoproducto == "REGULAR") {
+                            $("#tabla2 #cbx_tipoexhibicion_" + flag_tabla2).addClass('columnasreorder');
+                        }
+
+                        if (GMB < 0) {
+                            $("#tabla2 #txt_gm_" + flag_tabla2).css("color", "red");
+                        } else if (GMB > 0) {
+                            $("#tabla2 #txt_gm_" + flag_tabla2).css("color", "Blue");
+                        } else {
+                            $("#tabla2 #txt_gm_" + flag_tabla2).css("color", "Gray");
+                        }
+
+                        // Tachar los campos con estado eliminado
+                        if (estado == "Eliminado") {
+                            $(this).find("td").css('text-decoration', 'line-through');
+                        }
+
+                    }
+
+
+
+
+
+
+
+                    // Incrementar el contador de la tabla
                     flag_tabla2++;
-                    // Fin foreach que llena tabla
+
+                // Fin foreach que llena tabla
                 });
 
                 if (flag_cont_registro == 0) {
@@ -666,49 +758,9 @@ $(window).on('load', function () {
             $(".btn_pi_").attr("disabled", "disabled");
             $(".detalle_error_pi_").attr("disabled", "disabled");
 
-            // Define Tiempo 1 = 1000 (Colores a presupuesto tabla1)
-            /*var delay_color_presupuesto = 1000;
-            setTimeout(function () {
-                $("#tabla1 tbody tr").each(function () {
-
-                    $(this).find("td:eq(1)").addClass('filas_PPTO_AliceBlue');
-                    $(this).find("td:eq(2)").addClass('filas_PPTO_AliceBlue');
-                    $(this).find("td:eq(3)").addClass('filas_PPTO_AliceBlue');
-                    $(this).find("td:eq(4)").addClass('filas_PPTO_AliceBlue');
-                    $(this).find("td:eq(5)").addClass('filas_PPTO_AliceBlue');
-                    $(this).find("td:eq(6)").addClass('filas_PPTO_AliceBlue');
-                    $(this).find("td:eq(7)").addClass('filas_PPTO_AliceBlue');
-                    $(this).find("td:eq(8)").addClass('filas_PPTO_AliceBlue');
-                    $(this).find("td:eq(9)").addClass('filas_PPTO_AliceBlue');
-                    $(this).find("td:eq(10)").addClass('filas_PPTO_AliceBlue');
-
-                    $(this).find("td:eq(11)").addClass('filas_PPTO_LightPink');
-                    $(this).find("td:eq(12)").addClass('filas_PPTO_LightPink');
-                    $(this).find("td:eq(13)").addClass('filas_PPTO_LightPink');
-                    $(this).find("td:eq(14)").addClass('filas_PPTO_LightPink');
-                    $(this).find("td:eq(15)").addClass('filas_PPTO_LightPink');
-                    $(this).find("td:eq(16)").addClass('filas_PPTO_LightPink');
-                    $(this).find("td:eq(17)").addClass('filas_PPTO_LightPink');
-                    $(this).find("td:eq(18)").addClass('filas_PPTO_LightPink');
-                    $(this).find("td:eq(19)").addClass('filas_PPTO_LightPink');
-                    $(this).find("td:eq(20)").addClass('filas_PPTO_LightPink');
-
-                    $(this).find("td:eq(21)").addClass('filas_PPTO_LightSkyBlue');
-                    $(this).find("td:eq(22)").addClass('filas_PPTO_LightSkyBlue');
-                    $(this).find("td:eq(23)").addClass('filas_PPTO_LightSkyBlue');
-                    $(this).find("td:eq(24)").addClass('filas_PPTO_LightSkyBlue');
-                    $(this).find("td:eq(25)").addClass('filas_PPTO_LightSkyBlue');
-                    $(this).find("td:eq(26)").addClass('filas_PPTO_LightSkyBlue');
-                    $(this).find("td:eq(27)").addClass('filas_PPTO_LightSkyBlue');
-                    $(this).find("td:eq(28)").addClass('filas_PPTO_LightSkyBlue');
-                    $(this).find("td:eq(29)").addClass('filas_PPTO_LightSkyBlue');
-                    $(this).find("td:eq(30)").addClass('filas_PPTO_LightSkyBlue');
-                });
-            }, delay_color_presupuesto);*/
-
             /*cambiar los colores segun de la filas */
             // Define Tiempo 1 = 1000
-            var delay_color_segun_fila = 2000;
+            /*var delay_color_segun_fila = 2000;
             setTimeout(function () {
                 var $key = 0;
                 // Recorrer los TR de una Tabla
@@ -718,7 +770,6 @@ $(window).on('load', function () {
                     var reorder = $("#tabla2 #txt_debutreorder_" + $key).text();
 
                     var proforma = $("#tabla2 #txt_proforma_" + $key).val();
-                    //proforma = proforma.replace(/[^a-z0-9\-]/gi, '');
                     proforma = proforma.replace(/[^a-z0-9\-\_]/gi, '-');
                     var tipoproducto = $("#tabla2 #cbx_tipoproducto_" + $key).text();
                     var GMB = ($("#tabla2 #txt_gm_" + $key).text()).replace('%', '');
@@ -744,12 +795,10 @@ $(window).on('load', function () {
                     var temp_grilla2 = $("#tabla2 #cbx_temp_" + $key).text();
 
                     if (temp_grilla2 == 3) {
-                        //$(this).find("td:eq(3)").html("Ttemp");
                         $("#tabla2 #cbx_temp_" + $key).html("Ttemp");
                     } else {
                         var span_temporada = $('#span_tempo').text();
                         span_temporada = span_temporada.substring(0, 2);
-                        //$(this).find("td:eq(3)").html(span_temporada);
                         $("#tabla2 #cbx_temp_" + $key).html(span_temporada);
                     }
 
@@ -757,18 +806,7 @@ $(window).on('load', function () {
                     if (typeof(reorder) != "undefined") {
                         if (reorder == "REORDER") {
 
-                            //$( this ).find( "td:eq(21)" ).addClass('columnasreorder');
                             $("#tabla2 #cbx_ciclovida_" + $key).addClass('columnasreorder');
-
-                            /*$( this ).find( "td:eq(38)" ).addClass('columnasreorder');
-                                $( this ).find( "td:eq(39)" ).addClass('columnasreorder');
-                                $( this ).find( "td:eq(40)" ).addClass('columnasreorder');
-                                $( this ).find( "td:eq(41)" ).addClass('columnasreorder');
-                                $( this ).find( "td:eq(42)" ).addClass('columnasreorder');
-                                $( this ).find( "td:eq(43)" ).addClass('columnasreorder');
-                                $( this ).find( "td:eq(44)" ).addClass('columnasreorder');
-                                $( this ).find( "td:eq(45)" ).addClass('columnasreorder');
-                                $( this ).find( "td:eq(46)" ).addClass('columnasreorder');*/
 
                             $("#tabla2 #cbx_cluster_" + $key).addClass('columnasreorder');
                             $("#tabla2 #cbx_formato_" + $key).addClass('columnasreorder');
@@ -780,33 +818,23 @@ $(window).on('load', function () {
                             $("#tabla2 #txt_primeracarga_" + $key).addClass('columnasreorder');
                             $("#tabla2 #txt_tiendas_" + $key).addClass('columnasreorder');
 
-                            //$( this ).find( "td:eq(68)" ).addClass('columnasreorder');
                             $("#tabla2 #txt_semfin_" + $key).addClass('columnasreorder');
-                            //$( this ).find( "td:eq(69)" ).addClass('columnasreorder');
                             $("#tabla2 #txt_semanasciclovida_" + $key).addClass('columnasreorder');
-                            //$( this ).find( "td:eq(71)" ).addClass('columnasreorder');
                             $("#tabla2 #txt_semanasliquidacion_" + $key).addClass('columnasreorder');
 
                         } else {
-
-                            //$( this ).find( "td:eq(66)" ).css("color", "red");
                             $("#tabla2 #txt_debutreorder_" + $key).css("color", "red");
-
                         }
 
                         if (tipoproducto == "REGULAR") {
-                            //$( this ).find( "td:eq(25)" ).addClass('columnasreorder');
                             $("#tabla2 #cbx_tipoexhibicion_" + $key).addClass('columnasreorder');
                         }
 
                         if (GMB < 0) {
-                            //$( this ).find( "td:eq(53)").css("color", "red");
                             $("#tabla2 #txt_gm_" + $key).css("color", "red");
                         } else if (GMB > 0) {
-                            //$( this ).find( "td:eq(53)").css("color", "Blue");
                             $("#tabla2 #txt_gm_" + $key).css("color", "Blue");
                         } else {
-                            //$( this ).find( "td:eq(53)").css("color", "Gray");
                             $("#tabla2 #txt_gm_" + $key).css("color", "Gray");
                         }
 
@@ -820,7 +848,7 @@ $(window).on('load', function () {
                     $key++;
                 });
 
-            }, delay_color_segun_fila);
+            }, delay_color_segun_fila);*/
 
             // Cambiar la lógica, recorrer la tabla y si trae una PI busca los datos del
             // Define Tiempo 1 = 1000
@@ -978,6 +1006,9 @@ $(window).on('load', function () {
                 campos_bloquear_despues_llenar_tabla();
 
             }, delay_quitar_null);
+
+
+
 
             //aquí se genera un delay para fijar la cabecera
             var delay_thead = 3000;
