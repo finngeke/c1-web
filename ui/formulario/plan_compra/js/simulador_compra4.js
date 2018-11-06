@@ -793,7 +793,7 @@ $(window).on('load', function () {
 
 
 
-            //aquí se genera un delay para fijar la cabecera
+            // Recorrido 6 - aquí se genera un delay para fijar la cabecera
             var delay_thead = 3000;
             setTimeout(function () {
 
@@ -861,13 +861,13 @@ $(window).on('load', function () {
                 // Fin delay para filtrar cabecera
             }, delay_thead);
 
-            //delay calcular totales
+            // Recorrido 7 - delay calcular totales
             var delay_calculos_totales = 4000;
             setTimeout(function () {
                 cal_campos();
             }, delay_calculos_totales);
 
-            //delay para las validaciones de concurrencia ("pedida")
+            // Recorrido 8 - delay para las validaciones de concurrencia ("pedida")
             var delay_validaciones = 8000;
             setTimeout(function () {
                 validar_usuario_recarga_sesion_expirada();
