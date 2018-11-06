@@ -266,7 +266,6 @@ $(function () {
 // Load
 $(window).on('load', function () {
 
-
     $('#popup_cargando_simulador_compra_4').modal('show');
     // codigo que valida el usuario tipo lectura ...
     // se lleva parte de este codigo a depto.js ya que que
@@ -389,46 +388,6 @@ $(window).on('load', function () {
     $('.eliminar_bmt').tooltip();
     $('.actualiza_grid').tooltip();
     $('.importar_bmt').tooltip();
-
-    $('.tipo_tienda').on('click', function () {
-
-        // Actualiza la Fecha de la Concurrencia
-        act_fecha_concurrencia();
-
-        $('#selecciona_popup').modal('show');
-    });
-
-    $('.tipo_formato').on('click', function () {
-
-        // Actualiza la Fecha de la Concurrencia
-        act_fecha_concurrencia();
-
-        $('#selecciona_popup_formato').modal('show');
-    });
-
-    $('.tipo_ventana_llegada').on('click', function () {
-
-        // Actualiza la Fecha de la Concurrencia
-        act_fecha_concurrencia();
-
-        $('#selecciona_popup_ventana_llegada').modal('show');
-    });
-
-    $('.tipo_ppto_costo').on('click', function () {
-
-        // Actualiza la Fecha de la Concurrencia
-        act_fecha_concurrencia();
-
-        $('#selecciona_popup_ppto_costo').modal('show');
-    });
-
-    $('.tipo_ppto_retail').on('click', function () {
-
-        // Actualiza la Fecha de la Concurrencia
-        act_fecha_concurrencia();
-
-        $('#selecciona_popup_ppto_retail').modal('show');
-    });
 
     // Cargar los CBX del modulo
     var span_temporada = $('#span_temporada').text();
@@ -972,6 +931,51 @@ function act_fecha_concurrencia(){
     });
 
 }
+
+// Al presionar BTN tipo_tienda
+$('.tipo_tienda').on('click', function () {
+
+    // Actualiza la Fecha de la Concurrencia
+    act_fecha_concurrencia();
+
+    $('#selecciona_popup').modal('show');
+});
+
+// Al presionar BTN tipo_formato
+$('.tipo_formato').on('click', function () {
+
+    // Actualiza la Fecha de la Concurrencia
+    act_fecha_concurrencia();
+
+    $('#selecciona_popup_formato').modal('show');
+});
+
+// Al presionar BTN tipo_ventana_llegada
+$('.tipo_ventana_llegada').on('click', function () {
+
+    // Actualiza la Fecha de la Concurrencia
+    act_fecha_concurrencia();
+
+    $('#selecciona_popup_ventana_llegada').modal('show');
+});
+
+// Al presionar BTN tipo_ppto_costo
+$('.tipo_ppto_costo').on('click', function () {
+
+    // Actualiza la Fecha de la Concurrencia
+    act_fecha_concurrencia();
+
+    $('#selecciona_popup_ppto_costo').modal('show');
+});
+
+// Al presionar BTN tipo_ppto_retail
+$('.tipo_ppto_retail').on('click', function () {
+
+    // Actualiza la Fecha de la Concurrencia
+    act_fecha_concurrencia();
+
+    $('#selecciona_popup_ppto_retail').modal('show');
+});
 
 // Si escriben algo en la proforma actualizar el estado de la linea
 function actualizaCampoEstadoProforma(event) {
