@@ -100,20 +100,55 @@
 							<tbody>
 
 								<tr>
-									<F3:repeat group="{{@GRILLA_CABECERA}}" key="{{@key}}" value="{{@val}}">
-										<td>{{@val}}</td>
+									<F3:repeat group="{{@GRILLA_CABECERA}}" key="{{@key}}" value="{{@val}}" counter="{{ @ctr }}">
+
+                                        <check if="{{ @ctr==1 }}">
+                                            <td>{{@val}}</td>
+                                        </check>
+                                        <check if="{{ @ctr>1 && @ctr<=11 }}">
+                                            <td class="filas_PPTO_AliceBlue">{{@val}}</td>
+                                        </check>
+                                        <check if="{{ @ctr>11 && @ctr<=21 }}">
+                                            <td class="filas_PPTO_LightPink">{{@val}}</td>
+                                        </check>
+                                        <check if="{{ @ctr>21 && @ctr<=31 }}">
+                                            <td class="filas_PPTO_LightSkyBlue">{{@val}}</td>
+                                        </check>
+
 									</F3:repeat>
 								</tr>
 
 								<tr>
-									<F3:repeat group="{{@TABLA1_CONSUMO}}" key="{{@key}}" value="{{@val}}">
-										<td>{{@val}}</td>
+									<F3:repeat group="{{@TABLA1_CONSUMO}}" key="{{@key}}" value="{{@val}}" counter="{{ @ctr }}">
+                                        <check if="{{ @ctr==1 }}">
+                                            <td>{{@val}}</td>
+                                        </check>
+                                        <check if="{{ @ctr>1 && @ctr<=11 }}">
+                                            <td class="filas_PPTO_AliceBlue">{{@val}}</td>
+                                        </check>
+                                        <check if="{{ @ctr>11 && @ctr<=21 }}">
+                                            <td class="filas_PPTO_LightPink">{{@val}}</td>
+                                        </check>
+                                        <check if="{{ @ctr>21 && @ctr<=31 }}">
+                                            <td class="filas_PPTO_LightSkyBlue">{{@val}}</td>
+                                        </check>
 									</F3:repeat>
 								</tr>
 
 								<tr>
-									<F3:repeat group="{{@TABLA1_TOTAL}}" key="{{@key}}" value="{{@val}}">
-										<td>{{@val}}</td>
+									<F3:repeat group="{{@TABLA1_TOTAL}}" key="{{@key}}" value="{{@val}}" counter="{{ @ctr }}">
+                                        <check if="{{ @ctr==1 }}">
+                                            <td>{{@val}}</td>
+                                        </check>
+                                        <check if="{{ @ctr>1 && @ctr<=11 }}">
+                                            <td class="filas_PPTO_AliceBlue">{{@val}}</td>
+                                        </check>
+                                        <check if="{{ @ctr>11 && @ctr<=21 }}">
+                                            <td class="filas_PPTO_LightPink">{{@val}}</td>
+                                        </check>
+                                        <check if="{{ @ctr>21 && @ctr<=31 }}">
+                                            <td class="filas_PPTO_LightSkyBlue">{{@val}}</td>
+                                        </check>
 									</F3:repeat>
 								</tr>
 

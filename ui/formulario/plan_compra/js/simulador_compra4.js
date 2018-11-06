@@ -667,7 +667,7 @@ $(window).on('load', function () {
             $(".detalle_error_pi_").attr("disabled", "disabled");
 
             // Define Tiempo 1 = 1000 (Colores a presupuesto tabla1)
-            var delay_color_presupuesto = 1000;
+            /*var delay_color_presupuesto = 1000;
             setTimeout(function () {
                 $("#tabla1 tbody tr").each(function () {
 
@@ -704,7 +704,7 @@ $(window).on('load', function () {
                     $(this).find("td:eq(29)").addClass('filas_PPTO_LightSkyBlue');
                     $(this).find("td:eq(30)").addClass('filas_PPTO_LightSkyBlue');
                 });
-            }, delay_color_presupuesto);
+            }, delay_color_presupuesto);*/
 
             /*cambiar los colores segun de la filas */
             // Define Tiempo 1 = 1000
