@@ -253,6 +253,14 @@ $(function () {
     $('#btn_esconder_tabla1').tooltip({title: "Ocultar", trigger: "hover", placement: "right"});
     $('#btn_mostrar_tabla1').tooltip({title: "Desplegar", trigger: "hover", placement: "right"});
 
+    // Ocultar los BTN del flujo que no se debieran ver
+    $(".solicitud_generacion_ocd").hide();
+    $(".oc_generadad").hide();
+    $(".crear_modificaciond").hide();
+    $(".elimina_opciond").hide();
+    $(".solicitud_correccion_pi").show();
+
+
 });
 
 // Load
@@ -4171,8 +4179,12 @@ $('#btn_habilita_grilla').on('click', function () {
         $("#btn_guarda_proforma").hide();
         $("#btn_importar_bmt").hide();
 
-        // Bloquear Flujo de Aprobación (Se comenta para modo dinámico)
+        // Bloquear Botones Flujo, según tipo de edición
         //  $("#modulo_flujo_aprob").hide();
+        $(".solicitud_generacion_ocd").show();
+        $(".oc_generadad").show();
+        $(".crear_modificaciond").show();
+        $(".elimina_opciond").show();
         $(".solicitud_correccion_pi").hide();
 
         // Icono de candado abierto
@@ -4198,6 +4210,11 @@ $('#btn_habilita_grilla').on('click', function () {
 
         // Habilitar Flujo de Aprobación
         //$("#modulo_flujo_aprob").show();
+        //$(".solicitud_correccion_pi").show();
+        $(".solicitud_generacion_ocd").hide();
+        $(".oc_generadad").hide();
+        $(".crear_modificaciond").hide();
+        $(".elimina_opciond").hide();
         $(".solicitud_correccion_pi").show();
 
         // Icono de candado cerrado
