@@ -432,7 +432,8 @@ $(window).on('load', function () {
 
                         // Tachar los campos con estado eliminado
                         if (estado == "Eliminado") {
-                            $(this).find("td").css('text-decoration', 'line-through');
+                            //$(this).find("#tabla2 td").css('text-decoration', 'line-through');
+                            $("#tabla2 #tabla2_tr_id_" + flag_tabla2).css('text-decoration', 'line-through');
                         }
 
                     // Fin si reorder es distinto de Indefinido
@@ -3317,6 +3318,10 @@ function campos_bloquear_tipo_usuario() {
     $(".crear_modificacion").css({'pointer-events': 'none'});
     $(".elimina_opcion").css({'pointer-events': 'none'});
     $(".solicitud_correccion_pi").css({'pointer-events': 'none'});
+
+    // Bloquear Editar Grilla
+    $("#btn_edita_grilla").attr("disabled", "disabled");
+
 
 }
 

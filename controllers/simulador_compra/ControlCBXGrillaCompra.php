@@ -102,7 +102,7 @@
                     utf8_encode($val["FECHA_ETA"]),                      // 82
                     utf8_encode($val["FECHA_RECEPCION"]),                // 83
                     utf8_encode($val["DIAS_ATRASO"]),                    // 84
-                    utf8_encode($val["CODESTADO"]),                      // 85
+                    $val["CODESTADO"],                      // 85
                     utf8_encode($val["ESTADO_C1"]),                      // 86
                     utf8_encode($val["VENTANA_LLEGADA"]),                // 87
                     utf8_encode($val["FECHA_RECEPCD_C1"])                // 88
