@@ -10,245 +10,6 @@ $(function () {
     //"use strict";
     validar_aviso_carga_de_simulador();
 
-    /*ABRE POPUP MODAL PERFIL*/
-    $('.eliminar_bmt').on('click', function () {
-
-        // Actualiza la Fecha de la Concurrencia
-        act_fecha_concurrencia();
-
-        $('.registro').html('<b> ' + $('.bmt').html() + ' </b>');
-    });
-
-    $('.actualiza_grid').on('click', function () {
-
-        // Actualiza la Fecha de la Concurrencia
-        act_fecha_concurrencia();
-
-        location.reload();
-    });
-
-    //combobox exportar bmt
-    $('#tipos_export').on('change', function () {
-
-        // Actualiza la Fecha de la Concurrencia
-        act_fecha_concurrencia();
-
-        var tipo = $('#tipos_export').val();//variable que llamo a un combox o un text id html
-        if (tipo == 3) {
-
-            $("#bmt_export tbody").empty();
-
-            var div1 = document.getElementById("assorment_export");
-            div1.style.display = "none";
-            var div2 = document.getElementById("depto_selec");
-            div2.style.display = "none";
-            var div4 = document.getElementById("depto_selec_opcion");
-            div4.style.display = "none";
-            var div3 = document.getElementById("body_export");
-            div3.style.display = "";
-            var url_tabla = 'ajax_simulador_cbx/checkboxgrupo';
-            var flag_exporta_bmt = 0;
-
-            $("#btn_exportar").attr("disabled", "disabled");
-            $("#btn_limpiar_deptos").hide();
-            $("#btn_seleccionar_todo_depto").hide();
-
-            $.getJSON(url_tabla, function (data) {
-                $.each(data, function (i, o) {
-                    $('#bmt_export').append('<tr class = "check_gr">\n' +
-                        '<td class= "checkbox_grupo" id="txt_id_check' + flag_exporta_bmt + '"><input type="checkbox" id="checkbox_grupo" name="check[]" value="' + o[0] + '" onchange="validar()" ></td>\n' +
-                        '<td class="ids" id="txt_id_' + flag_exporta_bmt + '">' + o[0] + '</td>\n' +
-                        '</tr>');
-                    flag_exporta_bmt++;
-                });
-
-            }).done(function () {
-                $('#bmt_export').DataTable({
-                    retrieve: true,
-                    destroy: true,
-                    paging: false,
-                    "ordering": false,
-                    "bSort": false,
-                    "searching": false,
-                    "info": false,
-                    scrollCollapse: true
-                });
-            });
-
-        }
-        else if (tipo == 2) {
-
-            $("#depto_tabla_selec tbody").empty();
-            var div_assorment_c1 = document.getElementById("assorment_export");
-            div_assorment_c1.style.display = "none";
-            var div_depto_c1 = document.getElementById("depto_selec");
-            div_depto_c1.style.display = "";
-            var div_opcion_c1 = document.getElementById("depto_selec_opcion");
-            div_opcion_c1.style.display = "none";
-            var div_body_export_c1 = document.getElementById("body_export");
-            div_body_export_c1.style.display = "none";
-            $("#btn_exportar").attr("disabled", "disabled");
-            $("#btn_limpiar_deptos").show();
-            $("#btn_seleccionar_todo_depto").show();
-
-            /*################################ trabajo de llenar tabla ########################*/
-            var url_llenar_tabla_depto = 'ajax_simulador_cbx/llenar_tabla_depto';
-            var flag_llenar_tabla_depto = 0;
-            $.getJSON(url_llenar_tabla_depto, function (data) {
-                $.each(data, function (i, o) {
-                    $('#depto_tabla_selec').append('<tr>\n' +
-                        '<td id="txt_id_check_c1_' + flag_llenar_tabla_depto + '"><input type="checkbox"  id="check_depto"  name="check_depto[]" value="' + o[0] + '" onchange="validarc1()"></td>\n' +
-                        '<td id="txt_cod_depto_c1_' + flag_llenar_tabla_depto + '">' + o[0] + '</td>\n' +
-                        '<td id="txt_dep_depto_c1_' + flag_llenar_tabla_depto + '">' + o[1] + '</td>\n' +
-                        '</tr>');
-                    flag_llenar_tabla_depto++;
-                });
-            }).done(function () {
-                $('#depto_tabla_selec').DataTable({
-                    "oLanguage": {
-                        "sSearch": "Buscar:",
-                        "sZeroRecords": "No se encontraron registros"
-                    },
-                    paging: false,
-                    scrollY: "200px",
-                    scrollCollapse: true
-
-                    /* "oLanguage": {
-                         "sSearch": "Buscar:",
-                         "sZeroRecords" : "No se encontraron registros"
-                     },
-                    retrieve: true,
-                    destroy: true,
-                    paging: false,
-                    "ordering": false,
-                    "bSort": false,
-                      scrollY: "200px",
-                    "searching": false,
-                    "info": false,
-                     scrollCollapse: true*/
-                });
-            });
-            /*################################ trabajo de llenar tabla ########################*/
-
-
-        }
-        else if (tipo == 4) {
-
-            $("#depto_tabla_selec tbody").empty();
-            $("#depto_tabla_selec_opcion tbody").empty();
-
-            $("#btn_exportar").attr("disabled", "disabled");
-            var div_assorment_opcion = document.getElementById("assorment_export");
-            div_assorment_opcion.style.display = "none";
-            var div_depto_opcion = document.getElementById("depto_selec");
-            div_depto_opcion.style.display = "";
-            var div_opcion_opcion = document.getElementById("depto_selec_opcion");
-            div_opcion_opcion.style.display = "";
-            var div_body_export_opcion = document.getElementById("body_export");
-            div_body_export_opcion.style.display = "none";
-
-            $("#btn_limpiar_deptos").show();
-            $("#btn_seleccionar_todo_depto").show();
-
-            /*################################ trabajo de llenar tabla op-4  ########################*/
-            var url_llenar_tabla_depto_opcion = 'ajax_simulador_cbx/llenar_tabla_depto';
-            var flag_tabla_depto_opcion = 0;
-            $.getJSON(url_llenar_tabla_depto_opcion, function (data) {
-                $.each(data, function (i, o) {
-                    $('#depto_tabla_selec').append('<tr>\n' +
-                        '<td id="txt_id_check_op_es' + flag_tabla_depto_opcion + '"><input type="checkbox"  id="check_depto_estado"  name="check_depto_estado[]" value="' + o[0] + '" onchange="validarc1_estado_depto()"></td>\n' +
-                        '<td id="txt_depto_cod_op_es_' + flag_tabla_depto_opcion + '">' + o[0] + '</td>\n' +
-                        '<td id="txt_dep_depto_op_es_' + flag_tabla_depto_opcion + '">' + o[1] + '</td>\n' +
-                        '</tr>');
-                    flag_tabla_depto_opcion++;
-                });
-            }).done(function () {
-                $('#depto_tabla_selec').DataTable({
-                    retrieve: true,
-                    destroy: true,
-                    paging: false,
-                    "ordering": false,
-                    "bSort": false,
-                    scrollX: "500px",
-                    scrolly: "500px",
-                    "searching": false,
-                    "info": false,
-                    scrollCollapse: true
-                });
-            });
-            /*################################ trabajo de llenar tabla op 4 ########################*/
-            var url_llenar_tabla_opcion = 'ajax_simulador_cbx/llenar_tabla_oc';
-            var flag_llenar_tabla_opcion = 0;
-            $.getJSON(url_llenar_tabla_opcion, function (data) {
-                $.each(data, function (i, o) {
-                    $('#depto_tabla_selec_opcion').append('<tr>\n' +
-                        '<td id="toc_id_check' + flag_llenar_tabla_opcion + '"><input type="checkbox"  id="check_estado"  name="check_estado[]"  value="' + o[0] + '" onchange="validarc1_estado_depto()"></td>\n' +
-                        '<td id="oc_id_' + flag_llenar_tabla_opcion + '">' + o[1] + '</td>\n' +
-                        '</tr>');
-                    flag_llenar_tabla_opcion++;
-                });
-            }).done(function () {
-                $('#depto_tabla_selec_opcion').DataTable({
-                    retrieve: true,
-                    destroy: true,
-                    paging: false,
-                    "ordering": false,
-                    "bSort": false,
-                    scrollX: "500px",
-                    scrolly: "500px",
-                    "searching": false,
-                    "info": false,
-                    scrollCollapse: true
-                });
-            });
-
-
-        }
-        else {
-            $("#btn_exportar").attr("disabled", "disabled");
-            $("#depto_tabla_selec tbody").empty();
-            var div_assorment_assorment = document.getElementById("assorment_export");
-            div_assorment_assorment.style.display = "none";
-            var div_depto_assortment = document.getElementById("depto_selec");
-            div_depto_assortment.style.display = "";
-            var div_opcion_assortment = document.getElementById("depto_selec_opcion");
-            div_opcion_assortment.style.display = "none";
-            var div_body_export_assortment = document.getElementById("body_export");
-            div_body_export_assortment.style.display = "none";
-            $("#btn_exportar").attr("disabled", "disabled");
-
-            $("#btn_limpiar_deptos").show();
-            $("#btn_seleccionar_todo_depto").show();
-
-            /*################################ trabajo de llenar tabla ########################*/
-            var url_exp_assortment_llenar_tabla_depto = 'ajax_simulador_cbx/llenar_tabla_depto';
-            var flag_assortment_tabla_depto = 0;
-            $.getJSON(url_exp_assortment_llenar_tabla_depto, function (data) {
-                $.each(data, function (i, o) {
-                    $('#depto_tabla_selec').append('<tr>\n' +
-                        '<td id="txt_id_check_assortment' + flag_assortment_tabla_depto + '"><input type="checkbox"  id="check_depto"  name="check_depto[]" value="' + o[0] + '" onchange="validarc1()"></td>\n' +
-                        '<td id="txt_cod_depto_assortment_' + flag_assortment_tabla_depto + '">' + o[0] + '</td>\n' +
-                        '<td id="txt_dep_depto_assortment_' + flag_assortment_tabla_depto + '">' + o[1] + '</td>\n' +
-                        '</tr>');
-                    flag_assortment_tabla_depto++;
-                });
-            }).done(function () {
-                $('#depto_tabla_selec').DataTable({
-                    retrieve: true,
-                    destroy: true,
-                    paging: false,
-                    "ordering": false,
-                    "bSort": false,
-                    scrollX: "500px",
-                    scrolly: "500px",
-                    "searching": false,
-                    "info": false,
-                    scrollCollapse: true
-                });
-            });
-        }
-    });
-
     // Tooltip de Mostar/Ocultar Presupuestos
     $('#btn_esconder_tabla1').tooltip({title: "Ocultar", trigger: "hover", placement: "right"});
     $('#btn_mostrar_tabla1').tooltip({title: "Desplegar", trigger: "hover", placement: "right"});
@@ -267,6 +28,7 @@ $(function () {
 $(window).on('load', function () {
 
     $('#popup_cargando_simulador_compra_4').modal('show');
+
     // codigo que valida el usuario tipo lectura ...
     // se lleva parte de este codigo a depto.js ya que que
     // se aplican las mismas restricciones a tienda formato y pptos
@@ -975,6 +737,247 @@ $('.tipo_ppto_retail').on('click', function () {
     act_fecha_concurrencia();
 
     $('#selecciona_popup_ppto_retail').modal('show');
+});
+
+// BTN Eliminar BMT
+$('.eliminar_bmt').on('click', function () {
+
+    // Actualiza la Fecha de la Concurrencia
+    act_fecha_concurrencia();
+
+    $('.registro').html('<b> ' + $('.bmt').html() + ' </b>');
+});
+
+// BTN Actualiza Grilla
+$('.actualiza_grid').on('click', function () {
+
+    // Actualiza la Fecha de la Concurrencia
+    act_fecha_concurrencia();
+
+    location.reload();
+
+});
+
+//combobox exportar bmt
+$('#tipos_export').on('change', function () {
+
+    // Actualiza la Fecha de la Concurrencia
+    act_fecha_concurrencia();
+
+    var tipo = $('#tipos_export').val();//variable que llamo a un combox o un text id html
+    if (tipo == 3) {
+
+        $("#bmt_export tbody").empty();
+
+        var div1 = document.getElementById("assorment_export");
+        div1.style.display = "none";
+        var div2 = document.getElementById("depto_selec");
+        div2.style.display = "none";
+        var div4 = document.getElementById("depto_selec_opcion");
+        div4.style.display = "none";
+        var div3 = document.getElementById("body_export");
+        div3.style.display = "";
+        var url_tabla = 'ajax_simulador_cbx/checkboxgrupo';
+        var flag_exporta_bmt = 0;
+
+        $("#btn_exportar").attr("disabled", "disabled");
+        $("#btn_limpiar_deptos").hide();
+        $("#btn_seleccionar_todo_depto").hide();
+
+        $.getJSON(url_tabla, function (data) {
+            $.each(data, function (i, o) {
+                $('#bmt_export').append('<tr class = "check_gr">\n' +
+                    '<td class= "checkbox_grupo" id="txt_id_check' + flag_exporta_bmt + '"><input type="checkbox" id="checkbox_grupo" name="check[]" value="' + o[0] + '" onchange="validar()" ></td>\n' +
+                    '<td class="ids" id="txt_id_' + flag_exporta_bmt + '">' + o[0] + '</td>\n' +
+                    '</tr>');
+                flag_exporta_bmt++;
+            });
+
+        }).done(function () {
+            $('#bmt_export').DataTable({
+                retrieve: true,
+                destroy: true,
+                paging: false,
+                "ordering": false,
+                "bSort": false,
+                "searching": false,
+                "info": false,
+                scrollCollapse: true
+            });
+        });
+
+    }
+    else if (tipo == 2) {
+
+        $("#depto_tabla_selec tbody").empty();
+        var div_assorment_c1 = document.getElementById("assorment_export");
+        div_assorment_c1.style.display = "none";
+        var div_depto_c1 = document.getElementById("depto_selec");
+        div_depto_c1.style.display = "";
+        var div_opcion_c1 = document.getElementById("depto_selec_opcion");
+        div_opcion_c1.style.display = "none";
+        var div_body_export_c1 = document.getElementById("body_export");
+        div_body_export_c1.style.display = "none";
+        $("#btn_exportar").attr("disabled", "disabled");
+        $("#btn_limpiar_deptos").show();
+        $("#btn_seleccionar_todo_depto").show();
+
+        /*################################ trabajo de llenar tabla ########################*/
+        var url_llenar_tabla_depto = 'ajax_simulador_cbx/llenar_tabla_depto';
+        var flag_llenar_tabla_depto = 0;
+        $.getJSON(url_llenar_tabla_depto, function (data) {
+            $.each(data, function (i, o) {
+                $('#depto_tabla_selec').append('<tr>\n' +
+                    '<td id="txt_id_check_c1_' + flag_llenar_tabla_depto + '"><input type="checkbox"  id="check_depto"  name="check_depto[]" value="' + o[0] + '" onchange="validarc1()"></td>\n' +
+                    '<td id="txt_cod_depto_c1_' + flag_llenar_tabla_depto + '">' + o[0] + '</td>\n' +
+                    '<td id="txt_dep_depto_c1_' + flag_llenar_tabla_depto + '">' + o[1] + '</td>\n' +
+                    '</tr>');
+                flag_llenar_tabla_depto++;
+            });
+        }).done(function () {
+            $('#depto_tabla_selec').DataTable({
+                "oLanguage": {
+                    "sSearch": "Buscar:",
+                    "sZeroRecords": "No se encontraron registros"
+                },
+                paging: false,
+                scrollY: "200px",
+                scrollCollapse: true
+
+                /* "oLanguage": {
+                     "sSearch": "Buscar:",
+                     "sZeroRecords" : "No se encontraron registros"
+                 },
+                retrieve: true,
+                destroy: true,
+                paging: false,
+                "ordering": false,
+                "bSort": false,
+                  scrollY: "200px",
+                "searching": false,
+                "info": false,
+                 scrollCollapse: true*/
+            });
+        });
+        /*################################ trabajo de llenar tabla ########################*/
+
+
+    }
+    else if (tipo == 4) {
+
+        $("#depto_tabla_selec tbody").empty();
+        $("#depto_tabla_selec_opcion tbody").empty();
+
+        $("#btn_exportar").attr("disabled", "disabled");
+        var div_assorment_opcion = document.getElementById("assorment_export");
+        div_assorment_opcion.style.display = "none";
+        var div_depto_opcion = document.getElementById("depto_selec");
+        div_depto_opcion.style.display = "";
+        var div_opcion_opcion = document.getElementById("depto_selec_opcion");
+        div_opcion_opcion.style.display = "";
+        var div_body_export_opcion = document.getElementById("body_export");
+        div_body_export_opcion.style.display = "none";
+
+        $("#btn_limpiar_deptos").show();
+        $("#btn_seleccionar_todo_depto").show();
+
+        /*################################ trabajo de llenar tabla op-4  ########################*/
+        var url_llenar_tabla_depto_opcion = 'ajax_simulador_cbx/llenar_tabla_depto';
+        var flag_tabla_depto_opcion = 0;
+        $.getJSON(url_llenar_tabla_depto_opcion, function (data) {
+            $.each(data, function (i, o) {
+                $('#depto_tabla_selec').append('<tr>\n' +
+                    '<td id="txt_id_check_op_es' + flag_tabla_depto_opcion + '"><input type="checkbox"  id="check_depto_estado"  name="check_depto_estado[]" value="' + o[0] + '" onchange="validarc1_estado_depto()"></td>\n' +
+                    '<td id="txt_depto_cod_op_es_' + flag_tabla_depto_opcion + '">' + o[0] + '</td>\n' +
+                    '<td id="txt_dep_depto_op_es_' + flag_tabla_depto_opcion + '">' + o[1] + '</td>\n' +
+                    '</tr>');
+                flag_tabla_depto_opcion++;
+            });
+        }).done(function () {
+            $('#depto_tabla_selec').DataTable({
+                retrieve: true,
+                destroy: true,
+                paging: false,
+                "ordering": false,
+                "bSort": false,
+                scrollX: "500px",
+                scrolly: "500px",
+                "searching": false,
+                "info": false,
+                scrollCollapse: true
+            });
+        });
+        /*################################ trabajo de llenar tabla op 4 ########################*/
+        var url_llenar_tabla_opcion = 'ajax_simulador_cbx/llenar_tabla_oc';
+        var flag_llenar_tabla_opcion = 0;
+        $.getJSON(url_llenar_tabla_opcion, function (data) {
+            $.each(data, function (i, o) {
+                $('#depto_tabla_selec_opcion').append('<tr>\n' +
+                    '<td id="toc_id_check' + flag_llenar_tabla_opcion + '"><input type="checkbox"  id="check_estado"  name="check_estado[]"  value="' + o[0] + '" onchange="validarc1_estado_depto()"></td>\n' +
+                    '<td id="oc_id_' + flag_llenar_tabla_opcion + '">' + o[1] + '</td>\n' +
+                    '</tr>');
+                flag_llenar_tabla_opcion++;
+            });
+        }).done(function () {
+            $('#depto_tabla_selec_opcion').DataTable({
+                retrieve: true,
+                destroy: true,
+                paging: false,
+                "ordering": false,
+                "bSort": false,
+                scrollX: "500px",
+                scrolly: "500px",
+                "searching": false,
+                "info": false,
+                scrollCollapse: true
+            });
+        });
+
+
+    }
+    else {
+        $("#btn_exportar").attr("disabled", "disabled");
+        $("#depto_tabla_selec tbody").empty();
+        var div_assorment_assorment = document.getElementById("assorment_export");
+        div_assorment_assorment.style.display = "none";
+        var div_depto_assortment = document.getElementById("depto_selec");
+        div_depto_assortment.style.display = "";
+        var div_opcion_assortment = document.getElementById("depto_selec_opcion");
+        div_opcion_assortment.style.display = "none";
+        var div_body_export_assortment = document.getElementById("body_export");
+        div_body_export_assortment.style.display = "none";
+        $("#btn_exportar").attr("disabled", "disabled");
+
+        $("#btn_limpiar_deptos").show();
+        $("#btn_seleccionar_todo_depto").show();
+
+        /*################################ trabajo de llenar tabla ########################*/
+        var url_exp_assortment_llenar_tabla_depto = 'ajax_simulador_cbx/llenar_tabla_depto';
+        var flag_assortment_tabla_depto = 0;
+        $.getJSON(url_exp_assortment_llenar_tabla_depto, function (data) {
+            $.each(data, function (i, o) {
+                $('#depto_tabla_selec').append('<tr>\n' +
+                    '<td id="txt_id_check_assortment' + flag_assortment_tabla_depto + '"><input type="checkbox"  id="check_depto"  name="check_depto[]" value="' + o[0] + '" onchange="validarc1()"></td>\n' +
+                    '<td id="txt_cod_depto_assortment_' + flag_assortment_tabla_depto + '">' + o[0] + '</td>\n' +
+                    '<td id="txt_dep_depto_assortment_' + flag_assortment_tabla_depto + '">' + o[1] + '</td>\n' +
+                    '</tr>');
+                flag_assortment_tabla_depto++;
+            });
+        }).done(function () {
+            $('#depto_tabla_selec').DataTable({
+                retrieve: true,
+                destroy: true,
+                paging: false,
+                "ordering": false,
+                "bSort": false,
+                scrollX: "500px",
+                scrolly: "500px",
+                "searching": false,
+                "info": false,
+                scrollCollapse: true
+            });
+        });
+    }
 });
 
 // Si escriben algo en la proforma actualizar el estado de la linea
