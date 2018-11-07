@@ -278,7 +278,7 @@ class cbx_grilla_compra extends \parametros
 
     }
 
-    public static function llenar_tabla2($temporada, $depto)
+    public static function llenar_tabla2_base($temporada, $depto)
     {
 
         $sql = "SELECT
@@ -356,6 +356,115 @@ class cbx_grilla_compra extends \parametros
                 C.COD_PROVEEDOR,                 -- 71 Razon Social
                 C.COD_TRADER,                    -- 72 Trader
                 C.CODSKUPROVEEDOR,               -- 73 Cod SKU Proveedor
+                O.COD_PADRE SKU,                 -- 74 Cod Padre
+                C.PROFORMA,                      -- 75 Proforma
+                O.ARCHIVO,                       -- 76 Archivo
+                O.ESTILO_PMM,                    -- 77 Estilo Pmm
+                O.ESTADO_MATCH,                  -- 78 Estado Match
+                O.PO_NUMBER,                     -- 79 N OC
+                O.ESTADO_OC,                     -- 80 Estado OC
+                O.FECHA_EMBARQUE,                -- 81 Fecha Embarque
+                O.FECHA_ETA,                     -- 82 Fecha ETA
+                O.FECHA_RECEPCION,               -- 83 Fecha Recepciòn
+                O.DIAS_ATRASO,                   -- 84 Dias Atraso
+                convert((SELECT nom_est_c1 FROM plc_estado_c1 WHERE cod_est_c1= C.ESTADO),'utf8','us7ascii')CODESTADO,  -- 85 Estado Opcion
+                C.ESTADO ESTADO_C1,              -- 86 Estado C1
+                C.VENTANA_LLEGADA,               -- 87 Ventana Llegada
+                REPLACE((SELECT DISTINCT FECHA_RECEPCD FROM plc_ventana_emb V WHERE V.cod_temporada = C.COD_TEMPORADA AND V.cod_ventana = C.VENT_EMB),'/','-') FECHA_RECEPCD_C1 -- 88 Fecha recepcion CD
+                FROM PLC_PLAN_COMPRA_COLOR_3 C
+                LEFT JOIN PLC_PLAN_COMPRA_OC O ON C.COD_TEMPORADA = O.COD_TEMPORADA
+				AND C.DEP_DEPTO = O.DEP_DEPTO AND C.ID_COLOR3 = O.ID_COLOR3
+                WHERE C.COD_TEMPORADA = $temporada AND C.DEP_DEPTO = '" . $depto . "'
+                ORDER BY C.ID_COLOR3, C.COD_JER2,C.COD_SUBLIN,C.COD_ESTILO,NVL(COD_COLOR,0) ,C.VENTANA_LLEGADA,C.DEBUT_REODER";
+
+        $data = \database::getInstancia()->getFilas($sql);
+
+        return $data;
+
+    }
+
+    public static function llenar_tabla2($temporada, $depto)
+    {
+
+        $sql = "SELECT
+                C.ID_COLOR3,                  -- 0 id
+                C.GRUPO_COMPRA,               -- 1 grupo compra
+                NVL(TEMP,1) COD_TEMP,         -- 2 temp
+                C.NOM_LINEA LINEA,            -- 3 linea
+                C.NOM_SUBLINEA SUBLINEA,      -- 4 sublinea
+                C.NOM_MARCA MARCA,            -- 5 marca
+                C.DES_ESTILO ESTILO,          -- 6 estilo
+                C.SHORT_NAME,                 -- 7 estilo corto
+                C.ID_CORPORATIVO,             -- 8 cod. corp
+                C.DESCMODELO,                 -- 9 descripción
+                C.DESCRIP_INTERNET,           -- 10 Descripción Internet
+                CASE WHEN C.COMPOSICION = '0' THEN '' ELSE C.COMPOSICION END COMPOSICION, -- 11 Composicion
+                CASE WHEN C.COLECCION = '0' THEN '' ELSE C.COLECCION END COLECCION,       -- 12 Colección
+                C.EVENTO,                     -- 13 Evento
+                CASE WHEN C.NOM_ESTILOVIDA IS NULL THEN '' ELSE C.NOM_ESTILOVIDA END COD_ESTILO_VIDA, -- 14 estilo vida
+                '' CALIDAD,                      -- 15 Calidad
+                C.NOM_OCACIONUSO COD_OCASION_USO,-- 16 ocacion uso
+                C.NOM_PIRAMIDEMIX COD_PIRAMIX,   -- 17 piramide mix
+                C.NOM_VENTANA DESCRIPCION,       -- 18 ventana
+                C.NOM_RNK COD_RANKVTA,           -- 19 rank vta
+                C.NOM_LIFECYCLE LIFE_CYCLE,      -- 20 ciclo vida
+                C.NUM_EMB,                       -- 21 num_emb
+                C.NOM_COLOR COD_COLOR,           -- 22 color
+                C.TIPO_PRODUCTO,                 -- 23 Tipo Producto
+                C.TIPO_EXHIBICION,               -- 24 Tipo Exhibicion
+                C.DESTALLA,                      -- 25 Tallas
+                C.TIPO_EMPAQUE,                  -- 26 Tipo empaque
+                C.PORTALLA_1_INI,                -- 27 Compra Ini
+                C.PORTALLA_1,                    -- 28 Compra Ajustada
+                C.CURVATALLA,                    -- 29 Curva
+                C.CURVAMIN,                      -- 30 Curva Min
+                C.UNID_OPCION_INICIO,            -- 31 Uni Ini
+                C.UNID_OPCION_AJUSTADA,          -- 32 Uni Ajust
+                C.UNIDADES CAN,                  -- 33 Uni Final
+                C.MTR_PACK,                      -- 34 Master Pack
+                C.CANT_INNER,                    -- 35 Nº Cajas
+                C.SEG_ASIG,                      -- 36 Cluster
+                C.FORMATO,                       -- 37 Formato
+                C.TDAS,                          -- 38 Tdas
+                C.A ,                            -- 39 A
+                C.B,                             -- 40 B
+                C.C,                             -- 41 C
+                C.I,                             -- 42 I
+                C.UND_ASIG_INI,                  -- 43 Primera Carga
+                C.ROT,                           -- 44 %Tiendas
+                NOM_PRECEDENCIA,                 -- 45 Proced
+                NOM_VIA,                         -- 46 Vìa
+                NOM_PAIS,                        -- 47 Paìs
+                C.VIAJE,                         -- 48 Viaje
+                C.MKUP,                          -- 49 mkup
+                C.PRECIO_BLANCO,                 -- 50 Precio Blanco
+                C.GM,                            -- 51 GM
+                C.NOM_MONEDA  COD_TIP_MON,       -- 52 Moneda
+                C.COSTO_TARGET,                  -- 53 Target
+                C.COSTO_FOB,                     -- 54 FOB
+                C.COSTO_INSP,                    -- 55 Insp
+                C.COSTO_RFID,                    -- 56 RFID
+                C.ROYALTY_POR,                   -- 57 Royalty
+                C.COSTO_UNIT,                    -- 58 Costo Unitario Final
+                C.COSTO_UNITS,                   -- 59 Costo Unitario Final Pesos
+                C.CST_TOTLTARGET,                -- 60 Total Target
+                C.COSTO_TOT,                     -- 61 Total FOB
+                C.COSTO_TOTS,                    -- 62 Costo total pesos
+                C.RETAIL,                        -- 63 Total retail pesos
+                C.DEBUT_REODER,                  -- 64 Debut/reorder
+                C.SEM_INI,                       -- 65 Sem ini
+                C.SEM_FIN,                       -- 66 Sem fin
+                C.CICLO,                         -- 67 Semanas ciclo via
+                C.AGOT_OBJ,                      -- 68 Agot Obj
+                C.SEMLIQ,                        -- 69 Semanas Liquidacion
+                --C.ALIAS_PROV,                    -- 70 Proveedor
+                CASE WHEN C.ALIAS_PROV = '0' THEN '' ELSE C.ALIAS_PROV END ALIAS_PROV,                -- 70 Proveedor
+                -- C.COD_PROVEEDOR,                 -- 71 Razon Social
+                CASE WHEN C.COD_PROVEEDOR = '0' THEN '' ELSE C.COD_PROVEEDOR END COD_PROVEEDOR,       -- 71 Razon Social
+                -- C.COD_TRADER,                    -- 72 Trader
+                CASE WHEN C.COD_TRADER = '0' THEN '' ELSE C.COD_TRADER END COD_TRADER,                -- 72 Trader
+                --C.CODSKUPROVEEDOR,               -- 73 Cod SKU Proveedor
+                CASE WHEN C.CODSKUPROVEEDOR = '0' THEN '' ELSE C.CODSKUPROVEEDOR END CODSKUPROVEEDOR, -- 73 Cod SKU Proveedor
                 O.COD_PADRE SKU,                 -- 74 Cod Padre
                 C.PROFORMA,                      -- 75 Proforma
                 O.ARCHIVO,                       -- 76 Archivo

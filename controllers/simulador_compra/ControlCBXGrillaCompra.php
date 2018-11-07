@@ -94,18 +94,18 @@
                     utf8_encode($val["SKU"]),               // 74
 					utf8_encode($val["PROFORMA"]),          // 75
 					$val["ARCHIVO"],                        // 76
-					$val["ESTILO_PMM"],                     // 77
-					$val["ESTADO_MATCH"],                   // 78
-					$val["PO_NUMBER"],                      // 79
-					$val["ESTADO_OC"],                      // 80
-					$val["FECHA_EMBARQUE"],                 // 81
-					$val["FECHA_ETA"],                      // 82
-					$val["FECHA_RECEPCION"],                // 83
-					$val["DIAS_ATRASO"],                    // 84
-					$val["CODESTADO"],                      // 85
-					$val["ESTADO_C1"],                      // 86
-					$val["VENTANA_LLEGADA"],                // 87
-					$val["FECHA_RECEPCD_C1"]                // 88
+                    utf8_encode($val["ESTILO_PMM"]),                     // 77
+                    utf8_encode($val["ESTADO_MATCH"]),                   // 78
+                    utf8_encode($val["PO_NUMBER"]),                      // 79
+                    utf8_encode($val["ESTADO_OC"]),                      // 80
+                    utf8_encode($val["FECHA_EMBARQUE"]),                 // 81
+                    utf8_encode($val["FECHA_ETA"]),                      // 82
+                    utf8_encode($val["FECHA_RECEPCION"]),                // 83
+                    utf8_encode($val["DIAS_ATRASO"]),                    // 84
+                    utf8_encode($val["CODESTADO"]),                      // 85
+                    utf8_encode($val["ESTADO_C1"]),                      // 86
+                    utf8_encode($val["VENTANA_LLEGADA"]),                // 87
+                    utf8_encode($val["FECHA_RECEPCD_C1"])                // 88
 				);
 			}
 			header("Content-Type: application/json");

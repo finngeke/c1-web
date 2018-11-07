@@ -357,6 +357,7 @@ $(window).on('load', function () {
                         '</tr>');
 
 
+// ####################################### COMIENZO CONDICIONES A REGISTRO ######################################################################
 
                     var reorder = $("#tabla2 #txt_debutreorder_" + flag_tabla2).text();
 
@@ -437,17 +438,14 @@ $(window).on('load', function () {
                     // Fin si reorder es distinto de Indefinido
                     }
 
-
-
-
-
-
+// ###############################################################################################################################################
 
                     // Incrementar el contador de la tabla
                     flag_tabla2++;
 
                 // Fin foreach que llena tabla
                 });
+
 
                 if (flag_cont_registro == 0) {
 
@@ -483,19 +481,18 @@ $(window).on('load', function () {
             setTimeout(function () {
 
                 var id_text_increment = 0;
-                var nColumnas = $("#tabla2 tr:last th").length;
+                //var nColumnas = $("#tabla2 tr:last th").length;
                 $("#tabla2 > tbody >tr").each(function () {
                     var i = 0;
 
                     if ($("#txt_archivo_span_" + id_text_increment).html() == 'null') {
-                        $("#txt_archivo_span_" + id_text_increment).html('')
+                        $("#txt_archivo_span_" + id_text_increment).html('');
                     }
 
-                    for (i = 0; i <= nColumnas; i++) {
+                    /*for (i = 0; i <= nColumnas; i++) {
 
                         if ($(this).find("td:eq(" + i + ")").html() == 'null') {
                             $(this).find("td:eq(" + i + ")").html('');
-
                         } else if ($("#txt_composicion_" + id_text_increment).html() == '0') {
                             $("#txt_composicion_" + id_text_increment).html('');
                         } else if ($("#txt_coleccion_" + id_text_increment).text() == '0') {
@@ -534,8 +531,8 @@ $(window).on('load', function () {
                             $("#cbx_estadoopcion_" + id_text_increment).addClass('EstadoEliminado');
                         }
 
-                        // Fin del for nColumnas
-                    }
+                    // Fin del for nColumnas
+                    }*/
 
                     id_text_increment++;
 
