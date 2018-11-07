@@ -506,65 +506,6 @@ $(window).on('load', function () {
             var delay_quitar_null = 2000;
             setTimeout(function () {
 
-                var id_text_increment = 0;
-                //var nColumnas = $("#tabla2 tr:last th").length;
-                $("#tabla2 > tbody >tr").each(function () {
-                    var i = 0;
-
-                    if ($("#txt_archivo_span_" + id_text_increment).html() == 'null') {
-                        $("#txt_archivo_span_" + id_text_increment).html('');
-                    }
-
-                    /*for (i = 0; i <= nColumnas; i++) {
-
-                        if ($(this).find("td:eq(" + i + ")").html() == 'null') {
-                            $(this).find("td:eq(" + i + ")").html('');
-                        } else if ($("#txt_composicion_" + id_text_increment).html() == '0') {
-                            $("#txt_composicion_" + id_text_increment).html('');
-                        } else if ($("#txt_coleccion_" + id_text_increment).text() == '0') {
-                            $("#txt_coleccion_" + id_text_increment).html('');
-                        } else if ($("#txt_tiendas_" + id_text_increment).text() == 'null% ') {
-                            $("#txt_tiendas_" + id_text_increment).html('');
-                        } else if ($("#txt_viaje_" + id_text_increment).text() == '0') {
-                            $("#txt_viaje_" + id_text_increment).html('');
-                        } else if ($("#txt_proveedor_" + id_text_increment).text() == '0') {
-                            $("#txt_proveedor_" + id_text_increment).html('');
-                        } else if ($("#cbx_razonsocial_" + id_text_increment).text() == '0') {
-                            $("#cbx_razonsocial_" + id_text_increment).html('');
-                        } else if ($("#cbx_trader_" + id_text_increment).text() == '0') {
-                            $("#cbx_trader_" + id_text_increment).html('');
-                        } else if ($("#txt_cod_sku_proveedor_" + id_text_increment).text() == '0') {
-                            $("#txt_cod_sku_proveedor_" + id_text_increment).html('');
-                        } else if ($("#txt_proforma_" + id_text_increment).val() == 'null') {
-                            $("#txt_proforma_" + id_text_increment).val('');
-                        } else if ($("#txt_proforma_" + id_text_increment).val() == '0') {
-                            $("#txt_proforma_" + id_text_increment).val('');
-                        } else if ($("#cbx_estadoopcion_" + id_text_increment).text() == 'Ingresado') {
-                            $("#cbx_estadoopcion_" + id_text_increment).addClass('columnas');
-                        } else if ($("#cbx_estadoopcion_" + id_text_increment).text() == 'Compra Confirmada con PI') {
-                            $("#cbx_estadoopcion_" + id_text_increment).addClass('EstadoCompraConfirmadaPI');
-                        } else if ($("#cbx_estadoopcion_" + id_text_increment).text() == 'Pendiente de Aprobacion sin Match') {
-                            $("#cbx_estadoopcion_" + id_text_increment).addClass('EstadoPendienteAprobacionsinMatch');
-                        } else if ($("#cbx_estadoopcion_" + id_text_increment).text() == 'Pendiente de Aprobacion') {
-                            $("#cbx_estadoopcion_" + id_text_increment).addClass('EstadoAprobado');
-                        } else if ($("#cbx_estadoopcion_" + id_text_increment).text() == 'Aprobado') {
-                            $("#cbx_estadoopcion_" + id_text_increment).addClass('EstadoAprobado');
-                        } else if ($("#cbx_estadoopcion_" + id_text_increment).text() == 'Pendiente Generacion OC') {
-                            $("#cbx_estadoopcion_" + id_text_increment).addClass('EstadoPendienteGeneracionOC');
-                        } else if ($("#cbx_estadoopcion_" + id_text_increment).text() == 'Pendiente de Correccisn PI') {
-                            $("#cbx_estadoopcion_" + id_text_increment).addClass('Estadocorrecionpi');
-                        } else if ($("#cbx_estadoopcion_" + id_text_increment).text() == 'Eliminado') {
-                            $("#cbx_estadoopcion_" + id_text_increment).addClass('EstadoEliminado');
-                        }
-
-                    // Fin del for nColumnas
-                    }*/
-
-                    id_text_increment++;
-
-                });
-
-
                 //txt profroma bloqueado si el usuario es tipo lectura
                 if ($('#flag_top_menu_tipo_usuario').html() == 'LECTURA') {
                     $(".txt_proforma_").attr("disabled", "disabled");
