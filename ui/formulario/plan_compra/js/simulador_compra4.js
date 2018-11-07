@@ -458,6 +458,10 @@ $(window).on('load', function () {
                         $("#tabla2 #cbx_estadoopcion_" + flag_tabla2).addClass('EstadoEliminado');
                     }
 
+                    // Si llega null en el texto del archivo en vez de cargado
+                    if ($("#tabla2 #txt_archivo_span_" + flag_tabla2).html() == 'null') {
+                        $("#tabla2 #txt_archivo_span_" + flag_tabla2).html('');
+                    }
 
 
 // ###############################################################################################################################################

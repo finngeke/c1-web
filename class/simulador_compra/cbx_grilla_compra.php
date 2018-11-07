@@ -458,15 +458,16 @@ class cbx_grilla_compra extends \parametros
                 C.AGOT_OBJ,                      -- 68 Agot Obj
                 C.SEMLIQ,                        -- 69 Semanas Liquidacion
                 --C.ALIAS_PROV,                    -- 70 Proveedor
-                CASE WHEN C.ALIAS_PROV = '0' THEN '' ELSE C.ALIAS_PROV END ALIAS_PROV,                -- 70 Proveedor
+                CASE WHEN C.ALIAS_PROV = '0' THEN '' ELSE C.ALIAS_PROV END ALIAS_PROV,                            -- 70 Proveedor
                 -- C.COD_PROVEEDOR,                 -- 71 Razon Social
-                CASE WHEN C.COD_PROVEEDOR = '0' THEN '' ELSE C.COD_PROVEEDOR END COD_PROVEEDOR,       -- 71 Razon Social
+                CASE WHEN C.COD_PROVEEDOR = '0' THEN '' ELSE C.COD_PROVEEDOR END COD_PROVEEDOR,                   -- 71 Razon Social
                 -- C.COD_TRADER,                    -- 72 Trader
-                CASE WHEN C.COD_TRADER = '0' THEN '' ELSE C.COD_TRADER END COD_TRADER,                -- 72 Trader
+                CASE WHEN C.COD_TRADER = '0' THEN '' ELSE C.COD_TRADER END COD_TRADER,                            -- 72 Trader
                 --C.CODSKUPROVEEDOR,               -- 73 Cod SKU Proveedor
-                CASE WHEN C.CODSKUPROVEEDOR = '0' THEN '' ELSE C.CODSKUPROVEEDOR END CODSKUPROVEEDOR, -- 73 Cod SKU Proveedor
+                CASE WHEN C.CODSKUPROVEEDOR = '0' THEN '' ELSE C.CODSKUPROVEEDOR END CODSKUPROVEEDOR,             -- 73 Cod SKU Proveedor
                 O.COD_PADRE SKU,                 -- 74 Cod Padre
-                C.PROFORMA,                      -- 75 Proforma
+                --C.PROFORMA,                      -- 75 Proforma
+                CASE WHEN C.PROFORMA IS NULL THEN '' WHEN C.PROFORMA = '0' THEN '' ELSE C.PROFORMA END PROFORMA,  -- 75 Proforma
                 O.ARCHIVO,                       -- 76 Archivo
                 O.ESTILO_PMM,                    -- 77 Estilo Pmm
                 O.ESTADO_MATCH,                  -- 78 Estado Match
