@@ -438,6 +438,28 @@ $(window).on('load', function () {
                     // Fin si reorder es distinto de Indefinido
                     }
 
+
+                    // Colorea Estado Opción
+                    if (estado == 'Ingresado') {
+                        $("#tabla2 #cbx_estadoopcion_" + flag_tabla2).addClass('columnas');
+                    } else if (estado == 'Compra Confirmada con PI') {
+                        $("#tabla2 #cbx_estadoopcion_" + flag_tabla2).addClass('EstadoCompraConfirmadaPI');
+                    } else if (estado == 'Pendiente de Aprobacion sin Match') {
+                        $("#tabla2 #cbx_estadoopcion_" + flag_tabla2).addClass('EstadoPendienteAprobacionsinMatch');
+                    } else if (estado == 'Pendiente de Aprobacion') {
+                        $("#tabla2 #cbx_estadoopcion_" + flag_tabla2).addClass('EstadoAprobado');
+                    } else if (estado == 'Aprobado') {
+                        $("#tabla2 #cbx_estadoopcion_" + flag_tabla2).addClass('EstadoAprobado');
+                    } else if (estado == 'Pendiente Generacion OC') {
+                        $("#tabla2 #cbx_estadoopcion_" + flag_tabla2).addClass('EstadoPendienteGeneracionOC');
+                    } else if (estado == 'Pendiente de Correccisn PI') {
+                        $("#tabla2 #cbx_estadoopcion_" + flag_tabla2).addClass('Estadocorrecionpi');
+                    } else if (estado == 'Eliminado') {
+                        $("#tabla2 #cbx_estadoopcion_" + flag_tabla2).addClass('EstadoEliminado');
+                    }
+
+
+
 // ###############################################################################################################################################
 
                     // Incrementar el contador de la tabla
