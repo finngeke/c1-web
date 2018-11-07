@@ -367,18 +367,28 @@ $(window).on('load', function () {
                     var GMB = ($("#tabla2 #txt_gm_" + flag_tabla2).text()).replace('%', '');
 
                     // Buscar el estado de eliminado para darles la clase de tachar
-                    //var estado = $(this).find("td:eq(89)").text();
                     var estado = $("#tabla2 #cbx_estadoopcion_" + flag_tabla2).text();
+                    var estado_c1 = $("#tabla2 #txt_estadoc1_" + flag_tabla2).text();
                     var archivo_ = $("#tabla2 #txt_archivo_" + flag_tabla2).text();
+                    
+                    // ID   ESTADO
+                    // 0	Ingresado
+                    // 18	Compra Confirmada con PI
+                    // 19	Pendiente de Aprobacion sin Match
+                    // 20	Pendiente de Aprobacion
+                    // 21	Aprobado
+                    // 22	Pendiente Generacion OC
+                    // 23	Pendiente de Corrección PI
+                    // 24	Eliminado
 
                     if (archivo_ == "Cargado.. Upload Upload") {
                         $(".pi_" + flag_tabla2).attr("disabled", false);
-                    } else if (estado == "Ingresado" && proforma != 0 && proforma != 'null' && proforma != '') {
+                    } else if (estado_c1 == 0 && proforma != 0 && proforma != 'null' && proforma != '') {
                         $(".archivo_" + flag_tabla2).attr("disabled", false);
                     }
 
                     // Aparece una "s" ya que el despliegue corrige error de texto
-                    if (estado == "Pendiente de Correccisn PI") {
+                    if (estado_c1 == 23) {
                         $(".errorpi_" + flag_tabla2).attr("disabled", false);
                     }
 
@@ -431,7 +441,7 @@ $(window).on('load', function () {
                         }
 
                         // Tachar los campos con estado eliminado
-                        if (estado == "Eliminado") {
+                        if (estado_c1 == 24) {
                             //$(this).find("#tabla2 td").css('text-decoration', 'line-through');
                             $("#tabla2 #tabla2_tr_id_" + flag_tabla2).css('text-decoration', 'line-through');
                         }
@@ -441,21 +451,21 @@ $(window).on('load', function () {
 
 
                     // Colorea Estado Opción
-                    if (estado == 'Ingresado') {
+                    if (estado_c1 == 0) {
                         $("#tabla2 #cbx_estadoopcion_" + flag_tabla2).addClass('columnas');
-                    } else if (estado == 'Compra Confirmada con PI') {
+                    } else if (estado_c1 == 18) {
                         $("#tabla2 #cbx_estadoopcion_" + flag_tabla2).addClass('EstadoCompraConfirmadaPI');
-                    } else if (estado == 'Pendiente de Aprobacion sin Match') {
+                    } else if (estado_c1 == 19) {
                         $("#tabla2 #cbx_estadoopcion_" + flag_tabla2).addClass('EstadoPendienteAprobacionsinMatch');
-                    } else if (estado == 'Pendiente de Aprobacion') {
+                    } else if (estado_c1 == 20) {
                         $("#tabla2 #cbx_estadoopcion_" + flag_tabla2).addClass('EstadoAprobado');
-                    } else if (estado == 'Aprobado') {
+                    } else if (estado_c1 == 21) {
                         $("#tabla2 #cbx_estadoopcion_" + flag_tabla2).addClass('EstadoAprobado');
-                    } else if (estado == 'Pendiente Generacion OC') {
+                    } else if (estado_c1 == 22) {
                         $("#tabla2 #cbx_estadoopcion_" + flag_tabla2).addClass('EstadoPendienteGeneracionOC');
-                    } else if (estado == 'Pendiente de Correccisn PI') {
+                    } else if (estado_c1 == 23) {
                         $("#tabla2 #cbx_estadoopcion_" + flag_tabla2).addClass('Estadocorrecionpi');
-                    } else if (estado == 'Eliminado') {
+                    } else if (estado_c1 == 24) {
                         $("#tabla2 #cbx_estadoopcion_" + flag_tabla2).addClass('EstadoEliminado');
                     }
 
