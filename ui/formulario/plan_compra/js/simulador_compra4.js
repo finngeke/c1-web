@@ -370,7 +370,7 @@ $(window).on('load', function () {
                     var estado = $("#tabla2 #cbx_estadoopcion_" + flag_tabla2).text();
                     var estado_c1 = $("#tabla2 #txt_estadoc1_" + flag_tabla2).text();
                     var archivo_ = $("#tabla2 #txt_archivo_" + flag_tabla2).text();
-                    
+
                     // ID   ESTADO
                     // 0	Ingresado
                     // 18	Compra Confirmada con PI
