@@ -161,9 +161,9 @@ $(window).on('load', function () {
     cargaCBX(separa_barra_span[1]);
 
     // Buscar OC Estado 20 y Estado de la OC en PMM
-    var url_busca_oc20 = 'ajax_simulador_cbx/busca_oc_estado_20';           // Devuelve: PROFORMA,PO_NUMBER,COD_JER2,COD_SUBLIN,COD_MARCA,DES_ESTILO,VENTANA_LLEGADA,COD_COLOR,ID_COLOR3,NOM_LINEA,NOM_MARCA,NOM_VENTANA,NOM_COLOR,NOM_SUBLINEA)
-    var url_estado_oc_4_inserta = 'ajax_simulador_cbx/estado_oc_4_inserta_historial'; //Inserta en el historial cuando el estado es 4
-    var url_traer_datos_oc_broker = 'ajax_simulador_cbx/traer_datos_oc'; // Consulta a Broker
+    var url_busca_oc20 = 'ajax_simulador_cbx/busca_oc_estado_20';                       // Devuelve: PROFORMA,PO_NUMBER,COD_JER2,COD_SUBLIN,COD_MARCA,DES_ESTILO,VENTANA_LLEGADA,COD_COLOR,ID_COLOR3,NOM_LINEA,NOM_MARCA,NOM_VENTANA,NOM_COLOR,NOM_SUBLINEA)
+    var url_estado_oc_4_inserta = 'ajax_simulador_cbx/estado_oc_4_inserta_historial';   //Inserta en el historial cuando el estado es 4
+    var url_traer_datos_oc_broker = 'ajax_simulador_cbx/traer_datos_oc';                // Consulta a Broker
 
     // Busqueda de OC con estado 20
     $.getJSON(url_busca_oc20, function (data) {
@@ -571,7 +571,7 @@ $(window).on('load', function () {
 
                     var that = this;
 
-                    $("#input_filtros_columna_tabla2", this.footer()).on('keyup change', function () {
+                    $("#input_filtros_columna_tabla2", this.footer()).on('change', function () {
 
                         if (that.search() !== this.value) {
                             that.search(this.value).draw();
