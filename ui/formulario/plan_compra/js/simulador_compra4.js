@@ -1720,7 +1720,7 @@ function solicitud_correccion_pi_funcion(id_color3, proforma) {
 
 }
 
-// Otros Botones de la Grilla
+// Función asociada al BTN de ver historial de Cada Registro
 function despliegaHistorial(event) {
 
     // Actualiza la Fecha de la Concurrencia
@@ -1771,6 +1771,7 @@ function despliegaHistorial(event) {
 
 }
 
+// Al marcar sobre el radio o check de una línea, esta se colorea
 function colorearTRTabla(event) {
 
     // Rescato el value del elemento seleccionado
@@ -1789,6 +1790,7 @@ function colorearTRTabla(event) {
 // Fin del colorear TR
 }
 
+// BTN Asociado a descargar en excel el historial de cada registro (NO utilizado)
 $('#despliega_hitorial_excel').on('click', function () {
 
     // Actualiza la Fecha de la Concurrencia
@@ -2113,6 +2115,7 @@ function despliegaDetalleError(event) {
 
 }
 
+// Al presionar el BTN de comenzar con el Match
 function matchOC(event) {
 
     // Actualiza la Fecha de la Concurrencia
@@ -2575,6 +2578,7 @@ function matchOC(event) {
 // Fin del Match OC
 }
 
+// En Match cada vez que modifico una línea, recargo el CBX de la SubLinea
 function matchCargaSublinea(event) {
 
     // hay que cargar nuevamente la sublinea con el id de la linea que ha modificado
@@ -2601,6 +2605,7 @@ function matchCargaSublinea(event) {
 
 }
 
+// BTN Generar Match (Parte Inferior Izquierda, es el encargado de realizar el match)
 $('#btn_generar_match_oc').on('click', function () {
 
     // Actualiza la Fecha de la Concurrencia
@@ -2716,6 +2721,7 @@ $('#btn_generar_match_oc').on('click', function () {
 
 });
 
+// BTN Actualizar Match (Parte superior derecha de match, es el encargado de actualizar los registros corregidos)
 $('#btn_actualizar_match').on('click', function () {
 
     // Actualiza la Fecha de la Concurrencia
@@ -2820,6 +2826,7 @@ $('#btn_actualizar_match').on('click', function () {
 
 });
 
+// Al editar el campo SubLinea, se marca la línea como editada ("U")
 function editaSublinea(event) {
 
     // hay que cargar nuevamente la sublinea con el id de la linea que ha modificado
@@ -2831,6 +2838,7 @@ function editaSublinea(event) {
 
 }
 
+// Al editar el campo Estilo, se marca la línea como editada ("U")
 function editaEstilo(event) {
 
     // hay que cargar nuevamente la sublinea con el id de la linea que ha modificado
@@ -2842,6 +2850,7 @@ function editaEstilo(event) {
 
 }
 
+// Al editar el campo Color, se marca la línea como editada ("U")
 function editaColor(event) {
 
     // hay que cargar nuevamente la sublinea con el id de la linea que ha modificado
@@ -2853,6 +2862,7 @@ function editaColor(event) {
 
 }
 
+// Carga tiengas en el CBX #MARCAS - Modulo Tiendas (Verificar)
 function cargaCBX(depto) {
 
     $('#MARCAS').empty();
@@ -3432,6 +3442,7 @@ function campos_bloquear_despues_llenar_tabla() {
 
 }
 
+// BTN asociado a Esconder el Presupuesto
 $('#btn_esconder_tabla1').on('click', function () {
 
     // Actualiza la Fecha de la Concurrencia
@@ -3445,6 +3456,7 @@ $('#btn_esconder_tabla1').on('click', function () {
 
 });
 
+// BTN asociado a Mostrar el Presupuesto
 $('#btn_mostrar_tabla1').on('click', function () {
 
     // Actualiza la Fecha de la Concurrencia
