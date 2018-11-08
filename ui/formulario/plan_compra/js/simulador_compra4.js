@@ -517,7 +517,7 @@ $(window).on('load', function () {
             $(".detalle_error_pi_").attr("disabled", "disabled");
 
             
-            // Aquí el quitar null de las columnas y colorear estados
+            // Bloquea BTN de proforma y archivo cuando el usuario es de tipo lectura
             var delay_quitar_null = 2000;
             setTimeout(function () {
 
@@ -525,7 +525,10 @@ $(window).on('load', function () {
                 if ($('#flag_top_menu_tipo_usuario').html() == 'LECTURA') {
                     $(".txt_proforma_").attr("disabled", "disabled");
                     $(".txt_archivo_").attr("disabled", "disabled");
+                    $("#btn_edita_grilla").attr("disabled", "disabled");
                 }
+
+
 
                 campos_bloquear_despues_llenar_tabla();
 
@@ -3489,6 +3492,7 @@ function Validar_flag_concurrencia_usuario_log() {
                 if (contador_m == 2) {
                     contador_m = 0;
                 }
+
             }
 
             //los usuarios de tipo lectura no generan concurrencia por ende no se consideran.
