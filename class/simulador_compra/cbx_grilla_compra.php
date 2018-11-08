@@ -1253,11 +1253,11 @@ class cbx_grilla_compra extends \parametros
     {
 
         $sql = "SELECT ORDEN_DE_COMPRA, PI, NOMBRE_LINEA, NOMBRE_SUB_LINEA, NOMBRE_ESTILO, NRO_ESTILO, COLOR, COD_COLOR, NRO_LINEA, NRO_SUB_LINEA
-              FROM B
-              WHERE ORDEN_DE_COMPRA = '" . $oc . "'
-              AND PI = '" . $pi . "'
-              GROUP BY NOMBRE_ESTILO, NRO_ESTILO, COD_COLOR, ORDEN_DE_COMPRA, PI, NOMBRE_LINEA, NOMBRE_SUB_LINEA, COLOR, NRO_LINEA, NRO_SUB_LINEA
-              
+                FROM B
+                WHERE ORDEN_DE_COMPRA = '" . $oc . "'
+                AND PI = '" . $pi . "'
+                GROUP BY NOMBRE_ESTILO, NRO_ESTILO, COD_COLOR, ORDEN_DE_COMPRA, PI, NOMBRE_LINEA, NOMBRE_SUB_LINEA, COLOR, NRO_LINEA, NRO_SUB_LINEA
+                ORDER BY NRO_LINEA,NRO_SUB_LINEA,COD_COLOR
             ";
 
         //ORDER BY NRO_LINEA,NRO_SUB_LINEA,COD_COLOR
@@ -1425,29 +1425,29 @@ class cbx_grilla_compra extends \parametros
     public static function valida_tablab_cuza_color3($temporada, $depto, $login, $oc, $pi)
     {
 
-        $sql = "begin PLC_PKG_UTILS.PRC_LISTAR_OCPMMIN('" . $oc . "','" . $pi . "',$temporada,'" . $depto . "', :data); end;";
+        /*$sql = "begin PLC_PKG_UTILS.PRC_LISTAR_OCPMMIN('" . $oc . "','" . $pi . "',$temporada,'" . $depto . "', :data); end;";
         $data = \database::getInstancia()->getConsultaSP($sql, 1);
+        return $data;*/
+
+
+        $sql = "SELECT c.id_color3 ID,
+                     c.proforma,
+                     nvl(C.NOM_LINEA,'Sin Informacion') LINEA,
+                     c.cod_jer2 cod_linea,
+                     nvl(C.NOM_SUBLINEA,'Sin Informacion') SUB_LINEA,
+                     c.cod_sublin cod_sublinea,
+                     nvl(c.DES_ESTILO,'Sin Informacion') ESTILO,
+                     nvl(c.Nom_Color,'Sin Informacion') COLOR,
+                     c.cod_color 
+                FROM  plc_plan_compra_color_3 c
+                WHERE C.PROFORMA = '".$pi."' 
+                AND C.COD_TEMPORADA = $temporada 
+                AND C.DEP_DEPTO = '".$depto."' 
+                ORDER BY COD_LINEA,COD_SUBLINEA,COD_COLOR
+               ";
+
+        $data = \database::getInstancia()->getFilas($sql);
         return $data;
-
-
-        /*$sql_nuevo = "SELECT c.id_color3 ID,
-                             c.proforma,
-                             nvl(C.NOM_LINEA,'Sin Informacion') LINEA,
-                             c.cod_jer2 cod_linea,
-                             nvl(C.NOM_SUBLINEA,'Sin Informacion') SUB_LINEA,
-                             c.cod_sublin cod_sublinea,
-                             nvl(c.DES_ESTILO,'Sin Informacion') ESTILO,
-                             nvl(c.Nom_Color,'Sin Informacion') COLOR,
-                             c.cod_color 
-                        FROM  plc_plan_compra_color_3 c
-                        WHERE C.PROFORMA = '".$pi."' 
-                        AND C.COD_TEMPORADA = $temporada 
-                        AND C.DEP_DEPTO = '".$depto."' 
-                        ORDER BY COD_LINEA,COD_SUBLINEA,COD_COLOR
-                       ";*/
-
-        // $data = \database::getInstancia()->getFilas($sql);
-        // return $data;
 
     }
 

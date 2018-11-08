@@ -254,9 +254,11 @@ $(window).on('load', function () {
 
             success: function (data) {
 
-                $.each(data, function () {
+                /*$.each(data, function () {
                     flag_cont_registro++;
-                });
+                });*/
+
+                flag_cont_registro = data.length;
 
                 $.each(data, function (i, o) {
                     $('#tabla2').append('<tr id="tabla2_tr_id_' + flag_tabla2 + '" class="tabla2_tr_id_">\n' +
