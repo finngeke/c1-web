@@ -14,6 +14,10 @@ $(function () {
     $('#btn_esconder_tabla1').tooltip({title: "Ocultar", trigger: "hover", placement: "right"});
     $('#btn_mostrar_tabla1').tooltip({title: "Desplegar", trigger: "hover", placement: "right"});
 
+    // $('.eliminar_bmt').tooltip();
+    $('.actualiza_grid').tooltip();
+    // $('.importar_bmt').tooltip();
+
     // Ocultar los BTN del flujo que no se debieran ver
     $(".solicitud_generacion_ocd").hide();
     $(".oc_generadad").hide();
@@ -27,6 +31,7 @@ $(function () {
 // Load
 $(window).on('load', function () {
 
+    // En LoadWindow no en DocReady
     $('#popup_cargando_simulador_compra_4').modal('show');
 
     // codigo que valida el usuario tipo lectura ...
@@ -147,9 +152,6 @@ $(window).on('load', function () {
     $("#btn_generar_match_oc").attr("disabled", "disabled");
     $("#btn_actualizar_match").attr("disabled", "disabled");
 
-    $('.eliminar_bmt').tooltip();
-    $('.actualiza_grid').tooltip();
-    $('.importar_bmt').tooltip();
 
     // Cargar los CBX del modulo
     var span_temporada = $('#span_temporada').text();
@@ -2533,18 +2535,18 @@ function matchOC(event) {
                                             // Fin delay para comenzar a llenar grillas y buscar las diferencias entre tablaas
                                         }, delay);
 
-                                        // Fin del DONE llenar tabla plan
+                                    // Fin del DONE llenar tabla plan
                                     });
 
-                                    // Fin else si la tabla PMM tiene datos
+                                // Fin else si la tabla PMM tiene datos
                                 }
 
                             }, delay);
 
-                            // Fin del DONE llenat tabla PMM
+                        // Fin del DONE llenat tabla PMM
                         });
 
-                        // Fin del DONE traer datos OC desde WS
+                    // Fin del DONE traer datos OC desde WS
                     });
 
                     // Fin si la OC se encuentra linkeada
@@ -2554,7 +2556,7 @@ function matchOC(event) {
                     return false;
                 }
 
-                //Fin DONE si está linkeada la OC
+            //Fin DONE si está linkeada la OC
             });
 
         } else {
