@@ -585,9 +585,10 @@ $(window).on('load', function () {
                     // Ocultar campo de búsqueda
                     $('#tabla2_filter').css('display', 'none');
 
-                    // Fin tabla2_buscar_columnas
+                // Fin tabla2_buscar_columnas
                 });
 
+                // Confirmar: Ayuda a limpiar el cache de la celda del DOM
                 $("#tabla2 td input").on('change', function () {
                     var $td = $(this).closest('td');
                     $td.find('input').attr('value', this.value);
