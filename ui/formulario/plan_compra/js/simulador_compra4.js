@@ -514,7 +514,7 @@ $(window).on('load', function () {
 
             $(".txt_archivo_").attr("disabled", "disabled");
             $(".btn_pi_").attr("disabled", "disabled");
-            // Bloquea BTN detalle error PI
+            // Bloquea BTN detalle error PI (Se comenta 08-11-2018 ya que se indica que el BTN estaba siempre bloqueado)
             //$(".detalle_error_pi_").attr("disabled", "disabled");
 
             
@@ -529,13 +529,9 @@ $(window).on('load', function () {
                     $("#btn_edita_grilla").attr("disabled", "disabled");
                 }
 
-
-
                 campos_bloquear_despues_llenar_tabla();
 
             }, delay_quitar_null);
-
-
 
 
             // Recorrido 6 - aquí se genera un delay para fijar la cabecera
