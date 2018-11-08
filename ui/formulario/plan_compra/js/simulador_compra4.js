@@ -514,7 +514,8 @@ $(window).on('load', function () {
 
             $(".txt_archivo_").attr("disabled", "disabled");
             $(".btn_pi_").attr("disabled", "disabled");
-            $(".detalle_error_pi_").attr("disabled", "disabled");
+            // Bloquea BTN detalle error PI
+            //$(".detalle_error_pi_").attr("disabled", "disabled");
 
             
             // Bloquea BTN de proforma y archivo cuando el usuario es de tipo lectura
