@@ -517,7 +517,6 @@ $(window).on('load', function () {
             // Bloquea BTN detalle error PI (Se comenta 08-11-2018 ya que se indica que el BTN estaba siempre bloqueado)
             //$(".detalle_error_pi_").attr("disabled", "disabled");
 
-            
             // Bloquea BTN de proforma y archivo cuando el usuario es de tipo lectura
             var delay_quitar_null = 2000;
             setTimeout(function () {
@@ -532,7 +531,6 @@ $(window).on('load', function () {
                 campos_bloquear_despues_llenar_tabla();
 
             }, delay_quitar_null);
-
 
             // Recorrido 6 - aquí se genera un delay para fijar la cabecera
             var delay_thead = 3000;
@@ -579,7 +577,7 @@ $(window).on('load', function () {
                             cal_campos();
                         }
 
-                        // Fin de tabla2_buscar_columnas
+                    // Fin de tabla2_buscar_columnas
                     });
 
                     // Ocultar campo de búsqueda
