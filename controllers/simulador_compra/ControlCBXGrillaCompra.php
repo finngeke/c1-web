@@ -14,8 +14,76 @@
 		// Llenar Tabla2 (Grilla)
 		public function llenar_tabla2($f3) {
 			$data = \simulador_compra\cbx_grilla_compra::llenar_tabla2($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'));
-			$json = [];
+			$json = [];$dtPIs =[];
+
 			foreach ($data as $val) {
+                //vista y update de estado oc  18= Compra confirmada con PI /22 = solicitud de generacion oc / 19 = pendiente de aprobcion de match
+                $proforma = utf8_encode($val["PROFORMA"]);$orden_compra = ""; $estadoOc = "";$f_embarque = "";$f_eta = "";$f_recepcion = "";$dias_atrasado = ""; $_exist = false; $ESTADO= $val["ESTADO_C1"];$nom_estado= $val["CODESTADO"];
+                    if ($proforma <> 'null' and $proforma <> null and $proforma <> '0' and $proforma <> '' and
+                        ($val["ESTADO_C1"] == 18 or $val["ESTADO_C1"] == 19 or $val["ESTADO_C1"] == 22)) {
+
+                        //si ya paso por esta pi
+                        foreach ($dtPIs as $valor){
+                            if ($valor[0] == $proforma){
+                                $_exist = true;
+                                $orden_compra =$valor[1];
+                                $estadoOc = $valor[2];
+                                $f_embarque =$valor[3];
+                                $f_eta = $valor[4];
+                                $f_recepcion = $valor[5];
+                                $dias_atrasado = $valor[6];
+                                $ESTADO = $valor[7];
+                                $nom_estado =  $valor[8];
+                            }
+                        }
+
+                        if ($_exist == false) {
+                            //extracion broker por pi
+                            $dt = json_decode(\simulador_compra\cbx_grilla_compra::traer_datos_oc($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $proforma, $f3->get('CURLOPT_PORT'), $f3->get('CURLOPT_URL')));
+                            if (($dt->Body->fault->faultCode == 0) and (count($dt->Body->detalleConsultaOrdenCompra->detalle)) > 0) {
+                                $orden_compra = $dt->Body->detalleConsultaOrdenCompra->detalle[0]->ordenCompra;
+                                $estadoOc = $dt->Body->detalleConsultaOrdenCompra->detalle[0]->estadoOC;
+                                $f_embarque = $dt->Body->detalleConsultaOrdenCompra->detalle[0]->fechaEmbarque;
+                                $f_eta = $dt->Body->detalleConsultaOrdenCompra->detalle[0]->fechaEta;
+                                $f_recepcion = date("d-m-Y", (strtotime(date($f_eta) . "+ 15 days")));
+
+                                try {
+                                    $datetime1 = date_create($f_recepcion);
+                                    $datetime2 = date_create($val["FECHA_RECEPCD_C1"]);
+                                    $interval = date_diff($datetime2, $datetime1);
+                                    $dias_atrasado = $interval->format('%R%a');
+                                } catch (Exception $e) {
+                                    $dias_atrasado = "";
+                                }
+                                $ESTADO = 19;
+                                $nom_estado =  "Pendiente de Aprobacion sin Match";
+                                //actualizamos el flujo de estado automatico
+                                \simulador_compra\cbx_grilla_compra::Update_flujo_estado_oc_vist($f3->get('SESSION.COD_TEMPORADA')
+                                    , $f3->get('SESSION.COD_DEPTO')
+                                    , $val["ESTADO_C1"]
+                                    , $f3->get('SESSION.login')
+                                    , $orden_compra
+                                     ,$proforma);
+                            }
+                            array_push($dtPIs, array($proforma, $orden_compra, $estadoOc, $f_embarque, $f_eta, $f_recepcion, $dias_atrasado,$ESTADO,$nom_estado));
+                        }
+
+                    }
+                    else{
+                     $orden_compra = $val["PO_NUMBER"];
+                     $estadoOc = $val["ESTADO_OC"];
+                     $f_embarque =$val["FECHA_EMBARQUE"];
+                     $f_eta = $val["FECHA_ETA"];
+                     $f_recepcion = $val["FECHA_RECEPCION"];
+                     $dias_atrasado = $val["DIAS_ATRASO"];
+                     $ESTADO= $val["ESTADO_C1"];
+                     $nom_estado= $val["CODESTADO"];
+
+                    }
+
+
+
+//Carga la data plan de compra
 				$json[] = array(
 					$val["ID_COLOR3"],                      // 0
 					utf8_encode($val["GRUPO_COMPRA"]),      // 1
@@ -94,18 +162,18 @@
                     utf8_encode($val["SKU"]),               // 74
 					utf8_encode($val["PROFORMA"]),          // 75
 					$val["ARCHIVO"],                        // 76
-                    utf8_encode($val["ESTILO_PMM"]),                     // 77
-                    utf8_encode($val["ESTADO_MATCH"]),                   // 78
-                    utf8_encode($val["PO_NUMBER"]),                      // 79
-                    utf8_encode($val["ESTADO_OC"]),                      // 80
-                    utf8_encode($val["FECHA_EMBARQUE"]),                 // 81
-                    utf8_encode($val["FECHA_ETA"]),                      // 82
-                    utf8_encode($val["FECHA_RECEPCION"]),                // 83
-                    utf8_encode($val["DIAS_ATRASO"]),                    // 84
-                    $val["CODESTADO"],                      // 85
-                    utf8_encode($val["ESTADO_C1"]),                      // 86
-                    utf8_encode($val["VENTANA_LLEGADA"]),                // 87
-                    utf8_encode($val["FECHA_RECEPCD_C1"])                // 88
+					$val["ESTILO_PMM"],                     // 77
+					$val["ESTADO_MATCH"],                   // 78
+                    $orden_compra,                          // 79
+					$estadoOc,                              // 80
+					$f_embarque,                            // 81
+					$f_eta,                                 // 82
+                    $f_recepcion,                           // 83
+                    $dias_atrasado,                         // 84
+                    $nom_estado,                            // 85
+                    $ESTADO,                                // 86
+					$val["VENTANA_LLEGADA"],                // 87
+					""               // 88
 				);
 			}
 			header("Content-Type: application/json");
