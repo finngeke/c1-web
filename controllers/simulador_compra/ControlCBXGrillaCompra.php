@@ -70,12 +70,12 @@
 
                     }
                     else{
-                     $orden_compra = $val["PO_NUMBER"];
-                     $estadoOc = $val["ESTADO_OC"];
-                     $f_embarque =$val["FECHA_EMBARQUE"];
-                     $f_eta = $val["FECHA_ETA"];
-                     $f_recepcion = $val["FECHA_RECEPCION"];
-                     $dias_atrasado = $val["DIAS_ATRASO"];
+                     $orden_compra =  utf8_encode($val["PO_NUMBER"]);
+                     $estadoOc =  utf8_encode($val["ESTADO_OC"]);
+                     $f_embarque = utf8_encode($val["FECHA_EMBARQUE"]);
+                     $f_eta =  utf8_encode($val["FECHA_ETA"]);
+                     $f_recepcion =  utf8_encode($val["FECHA_RECEPCION"]);
+                     $dias_atrasado =  utf8_encode($val["DIAS_ATRASO"]);
                      $ESTADO= $val["ESTADO_C1"];
                      $nom_estado= $val["CODESTADO"];
 
@@ -162,8 +162,8 @@
                     utf8_encode($val["SKU"]),               // 74 cod_padre
 					utf8_encode($val["PROFORMA"]),          // 75
 					$val["ARCHIVO"],                        // 76
-					$val["ESTILO_PMM"],                     // 77
-					$val["ESTADO_MATCH"],                   // 78
+                    utf8_encode($val["ESTILO_PMM"]),        // 77
+                    utf8_encode($val["ESTADO_MATCH"]),      // 78
                     $orden_compra,                          // 79
 					$estadoOc,                              // 80
 					$f_embarque,                            // 81
@@ -172,7 +172,7 @@
                     $dias_atrasado,                         // 84
                     $nom_estado,                            // 85
                     $ESTADO,                                // 86
-					$val["VENTANA_LLEGADA"],                // 87
+					utf8_encode($val["VENTANA_LLEGADA"]),   // 87
 					""               // 88
 				);
 			}
