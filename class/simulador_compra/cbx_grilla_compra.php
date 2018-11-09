@@ -370,7 +370,7 @@ class cbx_grilla_compra extends \parametros
                 convert((SELECT nom_est_c1 FROM plc_estado_c1 WHERE cod_est_c1= C.ESTADO),'utf8','us7ascii')CODESTADO,  -- 85 Estado Opcion
                 C.ESTADO ESTADO_C1,              -- 86 Estado C1
                 C.VENTANA_LLEGADA,               -- 87 Ventana Llegada
-                (SELECT DISTINCT TO_CHAR(FECHA_RECEPCD, 'dd-mm-yyyy')FECHA_RECEPCD FROM plc_ventana_emb V WHERE V.cod_temporada = C.COD_TEMPORADA AND V.cod_ventana = C.VENT_EMB) FECHA_RECEPCD_C1 -- 88 Fecha recepcion CD
+                REPLACE((SELECT DISTINCT FECHA_RECEPCD FROM plc_ventana_emb V WHERE V.cod_temporada = C.COD_TEMPORADA AND V.cod_ventana = C.VENT_EMB),'/','-') FECHA_RECEPCD_C1 -- 88 Fecha recepcion CD
                 FROM PLC_PLAN_COMPRA_COLOR_3 C
                 LEFT JOIN PLC_PLAN_COMPRA_OC O ON C.COD_TEMPORADA = O.COD_TEMPORADA
 				AND C.DEP_DEPTO = O.DEP_DEPTO AND C.ID_COLOR3 = O.ID_COLOR3
@@ -480,7 +480,7 @@ class cbx_grilla_compra extends \parametros
                 convert((SELECT nom_est_c1 FROM plc_estado_c1 WHERE cod_est_c1= C.ESTADO),'utf8','us7ascii')CODESTADO,  -- 85 Estado Opcion
                 C.ESTADO ESTADO_C1,              -- 86 Estado C1
                 C.VENTANA_LLEGADA,               -- 87 Ventana Llegada
-                (SELECT DISTINCT TO_CHAR(FECHA_RECEPCD, 'dd-mm-yyyy')FECHA_RECEPCD FROM plc_ventana_emb V WHERE V.cod_temporada = C.COD_TEMPORADA AND V.cod_ventana = C.VENT_EMB) FECHA_RECEPCD_C1 -- 88 Fecha recepcion CD
+                REPLACE((SELECT DISTINCT FECHA_RECEPCD FROM plc_ventana_emb V WHERE V.cod_temporada = C.COD_TEMPORADA AND V.cod_ventana = C.VENT_EMB),'/','-') FECHA_RECEPCD_C1 -- 88 Fecha recepcion CD
                 FROM PLC_PLAN_COMPRA_COLOR_3 C
                 LEFT JOIN PLC_PLAN_COMPRA_OC O ON C.COD_TEMPORADA = O.COD_TEMPORADA
 				AND C.DEP_DEPTO = O.DEP_DEPTO AND C.ID_COLOR3 = O.ID_COLOR3
@@ -1046,104 +1046,6 @@ class cbx_grilla_compra extends \parametros
 
     // Fin de la clase
     }
-
-    public static function Update_flujo_estado_oc_vist($temporada,$depto,$estado,$login,$po_number,$proforma){
-
-/*
-        $f_embarque = date("d-m-Y", strtotime($f_embarque));
-        $fecha_eta = date("d-m-Y", strtotime($fecha_eta));
-
-        $dias_atraso= str_replace("+", "", $dias_atraso);
-        //actualizar tabla oc
-        $sql = "update plc_plan_compra_oc
-                   set po_number = ".$po_number."
-                   ,estado_oc = '".$estado_oc."'
-                   ,fecha_embarque = TO_DATE('".$f_embarque."','dd-mm-YYYY')
-                   ,fecha_eta = TO_DATE('".$fecha_eta."','dd-mm-YYYY')
-                   ,fecha_recepcion = TO_DATE('".$f_recepcion."','dd-mm-YYYY')
-                   ,dias_atraso = ".$dias_atraso."
-                   ,COD_PADRE = NULL
-                   ,ESTADO_MATCH = NULL
-                   ,ESTADO_OC = NULL
-                   ,ESTILO_PMM = NULL
-                    where cod_temporada = ".$temporada."
-                    and dep_depto =  '".$depto."'
-                    and PROFORMA = '".$proforma."'";
-        \database::getInstancia()->getConsulta($sql);
-*/
-        //actualiza el estado color3 en 19 (pendiente de aprobacion sin match)
-        $sql = "update plc_plan_compra_color_3
-                    set estado = 19
-                    where cod_temporada = ".$temporada."
-                    and dep_depto =  '".$depto."'
-                    and PROFORMA = '".$proforma."'";
-        \database::getInstancia()->getConsulta($sql);
-
-        if ($estado <> 19){
-            //dt id_color actualizar para historial
-            $sql = "select distinct id_color3 from plc_plan_compra_color_3
-                    where cod_temporada = ".$temporada."
-                    and dep_depto =  '".$depto."'
-                    and PROFORMA = '".$proforma."'";
-            $id_color3s = \database::getInstancia()->getFilas($sql);
-            //insert historial
-             foreach ($id_color3s as $val){
-                 $id_color3 =$val['ID_COLOR3'];
-                $count = 0; if($estado == 18){$count = 2;}else{$count = 1;};
-                for ($i = 1; $i <= $count; $i++) {
-                    $estadofor = 0;if ($i == 1) {$estadofor = 22;} else {$estadofor = 19;};
-                    $sql_insert = "INSERT INTO PLC_PLAN_COMPRA_HISTORICA (DPTO,LINEA,SUBLINEA,MARCA,ESTILO,VENTANA,COLOR,USER_LOGIN,USER_NOM,FECHA,HORA,PI,OC,ESTADO,TEMP,ID_COLOR3,NOM_LINEA,NOM_MARCA,NOM_VENTANA,NOM_COLOR,NOM_SUBLINEA)
-                                    SELECT C.DEP_DEPTO,
-                                            C.COD_JER2 LINEA,         -- linea
-                                            C.COD_SUBLIN SUBLINEA,    -- sublinea
-                                            C.COD_MARCA,              -- marca
-                                            C.DES_ESTILO ESTILO,      -- estilo
-                                            C.VENTANA_LLEGADA,        -- Ventana
-                                            NVL(COD_COLOR,0)COLOR,    -- Color
-                                            '" . $login . "',
-                                            (SELECT NOM_USR FROM PLC_USUARIO WHERE COD_USR = '" . $login . "'),
-                                            (SELECT SUBSTR(TO_CHAR(SYSDATE, 'DD-MM-YYYY'),1,10)N FROM DUAL),
-                                            (SELECT TO_CHAR(SYSDATE, 'HH24:MI:SS') FROM DUAL),
-                                            C.PROFORMA,
-                                            $po_number,
-                                            $estadofor,
-                                            C.COD_TEMPORADA,
-                                            C.ID_COLOR3,
-                                            C.NOM_LINEA LINEA,
-                                            C.NOM_MARCA MARCA,
-                                            C.NOM_VENTANA VENTANA,
-                                            C.NOM_COLOR COD_COLOR,
-                                            C.NOM_SUBLINEA SUBLINEA
-                                      FROM PLC_PLAN_COMPRA_COLOR_3 C
-                                      WHERE C.COD_TEMPORADA = $temporada AND C.DEP_DEPTO =  '" . $depto . "'
-                                      AND C.ID_COLOR3 = $id_color3";
-                     \database::getInstancia()->getConsulta($sql_insert);
-                }
-             }
-        }else{
-            $sql = "update plc_plan_compra_oc
-                   set po_number = NULL
-                       ,estado_oc = NULL
-                       ,fecha_embarque = NULL
-                       ,fecha_eta = NULL
-                       ,fecha_recepcion = NULL
-                       ,dias_atraso = NULL
-                       ,COD_PADRE = NULL
-                       ,ESTADO_MATCH = NULL
-                       ,ESTILO_PMM = NULL
-                    where cod_temporada = ".$temporada."
-                    and dep_depto =  '".$depto."'
-                    and PROFORMA = '".$proforma."'";
-
-            \database::getInstancia()->getConsulta($sql);
-
-        }
-
-
-    }
-
-
-
 
     // Listar el coemntario de la PI que se solcititò modificar
     public static function busca_comentario_pi($temporada, $depto, $login, $pi)
