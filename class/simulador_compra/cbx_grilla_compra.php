@@ -497,7 +497,7 @@ class cbx_grilla_compra extends \parametros
     public static function llenar_edita_grilla($temporada, $depto, $id_color3)
     {
 
-          $sql = "SELECT
+        $sql = "SELECT
                   C.GRUPO_COMPRA,               -- 0 grupo compra        
                   C.NOM_MARCA MARCA,            -- 1 marca
                   C.NOM_LINEA LINEA,            -- 2 linea
@@ -1016,7 +1016,7 @@ class cbx_grilla_compra extends \parametros
         $data_insert = \database::getInstancia()->getConsulta($sql_insert);
 
         // Si se ejecuta la consulta
-        if($data_insert){
+        if ($data_insert) {
 
             $sql_update = "begin PLC_PKG_UTILS.PRC_SOLOC($temporada,'" . $depto . "','" . $proforma . "',$estado_update, :error, :data); end;";
 
@@ -1033,64 +1033,76 @@ class cbx_grilla_compra extends \parametros
 
             $data_update = \database::getInstancia()->getConsultaSP($sql_update, 2);
 
-            if($data_update){
+            if ($data_update) {
                 return "OK";
-            }else{
+            } else {
                 return "ERROR";
             }
 
-        // Si la consulta no se puede realizar
-        }else{
+            // Si la consulta no se puede realizar
+        } else {
             return "ERROR";
         }
 
-    // Fin de la clase
+        // Fin de la clase
     }
-    public static function Update_flujo_estado_oc_vist($temporada,$depto,$estado,$login,$po_number,$proforma){
 
-/*
-        $f_embarque = date("d-m-Y", strtotime($f_embarque));
-        $fecha_eta = date("d-m-Y", strtotime($fecha_eta));
+    public static function Update_flujo_estado_oc_vist($temporada, $depto, $estado, $login, $po_number, $proforma)
+    {
 
-        $dias_atraso= str_replace("+", "", $dias_atraso);
-        //actualizar tabla oc
-        $sql = "update plc_plan_compra_oc
-                   set po_number = ".$po_number."
-                   ,estado_oc = '".$estado_oc."'
-                   ,fecha_embarque = TO_DATE('".$f_embarque."','dd-mm-YYYY')
-                   ,fecha_eta = TO_DATE('".$fecha_eta."','dd-mm-YYYY')
-                   ,fecha_recepcion = TO_DATE('".$f_recepcion."','dd-mm-YYYY')
-                   ,dias_atraso = ".$dias_atraso."
-                   ,COD_PADRE = NULL
-                   ,ESTADO_MATCH = NULL
-                   ,ESTADO_OC = NULL
-                   ,ESTILO_PMM = NULL
-                    where cod_temporada = ".$temporada."
-                    and dep_depto =  '".$depto."'
-                    and PROFORMA = '".$proforma."'";
-        \database::getInstancia()->getConsulta($sql);
-*/
+        /*
+                $f_embarque = date("d-m-Y", strtotime($f_embarque));
+                $fecha_eta = date("d-m-Y", strtotime($fecha_eta));
+
+                $dias_atraso= str_replace("+", "", $dias_atraso);
+                //actualizar tabla oc
+                $sql = "update plc_plan_compra_oc
+                           set po_number = ".$po_number."
+                           ,estado_oc = '".$estado_oc."'
+                           ,fecha_embarque = TO_DATE('".$f_embarque."','dd-mm-YYYY')
+                           ,fecha_eta = TO_DATE('".$fecha_eta."','dd-mm-YYYY')
+                           ,fecha_recepcion = TO_DATE('".$f_recepcion."','dd-mm-YYYY')
+                           ,dias_atraso = ".$dias_atraso."
+                           ,COD_PADRE = NULL
+                           ,ESTADO_MATCH = NULL
+                           ,ESTADO_OC = NULL
+                           ,ESTILO_PMM = NULL
+                            where cod_temporada = ".$temporada."
+                            and dep_depto =  '".$depto."'
+                            and PROFORMA = '".$proforma."'";
+                \database::getInstancia()->getConsulta($sql);
+        */
         //actualiza el estado color3 en 19 (pendiente de aprobacion sin match)
         $sql = "update plc_plan_compra_color_3
                     set estado = 19
-                    where cod_temporada = ".$temporada."
-                    and dep_depto =  '".$depto."'
-                    and PROFORMA = '".$proforma."'";
+                    where cod_temporada = " . $temporada . "
+                    and dep_depto =  '" . $depto . "'
+                    and PROFORMA = '" . $proforma . "'";
         \database::getInstancia()->getConsulta($sql);
 
-        if ($estado <> 19){
+        if ($estado <> 19) {
             //dt id_color actualizar para historial
             $sql = "select distinct id_color3 from plc_plan_compra_color_3
-                    where cod_temporada = ".$temporada."
-                    and dep_depto =  '".$depto."'
-                    and PROFORMA = '".$proforma."'";
+                    where cod_temporada = " . $temporada . "
+                    and dep_depto =  '" . $depto . "'
+                    and PROFORMA = '" . $proforma . "'";
             $id_color3s = \database::getInstancia()->getFilas($sql);
             //insert historial
-             foreach ($id_color3s as $val){
-                 $id_color3 =$val['ID_COLOR3'];
-                $count = 0; if($estado == 18){$count = 2;}else{$count = 1;};
+            foreach ($id_color3s as $val) {
+                $id_color3 = $val['ID_COLOR3'];
+                $count = 0;
+                if ($estado == 18) {
+                    $count = 2;
+                } else {
+                    $count = 1;
+                };
                 for ($i = 1; $i <= $count; $i++) {
-                    $estadofor = 0;if ($i == 1) {$estadofor = 22;} else {$estadofor = 19;};
+                    $estadofor = 0;
+                    if ($i == 1) {
+                        $estadofor = 22;
+                    } else {
+                        $estadofor = 19;
+                    };
                     $sql_insert = "INSERT INTO PLC_PLAN_COMPRA_HISTORICA (DPTO,LINEA,SUBLINEA,MARCA,ESTILO,VENTANA,COLOR,USER_LOGIN,USER_NOM,FECHA,HORA,PI,OC,ESTADO,TEMP,ID_COLOR3,NOM_LINEA,NOM_MARCA,NOM_VENTANA,NOM_COLOR,NOM_SUBLINEA)
                                     SELECT C.DEP_DEPTO,
                                             C.COD_JER2 LINEA,         -- linea
@@ -1116,10 +1128,10 @@ class cbx_grilla_compra extends \parametros
                                       FROM PLC_PLAN_COMPRA_COLOR_3 C
                                       WHERE C.COD_TEMPORADA = $temporada AND C.DEP_DEPTO =  '" . $depto . "'
                                       AND C.ID_COLOR3 = $id_color3";
-                     \database::getInstancia()->getConsulta($sql_insert);
+                    \database::getInstancia()->getConsulta($sql_insert);
                 }
-             }
-        }else{
+            }
+        } else {
             $sql = "update plc_plan_compra_oc
                    set po_number = NULL
                        ,estado_oc = NULL
@@ -1130,9 +1142,9 @@ class cbx_grilla_compra extends \parametros
                        ,COD_PADRE = NULL
                        ,ESTADO_MATCH = NULL
                        ,ESTILO_PMM = NULL
-                    where cod_temporada = ".$temporada."
-                    and dep_depto =  '".$depto."'
-                    and PROFORMA = '".$proforma."'";
+                    where cod_temporada = " . $temporada . "
+                    and dep_depto =  '" . $depto . "'
+                    and PROFORMA = '" . $proforma . "'";
 
             \database::getInstancia()->getConsulta($sql);
 
@@ -1140,8 +1152,8 @@ class cbx_grilla_compra extends \parametros
 
 
     }
-	
-	
+
+
     // Listar el coemntario de la PI que se solcititò modificar
     public static function busca_comentario_pi($temporada, $depto, $login, $pi)
     {
@@ -1190,9 +1202,9 @@ class cbx_grilla_compra extends \parametros
         $data = \database::getInstancia()->getFilas($sql);
         //return $data;
 
-        if($data){
+        if ($data) {
             return 1;
-        }else{
+        } else {
             return 0;
         }
 
@@ -1535,9 +1547,9 @@ class cbx_grilla_compra extends \parametros
                      nvl(c.Nom_Color,'Sin Informacion') COLOR,
                      c.cod_color 
                 FROM  plc_plan_compra_color_3 c
-                WHERE C.PROFORMA = '".$pi."' 
+                WHERE C.PROFORMA = '" . $pi . "' 
                 AND C.COD_TEMPORADA = $temporada 
-                AND C.DEP_DEPTO = '".$depto."' 
+                AND C.DEP_DEPTO = '" . $depto . "' 
                 ORDER BY COD_LINEA,COD_SUBLINEA,COD_COLOR
                ";
 
@@ -2657,407 +2669,153 @@ class cbx_grilla_compra extends \parametros
 // return $data;
 
 // Actualizar grilla en PLC_PLAN_COMPRA_COLOR_CIC
-public static function actualiza_grilla_plan_compra_color_cic($temporada, $depto, $login, $ID_COLOR3, $COSTO)
-{
+    public static function actualiza_grilla_plan_compra_color_cic($temporada, $depto, $login, $ID_COLOR3, $COSTO)
+    {
 
-    $sql = "UPDATE PLC_PLAN_COMPRA_COLOR_CIC 
+        $sql = "UPDATE PLC_PLAN_COMPRA_COLOR_CIC 
                 SET COSTO = $COSTO,
-                    USR_MOD = '".$login."',
+                    USR_MOD = '" . $login . "',
                     FEC_MOD = current_date
                 WHERE COD_TEMPORADA = $temporada
-                    AND DEP_DEPTO = '".$depto."'
+                    AND DEP_DEPTO = '" . $depto . "'
                     AND ID_COLOR3 = $ID_COLOR3
                 ";
 
-    // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
-    if (!file_exists('../archivos/log_querys/' . $login)) {
-        mkdir('../archivos/log_querys/' . $login, 0775, true);
+        // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+        if (!file_exists('../archivos/log_querys/' . $login)) {
+            mkdir('../archivos/log_querys/' . $login, 0775, true);
+        }
+
+        $stamp = date("Y-m-d_H-i-s");
+        $rand = rand(1, 999);
+        $content = $sql;
+        $fp = fopen("../archivos/log_querys/" . $login . "/EDITAGRILLA-PLC_PLAN_COMPRA_COLOR_CIC--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+        fwrite($fp, $content);
+        fclose($fp);
+
+        // $data = \database::getInstancia()->getConsulta($sql);
+        // return $data;
+
+        if (\database::getInstancia()->getConsulta($sql)) {
+            return 1;
+        } else {
+            return 0;
+        }
+
+
     }
-
-    $stamp = date("Y-m-d_H-i-s");
-    $rand = rand(1, 999);
-    $content = $sql;
-    $fp = fopen("../archivos/log_querys/" . $login . "/EDITAGRILLA-PLC_PLAN_COMPRA_COLOR_CIC--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
-    fwrite($fp, $content);
-    fclose($fp);
-
-    // $data = \database::getInstancia()->getConsulta($sql);
-    // return $data;
-
-    if(\database::getInstancia()->getConsulta($sql)){
-        return 1;
-    }else{
-        return 0;
-    }
-
-
-}
 
 // Listar País
-public static function listar_pais($cod_temporada,$depto){
+    public static function listar_pais($cod_temporada, $depto)
+    {
 
-    $sql =  "SELECT CNTRY_LVL_CHILD,CNTRY_NAME 
+        $sql = "SELECT CNTRY_LVL_CHILD,CNTRY_NAME 
                   FROM plc_pais
                   ORDER BY CNTRY_NAME ASC
                 ";
 
-    $data = \database::getInstancia()->getFilas($sql);
-    return $data;
+        $data = \database::getInstancia()->getFilas($sql);
+        return $data;
 
-}
+    }
 
 // Busca Formatos Grilla Editar
-public static function listar_formato_grilla_edita($temporada,$depto){
+    public static function listar_formato_grilla_edita($temporada, $depto)
+    {
 
-    $sql =  "select distinct b.des_seg,b.cod_seg
+        $sql = "select distinct b.des_seg,b.cod_seg
                     from plc_formatos_tda a
                     inner join plc_formato b on a.cod_temporada = b.cod_temporada
                                              and a.dep_depto = b.dep_depto
                                              and a.cod_seg = b.cod_seg
                     where a.COD_TEMPORADA = $temporada
-                    and a.DEP_DEPTO = '".$depto."' 
+                    and a.DEP_DEPTO = '" . $depto . "' 
                     order by 1 asc
                 ";
 
-    $data = \database::getInstancia()->getFilas($sql);
-    return $data;
+        $data = \database::getInstancia()->getFilas($sql);
+        return $data;
 
-}
+    }
 
 // Busca Ventana Grilla Editar
-public static function listar_ventana_grilla_edita($temporada,$depto){
+    public static function listar_ventana_grilla_edita($temporada, $depto)
+    {
 
-    $sql =  "SELECT * FROM plc_ventana";
+        $sql = "SELECT * FROM plc_ventana";
 
-    $data = \database::getInstancia()->getFilas($sql);
-    return $data;
+        $data = \database::getInstancia()->getFilas($sql);
+        return $data;
 
-}
-
-public static function CalculoCurvado($tipo_empaque,$tallas,$curvas_talla,$und_iniciales,$cluster,$formato
-    ,$A,$B,$C,$I,$debut_reoder,$PORTALLA_1_INI,$depto,$cod_tempo,$marca,$N_CURVASXCAJAS
-    ,$cod_linea,$cod_sublinea,$id_color3,$Guardado){
-
-    $dtmstpack = plan_compra::list_mstpack($cod_linea, $cod_sublinea,$depto);
-    $mstpack= 0;
-    if (count($dtmstpack)<> 0){
-        $mstpack = $dtmstpack[0];
     }
 
-    /*******************AJUSTE CUERVA DE COMPRA*********************/
-    $dtTabla = []; $dtTablaCurvado = [];$dtTablasSolidoCurvado = [];$dtTablasolidoFULL = [];$dtTablaReorder =[];
-    $unid_ajustas = 0;$unid_final = 0;$porcentajeAjust = "";$n_cajasfinales = 0;$totalprimerRepato = 0;$unid_ajustasxtallas = "";
-    $N_Columna = count(explode(",", trim($tallas)));
+    public static function CalculoCurvado($tipo_empaque, $tallas, $curvas_talla, $und_iniciales, $cluster, $formato
+        , $A, $B, $C, $I, $debut_reoder, $PORTALLA_1_INI, $depto, $cod_tempo, $marca, $N_CURVASXCAJAS
+        , $cod_linea, $cod_sublinea, $id_color3, $Guardado)
+    {
 
-    //*-----------------tallas columnas
-    $tallas2 = explode(",", trim($tallas));
-    $insert = [];
-    foreach ($tallas2 as $var) {
-        array_push($insert, $var);
-    }
-    array_push($insert, "Total");
-    array_push($dtTabla, $insert);
-
-    $clusters3 = "";
-    if ($debut_reoder == "DEBUT"){
-        //*-----------------curva de compra
-        $insert = [];$por_Inicial = explode("-", trim($PORTALLA_1_INI));$total = 0;
-        foreach ($por_Inicial as $var) {
-            $total += round((($var * $und_iniciales) / 100));
-            array_push($insert, round((($var * $und_iniciales) / 100)));
+        $dtmstpack = plan_compra::list_mstpack($cod_linea, $cod_sublinea, $depto);
+        $mstpack = 0;
+        if (count($dtmstpack) <> 0) {
+            $mstpack = $dtmstpack[0];
         }
-        array_push($insert, $total);
-        array_push($dtTabla, $insert);
 
-        //*-----------------Curva del Primer Reparto
-        $insert = [];$curvas = explode(",", trim($curvas_talla));$total = 0;
-        $clusters = explode("+", plan_compra::list_inter_tds_cluster($depto, $marca, $cod_tempo,$cluster, $formato));
-        foreach ($curvas as $var) {
-            $primer = 0;
-            foreach ($clusters as $varc) {
-                $clustCurva = 0;
-                if ($varc == "A"){
-                    $clustCurva = $A;
-                }elseif ($varc == "B"){
-                    $clustCurva = $B;
-                }elseif ($varc == "C"){
-                    $clustCurva = $C;
-                }elseif ($varc == "I"){
-                    $clustCurva = $I;
-                }
+        /*******************AJUSTE CUERVA DE COMPRA*********************/
+        $dtTabla = [];
+        $dtTablaCurvado = [];
+        $dtTablasSolidoCurvado = [];
+        $dtTablasolidoFULL = [];
+        $dtTablaReorder = [];
+        $unid_ajustas = 0;
+        $unid_final = 0;
+        $porcentajeAjust = "";
+        $n_cajasfinales = 0;
+        $totalprimerRepato = 0;
+        $unid_ajustasxtallas = "";
+        $N_Columna = count(explode(",", trim($tallas)));
 
-                $ntdas = 0;
-                if ($formato == "" OR $formato == "SIN FORMATO") {
-                    $ntdas = plan_compra::list_tdas_sin_formato($depto, $marca, $cod_tempo, $varc);
-                } elseif ($formato <> "" AND $formato <> "SIN FORMATO") {
-                    $ntdas = plan_compra::list_tdas_con_formato($depto, $marca, $cod_tempo, $varc, $formato);
-                }
-                $primer += $var * $clustCurva * $ntdas["TIENDAS"];
-            }
-            $total += $primer;
-            array_push($insert, $primer);
-        }
-        array_push($insert, $total);
-        array_push($dtTabla, $insert);
-
-        //*-----------------diferencial
-        $key = 0;$insert = [];$total = 0;
+        //*-----------------tallas columnas
+        $tallas2 = explode(",", trim($tallas));
+        $insert = [];
         foreach ($tallas2 as $var) {
-            $val = 0;
-            if ($dtTabla[1][$key] < $dtTabla[2][$key]) {
-                $val = $dtTabla[1][$key] - $dtTabla[2][$key];
-            }
-            $total += $val;
-            array_push($insert, $val);
-            $key += 1;
+            array_push($insert, $var);
         }
-        array_push($insert, $total);
+        array_push($insert, "Total");
         array_push($dtTabla, $insert);
 
-        //*-----------------Total
-        $key = 0;$insert = [];$total = 0;
-        foreach ($tallas2 as $var) {
-            $val = 0;
-            if ($dtTabla[3][$key] <> 0) {
-                $val = $dtTabla[2][$key];
-            } else {
-                $val = $dtTabla[1][$key];
+        $clusters3 = "";
+        if ($debut_reoder == "DEBUT") {
+            //*-----------------curva de compra
+            $insert = [];
+            $por_Inicial = explode("-", trim($PORTALLA_1_INI));
+            $total = 0;
+            foreach ($por_Inicial as $var) {
+                $total += round((($var * $und_iniciales) / 100));
+                array_push($insert, round((($var * $und_iniciales) / 100)));
             }
-            $total += $val;
-            array_push($insert, $val);
-            $key += 1;
-        }
-        array_push($insert, $total);
-        array_push($dtTabla, $insert);
+            array_push($insert, $total);
+            array_push($dtTabla, $insert);
 
-        //*-----------------CURVA DE COMPRA Ajustada
-        $key = 0;$insert = [];$total = "";
-        $TotalAjust = $dtTabla[4][$N_Columna];
-        foreach ($tallas2 as $var) {
-            $val = 0;
-            $val = (round((($dtTabla[4][$key] / $TotalAjust) * 100), 5));
-            if (strlen($val) > 6) {
-                $val = round($val, 3);
-            }
-            $total = $total . $val . "-";
-            array_push($insert, $val);
-            $key += 1;
-
-        }
-        $total = substr($total, 0, -1);
-        array_push($insert, $total);
-        array_push($dtTabla, $insert);
-
-        /*%*/$unid_ajustas = $dtTabla[4][$N_Columna];
-
-        /*CURVADO*/ if ($tipo_empaque == "Curvado" or $tipo_empaque == "CURVADO") {
-            //*****************1.-AJUSTE DE CAJAS CURVADOS
-            array_push($dtTablaCurvado, $dtTabla[0]);//CABECERA
-            array_push($dtTablaCurvado, $dtTabla[4]);//TOTAL AJUSTE COMPRA
             //*-----------------Curva del Primer Reparto
-            $insert = [];$total = 0;
+            $insert = [];
             $curvas = explode(",", trim($curvas_talla));
-            $clusters = explode("+", plan_compra::list_inter_tds_cluster($depto, $marca, $cod_tempo,$cluster, $formato));
-            foreach ($curvas as $var) {
-                $primer = 0;
-                foreach ($clusters as $varc) {
-                    $clustCurva = 0;
-                    if ($varc == "A"){
-                        $clustCurva = $A;
-                    }elseif ($varc == "B"){
-                        $clustCurva = $B;
-                    }elseif ($varc == "C"){
-                        $clustCurva = $C;
-                    }elseif ($varc == "I"){
-                        $clustCurva = $I;
-                    }
-                    $ntdas = 0;
-                    if ($formato == "" OR $formato == "SIN FORMATO") {
-                        $ntdas = plan_compra::list_tdas_sin_formato($depto, $marca, $cod_tempo, $varc);
-                    } elseif ($formato <> "" AND $formato <> "SIN FORMATO") {
-                        $ntdas = plan_compra::list_tdas_con_formato($depto, $marca, $cod_tempo, $varc, $formato);
-                    }
-
-                    $primer += $var * $clustCurva * $ntdas["TIENDAS"];
-                }
-                $total += $primer;
-                array_push($insert, $primer);
-            }
-            array_push($insert, $total);
-            array_push($dtTablaCurvado, $insert);
-
-            //*-----------------Curvas de repartos EJ: 1,2,3,4
-            $insert = [];$total = 0;
-            foreach ($curvas as $var) {
-                $total += $var;
-                array_push($insert, $var);
-            }
-            array_push($insert, $total);
-            array_push($dtTablaCurvado, $insert);
-
-            //Curva minima * n° de curva/caja
-            //$masterCurvado = $dtTablaCurvado [3][$N_Columna] * $N_CURVAS_CAJAS;
-            $insert = [];
-            foreach ($tallas2 as $vart){array_push($insert, 0);}
-            array_push($insert, $dtTablaCurvado [3][$N_Columna] * $N_CURVASXCAJAS);
-            array_push($dtTablaCurvado, $insert);
-
-            //total 1er repato / inner(curva min)
-            $Curva_repartir = $dtTablaCurvado [2][$N_Columna] / $dtTablaCurvado[3][$N_Columna];$insert = [];
-            foreach ($tallas2 as $vart){array_push($insert, 0);}
-            array_push($insert, $Curva_repartir);
-            array_push($dtTablaCurvado, $insert);
-
-            //Curva a repartir / n de curva cajas
-            $n_CAJAS = $Curva_repartir / $N_CURVASXCAJAS;$insert = [];
-            foreach ($tallas2 as $vart){array_push($insert, 0);}
-            array_push($insert, $n_CAJAS);
-            array_push($dtTablaCurvado, $insert);
-
-            //N° de curvas caja
-            $insert = [];
-            foreach ($tallas2 as $var) {array_push($insert, 0);}
-            array_push($insert, $N_CURVASXCAJAS);
-            array_push($dtTablaCurvado, $insert);
-
-
-            //*-------------porcenjas compra curvada
-            $key2 = 0;
-            foreach ($tallas2 as $vart) {
-                if ($dtTablaCurvado [2][$key2] <> 0) {
-                    $porcentajeAjust = $porcentajeAjust . (round(($dtTablaCurvado[2][$key2] / $dtTablaCurvado [2][$N_Columna]) * 100, 3)) . "-";
-                } else {
-                    $porcentajeAjust = $porcentajeAjust . "0-";
-                }
-                $key2 += 1;
-            }
-
-            //*****************2.-AJUSTE DE CAJAS SOLIDAS
-            array_push($dtTablasSolidoCurvado, $dtTabla[0]);//CABECERA
-            //total solido
-            $insert = [];$total = 0; $keytallas = 0;
-            foreach ($tallas2 as $vart) {
-                array_push($insert, $dtTablaCurvado[1][$keytallas] - $dtTablaCurvado[2][$keytallas]);
-                $total += $dtTablaCurvado[1][$keytallas] - $dtTablaCurvado[2][$keytallas];
-                $keytallas += 1;
-            }
-            array_push($insert, $total);
-            array_push($dtTablasSolidoCurvado, $insert);
-
-            //n°cajas
-
-            $insert = [];$total = 0;$keytallas = 0;
-            foreach ($tallas2 as $vart) {
-                $parametro95 = round($dtTablaCurvado[2][$keytallas] / $dtTablaCurvado[1][$keytallas] * 100, 3);
-                $decimal = 0;
-                if (is_float($parametro95 ) == true){$division = 0;
-                    if ($dtTablasSolidoCurvado[1][$keytallas] <> 0){
-                        $division = ($dtTablasSolidoCurvado[1][$keytallas] / $mstpack);
-                        $decimal  = (substr($division, strpos($division, "." )));
-                    }
-                }
-                if ($parametro95 >= 95 and $dtTablasSolidoCurvado[1][$keytallas] < $mstpack) {
-                    array_push($insert, 0);
-                } elseif ($parametro95 < 95 and $decimal < 0.3) {//Redondeo hacia abajo
-                    array_push($insert, floor($dtTablasSolidoCurvado[1][$keytallas] / $mstpack));
-                    $total += floor($dtTablasSolidoCurvado[1][$keytallas] / $mstpack);
-                } else {
-                    array_push($insert, ceil($dtTablasSolidoCurvado[1][$keytallas] / $mstpack));
-                    $total += ceil($dtTablasSolidoCurvado[1][$keytallas] / $mstpack);
-                }
-                $keytallas += 1;
-            }
-            array_push($insert, $total);
-            array_push($dtTablasSolidoCurvado, $insert);
-
-            //total de solido ajustado
-            $insert = [];$total = 0;$keytallas = 0;
-            foreach ($tallas2 as $vart) {
-                array_push($insert, $dtTablasSolidoCurvado[2][$keytallas] * $mstpack);
-                $total += $dtTablasSolidoCurvado[2][$keytallas] * $mstpack;
-                $keytallas += 1;
-            }
-            array_push($insert, $total);
-            array_push($dtTablasSolidoCurvado, $insert);
-            foreach ($clusters as $Var2) {
-                $clusters3 = $clusters3 . $Var2 . "+";
-            }
-
-            //MSTPACK
-            $insert = [];
-            foreach ($tallas2 as $var) {array_push($insert, 0);}
-            array_push($insert, $mstpack);
-            array_push($dtTablasSolidoCurvado, $insert);
-
-            //*-----------------% unid ajustada x tallas TOTALES
-            $key = 0; $unid_ajustasxtallas = "";$insert = [];$total= 0;
-            foreach ($tallas2 as $var) {
-                $unid_ajustasxtallas = $unid_ajustasxtallas . strval($dtTablasSolidoCurvado[3][$key] + $dtTablaCurvado[2][$key]) . "-";
-                array_push($insert, $dtTablasSolidoCurvado[3][$key] + $dtTablaCurvado[2][$key]);
-                $total += $dtTablasSolidoCurvado[3][$key] + $dtTablaCurvado[2][$key];
-                $key += 1;
-            }
-            array_push($insert, $total);
-            array_push($dtTablasSolidoCurvado, $insert);
-
-            //Total numero cajas finales
-            $insert = [];
-            foreach ($tallas2 as $var) {array_push($insert, 0);}
-            array_push($insert, $dtTablasSolidoCurvado[2][$N_Columna] + $n_CAJAS);
-            array_push($dtTablasSolidoCurvado, $insert);
-
-            //Total PORCENTAJE TOTAL AJUSTADO
-            $insert = [];$key2= 0;
-            foreach ($tallas2 as $vart) {
-                if ($dtTablaCurvado [2][$key2] <> 0) {
-                    array_push($insert, round(($dtTablaCurvado[2][$key2] / $dtTablaCurvado [2][$N_Columna]) * 100, 3));
-                } else {
-                    array_push($insert, 0);
-                }
-                $key2 += 1;
-            }
-            array_push($insert, 0);
-            array_push($dtTablasSolidoCurvado, $insert);
-
-            /*%*/$porcentajeAjust = substr($porcentajeAjust, 0, strlen($porcentajeAjust) - 1);
-            /*%*/$n_cajasfinales = $dtTablasSolidoCurvado[2][$N_Columna] + $n_CAJAS; //curvado + solido
-            /*%*/$unid_final = $dtTablasSolidoCurvado[3][$N_Columna] + $dtTablaCurvado[2][$N_Columna]; //curvado + solido
-            /*%*/$totalprimerRepato = $dtTablaCurvado[2][$N_Columna];
-            /*%*/$unid_ajustasxtallas = substr($unid_ajustasxtallas, 0, -1);
-            /*%*/$clusters3 = substr($clusters3, 0, -1);
-
-        }
-        /*SOLIDO*/ else{
-            /*******************AJUSTE MST-PACK SOLIDO*********************/
-            /*%*/$porcentajeAjust = $dtTabla[5][$N_Columna];
-            array_push($dtTablasolidoFULL, $dtTabla[0]);//CABECERA
-
-            //--------------unid iniciales
-            $insert = [];$por_ajust = explode("-", trim($porcentajeAjust));$total = 0;
-            foreach ($por_ajust as $var) {
-                $total += round((($var * $unid_ajustas) / 100));
-                array_push($insert, round((($var * $unid_ajustas) / 100)));
-            }
-            array_push($insert, $total);
-            array_push($dtTablasolidoFULL, $insert);
-
-            //*-----------------Curva del Primer Reparto
-            $insert = []; $curvas = explode(",", trim($curvas_talla));$total = 0;
+            $total = 0;
             $clusters = explode("+", plan_compra::list_inter_tds_cluster($depto, $marca, $cod_tempo, $cluster, $formato));
             foreach ($curvas as $var) {
                 $primer = 0;
                 foreach ($clusters as $varc) {
-                    $ntdas = 0;
                     $clustCurva = 0;
-                    if ($varc == "A"){
+                    if ($varc == "A") {
                         $clustCurva = $A;
-                    }elseif ($varc == "B"){
+                    } elseif ($varc == "B") {
                         $clustCurva = $B;
-                    }elseif ($varc == "C"){
+                    } elseif ($varc == "C") {
                         $clustCurva = $C;
-                    }elseif ($varc == "I"){
+                    } elseif ($varc == "I") {
                         $clustCurva = $I;
                     }
+
+                    $ntdas = 0;
                     if ($formato == "" OR $formato == "SIN FORMATO") {
                         $ntdas = plan_compra::list_tdas_sin_formato($depto, $marca, $cod_tempo, $varc);
                     } elseif ($formato <> "" AND $formato <> "SIN FORMATO") {
@@ -3069,242 +2827,592 @@ public static function CalculoCurvado($tipo_empaque,$tallas,$curvas_talla,$und_i
                 array_push($insert, $primer);
             }
             array_push($insert, $total);
-            array_push($dtTablasolidoFULL, $insert);
+            array_push($dtTabla, $insert);
 
-            //mst pack
+            //*-----------------diferencial
+            $key = 0;
+            $insert = [];
+            $total = 0;
+            foreach ($tallas2 as $var) {
+                $val = 0;
+                if ($dtTabla[1][$key] < $dtTabla[2][$key]) {
+                    $val = $dtTabla[1][$key] - $dtTabla[2][$key];
+                }
+                $total += $val;
+                array_push($insert, $val);
+                $key += 1;
+            }
+            array_push($insert, $total);
+            array_push($dtTabla, $insert);
+
+            //*-----------------Total
+            $key = 0;
+            $insert = [];
+            $total = 0;
+            foreach ($tallas2 as $var) {
+                $val = 0;
+                if ($dtTabla[3][$key] <> 0) {
+                    $val = $dtTabla[2][$key];
+                } else {
+                    $val = $dtTabla[1][$key];
+                }
+                $total += $val;
+                array_push($insert, $val);
+                $key += 1;
+            }
+            array_push($insert, $total);
+            array_push($dtTabla, $insert);
+
+            //*-----------------CURVA DE COMPRA Ajustada
+            $key = 0;
+            $insert = [];
+            $total = "";
+            $TotalAjust = $dtTabla[4][$N_Columna];
+            foreach ($tallas2 as $var) {
+                $val = 0;
+                $val = (round((($dtTabla[4][$key] / $TotalAjust) * 100), 5));
+                if (strlen($val) > 6) {
+                    $val = round($val, 3);
+                }
+                $total = $total . $val . "-";
+                array_push($insert, $val);
+                $key += 1;
+
+            }
+            $total = substr($total, 0, -1);
+            array_push($insert, $total);
+            array_push($dtTabla, $insert);
+
+            /*%*/
+            $unid_ajustas = $dtTabla[4][$N_Columna];
+
+            /*CURVADO*/
+            if ($tipo_empaque == "Curvado" or $tipo_empaque == "CURVADO") {
+                //*****************1.-AJUSTE DE CAJAS CURVADOS
+                array_push($dtTablaCurvado, $dtTabla[0]);//CABECERA
+                array_push($dtTablaCurvado, $dtTabla[4]);//TOTAL AJUSTE COMPRA
+                //*-----------------Curva del Primer Reparto
+                $insert = [];
+                $total = 0;
+                $curvas = explode(",", trim($curvas_talla));
+                $clusters = explode("+", plan_compra::list_inter_tds_cluster($depto, $marca, $cod_tempo, $cluster, $formato));
+                foreach ($curvas as $var) {
+                    $primer = 0;
+                    foreach ($clusters as $varc) {
+                        $clustCurva = 0;
+                        if ($varc == "A") {
+                            $clustCurva = $A;
+                        } elseif ($varc == "B") {
+                            $clustCurva = $B;
+                        } elseif ($varc == "C") {
+                            $clustCurva = $C;
+                        } elseif ($varc == "I") {
+                            $clustCurva = $I;
+                        }
+                        $ntdas = 0;
+                        if ($formato == "" OR $formato == "SIN FORMATO") {
+                            $ntdas = plan_compra::list_tdas_sin_formato($depto, $marca, $cod_tempo, $varc);
+                        } elseif ($formato <> "" AND $formato <> "SIN FORMATO") {
+                            $ntdas = plan_compra::list_tdas_con_formato($depto, $marca, $cod_tempo, $varc, $formato);
+                        }
+
+                        $primer += $var * $clustCurva * $ntdas["TIENDAS"];
+                    }
+                    $total += $primer;
+                    array_push($insert, $primer);
+                }
+                array_push($insert, $total);
+                array_push($dtTablaCurvado, $insert);
+
+                //*-----------------Curvas de repartos EJ: 1,2,3,4
+                $insert = [];
+                $total = 0;
+                foreach ($curvas as $var) {
+                    $total += $var;
+                    array_push($insert, $var);
+                }
+                array_push($insert, $total);
+                array_push($dtTablaCurvado, $insert);
+
+                //Curva minima * n° de curva/caja
+                //$masterCurvado = $dtTablaCurvado [3][$N_Columna] * $N_CURVAS_CAJAS;
+                $insert = [];
+                foreach ($tallas2 as $vart) {
+                    array_push($insert, 0);
+                }
+                array_push($insert, $dtTablaCurvado [3][$N_Columna] * $N_CURVASXCAJAS);
+                array_push($dtTablaCurvado, $insert);
+
+                //total 1er repato / inner(curva min)
+                $Curva_repartir = $dtTablaCurvado [2][$N_Columna] / $dtTablaCurvado[3][$N_Columna];
+                $insert = [];
+                foreach ($tallas2 as $vart) {
+                    array_push($insert, 0);
+                }
+                array_push($insert, $Curva_repartir);
+                array_push($dtTablaCurvado, $insert);
+
+                //Curva a repartir / n de curva cajas
+                $n_CAJAS = $Curva_repartir / $N_CURVASXCAJAS;
+                $insert = [];
+                foreach ($tallas2 as $vart) {
+                    array_push($insert, 0);
+                }
+                array_push($insert, $n_CAJAS);
+                array_push($dtTablaCurvado, $insert);
+
+                //N° de curvas caja
+                $insert = [];
+                foreach ($tallas2 as $var) {
+                    array_push($insert, 0);
+                }
+                array_push($insert, $N_CURVASXCAJAS);
+                array_push($dtTablaCurvado, $insert);
+
+
+                //*-------------porcenjas compra curvada
+                $key2 = 0;
+                foreach ($tallas2 as $vart) {
+                    if ($dtTablaCurvado [2][$key2] <> 0) {
+                        $porcentajeAjust = $porcentajeAjust . (round(($dtTablaCurvado[2][$key2] / $dtTablaCurvado [2][$N_Columna]) * 100, 3)) . "-";
+                    } else {
+                        $porcentajeAjust = $porcentajeAjust . "0-";
+                    }
+                    $key2 += 1;
+                }
+
+                //*****************2.-AJUSTE DE CAJAS SOLIDAS
+                array_push($dtTablasSolidoCurvado, $dtTabla[0]);//CABECERA
+                //total solido
+                $insert = [];
+                $total = 0;
+                $keytallas = 0;
+                foreach ($tallas2 as $vart) {
+                    array_push($insert, $dtTablaCurvado[1][$keytallas] - $dtTablaCurvado[2][$keytallas]);
+                    $total += $dtTablaCurvado[1][$keytallas] - $dtTablaCurvado[2][$keytallas];
+                    $keytallas += 1;
+                }
+                array_push($insert, $total);
+                array_push($dtTablasSolidoCurvado, $insert);
+
+                //n°cajas
+
+                $insert = [];
+                $total = 0;
+                $keytallas = 0;
+                foreach ($tallas2 as $vart) {
+                    $parametro95 = round($dtTablaCurvado[2][$keytallas] / $dtTablaCurvado[1][$keytallas] * 100, 3);
+                    $decimal = 0;
+                    if (is_float($parametro95) == true) {
+                        $division = 0;
+                        if ($dtTablasSolidoCurvado[1][$keytallas] <> 0) {
+                            $division = ($dtTablasSolidoCurvado[1][$keytallas] / $mstpack);
+                            $decimal = (substr($division, strpos($division, ".")));
+                        }
+                    }
+                    if ($parametro95 >= 95 and $dtTablasSolidoCurvado[1][$keytallas] < $mstpack) {
+                        array_push($insert, 0);
+                    } elseif ($parametro95 < 95 and $decimal < 0.3) {//Redondeo hacia abajo
+                        array_push($insert, floor($dtTablasSolidoCurvado[1][$keytallas] / $mstpack));
+                        $total += floor($dtTablasSolidoCurvado[1][$keytallas] / $mstpack);
+                    } else {
+                        array_push($insert, ceil($dtTablasSolidoCurvado[1][$keytallas] / $mstpack));
+                        $total += ceil($dtTablasSolidoCurvado[1][$keytallas] / $mstpack);
+                    }
+                    $keytallas += 1;
+                }
+                array_push($insert, $total);
+                array_push($dtTablasSolidoCurvado, $insert);
+
+                //total de solido ajustado
+                $insert = [];
+                $total = 0;
+                $keytallas = 0;
+                foreach ($tallas2 as $vart) {
+                    array_push($insert, $dtTablasSolidoCurvado[2][$keytallas] * $mstpack);
+                    $total += $dtTablasSolidoCurvado[2][$keytallas] * $mstpack;
+                    $keytallas += 1;
+                }
+                array_push($insert, $total);
+                array_push($dtTablasSolidoCurvado, $insert);
+                foreach ($clusters as $Var2) {
+                    $clusters3 = $clusters3 . $Var2 . "+";
+                }
+
+                //MSTPACK
+                $insert = [];
+                foreach ($tallas2 as $var) {
+                    array_push($insert, 0);
+                }
+                array_push($insert, $mstpack);
+                array_push($dtTablasSolidoCurvado, $insert);
+
+                //*-----------------% unid ajustada x tallas TOTALES
+                $key = 0;
+                $unid_ajustasxtallas = "";
+                $insert = [];
+                $total = 0;
+                foreach ($tallas2 as $var) {
+                    $unid_ajustasxtallas = $unid_ajustasxtallas . strval($dtTablasSolidoCurvado[3][$key] + $dtTablaCurvado[2][$key]) . "-";
+                    array_push($insert, $dtTablasSolidoCurvado[3][$key] + $dtTablaCurvado[2][$key]);
+                    $total += $dtTablasSolidoCurvado[3][$key] + $dtTablaCurvado[2][$key];
+                    $key += 1;
+                }
+                array_push($insert, $total);
+                array_push($dtTablasSolidoCurvado, $insert);
+
+                //Total numero cajas finales
+                $insert = [];
+                foreach ($tallas2 as $var) {
+                    array_push($insert, 0);
+                }
+                array_push($insert, $dtTablasSolidoCurvado[2][$N_Columna] + $n_CAJAS);
+                array_push($dtTablasSolidoCurvado, $insert);
+
+                //Total PORCENTAJE TOTAL AJUSTADO
+                $insert = [];
+                $key2 = 0;
+                foreach ($tallas2 as $vart) {
+                    if ($dtTablaCurvado [2][$key2] <> 0) {
+                        array_push($insert, round(($dtTablaCurvado[2][$key2] / $dtTablaCurvado [2][$N_Columna]) * 100, 3));
+                    } else {
+                        array_push($insert, 0);
+                    }
+                    $key2 += 1;
+                }
+                array_push($insert, 0);
+                array_push($dtTablasSolidoCurvado, $insert);
+
+                /*%*/
+                $porcentajeAjust = substr($porcentajeAjust, 0, strlen($porcentajeAjust) - 1);
+                /*%*/
+                $n_cajasfinales = $dtTablasSolidoCurvado[2][$N_Columna] + $n_CAJAS; //curvado + solido
+                /*%*/
+                $unid_final = $dtTablasSolidoCurvado[3][$N_Columna] + $dtTablaCurvado[2][$N_Columna]; //curvado + solido
+                /*%*/
+                $totalprimerRepato = $dtTablaCurvado[2][$N_Columna];
+                /*%*/
+                $unid_ajustasxtallas = substr($unid_ajustasxtallas, 0, -1);
+                /*%*/
+                $clusters3 = substr($clusters3, 0, -1);
+
+            } /*SOLIDO*/ else {
+                /*******************AJUSTE MST-PACK SOLIDO*********************/
+                /*%*/
+                $porcentajeAjust = $dtTabla[5][$N_Columna];
+                array_push($dtTablasolidoFULL, $dtTabla[0]);//CABECERA
+
+                //--------------unid iniciales
+                $insert = [];
+                $por_ajust = explode("-", trim($porcentajeAjust));
+                $total = 0;
+                foreach ($por_ajust as $var) {
+                    $total += round((($var * $unid_ajustas) / 100));
+                    array_push($insert, round((($var * $unid_ajustas) / 100)));
+                }
+                array_push($insert, $total);
+                array_push($dtTablasolidoFULL, $insert);
+
+                //*-----------------Curva del Primer Reparto
+                $insert = [];
+                $curvas = explode(",", trim($curvas_talla));
+                $total = 0;
+                $clusters = explode("+", plan_compra::list_inter_tds_cluster($depto, $marca, $cod_tempo, $cluster, $formato));
+                foreach ($curvas as $var) {
+                    $primer = 0;
+                    foreach ($clusters as $varc) {
+                        $ntdas = 0;
+                        $clustCurva = 0;
+                        if ($varc == "A") {
+                            $clustCurva = $A;
+                        } elseif ($varc == "B") {
+                            $clustCurva = $B;
+                        } elseif ($varc == "C") {
+                            $clustCurva = $C;
+                        } elseif ($varc == "I") {
+                            $clustCurva = $I;
+                        }
+                        if ($formato == "" OR $formato == "SIN FORMATO") {
+                            $ntdas = plan_compra::list_tdas_sin_formato($depto, $marca, $cod_tempo, $varc);
+                        } elseif ($formato <> "" AND $formato <> "SIN FORMATO") {
+                            $ntdas = plan_compra::list_tdas_con_formato($depto, $marca, $cod_tempo, $varc, $formato);
+                        }
+                        $primer += $var * $clustCurva * $ntdas["TIENDAS"];
+                    }
+                    $total += $primer;
+                    array_push($insert, $primer);
+                }
+                array_push($insert, $total);
+                array_push($dtTablasolidoFULL, $insert);
+
+                //mst pack
+                $insert = [];
+                foreach ($tallas2 as $var) {
+                    array_push($insert, $mstpack);
+                }
+                array_push($insert, $mstpack);
+                array_push($dtTablasolidoFULL, $insert);
+
+                //*-----------------N° Cajas
+                $key = 0;
+                $insert = [];
+                $total = 0;
+                foreach ($tallas2 as $var) {
+                    $val = 0;
+                    $val = $dtTablasolidoFULL[1][$key] / $dtTablasolidoFULL[3][$key];
+                    if (is_float($val) == true) {
+                        $val = round($val, 0);
+                        if (($val * $dtTablasolidoFULL[3][$key]) < $dtTablasolidoFULL[2][$key]) {
+                            $val += 1;
+                        }
+                    }
+                    $total += $val;
+                    array_push($insert, $val);
+                    $key += 1;
+                }
+                array_push($insert, $total);
+                array_push($dtTablasolidoFULL, $insert);
+
+                //*-----------------UND FINAL
+                $key = 0;
+                $insert = [];
+                $total = 0;
+                foreach ($tallas2 as $var) {
+                    $val = 0;
+                    $val = $dtTablasolidoFULL[4][$key] * $dtTablasolidoFULL[3][$key];
+                    $total += $val;
+                    array_push($insert, $val);
+                    $key += 1;
+                }
+                array_push($insert, $total);
+                array_push($dtTablasolidoFULL, $insert);
+
+                //*-----------------% pocentaje ajustada por mstpack
+                $key = 0;
+                $porcentajeAjust = "";
+                $unid_final = $dtTablasolidoFULL[5][$N_Columna];
+                foreach ($tallas2 as $var) {
+                    $porcentajeAjust = $porcentajeAjust . round((($dtTablasolidoFULL[5][$key] / $unid_final) * 100), 3) . "-";
+                    $key += 1;
+                }
+
+                //*-----------------% unid ajustada por mstpack
+                $key = 0;
+                foreach ($tallas2 as $var) {
+                    $unid_ajustasxtallas = $unid_ajustasxtallas . strval(round($dtTablasolidoFULL[5][$key], 0)) . "-";
+                    $key += 1;
+                }
+                foreach ($clusters as $Var2) {
+                    $clusters3 = $clusters3 . $Var2 . "+";
+                }
+
+                /*%*/
+                $porcentajeAjust = substr($porcentajeAjust, 0, -1);
+                /*%*/
+                $n_cajasfinales = $dtTablasolidoFULL[4][$N_Columna];
+                /*%*/
+                $unid_final = $dtTablasolidoFULL[5][$N_Columna];
+                /*%*/
+                $totalprimerRepato = $dtTablasolidoFULL[2][$N_Columna];
+                /*%*/
+                $unid_ajustasxtallas = substr($unid_ajustasxtallas, 0, -1);
+                /*%*/
+                $clusters3 = substr($clusters3, 0, -1);
+            }
+
+        }//fin debut
+        /*REORDER*/ ELSE {
+            $unid_ajust = $und_iniciales;
+            $porcentAjut = $PORTALLA_1_INI;
+            //*-----------------tallas columnas
+            array_push($dtTablaReorder, $dtTabla[0]);
+            //--------------unid iniciales
+            $insert = [];
+            $por_ajust = explode("-", trim($porcentAjut));
+            $total = 0;
+            foreach ($por_ajust as $var) {
+                $val = round(($var * $unid_ajust) / 100, 0);
+                $total += $val;
+                array_push($insert, $val);
+            }
+            array_push($insert, $total);
+            array_push($dtTablaReorder, $insert);
+
+            //-------------los  REORDER NO TIENE PRIMERA CARGA
+            //*-----------------N° Cajas
+            $key = 0;
+            $insert = [];
+            $total = 0;
+            foreach ($tallas2 as $var) {
+                $val = 0;
+                $val = $dtTablaReorder[1][$key] / $mstpack;
+                if (is_float($val) == true) {
+                    $val = round($val, 0);
+                }
+                $total += $val;
+                array_push($insert, $val);
+                $key += 1;
+            }
+            array_push($insert, $total);
+            array_push($dtTablaReorder, $insert);
+
+            //*-----------------UND FINAL
+            $key = 0;
+            $insert = [];
+            $total = 0;
+            foreach ($tallas2 as $var) {
+                $val = 0;
+                $val = $dtTablaReorder[2][$key] * $mstpack;
+                $total += $val;
+                array_push($insert, $val);
+                $key += 1;
+            }
+            array_push($insert, $total);
+            array_push($dtTablaReorder, $insert);
+
+            //mstpack
             $insert = [];
             foreach ($tallas2 as $var) {
                 array_push($insert, $mstpack);
             }
             array_push($insert, $mstpack);
-            array_push($dtTablasolidoFULL, $insert);
-
-            //*-----------------N° Cajas
-            $key = 0;$insert = [];$total = 0;
-            foreach ($tallas2 as $var) {
-                $val = 0;
-                $val = $dtTablasolidoFULL[1][$key] / $dtTablasolidoFULL[3][$key];
-                if (is_float($val) == true) {
-                    $val = round($val, 0);
-                    if (($val * $dtTablasolidoFULL[3][$key]) < $dtTablasolidoFULL[2][$key]) {
-                        $val += 1;
-                    }
-                }
-                $total += $val;
-                array_push($insert, $val);
-                $key += 1;
-            }
-            array_push($insert, $total);
-            array_push($dtTablasolidoFULL, $insert);
-
-            //*-----------------UND FINAL
-            $key = 0;$insert = [];$total = 0;
-            foreach ($tallas2 as $var) {
-                $val = 0;
-                $val = $dtTablasolidoFULL[4][$key] * $dtTablasolidoFULL[3][$key];
-                $total += $val;
-                array_push($insert, $val);
-                $key += 1;
-            }
-            array_push($insert, $total);
-            array_push($dtTablasolidoFULL, $insert);
+            array_push($dtTablaReorder, $insert);
 
             //*-----------------% pocentaje ajustada por mstpack
-            $key = 0;$porcentajeAjust = "";$unid_final = $dtTablasolidoFULL[5][$N_Columna];
+            $key = 0;
+            $porcentAjut = "";
+            $unid_final = $dtTablaReorder[3][$N_Columna];
             foreach ($tallas2 as $var) {
-                $porcentajeAjust = $porcentajeAjust . round((($dtTablasolidoFULL[5][$key] / $unid_final) * 100), 3) . "-";
+                $porcentajeAjust = $porcentajeAjust . round((($dtTablaReorder[3][$key] / $unid_final) * 100), 3) . "-";
                 $key += 1;
             }
-
-            //*-----------------% unid ajustada por mstpack
+            //*-----------------% unid ajustada por tallas mstpack
             $key = 0;
             foreach ($tallas2 as $var) {
-                $unid_ajustasxtallas = $unid_ajustasxtallas . strval(round($dtTablasolidoFULL[5][$key], 0)) . "-";
+                $unid_ajustasxtallas = $unid_ajustasxtallas . strval(round($dtTablaReorder[3][$key])) . "-";
                 $key += 1;
             }
-            foreach ($clusters as $Var2) {
-                $clusters3 = $clusters3 . $Var2 . "+";
+
+            /*%*/
+            $porcentajeAjust = substr($porcentajeAjust, 0, -1);
+            /*%*/
+            $n_cajasfinales = $dtTablaReorder[2][$N_Columna];
+            /*%*/
+            $unid_final = $dtTablaReorder[3][$N_Columna];
+            /*%*/
+            $totalprimerRepato = 0;
+            /*%*/
+            $unid_ajustasxtallas = substr($unid_ajustasxtallas, 0, -1);
+            /*%*/
+            $clusters3 = "";
+            /*%*/
+            $unid_ajustas = $und_iniciales;
+
+        }
+
+        // AJUSTE DE COMPRA   = $dtTabla
+        // AJUSTE CURVADO     = $dtTablaCurvado + $dtTablasSolidoCurvado
+        // AJUSTE SOLIDO FULL = $dtTablasolidoFULL
+        // AJUSTE REORDER     = $dtTablaReorder
+
+        $array2 = array(
+            /*unid_ajustada*/
+            $unid_ajustas
+            /*porcenajust=mstpack*/, $porcentajeAjust
+            /*n°cajas*/, $n_cajasfinales
+            /*unidfinal*/, $unid_final
+            /*primera carga*/, $totalprimerRepato
+            /*$tdas*/, round(($totalprimerRepato / $unid_final) * 100, 2)
+            /*unidadesajustXtalla*/, $unid_ajustasxtallas
+            /*clustes intersecion*/, $clusters3
+        , $dtTabla, $dtTablaCurvado, $dtTablasSolidoCurvado, $dtTablasolidoFULL, $dtTablaReorder);
+
+
+        if ($Guardado == 1) {
+            //Guardado PLC_AJUSTES_COMPRA $dtAjustada
+            $_query = plan_compra::SaveAjuste_Compra2(/*AJUSTE DE COMPRA*/
+                $dtTabla
+                /*AJUSTE CURVADO*/, $dtTablaCurvado
+                /*AJUSTE CUR SOLIDO*/, $dtTablasSolidoCurvado
+                /*AJUSTE SOLIDO FUL*/, $dtTablasolidoFULL
+                /*AJUSTE REORDER*/, $dtTablaReorder
+                /*DEBUT/REORDER*/, $debut_reoder
+                /*TIPO EMPAQUE*/, $tipo_empaque
+                /*ID_COLOR3*/, $id_color3
+                /*Tallas*/, $tallas
+                /*TEMPO*/, $cod_tempo
+                /*DEPTO*/, $depto);
+
+            $key4 = 0;
+            $logInsert = "";
+            $count = count($_query);
+            foreach ($_query as $val4) {
+                $key4++;
+                if ($count == $key4) {
+                    $val4 = str_replace("union", "", $val4);
+                }
+                $logInsert = $logInsert . " " . $val4;
             }
 
-            /*%*/$porcentajeAjust = substr($porcentajeAjust, 0, -1);
-            /*%*/$n_cajasfinales = $dtTablasolidoFULL[4][$N_Columna];
-            /*%*/$unid_final = $dtTablasolidoFULL[5][$N_Columna];
-            /*%*/$totalprimerRepato = $dtTablasolidoFULL[2][$N_Columna];
-            /*%*/$unid_ajustasxtallas = substr($unid_ajustasxtallas, 0, -1);
-            /*%*/$clusters3 = substr($clusters3, 0, -1);
+            $sql = "DELETE plc_ajustes_compra
+                    WHERE COD_TEMPORADA = " . $cod_tempo . " 
+                    AND DEP_DEPTO = '" . $depto . "'
+                    AND ID_COLOR3 = " . $id_color3;
+
+            \database::getInstancia()->getConsulta($sql);
+            plan_compra::InsertAjustes($logInsert);
+
         }
 
-    }//fin debut
-    /*REORDER*/ELSE{
-        $unid_ajust = $und_iniciales;$porcentAjut = $PORTALLA_1_INI;
-        //*-----------------tallas columnas
-        array_push($dtTablaReorder,$dtTabla[0]);
-        //--------------unid iniciales
-        $insert =[]; $por_ajust = explode("-",  trim($porcentAjut)); $total = 0;
-        foreach ($por_ajust as $var ){
-            $val = round(($var * $unid_ajust)/100,0);
-            $total += $val;
-            array_push($insert,$val);
-        }
-        array_push($insert,$total);
-        array_push($dtTablaReorder, $insert);
 
-        //-------------los  REORDER NO TIENE PRIMERA CARGA
-        //*-----------------N° Cajas
-        $key = 0; $insert =[]; $total = 0;
-        foreach ($tallas2 as $var ){$val = 0;
-            $val = $dtTablaReorder[1][$key] / $mstpack;
-            if (is_float($val) == true){
-                $val =round($val ,0);
-            }
-            $total+= $val;
-            array_push($insert,$val);
-            $key += 1;
-        }
-        array_push($insert,$total);
-        array_push($dtTablaReorder,$insert);
+        return $array2;
 
-        //*-----------------UND FINAL
-        $key = 0; $insert =[]; $total = 0;
-        foreach ($tallas2 as $var ){$val = 0;
-            $val = $dtTablaReorder[2][$key] * $mstpack;
-            $total+= $val;
-            array_push($insert,$val);
-            $key += 1;
-        }
-        array_push($insert,$total);
-        array_push($dtTablaReorder,$insert);
-
-        //mstpack
-        $insert =[];
-        foreach ($tallas2 as $var ){array_push($insert,$mstpack);}
-        array_push($insert,$mstpack);
-        array_push($dtTablaReorder,$insert);
-
-        //*-----------------% pocentaje ajustada por mstpack
-        $key = 0; $porcentAjut = ""; $unid_final  = $dtTablaReorder[3][$N_Columna];
-        foreach ($tallas2 as $var ){
-            $porcentajeAjust = $porcentajeAjust.round((($dtTablaReorder[3][$key]/$unid_final)*100),3)."-";
-            $key += 1;
-        }
-        //*-----------------% unid ajustada por tallas mstpack
-        $key = 0;
-        foreach ($tallas2 as $var ){
-            $unid_ajustasxtallas = $unid_ajustasxtallas.strval(round($dtTablaReorder[3][$key]))."-";
-            $key += 1;
-        }
-
-        /*%*/$porcentajeAjust = substr($porcentajeAjust, 0, -1);
-        /*%*/$n_cajasfinales = $dtTablaReorder[2][$N_Columna];
-        /*%*/$unid_final = $dtTablaReorder[3][$N_Columna];
-        /*%*/$totalprimerRepato = 0;
-        /*%*/$unid_ajustasxtallas = substr($unid_ajustasxtallas, 0, -1);
-        /*%*/$clusters3 = "";
-        /*%*/$unid_ajustas = $und_iniciales;
-
+        /*  echo "<pre>";
+          echo "/------1 ajuste----";
+          var_dump($dtTabla);
+          echo "/------2 curvado------";
+          var_dump($dtTablaCurvado);
+          echo "/------3 solidocurvado------";
+          var_dump($dtTablasSolidoCurvado);
+          echo "/------4 solidoFULL------";
+          var_dump($dtTablasolidoFULL);
+          echo "/------5 REORDER------";
+          var_dump($dtTablaReorder);
+          die();*/
     }
-
-    // AJUSTE DE COMPRA   = $dtTabla
-    // AJUSTE CURVADO     = $dtTablaCurvado + $dtTablasSolidoCurvado
-    // AJUSTE SOLIDO FULL = $dtTablasolidoFULL
-    // AJUSTE REORDER     = $dtTablaReorder
-
-    $array2 = array(
-        /*unid_ajustada*/$unid_ajustas
-        /*porcenajust=mstpack*/, $porcentajeAjust
-        /*n°cajas*/, $n_cajasfinales
-        /*unidfinal*/, $unid_final
-        /*primera carga*/, $totalprimerRepato
-        /*$tdas*/, round(($totalprimerRepato / $unid_final) * 100, 2)
-        /*unidadesajustXtalla*/, $unid_ajustasxtallas
-        /*clustes intersecion*/, $clusters3
-    ,$dtTabla,$dtTablaCurvado,$dtTablasSolidoCurvado,$dtTablasolidoFULL,$dtTablaReorder);
-
-
-    if ($Guardado == 1){
-        //Guardado PLC_AJUSTES_COMPRA $dtAjustada
-        $_query = plan_compra::SaveAjuste_Compra2(/*AJUSTE DE COMPRA*/$dtTabla
-            /*AJUSTE CURVADO*/,$dtTablaCurvado
-            /*AJUSTE CUR SOLIDO*/,$dtTablasSolidoCurvado
-            /*AJUSTE SOLIDO FUL*/, $dtTablasolidoFULL
-            /*AJUSTE REORDER*/, $dtTablaReorder
-            /*DEBUT/REORDER*/, $debut_reoder
-            /*TIPO EMPAQUE*/, $tipo_empaque
-            /*ID_COLOR3*/, $id_color3
-            /*Tallas*/, $tallas
-            /*TEMPO*/, $cod_tempo
-            /*DEPTO*/, $depto);
-
-        $key4 = 0;$logInsert = "";$count = count($_query);
-        foreach ($_query as $val4){$key4++;
-            if($count == $key4){
-                $val4 = str_replace("union", "", $val4);
-            }
-            $logInsert = $logInsert." ".$val4;
-        }
-
-        $sql = "DELETE plc_ajustes_compra
-                    WHERE COD_TEMPORADA = ".$cod_tempo." 
-                    AND DEP_DEPTO = '".$depto."'
-                    AND ID_COLOR3 = ". $id_color3;
-
-        \database::getInstancia()->getConsulta($sql);
-        plan_compra::InsertAjustes($logInsert);
-
-    }
-
-
-
-
-
-    return $array2;
-
-    /*  echo "<pre>";
-      echo "/------1 ajuste----";
-      var_dump($dtTabla);
-      echo "/------2 curvado------";
-      var_dump($dtTablaCurvado);
-      echo "/------3 solidocurvado------";
-      var_dump($dtTablasSolidoCurvado);
-      echo "/------4 solidoFULL------";
-      var_dump($dtTablasolidoFULL);
-      echo "/------5 REORDER------";
-      var_dump($dtTablaReorder);
-      die();*/
-}
 
 // Actualiza la fecha del registro de concurrencia
-public static function actualiza_fecha_concurrencia($temporada, $depto, $login)
-{
+    public static function actualiza_fecha_concurrencia($temporada, $depto, $login)
+    {
 
-    $sql = "UPDATE PLC_CONCURRENCIA
+        $sql = "UPDATE PLC_CONCURRENCIA
                 SET FECHA = SYSDATE
-                WHERE COD_USR = '".$login."'
+                WHERE COD_USR = '" . $login . "'
                 AND COD_TEMPORADA =  $temporada
-                AND DEP_DEPTO = '".$depto."' 
+                AND DEP_DEPTO = '" . $depto . "' 
                 ";
 
-    // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
-    if (!file_exists('../archivos/log_querys/' . $login)) {
-        mkdir('../archivos/log_querys/' . $login, 0775, true);
+        // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+        if (!file_exists('../archivos/log_querys/' . $login)) {
+            mkdir('../archivos/log_querys/' . $login, 0775, true);
+        }
+        $stamp = date("Y-m-d_H-i-s");
+        $rand = rand(1, 999);
+        $content = $sql;
+        $fp = fopen("../archivos/log_querys/" . $login . "/PERMISO-ACTFECHA--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+        fwrite($fp, $content);
+        fclose($fp);
+
+        $data = \database::getInstancia()->getConsulta($sql);
+
+        if ($data) {
+            return 0;
+        } else {
+            return 1;
+        }
+
+
     }
-    $stamp = date("Y-m-d_H-i-s");
-    $rand = rand(1, 999);
-    $content = $sql;
-    $fp = fopen("../archivos/log_querys/" . $login . "/PERMISO-ACTFECHA--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
-    fwrite($fp, $content);
-    fclose($fp);
-
-    $data = \database::getInstancia()->getConsulta($sql);
-
-    if($data){
-        return 0;
-    }else{
-        return 1;
-    }
-
-
-}
 
 
 
@@ -3314,7 +3422,7 @@ public static function actualiza_fecha_concurrencia($temporada, $depto, $login)
     public static function guarda_proforma_cond1($temporada, $depto, $login, $proforma, $id_insertar, $archivo)
     {
 
-        if($archivo==1){
+        if ($archivo == 1) {
 
             // 1.- Guarda Registro en plc_plan_compra_oc
 
@@ -3361,9 +3469,8 @@ public static function actualiza_fecha_concurrencia($temporada, $depto, $login)
             // Aquí voy a buscar todos los registros de plan color 3 que tengan la misma PI (Excluyendo el id_color 3 ya ingresado) y los agrego a plc_plan_compra_oc
 
 
-
             // Si puedo guardar en plc_plan_compra_oc, actualizo plc_plan_compra_color_3
-            if($data_plan_compra_oc){
+            if ($data_plan_compra_oc) {
 
                 // 2.- Actualiza plc_plan_compra_color3 estado=18 y proforma = $proforma
                 $sql_plan_compra_color_3 = "UPDATE plc_plan_compra_color_3
@@ -3388,7 +3495,7 @@ public static function actualiza_fecha_concurrencia($temporada, $depto, $login)
                 $data_plan_compra_color_3 = \database::getInstancia()->getConsulta($sql_plan_compra_color_3);
 
                 // Si se pudo actualizar plc_plan_compra_color_3, guardo en el historial
-                if($data_plan_compra_color_3){
+                if ($data_plan_compra_color_3) {
 
                     // 3.- Guarda Historial (Incluye el registro + los datos de la PI)
                     $sql_historial = "INSERT INTO plc_plan_compra_historica (temp,dpto,linea,sublinea,marca,estilo,ventana,color,user_login,user_nom,fecha,hora,pi,oc,estado,id_color3,nom_linea,nom_sublinea,nom_marca,nom_ventana,nom_color)
@@ -3434,32 +3541,31 @@ public static function actualiza_fecha_concurrencia($temporada, $depto, $login)
 
                     $data_historial = \database::getInstancia()->getConsulta($sql_historial);
 
-                    if($data_historial){
+                    if ($data_historial) {
                         return "OK";
-                    }else{
+                    } else {
                         return "ERROR";
                     }
 
 
-                }else{
+                } else {
                     return "ERROR";
                 }
 
 
-            }else{
+            } else {
                 return "ERROR";
             }
 
 
-        // No llega con archivo
-        }else{
+            // No llega con archivo
+        } else {
 
             // voy a buscra si en plc_plan_compra_oc hay algun registro de esa PI
 
             // si hay, se inserta registro en plc_plan_compra_oc y se actualiza estado en plc_plan_compra_color_3=18 ... historial
 
             // si NO hay,
-
 
 
             // 1.- Actualiza plc_plan_compra_color3 proforma = $proforma
@@ -3485,7 +3591,7 @@ public static function actualiza_fecha_concurrencia($temporada, $depto, $login)
             $data_plan_compra_color_3 = \database::getInstancia()->getConsulta($sql_plan_compra_color_3);
 
             // 2.- Guarda Historial
-            if($data_plan_compra_color_3){
+            if ($data_plan_compra_color_3) {
 
                 // Guardo Historial
                 $sql_historial = "INSERT INTO plc_plan_compra_historica (temp,dpto,linea,sublinea,marca,estilo,ventana,color,user_login,user_nom,fecha,hora,pi,oc,estado,id_color3,nom_linea,nom_sublinea,nom_marca,nom_ventana,nom_color)
@@ -3531,21 +3637,18 @@ public static function actualiza_fecha_concurrencia($temporada, $depto, $login)
 
                 $data_historial = \database::getInstancia()->getConsulta($sql_historial);
 
-                if($data_historial){
+                if ($data_historial) {
                     return "OK";
-                }else{
+                } else {
                     return "ERROR";
                 }
 
 
-            }else{
+            } else {
                 return "ERROR";
             }
 
         }
-
-
-
 
 
     }
@@ -3555,8 +3658,8 @@ public static function actualiza_fecha_concurrencia($temporada, $depto, $login)
 
         $sql_archivo = "SELECT 1 FROM plc_plan_compra_oc
                 WHERE COD_TEMPORADA = $temporada 
-                AND DEP_DEPTO = '".$depto."'
-                AND PROFORMA = '".$proforma."'
+                AND DEP_DEPTO = '" . $depto . "'
+                AND PROFORMA = '" . $proforma . "'
                 AND ARCHIVO = 'Cargado..'
                 AND ID_COLOR3 = $id_insertar
                 ";
@@ -3587,9 +3690,9 @@ public static function actualiza_fecha_concurrencia($temporada, $depto, $login)
 
             $data = \database::getInstancia()->getConsulta($sql);
 
-            if($data){
+            if ($data) {
                 return "OK";
-            }else{
+            } else {
                 return "ERROR";
             }
 
@@ -3636,7 +3739,7 @@ public static function actualiza_fecha_concurrencia($temporada, $depto, $login)
             $data_plan_compra_oc = \database::getInstancia()->getConsulta($sql_plan_compra_oc);
 
             // Se pudo ingresar el registro del archivo en plc_plan_compra_oc
-            if($data_plan_compra_oc){
+            if ($data_plan_compra_oc) {
 
                 // Actualizo plan_compra_color3 estado=18 y proforma=$proforma
                 $sql_plan_compra_color_3 = "UPDATE plc_plan_compra_color_3
@@ -3660,17 +3763,16 @@ public static function actualiza_fecha_concurrencia($temporada, $depto, $login)
 
                 $data_plan_compra_color_3 = \database::getInstancia()->getConsulta($sql_plan_compra_color_3);
 
-                if($data_plan_compra_color_3){
+                if ($data_plan_compra_color_3) {
                     return "OK";
-                }else{
+                } else {
                     return "ERROR";
                 }
 
 
-            }else{
+            } else {
                 return "ERROR";
             }
-
 
 
         }
@@ -3681,8 +3783,6 @@ public static function actualiza_fecha_concurrencia($temporada, $depto, $login)
 
 
 // ######################## FIN TRABAJO CON NUEVA CARGA DE PROFORMA ########################
-
-
 
 
 // Fin de la Clase
