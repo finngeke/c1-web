@@ -537,7 +537,30 @@ $(window).on('load', function () {
             var delay_thead = 3000;
             setTimeout(function () {
 
-                $('#tfoot_filtro_columna_individual th').each(function () {
+                $('#flag_top_aviso_termino_carga').html(parseInt($('#flag_top_aviso_termino_carga').html()) + 1);
+
+                var tabla2_buscar_columnas = $('#tabla2').DataTable({
+                    // "ordering": false,
+                    // paging: true,
+                    paging: false,
+                    "searching": false,
+                    scrollY: "140px",
+                    scrollX: true,
+                    "info": false,
+                    fixedColumns: true,
+                    scrollCollapse: true,
+                    "oLanguage": {
+                        "sSearch": "Buscar:",
+                        "sZeroRecords": "No se encontraron registros"
+                    },
+                    columnDefs: [
+                        {"type": "html-input", "targets": [78]} // 77 es la posición de la proforma "txt_proforma_"
+                    ]
+
+                });
+
+
+                /*$('#tfoot_filtro_columna_individual th').each(function () {
                     var title = $(this).text();
                     title = title.replace(/[^a-z0-9\-]/gi, '');
 
@@ -597,7 +620,7 @@ $(window).on('load', function () {
                 $('#flag_top_aviso_termino_carga').html(parseInt($('#flag_top_aviso_termino_carga').html()) + 1);
                 //$('#span_accion_cargando').html('Cargando estructura de la tabla');
                 $('#accion_carga_estructura_tabla2').removeClass('fa fa-refresh');
-                $('#accion_carga_estructura_tabla2').addClass('fa fa-check');
+                $('#accion_carga_estructura_tabla2').addClass('fa fa-check');*/
 
                 // Fin delay para filtrar cabecera
             }, delay_thead);
@@ -3337,7 +3360,7 @@ function campos_bloquear_tipo_usuario() {
     $(".crear_modificacion").css({'pointer-events': 'none'});
     $(".elimina_opcion").css({'pointer-events': 'none'});
     $(".solicitud_correccion_pi").css({'pointer-events': 'none'});
-    
+
 }
 
 function campos_bloquear_despues_llenar_tabla() {
