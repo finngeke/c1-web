@@ -86,7 +86,7 @@ $(window).on('load', function () {
 
                         if (flag_cant_usr_session != '') {
 
-                            if( ($('#flag_usuario_no_lectura').text() != 'EPACHECO') || ($('#flag_usuario_no_lectura').text() != 'ROBERTO') ) {
+                            if (($('#flag_usuario_no_lectura').text() != 'EPACHECO') || ($('#flag_usuario_no_lectura').text() != 'ROBERTO')) {
 
                                 //Busco si existe un registro asociado al loguin
                                 $.getJSON(url_busca_usuario_tabla_session, {DEPTO: depto}, function (data) {
@@ -101,7 +101,7 @@ $(window).on('load', function () {
 
                                     });
                                 });
-                                
+
                             }
 
                         } else {
@@ -451,7 +451,7 @@ $(window).on('load', function () {
                             $("#tabla2 #tabla2_tr_id_" + flag_tabla2).css('text-decoration', 'line-through');
                         }
 
-                    // Fin si reorder es distinto de Indefinido
+                        // Fin si reorder es distinto de Indefinido
                     }
 
 
@@ -485,7 +485,7 @@ $(window).on('load', function () {
                     // Incrementar el contador de la tabla
                     flag_tabla2++;
 
-                // Fin foreach que llena tabla
+                    // Fin foreach que llena tabla
                 });
 
 
@@ -578,13 +578,13 @@ $(window).on('load', function () {
                             cal_campos();
                         }
 
-                    // Fin de tabla2_buscar_columnas
+                        // Fin de tabla2_buscar_columnas
                     });
 
                     // Ocultar campo de búsqueda
                     $('#tabla2_filter').css('display', 'none');
 
-                // Fin tabla2_buscar_columnas
+                    // Fin tabla2_buscar_columnas
                 });
 
                 // Confirmar: Ayuda a limpiar el cache de la celda del DOM
@@ -635,7 +635,7 @@ $(window).on('load', function () {
 // ############################################ FUNCIONES QUE SON LLAMADAS DE LA GRILLA O POR LOS POPUP QUE SE CARGAN ############################################
 
 // Función Recarga Página
-function delay_reload(segundos){
+function delay_reload(segundos) {
 
     setTimeout(function () {
         // Recargar Página
@@ -645,14 +645,14 @@ function delay_reload(segundos){
 }
 
 // Función Limpia Caracteres
-function limpia_caracteres(string){
+function limpia_caracteres(string) {
 
     return string.replace(/[^a-z0-9\-\_]/gi, '-');
 
 }
 
 // Al momento de abrir un modal o hacer click actualiza la fecha y hora en el cuál el usuario realizó la acción para poder asì luego eliminar las concurrencias con màs de X tiempo
-function act_fecha_concurrencia(){
+function act_fecha_concurrencia() {
 
     var url_act_fecha_concurrencia = 'ajax_simulador_cbx/actualiza_fecha_concurrencia';
 
@@ -963,7 +963,7 @@ $('#tipos_export').on('change', function () {
 function actualizaCampoEstadoProforma(event) {
 
     // Habilita el BTN de guarda proforma
-    $("#btn_guarda_proforma").attr('disabled',false);
+    $("#btn_guarda_proforma").attr('disabled', false);
 
     var id_carga_pi = $(event.target);
     id_carga_pi = id_carga_pi.attr('id');
@@ -978,104 +978,93 @@ function actualizaCampoEstadoProforma(event) {
     // Busco el valor del campo asociado a identificar cuales campos han dido editados en el momento
     var busca_campo_actualizado = $("#tabla2 #txt_estado_cambio_proforma_" + separa_barra[2]).text();
 
-        // 1.2.- Verifico que el estado sea 0 por si el usuario escribe sobre una PI existente
-        if ( (valor_campo != 0) && (valor_campo != "") && (valor_campo != null) && (valor_campo != "null") && (valor_campo.length>2) && (estado_c1 == 0) ) {
-            //alert(" ASIGNA - Proforma: " + valor_campo + " Incremental: "+separa_barra[2]);
-            $('#txt_estado_cambio_proforma_' + separa_barra[2]).html("U");
-        } else {
-            //alert(" ASIGNA - Proforma: " + valor_campo + " Incremental: "+separa_barra[2]);
-            $('#txt_estado_cambio_proforma_' + separa_barra[2]).html("");
-        }
+    // 1.2.- Verifico que el estado sea 0 por si el usuario escribe sobre una PI existente
+    if ((valor_campo != 0) && (valor_campo != "") && (valor_campo != null) && (valor_campo != "null") && (valor_campo.length > 2) && (estado_c1 == 0)) {
+        //alert(" ASIGNA - Proforma: " + valor_campo + " Incremental: "+separa_barra[2]);
+        $('#txt_estado_cambio_proforma_' + separa_barra[2]).html("U");
+    } else {
+        //alert(" ASIGNA - Proforma: " + valor_campo + " Incremental: "+separa_barra[2]);
+        $('#txt_estado_cambio_proforma_' + separa_barra[2]).html("");
+    }
 
-        // 2.- Verificar que el valor del campo ingresado (PROFORMA) no exista previamente con estado 20 / 21
-        var url_act_campo_busca_proforma = 'ajax_simulador_cbx/busca_existe_proforma';
-        var url_act_campo_busca_archivo = 'ajax_simulador_cbx/busca_existe_archivo';
-        var count_pro_existe = 0;
-        var count_archivo_existe = 0;
+    // 2.- Verificar que el valor del campo ingresado (PROFORMA) no exista previamente con estado 20 / 21
+    var url_act_campo_busca_proforma = 'ajax_simulador_cbx/busca_existe_proforma';
+    var url_act_campo_busca_archivo = 'ajax_simulador_cbx/busca_existe_archivo';
+    var count_pro_existe = 0;
+    var count_archivo_existe = 0;
 
-        $.getJSON(url_act_campo_busca_proforma, {PI: valor_campo}).done(function (data) {
-            $.each(data, function (i, o) {
-                count_pro_existe++;
-            });
-        }).done(function () {
+    $.getJSON(url_act_campo_busca_proforma, {PI: valor_campo}).done(function (data) {
+        $.each(data, function (i, o) {
+            count_pro_existe++;
+        });
+    }).done(function () {
 
-            // Existe la Proforma con estado 20 o 21
-            if (count_pro_existe > 0) {
+        // Existe la Proforma con estado 20 o 21
+        if (count_pro_existe > 0) {
 
-                alert("Si olvidó registrar una opción, tiene que Crear una Modificación de la PI.");
-                // Dejo el campo de la proforma en blanco
-                $('#txt_proforma_' + separa_barra[2]).val('');
-                // limpiar el campo de editado
-                $("#tabla2 #txt_estado_cambio_proforma_" + separa_barra[2]).text('');
+            alert("Si olvidó registrar una opción, tiene que Crear una Modificación de la PI.");
+            // Dejo el campo de la proforma en blanco
+            $('#txt_proforma_' + separa_barra[2]).val('');
+            // limpiar el campo de editado
+            $("#tabla2 #txt_estado_cambio_proforma_" + separa_barra[2]).text('');
 
             // Esta proforma no existe con estado 20/21
-            } else {
+        } else {
 
-                // Consultamos si el Archivo fue cargado previamente a la tabla PLC_PLAN_COMPRA_OC (Donde queda registrado el "Cargado..")
-                $.getJSON(url_act_campo_busca_archivo, {PI: valor_campo}).done(function (data) {
+            // Consultamos si el Archivo fue cargado previamente a la tabla PLC_PLAN_COMPRA_OC (Donde queda registrado el "Cargado..")
+            $.getJSON(url_act_campo_busca_archivo, {PI: valor_campo}).done(function (data) {
 
-                    /*$.each(data, function (i, o) {
-                        count_archivo_existe++;
-                    });*/
+                /*$.each(data, function (i, o) {
+                    count_archivo_existe++;
+                });*/
 
-                    count_archivo_existe = data;
+                count_archivo_existe = data;
 
 
-                }).done(function () {
+            }).done(function () {
 
-                    // Si no existe archivo cargado previamente a la PI que estamos buscando
-                    if (count_archivo_existe == 0) {
+                // Si no existe archivo cargado previamente a la PI que estamos buscando
+                if (count_archivo_existe == 0) {
 
-                        // count_archivo_existe == 0 Me dice que en la BD no hay archivos subidos para esta PI, pero queda aún revisar el despliegue actual de la grilla.
-                        // puedo haber agregado recién una PI, luego archivo... y posteriormente otra pi a olvidada, sin haber guardado aún.
-                        var rec_upd_recientes = 0;
-                        var cuenta_is_a_pi_recien_actualizada = 0;
+                    // count_archivo_existe == 0 Me dice que en la BD no hay archivos subidos para esta PI, pero queda aún revisar el despliegue actual de la grilla.
+                    // puedo haber agregado recién una PI, luego archivo... y posteriormente otra pi a olvidada, sin haber guardado aún.
+                    var rec_upd_recientes = 0;
+                    var cuenta_is_a_pi_recien_actualizada = 0;
 
-                        $(".tabla2 > tbody >tr").each(function () {
+                    $(".tabla2 > tbody >tr").each(function () {
 
-                            var estado_c1_res = $("#tabla2 #txt_estadoc1_" + rec_upd_recientes).text();
-                            var campo_actualizado_res = $("#tabla2 #txt_estado_cambio_proforma_" + rec_upd_recientes).text();
-                            var proforma_res = $('#txt_proforma_' + rec_upd_recientes).val();
-                            proforma_res = proforma_res.replace(/[^a-z0-9\-\_]/gi, '-');
-                            var archivo_res = $("#tabla2 #txt_archivo_" + rec_upd_recientes).text();
+                        var estado_c1_res = $("#tabla2 #txt_estadoc1_" + rec_upd_recientes).text();
+                        var campo_actualizado_res = $("#tabla2 #txt_estado_cambio_proforma_" + rec_upd_recientes).text();
+                        var proforma_res = $('#txt_proforma_' + rec_upd_recientes).val();
+                        proforma_res = proforma_res.replace(/[^a-z0-9\-\_]/gi, '-');
+                        var archivo_res = $("#tabla2 #txt_archivo_" + rec_upd_recientes).text();
 
-                            if( (valor_campo==proforma_res) && (campo_actualizado_res=='U') && (estado_c1_res==0) && (archivo_res == "Cargado.. Upload Upload") ){
-                                cuenta_is_a_pi_recien_actualizada++;
-                            }
+                        if ((valor_campo == proforma_res) && (campo_actualizado_res == 'U') && (estado_c1_res == 0) && (archivo_res == "Cargado.. Upload Upload")) {
+                            cuenta_is_a_pi_recien_actualizada++;
+                        }
 
-                            // el incremental se agrega antes de produccion, pero luego de QA
+                        // el incremental se agrega antes de produccion, pero luego de QA
                         rec_upd_recientes++;
 
                         // Fin del recorrido de la tabla
-                        });
+                    });
 
-                        // Si no encuentra que se editó previamente un resgistro asociado a la misma PI y se subió archivo...
-                        if(cuenta_is_a_pi_recien_actualizada==0){
+                    // Si no encuentra que se editó previamente un resgistro asociado a la misma PI y se subió archivo...
+                    if (cuenta_is_a_pi_recien_actualizada == 0) {
 
-                            // Activar o desactivar boton de cargar archivo
-                            if ( (valor_campo != 0) && (valor_campo != "") && (valor_campo != null) && (valor_campo != "null") && (valor_campo.length>2) ) {
-                                    // Habilito el BTN de Carga de Archivo
-                                $(".archivo_" + separa_barra[2]).attr("disabled", false);
+                        // Activar o desactivar boton de cargar archivo
+                        if ((valor_campo != 0) && (valor_campo != "") && (valor_campo != null) && (valor_campo != "null") && (valor_campo.length > 2)) {
+                            // Habilito el BTN de Carga de Archivo
+                            $(".archivo_" + separa_barra[2]).attr("disabled", false);
 
-                            } else {
-                                    // Bloqueo el BTN de Carga de Archivo
-                                $(".archivo_" + separa_barra[2]).attr("disabled", true);
-                                // Quitar la "U" de editado?
-
-
-                            }
-
-                        }else{
-
-                            // Desabilito Campo
+                        } else {
+                            // Bloqueo el BTN de Carga de Archivo
                             $(".archivo_" + separa_barra[2]).attr("disabled", true);
-                            // Agregar texto Cargado..
-                            $("#txt_archivo_span_" + separa_barra[2]).html('Cargado..');
+                            // Quitar la "U" de editado?
+
 
                         }
 
-
-                     // Si trae archivos deshabilito boton subir archivo y agrago texto cargado
                     } else {
 
                         // Desabilito Campo
@@ -1085,13 +1074,23 @@ function actualizaCampoEstadoProforma(event) {
 
                     }
 
-                });
 
-            }
+                    // Si trae archivos deshabilito boton subir archivo y agrago texto cargado
+                } else {
+
+                    // Desabilito Campo
+                    $(".archivo_" + separa_barra[2]).attr("disabled", true);
+                    // Agregar texto Cargado..
+                    $("#txt_archivo_span_" + separa_barra[2]).html('Cargado..');
+
+                }
+
+            });
+
+        }
 
         // Fin del busca proforma con estado 20/21
-        });
-
+    });
 
 
 }
@@ -1119,7 +1118,7 @@ function validarc1(event) {
     });
 
 
-    if (_val == true){
+    if (_val == true) {
         if (($("#check_depto:checked").val()) != null) {
             $("#btn_exportar").attr("disabled", false);
         } else {
@@ -1225,7 +1224,7 @@ function cargaArchivo(event) {
 function cargaArchivoServer(event) {
 
     // Habilita el BTN de guarda proforma
-    $("#btn_guarda_proforma").attr('disabled',false);
+    $("#btn_guarda_proforma").attr('disabled', false);
 
     // Actualiza la Fecha de la Concurrencia
     act_fecha_concurrencia();
@@ -1246,7 +1245,7 @@ function cargaArchivoServer(event) {
     var campo_actualizado_res = $("#tabla2 #txt_estado_cambio_proforma_" + separa_barra[2]).text();
 
     // Para subir el archivo no debe tener el texto cargado
-    if ((estado_c1 == 0) && (proforma != 0) && (proforma != "") && (proforma != "null") && (proforma != null) && (proforma.length>2) && (campo_archivo_server != "Cargado.. Upload Upload") ) {
+    if ((estado_c1 == 0) && (proforma != 0) && (proforma != "") && (proforma != "null") && (proforma != null) && (proforma.length > 2) && (campo_archivo_server != "Cargado.. Upload Upload")) {
 
         // Desplegar el  modal
         $('#carga_pi_archivo').modal('show');
@@ -1297,98 +1296,95 @@ $('.guarda_proforma').on('click', function () {
     var respuesta = confirm("¿Guardar la Proforma Ingresada?");
     if (respuesta == true) {
 
-    // Bloquear el BTN de Guardado
-    $("#btn_guarda_proforma").attr('disabled',true);
+        // Bloquear el BTN de Guardado
+        $("#btn_guarda_proforma").attr('disabled', true);
 
-    // Antes de realizar cualquier cambio verificar que no existe un nombre de proforma con caracteres extraños
-    /*var cont_check_proforma = 0;
-    var conteo_errores_prof = 0;
+        // Antes de realizar cualquier cambio verificar que no existe un nombre de proforma con caracteres extraños
+        /*var cont_check_proforma = 0;
+        var conteo_errores_prof = 0;
 
-    $("#tabla2 >tbody >tr").each(function () {
+        $("#tabla2 >tbody >tr").each(function () {
 
-        var proforma = $("#tabla2 #txt_proforma_" + cont_check_proforma).val();
-        proforma = proforma.replace(/[^a-z0-9\-\_]/gi, '-');
-        var proforma_usuario = $("#tabla2 #txt_proforma_" + cont_check_proforma).val();
-        var busca_campo_actualizado = $("#tabla2 #txt_estado_cambio_proforma_" + cont_check_proforma).text();
+            var proforma = $("#tabla2 #txt_proforma_" + cont_check_proforma).val();
+            proforma = proforma.replace(/[^a-z0-9\-\_]/gi, '-');
+            var proforma_usuario = $("#tabla2 #txt_proforma_" + cont_check_proforma).val();
+            var busca_campo_actualizado = $("#tabla2 #txt_estado_cambio_proforma_" + cont_check_proforma).text();
 
-        // Incluir solo los campos editados?
-        if( (busca_campo_actualizado=='U') && (proforma != proforma_usuario) ){
-            conteo_errores_prof = conteo_errores_prof+1;
-        }
+            // Incluir solo los campos editados?
+            if( (busca_campo_actualizado=='U') && (proforma != proforma_usuario) ){
+                conteo_errores_prof = conteo_errores_prof+1;
+            }
 
-        cont_check_proforma++;
+            cont_check_proforma++;
 
-    // Fin de la tabla que valida que las proformas se encuentren bien ingresadas (Se agrega el promise)
-    }).promise().done(function(){*/
+        // Fin de la tabla que valida que las proformas se encuentren bien ingresadas (Se agrega el promise)
+        }).promise().done(function(){*/
 
         // Si conteo_errores_prof==0 (Todas las proformas sin caracteres especiales)
         // Sigo con el resto del código de lo contrario mensaje de caracteres especiales
         //if(conteo_errores_prof == 0){
 
-            // URL`s de Guardado de Proforma e Historial
-            var url_act_proforma = 'ajax_simulador_cbx/guarda_proforma_cond1';
+        // URL`s de Guardado de Proforma e Historial
+        var url_act_proforma = 'ajax_simulador_cbx/guarda_proforma_cond1';
 
-            // Recorrer la tabla y traer los datos de la proforma a guardar
-            var conta_datos_tr = 0;
-            $("#tabla2 >tbody >tr").each(function () {
+        // Recorrer la tabla y traer los datos de la proforma a guardar
+        var conta_datos_tr = 0;
+        $("#tabla2 >tbody >tr").each(function () {
 
-                // Solo para validar que no me encuentro en las cabeceras (sirve como ID del Campo)
-                var correlativo_tabla = conta_datos_tr;
-                var estado_c1 = $("#tabla2 #txt_estadoc1_" + conta_datos_tr).text();
-                var busca_campo_actualizado = $("#tabla2 #txt_estado_cambio_proforma_" + conta_datos_tr).text();
-                var id_color = $("#tabla2 #txt_id_color_" + conta_datos_tr).text();
-                var proforma = $("#tabla2 #txt_proforma_" + conta_datos_tr).val();
-                //proforma = proforma.replace(/[^a-z0-9\-]/gi, '');
-                proforma = proforma.replace(/[^a-z0-9\-\_]/gi, '-');
-                // Leemos el campo de subir archivo
-                var cargado = $("#tabla2 #txt_archivo_" + conta_datos_tr).text();
+            // Solo para validar que no me encuentro en las cabeceras (sirve como ID del Campo)
+            var correlativo_tabla = conta_datos_tr;
+            var estado_c1 = $("#tabla2 #txt_estadoc1_" + conta_datos_tr).text();
+            var busca_campo_actualizado = $("#tabla2 #txt_estado_cambio_proforma_" + conta_datos_tr).text();
+            var id_color = $("#tabla2 #txt_id_color_" + conta_datos_tr).text();
+            var proforma = $("#tabla2 #txt_proforma_" + conta_datos_tr).val();
+            //proforma = proforma.replace(/[^a-z0-9\-]/gi, '');
+            proforma = proforma.replace(/[^a-z0-9\-\_]/gi, '-');
+            // Leemos el campo de subir archivo
+            var cargado = $("#tabla2 #txt_archivo_" + conta_datos_tr).text();
 
-                // Limpio el campo de la proforma de caracteres no deseados (Asignandole el nuevo sin caracteres especiales y ahora aceptando espacios)
-                $("#tabla2 #txt_proforma_" + correlativo_tabla).val(proforma);
+            // Limpio el campo de la proforma de caracteres no deseados (Asignandole el nuevo sin caracteres especiales y ahora aceptando espacios)
+            $("#tabla2 #txt_proforma_" + correlativo_tabla).val(proforma);
 
-                // 1.1- El estado de la c1=0 puede o no tener PI y/o Archivo
-                if( (estado_c1 == 0) && (busca_campo_actualizado == "U") && (proforma != 0) && (proforma != "") && (proforma != "null") && (proforma != null) && (proforma.length>2) ){
+            // 1.1- El estado de la c1=0 puede o no tener PI y/o Archivo
+            if ((estado_c1 == 0) && (busca_campo_actualizado == "U") && (proforma != 0) && (proforma != "") && (proforma != "null") && (proforma != null) && (proforma.length > 2)) {
 
-                    var sube_archivo = 0;
-                    if(cargado == 'Cargado.. Upload Upload'){
-                        sube_archivo = 1;
-                    }
-
-                    // guarda_proforma_cond1
-                    var dataString_factor = "PROFORMA=" + proforma + "&ID_INSERTAR=" + id_color + "&ARCHIVO="+ sube_archivo;
-
-                    $.ajax({
-                        type: "GET",
-                        url: url_act_proforma,
-                        data: dataString_factor,
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        success: function (data_proforma) {
-
-                        }, error: function (jqXHR, textStatus, errorThrown) {
-                            console.log("Error: " + textStatus + " errorThrown: " + errorThrown);
-                        }
-
-                    }).done(function () {
-
-                    });
-
-
-
-
+                var sube_archivo = 0;
+                if (cargado == 'Cargado.. Upload Upload') {
+                    sube_archivo = 1;
                 }
 
-                // Incremental de los registros de la tabla
-                conta_datos_tr++;
+                // guarda_proforma_cond1
+                var dataString_factor = "PROFORMA=" + proforma + "&ID_INSERTAR=" + id_color + "&ARCHIVO=" + sube_archivo;
+
+                $.ajax({
+                    type: "GET",
+                    url: url_act_proforma,
+                    data: dataString_factor,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data_proforma) {
+
+                    }, error: function (jqXHR, textStatus, errorThrown) {
+                        console.log("Error: " + textStatus + " errorThrown: " + errorThrown);
+                    }
+
+                }).done(function () {
+
+                });
+
+
+            }
+
+            // Incremental de los registros de la tabla
+            conta_datos_tr++;
 
             // Fin de la tabla
-            }).promise().done(function(){
+        }).promise().done(function () {
 
-                alert("Se han guardado los cambios... vamos a refrescar la página.");
-                location.reload(true);
+            alert("Se han guardado los cambios... vamos a refrescar la página.");
+            location.reload(true);
 
-            });
-
+        });
 
 
         // Fin del else de registros con proforma ok
@@ -1396,14 +1392,14 @@ $('.guarda_proforma').on('click', function () {
             alert("Una o más de las proformas ingresadas contiene caracteres especiales, no se puede realizar el guardado.");
         }*/
 
-    // Fin del promise
-    //});
+        // Fin del promise
+        //});
 
 
     } else {
 
         // Habilitar el BTN de Guardado... el usuario no quiere guardar los cambios aún
-        $("#btn_guarda_proforma").attr('disabled',false);
+        $("#btn_guarda_proforma").attr('disabled', false);
 
         return false;
     }
@@ -2187,7 +2183,6 @@ function matchOC(event) {
                     $.getJSON(url_elimina_oc_canceladas, {OC: orden_compra, PI: proforma});
 
 
-
                     // 6.- Agrega la tabla "B" OC o PI (PLC_PKG_UTILS.PRC_AGREGAR_OCPMM)
                     var url_atablab_oc_pi = 'ajax_simulador_cbx/agrega_tabla_b_ocpi';
                     $.getJSON(url_atablab_oc_pi, {OC: orden_compra, PI: proforma});
@@ -2540,18 +2535,18 @@ function matchOC(event) {
                                             // Fin delay para comenzar a llenar grillas y buscar las diferencias entre tablaas
                                         }, delay);
 
-                                    // Fin del DONE llenar tabla plan
+                                        // Fin del DONE llenar tabla plan
                                     });
 
-                                // Fin else si la tabla PMM tiene datos
+                                    // Fin else si la tabla PMM tiene datos
                                 }
 
                             }, delay);
 
-                        // Fin del DONE llenat tabla PMM
+                            // Fin del DONE llenat tabla PMM
                         });
 
-                    // Fin del DONE traer datos OC desde WS
+                        // Fin del DONE traer datos OC desde WS
                     });
 
                     // Fin si la OC se encuentra linkeada
@@ -2561,7 +2556,7 @@ function matchOC(event) {
                     return false;
                 }
 
-            //Fin DONE si está linkeada la OC
+                //Fin DONE si está linkeada la OC
             });
 
         } else {
@@ -4096,7 +4091,7 @@ $('#btn_habilita_grilla').on('click', function () {
 // Editar Grilla / llenar tabla grilla editable
 $('#btn_edita_grilla').on('click', function () {
 
-  // Actualiza la Fecha de la Concurrencia
+    // Actualiza la Fecha de la Concurrencia
     act_fecha_concurrencia();
 
     // eliminar los registros de la tabla, generados en otra consulta previa
@@ -4169,7 +4164,7 @@ $('#btn_edita_grilla').on('click', function () {
                         '<td id="id_linea_' + o[14] + '">' + o[2] + '</td>\n' +
                         '<td id="id_sublinea_' + o[14] + '">' + o[3] + '</td>\n' +
                         '<td id="id_estilo_' + o[14] + '">' + o[4] + '</td>\n' +
-                       // '<td id="id_ventana_' + o[14] + '">' + o[6] + '</td>\n' +
+                        // '<td id="id_ventana_' + o[14] + '">' + o[6] + '</td>\n' +
                         '<td id="id_nom_ventana_' + o[14] + '"><select id="txt_nom_ventana_' + o[14] + '" name="txt_nom_ventana_' + o[14] + '" class="txt_nom_ventana_" disabled></select></td>\n' +
                         '<td id="id_color_' + o[14] + '">' + o[7] + '</td>\n' +
                         '<td id="DESTALLA_' + o[14] + '">' + o[23] + '</td>\n' +
@@ -4191,7 +4186,7 @@ $('#btn_edita_grilla').on('click', function () {
                         '<td class="columnas" id="id_insp_' + o[14] + '"><input type="text" id="txt_insp_' + o[14] + '" name="txt_insp_' + o[14] + '" value="' + o[11] + '" size="3"></td>\n' +
                         '<td class="columnas" id="id_rfid_' + o[14] + '"><input type="text" id="txt_rfid_' + o[14] + '" name="txt_rfid_' + o[14] + '" value="' + o[12] + '" size="3"></td>\n' +
                         '<td class="columnas" id="id_aliasproveedor_' + o[14] + '"><input type="text" id="txt_aliasproveedor_' + o[14] + '" name="txt_aliasproveedor_' + o[14] + '" value="' + o[13] + '" size="20"></td>\n' +
-                        '<td id="DEBUT_REODER_' + o[14] + '">' + o[30] + '</td>\n'+
+                        '<td id="DEBUT_REODER_' + o[14] + '">' + o[30] + '</td>\n' +
                         '<td id="id_mkup_' + o[14] + '" style="display: none">' + o[15] + '</td>\n' +
                         '<td id="id_gm_' + o[14] + '" style="display: none">' + o[16] + '</td>\n' +
                         '<td id="id_via_' + o[14] + '" style="display: none">' + o[17] + '</td>\n' +
@@ -4351,9 +4346,7 @@ $('#btn_edita_grilla').on('click', function () {
 
                     });
 
-                  //  $("#btn_editar_registros_grilla_editable").show();
-
-
+                    //  $("#btn_editar_registros_grilla_editable").show();
 
 
                     // Fin del si llegan registros
@@ -4367,17 +4360,17 @@ $('#btn_edita_grilla').on('click', function () {
 
             // DataTable de la tabla de edición de grilla (verificar si agregando el ajaxstop se mejora el despligue de la tabla)
             // Funcionando, pero se mueve más arriba en el código para desplegar bien la estructura de las columnas
-          /*  $('#tabla_edita_grilla').DataTable({
-                retrieve: true,
-                destroy: true,
-                "ordering": false,
-                paging: false,
-                searching: false,
-                scrollY: "200px",
-                scrollX: "150px",
-                "info": false,
-                fixedColumns: true
-            });*/
+            /*  $('#tabla_edita_grilla').DataTable({
+                  retrieve: true,
+                  destroy: true,
+                  "ordering": false,
+                  paging: false,
+                  searching: false,
+                  scrollY: "200px",
+                  scrollX: "150px",
+                  "info": false,
+                  fixedColumns: true
+              });*/
             // Desplegar el BTN editar
 
         });
@@ -4529,11 +4522,29 @@ $('#btn_editar_registros_grilla_editable').on('click', function () {
         $.ajax({
             url: url_calculo_Curvado,
             type: 'POST',
-            data: jQuery.param({_tipo_empaque: tipo_empaque,_tallas: tallas,_curvas: curvas
-                                ,_und_iniciales: und_iniciales, _cluster: cluster
-                                ,_formato: formato,_A: A,_B: B,_C: C,_I: I
-                                ,_DEBUT_REODER:DEBUT_REODER,_PORTALLA_1_INI:PORTALLA_1_INI,_marcas:marcas
-                                ,_N_CURVASXCAJAS:N_CURVAS_CAJAS,_cod_linea:cod_linea,_cod_sublinea:cod_sublinea,_id_color3:id_color3g}),
+            data: jQuery.param({
+                _tipo_empaque: tipo_empaque,
+                _tallas: tallas,
+                _curvas: curvas
+                ,
+                _und_iniciales: und_iniciales,
+                _cluster: cluster
+                ,
+                _formato: formato,
+                _A: A,
+                _B: B,
+                _C: C,
+                _I: I
+                ,
+                _DEBUT_REODER: DEBUT_REODER,
+                _PORTALLA_1_INI: PORTALLA_1_INI,
+                _marcas: marcas
+                ,
+                _N_CURVASXCAJAS: N_CURVAS_CAJAS,
+                _cod_linea: cod_linea,
+                _cod_sublinea: cod_sublinea,
+                _id_color3: id_color3g
+            }),
             success: function (data2) {
                 var _result = data2.split("|");
                 und_ajust = _result[0];
@@ -4680,8 +4691,7 @@ $('#btn_editar_registros_grilla_editable').on('click', function () {
                         if (fob > 0) {
                             total_fob_usd = (total_fob_usd).toFixed(2);
                         }
-                        var dataString_upd1 = "ID_COLOR3=" + id_color3 + "&COSTO_FOB=" + fob + "&COSTO_INSP=" + insp + "&COSTO_RFID=" + rfid + "&COSTO_UNIT=" + costo_unitario_final_usd + "&COSTO_UNITS=" + costo_unitario_final_pesos + "&CST_TOTLTARGET=" + total_target_usd + "&COSTO_TOT=" + total_fob_usd + "&COSTO_TOTS=" + costo_total_pesos + "&MKUP=" + nuevo_mkup + "&GM=" + nuevo_gm + "&PROVEEDOR=" + provedor + "&PAIS=" + pais + "&VIA=" + via + "&FACTOR_EST=" + factor_est_campo + "&NOM_VIA=" + nuevo_nom_via + "&NOM_PAIS=" + nuevo_nom_pais + "&TARGET=" + target + "&und_ajust=" + und_ajust + "&porcent_ajust=" + porcent_ajust + "&n_cajas=" + n_cajas + "&primera_carga=" + primera_carga + "&tiendas=" + tiendas+ "&unida_ajust_xtallas=" + unida_ajust_xtallas + "&UNIDADES_FINALES=" + unidades_finales+ "&UNIDADES_INICIALES=" + und_iniciales + "&cluster_=" + cluster + "&marca_=" + marcas + "&debut_=" + debut_reorder + "&tipo_emp_=" + tipo_empaque + "&formatos_=" + formato;
-
+                        var dataString_upd1 = "ID_COLOR3=" + id_color3 + "&COSTO_FOB=" + fob + "&COSTO_INSP=" + insp + "&COSTO_RFID=" + rfid + "&COSTO_UNIT=" + costo_unitario_final_usd + "&COSTO_UNITS=" + costo_unitario_final_pesos + "&CST_TOTLTARGET=" + total_target_usd + "&COSTO_TOT=" + total_fob_usd + "&COSTO_TOTS=" + costo_total_pesos + "&MKUP=" + nuevo_mkup + "&GM=" + nuevo_gm + "&PROVEEDOR=" + provedor + "&PAIS=" + pais + "&VIA=" + via + "&FACTOR_EST=" + factor_est_campo + "&NOM_VIA=" + nuevo_nom_via + "&NOM_PAIS=" + nuevo_nom_pais + "&TARGET=" + target + "&und_ajust=" + und_ajust + "&porcent_ajust=" + porcent_ajust + "&n_cajas=" + n_cajas + "&primera_carga=" + primera_carga + "&tiendas=" + tiendas + "&unida_ajust_xtallas=" + unida_ajust_xtallas + "&UNIDADES_FINALES=" + unidades_finales + "&UNIDADES_INICIALES=" + und_iniciales + "&cluster_=" + cluster + "&marca_=" + marcas + "&debut_=" + debut_reorder + "&tipo_emp_=" + tipo_empaque + "&formatos_=" + formato;
 
 
                         $.ajax({
@@ -4738,16 +4748,14 @@ $('#btn_editar_registros_grilla_editable').on('click', function () {
         });
 
 
-
-
         //console.log(tipo_empaque +"/"+tallas+"/"+curvas+"/"+und_iniciales+"/"+cluster+"/"+formato+"/"+A+"/"+B+"/"+C+"/"+I);
 
     });
 
     // Cuando termine de realizar todas las llamadas, ejecutar lo que tiene dentro
- $(document).ajaxStop(function () {
+    $(document).ajaxStop(function () {
         // Avisar término de updates
-		$(".loading_tabla_edita_grilla").hide();
+        $(".loading_tabla_edita_grilla").hide();
         alert("Los datos han sido actualizados, favor revisar.");
         // Recargar Página
         location.reload(true);
@@ -4757,7 +4765,7 @@ $('#btn_editar_registros_grilla_editable').on('click', function () {
 });
 
 // Función responsable de la carga de la PI
-$("#pi_upload_ajax").on('submit',(function(e) {
+$("#pi_upload_ajax").on('submit', (function (e) {
 
     e.preventDefault();
 
@@ -4767,15 +4775,15 @@ $("#pi_upload_ajax").on('submit',(function(e) {
     $.ajax({
         url: "guardar/archivo_pi_server",
         type: "POST",
-        data:  new FormData(this),
+        data: new FormData(this),
         contentType: false,
         cache: false,
-        processData:false,
-        beforeSend : function(){
+        processData: false,
+        beforeSend: function () {
             // Acción antes de enviar
-        },success: function(return_proforma){
+        }, success: function (return_proforma) {
 
-            if(return_proforma!='ERROR'){
+            if (return_proforma != 'ERROR') {
 
                 // Asignar el texto "Cargado.." y bloquear btn
                 var inc_rec_prof = 0;
@@ -4788,18 +4796,18 @@ $("#pi_upload_ajax").on('submit',(function(e) {
                     var campo_archivo_server = $("#tabla2 #txt_archivo_" + inc_rec_prof).text();
 
                     // Cuando recorra la tabla verificar que la proforma que llega sea igual a la ingresada y que este campo se encuentre editado recientemente (U)
-                    if ( (return_proforma == busca_prof_spec) && (estado_c1==0) ) { //&& (busca_campo_actualizado=='U')
+                    if ((return_proforma == busca_prof_spec) && (estado_c1 == 0)) { //&& (busca_campo_actualizado=='U')
                         // Agregarle el cargado al BTN
-                        $("#tabla2 #txt_archivo_span_"+inc_rec_prof).text("Cargado..");
+                        $("#tabla2 #txt_archivo_span_" + inc_rec_prof).text("Cargado..");
 
                         // Al campo lo dejo como actualizado (31102018 Corrige error cargas posteriores de archivo)
                         $("#tabla2 #txt_estado_cambio_proforma_" + inc_rec_prof).text('U');
 
                     }
 
-                inc_rec_prof++;
+                    inc_rec_prof++;
 
-                }).promise().done(function(data){
+                }).promise().done(function (data) {
 
                     // Ocultar el POPUP, al final el recorrido de la tabla. Mientras el código realiza su pega
                     $('#carga_pi_archivo').modal('hide');
@@ -4807,13 +4815,13 @@ $("#pi_upload_ajax").on('submit',(function(e) {
                 });
 
 
-            }else{
+            } else {
                 // Problemas con la subida
                 alert("[SUBIR] Error al cargar PI, intente nuevamente.");
             }
 
 
-        },error: function(e){
+        }, error: function (e) {
             // Si existe error en la carga de archivos
             alert("[EJECUCION] Error al cargar PI, intente nuevamente.");
         }
@@ -4823,7 +4831,7 @@ $("#pi_upload_ajax").on('submit',(function(e) {
 }));
 
 // Revisa en la grilla todas las proformas asociadas a la que se van a guardar
-function busca_prof_aguardar(){
+function busca_prof_aguardar() {
 
     var string_a_php = "";
     var flag_busca_prof = 0;
@@ -4870,7 +4878,7 @@ function busca_prof_aguardar(){
             // Fin de buscar si la columna trae datos
         }
 
-    flag_busca_prof++;
+        flag_busca_prof++;
 
     });
 
@@ -4925,17 +4933,17 @@ $('.solicitud_generacion_ocd').on('click', function () {
                 proforma = proforma.replace(/[^a-z0-9\-\_]/gi, '-');
 
                 // Verificar Estado C1
-                if( (estado_c1==18) && (proforma.length>2) && (proforma !='') && (proforma != 'null') && (proforma != null) && (id_color3 != null) ){
+                if ((estado_c1 == 18) && (proforma.length > 2) && (proforma != '') && (proforma != 'null') && (proforma != null) && (id_color3 != null)) {
 
-                    $.getJSON(url, {ID_COLOR3: id_color3, ESTADO_INSERT: 22,PROFORMA: proforma, ESTADO_UPDATE: 1});
+                    $.getJSON(url, {ID_COLOR3: id_color3, ESTADO_INSERT: 22, PROFORMA: proforma, ESTADO_UPDATE: 1});
 
-                // Fin de la validación de estado
-                }else{
-                    alert("Proforma:"+proforma+", requiere: Compra Confirmada PI.");
+                    // Fin de la validación de estado
+                } else {
+                    alert("Proforma:" + proforma + ", requiere: Compra Confirmada PI.");
                 }
 
-            // Fin del each ya seleccionados de la tabla
-            }).promise().done(function(){
+                // Fin del each ya seleccionados de la tabla
+            }).promise().done(function () {
 
                 delay_reload(5000);
 
@@ -4947,7 +4955,7 @@ $('.solicitud_generacion_ocd').on('click', function () {
         }
 
 
-    // Si el usuario no acepta realizar cambios
+        // Si el usuario no acepta realizar cambios
     } else {
         alert("No se han Realizado Cambios.");
     }
@@ -4986,17 +4994,17 @@ $('.oc_generadad').on('click', function () {
                 proforma = proforma.replace(/[^a-z0-9\-\_]/gi, '-');
 
                 // Verificar Estado C1
-                if( (estado_c1==22) && (proforma.length>2) && (proforma !='') && (proforma != 'null') && (proforma != null) && (id_color3 != null) ){
+                if ((estado_c1 == 22) && (proforma.length > 2) && (proforma != '') && (proforma != 'null') && (proforma != null) && (id_color3 != null)) {
 
-                    $.getJSON(url, {ID_COLOR3: id_color3, ESTADO_INSERT: 19,PROFORMA: proforma, ESTADO_UPDATE: 2});
+                    $.getJSON(url, {ID_COLOR3: id_color3, ESTADO_INSERT: 19, PROFORMA: proforma, ESTADO_UPDATE: 2});
 
-                // Fin de la validación de estado
-                }else{
-                    alert("Proforma:"+proforma+", requiere: Pendiente Generacion OC.");
+                    // Fin de la validación de estado
+                } else {
+                    alert("Proforma:" + proforma + ", requiere: Pendiente Generacion OC.");
                 }
 
                 // Fin del each ya seleccionados de la tabla
-            }).promise().done(function(){
+            }).promise().done(function () {
 
                 delay_reload(5000);
 
@@ -5047,17 +5055,17 @@ $('.crear_modificaciond').on('click', function () {
                 proforma = proforma.replace(/[^a-z0-9\-\_]/gi, '-');
 
                 // Verificar Estado C1
-                if( (estado_c1!=24) && (proforma.length>2) && (proforma !='') && (proforma != 'null') && (proforma != null) && (id_color3 != null)){
+                if ((estado_c1 != 24) && (proforma.length > 2) && (proforma != '') && (proforma != 'null') && (proforma != null) && (id_color3 != null)) {
 
-                    $.getJSON(url, {ID_COLOR3: id_color3, ESTADO_INSERT: 0,PROFORMA: proforma, ESTADO_UPDATE: 3});
+                    $.getJSON(url, {ID_COLOR3: id_color3, ESTADO_INSERT: 0, PROFORMA: proforma, ESTADO_UPDATE: 3});
 
-                // Fin de la validación de estado
-                }else{
+                    // Fin de la validación de estado
+                } else {
                     alert("No puede modificar una opción eliminada.\n");
                 }
 
                 // Fin del each ya seleccionados de la tabla
-            }).promise().done(function(){
+            }).promise().done(function () {
 
                 delay_reload(5000);
 
@@ -5107,17 +5115,17 @@ $('.elimina_opciond').on('click', function () {
                 proforma = proforma.replace(/[^a-z0-9\-\_]/gi, '-');
 
                 // Verificar Estado C1
-                if((estado_c1!=21) && (proforma.length>2) && (proforma !='') && (proforma != 'null') && (proforma != null) && (id_color3 != null)){
+                if ((estado_c1 != 21) && (proforma.length > 2) && (proforma != '') && (proforma != 'null') && (proforma != null) && (id_color3 != null)) {
 
-                    $.getJSON(url, {ID_COLOR3: id_color3, ESTADO_INSERT: 24,PROFORMA: proforma, ESTADO_UPDATE: 4});
+                    $.getJSON(url, {ID_COLOR3: id_color3, ESTADO_INSERT: 24, PROFORMA: proforma, ESTADO_UPDATE: 4});
 
-                // Fin de la validación de estado
-                }else{
+                    // Fin de la validación de estado
+                } else {
                     alert("No puede solicitar eliminar una opción ya aprobada.");
                 }
 
                 // Fin del each ya seleccionados de la tabla
-            }).promise().done(function(){
+            }).promise().done(function () {
 
                 delay_reload(5000);
 
