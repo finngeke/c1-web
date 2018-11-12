@@ -199,19 +199,19 @@ $(window).on('load', function () {
                     // A - VALIDAR LINK DEL FLUJO DE APROBACION
                     verifica_accion = $.grep(arreglo_accion_desac,function(e){return e.id_accion==43;});
                     if (verifica_accion.length > 0){
-                        $(".solicitud_generacion_oc").css({ 'pointer-events': 'none' });
+                        $(".solicitud_generacion_ocd").css({ 'pointer-events': 'none' });
                     }
                     verifica_accion = $.grep(arreglo_accion_desac,function(e){return e.id_accion==44;});
                     if (verifica_accion.length > 0){
-                        $(".oc_generada").css({ 'pointer-events': 'none' });
+                        $(".oc_generadad").css({ 'pointer-events': 'none' });
                     }
                     verifica_accion = $.grep(arreglo_accion_desac,function(e){return e.id_accion==45;});
                     if (verifica_accion.length > 0){
-                        $(".crear_modificacion").css({ 'pointer-events': 'none' });
+                        $(".crear_modificaciond").css({ 'pointer-events': 'none' });
                     }
                     verifica_accion = $.grep(arreglo_accion_desac,function(e){return e.id_accion==46;});
                     if (verifica_accion.length > 0){
-                        $(".elimina_opcion").css({ 'pointer-events': 'none' });
+                        $(".elimina_opciond").css({ 'pointer-events': 'none' });
                     }
                     verifica_accion = $.grep(arreglo_accion_desac,function(e){return e.id_accion==47;});
                     if (verifica_accion.length > 0){

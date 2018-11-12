@@ -3337,11 +3337,7 @@ function campos_bloquear_tipo_usuario() {
     $(".crear_modificacion").css({'pointer-events': 'none'});
     $(".elimina_opcion").css({'pointer-events': 'none'});
     $(".solicitud_correccion_pi").css({'pointer-events': 'none'});
-
-    // Bloquear Editar Grilla
-    $("#btn_edita_grilla").attr("disabled", "disabled");
-
-
+    
 }
 
 function campos_bloquear_despues_llenar_tabla() {
@@ -3425,6 +3421,7 @@ function campos_bloquear_despues_llenar_tabla() {
 
                 $('#accion_carga_configuracion_permisos_simulador').removeClass('fa fa-refresh');
                 $('#accion_carga_configuracion_permisos_simulador').addClass('fa fa-check');
+
             });
 
         });
