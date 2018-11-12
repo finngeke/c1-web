@@ -99,7 +99,7 @@
 					utf8_encode($val["COMPOSICION"]),       // 11
 					utf8_encode($val["COLECCION"]),         // 12
 					utf8_encode($val["EVENTO"]),            // 13
-					$val["COD_ESTILO_VIDA"],                // 14
+                    utf8_encode($val["COD_ESTILO_VIDA"]),   // 14
 					utf8_encode($val["CALIDAD"]),           // 15
 					utf8_encode($val["COD_OCASION_USO"]),   // 16
                     utf8_encode($val["COD_PIRAMIX"]),       // 17
@@ -123,13 +123,13 @@
 					$val["CANT_INNER"],                     // 35
                     utf8_encode($val["SEG_ASIG"]),          // 36
 					utf8_encode($val["FORMATO"]),           // 37
-					$val["TDAS"],                           // 38
+                    utf8_encode($val["TDAS"]),              // 38
 					$val["A"],                              // 39
 					$val["B"],                              // 40
 					$val["C"],                              // 41
 					$val["I"],                              // 42
 					$val["UND_ASIG_INI"],                   // 43
-					$val["ROT"],                            // 44
+                    utf8_encode($val["ROT"]),               // 44
 					utf8_encode($val["NOM_PRECEDENCIA"]),   // 45
 					utf8_encode($val["NOM_VIA"]),           // 46
 					utf8_encode($val["NOM_PAIS"]),          // 47
@@ -137,7 +137,7 @@
 					$val["MKUP"],                           // 49
 					$val["PRECIO_BLANCO"],                  // 50
 					$val["GM"],                             // 51
-					$val["COD_TIP_MON"],                    // 52
+                    utf8_encode($val["COD_TIP_MON"]),       // 52
 					$val["COSTO_TARGET"],                   // 53
 					$val["COSTO_FOB"],                      // 54
 					$val["COSTO_INSP"],                     // 55
@@ -159,7 +159,7 @@
 					utf8_encode($val["COD_PROVEEDOR"]),     // 71
 					utf8_encode($val["COD_TRADER"]),        // 72
 					utf8_encode($val["CODSKUPROVEEDOR"]),   // 73
-                    utf8_encode($val["SKU"]),               // 74 cod_padre
+                    utf8_encode($val["SKU"]),               // 74
 					utf8_encode($val["PROFORMA"]),          // 75
 					$val["ARCHIVO"],                        // 76
                     utf8_encode($val["ESTILO_PMM"]),        // 77
