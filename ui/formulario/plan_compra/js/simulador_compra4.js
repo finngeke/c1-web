@@ -86,7 +86,7 @@ $(window).on('load', function () {
 
                         if (flag_cant_usr_session != '') {
 
-                            if ($('#flag_usuario_no_lectura').text() != 'EPACHECO') {
+                            if( ($('#flag_usuario_no_lectura').text() != 'EPACHECO') || ($('#flag_usuario_no_lectura').text() != 'ROBERTO') ) {
 
                                 //Busco si existe un registro asociado al loguin
                                 $.getJSON(url_busca_usuario_tabla_session, {DEPTO: depto}, function (data) {
@@ -101,6 +101,7 @@ $(window).on('load', function () {
 
                                     });
                                 });
+                                
                             }
 
                         } else {
