@@ -2529,7 +2529,7 @@ class cbx_grilla_compra extends \parametros
     }
 
 
-// ######################## TRABAJO CON GRILLA EDITABLE ########################
+    // ######################## TRABAJO CON GRILLA EDITABLE ########################
 
     public static function listar_factor($cod_temporada, $depto, $pais, $via, $moneda, $ventana)
     {
@@ -2665,10 +2665,10 @@ class cbx_grilla_compra extends \parametros
 
 
 
-// $data = \database::getInstancia()->getConsulta($sql);
-// return $data;
+    // $data = \database::getInstancia()->getConsulta($sql);
+    // return $data;
 
-// Actualizar grilla en PLC_PLAN_COMPRA_COLOR_CIC
+    // Actualizar grilla en PLC_PLAN_COMPRA_COLOR_CIC
     public static function actualiza_grilla_plan_compra_color_cic($temporada, $depto, $login, $ID_COLOR3, $COSTO)
     {
 
@@ -2705,7 +2705,7 @@ class cbx_grilla_compra extends \parametros
 
     }
 
-// Listar País
+    // Listar País
     public static function listar_pais($cod_temporada, $depto)
     {
 
@@ -2719,7 +2719,7 @@ class cbx_grilla_compra extends \parametros
 
     }
 
-// Busca Formatos Grilla Editar
+    // Busca Formatos Grilla Editar
     public static function listar_formato_grilla_edita($temporada, $depto)
     {
 
@@ -2738,7 +2738,7 @@ class cbx_grilla_compra extends \parametros
 
     }
 
-// Busca Ventana Grilla Editar
+    // Busca Ventana Grilla Editar
     public static function listar_ventana_grilla_edita($temporada, $depto)
     {
 
@@ -3381,7 +3381,7 @@ class cbx_grilla_compra extends \parametros
           die();*/
     }
 
-// Actualiza la fecha del registro de concurrencia
+    // Actualiza la fecha del registro de concurrencia
     public static function actualiza_fecha_concurrencia($temporada, $depto, $login)
     {
 
@@ -3416,7 +3416,7 @@ class cbx_grilla_compra extends \parametros
 
 
 
-// ######################## TRABAJO CON NUEVA CARGA DE PROFORMA ########################
+    // ######################## TRABAJO CON NUEVA CARGA DE PROFORMA ########################
 
     // Actualmente se utiliza 29102018
     public static function guarda_proforma_cond1($temporada, $depto, $login, $proforma, $id_insertar, $archivo)
@@ -3782,7 +3782,7 @@ class cbx_grilla_compra extends \parametros
 
 
 
-// ######################## FIN TRABAJO CON NUEVA CARGA DE PROFORMA ########################
+    // ######################## FIN TRABAJO CON NUEVA CARGA DE PROFORMA ########################
 
 
 // Fin de la Clase

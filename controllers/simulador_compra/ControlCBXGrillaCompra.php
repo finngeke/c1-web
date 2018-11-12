@@ -631,7 +631,7 @@
             echo json_encode(\simulador_compra\cbx_grilla_compra::listar_ventana_grilla_edita($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO')));
         }
 
-		        // CURVADO CON EDITAR GRILLA
+		// CURVADO CON EDITAR GRILLA
 
         public function CalculoCurvadoGrilla($f3){
 
