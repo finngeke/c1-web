@@ -388,8 +388,11 @@ $(window).on('load', function () {
 
                     if (archivo_ == "Cargado.. Upload Upload") {
                         $(".pi_" + flag_tabla2).attr("disabled", false);
-                    } else if (estado_c1 == 0 && proforma != 0 && proforma != 'null' && proforma != '') {
+                        $(".archivo_" + flag_tabla2).attr("disabled", true);
+                    //} else if (estado_c1 == 0 && proforma != 0 && proforma != 'null' && proforma != '') {
+                    } else {
                         $(".archivo_" + flag_tabla2).attr("disabled", false);
+                        $(".pi_" + flag_tabla2).attr("disabled", true);
                     }
 
                     // Aparece una "s" ya que el despliegue corrige error de texto
@@ -513,8 +516,8 @@ $(window).on('load', function () {
 
         }).done(function () {
 
-            $(".txt_archivo_").attr("disabled", "disabled");
-            $(".btn_pi_").attr("disabled", "disabled");
+            //$(".txt_archivo_").attr("disabled", "disabled");
+            //$(".btn_pi_").attr("disabled", "disabled");
             // Bloquea BTN detalle error PI (Se comenta 08-11-2018 ya que se indica que el BTN estaba siempre bloqueado)
             //$(".detalle_error_pi_").attr("disabled", "disabled");
 
