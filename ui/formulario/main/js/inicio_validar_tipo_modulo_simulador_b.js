@@ -96,12 +96,12 @@ $(window).on('load', function () {
                     }*/
 
                     // BTN Edita Grilla en QA
-                    /*verifica_accion = $.grep(arreglo_accion_desac,function(e){return e.id_accion==79;});
+                    verifica_accion = $.grep(arreglo_accion_desac,function(e){return e.id_accion==79;});
                     if (verifica_accion.length > 0){
                         //$("#btn_habilita_grilla").attr("disabled", "disabled");
                         $("#btn_edita_grilla").attr("disabled", "disabled");
                         //$("#btn_habilita_grilla").hide();
-                    }*/
+                    }
 
 
                     // M - VALIDAR MODULO DE TIENDAS
