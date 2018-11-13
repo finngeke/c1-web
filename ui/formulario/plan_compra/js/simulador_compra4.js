@@ -3355,10 +3355,10 @@ function campos_bloquear_tipo_usuario() {
     $("#input_total_ppto_retail").attr("disabled", "disabled");
 
     // links de simulador de compra (flujo de aprobacion)
-    $(".solicitud_generacion_oc").css({'pointer-events': 'none'});
-    $(".oc_generada").css({'pointer-events': 'none'});
-    $(".crear_modificacion").css({'pointer-events': 'none'});
-    $(".elimina_opcion").css({'pointer-events': 'none'});
+    $(".solicitud_generacion_ocd").css({'pointer-events': 'none'});
+    $(".oc_generadad").css({'pointer-events': 'none'});
+    $(".crear_modificaciond").css({'pointer-events': 'none'});
+    $(".elimina_opciond").css({'pointer-events': 'none'});
     $(".solicitud_correccion_pi").css({'pointer-events': 'none'});
 
 }
