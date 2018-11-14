@@ -333,6 +333,7 @@ class cbx_grilla_compra extends \parametros
                 C.VIAJE,                         -- 48 Viaje
                 C.MKUP,                          -- 49 mkup
                 C.PRECIO_BLANCO,                 -- 50 Precio Blanco
+                '' OFERTA,                       -- 51 Oferta 
                 C.GM,                            -- 51 GM
                 C.NOM_MONEDA  COD_TIP_MON,       -- 52 Moneda
                 C.COSTO_TARGET,                  -- 53 Target
