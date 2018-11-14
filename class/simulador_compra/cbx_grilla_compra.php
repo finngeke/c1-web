@@ -379,9 +379,42 @@ class cbx_grilla_compra extends \parametros
 
         $data = \database::getInstancia()->getFilas($sql);
 
+        /*$insert = [];
+        foreach ($data as $vart){
+            array_push($insert, 0);
+        }*/
+
+
         return $data;
 
     }
+
+    public static function llenar_tabla2_telerik($temporada, $depto)
+    {
+
+        $sql = "SELECT
+                C.NOM_SUBLINEA ID_COLOR3
+                FROM PLC_PLAN_COMPRA_COLOR_3 C
+                LEFT JOIN PLC_PLAN_COMPRA_OC O ON C.COD_TEMPORADA = O.COD_TEMPORADA
+				AND C.DEP_DEPTO = O.DEP_DEPTO AND C.ID_COLOR3 = O.ID_COLOR3
+                WHERE C.COD_TEMPORADA = $temporada AND C.DEP_DEPTO = '" . $depto . "'
+                ORDER BY C.ID_COLOR3, C.COD_JER2,C.COD_SUBLIN,C.COD_ESTILO,NVL(COD_COLOR,0) ,C.VENTANA_LLEGADA,C.DEBUT_REODER";
+
+        $data = \database::getInstancia()->getFilas($sql);
+
+        $array1 = [];
+        foreach ($data as $va1){
+            array_push($array1
+                , array( "ID_COLOR3"=> $va1[0]
+                )
+            );
+        }
+
+
+        return $data;
+
+    }
+
 
     public static function llenar_tabla2($temporada, $depto)
     {

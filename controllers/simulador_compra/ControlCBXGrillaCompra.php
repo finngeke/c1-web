@@ -175,11 +175,17 @@
 					utf8_encode($val["VENTANA_LLEGADA"]),   // 87
 					""               // 88
 				);
+
 			}
 
 			header("Content-Type: application/json");
 			echo json_encode($json, JSON_PRETTY_PRINT);
+
 		}
+
+        public function llenar_tabla2_telerik($f3) {//, JSON_FORCE_OBJECT
+            echo json_encode(\simulador_compra\cbx_grilla_compra::llenar_tabla2_base($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO')));
+        }
 
         public function llenar_edita_grilla($f3) {
         $data = \simulador_compra\cbx_grilla_compra::llenar_edita_grilla($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('GET.ID_COLOR3'));
