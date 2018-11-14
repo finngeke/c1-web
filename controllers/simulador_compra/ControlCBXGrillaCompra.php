@@ -14,8 +14,7 @@
 		// Llenar Tabla2 (Grilla)
 		public function llenar_tabla2($f3) {
 		$data = \simulador_compra\cbx_grilla_compra::llenar_tabla2($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'));
-			$json = [];$dtPIs =[];
-
+			$json = [];$dtPIs =[];$dt20 =[];
 			foreach ($data as $val) {
                 //vista y update de estado oc  18= Compra confirmada con PI /22 = solicitud de generacion oc / 19 = pendiente de aprobcion de match
                 $proforma = utf8_encode($val["PROFORMA"]);$orden_compra = ""; $estadoOc = "";$f_embarque = "";$f_eta = "";$f_recepcion = "";$dias_atrasado = ""; $_exist = false; $ESTADO= $val["ESTADO_C1"];$nom_estado= $val["CODESTADO"];
@@ -55,6 +54,7 @@
                                 } catch (Exception $e) {
                                     $dias_atrasado = "";
                                 }
+
                                 $ESTADO = 19;
                                 $nom_estado =  "Pendiente de Aprobacion sin Match";
                                 //actualizamos el flujo de estado automatico
@@ -67,8 +67,47 @@
                             }
                             array_push($dtPIs, array($proforma, $orden_compra, $estadoOc, $f_embarque, $f_eta, $f_recepcion, $dias_atrasado,$ESTADO,$nom_estado));
                         }
-
                     }
+
+                 /*   elseif ($val["ESTADO_C1"] == 20){$_exist2 = false;
+                        //si ya paso por esta pi
+                        foreach ($dt20 as $valor){
+                            if ($valor[0] == $proforma){
+                                $_exist2 = true;
+                                $orden_compra =$valor[1];
+                                $estadoOc = $valor[2];
+                                $ESTADO = $valor[7];
+                                $nom_estado =  $valor[8];
+                            }
+                        }
+                        if ($_exist2 == false){
+                            //extracion broker por pi
+                            $dt = json_decode(\simulador_compra\cbx_grilla_compra::traer_datos_oc($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $proforma, $f3->get('CURLOPT_PORT'), $f3->get('CURLOPT_URL')));
+                            if (($dt->Body->fault->faultCode == 0) and (count($dt->Body->detalleConsultaOrdenCompra->detalle)) > 0) {
+                                $estadoOc = $dt->Body->detalleConsultaOrdenCompra->detalle[0]->estadoOC;
+                                if ($estadoOc == 'On Order' or $estadoOc or 'Recepcion Completa' or $estadoOc == 'Recepcion Parcial'){
+                                    $orden_compra =  utf8_encode($val["PO_NUMBER"]);
+                                    $estadoOc =  $dt->Body->detalleConsultaOrdenCompra->detalle[0]->estadoOC;
+                                    $f_embarque = utf8_encode($val["FECHA_EMBARQUE"]);
+                                    $f_eta =  utf8_encode($val["FECHA_ETA"]);
+                                    $f_recepcion =  utf8_encode($val["FECHA_RECEPCION"]);
+                                    $dias_atrasado =  utf8_encode($val["DIAS_ATRASO"]);
+
+                                    $ESTADO= 21;
+                                    $nom_estado= "Aprobado";
+                                    //insert historial
+                                   \simulador_compra\cbx_grilla_compra::estado_oc_4_inserta_historial($f3->get('SESSION.COD_TEMPORADA')
+                                       , $f3->get('SESSION.COD_DEPTO'), $f3->get('GET.LINEA'), $f3->get('GET.SUBLINEA')
+                                       , $f3->get('GET.MARCA'), $f3->get('GET.ESTILO'), $f3->get('GET.VENTANA')
+                                       , $f3->get('GET.COLOR'), $f3->get('SESSION.login'), $f3->get('GET.PI'), $f3->get('GET.OC')
+                                       , $f3->get('GET.ESTADO'), $f3->get('GET.ID_COLOR3'), $f3->get('GET.TIPO_INSERT')
+                                       , $f3->get('GET.NOM_LINEA'), $f3->get('GET.NOM_SUBLINEA'), $f3->get('GET.NOM_MARCA')
+                                       , $f3->get('GET.NOM_VENTANA'), $f3->get('GET.NOM_COLOR'));
+                    }
+                            }
+                        }
+                    }*/
+                 
                     else{
                      $orden_compra =  utf8_encode($val["PO_NUMBER"]);
                      $estadoOc =  utf8_encode($val["ESTADO_OC"]);
@@ -78,10 +117,7 @@
                      $dias_atrasado =  utf8_encode($val["DIAS_ATRASO"]);
                      $ESTADO= $val["ESTADO_C1"];
                      $nom_estado= $val["CODESTADO"];
-
                     }
-
-
 
 //Carga la data plan de compra
 				$json[] = array(
@@ -587,7 +623,6 @@
 
             $COSTO_UNITS = round($f3->get('GET.COSTO_UNITS'),0);
 
-
         /* ECHO ($f3->get('GET.und_ajust')."|".
             $f3->get('GET.porcent_ajust')."|".
             $f3->get('GET.n_cajas')."|".
@@ -614,12 +649,16 @@
                 , $f3->get('GET.NOM_PAIS'), $f3->get('GET.TARGET')
                 ,  $f3->get('GET.tipo_emp_'),$f3->get('GET.UNIDADES_INICIALES'),$f3->get('GET.und_ajust'),$f3->get('GET.UNIDADES_FINALES'),
                 $f3->get('GET.porcent_ajust'),$f3->get('GET.tiendas'),$f3->get('GET.formatos_'),$f3->get('GET.n_cajas'),
-                $f3->get('GET.unida_ajust_xtallas'),$f3->get('GET.marca_'),$cluster,$f3->get('GET.debut_'));
+                $f3->get('GET.unida_ajust_xtallas'),$f3->get('GET.marca_'),$cluster,$f3->get('GET.debut_'),$f3->get('GET.precioRetail_'),$f3->get('GET.precio_blanco_')
+                ,$f3->get('GET.COSTO'));
 }
 
         // Actualizar grilla en PLC_PLAN_COMPRA_COLOR_CIC
         public function actualiza_grilla_plan_compra_color_cic($f3) {
-            echo \simulador_compra\cbx_grilla_compra::actualiza_grilla_plan_compra_color_cic($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $f3->get('GET.ID_COLOR3'), $f3->get('GET.COSTO'));
+            echo \simulador_compra\cbx_grilla_compra::actualiza_grilla_plan_compra_color_cic($f3->get('SESSION.COD_TEMPORADA')
+                , $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login')
+                , $f3->get('GET.ID_COLOR3'), $f3->get('GET.COSTO')
+                , $f3->get('GET.precioRetail_'));
         }
 
         // Listar País
