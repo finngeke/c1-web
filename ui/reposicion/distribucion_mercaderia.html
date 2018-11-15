@@ -22,6 +22,7 @@
             <form method="POST" enctype="multipart/form-data" class="form_export_bmt" action="exporta_excel_distribucion">
 			<button id="btn-save" class="btn btn-app btn_guardar_distribucion"><i class="fa fa-save"></i>Guardar</button>
 			<button id="btn-aprove" class="btn btn-app btn_aprobar_distribucion"><i class="fa fa-thumbs-up"></i>Aprobar</button>
+			<input type="hidden" name="nroEmbarqueHidden" id="nroEmbarqueHidden" value="{{@nroEmbarque}}">
 			<button type="submit" id="btn-excel" class="btn btn-app btn_descarga_excel"><i class="fa fa-file-excel-o"></i>Excel</button>
 			<a id="btn-salir" href="reposicion" class="btn btn-app"><i class="fa fa-sign-out"></i> Salir</a>
             </form>
@@ -350,12 +351,6 @@
 		createTable();
 	});
 
-    // BTN Descarga en Excel
-    $('#btn-excel').on('click', function () {
-
-        alert("Exportar Excel");
-
-    });
 
 
 

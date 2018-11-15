@@ -1,12 +1,12 @@
 <?php
 	require_once '../../PHPExcel/PHPExcel.php';
-	// Obtiene la temporada para la generación de los datos
-	//$cod_temporada = $f3->get('SESSION.COD_TEMPORADA');
-	
+
+    $nroEmbarqueHidden = $_POST['nroEmbarqueHidden'];
+
 	// Variables que se utilizaran para estilo hora fecha y otros
 	$hoy = date("YmdHis");
 
-    $distribucion = \reposicion\distribucion::excel_distribucion_mercaderia(81298);
+    $distribucion = \reposicion\distribucion::excel_distribucion_mercaderia($nroEmbarqueHidden);
 
 	// Crea el objeto Excel PHP
 	$objPHPExcel = new PHPExcel();

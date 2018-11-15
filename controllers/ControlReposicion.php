@@ -543,30 +543,14 @@
 
         public function excel_distribucion_mercaderia($f3) {
 
-            //echo json_encode(\reposicion\distribucion::excel_distribucion_mercaderia($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $f3->get('GET.NRO_EMBARQUE')));
+            $nroEmbarqueHidden = $_POST['nroEmbarqueHidden'];
 
-            //require_once '../PHPExcel/PHPExcel.php';
+            $distribucion = \reposicion\distribucion::excel_distribucion_mercaderia($nroEmbarqueHidden);
 
-            //$temporada = $f3->get('SESSION.COD_TEMPORADA');
-
-            $distribucion = \reposicion\distribucion::excel_distribucion_mercaderia(81298);
-
-            /*echo "<pre>";
-            var_dump($distribucion);
-            die();*/
 
             // Crea el objeto Excel PHP
             $objPHPExcel = new PHPExcel();
             $objPHPExcel->getActiveSheet()->setTitle("Distribución de Mercadería");
-
-            //$headers = array("TEMPORADA", "COD_DEPTO", "DES_DEPTO", "COD_ESTILO", "DES_ESTILO", "DES_COLOR", "VENTANA", "NOM_MARCA", "EVENTO", "NRO_EMBARQUE", "CURVATALLA", "CURVAS_CAJAS", "LPN_NUMBER", "COD_TDA", "TIPO_EMPAQUE", "UNIDADES");
-
-            /*$col = 0;
-            foreach ($headers as $h) {
-                    $c = \LibraryHelper::getColumnNameFromNumber($col);
-                    $objPHPExcel->getActiveSheet()->SetCellValue($c . "3", $h["COLUMNAS"]);
-                    $col++;
-            }*/
 
             $objPHPExcel->getActiveSheet()->SetCellValue("A1", "TEMPORADA");
             $objPHPExcel->getActiveSheet()->SetCellValue("B1", "COD_DEPTO");
