@@ -2598,9 +2598,9 @@ class cbx_grilla_compra extends \parametros
     public static function actualiza_grilla_plan_compra_color3($temporada, $depto, $login, $ID_COLOR3, $COSTO_FOB, $COSTO_INSP, $COSTO_RFID, $COSTO_UNIT, $COSTO_UNITS, $CST_TOTLTARGET, $COSTO_TOT, $COSTO_TOTS, $MKUP, $GM, $PROVEEDOR
         , $VIA, $PAIS, $FACTOR_EST, $NOM_VIA, $NOM_PAIS, $TARGET
         , $tipo_empaque, $und_inicial, $und_ajust, $und_final, $porcent_ajust, $porcent_tdas, $formato
-        , $cant_cajas, $und_ajust_xtallas, $cod_marca, $cluster, $debut_)
-    {
+        , $cant_cajas, $und_ajust_xtallas, $cod_marca, $cluster, $debut_,$retail,$precio_blanco,$COSTO){
 
+        $_Error = false;
         $und_ajust_xtallas = str_replace("\"", "", $und_ajust_xtallas);
         $und_ajust = str_replace("\"", "", $und_ajust);
         $dtdivicantidad = plan_compra::Division_cantidades($und_ajust_xtallas);
@@ -2614,8 +2614,7 @@ class cbx_grilla_compra extends \parametros
                 , $cluster
                 , $formato);
         }
-
-
+        //UPDATE PLC_PLAN_COMPRA_COLOR_3
         $sql = "UPDATE PLC_PLAN_COMPRA_COLOR_3 
                     SET COSTO_FOB = $COSTO_FOB,
                     COSTO_INSP = $COSTO_INSP,
@@ -2663,16 +2662,12 @@ class cbx_grilla_compra extends \parametros
                     ,PORCEN_T7 = '" . $dtdiviporcent[6] . "'
                     ,PORCEN_T8 = '" . $dtdiviporcent[7] . "'
                     ,PORCEN_T9 = '" . $dtdiviporcent[8] . "'
+                    ,retail = $retail
+                    ,precio_blanco = $precio_blanco
                 WHERE COD_TEMPORADA = $temporada
                     AND DEP_DEPTO = '" . $depto . "'
                     AND ID_COLOR3 = $ID_COLOR3
                 ";
-
-        // Campos de la tercera entrega de la edición de grilla
-        /*,TIPO_EMPAQUE = $TIPO_EMPAQUE,
-        FORMATO = $FORMATO,
-        NOM_VENTANA = $NOM_VENTANA*/
-
 
         // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
         if (!file_exists('../archivos/log_querys/' . $login)) {
@@ -2685,6 +2680,32 @@ class cbx_grilla_compra extends \parametros
         $fp = fopen("../archivos/log_querys/" . $login . "/EDITAGRILLA-PLC_PLAN_COMPRA_COLOR_3--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
         fwrite($fp, $content);
         fclose($fp);
+        if (\database::getInstancia()->getConsulta($sql)) {
+            $_Error = true ;
+        }
+
+        //UPDATE PLC_PLAN_COMPRA_COLOR_CIC
+        if ($_Error == true){
+            $sql = "UPDATE PLC_PLAN_COMPRA_COLOR_CIC 
+                SET COSTO = $COSTO,
+                    USR_MOD = '" . $login . "',
+                    FEC_MOD = current_date,
+                    VTA_CDSCTO = $retail
+                WHERE COD_TEMPORADA = $temporada
+                    AND DEP_DEPTO = '" . $depto . "'
+                    AND ID_COLOR3 = $ID_COLOR3
+                ";
+
+            // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+            if (!file_exists('../archivos/log_querys/' . $login)) {
+                mkdir('../archivos/log_querys/' . $login, 0775, true);
+            }
+            $stamp = date("Y-m-d_H-i-s");
+            $rand = rand(1, 999);
+            $content = $sql;
+            $fp = fopen("../archivos/log_querys/" . $login . "/EDITAGRILLA-PLC_PLAN_COMPRA_COLOR_CIC--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+            fwrite($fp, $content);
+            fclose($fp);
 
         // $data = \database::getInstancia()->getConsulta($sql);
         // return $data;
@@ -2694,22 +2715,21 @@ class cbx_grilla_compra extends \parametros
         } else {
             return 0;
         }
-
+        }else{
+            return 0;
+        }
     }
 
 
-
-    // $data = \database::getInstancia()->getConsulta($sql);
-    // return $data;
-
     // Actualizar grilla en PLC_PLAN_COMPRA_COLOR_CIC
-    public static function actualiza_grilla_plan_compra_color_cic($temporada, $depto, $login, $ID_COLOR3, $COSTO)
+    public static function actualiza_grilla_plan_compra_color_cic($temporada, $depto, $login, $ID_COLOR3, $COSTO,$retail )
     {
 
         $sql = "UPDATE PLC_PLAN_COMPRA_COLOR_CIC 
                 SET COSTO = $COSTO,
                     USR_MOD = '" . $login . "',
-                    FEC_MOD = current_date
+                    FEC_MOD = current_date,
+                    VTA_CDSCTO = $retail
                 WHERE COD_TEMPORADA = $temporada
                     AND DEP_DEPTO = '" . $depto . "'
                     AND ID_COLOR3 = $ID_COLOR3
@@ -2807,7 +2827,6 @@ class cbx_grilla_compra extends \parametros
         $totalprimerRepato = 0;
         $unid_ajustasxtallas = "";
         $N_Columna = count(explode(",", trim($tallas)));
-
         //*-----------------tallas columnas
         $tallas2 = explode(",", trim($tallas));
         $insert = [];
@@ -2916,7 +2935,6 @@ class cbx_grilla_compra extends \parametros
             $total = substr($total, 0, -1);
             array_push($insert, $total);
             array_push($dtTabla, $insert);
-
             /*%*/
             $unid_ajustas = $dtTabla[4][$N_Columna];
 

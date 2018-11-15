@@ -4111,6 +4111,9 @@ $('#btn_habilita_grilla').on('click', function () {
 
 });
 
+
+//#region "Editar_Grilla"
+
 // Editar Grilla / llenar tabla grilla editable
 $('#btn_edita_grilla').on('click', function () {
 
@@ -4204,6 +4207,7 @@ $('#btn_edita_grilla').on('click', function () {
                         '<td id="I_' + o[14] + '">' + o[28] + '</td>\n' +
                         '<td class="columnas" id="id_via_' + o[14] + '"><select id="txt_via_' + o[14] + '" name="txt_via_' + o[14] + '" class="txt_via_"><option value="1">MARITIMO</option><option value="2">AEREA</option><option value="3">TERRESTRE</option></select></td>\n' +
                         '<td class="columnas" id="id_pais_' + o[14] + '"><select id="txt_pais_' + o[14] + '" name="txt_pais_' + o[14] + '" class="txt_pais_"></select></td>\n' +
+                        '<td class="columnas" id="id_precio_blanco_' + o[14] + '"><input type="text" id="txt_precio_blanco_' + o[14] + '" name="txt_precio_blanco_' + o[14] + '" value="' + o[20] + '" size="3"></td>\n' +
                         '<td class="columnas" id="id_target_' + o[14] + '"><input type="text" id="txt_target_' + o[14] + '" name="txt_target_' + o[14] + '" value="' + o[9] + '" size="3"></td>\n' +
                         '<td class="columnas" id="id_fob_' + o[14] + '"><input type="text" id="txt_fob_' + o[14] + '" name="txt_fob_' + o[14] + '" value="' + o[10] + '" size="3"></td>\n' +
                         '<td class="columnas" id="id_insp_' + o[14] + '"><input type="text" id="txt_insp_' + o[14] + '" name="txt_insp_' + o[14] + '" value="' + o[11] + '" size="3"></td>\n' +
@@ -4215,7 +4219,6 @@ $('#btn_edita_grilla').on('click', function () {
                         '<td id="id_via_' + o[14] + '" style="display: none">' + o[17] + '</td>\n' +
                         '<td id="id_pais_' + o[14] + '" style="display: none">' + o[18] + '</td>\n' +
                         '<td id="id_ventana_llegada_' + o[14] + '" style="display: none">' + o[19] + '</td>\n' +
-                        '<td id="id_precio_blanco_' + o[14] + '" style="display: none">' + o[20] + '</td>\n' +
                         '<td id="COD_MARCA_' + o[14] + '" style="display: none">' + o[32] + '</td>\n' +
                         '<td id="N_CURVASXCAJAS_' + o[14] + '" style="display: none">' + o[33] + '</td>\n' +
                         '<td id="COD_JER2_' + o[14] + '" style="display: none">' + o[34] + '</td>\n' +
@@ -4442,7 +4445,7 @@ $('#btn_editar_registros_grilla_editable').on('click', function () {
     var total_fob_usd = 0;
     var total_target_usd = 0;
     var costo_unitario_final_usd = 0; // era ""
-
+    var _error = false;
 
     $("#tabla_edita_grilla tbody tr").each(function () {
 
@@ -4481,12 +4484,11 @@ $('#btn_editar_registros_grilla_editable').on('click', function () {
             rfid = "0" + rfid;
         }
         var provedor = $("#tabla_edita_grilla #txt_aliasproveedor_" + id_color3).val();
-        var precio_blanco = $("#tabla_edita_grilla #id_precio_blanco_" + id_color3).text();
+        var precio_blanco = $("#tabla_edita_grilla #txt_precio_blanco_" + id_color3).val();
 
         var ventana_num = $("#tabla_edita_grilla #id_ventana_llegada_" + id_color3).text();
         //var ventana_text = $("#tabla_edita_grilla #id_ventana_" + id_color3).text();
         var ventana_text = $("#tabla_edita_grilla #txt_nom_ventana_" + id_color3 + " option:selected").text();
-
         var mkup = $("#tabla_edita_grilla #id_mkup_" + id_color3).text();
         var gm = $("#tabla_edita_grilla #id_gm_" + id_color3).text();
         var via = $("#tabla_edita_grilla #id_via_" + id_color3).text();
@@ -4501,12 +4503,12 @@ $('#btn_editar_registros_grilla_editable').on('click', function () {
         var error_costo_unitario_final_usd = 0;
         var error_factor = 0;
         var error_tipocambio = 0;
+        var error_curvado = 0
 
         // Voy a buscar factor y tipocambio, para poder haccer los calculos
         var factor = 0;
         var tipocambio = 0;
         var factor_est_campo = 0;
-
 
         // Si se realizaron cambios en la Vía
         // (La que llega por BD, es distinta a la que se está leyendo del campo)
@@ -4515,7 +4517,6 @@ $('#btn_editar_registros_grilla_editable').on('click', function () {
             via = nueva_via;
             // Se realizaron cambios en la Vía
         }
-
 
         //Curvado
         var tipo_empaque = $("#tabla_edita_grilla #txt_tipo_embarque_" + id_color3 + " option:selected").text();
@@ -4542,27 +4543,32 @@ $('#btn_editar_registros_grilla_editable').on('click', function () {
         var tiendas = "";
         var unida_ajust_xtallas = "";
 
+        
+        //validaciones
+        if (tipo_empaque != '' && PORTALLA_1_INI != '' && tallas != '' && curvas != '' && und_iniciales > 0 && cluster != null && cluster != '' ){
+        }else{
+            _error = true;
+            //error_tipocambio = 1;
+            alert(" Error Tipo empaque,Porcent Ini,Tallas,Curvas,Und Iniciales,Cluster No pueden estar en Blanco..");
+        }
+
+        if(_error == false){
         $.ajax({
             url: url_calculo_Curvado,
             type: 'POST',
-            data: jQuery.param({
-                _tipo_empaque: tipo_empaque,
+            data: jQuery.param({_tipo_empaque: tipo_empaque,
                 _tallas: tallas,
-                _curvas: curvas
-                ,
+                                _curvas: curvas,
                 _und_iniciales: und_iniciales,
-                _cluster: cluster
-                ,
+                                _cluster: cluster,
                 _formato: formato,
                 _A: A,
                 _B: B,
                 _C: C,
-                _I: I
-                ,
+                                _I: I,
                 _DEBUT_REODER: DEBUT_REODER,
                 _PORTALLA_1_INI: PORTALLA_1_INI,
-                _marcas: marcas
-                ,
+                                _marcas: marcas,
                 _N_CURVASXCAJAS: N_CURVAS_CAJAS,
                 _cod_linea: cod_linea,
                 _cod_sublinea: cod_sublinea,
@@ -4580,6 +4586,8 @@ $('#btn_editar_registros_grilla_editable').on('click', function () {
 
             }, error: function (jqXHR, textStatus, errorThrown) {
                 console.log("Error: " + textStatus + " errorThrown: " + errorThrown);
+                    _error = true;
+                   error_curvado = 1;
                 //error_tipocambio = 1;
                 alert("Error en el calculo del curvado.");
             }
@@ -4594,7 +4602,6 @@ $('#btn_editar_registros_grilla_editable').on('click', function () {
                 dataType: "json",
 
                 success: function (data) {
-
                     // Traigo datos del Factor
                     $.each(data, function (i, o) {
                         factor = parseFloat(o[0]);
@@ -4604,6 +4611,7 @@ $('#btn_editar_registros_grilla_editable').on('click', function () {
                 }, error: function (jqXHR, textStatus, errorThrown) {
                     console.log("Error: " + textStatus + " errorThrown: " + errorThrown);
                     error_factor = 1;
+                        _error = true;
                     alert("Error al obtener Factor para realizar los cálculos, intente nuevamente.");
                 }
 
@@ -4629,58 +4637,32 @@ $('#btn_editar_registros_grilla_editable').on('click', function () {
                     }, error: function (jqXHR, textStatus, errorThrown) {
                         console.log("Error: " + textStatus + " errorThrown: " + errorThrown);
                         error_tipocambio = 1;
+                            _error = true;
                         alert("Error al obtener Tipo Cambio para realizar los cálculos, intente nuevamente.");
                     }
 
                 }).done(function () {
-
-                    var total_errores = error_costo_unitario_final_usd + error_factor + error_tipocambio;
-
+                        var total_errores = error_costo_unitario_final_usd + error_factor + error_tipocambio+error_curvado;
                     if (total_errores == 0) {
 
                         // Definir la Ruta de Guardado
                         var url_PLC_PLAN_COMPRA_COLOR_3 = 'ajax_simulador_cbx/actualiza_grilla_plan_compra_color3';
-                        var url_PLC_PLAN_COMPRA_COLOR_CIC = 'ajax_simulador_cbx/actualiza_grilla_plan_compra_color_cic';
-
                         // Cálculos
                         // Costo unitarios final US$ : (Fob o target) + insp + rfid
-
-
                         if (fob > 0) {
-
                             costo_unitario_final_usd = parseFloat(fob) + parseFloat(insp) + parseFloat(rfid);
                             costo_unitario_final_usd = costo_unitario_final_usd.toFixed(2);
                             total_fob_usd = costo_unitario_final_usd * unidades_finales;
-                            // alert("FOB - TARGET: " + target+" / FOB: " + fob+" / COF USD: " + costo_unitario_final_usd+" / INSP: " + insp+" / RFID: " + rfid);
-
                         } else {
-
                             costo_unitario_final_usd = parseFloat(target) + parseFloat(insp) + parseFloat(rfid);
                             costo_unitario_final_usd = costo_unitario_final_usd.toFixed(2);
                             total_target_usd = (costo_unitario_final_usd * unidades_finales).toFixed(2);
-                            // alert("NOFOB - TARGET: " + target+" / FOB: " + fob+" / COF USD: " + costo_unitario_final_usd+" / INSP: " + insp+" / RFID: " + rfid);
-
                         }
 
                         var costo_unitario_final_usd_target = parseFloat(target) + parseFloat(insp) + parseFloat(rfid);
                         costo_unitario_final_usd_target = costo_unitario_final_usd_target.toFixed(2);
                         total_target_usd = (costo_unitario_final_usd_target * unidades_finales).toFixed(2);
 
-
-                        /*else{
-                                                error_costo_unitario_final_usd = 1;
-                                            }*/
-
-                        // alert("Total FOB USD: " + total_fob_usd + " Total TARGET USD: "+total_target_usd);
-
-                        // Total Fob US$: Costo unitarios final US$ (total con fob)  * unidades (Funcionando Antes de Comentar)
-                        // total_fob_usd = costo_unitario_final_usd * unidades_finales;
-                        // Total Target US$: Costo unitarios final US$ (total con target)  * unidades (Funcionando Antes de Comentar)
-                        // total_target_usd = costo_unitario_final_usd * unidades_finales;
-
-                        // Costo unitarios final Pesos :
-                        // si factor > 0  = Costo unitarios final US$ * Factor
-                        // si factor = 0 o no se encuentra factor = Costo unitarios final US$ * Tipo cambio
                         if (factor > 0) {
                             var costo_unitario_final_pesos = costo_unitario_final_usd * factor;
                             // costo_unitario_final_pesos = costo_unitario_final_pesos.toFixed(2);
@@ -4710,13 +4692,19 @@ $('#btn_editar_registros_grilla_editable').on('click', function () {
                             factor_est_campo = tipocambio;
                         }
 
-                        // Actualizar PLC_PLAN_COMPRA_COLOR_ url_PLC_PLAN_COMPRA_COLOR_3                                                                                                                                                                                                                                                                                                                    // +"&TIPO_EMPAQUE="+TIPO_EMPAQUE+"&FORMATO="+FORMATO+"&NOM_VENTANA="+NOM_VENTANA                                                                                                                                                                                                                                                                                                                           // +"&TIPO_EMPAQUE="+TIPO_EMPAQUE+"&FORMATO="+FORMATO+"&NOM_VENTANA="+NOM_VENTANA
+                            // +"&TIPO_EMPAQUE="+TIPO_EMPAQUE+"&FORMATO="+FORMATO+"&NOM_VENTANA="+NOM_VENTANA                                                                                                                                                                                                                                                                                                                           // +"&TIPO_EMPAQUE="+TIPO_EMPAQUE+"&FORMATO="+FORMATO+"&NOM_VENTANA="+NOM_VENTANA
                         if (fob > 0) {
                             total_fob_usd = (total_fob_usd).toFixed(2);
                         }
-                        var dataString_upd1 = "ID_COLOR3=" + id_color3 + "&COSTO_FOB=" + fob + "&COSTO_INSP=" + insp + "&COSTO_RFID=" + rfid + "&COSTO_UNIT=" + costo_unitario_final_usd + "&COSTO_UNITS=" + costo_unitario_final_pesos + "&CST_TOTLTARGET=" + total_target_usd + "&COSTO_TOT=" + total_fob_usd + "&COSTO_TOTS=" + costo_total_pesos + "&MKUP=" + nuevo_mkup + "&GM=" + nuevo_gm + "&PROVEEDOR=" + provedor + "&PAIS=" + pais + "&VIA=" + via + "&FACTOR_EST=" + factor_est_campo + "&NOM_VIA=" + nuevo_nom_via + "&NOM_PAIS=" + nuevo_nom_pais + "&TARGET=" + target + "&und_ajust=" + und_ajust + "&porcent_ajust=" + porcent_ajust + "&n_cajas=" + n_cajas + "&primera_carga=" + primera_carga + "&tiendas=" + tiendas + "&unida_ajust_xtallas=" + unida_ajust_xtallas + "&UNIDADES_FINALES=" + unidades_finales + "&UNIDADES_INICIALES=" + und_iniciales + "&cluster_=" + cluster + "&marca_=" + marcas + "&debut_=" + debut_reorder + "&tipo_emp_=" + tipo_empaque + "&formatos_=" + formato;
 
+                            var costo_retail = 0;
+                            // total retail
+                            if (precio_blanco > 0 &&  unidades_finales > 0 ){
+                                costo_retail = Math.round((precio_blanco * unidades_finales)/1.19);
+                            }
 
+                            // Actualizar PLC_PLAN_COMPRA_COLOR_3/PLC_PLAN_COMPRA_COLOR_CIC
+                            var dataString_upd1 = "ID_COLOR3=" + id_color3 + "&COSTO_FOB=" + fob + "&COSTO_INSP=" + insp + "&COSTO_RFID=" + rfid + "&COSTO_UNIT=" + costo_unitario_final_usd + "&COSTO_UNITS=" + costo_unitario_final_pesos + "&CST_TOTLTARGET=" + total_target_usd + "&COSTO_TOT=" + total_fob_usd + "&COSTO_TOTS=" + costo_total_pesos + "&MKUP=" + nuevo_mkup + "&GM=" + nuevo_gm + "&PROVEEDOR=" + provedor + "&PAIS=" + pais + "&VIA=" + via + "&FACTOR_EST=" + factor_est_campo + "&NOM_VIA=" + nuevo_nom_via + "&NOM_PAIS=" + nuevo_nom_pais + "&TARGET=" + target + "&und_ajust=" + und_ajust + "&porcent_ajust=" + porcent_ajust + "&n_cajas=" + n_cajas + "&primera_carga=" + primera_carga + "&tiendas=" + tiendas + "&unida_ajust_xtallas=" + unida_ajust_xtallas + "&UNIDADES_FINALES=" + unidades_finales + "&UNIDADES_INICIALES=" + und_iniciales + "&cluster_=" + cluster + "&marca_=" + marcas + "&debut_=" + debut_reorder + "&tipo_emp_=" + tipo_empaque + "&formatos_=" + formato+"&precioRetail_=" + costo_retail+"&precio_blanco_=" + precio_blanco+ "&COSTO=" + costo_total_pesos;
                         $.ajax({
                             type: "GET",
                             url: url_PLC_PLAN_COMPRA_COLOR_3,
@@ -4728,48 +4716,22 @@ $('#btn_editar_registros_grilla_editable').on('click', function () {
                                 // Éxito
                             }, error: function (jqXHR, textStatus, errorThrown) {
                                 console.log("COLOR3 Error: " + textStatus + " errorThrown: " + errorThrown);
+                                    _error = true;
+                                    alert("Error Actualizar Plan de Compra..");
                             }
 
                         }).done(function () {
 
-                            // Actualizar PLC_PLAN_COMPRA_COLOR_CIC url_PLC_PLAN_COMPRA_COLOR_CIC
-                            var dataString_upd2 = "ID_COLOR3=" + id_color3 + "&COSTO=" + costo_total_pesos;
-                            $.ajax({
-                                type: "GET",
-                                url: url_PLC_PLAN_COMPRA_COLOR_CIC,
-                                data: dataString_upd2,
-                                contentType: "application/json; charset=utf-8",
-                                dataType: "json",
-
-                                success: function (data) {
-                                    // Éxito
-                                }, error: function (jqXHR, textStatus, errorThrown) {
-                                    console.log("CIC Error: " + textStatus + " errorThrown: " + errorThrown);
-                                }
-
-                            }).done(function () {
-
-                                // Done
-
-                                // Fin del done asociado a la búsqueda de url_PLC_PLAN_COMPRA_COLOR_CIC
-                            });
-
-
-                            // Fin del done asociado a la búsqueda de url_PLC_PLAN_COMPRA_COLOR_3
                         });
-
-
                     } else {
                         alert("No hemos podido obtener algunos datos necesarios para realizar los cálculos, intente nuevamente.");
                     }
-
-
                     // fin del done de busca tipo de cambio
                 });
 
             });
         });
-
+        }
 
         //console.log(tipo_empaque +"/"+tallas+"/"+curvas+"/"+und_iniciales+"/"+cluster+"/"+formato+"/"+A+"/"+B+"/"+C+"/"+I);
 
@@ -4777,15 +4739,23 @@ $('#btn_editar_registros_grilla_editable').on('click', function () {
 
     // Cuando termine de realizar todas las llamadas, ejecutar lo que tiene dentro
     $(document).ajaxStop(function () {
+        if(_error == false) {
         // Avisar término de updates
         $(".loading_tabla_edita_grilla").hide();
         alert("Los datos han sido actualizados, favor revisar.");
         // Recargar Página
         location.reload(true);
+        }else{
+            $(".loading_tabla_edita_grilla").hide();
+        }
     });
 
 // fin del Botón actualizar del editar grilla
 });
+
+//#endregion
+
+
 
 // Función responsable de la carga de la PI
 $("#pi_upload_ajax").on('submit', (function (e) {
