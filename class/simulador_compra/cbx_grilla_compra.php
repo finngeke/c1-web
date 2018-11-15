@@ -293,6 +293,9 @@ class cbx_grilla_compra extends \parametros
                 C.ID_CORPORATIVO,             -- 8 cod. corp
                 C.DESCMODELO,                 -- 9 descripción
                 C.DESCRIP_INTERNET,           -- 10 Descripción Internet
+                ''COMPOSICION,
+                ''TIPO_TELA,
+                ''FORRO,
                 C.COMPOSICION,                -- 11 Composicion
                 C.COLECCION,                  -- 12 Colección
                 C.EVENTO,                     -- 13 Evento
@@ -356,6 +359,7 @@ class cbx_grilla_compra extends \parametros
                 C.ALIAS_PROV,                    -- 70 Proveedor
                 C.COD_PROVEEDOR,                 -- 71 Razon Social
                 C.COD_TRADER,                    -- 72 Trader
+                ''AFTER_MEETING_REMARKS,
                 C.CODSKUPROVEEDOR,               -- 73 Cod SKU Proveedor
                 O.COD_PADRE SKU,                 -- 74 Cod Padre
                 C.PROFORMA,                      -- 75 Proforma
@@ -364,6 +368,7 @@ class cbx_grilla_compra extends \parametros
                 O.ESTADO_MATCH,                  -- 78 Estado Match
                 O.PO_NUMBER,                     -- 79 N OC
                 O.ESTADO_OC,                     -- 80 Estado OC
+                '' FECHA_ACORDADA,
                 O.FECHA_EMBARQUE,                -- 81 Fecha Embarque
                 O.FECHA_ETA,                     -- 82 Fecha ETA
                 O.FECHA_RECEPCION,               -- 83 Fecha Recepciòn
@@ -381,10 +386,12 @@ class cbx_grilla_compra extends \parametros
         $data = \database::getInstancia()->getFilas($sql);
         /*return $data;*/
 
+        // Transformo a array asociativo
         $array1 = [];
         foreach ($data as $va1){
             array_push($array1
-                , array( "ID_COLOR3"=> $va1[0]
+                , array(
+                 "ID_COLOR3"=> $va1[0]
                 ,"GRUPO_COMPRA"=> $va1[1]
                 ,"COD_TEMP"=> $va1[2]
                 ,"LINEA"=> $va1[3]
@@ -395,6 +402,9 @@ class cbx_grilla_compra extends \parametros
                 ,"ID_CORPORATIVO"=> $va1[8]
                 ,"DESCMODELO"=> $va1[9]
                 ,"DESCRIP_INTERNET"=> $va1[10]
+                ,"COMPOSICION"=> $va1[10]
+                ,"TIPO_TELA"=> $va1[10]
+                ,"FORRO"=> $va1[10]
                 ,"COMPOSICION"=> $va1[11]
                 ,"COLECCION"=> $va1[12]
                 ,"EVENTO"=> $va1[13]
@@ -458,6 +468,7 @@ class cbx_grilla_compra extends \parametros
                 ,"ALIAS_PROV"=> $va1[71]
                 ,"COD_PROVEEDOR"=> $va1[72]
                 ,"COD_TRADER"=>$va1[73]
+                ,"AFTER_MEETING_REMARKS"=>$va1[73]
                 ,"CODSKUPROVEEDOR"=> $va1[74]
                 ,"SKU"=> $va1[75]
                 ,"PROFORMA"=> $va1[76]
@@ -466,6 +477,7 @@ class cbx_grilla_compra extends \parametros
                 ,"ESTADO_MATCH"=> $va1[79]
                 ,"PO_NUMBER"=> $va1[80]
                 ,"ESTADO_OC"=> $va1[81]
+                ,"FECHA_ACORDADA"=> $va1[81]
                 ,"FECHA_EMBARQUE"=> $va1[82]
                 ,"FECHA_ETA"=> $va1[83]
                 ,"FECHA_RECEPCION"=> $va1[84]
