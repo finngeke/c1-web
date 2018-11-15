@@ -541,5 +541,84 @@
 			}
 		}
 
+        public function excel_distribucion_mercaderia($f3) {
+
+            //echo json_encode(\reposicion\distribucion::excel_distribucion_mercaderia($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $f3->get('GET.NRO_EMBARQUE')));
+
+            //require_once '../PHPExcel/PHPExcel.php';
+
+            //$temporada = $f3->get('SESSION.COD_TEMPORADA');
+
+            $distribucion = \reposicion\distribucion::excel_distribucion_mercaderia(81298);
+
+            /*echo "<pre>";
+            var_dump($distribucion);
+            die();*/
+
+            // Crea el objeto Excel PHP
+            $objPHPExcel = new PHPExcel();
+            $objPHPExcel->getActiveSheet()->setTitle("Distribución de Mercadería");
+
+            //$headers = array("TEMPORADA", "COD_DEPTO", "DES_DEPTO", "COD_ESTILO", "DES_ESTILO", "DES_COLOR", "VENTANA", "NOM_MARCA", "EVENTO", "NRO_EMBARQUE", "CURVATALLA", "CURVAS_CAJAS", "LPN_NUMBER", "COD_TDA", "TIPO_EMPAQUE", "UNIDADES");
+
+            /*$col = 0;
+            foreach ($headers as $h) {
+                    $c = \LibraryHelper::getColumnNameFromNumber($col);
+                    $objPHPExcel->getActiveSheet()->SetCellValue($c . "3", $h["COLUMNAS"]);
+                    $col++;
+            }*/
+
+            $objPHPExcel->getActiveSheet()->SetCellValue("A1", "TEMPORADA");
+            $objPHPExcel->getActiveSheet()->SetCellValue("B1", "COD_DEPTO");
+            $objPHPExcel->getActiveSheet()->SetCellValue("C1", "DES_DEPTO");
+            $objPHPExcel->getActiveSheet()->SetCellValue("D1", "COD_ESTILO");
+            $objPHPExcel->getActiveSheet()->SetCellValue("E1", "DES_ESTILO");
+            $objPHPExcel->getActiveSheet()->SetCellValue("F1", "DES_COLOR");
+            $objPHPExcel->getActiveSheet()->SetCellValue("G1", "VENTANA");
+            $objPHPExcel->getActiveSheet()->SetCellValue("H1", "NOM_MARCA");
+            $objPHPExcel->getActiveSheet()->SetCellValue("I1", "EVENTO");
+            $objPHPExcel->getActiveSheet()->SetCellValue("J1", "NRO_EMBARQUE");
+            $objPHPExcel->getActiveSheet()->SetCellValue("K1", "CURVATALLA");
+            $objPHPExcel->getActiveSheet()->SetCellValue("L1", "CURVAS_CAJAS");
+            $objPHPExcel->getActiveSheet()->SetCellValue("M1", "LPN_NUMBER");
+            $objPHPExcel->getActiveSheet()->SetCellValue("N1", "COD_TDA");
+            $objPHPExcel->getActiveSheet()->SetCellValue("O1", "TIPO_EMPAQUE");
+            $objPHPExcel->getActiveSheet()->SetCellValue("P1", "UNIDADES");
+
+
+            // Se genera la consulta
+            $row = 2;
+
+            foreach ($distribucion as $item) {
+                $objPHPExcel->getActiveSheet()->SetCellValue("A$row", $item["TEMPORADA"]);
+                $objPHPExcel->getActiveSheet()->SetCellValue("B$row", $item["COD_DEPTO"]);
+                $objPHPExcel->getActiveSheet()->SetCellValue("C$row", $item["DES_DEPTO"]);
+                $objPHPExcel->getActiveSheet()->SetCellValue("D$row", $item["COD_ESTILO"]);
+                $objPHPExcel->getActiveSheet()->SetCellValue("E$row", $item["DES_ESTILO"]);
+                $objPHPExcel->getActiveSheet()->SetCellValue("F$row", $item["DES_COLOR"]);
+                $objPHPExcel->getActiveSheet()->SetCellValue("G$row", $item["VENTANA"]);
+                $objPHPExcel->getActiveSheet()->SetCellValue("H$row", $item["NOM_MARCA"]);
+                $objPHPExcel->getActiveSheet()->SetCellValue("I$row", $item["EVENTO"]);
+                $objPHPExcel->getActiveSheet()->SetCellValue("J$row", $item["NRO_EMBARQUE"]);
+                $objPHPExcel->getActiveSheet()->SetCellValue("K$row", $item["CURVATALLA"]);
+                $objPHPExcel->getActiveSheet()->SetCellValue("L$row", $item["CURVAS_CAJAS"]);
+                $objPHPExcel->getActiveSheet()->SetCellValue("M$row", $item["LPN_NUMBER"]);
+                $objPHPExcel->getActiveSheet()->SetCellValue("N$row", $item["COD_TDA"]);
+                $objPHPExcel->getActiveSheet()->SetCellValue("O$row", $item["TIPO_EMPAQUE"]);
+                $objPHPExcel->getActiveSheet()->SetCellValue("P$row", $item["UNIDADES"]);
+
+                // $objPHPExcel->getActiveSheet()->getStyle("B$row:CX$row")->applyFromArray($estiloCelda);
+                $row++;
+            }
+            // Escribe el archivo Excel
+            header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            header("Content-Disposition: attachment; filename=Distribucion.xlsx");
+            $objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
+            $objWriter->save('php://output');
+
+
+
+		}
+
 
 	}

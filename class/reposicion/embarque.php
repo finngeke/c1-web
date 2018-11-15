@@ -112,4 +112,5 @@
 						(NRO_EMBARQUE = $nro_embarque)";
 			return \database::getInstancia()->getConsulta($sql);
 		}
+
 	}

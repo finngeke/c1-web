@@ -116,6 +116,7 @@ $f3->route('POST /guardar/factorestimado', 'factor_est\ControlCrea->guardarFacto
 $f3->route('GET /exporta_factor', 'ControlFormularioExport->excelFactorEstimado');
 //$f3->route('GET /exporta_excel/@tipo [ajax]', 'ControlFormularioExport->excelPlanDeCompra->@tipo');
 $f3->route('POST /exporta_excel', 'ControlFormularioExport->excelPlanDeCompra');
+$f3->route('POST /exporta_excel_distribucion', 'ControlReposicion->excel_distribucion_mercaderia');
 $f3->route('GET /exporta_ARCHIVO', 'usuario->PRUEBAEXCEL');
 $f3->route('GET /exportar_simulador/@tipo [ajax]', 'ControlFormularioExport->@tipo');
 $f3->route('GET /exportar_simulador2', 'simulador\plan_compra');
