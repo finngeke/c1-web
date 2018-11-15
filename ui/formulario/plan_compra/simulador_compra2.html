@@ -51,7 +51,7 @@
                     model: {
                         id: "ID_COLOR3",
                         fields: {
-                            ID_COLOR3: { type: "number" },
+                            ID_COLOR3: { type: "number", value:"ID" },
                             GRUPO_COMPRA: { type: "string" }
                         }
                     }
@@ -66,7 +66,16 @@
                 sheetsbar: false,
                 sheets: [{
                     name: "D141",
-                    dataSource: dataSource
+                    dataSource: dataSource,
+                    columns: [
+                        { width: 80 },
+                        { width: 100 },
+                        { width: 100 },
+                        { width: 150 },
+                        { width: 150 },
+                        { width: 130 },
+                        { width: 130 }
+                    ]
                 }]
             });
 
