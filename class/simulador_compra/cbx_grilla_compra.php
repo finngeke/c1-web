@@ -379,14 +379,109 @@ class cbx_grilla_compra extends \parametros
                 ORDER BY C.ID_COLOR3, C.COD_JER2,C.COD_SUBLIN,C.COD_ESTILO,NVL(COD_COLOR,0) ,C.VENTANA_LLEGADA,C.DEBUT_REODER";
 
         $data = \database::getInstancia()->getFilas($sql);
+        /*return $data;*/
 
-        /*$insert = [];
-        foreach ($data as $vart){
-            array_push($insert, 0);
-        }*/
+        $array1 = [];
+        foreach ($data as $va1){
+            array_push($array1
+                , array( "ID_COLOR3"=> $va1[0]
+                ,"GRUPO_COMPRA"=> $va1[1]
+                ,"COD_TEMP"=> $va1[2]
+                ,"LINEA"=> $va1[3]
+                ,"SUBLINEA"=> $va1[4]
+                ,"MARCA"=> $va1[5]
+                ,"ESTILO"=> $va1[6]
+                ,"SHORT_NAME"=> $va1[7]
+                ,"ID_CORPORATIVO"=> $va1[8]
+                ,"DESCMODELO"=> $va1[9]
+                ,"DESCRIP_INTERNET"=> $va1[10]
+                ,"COMPOSICION"=> $va1[11]
+                ,"COLECCION"=> $va1[12]
+                ,"EVENTO"=> $va1[13]
+                ,"COD_ESTILO_VIDA"=> $va1[14]
+                ,"CALIDAD"=> $va1[15]
+                ,"COD_OCASION_USO"=> $va1[16]
+                ,"COD_PIRAMIX"=> $va1[17]
+                ,"DESCRIPCION"=> $va1[18] //ventana
+                ,"COD_RANKVTA"=> $va1[19]
+                ,"LIFE_CYCLE"=> $va1[20]
+                ,"NUM_EMB"=> $va1[21]
+                ,"COD_COLOR"=> $va1[22]
+                ,"TIPO_PRODUCTO"=> $va1[23]
+                ,"TIPO_EXHIBICION"=> $va1[24]
+                ,"DESTALLA"=> $va1[25]
+                ,"TIPO_EMPAQUE"=> $va1[26]
+                ,"PORTALLA_1_INI"=> $va1[27]
+                ,"PORTALLA_1"=> $va1[28]
+                ,"CURVATALLA"=> $va1[29]
+                ,"CURVAMIN"=> $va1[30]
+                ,"UNID_OPCION_INICIO"=> $va1[31]
+                ,"UNID_OPCION_AJUSTADA"=> $va1[32]
+                ,"CAN"=> $va1[33]
+                ,"MTR_PACK"=> $va1[34]
+                ,"CANT_INNER"=> $va1[35]
+                ,"SEG_ASIG"=> $va1[36]
+                ,"FORMATO"=> $va1[37]
+                ,"TDAS"=> $va1[38]
+                ,"A"=> $va1[39]
+                ,"B"=> $va1[40]
+                ,"C"=> $va1[41]
+                ,"I"=> $va1[42]
+                ,"UND_ASIG_INI"=> $va1[43]
+                ,"ROT"=> $va1[44]
+                ,"NOM_PRECEDENCIA"=> $va1[45]
+                ,"NOM_VIA"=> $va1[46]
+                ,"NOM_PAIS"=> $va1[47]
+                ,"VIAJE"=> $va1[48]
+                ,"MKUP"=> $va1[49]
+                ,"PRECIO_BLANCO"=> $va1[50]
+                ,"OFERTA"=> $va1[51]
+                ,"GM"=> $va1[52]
+                ,"COD_TIP_MON"=> $va1[53]
+                ,"COSTO_TARGET"=> $va1[54]
+                ,"COSTO_FOB"=> $va1[55]
+                ,"COSTO_INSP"=> $va1[56]
+                ,"COSTO_RFID"=> $va1[57]
+                ,"ROYALTY_POR"=> $va1[58]
+                ,"COSTO_UNIT"=> $va1[59]
+                ,"COSTO_UNITS"=> $va1[60]
+                ,"CST_TOTLTARGET"=> $va1[61]
+                ,"COSTO_TOT"=> $va1[62]
+                ,"COSTO_TOTS"=> $va1[63]
+                ,"RETAIL"=> $va1[64]
+                ,"DEBUT_REODER"=> $va1[65]
+                ,"SEM_INI"=> $va1[66]
+                ,"SEM_FIN"=> $va1[67]
+                ,"CICLO"=> $va1[68]
+                ,"AGOT_OBJ"=> $va1[69]
+                ,"SEMLIQ"=> $va1[70]
+                ,"ALIAS_PROV"=> $va1[71]
+                ,"COD_PROVEEDOR"=> $va1[72]
+                ,"COD_TRADER"=>$va1[73]
+                ,"CODSKUPROVEEDOR"=> $va1[74]
+                ,"SKU"=> $va1[75]
+                ,"PROFORMA"=> $va1[76]
+                ,"ARCHIVO"=> $va1[77]
+                ,"ESTILO_PMM"=> $va1[78]
+                ,"ESTADO_MATCH"=> $va1[79]
+                ,"PO_NUMBER"=> $va1[80]
+                ,"ESTADO_OC"=> $va1[81]
+                ,"FECHA_EMBARQUE"=> $va1[82]
+                ,"FECHA_ETA"=> $va1[83]
+                ,"FECHA_RECEPCION"=> $va1[84]
+                ,"DIAS_ATRASO"=> $va1[85]
+                ,"CODESTADO"=> $va1[86]
+                ,"ESTADO_C1"=> $va1[87]
+                ,"VENTANA_LLEGADA"=> $va1[88]
+                ,"FECHA_RECEPCD_C1"=> $va1[89]
+                )
+            );
+        }
 
 
-        return $data;
+        return $array1;
+
+
 
     }
 
@@ -402,20 +497,9 @@ class cbx_grilla_compra extends \parametros
                 ORDER BY C.ID_COLOR3, C.COD_JER2,C.COD_SUBLIN,C.COD_ESTILO,NVL(COD_COLOR,0) ,C.VENTANA_LLEGADA,C.DEBUT_REODER";
 
         $data = \database::getInstancia()->getFilas($sql);
-
-        $array1 = [];
-        foreach ($data as $va1){
-            array_push($array1
-                , array( "ID_COLOR3"=> $va1[0]
-                )
-            );
-        }
-
-
         return $data;
 
     }
-
 
     public static function llenar_tabla2($temporada, $depto)
     {

@@ -741,7 +741,9 @@
 // ######################## FIN TRABAJO CON NUEVO GUARDADO PI ########################
 
 
+        public function actualiza_tabla2_telerik($f3) {//, JSON_FORCE_OBJECT
 
+        }
 
 // Termina Clase
 	}
