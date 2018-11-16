@@ -626,6 +626,228 @@ class cbx_grilla_compra extends \parametros
 
     }
 
+    public static function actualiza_tabla2()
+    {
+
+        $sql = "UPDATE PLC_PLAN_COMPRA_COLOR_3 SET 
+                ID_COLOR3 = $ID_COLOR3,
+                GRUPO_COMPRA = $GRUPO_COMPRA,
+                NVL(TEMP,1) COD_TEMP,
+                NOM_LINEA = $LINEA,
+                NOM_SUBLINEA = $SUBLINEA,
+                NOM_MARCA = $MARCA,
+                DES_ESTILO = $ESTILO,
+                SHORT_NAME = $SHORT_NAME,
+                ID_CORPORATIVO = $ID_CORPORATIVO,
+                DESCMODELO = $DESCMODELO,
+                DESCRIP_INTERNET = $DESCRIP_INTERNET,
+                NOMBRE_COMPRADOR = $NOMBRE_COMPRADOR,
+                NOMBRE_DISENADOR = $NOMBRE_DISENADOR,
+                COMPOSICION = $COMPOSICION,
+                TIPO_TELA = $TIPO_TELA,
+                FORRO = $FORRO,
+                COLECCION = $COLECCION,
+                EVENTO = $EVENTO,
+                NOM_ESTILOVIDA = $COD_ESTILO_VIDA,
+                CALIDAD = $CALIDAD,
+                NOM_OCACIONUSO = $NOM_OCACIONUSO,
+                NOM_PIRAMIDEMIX = $NOM_PIRAMIDEMIX,
+                NOM_VENTANA = $NOM_VENTANA,
+                NOM_RNK = $NOM_RNK,
+                NOM_LIFECYCLE = $NOM_LIFECYCLE,
+                NUM_EMB = $NUM_EMB,
+                NOM_COLOR = $NOM_COLOR,
+                TIPO_PRODUCTO = $TIPO_PRODUCTO,                 -- 23 Tipo Producto
+                TIPO_EXHIBICION = $TIPO_EXHIBICION,               -- 24 Tipo Exhibicion
+                DESTALLA = $DESTALLA,                      -- 25 Tallas
+                C.TIPO_EMPAQUE,                  -- 26 Tipo empaque
+                C.PORTALLA_1_INI,                -- 27 Compra Ini
+                C.PORTALLA_1,                    -- 28 Compra Ajustada
+                C.CURVATALLA,                    -- 29 Curva
+                C.CURVAMIN,                      -- 30 Curva Min
+                C.UNID_OPCION_INICIO,            -- 31 Uni Ini
+                C.UNID_OPCION_AJUSTADA,          -- 32 Uni Ajust
+                C.UNIDADES CAN,                  -- 33 Uni Final
+                C.MTR_PACK,                      -- 34 Master Pack
+                C.CANT_INNER,                    -- 35 Nº Cajas
+                C.SEG_ASIG,                      -- 36 Cluster
+                C.FORMATO,                       -- 37 Formato
+                C.TDAS,                          -- 38 Tdas
+                C.A ,                            -- 39 A
+                C.B,                             -- 40 B
+                C.C,                             -- 41 C
+                C.I,                             -- 42 I
+                C.UND_ASIG_INI,                  -- 43 Primera Carga
+                C.ROT,                           -- 44 %Tiendas
+                NOM_PRECEDENCIA,                 -- 45 Proced
+                NOM_VIA,                         -- 46 Vìa
+                NOM_PAIS,                        -- 47 Paìs
+                C.VIAJE,                         -- 48 Viaje
+                C.MKUP,                          -- 49 mkup
+                C.PRECIO_BLANCO,                 -- 50 Precio Blanco
+                '' OFERTA,                       -- 51 Oferta 
+                C.GM,                            -- 51 GM
+                C.NOM_MONEDA  COD_TIP_MON,       -- 52 Moneda
+                C.COSTO_TARGET,                  -- 53 Target
+                C.COSTO_FOB,                     -- 54 FOB
+                C.COSTO_INSP,                    -- 55 Insp
+                C.COSTO_RFID,                    -- 56 RFID
+                C.ROYALTY_POR,                   -- 57 Royalty
+                C.COSTO_UNIT,                    -- 58 Costo Unitario Final
+                C.COSTO_UNITS,                   -- 59 Costo Unitario Final Pesos
+                C.CST_TOTLTARGET,                -- 60 Total Target
+                C.COSTO_TOT,                     -- 61 Total FOB
+                C.COSTO_TOTS,                    -- 62 Costo total pesos
+                C.RETAIL,                        -- 63 Total retail pesos
+                C.DEBUT_REODER,                  -- 64 Debut/reorder
+                C.SEM_INI,                       -- 65 Sem ini
+                C.SEM_FIN,                       -- 66 Sem fin
+                C.CICLO,                         -- 67 Semanas ciclo via
+                C.AGOT_OBJ,                      -- 68 Agot Obj
+                C.SEMLIQ,                        -- 69 Semanas Liquidacion
+                C.ALIAS_PROV,                    -- 70 Proveedor
+                C.COD_PROVEEDOR,                 -- 71 Razon Social
+                C.COD_TRADER,                    -- 72 Trader
+                ''AFTER_MEETING_REMARKS,
+                C.CODSKUPROVEEDOR,               -- 73 Cod SKU Proveedor
+                O.COD_PADRE SKU,                 -- 74 Cod Padre
+                C.PROFORMA,                      -- 75 Proforma
+                O.ARCHIVO,                       -- 76 Archivo
+                O.ESTILO_PMM,                    -- 77 Estilo Pmm
+                O.ESTADO_MATCH,                  -- 78 Estado Match
+                O.PO_NUMBER,                     -- 79 N OC
+                O.ESTADO_OC,                     -- 80 Estado OC
+                '' FECHA_ACORDADA,
+                O.FECHA_EMBARQUE,                -- 81 Fecha Embarque
+                O.FECHA_ETA,                     -- 82 Fecha ETA
+                O.FECHA_RECEPCION,               -- 83 Fecha Recepciòn
+                O.DIAS_ATRASO,                   -- 84 Dias Atraso
+                convert((SELECT nom_est_c1 FROM plc_estado_c1 WHERE cod_est_c1= C.ESTADO),'utf8','us7ascii')CODESTADO,  -- 85 Estado Opcion
+                C.ESTADO ESTADO_C1,              -- 86 Estado C1
+                C.VENTANA_LLEGADA,               -- 87 Ventana Llegada
+                REPLACE((SELECT DISTINCT FECHA_RECEPCD FROM plc_ventana_emb V WHERE V.cod_temporada = C.COD_TEMPORADA AND V.cod_ventana = C.VENT_EMB),'/','-') FECHA_RECEPCD_C1 -- 88 Fecha recepcion CD
+                FROM PLC_PLAN_COMPRA_COLOR_3 C
+                LEFT JOIN PLC_PLAN_COMPRA_OC O ON C.COD_TEMPORADA = O.COD_TEMPORADA
+				AND C.DEP_DEPTO = O.DEP_DEPTO AND C.ID_COLOR3 = O.ID_COLOR3
+                WHERE C.COD_TEMPORADA = $temporada AND C.DEP_DEPTO = '" . $depto . "'
+                ORDER BY C.ID_COLOR3, C.COD_JER2,C.COD_SUBLIN,C.COD_ESTILO,NVL(COD_COLOR,0) ,C.VENTANA_LLEGADA,C.DEBUT_REODER";
+
+        $data = \database::getInstancia()->getFilas($sql);
+        /*return $data;*/
+
+        // Transformo a array asociativo
+        $array1 = [];
+        foreach ($data as $va1){
+            array_push($array1
+                , array(
+                    "ID_COLOR3"=> $va1[0]
+                ,"GRUPO_COMPRA"=> $va1[1]
+                ,"COD_TEMP"=> $va1[2]
+                ,"LINEA"=> $va1[3]
+                ,"SUBLINEA"=> $va1[4]
+                ,"MARCA"=> $va1[5]
+                ,"ESTILO"=> $va1[6]
+                ,"SHORT_NAME"=> $va1[7]
+                ,"ID_CORPORATIVO"=> $va1[8]
+                ,"DESCMODELO"=> $va1[9]
+                ,"DESCRIP_INTERNET"=> $va1[10]
+                ,"NOMBRE_COMPRADOR"=> $va1[11]
+                ,"NOMBRE_DISENADOR"=> $va1[12]
+                ,"COMPOSICION"=> $va1[13]
+                ,"TIPO_TELA"=> $va1[14]
+                ,"FORRO"=> $va1[15]
+                ,"COLECCION"=> $va1[16]
+                ,"EVENTO"=> $va1[17]
+                ,"COD_ESTILO_VIDA"=> $va1[18]
+                ,"CALIDAD"=> $va1[19]
+                ,"COD_OCASION_USO"=> $va1[20]
+                ,"COD_PIRAMIX"=> $va1[21]
+                ,"DESCRIPCION"=> $va1[22] //ventana
+                ,"COD_RANKVTA"=> $va1[23]
+                ,"LIFE_CYCLE"=> $va1[24]
+                ,"NUM_EMB"=> $va1[25]
+                ,"COD_COLOR"=> $va1[26]
+                ,"TIPO_PRODUCTO"=> $va1[27]
+                ,"TIPO_EXHIBICION"=> $va1[28]
+                ,"DESTALLA"=> $va1[29]
+                ,"TIPO_EMPAQUE"=> $va1[30]
+                ,"PORTALLA_1_INI"=> $va1[31]
+                ,"PORTALLA_1"=> $va1[32]
+                ,"CURVATALLA"=> $va1[33]
+                ,"CURVAMIN"=> $va1[34]
+                ,"UNID_OPCION_INICIO"=> $va1[35]
+                ,"UNID_OPCION_AJUSTADA"=> $va1[36]
+                ,"CAN"=> $va1[37]
+                ,"MTR_PACK"=> $va1[38]
+                ,"CANT_INNER"=> $va1[39]
+                ,"SEG_ASIG"=> $va1[40]
+                ,"FORMATO"=> $va1[41]
+                ,"TDAS"=> $va1[42]
+                ,"A"=> $va1[43]
+                ,"B"=> $va1[44]
+                ,"C"=> $va1[45]
+                ,"I"=> $va1[46]
+                ,"UND_ASIG_INI"=> $va1[47]
+                ,"ROT"=> $va1[48]
+                ,"NOM_PRECEDENCIA"=> $va1[49]
+                ,"NOM_VIA"=> $va1[50]
+                ,"NOM_PAIS"=> $va1[51]
+                ,"VIAJE"=> $va1[52]
+                ,"MKUP"=> $va1[53]
+                ,"PRECIO_BLANCO"=> $va1[54]
+                ,"OFERTA"=> $va1[55]
+                ,"GM"=> $va1[56]
+                ,"COD_TIP_MON"=> $va1[57]
+                ,"COSTO_TARGET"=> $va1[58]
+                ,"COSTO_FOB"=> $va1[59]
+                ,"COSTO_INSP"=> $va1[60]
+                ,"COSTO_RFID"=> $va1[61]
+                ,"ROYALTY_POR"=> $va1[62]
+                ,"COSTO_UNIT"=> $va1[63]
+                ,"COSTO_UNITS"=> $va1[64]
+                ,"CST_TOTLTARGET"=> $va1[65]
+                ,"COSTO_TOT"=> $va1[66]
+                ,"COSTO_TOTS"=> $va1[67]
+                ,"RETAIL"=> $va1[68]
+                ,"DEBUT_REODER"=> $va1[69]
+                ,"SEM_INI"=> $va1[70]
+                ,"SEM_FIN"=> $va1[71]
+                ,"CICLO"=> $va1[72]
+                ,"AGOT_OBJ"=> $va1[73]
+                ,"SEMLIQ"=> $va1[74]
+                ,"ALIAS_PROV"=> $va1[75]
+                ,"COD_PROVEEDOR"=> $va1[76]
+                ,"COD_TRADER"=>$va1[77]
+                ,"AFTER_MEETING_REMARKS"=>$va1[78]
+                ,"CODSKUPROVEEDOR"=> $va1[79]
+                ,"SKU"=> $va1[80]
+                ,"PROFORMA"=> $va1[81]
+                ,"ARCHIVO"=> $va1[82]
+                ,"ESTILO_PMM"=> $va1[83]
+                ,"ESTADO_MATCH"=> $va1[84]
+                ,"PO_NUMBER"=> $va1[85]
+                ,"ESTADO_OC"=> $va1[86]
+                ,"FECHA_ACORDADA"=> $va1[87]
+                ,"FECHA_EMBARQUE"=> $va1[88]
+                ,"FECHA_ETA"=> $va1[89]
+                ,"FECHA_RECEPCION"=> $va1[90]
+                ,"DIAS_ATRASO"=> $va1[91]
+                ,"CODESTADO"=> $va1[92]
+                ,"ESTADO_C1"=> $va1[93]
+                ,"VENTANA_LLEGADA"=> $va1[94]
+                ,"FECHA_RECEPCD_C1"=> $va1[95]
+                )
+            );
+        }
+
+
+        return $array1;
+
+
+
+    }
+
+
     public static function llenar_edita_grilla($temporada, $depto, $id_color3)
     {
 
