@@ -1281,31 +1281,73 @@ class cbx_grilla_compra extends \parametros
         // Fin de la clase
     }
 
-    public static function Update_flujo_estado_oc_vist($temporada, $depto, $estado, $login, $po_number, $proforma)
+    public static function Update_flujo_estado_oc_vist($temporada, $depto, $estado, $login, $po_number, $proforma,$estado_oc)
     {
 
-        /*
-                $f_embarque = date("d-m-Y", strtotime($f_embarque));
-                $fecha_eta = date("d-m-Y", strtotime($fecha_eta));
+     if ($estado == 20){
+         //actualiza el estado color3 en 21 (aprobado)
+         $sql = "update plc_plan_compra_color_3
+                    set estado = 21
+                    where cod_temporada = " . $temporada . "
+                    and dep_depto =  '" . $depto . "'
+                    and PROFORMA = '" . $proforma . "'";
+         \database::getInstancia()->getConsulta($sql);
 
-                $dias_atraso= str_replace("+", "", $dias_atraso);
-                //actualizar tabla oc
+         //dt id_color actualizar para historial
+         $sql = "select distinct id_color3 from plc_plan_compra_color_3
+                    where cod_temporada = " . $temporada . "
+                    and dep_depto =  '" . $depto . "'
+                    and PROFORMA = '" . $proforma . "'";
+         $id_color3s = \database::getInstancia()->getFilas($sql);
+
                 $sql = "update plc_plan_compra_oc
-                           set po_number = ".$po_number."
-                           ,estado_oc = '".$estado_oc."'
-                           ,fecha_embarque = TO_DATE('".$f_embarque."','dd-mm-YYYY')
-                           ,fecha_eta = TO_DATE('".$fecha_eta."','dd-mm-YYYY')
-                           ,fecha_recepcion = TO_DATE('".$f_recepcion."','dd-mm-YYYY')
-                           ,dias_atraso = ".$dias_atraso."
-                           ,COD_PADRE = NULL
-                           ,ESTADO_MATCH = NULL
-                           ,ESTADO_OC = NULL
-                           ,ESTILO_PMM = NULL
-                            where cod_temporada = ".$temporada."
-                            and dep_depto =  '".$depto."'
-                            and PROFORMA = '".$proforma."'";
+                   set estado_oc = '" . $estado_oc . "'
+                    where cod_temporada = " . $temporada . "
+                    and dep_depto =  '" . $depto . "'
+                    and PROFORMA = '" . $proforma . "'";
+
+         if (!file_exists('../archivos/log_querys/' . $login)) {
+             mkdir('../archivos/log_querys/' . $login, 0775, true);
+         }
+         $stamp = date("Y-m-d_H-i-s");
+         $rand = rand(1, 999);
+         $content = $sql;
+         $fp = fopen("../archivos/log_querys/" . $login . "/update20oc--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+         fwrite($fp, $content);
+         fclose($fp);
                 \database::getInstancia()->getConsulta($sql);
-        */
+
+         foreach ($id_color3s as $val) {
+             $id_color3 = $val['ID_COLOR3'];
+             $sql_insert = "INSERT INTO PLC_PLAN_COMPRA_HISTORICA (DPTO,LINEA,SUBLINEA,MARCA,ESTILO,VENTANA,COLOR,USER_LOGIN,USER_NOM,FECHA,HORA,PI,OC,ESTADO,TEMP,ID_COLOR3,NOM_LINEA,NOM_MARCA,NOM_VENTANA,NOM_COLOR,NOM_SUBLINEA)
+                                    SELECT C.DEP_DEPTO,
+                                            C.COD_JER2 LINEA,         -- linea
+                                            C.COD_SUBLIN SUBLINEA,    -- sublinea
+                                            C.COD_MARCA,              -- marca
+                                            C.DES_ESTILO ESTILO,      -- estilo
+                                            C.VENTANA_LLEGADA,        -- Ventana
+                                            NVL(COD_COLOR,0)COLOR,    -- Color
+                                            '" . $login . "',
+                                            (SELECT NOM_USR FROM PLC_USUARIO WHERE COD_USR = '" . $login . "'),
+                                            (SELECT SUBSTR(TO_CHAR(SYSDATE, 'DD-MM-YYYY'),1,10)N FROM DUAL),
+                                            (SELECT TO_CHAR(SYSDATE, 'HH24:MI:SS') FROM DUAL),
+                                            C.PROFORMA,
+                                            $po_number,
+                                            21,
+                                            C.COD_TEMPORADA,
+                                            C.ID_COLOR3,
+                                            C.NOM_LINEA LINEA,
+                                            C.NOM_MARCA MARCA,
+                                            C.NOM_VENTANA VENTANA,
+                                            C.NOM_COLOR COD_COLOR,
+                                            C.NOM_SUBLINEA SUBLINEA
+                                      FROM PLC_PLAN_COMPRA_COLOR_3 C
+                                      WHERE C.COD_TEMPORADA = $temporada AND C.DEP_DEPTO =  '" . $depto . "'
+                                      AND C.ID_COLOR3 = $id_color3";
+             \database::getInstancia()->getConsulta($sql_insert);
+         }
+     }
+     elseif($estado == 18 or $estado == 19 or $estado == 22){
         //actualiza el estado color3 en 19 (pendiente de aprobacion sin match)
         $sql = "update plc_plan_compra_color_3
                     set estado = 19
@@ -1381,12 +1423,71 @@ class cbx_grilla_compra extends \parametros
                     and PROFORMA = '" . $proforma . "'";
 
             \database::getInstancia()->getConsulta($sql);
-
         }
+       }
+     elseif($estado == 21){
 
+         //dt id_color actualizar
+         $sql = "select distinct id_color3 from plc_plan_compra_oc
+                    where cod_temporada = " . $temporada . "
+                    and dep_depto =  '" . $depto . "'
+                    and po_number = '" . $po_number . "'";
+         $id_color3s = \database::getInstancia()->getFilas($sql);
 
+         if (count($id_color3s)> 0){
+             $ids = "";
+             foreach ($id_color3s as $val) {
+                 $ids = $ids.$val['ID_COLOR3'].",";
     }
+             $ids = substr ($ids, 0, -1);
 
+             //actualiza el estado color3 en 0 (ingresado)
+             $sql = "update plc_plan_compra_color_3
+                    set estado = 0
+                        ,proforma = null
+                    where cod_temporada = " . $temporada . "
+                    and dep_depto =  '" . $depto . "'
+                    and id_color3 in(" . $ids . ")";
+             \database::getInstancia()->getConsulta($sql);
+
+             //insert historial
+             $sql_insert = "INSERT INTO PLC_PLAN_COMPRA_HISTORICA (DPTO,LINEA,SUBLINEA,MARCA,ESTILO,VENTANA,COLOR,USER_LOGIN,USER_NOM,FECHA,HORA,PI,OC,ESTADO,TEMP,ID_COLOR3,NOM_LINEA,NOM_MARCA,NOM_VENTANA,NOM_COLOR,NOM_SUBLINEA)
+                                    SELECT C.DEP_DEPTO,
+                                            C.COD_JER2 LINEA,         -- linea
+                                            C.COD_SUBLIN SUBLINEA,    -- sublinea
+                                            C.COD_MARCA,              -- marca
+                                            C.DES_ESTILO ESTILO,      -- estilo
+                                            C.VENTANA_LLEGADA,        -- Ventana
+                                            NVL(COD_COLOR,0)COLOR,    -- Color
+                                            '" . $login . "',
+                                            'OC=" . $po_number . "',
+                                            (SELECT SUBSTR(TO_CHAR(SYSDATE, 'DD-MM-YYYY'),1,10)N FROM DUAL),
+                                            (SELECT TO_CHAR(SYSDATE, 'HH24:MI:SS') FROM DUAL),
+                                            C.PROFORMA,
+                                            $po_number,
+                                            25,
+                                            C.COD_TEMPORADA,
+                                            C.ID_COLOR3,
+                                            C.NOM_LINEA LINEA,
+                                            C.NOM_MARCA MARCA,
+                                            C.NOM_VENTANA VENTANA,
+                                            C.NOM_COLOR COD_COLOR,
+                                            C.NOM_SUBLINEA SUBLINEA
+                                      FROM PLC_PLAN_COMPRA_COLOR_3 C
+                                      WHERE C.COD_TEMPORADA = $temporada AND C.DEP_DEPTO =  '" . $depto . "'
+                                      AND C.ID_COLOR3 IN (".$ids.")";
+             \database::getInstancia()->getConsulta($sql_insert);
+
+
+            //borramos la  compra_oc
+             $sql = "delete plc_plan_compra_oc
+                    where cod_temporada = " . $temporada . "
+                    and dep_depto =  '" . $depto . "'
+                    and id_color3 in(" . $ids . ")";;
+             \database::getInstancia()->getConsulta($sql);
+         }
+     }
+    }
 
     // Listar el coemntario de la PI que se solcititò modificar
     public static function busca_comentario_pi($temporada, $depto, $login, $pi)
@@ -1588,6 +1689,199 @@ class cbx_grilla_compra extends \parametros
 
 
     }
+
+    //extraer datos orden de compra poc OC o PI
+    public static function traer_datos_oc_2($pi,$oc,$puerto,$url){
+        $curl = curl_init();
+
+        if ($pi <> ""){
+            curl_setopt_array($curl, array(
+                CURLOPT_PORT => $puerto,
+                CURLOPT_URL => $url . "/consultaOrdenComprarst/v1/consultaOrdenCompra",
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 30,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "POST",
+                //CURLOPT_POSTFIELDS => "{\n\t\"HeaderRply\": {\n\t\t\"servicio\": {\n\t\t\t\"nombreServicio\": \"string\",\n\t\t\t\"operacion\": \"string\",\n\t\t\t\"idTransaccion\": \"string\",\n\t\t\t\"tipoMensaje\": \"string\",\n\t\t\t\"tipoTransaccion\": \"string\",\n\t\t\t\"usuario\": \"string\",\n\t\t\t\"dominioPais\": \"string\",\n\t\t\t\"ipOrigen\": \"string\",\n\t\t\t\"servidor\": \"string\",\n\t\t\t\"timeStamp\": \"string\"\n\t\t},\n\t\t\"paginacion\": {\n\t\t\t\"numPagina\": \"string\",\n\t\t\t\"cantidadRegistros\": \"string\",\n\t\t\t\"totalRegistros\": \"string\"\n\t\t},\n\t\t\"track\": {\n\t\t\t\"idTrack\": \"string\",\n\t\t\t\"codSistema\": \"string\",\n\t\t\t\"codAplicacion\": \"string\",\n\t\t\t\"componente\": \"string\",\n\t\t\t\"estado\": \"string\",\n\t\t\t\"dataLogger\": \"string\",\n\t\t\t\"flagTracking\": \"string\",\n\t\t\t\"flagLog\": \"string\"\n\t\t},\n\t\t\"error\": [\n\t\t\t{\n\t\t\t\t\"errorCode\": \"string\",\n\t\t\t\t\"errorGlosa\": \"string\"\n\t\t\t}\n\t\t],\n\t\t\"reproceso\": {\n\t\t\t\"countReproceso\": \"string\",\n\t\t\t\"intervaloReintento\": \"string\",\n\t\t\t\"objetoReproceso\": \"string\"\n\t\t},\n\t\t\"filler\": \"string\"\n\t},\n\t\"Body\": {\n\t\t\"headerServicio\": {\n\t\t\t\"version\": \"string\",\n\t\t\t\"canal\": \"string\",\n\t\t\t\"estado\": \"string\",\n\t\t\t\"comercio\": \"string\",\n\t\t\t\"fecha\": \"string\",\n\t\t\t\"hora\": \"string\",\n\t\t\t\"nroTransaccion\": \"string\",\n\t\t\t\"sucursal\": \"string\",\n\t\t\t\"terminal\": \"string\",\n\t\t\t\"tipoTransaccion\": \"string\",\n\t\t\t\"codigoUsusario\": \"string\",\n\t\t\t\"entidad\": \"string\",\n\t\t\t\"dominioPais\": \"string\"\n\t\t},\n\t\t\"ordenCompra\": \"".$po."\",\n\t\t\"numeroPI\": \"".$pi."\"\n\t}\n}",
+                CURLOPT_POSTFIELDS => "{
+               \"HeaderRply\": {
+                              \"servicio\": {
+                                            \"nombreServicio\": \"string\",
+                                            \"operacion\": \"string\",
+                                            \"idTransaccion\": \"string\",
+                                            \"tipoMensaje\": \"string\",
+                                            \"tipoTransaccion\": \"string\",
+                                            \"usuario\": \"string\",
+                                            \"dominioPais\": \"string\",
+                                            \"ipOrigen\": \"string\",
+                                            \"servidor\": \"string\",
+                                            \"timeStamp\": \"string\"
+                              },
+                              \"paginacion\": {
+                                            \"numPagina\": \"string\",
+                                            \"cantidadRegistros\": \"string\",
+                                            \"totalRegistros\": \"string\"
+                              },
+                              \"track\": {
+                                            \"idTrack\": \"string\",
+                                            \"codSistema\": \"string\",
+                                            \"codAplicacion\": \"string\",
+                                            \"componente\": \"string\",
+                                            \"estado\": \"string\",
+                                            \"dataLogger\": \"string\",
+                                            \"flagTracking\": \"string\",
+                                            \"flagLog\": \"string\"
+                              },
+                              \"error\": [
+                                            {
+                                                           \"errorCode\": \"string\",
+                                                           \"errorGlosa\": \"string\"
+                                            }
+                              ],
+                              \"reproceso\": {
+                                            \"countReproceso\": \"string\",
+                                            \"intervaloReintento\": \"string\",
+                                            \"objetoReproceso\": \"string\"
+                              },
+                              \"filler\": \"string\"
+               },
+               \"Body\": {
+                              \"headerServicio\": {
+                                            \"version\": \"string\",
+                                            \"canal\": \"string\",
+                                            \"estado\": \"string\",
+                                            \"comercio\": \"string\",
+                                            \"fecha\": \"string\",
+                                            \"hora\": \"string\",
+                                            \"nroTransaccion\": \"string\",
+                                            \"sucursal\": \"string\",
+                                            \"terminal\": \"string\",
+                                            \"tipoTransaccion\": \"string\",
+                                            \"codigoUsusario\": \"string\",
+                                            \"entidad\": \"string\",
+                                            \"dominioPais\": \"string\"
+                              },
+                              \"ordenCompra\": \"0\",
+                              \"numeroPI\": \"" . $pi . "\"
+               }
+}",
+                CURLOPT_HTTPHEADER => array(
+                    "Content-Type: application/json"
+                ),
+            ));
+        }
+        else{
+            curl_setopt_array($curl, array(
+                CURLOPT_PORT => $puerto,
+                CURLOPT_URL => $url . "/consultaOrdenComprarst/v1/consultaOrdenCompra",
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 30,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "POST",
+                //CURLOPT_POSTFIELDS => "{\n\t\"HeaderRply\": {\n\t\t\"servicio\": {\n\t\t\t\"nombreServicio\": \"string\",\n\t\t\t\"operacion\": \"string\",\n\t\t\t\"idTransaccion\": \"string\",\n\t\t\t\"tipoMensaje\": \"string\",\n\t\t\t\"tipoTransaccion\": \"string\",\n\t\t\t\"usuario\": \"string\",\n\t\t\t\"dominioPais\": \"string\",\n\t\t\t\"ipOrigen\": \"string\",\n\t\t\t\"servidor\": \"string\",\n\t\t\t\"timeStamp\": \"string\"\n\t\t},\n\t\t\"paginacion\": {\n\t\t\t\"numPagina\": \"string\",\n\t\t\t\"cantidadRegistros\": \"string\",\n\t\t\t\"totalRegistros\": \"string\"\n\t\t},\n\t\t\"track\": {\n\t\t\t\"idTrack\": \"string\",\n\t\t\t\"codSistema\": \"string\",\n\t\t\t\"codAplicacion\": \"string\",\n\t\t\t\"componente\": \"string\",\n\t\t\t\"estado\": \"string\",\n\t\t\t\"dataLogger\": \"string\",\n\t\t\t\"flagTracking\": \"string\",\n\t\t\t\"flagLog\": \"string\"\n\t\t},\n\t\t\"error\": [\n\t\t\t{\n\t\t\t\t\"errorCode\": \"string\",\n\t\t\t\t\"errorGlosa\": \"string\"\n\t\t\t}\n\t\t],\n\t\t\"reproceso\": {\n\t\t\t\"countReproceso\": \"string\",\n\t\t\t\"intervaloReintento\": \"string\",\n\t\t\t\"objetoReproceso\": \"string\"\n\t\t},\n\t\t\"filler\": \"string\"\n\t},\n\t\"Body\": {\n\t\t\"headerServicio\": {\n\t\t\t\"version\": \"string\",\n\t\t\t\"canal\": \"string\",\n\t\t\t\"estado\": \"string\",\n\t\t\t\"comercio\": \"string\",\n\t\t\t\"fecha\": \"string\",\n\t\t\t\"hora\": \"string\",\n\t\t\t\"nroTransaccion\": \"string\",\n\t\t\t\"sucursal\": \"string\",\n\t\t\t\"terminal\": \"string\",\n\t\t\t\"tipoTransaccion\": \"string\",\n\t\t\t\"codigoUsusario\": \"string\",\n\t\t\t\"entidad\": \"string\",\n\t\t\t\"dominioPais\": \"string\"\n\t\t},\n\t\t\"ordenCompra\": \"".$po."\",\n\t\t\"numeroPI\": \"".$pi."\"\n\t}\n}",
+                CURLOPT_POSTFIELDS => "{
+               \"HeaderRply\": {
+                              \"servicio\": {
+                                            \"nombreServicio\": \"string\",
+                                            \"operacion\": \"string\",
+                                            \"idTransaccion\": \"string\",
+                                            \"tipoMensaje\": \"string\",
+                                            \"tipoTransaccion\": \"string\",
+                                            \"usuario\": \"string\",
+                                            \"dominioPais\": \"string\",
+                                            \"ipOrigen\": \"string\",
+                                            \"servidor\": \"string\",
+                                            \"timeStamp\": \"string\"
+                              },
+                              \"paginacion\": {
+                                            \"numPagina\": \"string\",
+                                            \"cantidadRegistros\": \"string\",
+                                            \"totalRegistros\": \"string\"
+                              },
+                              \"track\": {
+                                            \"idTrack\": \"string\",
+                                            \"codSistema\": \"string\",
+                                            \"codAplicacion\": \"string\",
+                                            \"componente\": \"string\",
+                                            \"estado\": \"string\",
+                                            \"dataLogger\": \"string\",
+                                            \"flagTracking\": \"string\",
+                                            \"flagLog\": \"string\"
+                              },
+                              \"error\": [
+                                            {
+                                                           \"errorCode\": \"string\",
+                                                           \"errorGlosa\": \"string\"
+                                            }
+                              ],
+                              \"reproceso\": {
+                                            \"countReproceso\": \"string\",
+                                            \"intervaloReintento\": \"string\",
+                                            \"objetoReproceso\": \"string\"
+                              },
+                              \"filler\": \"string\"
+               },
+               \"Body\": {
+                              \"headerServicio\": {
+                                            \"version\": \"string\",
+                                            \"canal\": \"string\",
+                                            \"estado\": \"string\",
+                                            \"comercio\": \"string\",
+                                            \"fecha\": \"string\",
+                                            \"hora\": \"string\",
+                                            \"nroTransaccion\": \"string\",
+                                            \"sucursal\": \"string\",
+                                            \"terminal\": \"string\",
+                                            \"tipoTransaccion\": \"string\",
+                                            \"codigoUsusario\": \"string\",
+                                            \"entidad\": \"string\",
+                                            \"dominioPais\": \"string\"
+                              },
+                              \"ordenCompra\": \"" . $oc . "\",
+                              \"numeroPI\": \"0\"
+               }
+}",
+                CURLOPT_HTTPHEADER => array(
+                    "Content-Type: application/json"
+                ),
+            ));
+        }
+
+
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+
+        curl_close($curl);
+        if ($err) {
+            return $err;
+        } else {
+            return $response;
+        }
+
+
+    }
+
+    Public static function traer_datos_oc_3($oc){
+        $sql = "select po_number
+                       ,cod_estado 
+                       ,case when cod_estado = 1 then 'Modo Ingreso' 
+                             when cod_estado = 2 then 'Pendiente Autorizacion'
+                             when cod_estado = 3 then 'Autorizada'
+                             when cod_estado = 4 then 'On Order'
+                             when cod_estado = 5 then 'Recepcion Parcial'
+                             when cod_estado = 6 then 'Recepcion Completa'
+                             when cod_estado = 7 then 'Cancelada' end  NOM_ESTADO
+                from plc_ordenes_compra_pmm
+                where po_number = ". $oc ;
+
+        $data = \database::getInstancia()->getFilas($sql);
+        return $data;
+    }
+
 
     // Trabajando en MATCH llenar tabla PMM
     public static function llenar_tabla_pmm($temporada, $depto, $login, $oc, $pi)

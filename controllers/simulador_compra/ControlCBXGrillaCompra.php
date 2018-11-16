@@ -14,13 +14,12 @@
 		// Llenar Tabla2 (Grilla)
 		public function llenar_tabla2($f3) {
 		$data = \simulador_compra\cbx_grilla_compra::llenar_tabla2($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'));
-			$json = [];$dtPIs =[];$dt20 =[];
+			$json = [];$dtPIs =[];$dt2021 =[];
 			foreach ($data as $val) {
-                //vista y update de estado oc  18= Compra confirmada con PI /22 = solicitud de generacion oc / 19 = pendiente de aprobcion de match
-                $proforma = utf8_encode($val["PROFORMA"]);$orden_compra = ""; $estadoOc = "";$f_embarque = "";$f_eta = "";$f_recepcion = "";$dias_atrasado = ""; $_exist = false; $ESTADO= $val["ESTADO_C1"];$nom_estado= $val["CODESTADO"];
+                //variables
+                $proforma = utf8_encode($val["PROFORMA"]);$orden_compra = ""; $estadoOc = "";$f_embarque = "";$f_eta = "";$f_recepcion = "";$dias_atrasado = ""; $_exist = false; $ESTADO= $val["ESTADO_C1"];$nom_estado= $val["CODESTADO"];$estilo_pmm = utf8_encode($val["ESTILO_PMM"]);$estado_match = utf8_encode($val["ESTADO_MATCH"]);
                     if ($proforma <> 'null' and $proforma <> null and $proforma <> '0' and $proforma <> '' and
                         ($val["ESTADO_C1"] == 18 or $val["ESTADO_C1"] == 19 or $val["ESTADO_C1"] == 22)) {
-
                         //si ya paso por esta pi
                         foreach ($dtPIs as $valor){
                             if ($valor[0] == $proforma){
@@ -38,7 +37,7 @@
 
                         if ($_exist == false) {
                             //extracion broker por pi
-                            $dt = json_decode(\simulador_compra\cbx_grilla_compra::traer_datos_oc($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $proforma, $f3->get('CURLOPT_PORT'), $f3->get('CURLOPT_URL')));
+                            $dt = json_decode(\simulador_compra\cbx_grilla_compra::traer_datos_oc_2($proforma,0, $f3->get('CURLOPT_PORT'), $f3->get('CURLOPT_URL')));
                             if (($dt->Body->fault->faultCode == 0) and (count($dt->Body->detalleConsultaOrdenCompra->detalle)) > 0) {
                                 $orden_compra = $dt->Body->detalleConsultaOrdenCompra->detalle[0]->ordenCompra;
                                 $estadoOc = $dt->Body->detalleConsultaOrdenCompra->detalle[0]->estadoOC;
@@ -63,60 +62,92 @@
                                     , $val["ESTADO_C1"]
                                     , $f3->get('SESSION.login')
                                     , $orden_compra
-                                     ,$proforma);
+                                    , $proforma
+                                    , $estadoOc);
                             }
                             array_push($dtPIs, array($proforma, $orden_compra, $estadoOc, $f_embarque, $f_eta, $f_recepcion, $dias_atrasado,$ESTADO,$nom_estado));
                         }
                     }
-
-                 /*   elseif ($val["ESTADO_C1"] == 20){$_exist2 = false;
-                        //si ya paso por esta pi
-                        foreach ($dt20 as $valor){
-                            if ($valor[0] == $proforma){
+                    elseif (($val["ESTADO_C1"] == 20 or $val["ESTADO_C1"] == 21) and $val["PO_NUMBER"] <> null and $val["PO_NUMBER"] <> ''){$_exist2 = false;
+                        //si ya paso por esta oc
+                        foreach ($dt2021 as $valor){
+                            if ($valor[1] == $val["PO_NUMBER"]){
                                 $_exist2 = true;
                                 $orden_compra =$valor[1];
                                 $estadoOc = $valor[2];
+                                $f_embarque =$valor[3];
+                                $f_eta = $valor[4];
+                                $f_recepcion = $valor[5];
+                                $dias_atrasado = $valor[6];
                                 $ESTADO = $valor[7];
                                 $nom_estado =  $valor[8];
+                                $estilo_pmm =  $valor[9];
+                                $estado_match =  $valor[10];
                             }
                         }
                         if ($_exist2 == false){
-                            //extracion broker por pi
-                            $dt = json_decode(\simulador_compra\cbx_grilla_compra::traer_datos_oc($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $proforma, $f3->get('CURLOPT_PORT'), $f3->get('CURLOPT_URL')));
-                            if (($dt->Body->fault->faultCode == 0) and (count($dt->Body->detalleConsultaOrdenCompra->detalle)) > 0) {
-                                $estadoOc = $dt->Body->detalleConsultaOrdenCompra->detalle[0]->estadoOC;
-                                if ($estadoOc == 'On Order' or $estadoOc or 'Recepcion Completa' or $estadoOc == 'Recepcion Parcial'){
+                            //extracion broker por oc
+                            $dt = \simulador_compra\cbx_grilla_compra::traer_datos_oc_3(utf8_encode($val["PO_NUMBER"]));
+                            if(count($dt) > 0) {
+                                if ($dt[0]["COD_ESTADO"] == 7){
+                                    //actualizamos el flujo de estado automatico con oc estado cancelado
+                                    \simulador_compra\cbx_grilla_compra::Update_flujo_estado_oc_vist($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $val["ESTADO_C1"], $f3->get('SESSION.login'), utf8_encode($val["PO_NUMBER"]), $proforma, "");
+                                    $orden_compra =  "";
+                                    $estadoOc =  "";
+                                    $f_embarque = "";
+                                    $f_eta =  "";
+                                    $f_recepcion =  "";
+                                    $dias_atrasado =  "";
+                                    $ESTADO= 0;
+                                    $nom_estado= "Ingresado";
+                                    $estilo_pmm = "";
+                                    $estado_match="";
+                                    ;
+                                    array_push($dt2021, array($proforma, $val["PO_NUMBER"], $estadoOc, $f_embarque, $f_eta, $f_recepcion, $dias_atrasado,$ESTADO,$nom_estado,$estilo_pmm,$estado_match));
+                                }
+                                elseif ($val["ESTADO_C1"] == 20 and $dt[0]["COD_ESTADO"] == 4 and $dt[0]["COD_ESTADO"] == 5 and $dt[0]["COD_ESTADO"] == 6 ){
+                                    $estadoOc = $dt[0]["NOM_ESTADO"];
                                     $orden_compra =  utf8_encode($val["PO_NUMBER"]);
-                                    $estadoOc =  $dt->Body->detalleConsultaOrdenCompra->detalle[0]->estadoOC;
                                     $f_embarque = utf8_encode($val["FECHA_EMBARQUE"]);
                                     $f_eta =  utf8_encode($val["FECHA_ETA"]);
                                     $f_recepcion =  utf8_encode($val["FECHA_RECEPCION"]);
                                     $dias_atrasado =  utf8_encode($val["DIAS_ATRASO"]);
-
                                     $ESTADO= 21;
                                     $nom_estado= "Aprobado";
-                                    //insert historial
-                                   \simulador_compra\cbx_grilla_compra::estado_oc_4_inserta_historial($f3->get('SESSION.COD_TEMPORADA')
-                                       , $f3->get('SESSION.COD_DEPTO'), $f3->get('GET.LINEA'), $f3->get('GET.SUBLINEA')
-                                       , $f3->get('GET.MARCA'), $f3->get('GET.ESTILO'), $f3->get('GET.VENTANA')
-                                       , $f3->get('GET.COLOR'), $f3->get('SESSION.login'), $f3->get('GET.PI'), $f3->get('GET.OC')
-                                       , $f3->get('GET.ESTADO'), $f3->get('GET.ID_COLOR3'), $f3->get('GET.TIPO_INSERT')
-                                       , $f3->get('GET.NOM_LINEA'), $f3->get('GET.NOM_SUBLINEA'), $f3->get('GET.NOM_MARCA')
-                                       , $f3->get('GET.NOM_VENTANA'), $f3->get('GET.NOM_COLOR'));
+                                    //actualizamos el flujo de estado automatico
+                                    \simulador_compra\cbx_grilla_compra::Update_flujo_estado_oc_vist($f3->get('SESSION.COD_TEMPORADA')
+                                        , $f3->get('SESSION.COD_DEPTO')
+                                        , $val["ESTADO_C1"]
+                                        , $f3->get('SESSION.login')
+                                        , $orden_compra
+                                        , $proforma
+                                        , $estadoOc);
+                                    array_push($dt2021, array($proforma, $val["PO_NUMBER"], $estadoOc, $f_embarque, $f_eta, $f_recepcion, $dias_atrasado,$ESTADO,$nom_estado,$estilo_pmm,$estado_match));
                     }
+                                else{
+                                    $orden_compra = $val["PO_NUMBER"];
+                                    $estadoOc = ($val["ESTADO_OC"]<> null ? ($val["ESTADO_OC"]) :"");
+                                    $f_embarque =$val["FECHA_EMBARQUE"];
+                                    $f_eta = $val["FECHA_ETA"];
+                                    $f_recepcion = $val["FECHA_RECEPCION"];
+                                    $dias_atrasado = ($val["DIAS_ATRASO"]<> null ? ($val["DIAS_ATRASO"]) :"");
+                                    $ESTADO= $val["ESTADO_C1"];
+                                    $nom_estado= $val["CODESTADO"];
+                                    array_push($dt2021, array($proforma, $val["PO_NUMBER"], $estadoOc, $f_embarque, $f_eta, $f_recepcion, $dias_atrasado,$ESTADO,$nom_estado,$estilo_pmm,$estado_match));
                             }
                         }
-                    }*/
-                 
                     else{
-                     $orden_compra =  utf8_encode($val["PO_NUMBER"]);
-                     $estadoOc =  utf8_encode($val["ESTADO_OC"]);
-                     $f_embarque = utf8_encode($val["FECHA_EMBARQUE"]);
-                     $f_eta =  utf8_encode($val["FECHA_ETA"]);
-                     $f_recepcion =  utf8_encode($val["FECHA_RECEPCION"]);
-                     $dias_atrasado =  utf8_encode($val["DIAS_ATRASO"]);
+                                $orden_compra = $val["PO_NUMBER"];
+                                $estadoOc = ($val["ESTADO_OC"]<> null ? ($val["ESTADO_OC"]) :"");
+                                $f_embarque =$val["FECHA_EMBARQUE"];
+                                $f_eta = $val["FECHA_ETA"];
+                                $f_recepcion = $val["FECHA_RECEPCION"];
+                                $dias_atrasado = ($val["DIAS_ATRASO"]<> null ? ($val["DIAS_ATRASO"]) :"");
                      $ESTADO= $val["ESTADO_C1"];
                      $nom_estado= $val["CODESTADO"];
+                                array_push($dt2021, array($proforma, utf8_encode($val["PO_NUMBER"]), $estadoOc, $f_embarque, $f_eta, $f_recepcion, $dias_atrasado,$ESTADO,$nom_estado));
+                            }
+                        }
                     }
 
 //Carga la data plan de compra
@@ -198,8 +229,8 @@
                     utf8_encode($val["SKU"]),               // 74
 					utf8_encode($val["PROFORMA"]),          // 75
 					$val["ARCHIVO"],                        // 76
-                    utf8_encode($val["ESTILO_PMM"]),        // 77
-                    utf8_encode($val["ESTADO_MATCH"]),      // 78
+                    $estilo_pmm,                            // 77
+                    $estado_match,                          // 78
                     $orden_compra,                          // 79
 					$estadoOc,                              // 80
 					$f_embarque,                            // 81
@@ -211,7 +242,6 @@
 					utf8_encode($val["VENTANA_LLEGADA"]),   // 87
 					""               // 88
 				);
-
 			}
 
 			header("Content-Type: application/json");
