@@ -741,8 +741,11 @@
 // ######################## FIN TRABAJO CON NUEVO GUARDADO PI ########################
 
 
-        public function actualiza_tabla2($f3) {//, JSON_FORCE_OBJECT
+        public function actualiza_tabla2($f3) {
 
+            $content = trim(file_get_contents("php://input"));
+            var_dump($content);
+            die();
         }
 
 // Termina Clase
