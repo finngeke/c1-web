@@ -161,84 +161,6 @@ $(window).on('load', function () {
 
     cargaCBX(separa_barra_span[1]);
 
-    // Buscar OC Estado 20 y Estado de la OC en PMM
-    var url_busca_oc20 = 'ajax_simulador_cbx/busca_oc_estado_20';                       // Devuelve: PROFORMA,PO_NUMBER,COD_JER2,COD_SUBLIN,COD_MARCA,DES_ESTILO,VENTANA_LLEGADA,COD_COLOR,ID_COLOR3,NOM_LINEA,NOM_MARCA,NOM_VENTANA,NOM_COLOR,NOM_SUBLINEA)
-    var url_estado_oc_4_inserta = 'ajax_simulador_cbx/estado_oc_4_inserta_historial';   //Inserta en el historial cuando el estado es 4
-    var url_traer_datos_oc_broker = 'ajax_simulador_cbx/traer_datos_oc';                // Consulta a Broker
-
-    // Busqueda de OC con estado 20
-    $.getJSON(url_busca_oc20, function (data) {
-
-        $.each(data, function (i, o) {
-
-            // Si me llega una OC con estado 20, voy a buscar su estado a PMM y de ser 4 lo inserto en el historial
-            //if( o[1] > 0 ){ // Está de más dice lalo 13-07-2018 15:30
-
-            $.getJSON(url_traer_datos_oc_broker, {PI: o[0]}, function (data) {
-
-                var json = JSON.parse(data);
-                // Si se ejecuta correctamente
-                if (json.Body.fault.faultCode == 0) {
-                    // Resultado a objeto
-                    var detalle = json.Body.detalleConsultaOrdenCompra.detalle;
-                    if (detalle.length > 0) {
-                        // tomar el priemr registro y ver si llegan datos, para continuar
-                        if (detalle[0].ordenCompra.length > 0) {
-
-                            // Asignamos las variables que llegan del WS
-                            var ordenCompra = detalle[0].ordenCompra;
-                            var PI = detalle[0].PI;
-                            var estadoOC = detalle[0].estadoOC;
-
-                            if ((estadoOC == 'On Order') || (estadoOC == 'Recepcion Completa') || (estadoOC == 'Recepcion Parcial')) {
-
-                                // Insertar en el Historial de Compra
-                                $.getJSON(url_estado_oc_4_inserta, {
-                                    LINEA: o[2],
-                                    SUBLINEA: o[3],
-                                    MARCA: o[4],
-                                    ESTILO: o[5],
-                                    VENTANA: o[6],
-                                    COLOR: o[7],
-                                    PI: o[0],
-                                    OC: o[1],
-                                    ESTADO: 21,
-                                    ID_COLOR3: o[8],
-                                    TIPO_INSERT: 1,
-                                    NOM_LINEA: o[9],
-                                    NOM_SUBLINEA: o[13],
-                                    NOM_MARCA: o[10],
-                                    NOM_VENTANA: o[11],
-                                    NOM_COLOR: o[12]
-                                }).done(function () {
-
-                                    // Aquí se debe trabajar con EstadoOpcion_OCPMM() actualiza estado oc segun ocpmm
-                                    var url_EstadoOpcion_OCPMM = 'ajax_simulador_cbx/actualiza_estado_oc_segun_ocpmm';
-                                    $.getJSON(url_EstadoOpcion_OCPMM, {PI: o[0], ID_COLOR3: o[8], ESTADO: estadoOC});
-
-                                });
-
-                                // Fin de si el estado es 'On Order' or 'Recepcion Completa' or 'Recepcion Parcial'
-                            }
-
-                            // Fin si me llega algún registro
-                        }
-
-                        // Fin de si llega código de respuesta correcta
-                    }
-                }
-
-                // Fin traer datos de la OC de Broker
-            });
-
-            //Fin del si llega OC con estado 20
-            //}
-
-            // Fin del each de OCs con estado 20
-        });
-
-        // Fin de busca OC estado 20... comenzamos con los despliegues
-    }).done(function (data) {
 
 // ############################################## INICIO TRABAJO GRILLA 2 LLENAR GRILLA ##################################################################
         // Cargar datos de la grilla 2
@@ -509,7 +431,6 @@ $(window).on('load', function () {
                     $('#accion_carga_datos_tabla2').addClass('fa fa-check');
 
                 }
-
             }, error: function (jqXHR, textStatus, errorThrown) {
                 console.log("Error: " + textStatus + " errorThrown: " + errorThrown);
             }
@@ -649,9 +570,6 @@ $(window).on('load', function () {
         });
 
 // ############################################## FIN TRABAJO GRILLA 2 LLENAR GRILLA ##################################################################
-
-        // Fin del done busca OC estado 20
-    });
 
 
 // fin de onload
