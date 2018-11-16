@@ -629,6 +629,8 @@ class cbx_grilla_compra extends \parametros
     public static function actualiza_tabla2()
     {
 
+        $content = trim(file_get_contents("php://input"));
+
         $sql = "UPDATE PLC_PLAN_COMPRA_COLOR_3 SET";
         $sql .= "ID_COLOR3 = $ID_COLOR3,";
         $sql .= "GRUPO_COMPRA = $GRUPO_COMPRA,";
