@@ -629,102 +629,91 @@ class cbx_grilla_compra extends \parametros
     public static function actualiza_tabla2()
     {
 
-        $sql = "UPDATE PLC_PLAN_COMPRA_COLOR_3 SET 
-                ID_COLOR3 = $ID_COLOR3,
-                GRUPO_COMPRA = $GRUPO_COMPRA,
-                NVL(TEMP,1) COD_TEMP,
-                NOM_LINEA = $LINEA,
-                NOM_SUBLINEA = $SUBLINEA,
-                NOM_MARCA = $MARCA,
-                DES_ESTILO = $ESTILO,
-                SHORT_NAME = $SHORT_NAME,
-                ID_CORPORATIVO = $ID_CORPORATIVO,
-                DESCMODELO = $DESCMODELO,
-                DESCRIP_INTERNET = $DESCRIP_INTERNET,
-                NOMBRE_COMPRADOR = $NOMBRE_COMPRADOR,
-                NOMBRE_DISENADOR = $NOMBRE_DISENADOR,
-                COMPOSICION = $COMPOSICION,
-                TIPO_TELA = $TIPO_TELA,
-                FORRO = $FORRO,
-                COLECCION = $COLECCION,
-                EVENTO = $EVENTO,
-                NOM_ESTILOVIDA = $COD_ESTILO_VIDA,
-                CALIDAD = $CALIDAD,
-                NOM_OCACIONUSO = $NOM_OCACIONUSO,
-                NOM_PIRAMIDEMIX = $NOM_PIRAMIDEMIX,
-                NOM_VENTANA = $NOM_VENTANA,
-                NOM_RNK = $NOM_RNK,
-                NOM_LIFECYCLE = $NOM_LIFECYCLE,
-                NUM_EMB = $NUM_EMB,
-                NOM_COLOR = $NOM_COLOR,
-                TIPO_PRODUCTO = $TIPO_PRODUCTO,
-                TIPO_EXHIBICION = $TIPO_EXHIBICION,
-                DESTALLA = $DESTALLA,
-                TIPO_EMPAQUE = $TIPO_EMPAQUE,
-                PORTALLA_1_INI = $PORTALLA_1_INI,
-                PORTALLA_1 = $PORTALLA_1,
-                CURVATALLA = $CURVATALLA,
-                CURVAMIN = $CURVAMIN,
-                UNID_OPCION_INICIO = $UNID_OPCION_INICIO,
-                UNID_OPCION_AJUSTADA = $UNID_OPCION_AJUSTADA,
-                UNIDADES = $UNIDADES,
-                MTR_PACK = $MTR_PACK,
-                CANT_INNER = $CANT_INNER,
-                SEG_ASIG = $SEG_ASIG,
-                FORMATO = $FORMATO,
-                TDAS = $TDAS,
-                A = $A,
-                B = $B,
-                C = $C,
-                I = $I,
-                UND_ASIG_INI = $UND_ASIG_INI,
-                ROT = $ROT,
-                NOM_PRECEDENCIA = $NOM_PRECEDENCIA,
-                NOM_VIA = $NOM_VIA,
-                NOM_PAIS = $NOM_PAIS,
-                VIAJE = $VIAJE,
-                MKUP = $MKUP,
-                PRECIO_BLANCO = $PRECIO_BLANCO,
-                OFERTA = $OFERTA,
-                GM = $GM,
-                NOM_MONEDA = $NOM_MONEDA,
-                COSTO_TARGET = $COSTO_TARGET,
-                COSTO_FOB = $COSTO_FOB,
-                COSTO_INSP = $COSTO_INSP,
-                COSTO_RFID = $COSTO_RFID,
-                ROYALTY_POR = $ROYALTY_POR,
-                COSTO_UNIT = $COSTO_UNIT,
-                COSTO_UNITS = $COSTO_UNITS,
-                CST_TOTLTARGET = $CST_TOTLTARGET,
-                COSTO_TOT = $COSTO_TOT,
-                COSTO_TOTS = $COSTO_TOTS,
-                RETAIL = $RETAIL,
-                DEBUT_REODER = $DEBUT_REODER,
-                SEM_INI = $SEM_INI,
-                SEM_FIN = $SEM_FIN,
-                CICLO = $CICLO,
-                AGOT_OBJ = $AGOT_OBJ,
-                SEMLIQ = $SEMLIQ,
-                ALIAS_PROV = $ALIAS_PROV,
-                COD_PROVEEDOR = $COD_PROVEEDOR,
-                COD_TRADER = $COD_TRADER,
-                AFTER_MEETING_REMARKS = $AFTER_MEETING_REMARKS,
-                CODSKUPROVEEDOR = $CODSKUPROVEEDOR,
-                O.COD_PADRE SKU,
-                PROFORMA = $PROFORMA,
-                O.ARCHIVO,
-                O.ESTILO_PMM,
-                O.ESTADO_MATCH,
-                O.PO_NUMBER,
-                O.ESTADO_OC,
-                '' FECHA_ACORDADA,
-                O.FECHA_EMBARQUE,
-                O.FECHA_ETA,
-                O.FECHA_RECEPCION,
-                O.DIAS_ATRASO,
-                ESTADO = $ESTADO,
-                VENTANA_LLEGADA = $VENTANA_LLEGADA,
-                FROM PLC_PLAN_COMPRA_COLOR_3
+        $sql = "UPDATE PLC_PLAN_COMPRA_COLOR_3 SET";
+        $sql .= "ID_COLOR3 = $ID_COLOR3,";
+        $sql .= "GRUPO_COMPRA = $GRUPO_COMPRA,";
+        $sql .= "NVL(TEMP,1) COD_TEMP,";
+        $sql .= "NOM_LINEA = $LINEA,";
+        $sql .= "NOM_SUBLINEA = $SUBLINEA,";
+        $sql .= "NOM_MARCA = $MARCA,";
+        $sql .= "DES_ESTILO = $ESTILO,";
+        $sql .= "SHORT_NAME = $SHORT_NAME,";
+        $sql .= "ID_CORPORATIVO = $ID_CORPORATIVO,";
+        $sql .= "DESCMODELO = $DESCMODELO,";
+        $sql .= "DESCRIP_INTERNET = $DESCRIP_INTERNET,";
+        $sql .= "NOMBRE_COMPRADOR = $NOMBRE_COMPRADOR,";
+        $sql .= "NOMBRE_DISENADOR = $NOMBRE_DISENADOR,";
+        $sql .= "COMPOSICION = $COMPOSICION,";
+        $sql .= "TIPO_TELA = $TIPO_TELA,";
+        $sql .= "FORRO = $FORRO,";
+        $sql .= "COLECCION = $COLECCION,";
+        $sql .= "EVENTO = $EVENTO,";
+        $sql .= "NOM_ESTILOVIDA = $COD_ESTILO_VIDA,";
+        $sql .= "CALIDAD = $CALIDAD,";
+        $sql .= "NOM_OCACIONUSO = $NOM_OCACIONUSO,";
+        $sql .= "NOM_PIRAMIDEMIX = $NOM_PIRAMIDEMIX,";
+        $sql .= "NOM_VENTANA = $NOM_VENTANA,";
+        $sql .= "NOM_RNK = $NOM_RNK,";
+        $sql .= "NOM_LIFECYCLE = $NOM_LIFECYCLE,";
+        $sql .= "NUM_EMB = $NUM_EMB,";
+        $sql .= "NOM_COLOR = $NOM_COLOR,";
+        $sql .= "TIPO_PRODUCTO = $TIPO_PRODUCTO,";
+        $sql .= "TIPO_EXHIBICION = $TIPO_EXHIBICION,";
+        $sql .= "DESTALLA = $DESTALLA,";
+        $sql .= "TIPO_EMPAQUE = $TIPO_EMPAQUE,";
+        $sql .= "PORTALLA_1_INI = $PORTALLA_1_INI,";
+        $sql .= "PORTALLA_1 = $PORTALLA_1,";
+        $sql .= "CURVATALLA = $CURVATALLA,";
+        $sql .= "CURVAMIN = $CURVAMIN,";
+        $sql .= "UNID_OPCION_INICIO = $UNID_OPCION_INICIO,";
+        $sql .= "UNID_OPCION_AJUSTADA = $UNID_OPCION_AJUSTADA,";
+        $sql .= "UNIDADES = $UNIDADES,";
+        $sql .= "MTR_PACK = $MTR_PACK,";
+        $sql .= "CANT_INNER = $CANT_INNER,";
+        $sql .= "SEG_ASIG = $SEG_ASIG,";
+        $sql .= "FORMATO = $FORMATO,";
+        $sql .= "TDAS = $TDAS,";
+        $sql .= "A = $A,";
+        $sql .= "B = $B,";
+        $sql .= "C = $C,";
+        $sql .= "I = $I,";
+        $sql .= "UND_ASIG_INI = $UND_ASIG_INI,";
+        $sql .= "ROT = $ROT,";
+        $sql .= "NOM_PRECEDENCIA = $NOM_PRECEDENCIA,";
+        $sql .= "NOM_VIA = $NOM_VIA,";
+        $sql .= "NOM_PAIS = $NOM_PAIS,";
+        $sql .= "VIAJE = $VIAJE,";
+        $sql .= "MKUP = $MKUP,";
+        $sql .= "PRECIO_BLANCO = $PRECIO_BLANCO,";
+        $sql .= "OFERTA = $OFERTA,";
+        $sql .= "GM = $GM,";
+        $sql .= "NOM_MONEDA = $NOM_MONEDA,";
+        $sql .= "COSTO_TARGET = $COSTO_TARGET,";
+        $sql .= "COSTO_FOB = $COSTO_FOB,";
+        $sql .= "COSTO_INSP = $COSTO_INSP,";
+        $sql .= "COSTO_RFID = $COSTO_RFID,";
+        $sql .= "ROYALTY_POR = $ROYALTY_POR,";
+        $sql .= "COSTO_UNIT = $COSTO_UNIT,";
+        $sql .= "COSTO_UNITS = $COSTO_UNITS,";
+        $sql .= "CST_TOTLTARGET = $CST_TOTLTARGET,";
+        $sql .= "COSTO_TOT = $COSTO_TOT,";
+        $sql .= "COSTO_TOTS = $COSTO_TOTS,";
+        $sql .= "RETAIL = $RETAIL,";
+        $sql .= "DEBUT_REODER = $DEBUT_REODER,";
+        $sql .= "SEM_INI = $SEM_INI,";
+        $sql .= "SEM_FIN = $SEM_FIN,";
+        $sql .= "CICLO = $CICLO,";
+        $sql .= "AGOT_OBJ = $AGOT_OBJ,";
+        $sql .= "SEMLIQ = $SEMLIQ,";
+        $sql .= "ALIAS_PROV = $ALIAS_PROV,";
+        $sql .= "COD_PROVEEDOR = $COD_PROVEEDOR,";
+        $sql .= "COD_TRADER = $COD_TRADER,";
+        $sql .= "AFTER_MEETING_REMARKS = $AFTER_MEETING_REMARKS,";
+        $sql .= "CODSKUPROVEEDOR = $CODSKUPROVEEDOR,";
+        $sql .= "PROFORMA = $PROFORMA,";
+        $sql .= "ESTADO = $ESTADO,";
+        $sql .= "VENTANA_LLEGADA = $VENTANA_LLEGADA,";
+        $sql .= "FROM PLC_PLAN_COMPRA_COLOR_3
                 WHERE COD_TEMPORADA = $temporada AND DEP_DEPTO = '" . $depto . "'
                 AND ID_COLOR3 = $ID_COLOR3
                 ";
