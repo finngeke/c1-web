@@ -3,20 +3,17 @@ $(function () {
     // ####################### FUNCIONES ASOCIADAS AL DESPLIEGUE DE DATA #######################
 
     // Defrine URL Base, para Llamar a los JSON
-    var crudServiceBaseUrl = "ajax_simulador_cbx/";
+    var crudServiceBaseUrl = "TelerikPlanCompra/";
 
     // Función que envia la Data al PHP
     function onSubmit(e) {
 
-
         /*var url_tabla = 'ajax_simulador_cbx/actualiza_tabla2';
         $.getJSON(url_tabla, {models: kendo.stringify(e.data)});*/
 
-
-
         $.ajax({
             //type: "POST",
-            url: crudServiceBaseUrl + "actualiza_tabla2",
+            url: crudServiceBaseUrl + "ActualizaPlanCompra",
             data: {models: kendo.stringify(e.data)},
             contentType: "application/json",
             //dataType: "json",
@@ -39,7 +36,7 @@ $(function () {
     // Función que trae la indormación a cargar el DataTable
     function onRead(options) {
         $.ajax({
-            url: crudServiceBaseUrl + "llenar_tabla2_telerik",
+            url: crudServiceBaseUrl + "ListarPlanCompra",
             dataType: "json",
             success: function (result) {
                 options.success(result);
@@ -174,6 +171,13 @@ $(function () {
                         oculta_columna_spread.hideColumn(93);
                         oculta_columna_spread.hideColumn(94);
                         oculta_columna_spread.hideColumn(95);
+                        oculta_columna_spread.hideColumn(96);
+                        oculta_columna_spread.hideColumn(97);
+                        oculta_columna_spread.hideColumn(98);
+                        oculta_columna_spread.hideColumn(99);
+                        oculta_columna_spread.hideColumn(100);
+                        oculta_columna_spread.hideColumn(101);
+                        oculta_columna_spread.hideColumn(102);
 
                         // Bloquear columnas
                         var bloqueo_columna_id = spreadsheet_conteo_total.activeSheet().range("A1:A"+total_registros_listados);
@@ -188,7 +192,7 @@ $(function () {
                         var bloqueo_columnas_semanas = spreadsheet_conteo_total.activeSheet().range("BS1:BU"+total_registros_listados);
                         var bloqueo_columna_razonsocial = spreadsheet_conteo_total.activeSheet().range("BY1:BY"+total_registros_listados);
                         var bloqueo_columna_codpadre = spreadsheet_conteo_total.activeSheet().range("CC1:CC"+total_registros_listados);
-                        var bloqueo_columnas_oc = spreadsheet_conteo_total.activeSheet().range("CE1:CO"+total_registros_listados);
+                        var bloqueo_columnas_oc = spreadsheet_conteo_total.activeSheet().range("CE1:CY"+total_registros_listados);
                         bloqueo_columna_id.enable(false);
                         bloqueo_columna_comprajustada.enable(false);
                         bloqueo_columna_uniajustada.enable(false);
@@ -317,7 +321,15 @@ $(function () {
                     CODESTADO: {type: "string"},
                     ESTADO_C1: {type: "string"},
                     VENTANA_LLEGADA: {type: "string"},
-                    FECHA_RECEPCD_C1: {type: "string"}
+                    PROFORMA_BASE: {type: "string"},
+                    TIPO_EMPAQUE_BASE: {type: "string"},
+                    UNI_INICIALES_BASE: {type: "number"},
+                    PRECIO_BLANCO_BASE: {type: "number"},
+                    COSTO_TARGET_BASE: {type: "number"},
+                    COSTO_FOB_BASE: {type: "number"},
+                    COSTO_INSP_BASE: {type: "number"},
+                    COSTO_RFID_BASE: {type: "number"}
+
                 }
             }
         }
@@ -326,7 +338,7 @@ $(function () {
 
     // Asigna la estructura visual de la Grilla tipo Excel
     $("#spreadsheet").kendoSpreadsheet({
-        columns: 97,
+        columns: 103, //103 Siempre visible
         //rows: 10,
         //toolbar: true,
         toolbar: {
@@ -456,7 +468,7 @@ $(function () {
                     var dataSource_historial = new kendo.data.DataSource({
                         transport: {
                             read:  {
-                                url: "ajax_simulador_cbx/llenar_tabla_historial",
+                                url: "TelerikPlanCompra/ListarHistorial",
                                 dataType: "json",
                                 data:{ID_COLOR3: kendo.parseInt(ID_COLOR3)}
                             }
@@ -496,7 +508,7 @@ $(function () {
                     var dataSource_ajuste_compra = new kendo.data.DataSource({
                         transport: {
                             read:  {
-                                url: "ajax_simulador_cbx/llenar_tabla_historial",
+                                url: "TelerikPlanCompra/ListarHistorial",
                                 dataType: "json",
                                 data:{ID_COLOR3: kendo.parseInt(ID_COLOR3)}
                             }
