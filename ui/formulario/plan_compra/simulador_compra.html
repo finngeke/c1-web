@@ -1,336 +1,61 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Sorting and Filtering</title>
-	<meta charset="utf-8">
-	<link href="{{@TELERIK}}web/telerik/content/shared/styles/examples-offline.css" rel="stylesheet">
-	<link href="{{@TELERIK}}web/telerik/styles/kendo.common.min.css" rel="stylesheet">
-	<link href="{{@TELERIK}}web/telerik/styles/kendo.rtl.min.css" rel="stylesheet">
-	<link href="{{@TELERIK}}web/telerik/styles/kendo.default.min.css" rel="stylesheet">
-	<link href="{{@TELERIK}}web/telerik/styles/kendo.default.mobile.min.css" rel="stylesheet">
-	<script src="{{@TELERIK}}web/telerik/js/jquery.min.js"></script>
-	<script src="{{@TELERIK}}web/telerik/js/jszip.min.js"></script>
-	<script src="{{@TELERIK}}web/telerik/js/kendo.all.min.js"></script>
-	<script src="{{@TELERIK}}web/telerik/content/shared/js/console.js"></script>
-</head>
-<body>
+<div id="div_grilla_telerik_pc">
 
-<a class="offline-button" href="../index.html">Volver</a>
-
-<div id="example">
-	<div id="spreadsheet" style="width: 100%;height: 500px;" ></div>
-
-    <script>
-        /*var dataSource = new kendo.data.DataSource({
-            transport: {
-                read: {
-                    url: "ajax_simulador_cbx/llenar_tabla2",
-                    dataType: "json"
-                }
-            }
-
-        });
-
-        dataSource.read().then(function() {
-            var view = dataSource.view();
-            console.log(view);
-        });*/
-    </script>
+    <!-- Despliega el menú del top simulador_compra_menu_top.ja-->
+    <div id="toolbar_plan_compra" class="demo-section k-content wide"></div>
 
 
-    <script>
-       /* $(function() {
-
-            var crudServiceBaseUrl = "ajax_simulador_cbx";
-
-            var dataSource = new kendo.data.DataSource({
-                transport: {
-                    read: onRead,
-                    submit: onSubmit
-                },
-                batch: true,
-                change: function() {
-                    $("#cancel, #save").toggleClass("k-state-disabled", !this.hasChanges());
-                },
-                schema: {
-                    //data: "JSONDataResult",
-                    parse: function(response) {
-                        console.log("parse");
-                        console.log(JSON.stringify(response, null, 4));
-                        debugger;
-                        return response.JSONDataResult;
-                    },
-                    model: {
-                        id: "ID_COLOR3",
-                        fields: {
-                            ID_COLOR3: { type: "string" }
-                        }
-                    }
-                }
-            });
-
-
-            $("#spreadsheet").kendoSpreadsheet({
-                columns: 20,
-                rows: 10,
-                toolbar: true,
-                sheetsbar: false,
-                sheets: [{
-                    name: "Products",
-                    dataSource: dataSource,
-                    rows: [{
-                        height: 40,
-                        cells: [
-                            {
-                                bold: "true",
-                                background: "#9c27b0",
-                                textAlign: "center",
-                                color: "white"
-                            },{
-                                bold: "true",
-                                background: "#9c27b0",
-                                textAlign: "center",
-                                color: "white"
-                            },{
-                                bold: "true",
-                                background: "#9c27b0",
-                                textAlign: "center",
-                                color: "white"
-                            },{
-                                bold: "true",
-                                background: "#9c27b0",
-                                textAlign: "center",
-                                color: "white"
-                            },{
-                                bold: "true",
-                                background: "#9c27b0",
-                                textAlign: "center",
-                                color: "white"
-                            }]
-                    }],
-                    columns: [
-                        { width: 100 },
-                        { width: 415 },
-                        { width: 145 },
-                        { width: 145 },
-                        { width: 145 }
-                    ]
-                }]
-            });
-
-            function onSubmit(e) {
-                $.ajax({
-                    url: crudServiceBaseUrl + "/update_tabla2_telerik",
-                    data: { models: kendo.stringify(e.data) },
-                    contentType: "application/json",
-                    dataType: "json",
-                    success: function (result) {
-                        e.success(result.Updated, "update");
-                        e.success(result.Created, "create");
-                        e.success(result.Destroyed, "destroy");
-                    },
-                    error: function (xhr, httpStatusMessage, customErrorMessage) {
-                        alert(xhr.responseText);
-                    }
-                });
-            }
-
-            function onRead(options) {
-                $.ajax({
-                    url: crudServiceBaseUrl + "/llenar_tabla2_telerik",
-                    dataType: "json",
-                    success: function (result) {
-                        options.success(result);
-                    },
-                    error: function (result) {
-                        options.error(result);
-                    }
-                });
-            }
-
-            $("#save").click(function() {
-                if (!$(this).hasClass("k-state-disabled")) {
-                    dataSource.sync();
-                }
-            });
-
-            $("#cancel").click(function() {
-                if (!$(this).hasClass("k-state-disabled")) {
-                    dataSource.cancelChanges();
-                }
-            });
+    <button class="k-button" id="guardar_cambios_pc">Guardar Cambios</button>
+    <button class="k-button" id="cancelar_cambios_pc">Cancelar Cambios</button>
 
 
 
-        });*/
-    </script>
+    <!-- Despliega la Grilla / Plan de Compra -->
+    <div id="spreadsheet" style="width: 100%;height: 500px;"></div>
 
 
-    <script>
 
-        var dataSource = new kendo.data.DataSource({
-            transport: {
-                read:  {
-                    url: "ajax_simulador_cbx/llenar_tabla2_telerik",
-                    dataType: "json"
-                }
-            }
-        });
+    <!-- POPUP Carga Archivo PI -->
+    <div id="POPUP_carga_archivo_pi">
+        <form method="post" action="/kendo-ui/upload/submit">
+            <ul id="fieldlist">
+                <li>
+                    <label for="NombrePI">PROFORMA:</label>
+                    <input type="text" class="k-textbox" name="NombrePI" id="NombrePI" required="required" />
+                </li>
+                <li>
+                    <br>
+                    <input name="txt_archivo_pi" id="txt_archivo_pi" type="file" aria-label="txt_archivo_pi" />
+                </li>
+                <li>
+                    <br><button type="submit" class="k-button k-primary">Guardar Archivo</button>
+                </li>
+            </ul>
+        </form>
+    </div>
 
-        $("#spreadsheet").kendoSpreadsheet({
-            sheets: [
-            {
-                name: "D141",
-                /*mergedCells: [
-                    "A1:G1",
-                    "A2:F2"
-                ],*/
-                filter: {
-                    ref: "B1:AX100",
-                    columns:[]
-                },
-                columns: [
-                    { width: 40 },
-                    { width: 90 },
-                    { width: 70 },
-                    { width: 150 },
-                    { width: 150 },
-                    { width: 130 },
-                    { width: 130 }
-                ]/*,
-                height: 550,
-                sortable: true,
-                resizable: true,
-                pageable: true
-                groupable: true,
-                sortable: true,pageable: {
-                    refresh: true,
-                    pageSizes: true,
-                    buttonCount: 5
-                }*/
+    <!-- POPUP Historial -->
+    <div id="POPUP_historial">
+        <div id="grid_popup_historial"></div>
+    </div>
 
-            }]
-        });
+    <!-- POPUP Ajuste Compra -->
+    <div id="POPUP_ajuste_compra">
+        <div id="grid_ajuste_compra"></div>
+    </div>
 
-        var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
-        var sheet = spreadsheet.activeSheet();
+    <!-- POPUP Ajuste N Cajas -->
+    <div id="POPUP_ajuste_cajas">
+        <div id="grid_ajuste_cajas"></div>
+    </div>
 
-        sheet.setDataSource(dataSource, [
-            { field: "ID_COLOR3", title: "ID" },
-            { field: "GRUPO_COMPRA", title: "G. Compra" },
-            { field: "COD_TEMP", title: "Temp" },
-            { field: "LINEA", title: "Línea" },
-            { field: "SUBLINEA", title: "SubLínea" },
-            { field: "MARCA", title: "Marca" },
-            { field: "ESTILO", title: "Estilo"},
-            { field: "SHORT_NAME", title: "Estilo Corto" },
-            { field: "ID_CORPORATIVO", title: "Cod. Corp." },
-            { field: "DESCMODELO", title: "Descripción" },
-            { field: "DESCRIP_INTERNET", title: "Desc. Internet" },
-            { field: "COMPOSICION", title: "Composición" },
-            { field: "COLECCION", title: "Colección" },
-            { field: "EVENTO", title: "Evento" },
-            { field: "COD_ESTILO_VIDA", title: "Estilo Vida" },
-            { field: "CALIDAD", title: "Calidad" },
-            { field: "COD_OCASION_USO", title: "Ocación Uso" },
-            { field: "COD_PIRAMIX", title: "Piramide Mix" },
-            { field: "DESCRIPCION", title: "Ventana" },
-            { field: "COD_RANKVTA", title: "Rank. Venta" },
-            { field: "LIFE_CYCLE", title: "Ciclo Vida" },
-            { field: "NUM_EMB", title: "Num. Opción" },
-            { field: "COD_COLOR", title: "Color" },
-            // BTN Hist
-            { field: "TIPO_PRODUCTO", title: "Tipo Producto" },
-            { field: "TIPO_EXHIBICION", title: "Tipo Exhibición" },
-            { field: "DESTALLA", title: "Talla" },
-            { field: "TIPO_EMPAQUE", title: "Tipo Empaque" },
-            { field: "PORTALLA_1_INI", title: "% Compra Ini." },
-            { field: "PORTALLA_1", title: "% Compra Ajust." },
-            // BTN Ajuste Compra
-            { field: "CURVATALLA", title: "Curva" },
-            { field: "CURVAMIN", title: "Curva Min." },
-            { field: "UNID_OPCION_INICIO", title: "Uni Ini" },
-            { field: "UNID_OPCION_AJUSTADA", title: "Uni Ajust" },
-            { field: "UNIDADESCAN", title: "Uni Final" },
-            { field: "MTR_PACK", title: "MtrPack" },
-            { field: "CANT_INNER", title: "Nro Cajas" },
-            { field: "SEG_ASIG", title: "Cluster" },
-            { field: "FORMATO", title: "Formato" },
-            { field: "TDAS", title: "Tienda" },
-            { field: "A", title: "A" },
-            { field: "B", title: "B" },
-            { field: "C", title: "C" },
-            { field: "I", title: "I" },
-            { field: "UND_ASIG_INI", title: "Primera Carga" },
-            { field: "ROT", title: "% Tienda" },
-            { field: "NOM_PRECEDENCIA", title: "Proced" },
-            { field: "NOM_VIA", title: "Vía" },
-            { field: "NOM_PAIS", title: "País" },
-            { field: "VIAJE", title: "Viaje" },
-            { field: "MKUP", title: "Mkup" },
-            { field: "PRECIO_BLANCO", title: "Precio Blanco" },
-            { field: "OFERTA", title: "Oferta" },
-            { field: "GM", title: "GM" },
-            { field: "COD_TIP_MON", title: "Moneda" },
-            { field: "COSTO_TARGET", title: "Target" },
-            { field: "COSTO_FOB", title: "FOB" },
-            { field: "COSTO_INSP", title: "Insp" },
-            { field: "COSTO_RFID", title: "RFID" },
-            { field: "ROYALTY_POR", title: "Royalty(%)" },
-            { field: "COSTO_UNIT", title: "Costo Unitario Final US$" },
-            { field: "COSTO_UNITS", title: "Costo Unitario Final Pesos" },
-            { field: "CST_TOTLTARGET", title: "Total Target US$" },
-            { field: "COSTO_TOT", title: "Total FOB US$" },
-            { field: "COSTO_TOTS", title: "Costo Total Pesos" },
-            { field: "RETAIL", title: "Total Retail Pesos (Sin IVA)" },
-            { field: "DEBUT_REODER", title: "Debut / Reorder" },
-            { field: "SEM_INI", title: "Sem. Ini." },
-            { field: "SEM_FIN", title: "Sem. Fin" },
-            { field: "CICLO", title: "Semanas Ciclo Vida" },
-            { field: "AGOT_OBJ", title: "Agot. Obj." },
-            { field: "SEMLIQ", title: "Semanas Liquidación" },
-            { field: "ALIAS_PROV", title: "Proveedor" },
-            { field: "COD_PROVEEDOR", title: "Razón Social" },
-            { field: "COD_TRADER", title: "Trader" },
-            { field: "CODSKUPROVEEDOR", title: "Cod. SKU Proveedor" },
-            { field: "COD_PADRESKU", title: "Cod. Padre" },
-            { field: "PROFORMA", title: "Proforma" },
-            // BTN D
-            { field: "ARCHIVO", title: "Archivo" },
-            // Btn PI
-            { field: "ESTILO_PMM", title: "Estilo PMM" },
-            { field: "ESTADO_MATCH", title: "Estado Match" },
-            { field: "PO_NUMBER", title: "Nº OC" },
-            { field: "ESTADO_OC", title: "Estado OC" },
-            { field: "FECHA_EMBARQUE", title: "Fecha Embarque" },
-            { field: "FECHA_ETA", title: "Fecha ETA" },
-            { field: "FECHA_RECEPCION", title: "Fecha Recepción CD" },
-            { field: "DIAS_ATRASO", title: "Días Atraso CD" },
-            { field: "CODESTADO", title: "Estado Opción" },
-            { field: "ESTADO_C1", title: "ESTADO_C1" },
-            { field: "VENTANA_LLEGADA", title: "VENTANA_LLEGADA" },
-            { field: "FECHA_RECEPCD_C1", title: "FECHA_RECEPCD_C1" }
-        ]);
+    <!-- POPUP Detalle Error -->
+    <div id="POPUP_detalle_error">
 
-        // Bloqueo de Columnas
-        var range = spreadsheet.activeSheet().range("A1:A100");
-        range.enable(!true);
-
-    </script>
+    </div>
 
 
+    <!-- TAG de los mensajes de alert -->
+    <span id="popupNotification"></span>
 
 
 </div>
-
-
-</body>
-</html>
-
-
-</div>
-
-
-
-</body>
-</html>
