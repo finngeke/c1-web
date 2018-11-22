@@ -2989,7 +2989,7 @@ $('#form_import_bmt').submit(function (event) {
                                                         $('#seguimiento').html(" Insertando Historial Filas: " + _total1 + "/" + count);
                                                         $('#count').html(_total1);
                                                         if (_total1 == count) {
-                                                            $('#seguimiento').html("  Separación de filas por ventana.");
+                                                            $('#seguimiento').html("  Limpiando data.");
                                                             var _data = 'importar_archivo/ImpAssormAbrirDataVent';
                                                             $.getJSON(_data, function (_Rowss) {
                                                                 if (_Rowss == 0) {

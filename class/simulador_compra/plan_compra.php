@@ -1303,15 +1303,15 @@ class plan_compra extends \parametros {
         return $count;
 
     }
-    public static function getC_uni_final($target,$rfid,$ventana,$cod_temporada,$depto,$pais,$via){
+    public static function getC_uni_final($c_uni_US,$ventana,$cod_temporada,$depto,$pais,$via){
         $costo = 0;
         $factor =  plan_compra::lis_factor($cod_temporada,$depto,$pais,$via,2,$ventana);
         if (count($factor) <> 0 ){
-            $costo = round(($target+$rfid) * $factor[0][0]);
+            $costo = round(($c_uni_US) * $factor[0][0]);
         }else{
             $tc = plan_compra::lis_tipo_cambio($cod_temporada,$depto,2,$ventana);
             if(count($tc)<> 0){
-                $costo = round(($target+$rfid) * $tc[0][0]);
+                $costo = round(($c_uni_US) * $tc[0][0]);
             }
         }
 
@@ -2742,7 +2742,7 @@ class plan_compra extends \parametros {
                 /*V_COD_COLOR*/                 ","  . $rows[$nom_columnas['Cod Color']] . "" .
                 /*V_EVENTO*/                    ",'" . $rows[$nom_columnas['Evento']] . "'" .
                 /*V_GRUPO_DE_COMPRA*/           ",'" . $rows[$nom_columnas['Grupo de compra']] . "'" .
-                /*V_VENTANA_DEBUT*/             ",'" . $rows[$nom_columnas['Ventana Debut']] . "'" .
+                /*V_VENTANA_DEBUT*/             ",''" .
                 /*V_TIPO_EXHIBICION*/           ",'" . $rows[$nom_columnas['Tipo exhibicion']] . "'" .
                 /*V_TIPO_PRODUCTO*/             ",'" . $rows[$nom_columnas['Tipo Producto']] . "'" .
                 /*V_DEBUT_O_REORDER*/           ",'" . $rows[$nom_columnas['Debut o Reorder']] . "'" .
@@ -2816,21 +2816,22 @@ class plan_compra extends \parametros {
                 /*V_Size_7*/                    ",'" . $rows[$nom_columnas['Size%7']] . "'" .
                 /*V_Size_8*/                    ",'" . $rows[$nom_columnas['Size%8']] . "'" .
                 /*V_Size_9*/                    ",'" . $rows[$nom_columnas['Size%9']] . "'" .
-                /*V_VENTA*/                     ","  . ($rows[$nom_columnas['VentA'] ]<> null ? ($rows[$nom_columnas['VentA']]) : 0)  . "" .
-                /*V_VENTB*/                     ","  . ($rows[$nom_columnas['VentB'] ]<> null ? ($rows[$nom_columnas['VentB']]) : 0)  . "" .
-                /*V_VENTC*/                     ","  . ($rows[$nom_columnas['VentC'] ]<> null ? ($rows[$nom_columnas['VentC']]) : 0)  . "" .
-                /*V_VENTD*/                     ","  . ($rows[$nom_columnas['VentD'] ]<> null ? ($rows[$nom_columnas['VentD']]) : 0)  . "" .
-                /*V_VENTE*/                     ","  . ($rows[$nom_columnas['VentE'] ]<> null ? ($rows[$nom_columnas['VentE']]) : 0)  . "" .
-                /*V_VENTF*/                     ","  . ($rows[$nom_columnas['VentF'] ]<> null ? ($rows[$nom_columnas['VentF']]) : 0)  . "" .
-                /*V_VENTG*/                     ","  . ($rows[$nom_columnas['VentG'] ]<> null ? ($rows[$nom_columnas['VentG']]) : 0)  . "" .
-                /*V_VENTH*/                     ","  . ($rows[$nom_columnas['VentH'] ]<> null ? ($rows[$nom_columnas['VentH']]) : 0)  . "" .
-                /*V_VENTI*/                     ","  . ($rows[$nom_columnas['VentI'] ]<> null ? ($rows[$nom_columnas['VentI']]) : 0)  . "" .
-                /*V_COD_OPCION*/                ",'" . $rows[$nom_columnas['Cod Opcion']] . "'" .", :error, :data); end;");
-
+                /*V_COD_OPCION*/                ",'" . $rows[$nom_columnas['Cod Opcion']] . "'".
+                /*V_NOMBRE_COMPRADOR*/          ",'" . $rows[$nom_columnas['Nombre Comprador']] . "'".
+                /*V_NOMBRE_DISENADOR*/          ",'" . $rows[$nom_columnas['Nombre Disenador']] . "'".
+                /*V_COMPOSICION*/               ",'" . $rows[$nom_columnas['Composicion']] . "'".
+                /*V_TIPO_DE_TELA*/              ",'" . $rows[$nom_columnas['Tipo de Tela']] . "'".
+                /*V_FORRO*/                     ",'" . $rows[$nom_columnas['Forro']] . "'".
+                /*V_OFERTA*/                    ",'" . $rows[$nom_columnas['Oferta']] . "'".
+                /*V_FOB_USD*/                   ","  . ($rows[$nom_columnas['FOB USD'] ] <> null ? ($rows[$nom_columnas['FOB USD']]) : 0) . "".
+                /*V_PROVEEDOR*/                 ",'" . $rows[$nom_columnas['Proveedor']] . "'".
+                /*V_COMENTARIOS_POST_NEGOC*/    ",'" . $rows[$nom_columnas['Comentarios Post Negociacion']] . "'".
+                /*V_FECHA_EMBARQUE_ACORDADA*/   ",TO_DATE('" . $rows[$nom_columnas['Fecha de Embarque Acordada']] . "','dd-mm-yyyy')".
+                /*V_UNIDADES*/                  ",'" . $rows[$nom_columnas['UNIDADES']] . "'".
+                /*V_VENTANA*/                   ",'" . $rows[$nom_columnas['Ventana']] . "'".
+                ", :error, :data); end;");
 
         $data = \database::getInstancia()->getConsultaSP($sql, 2);
-
-
 
         $_error = explode("#", $data);
         if ($_error[0] == 1 ){
@@ -2896,11 +2897,11 @@ class plan_compra extends \parametros {
                 /*V_SEMLIQ*/                ","  . $rows[$nom_columnas['semliq']] . "" .
                 /*V_COSTO_UNIT*/            ","  . $rows[$nom_columnas['cos_uni_finalUS']].""./*-COSTO UNITARIO FINAL US$-*/
                 /*V_COSTO_UNITH*/           ",0" .
-                /*V_COSTO_TOT*/             ",0" . /*-TOTAL FOB US$-*/
+                /*V_COSTO_TOT*/             ","  . $rows[$nom_columnas['cos_total_fob_us']] .""./*TOTAL FOB*/
                 /*V_COSTO_TOTH*/            ",0" .
                 /*V_PRECIO_BLANCO*/         ","  . $rows[$nom_columnas['Precio']] . "" .
                 /*V_PRECIO_BLANCOH*/        ",0" .
-                /*V_COSTO_FOB*/             ",0" .
+                /*V_COSTO_FOB*/             ","  . $rows[$nom_columnas['FOB USD']] ."".
                 /*V_COSTO_INSP*/            ",0" .
                 /*V_COSTO_HANGER*/          ",0" .
                 /*V_COSTO_STICKER*/         ",0" .
@@ -2920,7 +2921,7 @@ class plan_compra extends \parametros {
                 /*V_BOLSA*/                 ",0" .
                 /*V_ITEM_REF*/              ",0" .
                 /*V_LIFE_CYCLE*/            ","  . $rows[$nom_columnas['cod_ciclo_vida']] . "" .
-                /*V_VENT_REAL*/             ",'" . $rows[$nom_columnas['Ventana Debut']] . "'" .
+                /*V_VENT_REAL*/             ",'" . $rows[$nom_columnas['Ventana']] . "'" .
                 /*V_RETAIL*/                ","  . $rows[$nom_columnas['cos_retail']] . "" .  /*-RETAIL-*/
                 /*V_FORMATO*/               ",'" . $rows[$nom_columnas['Formato']] . "'" .
                 /*V_DEBUT_REODER*/          ",'" . $rows[$nom_columnas['Debut o Reorder']] . "'" .
@@ -2929,7 +2930,7 @@ class plan_compra extends \parametros {
                 /*V_TIPO_EXHIBICION*/       ",'" . $rows[$nom_columnas['Tipo exhibicion']] . "'" .
                 /*V_ID_CORPORATIVO*/        ",'" . $rows[$nom_columnas['Codigo corporativo']] . "'" .
                 /*V_MTR_PACK*/              ","  . $rows[$nom_columnas['mst_pack']] . "" .
-                /*V_MKUP*/                  ","  . $rows[$nom_columnas['mkup']]   . "" .
+                /*V_MKUP*/                  ","  . $rows[$nom_columnas['mkup']]. "" .
                 /*V_CODSKUPROVEEDOR*/       ",0" .
                 /*V_GRUPO_COMPRA*/          ",'" . $rows[$nom_columnas['Grupo de compra']] . "'" .
                 /*V_PROFORMA*/              ",0" .
@@ -2940,7 +2941,7 @@ class plan_compra extends \parametros {
                 /*V_VIAJE*/                 ",0" .
                 /*V_CST_TOTLTARGET*/        ","  . $rows[$nom_columnas['cos_total_target']] .""./*-COSTO TOTAL TARGET.-*/
                 /*V_CANT_INNER*/            ","  . $rows[$nom_columnas['n_cajas']]. "" ./*-N_CAJAS.-*/
-                /*V_UNID_OPCION_INICIO*/    ","  . $rows[$nom_columnas['Unidades']] . "" .
+                /*V_UNID_OPCION_INICIO*/    ","  . $rows[$nom_columnas['UNIDADES']] . "" .
                 /*V_UND_ASIG_INI*/          ","  . $rows[$nom_columnas['primer_reparto']] . "" . /*-Primera_Reparto.-*/
                 /*V_DESTALLA*/              ",'" . $rows[$nom_columnas['tallas']] . "'" .
                 /*V_CURVATALLA*/            ",'" . $rows[$nom_columnas['curva_reparto']] . "'" .
@@ -2948,14 +2949,14 @@ class plan_compra extends \parametros {
                 /*V_PORTALLA_1*/            ",'" . $rows[$nom_columnas['porcent_ajust']]. "'" ./*-Porcentaje Ajustada-*/
                 /*V_CURVAMIN*/              ","  . $rows[$nom_columnas['Inner']] . "" .
                 /*V_DIST*/                  ",0" .
-                /*V_COMPOSICION*/           ",0" .
+                /*V_COMPOSICION*/           ",'" . $rows[$nom_columnas['Composicion']] ."'" .
                 /*V_TEMP*/                  ","  . $rows[$nom_columnas['cod_temp']] . "" .
                 /*V_COLECCION*/             ",0" .
                 /*V_COD_ESTILO_VIDA*/       ",0" .
                 /*V_DESCMODELO*/            ",'" . utf8_encode($rows[$nom_columnas['Descripcion Estilo']]) . "'" .
                 /*V_CALIDAD*/               ",0" .
                 /*V_COD_OCASION_USO*/       ",0" .
-                /*V_ALIAS_PROV*/            ",0" .
+                /*V_ALIAS_PROV*/            ",'" . $rows[$nom_columnas['Proveedor']] ."'" .
                 /*V_COD_PROVEEDOR*/         ",0" .
                 /*V_COD_TRADER*/            ",0" .
                 /*V_A*/                     ","  . ($rows[$nom_columnas['ClusterA']] <> null ? ($rows[$nom_columnas['ClusterA']]) : 0). "" .
@@ -2975,7 +2976,7 @@ class plan_compra extends \parametros {
                 /*V_NOM_CALIDAD*/           ",''".
                 /*V_NOM_OCACIONUSO*/        ",''".
                 /*V_NOM_PIRAMIDEMIX*/       ",'" . $rows[$nom_columnas['Piramide Mix']] . "'" .
-                /*V_NOM_VENTANA*/           ",'" . $rows[$nom_columnas['Ventana Debut']] . "'" .
+                /*V_NOM_VENTANA*/           ",'" . $rows[$nom_columnas['Ventana']] . "'" .
                 /*V_NOM_LIFECYCLE*/         ",'" . $rows[$nom_columnas['Ciclo de Vida']] . "'" .
                 /*V_NOM_COLOR*/             ",'" . $rows[$nom_columnas['Color']] . "'" .
                 /*V_NOM_PROCEDENCIA*/       ",'IMP'".
@@ -3054,7 +3055,14 @@ class plan_compra extends \parametros {
                 /*V_COSTO_RFID*/            ","  . ($rows[$nom_columnas['RFID USD']]<> null ? ($rows[$nom_columnas['RFID USD']]) : 0). "" .
                 /*V_ERROR_PI*/              ",''".
                 /*V_SHORT_NAME*/            ",'" . $rows[$nom_columnas['Estilo Corto']] . "'".
-                /*V_N_CURVASXCAJAS*/        ","  . ($rows[$nom_columnas['N curvas por caja curvadas'] ]<> null ? ($rows[$nom_columnas['N curvas por caja curvadas']]) : 0). ", :error, :data); end;");
+                /*V_N_CURVASXCAJAS*/        ","  . ($rows[$nom_columnas['N curvas por caja curvadas']]<> null ? ($rows[$nom_columnas['N curvas por caja curvadas']]) : 0). "" .
+                /*V_NOMBRE_COMPRADOR*/      ",'" . $rows[$nom_columnas['Nombre Comprador']] . "'".
+                /*V_NOMBRE_DISENADOR*/      ",'" . $rows[$nom_columnas['Nombre Disenador']] . "'".
+                /*V_TIPO_DE_TELA*/          ",'" . $rows[$nom_columnas['Tipo de Tela']] . "'".
+                /*V_FORRO*/                 ",'" . $rows[$nom_columnas['Forro']] . "'".
+                /*V_OFERTA*/                ",'" . $rows[$nom_columnas['Oferta']] . "'".
+                /*V_COME_POST_NEGOCIACION*/ ",'" . $rows[$nom_columnas['Comentarios Post Negociacion']] . "'".
+                /*V_F_EMBARQUE_ACORDADA*/   ",TO_DATE('" . $rows[$nom_columnas['Fecha de Embarque Acordada']] . "','dd-mm-yyyy'), :error, :data); end;");
 
         $data = \database::getInstancia()->getConsultaSP($sql, 2);
 
@@ -3125,7 +3133,7 @@ class plan_compra extends \parametros {
                     /*V_NOM_LINEA*/     ",'" . $rows[$nom_columnas['nom_linea']]  . "'" .
                     /*V_NOM_SUBLINEA*/  ",'" . $rows[$nom_columnas['nom_sublinea']] . "'" .
                     /*V_NOM_MARCA*/     ",'" . $rows[$nom_columnas['nom_marca']]. "'" .
-                    /*V_NOM_VENTANA*/   ",'" . $rows[$nom_columnas['Ventana Debut']] . "'" .
+                    /*V_NOM_VENTANA*/   ",'" . $rows[$nom_columnas['Ventana']] . "'" .
                     /*V_NOM_COLOR*/     ",'" . $rows[$nom_columnas['Color']] . "', :error, :data); end;");
             $data = \database::getInstancia()->getConsultaSP($sql, 2);
             $_error = explode("#", $data);
@@ -3236,7 +3244,7 @@ class plan_compra extends \parametros {
 
         return $data;
     }
-    public static function ImpAssorCalculos($rows,$nom_columnas,$cod_tempo,$depto,$login,$dtjerarquia,$f3){
+    public static function ImpAssorCalculos($rows,$nom_columnas,$cod_tempo,$depto,$dtjerarquia,$f3){
         $_error ="";
         $_v = 0;
         $_Array = []; array_push($_Array,$nom_columnas);
@@ -3245,6 +3253,7 @@ class plan_compra extends \parametros {
         $key = 0;
         $dtcolores = plan_compra::list_colores();
 
+
         foreach($rows as $val2){ $_i ++;
             if ($_i > 1){ //fila 1 es la cabesera
                 if ($_i == 2){//Borrar filas, maximo id_color3
@@ -3252,8 +3261,7 @@ class plan_compra extends \parametros {
                     $key = plan_compra::get_maxidplan($cod_tempo,$depto)+1;
                 }
                 $dtmarcas = plan_compra::list_Marcas($depto);
-                $rfid = number_format( $val2[$nom_columnas['RFID USD']], 2, '.', ',');
-                $cod_vent =  plan_compra::get_codName($val2[$nom_columnas['Ventana Debut']], plan_compra::list_ventanas($cod_tempo));
+                $cod_vent =  plan_compra::get_codName($val2[$nom_columnas['Ventana']], plan_compra::list_ventanas($cod_tempo));
                 $cod_pais = plan_compra::get_codName($val2[$nom_columnas['Pais']], plan_compra::list_pais());
                 $cod_via =plan_compra::get_codName($val2[$nom_columnas['Via']], plan_compra::list_via());
                 $tdas = plan_compra::get_N_tdas($depto,$val2[$nom_columnas['Codigo Marca']],$cod_tempo,$val2[$nom_columnas['Cluster']], $val2[$nom_columnas['Formato']]);
@@ -3261,20 +3269,28 @@ class plan_compra extends \parametros {
                 $curva_reparto = plan_compra::get_ComposicionCampos2($val2, $nom_columnas, "Curva");
                 $tallas = plan_compra::get_ComposicionCampos2($val2, $nom_columnas, "Talla");
                 $mstpack = plan_compra::list_mstpack($val2[$nom_columnas['Cod Linea']],$val2[$nom_columnas['Cod Sublinea']],$depto);
-                $dtAjustada = plan_compra::AjustesPrimerReparto2($por_Inicial,$val2[$nom_columnas['Unidades']],$curva_reparto,$tallas,$val2,$nom_columnas,$cod_tempo,$depto,$val2[$nom_columnas['Codigo Marca']],$val2[$nom_columnas['Debut o Reorder']],$val2[$nom_columnas['Tipo de empaque']],$val2[$nom_columnas['N curvas por caja curvadas']],$val2[$nom_columnas['Formato']],"",$mstpack);
+                $dtAjustada = plan_compra::AjustesPrimerReparto2($por_Inicial,$val2[$nom_columnas['UNIDADES']],$curva_reparto,$tallas,$val2,$nom_columnas,$cod_tempo,$depto,$val2[$nom_columnas['Codigo Marca']],$val2[$nom_columnas['Debut o Reorder']],$val2[$nom_columnas['Tipo de empaque']],$val2[$nom_columnas['N curvas por caja curvadas']],$val2[$nom_columnas['Formato']],"",$mstpack);
                 $dtdiviporcent = plan_compra::Division_porcent ($dtAjustada[1]);
                 $dtdivicantidad = plan_compra::Division_cantidades($dtAjustada[6]);
                 $dtclustercurva= plan_compra::curvaportiendas($dtAjustada[7],$val2[$nom_columnas['ClusterA']],$val2[$nom_columnas['ClusterB']],$val2[$nom_columnas['ClusterC']],$val2[$nom_columnas['ClusterI']]);
+
+                /*COSTOS*/
+                $rfid = number_format( $val2[$nom_columnas['RFID USD']], 2, '.', ',');
+                $COS_UNI_US = plan_compra::get_COS_UNI_US($val2[$nom_columnas['Target USD']],$rfid,$val2[$nom_columnas['FOB USD']]);
+                $COS_UNI_PESOS = plan_compra::getC_uni_final($COS_UNI_US,$val2[$nom_columnas['Ventana']],$cod_tempo,$depto,$cod_pais,$cod_via);
                 $Cos_Total_Target_us = ($val2[$nom_columnas['Target USD']] + $val2[$nom_columnas['RFID USD']]) *  $dtAjustada[3];
-                $Cos_Uni_Finl_Pesos = plan_compra::getC_uni_finalbmt($Cos_Total_Target_us,$val2[$nom_columnas['Ventana Debut']],$cod_tempo,$depto,$cod_pais,$cod_via);
+                $Cos_Total_Fob_us = plan_compra::get_cos_final_fob_us($val2[$nom_columnas['Target USD']],$val2[$nom_columnas['RFID USD']],$val2[$nom_columnas['FOB USD']],$dtAjustada[3]);
+                $Cos_Finl_Pesos = plan_compra::getC_uni_finalbmt($Cos_Total_Fob_us,$val2[$nom_columnas['Ventana']],$cod_tempo,$depto,$cod_pais,$cod_via);
+                $Cos_Total_Fob_usIns = 0;if($val2[$nom_columnas['FOB USD']] <> 0){$Cos_Total_Fob_usIns = $Cos_Total_Fob_us;}
 
                 //data calculable
-                array_push($_Array
-                    , array($val2[$nom_columnas["s"]]
+                    array_push($_Array, array($val2[$nom_columnas["s"]]
                     , $val2[$nom_columnas["Cod Dpto"]]
                     , $val2[$nom_columnas["Dpto"]]
                     , $val2[$nom_columnas["Marca"]]
                     , $val2[$nom_columnas["Codigo Marca"]]
+                        , $val2[$nom_columnas["Nombre Comprador"]]
+                        , $val2[$nom_columnas["Nombre Disenador"]]
                     , $val2[$nom_columnas["Season"]]
                     , $val2[$nom_columnas["Linea"]]
                     , $val2[$nom_columnas["Cod Linea"]]
@@ -3285,17 +3301,20 @@ class plan_compra extends \parametros {
                     , $val2[$nom_columnas["Estilo Corto"]]
                     , $val2[$nom_columnas["Descripcion Estilo"]]
                     , $val2[$nom_columnas["Cod Opcion"]]
-                        //, $val2[$nom_columnas["Color"]]
-                    , plan_compra::get_nomcolor2($dtcolores,$val2[$nom_columnas["Cod Color"]])
+                        , plan_compra::get_nomcolor2($dtcolores, $val2[$nom_columnas["Cod Color"]])
                     , $val2[$nom_columnas["Cod Color"]]
+                        , $val2[$nom_columnas["Composicion"]]
+                        , $val2[$nom_columnas["Tipo de Tela"]]
+                        , $val2[$nom_columnas["Forro"]]
                     , $val2[$nom_columnas["Evento"]]
                     , $val2[$nom_columnas["Grupo de compra"]]
-                    , $val2[$nom_columnas["Ventana Debut"]]
+                        , $val2[$nom_columnas["Ventana"]]
                     , $val2[$nom_columnas["Tipo exhibicion"]]
                     , $val2[$nom_columnas["Tipo Producto"]]
                     , $val2[$nom_columnas["Debut o Reorder"]]
                     , $val2[$nom_columnas["Temporada"]]
                     , $val2[$nom_columnas["Precio"]]
+                        , $val2[$nom_columnas["Oferta"]]
                     , $val2[$nom_columnas["Ranking de venta"]]
                     , $val2[$nom_columnas["Ciclo de Vida"]]
                     , $val2[$nom_columnas["Piramide Mix"]]
@@ -3308,9 +3327,13 @@ class plan_compra extends \parametros {
                     , $val2[$nom_columnas["Compra Unidades final"]]
                     , $val2[$nom_columnas["Var%"]]
                     , $val2[$nom_columnas["Target USD"]]
-                    , $val2[$nom_columnas["RFID USD"]]
+                        , $val2[$nom_columnas["FOB USD"]]
+                        , $rfid
                     , $val2[$nom_columnas["Via"]]
                     , $val2[$nom_columnas["Pais"]]
+                        , $val2[$nom_columnas["Proveedor"]]
+                        , $val2[$nom_columnas["Comentarios Post Negociacion"]]
+                        , $val2[$nom_columnas["Fecha de Embarque Acordada"]]
                     , $val2[$nom_columnas["Factor"]]
                     , $val2[$nom_columnas["Costo Total"]]
                     , $val2[$nom_columnas["Retail Total sin iva"]]
@@ -3333,70 +3356,69 @@ class plan_compra extends \parametros {
                     , $val2[$nom_columnas["TiendasB"]]
                     , $val2[$nom_columnas["TiendasC"]]
                     , $val2[$nom_columnas["TiendasI"]]
-                        /*cluster a*/               , $dtclustercurva[0]
-                        /*cluster b*/               , $dtclustercurva[1]
-                        /*cluster c*/               , $dtclustercurva[2]
-                        /*cluster I*/               , $dtclustercurva[3]
+                            /*cluster a*/, $dtclustercurva[0]
+                            /*cluster b*/, $dtclustercurva[1]
+                            /*cluster c*/, $dtclustercurva[2]
+                            /*cluster I*/, $dtclustercurva[3]
                     , $val2[$nom_columnas["Size%1"]], $val2[$nom_columnas["Size%2"]], $val2[$nom_columnas["Size%3"]]
                     , $val2[$nom_columnas["Size%4"]], $val2[$nom_columnas["Size%5"]], $val2[$nom_columnas["Size%6"]]
                     , $val2[$nom_columnas["Size%7"]], $val2[$nom_columnas["Size%8"]], $val2[$nom_columnas["Size%9"]]
-                    , $val2[$nom_columnas["VentA"]], $val2[$nom_columnas["VentB"]], $val2[$nom_columnas["VentC"]]
-                    , $val2[$nom_columnas["VentD"]], $val2[$nom_columnas["VentE"]], $val2[$nom_columnas["VentF"]]
-                    , $val2[$nom_columnas["VentG"]], $val2[$nom_columnas["VentH"]], $val2[$nom_columnas["VentI"]]
-                    , $val2[$nom_columnas["Unidades"]]
-                        /*piramide mix*/            , plan_compra::get_codName($val2[$nom_columnas['Piramide Mix']], plan_compra::list_piramidemix($f3))
-                        /*unidades finales*/        , $dtAjustada[3]
-                        /*semana inicio*/           , plan_compra::SemanasIni_Fin('SemIni',$cod_vent,$cod_tempo,'','')
-                        /*semana fin*/              , plan_compra::SemanasIni_Fin('SemFin',$cod_vent,$cod_tempo,plan_compra::get_codName($val2[$nom_columnas['Ciclo de Vida']], plan_compra::list_ciclo_vida()),$val2[$nom_columnas['Debut o Reorder']])
-                        /*ciclo*/                   , plan_compra::getsemliq_cicloA('CicloA',$val2[$nom_columnas['Ciclo de Vida']],$val2[$nom_columnas['Debut o Reorder']])
-                        /*COD_RANKVTA*/             , plan_compra::get_codName($val2[$nom_columnas['Ranking de venta']], plan_compra::list_rnk($f3))
-                        /*tdas*/                    , $dtAjustada[5]
-                        /*gm*/                      , round((((($val2[$nom_columnas['Precio']]/1.19)-(plan_compra::getC_uni_final($val2[$nom_columnas['Target USD']],$rfid,$val2[$nom_columnas['Ventana Debut']],$cod_tempo,$depto,$cod_pais,$cod_via)))/($val2[$nom_columnas['Precio']]/1.19))*100),2)
-                        /*cod ventana*/             , $cod_vent
-                        /*semanaliq*/               , plan_compra::getsemliq_cicloA('semLiq',$val2[$nom_columnas['Ciclo de Vida']],$val2[$nom_columnas['Debut o Reorder']])
-                        /*cos_uni_final us*/        , $val2[$nom_columnas['Target USD']] + $rfid
-                        /*cos_uni_final $*/         , plan_compra::getC_uni_final($val2[$nom_columnas['Target USD']],$rfid,$val2[$nom_columnas['Ventana Debut']] ,$cod_tempo,$depto,$cod_pais,$cod_via)
-                        /*cos_total*/               , $Cos_Uni_Finl_Pesos
-                        /*cod_ciclo_vid*/           , plan_compra::get_codName($val2[$nom_columnas['Ciclo de Vida']], plan_compra::list_ciclo_vida())
-                        /*cost_retail*/             , ROUND((($dtAjustada[3] * $val2[$nom_columnas['Precio']])/1.19))
-                        /*mstpack*/                 , plan_compra::get_mst_pack($depto,$val2[$nom_columnas['Cod Linea']],$val2[$nom_columnas['Cod Sublinea']])
-                        /*mkup*/                    , round(($val2[$nom_columnas['Precio']]/1.19)/ (plan_compra::getC_uni_final($val2[$nom_columnas['Target USD']],$rfid,$val2[$nom_columnas['Ventana Debut']],$cod_tempo,$depto,$cod_pais,$cod_via)),2)
-                        /*cod_via*/                 , $cod_via
-                        /*cod_pais*/                , $cod_pais
-                        /*costo total target*/      , $Cos_Total_Target_us
-                        /*n_cajas*/                 , $dtAjustada[2]
-                        /*primer reparto*/          , $dtAjustada[4]
-                        /*tallas*/                  , $tallas
-                        /*CURVATALLA*/              , $curva_reparto
-                        /*Porcentaje Ajustada-*/    , $dtAjustada[1]
-                        /*temp*/                    , plan_compra::get_codtemporadaseason2($val2, $nom_columnas)
-                        /*diferancia*/              , $dtAjustada[5]
-                        /*nom_linea*/               , plan_compra::get_NomJerarquia2($dtjerarquia, $val2, $nom_columnas, 1)
-                        /*nom_sublinea*/            , plan_compra::get_NomJerarquia2($dtjerarquia, $val2, $nom_columnas, 2)
-                        /*nom_marca*/               , plan_compra::get_NomMarcas2($dtmarcas, $val2, $nom_columnas)
-                        /*porcent_1*/               , $dtdiviporcent[0]
-                        /*porcent_2*/               , $dtdiviporcent[1]
-                        /*porcent_3*/               , $dtdiviporcent[2]
-                        /*porcent_4*/               , $dtdiviporcent[3]
-                        /*porcent_5*/               , $dtdiviporcent[4]
-                        /*porcent_6*/               , $dtdiviporcent[5]
-                        /*porcent_7*/               , $dtdiviporcent[6]
-                        /*porcent_8*/               , $dtdiviporcent[7]
-                        /*porcent_9*/               , $dtdiviporcent[8]
-                        /*cant_1*/                  , $dtdivicantidad[0]
-                        /*cant_2*/                  , $dtdivicantidad[1]
-                        /*cant_3*/                  , $dtdivicantidad[2]
-                        /*cant_4*/                  , $dtdivicantidad[3]
-                        /*cant_5*/                  , $dtdivicantidad[4]
-                        /*cant_6*/                  , $dtdivicantidad[5]
-                        /*cant_7*/                  , $dtdivicantidad[6]
-                        /*cant_8*/                  , $dtdivicantidad[7]
-                        /*cant_9*/                  , $dtdivicantidad[8]
-                        /*porcent ini*/             , $por_Inicial
-                        /*opcion ajust*/            , $dtAjustada[0]
-                        /*id_color3*/               , $key
-                        /*n_tdast*/                 , $tdas
-                    ));
+                        , $val2[$nom_columnas["UNIDADES"]]
+                            /*piramide mix*/, plan_compra::get_codName($val2[$nom_columnas['Piramide Mix']], plan_compra::list_piramidemix($f3))
+                            /*unidades finales*/, $dtAjustada[3]
+                            /*semana inicio*/, plan_compra::SemanasIni_Fin('SemIni', $cod_vent, $cod_tempo, '', '')
+                            /*semana fin*/, plan_compra::SemanasIni_Fin('SemFin', $cod_vent, $cod_tempo, plan_compra::get_codName($val2[$nom_columnas['Ciclo de Vida']], plan_compra::list_ciclo_vida()), $val2[$nom_columnas['Debut o Reorder']])
+                            /*ciclo*/, plan_compra::getsemliq_cicloA('CicloA', $val2[$nom_columnas['Ciclo de Vida']], $val2[$nom_columnas['Debut o Reorder']])
+                            /*COD_RANKVTA*/, plan_compra::get_codName($val2[$nom_columnas['Ranking de venta']], plan_compra::list_rnk($f3))
+                            /*tdas*/, $dtAjustada[5]
+                            /*gm*/, round((((($val2[$nom_columnas['Precio']] / 1.19) - $COS_UNI_PESOS) / ($val2[$nom_columnas['Precio']] / 1.19)) * 100), 2)
+                            /*cod ventana*/, $cod_vent
+                            /*semanaliq*/, plan_compra::getsemliq_cicloA('semLiq', $val2[$nom_columnas['Ciclo de Vida']], $val2[$nom_columnas['Debut o Reorder']])
+                            /*cos_uni_us*/, $COS_UNI_US
+                            /*cos_uni_$*/, $COS_UNI_PESOS
+                            /*cos_total*/, $Cos_Finl_Pesos
+                            /*cod_ciclo_vid*/, plan_compra::get_codName($val2[$nom_columnas['Ciclo de Vida']], plan_compra::list_ciclo_vida())
+                            /*cost_retail*/, ROUND((($dtAjustada[3] * $val2[$nom_columnas['Precio']]) / 1.19))
+                            /*mstpack*/, plan_compra::get_mst_pack($depto, $val2[$nom_columnas['Cod Linea']], $val2[$nom_columnas['Cod Sublinea']])
+                            /*mkup*/, round(($val2[$nom_columnas['Precio']] / 1.19) / ($COS_UNI_PESOS), 2)
+                            /*cod_via*/, $cod_via
+                            /*cod_pais*/, $cod_pais
+                            /*costo total target*/, $Cos_Total_Target_us
+                            /*n_cajas*/, $dtAjustada[2]
+                            /*primer reparto*/, $dtAjustada[4]
+                            /*tallas*/, $tallas
+                            /*CURVATALLA*/, $curva_reparto
+                            /*Porcentaje Ajustada-*/, $dtAjustada[1]
+                            /*temp*/, plan_compra::get_codtemporadaseason2($val2, $nom_columnas)
+                            /*diferancia*/, $dtAjustada[5]
+                            /*nom_linea*/, plan_compra::get_NomJerarquia2($dtjerarquia, $val2, $nom_columnas, 1)
+                            /*nom_sublinea*/, plan_compra::get_NomJerarquia2($dtjerarquia, $val2, $nom_columnas, 2)
+                            /*nom_marca*/, plan_compra::get_NomMarcas2($dtmarcas, $val2, $nom_columnas)
+                            /*porcent_1*/, $dtdiviporcent[0]
+                            /*porcent_2*/, $dtdiviporcent[1]
+                            /*porcent_3*/, $dtdiviporcent[2]
+                            /*porcent_4*/, $dtdiviporcent[3]
+                            /*porcent_5*/, $dtdiviporcent[4]
+                            /*porcent_6*/, $dtdiviporcent[5]
+                            /*porcent_7*/, $dtdiviporcent[6]
+                            /*porcent_8*/, $dtdiviporcent[7]
+                            /*porcent_9*/, $dtdiviporcent[8]
+                            /*cant_1*/, $dtdivicantidad[0]
+                            /*cant_2*/, $dtdivicantidad[1]
+                            /*cant_3*/, $dtdivicantidad[2]
+                            /*cant_4*/, $dtdivicantidad[3]
+                            /*cant_5*/, $dtdivicantidad[4]
+                            /*cant_6*/, $dtdivicantidad[5]
+                            /*cant_7*/, $dtdivicantidad[6]
+                            /*cant_8*/, $dtdivicantidad[7]
+                            /*cant_9*/, $dtdivicantidad[8]
+                            /*porcent ini*/, $por_Inicial
+                            /*opcion ajust*/, $dtAjustada[0]
+                            /*id_color3*/, $key
+                            /*n_tdast*/, $tdas
+                            /*cos_total_fob_us*/, $Cos_Total_Fob_usIns
+                        )
+                    );
 
                 //Guardado PLC_AJUSTES_COMPRA $dtAjustada
                 $_query = plan_compra::SaveAjuste_Compra2(/*AJUSTE DE COMPRA*/$dtAjustada[8]
@@ -3410,7 +3432,6 @@ class plan_compra extends \parametros {
                     /*Tallas*/, $tallas
                     /*TEMPO*/, $cod_tempo
                     /*DEPTO*/, $depto);
-
 
                 foreach ($_query as $val3){
                     array_push($logAjustes,$val3);
@@ -3429,6 +3450,28 @@ class plan_compra extends \parametros {
         plan_compra::InsertAjustes($logInsert);
 
         return $_Array;
+    }
+
+
+    public static function get_COS_UNI_US($target,$rfid,$fob) {
+        $val = 0;
+        if($fob == 0){
+            $val = $target + $rfid;
+        }else{
+            $val = $fob + $rfid;
+        }
+        return $val;
+    }
+
+    public static function get_cos_final_fob_us($target,$rfid,$fob,$unidades){
+        $val = 0;
+        if ($fob == 0){
+            $val = ($target+$rfid)*$unidades;
+
+        }else{
+            $val = ($fob+$rfid)*$unidades;
+        }
+        return $val;
     }
 #endregion
 

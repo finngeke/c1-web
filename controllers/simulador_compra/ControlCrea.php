@@ -513,7 +513,7 @@ public function ImportarAssormentValidaciones($f3){
         $count = 0;
         foreach ($cellIterator as $cell) {
             $count += 1;
-            if ($count > 102){
+            if ($count > 104){
                 break;
             }
             if ($column <= 1 ){
@@ -540,11 +540,9 @@ public function ImportarAssormentValidaciones($f3){
         $_error = false;
     }
 
-    //Validacion de Columnas archivo en blanco
+    //Validacion de Columnas archivo en bl8anco
     if ($_error == true){
-        array_push($rows[2],"Unidades");
-        try {
-            $nom_columnas = array_flip($rows[2]);
+        try {$nom_columnas = array_flip($rows[2]);
         }catch (Exception $e) {
             $_array_error = [];
             array_push($_array_error, "false","Existen colummnas en blanco.");
@@ -674,7 +672,6 @@ public function ImportarAssormentValidaciones($f3){
         }
     }
 
-
     //validacion de mstpack
     if ($_error == true) {
     $_ERROR2 = valida_archivo_bmt::val_mstpack($rows,$limite,$nom_columnas,$depto);
@@ -697,9 +694,6 @@ public function ImportarAssormentValidaciones($f3){
 
         }
     }
-
-
-
 
     //fin de validacion
     if ($_error == true ){
@@ -740,31 +734,20 @@ public function ImportarAssormentdelrows($f3){
             $count = 0;
             foreach ($cellIterator as $cell) {
                 $count += 1;
-                if ($count > 102) {
+                if ($count > 104) {
                     break;
                 }
                 if ($column <= 1) {
                     $cells[] = "s";
-                } else {
+                }else {
                     $cells[] = $cell->getCalculatedValue();
                 }
-                /*if ($column == 29 && $fila >= 14) { // TARGET BUDGET
-                    $cells[] = $cell->getCalculatedValue();
-                } elseif ($column == 30 && $fila >= 14) { //TOTAL QUANTITY
-                    $cells[] = $cell->getCalculatedValue();
-                } elseif ($column == 32 && $fila >= 14) {
-                    $cells[] = $cell->getCalculatedValue();
-                } else {
-                    $cells[] = $cell->getValue();
-                }*/
-                //$cells[] = $cell->getValue();
                 $column++;
             }
             $rows[] = $cells;
             $fila++;
         }
 
-        array_push($rows[2],"Unidades");
         $nom_columnas = array_flip($rows[2]);
         $limite = (count($rows)-1);
         for($i = 3;$i <= $limite; $i++){
@@ -786,13 +769,13 @@ public function ImportarAssormentInsHistorial($f3){
     $codMarca = $rows[$Columnas['Codigo Marca']];
 
 
+
    if ($_POST['_delete'] == 1 ){
         $grupo_compra = $rows[$Columnas['Grupo de compra']];
         plan_compra::InsertHistoricadelAssorment($cod_tempo,$depto,$codMarca,$grupo_compra);
     }
 
     $_ERROR = plan_compra::InsertHistoricaAssortment2($rows,$Columnas,$cod_tempo,$depto,$codMarca);
-
 
    $_val = "";
     if ($_ERROR["Tipo"] == false ){
@@ -805,6 +788,7 @@ public function ImportarAssormentInsHistorial($f3){
 }
 
 public function ImpAssormAbrirDataVent($f3){
+
     $cod_tempo = $f3->get('SESSION.COD_TEMPORADA');
     $depto = $f3->get('SESSION.COD_DEPTO');
 
@@ -826,7 +810,6 @@ public function ImpAssormAbrirDataVent($f3){
 
 
     foreach ($worksheet->getRowIterator() AS $row) {
-
         $cellIterator = $row->getCellIterator();
         $cellIterator->setIterateOnlyExistingCells(FALSE); // This loops through all cells,
         $cells = [];
@@ -834,7 +817,7 @@ public function ImpAssormAbrirDataVent($f3){
         $count = 0;
         foreach ($cellIterator as $cell) {
             $count += 1;
-            if ($count > 102) {
+            if ($count > 104) {
                 break;
             }
             if ($column <= 1) {
@@ -858,7 +841,6 @@ public function ImpAssormAbrirDataVent($f3){
         $fila++;
     }
 
-    array_push($rows[2],"Unidades");
     $nom_columnas = array_flip($rows[2]);
     $limite = (count($rows)-1);
     for($i = 3;$i <= $limite; $i++){
@@ -870,15 +852,11 @@ public function ImpAssormAbrirDataVent($f3){
     $rows = valida_archivo_bmt::eliminardatosrows($rows,$limite,$nom_columnas);
     $limite = (count($rows)-1);
 
-
     //reabrir datos por ventana
-    $rows = valida_archivo_bmt::Separacion_Data_Ventana2($rows,$nom_columnas,$cod_tempo,$depto);
-    //$limite = (count($rows)-1);
-    //$nom_columnas = array_flip($rows[0]);
+    $rows = valida_archivo_bmt::Limpieza_data_Assortment($rows,$nom_columnas);
+    $_SESSION['dtAssorment']= $rows;
 
-    $_SESSION['dtSeparacionVent']= $rows;
-
-    if ( count($_SESSION['dtSeparacionVent']) > 0){
+    if ( count($_SESSION['dtAssorment']) > 0){
        echo 1;
     }else{
         echo 0;
@@ -890,7 +868,7 @@ public function ImpAssormCalculos($f3){
 
         $cod_tempo = $f3->get('SESSION.COD_TEMPORADA');
         $depto = $f3->get('SESSION.COD_DEPTO');
-        $rows = $_SESSION['dtSeparacionVent'];
+        $rows = $_SESSION['dtAssorment'];
         $Columnas = $rows[0];
         $login = $f3->get('SESSION.login');
 
@@ -903,13 +881,8 @@ public function ImpAssormCalculos($f3){
         $Columnas = array_flip($Columnas);
 
         //Calculo del curvado y costos + insert PLC_AJUSTES_COMPRA + delete rows
-        $rows = plan_compra::ImpAssorCalculos($rows,$Columnas,$cod_tempo,$depto,$login,$_SESSION['dtjerarquia'],$f3);
-
-
-
+        $rows = plan_compra::ImpAssorCalculos($rows,$Columnas,$cod_tempo,$depto,$_SESSION['dtjerarquia'],$f3);
         echo json_encode($rows);
-
-
     }
 
 public function InsertarAssormentC1($f3){

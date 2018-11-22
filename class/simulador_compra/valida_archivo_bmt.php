@@ -293,7 +293,7 @@ class valida_archivo_bmt extends \parametros {
             }
         }}//2 Validacion ciclo de vida
         if ($val == TRUE) {
-/*Validacion RNK VTA */ $tipoVal = 3; $dtrnkventa = plan_compra::list_rnk($f3);
+            /*Validacion RNK VTA */ $tipoVal = 3; $dtrnkventa = plan_compra::list_rnk($f3);
             for($i = 3;$i <= $limite; $i++){
                 $val2 = false;
                 if ($rows[$i][$nom_columnas['Ranking de venta']] != null ) {
@@ -385,11 +385,11 @@ class valida_archivo_bmt extends \parametros {
                 }
             }}//8 Validacion pais
         if ($val == TRUE) {
-            /*Validacion Ventana Debut */ $tipoVal = 9; $ventanas = array("A","B","C","D","E","F","G","H","I");
+            /*Validacion Ventana */ $tipoVal = 9; $ventanas = array("A","B","C","D","E","F","G","H","I");
             for($i = 3;$i <= $limite; $i++){
                 $val2 = false;
                     foreach ($ventanas as $var)  {
-                        if ($var == strtoupper($rows[$i][$nom_columnas['Ventana Debut']])) {
+                        if ($var == strtoupper($rows[$i][$nom_columnas['Ventana']])) {
                             $val2 = true;break;
                         };
                     }
@@ -397,7 +397,7 @@ class valida_archivo_bmt extends \parametros {
                         $val = FALSE;
                         $filarow = $filarow . strval($i + 1) . ",";
                     }
-            }}//9 Validacion Ventana Debut
+            }}
         if ($val == TRUE) {
             /*Validacion Precio Blanco null*/ $tipoVal = 18;
             for($i = 3;$i <= $limite; $i++){
@@ -423,6 +423,15 @@ class valida_archivo_bmt extends \parametros {
                 }
             }}//
         if ($val == TRUE) {
+            /*Validacion debut reorder*/ $tipoVal = 25;
+            for($i = 3;$i <= $limite; $i++){
+                if ($rows[$i][$nom_columnas['Debut o Reorder']] == "DEBUT" or $rows[$i][$nom_columnas['Debut o Reorder']]== "REORDER") {
+                }else{
+                    $val = FALSE;
+                    $filarow = $filarow . strval($i + 1) . ",";
+                }
+            }}//
+        if ($val == TRUE) {
             /*Validacion Tallas y Curvas*/ $tipoVal = 11;
             for($i = 3;$i <= $limite; $i++){
                 $arraytalla = [];$arraycurva = [];
@@ -445,12 +454,18 @@ class valida_archivo_bmt extends \parametros {
         if ($val == TRUE) {
             /*Validacion tipo empaque*/ $tipoVal = 12;
             for($i = 3;$i <= $limite; $i++){
-                if ($rows[$i][$nom_columnas['Tipo de empaque']] != null and $rows[$i][$nom_columnas['Tipo de empaque']] <> "0" and $rows[$i][$nom_columnas['Tipo de empaque']] <> "") {
                     if (strtoupper($rows[$i][$nom_columnas['Tipo de empaque']]) == "SOLIDO" or strtoupper($rows[$i][$nom_columnas['Tipo de empaque']])== "CURVADO") {
                     }else{
                         $val = FALSE;
                         $filarow = $filarow . strval($i + 1) . ",";
                     }
+            }}//
+        if ($val == TRUE) {
+            /*Validacion tipo empaque no los reordes*/ $tipoVal = 24;
+            for($i = 3;$i <= $limite; $i++){
+                if($rows[$i][$nom_columnas['Debut o Reorder']] == "REORDER" and  $rows[$i][$nom_columnas['Tipo de empaque']] == "CURVADO"){
+                    $val = FALSE;
+                    $filarow = $filarow . strval($i + 1) . ",";
                 }
             }}//
         if ($val == TRUE) {
@@ -491,12 +506,11 @@ class valida_archivo_bmt extends \parametros {
         if ($val == TRUE) {
             /*Validacion de Unidades*/ $tipoVal = 14;
             for($i = 3;$i <= $limite; $i++){
-                $ventana =  $rows[$i][$nom_columnas['Ventana Debut']] ;
+                $ventana =  $rows[$i][$nom_columnas['Ventana']] ;
 
-                if ($rows[$i][$nom_columnas['Vent'.$ventana]] == null or
-                    $rows[$i][$nom_columnas['Vent'.$ventana]] == "0" or
-                    $rows[$i][$nom_columnas['Vent'.$ventana]] == "") {
-
+                if ($rows[$i][$nom_columnas['UNIDADES']] == null or
+                    $rows[$i][$nom_columnas['UNIDADES']] == "0" or
+                    $rows[$i][$nom_columnas['UNIDADES']] == "") {
                     $val = FALSE;
                     $filarow = $filarow . strval($i + 1) . ",";
                 }
@@ -649,7 +663,40 @@ class valida_archivo_bmt extends \parametros {
                }
             }
         }//
-
+        if ($val == TRUE) {
+            /*Validacion fecha acordada*/ $tipoVal = 26;
+            for($i = 3;$i <= $limite; $i++){
+                if ($rows[$i][$nom_columnas['Fecha de Embarque Acordada']] <> null or $rows[$i][$nom_columnas['Fecha de Embarque Acordada']]<> "") {
+                    $dtfecha = explode('-', $rows[$i][$nom_columnas['Fecha de Embarque Acordada']]);
+                    if (count($dtfecha)== 3){
+                        if (checkdate($dtfecha[1], $dtfecha[0], $dtfecha[2]) == false){
+                            $val = FALSE;
+                            $filarow = $filarow . strval($i + 1) . ",";
+                        }
+                    }else{
+                        $val = FALSE;
+                        $filarow = $filarow . strval($i + 1) . ",";
+                    }
+                }
+            }
+        }//
+        if ($val == TRUE) {
+            /*Validacion evento*/ $tipoVal = 27;
+            for($i = 3;$i <= $limite; $i++){
+                if($rows[$i][$nom_columnas['Evento']] <> NULL and $rows[$i][$nom_columnas['Evento']] <> ''){
+                    $eventos = "MADRE,PADRE,NINO,NAVIDAD"; $dtevento = explode(",", $eventos);
+                    $_exs = false;
+                    foreach ($dtevento as $valor){
+                        if ($valor == strtoupper($rows[$i][$nom_columnas['Evento']])){
+                            $_exs = true; break;
+                        }
+                    }
+                    if($_exs == false){
+                        $val = FALSE;
+                        $filarow = $filarow . strval($i + 1) . ",";
+                    }
+                }
+            }}//
         if ($val == FALSE ) {
             if ($tipoVal == 1){
                 $array = array('Tipo' => $val,
@@ -697,7 +744,7 @@ class valida_archivo_bmt extends \parametros {
             }
             elseif ($tipoVal == 12){
                 $array = array('Tipo' => $val,
-                    'Error'=> "(".substr($filarow, 0, - 1).") ->El tipo empaque no encuentran bd C1.");
+                    'Error'=> "(".substr($filarow, 0, - 1).") ->El tipo empaque no encuentran bd C1.Ej(SOLIDO o CURVADO)");
             }
             elseif ($tipoVal == 13){
                 $array = array('Tipo' => $val,
@@ -705,7 +752,7 @@ class valida_archivo_bmt extends \parametros {
             }
             elseif ($tipoVal == 14){
                 $array = array('Tipo' => $val,
-                    'Error'=> "(".substr($filarow, 0, - 1).") ->.Las unidades por ventana no deben estar en 0.");
+                    'Error'=> "(".substr($filarow, 0, - 1).") ->.Las unidades no deben estar en 0.");
             }
             elseif ($tipoVal == 15){
                 $array = array('Tipo' => $val,
@@ -742,6 +789,18 @@ class valida_archivo_bmt extends \parametros {
             elseif ($tipoVal == 23){
                 $array = array('Tipo' => $val,
                     'Error'=> "(".substr($filarow, 0, - 1).") ->El ClusterI no debe ser nulo o no debe esta en 0.");
+            }elseif ($tipoVal == 24){
+                $array = array('Tipo' => $val,
+                    'Error'=> "(".substr($filarow, 0, - 1).") ->Los Reorder's tiene un tipo de empaque Curvados.");
+            }elseif ($tipoVal == 25){
+                $array = array('Tipo' => $val,
+                    'Error'=> "(".substr($filarow, 0, - 1).") ->El campo [Debut o Reorder] esta vacío o no se encuentra bd C1.");
+            }elseif ($tipoVal == 26){
+                $array = array('Tipo' => $val,
+                    'Error'=> "(".substr($filarow, 0, - 1).") ->El campo [Fecha de Embarque Acordada] el formato es incorrecto.Ej (dd-mm-yyyy)");
+            }elseif ($tipoVal == 27){
+                $array = array('Tipo' => $val,
+                    'Error'=> "(".substr($filarow, 0, - 1).") ->Evento(s) no encuentrado(s) BD C1. Ej: MADRE,PADRE,NINO,NAVIDAD.");
             }
         }else{
             $array = array('Tipo' => $val,
@@ -1130,6 +1189,104 @@ class valida_archivo_bmt extends \parametros {
         }
         return $arrayinsert;
     }
+
+
+    public static function Limpieza_data_Assortment($rows,$nom_columnas){
+
+        $arrayinsert=[];
+        array_push($arrayinsert,$rows[0]);
+        $key = 0;
+        foreach ($rows as $val){$key ++;
+            if($key>1){
+                $debut = strtoupper($val[$nom_columnas["Debut o Reorder"]]);
+                array_push($arrayinsert
+                  , array($val[$nom_columnas["s"]]
+                        , $val[$nom_columnas["Cod Dpto"]]
+                        , $val[$nom_columnas["Dpto"]]
+                        , $val[$nom_columnas["Marca"]]
+                        , $val[$nom_columnas["Codigo Marca"]]
+                        , $val[$nom_columnas["Nombre Comprador"]]
+                        , $val[$nom_columnas["Nombre Disenador"]]
+                        , $val[$nom_columnas["Season"]]
+                        , $val[$nom_columnas["Linea"]]
+                        , $val[$nom_columnas["Cod Linea"]]
+                        , $val[$nom_columnas["Sublinea"]]
+                        , $val[$nom_columnas["Cod Sublinea"]]
+                        , $val[$nom_columnas["Codigo corporativo"]]
+                        , $val[$nom_columnas["Nombre Estilo"]]
+                        , $val[$nom_columnas["Estilo Corto"]]
+                        , $val[$nom_columnas["Descripcion Estilo"]]
+                        , $val[$nom_columnas["Cod Opcion"]]
+                        , $val[$nom_columnas["Color"]]
+                        , $val[$nom_columnas["Cod Color"]]
+                        , $val[$nom_columnas["Composicion"]]
+                        , $val[$nom_columnas["Tipo de Tela"]]
+                        , $val[$nom_columnas["Forro"]]
+                        , $val[$nom_columnas["Evento"]]
+                        , $val[$nom_columnas["Grupo de compra"]]
+                        , $val[$nom_columnas["Ventana"]]
+                        , $val[$nom_columnas["Tipo exhibicion"]]
+                        , $val[$nom_columnas["Tipo Producto"]]
+                        , $debut
+                        , $val[$nom_columnas["Temporada"]]
+                        , $val[$nom_columnas["Precio"]]
+                        , $val[$nom_columnas["Oferta"]]
+                        , $val[$nom_columnas["Ranking de venta"]]
+                        , $val[$nom_columnas["Ciclo de Vida"]]
+                        , $val[$nom_columnas["Piramide Mix"]]
+                        , $val[$nom_columnas["Ratio compra"]]
+                        , $val[$nom_columnas["Factor amplificacion"]]
+                        , $val[$nom_columnas["Ratio compra final"]]
+                        , valida_archivo_bmt::Valida_DEBUT_REORDER($val[$nom_columnas["Cluster"]],$debut,"CLUSTER")
+                        , valida_archivo_bmt::Valida_DEBUT_REORDER($val[$nom_columnas["Formato"]],$debut,"FORMATO")
+                        , $val[$nom_columnas["Compra Unidades Assortment"]]
+                        , $val[$nom_columnas["Compra Unidades final"]]
+                        , $val[$nom_columnas["Var%"]]
+                        , ($val[$nom_columnas["Target USD"]] <> null ? ($val[$nom_columnas["Target USD"]]) : 0)
+                        , ($val[$nom_columnas["FOB USD"]] <> null ? ($val[$nom_columnas["FOB USD"]]) : 0)
+                        , ($val[$nom_columnas["RFID USD"]] <> null ? ($val[$nom_columnas["RFID USD"]]) : 0)
+                        , $val[$nom_columnas["Via"]]
+                        , $val[$nom_columnas["Pais"]]
+                        , $val[$nom_columnas["Proveedor"]]
+                        , $val[$nom_columnas["Comentarios Post Negociacion"]]
+                        , $val[$nom_columnas["Fecha de Embarque Acordada"]]
+                        , $val[$nom_columnas["Factor"]]
+                        , $val[$nom_columnas["Costo Total"]]
+                        , $val[$nom_columnas["Retail Total sin iva"]]
+                        , $val[$nom_columnas["MUP Compra"]]
+                        , $val[$nom_columnas["Exhibicion"]]
+                        , $val[$nom_columnas["Talla1"]], $val[$nom_columnas["Talla2"]], $val[$nom_columnas["Talla3"]]
+                        , $val[$nom_columnas["Talla4"]], $val[$nom_columnas["Talla5"]], $val[$nom_columnas["Talla6"]]
+                        , $val[$nom_columnas["Talla7"]], $val[$nom_columnas["Talla8"]], $val[$nom_columnas["Talla9"]]
+                        , $val[$nom_columnas["Inner"]]
+                        , $val[$nom_columnas["Curva1"]], $val[$nom_columnas["Curva2"]], $val[$nom_columnas["Curva3"]]
+                        , $val[$nom_columnas["Curva4"]], $val[$nom_columnas["Curva5"]], $val[$nom_columnas["Curva6"]]
+                        , $val[$nom_columnas["Curva7"]], $val[$nom_columnas["Curva8"]], $val[$nom_columnas["Curva9"]]
+                        , $val[$nom_columnas["Validador Masterpack/Inner"]]
+                        , $val[$nom_columnas["Tipo de empaque"]]
+                        , $val[$nom_columnas["N curvas por caja curvadas"]]
+                        , $val[$nom_columnas["1_%"]], $val[$nom_columnas["2_%"]], $val[$nom_columnas["3_%"]]
+                        , $val[$nom_columnas["4_%"]], $val[$nom_columnas["5_%"]], $val[$nom_columnas["6_%"]]
+                        , $val[$nom_columnas["7_%"]], $val[$nom_columnas["8_%"]], $val[$nom_columnas["9_%"]]
+                        , $val[$nom_columnas["TiendasA"]]
+                        , $val[$nom_columnas["TiendasB"]]
+                        , $val[$nom_columnas["TiendasC"]]
+                        , $val[$nom_columnas["TiendasI"]]
+                        , valida_archivo_bmt::ValidaCurvasxtdasDebut($val[$nom_columnas["ClusterA"]],$debut)
+                        , valida_archivo_bmt::ValidaCurvasxtdasDebut($val[$nom_columnas["ClusterB"]],$debut)
+                        , valida_archivo_bmt::ValidaCurvasxtdasDebut($val[$nom_columnas["ClusterC"]],$debut)
+                        , valida_archivo_bmt::ValidaCurvasxtdasDebut($val[$nom_columnas["ClusterI"]],$debut)
+                        , $val[$nom_columnas["Size%1"]], $val[$nom_columnas["Size%2"]], $val[$nom_columnas["Size%3"]]
+                        , $val[$nom_columnas["Size%4"]], $val[$nom_columnas["Size%5"]], $val[$nom_columnas["Size%6"]]
+                        , $val[$nom_columnas["Size%7"]], $val[$nom_columnas["Size%8"]], $val[$nom_columnas["Size%9"]]
+                        , $val[$nom_columnas["UNIDADES"]]
+                    ));
+            }
+        }
+        return $arrayinsert;
+    }
+
+
     public static function existenCamposVacios($fila, $campo, $columnas, $datos) {
 
         $valor = '';
@@ -1374,7 +1531,6 @@ class valida_archivo_bmt extends \parametros {
     }
     public static function ValidaCodOpcion($rows,$limite,$nom_columnas,$temporada){
         $val3 = TRUE; $_mensaje = []; $tipoVal = 0;
-        $dtDistinctCodopcion = [];
         $_Errorfile = ""; $tipoVal = 1;
 
         //1.-validacion de num opcion en blanco
@@ -1396,38 +1552,6 @@ class valida_archivo_bmt extends \parametros {
                 if (strlen($rows[$i][$nom_columnas['Cod Opcion']]) <> 12){
                     $_Errorfile = $_Errorfile . ($i + 1) . ",";
                     $val3 = false;
-                }
-            }
-        }
-
-        //3.-validacion Duplicidad de num_opcion del archivo
-        if ($val3 == TRUE) {$tipoVal = 3; $_Errorfile = "";
-            for($i = 3;$i <= $limite; $i++){
-                array_push($dtDistinctCodopcion,$rows[$i][$nom_columnas['Cod Opcion']]);
-            }
-            $dtDistinctCodopcion = array_unique($dtDistinctCodopcion);
-
-            foreach ($dtDistinctCodopcion as $val) {
-                $contador = 0;
-                $array = explode(",", $_Errorfile);
-                $_exist = false;
-                foreach ($array as $val2) {
-                    if ($val2 == $val) {
-                        $_exist = true;
-                        break;
-                    }
-                }
-                if ($_exist == false) {
-                    for ($i = 3; $i <= $limite; $i++) {
-                        if ($val == $rows[$i][$nom_columnas['Cod Opcion']]) {
-                            $contador++;
-                        }
-                        if ($contador > 1) {
-                            $_Errorfile = $_Errorfile . ($i + 1) . ",";
-                            $val3 = false;
-                            break;
-                        }
-                    }
                 }
             }
         }
@@ -1457,9 +1581,6 @@ class valida_archivo_bmt extends \parametros {
             }elseif ($tipoVal == 2){
                 $_mensaje = array('Tipo' => $val3,
                     'Error'=> "(".substr($_Errorfile, 0, - 1).") -> El Número de opción tiene que ser 12 caracteres. Ej:(SS19INDH0001)");
-            }elseif ($tipoVal == 3){
-                $_mensaje = array('Tipo' => $val3,
-                    'Error'=> "(".substr($_Errorfile, 0, - 1).") -> Existe(n) Número(s) de opción(es) duplicada(s).");
             }elseif ($tipoVal == 4){
                 $_mensaje = array('Tipo' => $val3,
                     'Error'=> "(".substr($_Errorfile, 0, - 1).") -> El Número de opción tiene otra temporada la que esta seleccionada EJ. OI = FW | PV = SS.");
