@@ -16,18 +16,18 @@
 
     <!-- POPUP Carga Archivo PI -->
     <div id="POPUP_carga_archivo_pi">
-        <form method="post" action="/kendo-ui/upload/submit">
+        <form method="POST" action="guardar/archivo_pi_server" id="pi_upload_ajax" name="pi_upload_ajax" enctype="multipart/form-data">
             <ul id="fieldlist">
                 <li>
                     <label for="NombrePI">PROFORMA:</label>
-                    <input type="text" class="k-textbox" name="NombrePI" id="NombrePI" required="required" />
+                    <input type="text" class="k-textbox" name="NombrePI" id="NombrePI" readonly required="required" />
                 </li>
                 <li>
                     <br>
                     <input name="txt_archivo_pi" id="txt_archivo_pi" type="file" aria-label="txt_archivo_pi" />
                 </li>
                 <li>
-                    <br><button type="submit" class="k-button k-primary">Guardar Archivo</button>
+                    <br><button type="submit" class="k-button k-primary" id="carga_pi_server_archivo" >Guardar Archivo</button>
                 </li>
             </ul>
         </form>
