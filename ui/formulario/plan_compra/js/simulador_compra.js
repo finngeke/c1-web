@@ -13,7 +13,7 @@ $(function () {
 
         $.ajax({
             //type: "POST",
-            url: crudServiceBaseUrl + "ActualizaPlanCompra",
+            url: crudServiceBaseUrl + "ProcesaDataPlanCompra",
             data: {models: kendo.stringify(e.data)},
             contentType: "application/json",
             //dataType: "json",
@@ -248,7 +248,7 @@ $(function () {
                     CALIDAD: {type: "string"},
                     COD_OCASION_USO: {type: "string"},
                     COD_PIRAMIX: {type: "string"},
-                    DESCRIPCION: {type: "string"},
+                    NOM_VENTANA: {type: "string"},
                     COD_RANKVTA: {type: "string"},
                     LIFE_CYCLE: {type: "string"},
                     NUM_EMB: {type: "string"},
@@ -328,7 +328,11 @@ $(function () {
                     COSTO_TARGET_BASE: {type: "number"},
                     COSTO_FOB_BASE: {type: "number"},
                     COSTO_INSP_BASE: {type: "number"},
-                    COSTO_RFID_BASE: {type: "number"}
+                    COSTO_RFID_BASE: {type: "number"},
+                    COD_MARCA: {type: "number"},
+                    N_CURVASXCAJAS: {type: "number"},
+                    COD_JER2: {type: "number"},
+                    COD_SUBLIN: {type: "number"}
 
                 }
             }
@@ -434,6 +438,7 @@ $(function () {
             // Busco el ID_COLOR3
             var ID_COLOR3 ="";
             var DEBUTREORDER ="";
+            var PROFORMA ="";
             var spreadsheet_id_color3 = $("#spreadsheet").data("kendoSpreadsheet");
             var sheet = spreadsheet_id_color3.activeSheet();
             var range = sheet.selection();
@@ -446,6 +451,8 @@ $(function () {
                 ID_COLOR3 = range_color3.values();
                 var range_debutreorder = sheet.range("BR"+fila_id);
                 DEBUTREORDER = range_debutreorder.values();
+                var range_proforma = sheet.range("CD"+fila_id);
+                PROFORMA = range_proforma.values();
 
             });
 
@@ -548,12 +555,24 @@ $(function () {
             }
 
             if(command == "Cargar Archivo PI") {
-                /*var sheet = spreadsheet.activeSheet(),
-                    selection = sheet.selection();
-                selection.background("green");*/
 
-                var popupArchivoPI = $("#POPUP_carga_archivo_pi");
-                popupArchivoPI.data("kendoWindow").open();
+                /*
+                var sheet = spreadsheet.activeSheet(),
+                selection = sheet.selection();
+                selection.background("green");
+                */
+
+                if( (PROFORMA.length==0) ){
+                    popupNotification.show(" Seleccione un registro con proforma.", "error");
+                }else {
+
+                    $("#NombrePI").val(PROFORMA);
+
+                    var popupArchivoPI = $("#POPUP_carga_archivo_pi");
+                    popupArchivoPI.data("kendoWindow").open();
+
+                }
+
 
             }
 
