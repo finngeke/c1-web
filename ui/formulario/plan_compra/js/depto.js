@@ -51,7 +51,7 @@ function redireccDeptoPopUp(event) {
                 flag_cod_tip_usr = c[0];
 
                 //estos perfiles ingresan como lectura
-                if ((flag_cod_tip_usr == 11) || (flag_cod_tip_usr == 4) || (flag_cod_tip_usr == 7)) {
+                if ((flag_cod_tip_usr == 11) || (flag_cod_tip_usr == 4) || (flag_cod_tip_usr == 7) || (flag_cod_tip_usr == 100) || (flag_cod_tip_usr == 101)) {
                     // Llamada a la función de bloqueos de popup cuando es de tipo lectura
                     campos_bloquear_tipo_usuario();
 
@@ -211,7 +211,7 @@ function redireccDeptoPopUp(event) {
                                                         flag_cod_tip_usr = c[0];
 
                                                         //estos perfiles ingresan como lectura
-                                                        if ((flag_cod_tip_usr == 11) || (flag_cod_tip_usr == 4) ||(flag_cod_tip_usr == 7)){
+                                                        if ((flag_cod_tip_usr == 11) || (flag_cod_tip_usr == 4) ||(flag_cod_tip_usr == 7) || (flag_cod_tip_usr == 100) || (flag_cod_tip_usr == 101)){
 														getjerarquia(depto);
                                                         location.href='simulador_compra?depto='+depto;
 

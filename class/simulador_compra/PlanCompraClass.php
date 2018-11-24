@@ -265,6 +265,43 @@ class PlanCompraClass extends \parametros
     public static function ProcesaDataPlanCompra($TEMPORADA, $DEPTO, $LOGIN, $ID_COLOR3, $GRUPO_COMPRA, $COD_TEMP, $LINEA, $SUBLINEA, $MARCA, $ESTILO, $SHORT_NAME, $ID_CORPORATIVO, $DESCMODELO, $DESCRIP_INTERNET, $NOMBRE_COMPRADOR, $NOMBRE_DISENADOR, $COMPOSICION, $TIPO_TELA, $FORRO, $COLECCION, $EVENTO, $COD_ESTILO_VIDA, $CALIDAD, $COD_OCASION_USO, $COD_PIRAMIX, $NOM_VENTANA, $COD_RANKVTA, $LIFE_CYCLE, $NUM_EMB, $COD_COLOR, $TIPO_PRODUCTO, $TIPO_EXHIBICION, $DESTALLA, $TIPO_EMPAQUE, $PORTALLA_1_INI, $PORTALLA_1, $CURVATALLA, $CURVAMIN, $UNID_OPCION_INICIO, $UNID_OPCION_AJUSTADA, $CAN, $MTR_PACK, $CANT_INNER, $SEG_ASIG, $FORMATO, $TDAS, $A, $B, $C, $I, $UND_ASIG_INI, $ROT, $NOM_PRECEDENCIA, $NOM_VIA, $NOM_PAIS, $VIAJE, $MKUP, $PRECIO_BLANCO, $OFERTA, $GM, $COD_TIP_MON, $COSTO_TARGET, $COSTO_FOB, $COSTO_INSP, $COSTO_RFID, $ROYALTY_POR, $COSTO_UNIT, $COSTO_UNITS, $CST_TOTLTARGET, $COSTO_TOT, $COSTO_TOTS, $RETAIL, $DEBUT_REODER, $SEM_INI, $SEM_FIN, $CICLO, $AGOT_OBJ, $SEMLIQ, $ALIAS_PROV, $COD_PROVEEDOR, $COD_TRADER, $AFTER_MEETING_REMARKS, $CODSKUPROVEEDOR, $SKU, $PROFORMA, $ARCHIVO, $ESTILO_PMM, $ESTADO_MATCH, $PO_NUMBER, $ESTADO_OC, $FECHA_ACORDADA, $FECHA_EMBARQUE, $FECHA_ETA, $FECHA_RECEPCION, $DIAS_ATRASO, $CODESTADO, $ESTADO_C1, $VENTANA_LLEGADA, $PROFORMA_BASE, $TIPO_EMPAQUE_BASE, $UNI_INICIALES_BASE, $PRECIO_BLANCO_BASE, $COSTO_TARGET_BASE, $COSTO_FOB_BASE, $COSTO_INSP_BASE, $COSTO_RFID_BASE, $COD_MARCA, $N_CURVASXCAJAS, $COD_JER2, $COD_SUBLIN)
     {
 
+        // 1.- Si la proforma base no es igual a la que nos llega, hay que aplicar la función de guardado de proforma.
+        if( ($PROFORMA_BASE != $PROFORMA) && (is_null($PROFORMA_BASE)) ){
+
+            // Si llega $PROFORMA y $ID_COLOR3
+            if( (!empty($PROFORMA)) && (!empty($ID_COLOR3)) && ($ESTADO_C1==0) ){
+
+                $sube_archivo = 0;
+                if ($ARCHIVO == "Cargado..") {
+                    $sube_archivo = 1;
+                }
+
+
+                // Aplicar guardado de proforma
+                $query_proforma = PlanCompraClass::GuardaProforma($TEMPORADA, $DEPTO, $LOGIN,$PROFORMA,$ID_COLOR3,$sube_archivo);
+                if(!$query_proforma){
+                    return " No se pudo realizar la actualización de la proforma.";
+                    die();
+                }
+
+
+            // Fin Validación Campos Necesarios
+            }
+
+        // Fin validación PROFORMA
+        }
+
+
+        // 2.- Verificar si hay cambios en algún dato que implique curvado -> 2.1 Aplicar Guardado solo Curvado.
+        //                                                                 -> 2.2 Aplicar Guardado Resto de los Campos.
+
+
+        //3.- Si no hay cambios en datos curvados, utilizar 2.2 (Separar guardado y posibles errores)
+
+
+
+
+        // Validar Campo $COSTO_TARGET
         $COSTO_TARGET = str_replace(",", ".", $COSTO_TARGET);
         if (empty($COSTO_TARGET) || (!is_numeric($COSTO_TARGET)) || ($COSTO_TARGET == null ) || ($COSTO_TARGET == '' ) ) {
             $COSTO_TARGET = 0;
@@ -274,6 +311,7 @@ class PlanCompraClass extends \parametros
             $COSTO_TARGET = "0" . $COSTO_TARGET;
         }
 
+        // Validar Campo $COSTO_FOB
         $COSTO_FOB = str_replace(",", ".", $COSTO_FOB);
         if (empty($COSTO_FOB) || (!is_numeric($COSTO_FOB)) || ($COSTO_FOB == null ) || ($COSTO_FOB == '' ) ) {
             $COSTO_FOB = 0;
@@ -283,7 +321,7 @@ class PlanCompraClass extends \parametros
             $COSTO_FOB = "0" . $COSTO_FOB;
         }
 
-
+        // Validar Campo $COSTO_INSP
         $COSTO_INSP = str_replace(",", ".", $COSTO_INSP);
         if (empty($COSTO_INSP) || (!is_numeric($COSTO_INSP)) || ($COSTO_INSP == null ) || ($COSTO_INSP == '' ) ) {
             $COSTO_INSP = 0;
@@ -293,7 +331,7 @@ class PlanCompraClass extends \parametros
             $COSTO_INSP = "0" . $COSTO_INSP;
         }
 
-
+        // Validar Campo $COSTO_RFID
         $COSTO_RFID = str_replace(",", ".", $COSTO_RFID);
         if (empty($COSTO_RFID) || (!is_numeric($COSTO_RFID)) || ($COSTO_RFID == null ) || ($COSTO_RFID == '' ) ) {
             $COSTO_RFID = 0;
@@ -346,6 +384,13 @@ class PlanCompraClass extends \parametros
             return " No se pudo obtener los datos del curvado, revise la data ingresada.";
             die();
         }*/
+
+
+        // Validar que llega la Vía
+        if( ($NOM_VIA!="MARITIMO") || ($NOM_VIA!="AEREA") || ($NOM_VIA!="TERRESTRE") ){
+            return " El valor enviado en la columna Vía, no corresponde.";
+            die();
+        }
 
         // Transforma a Número el "Nombre de la Vía"
         $NOM_VIA_NUMERO=0;
@@ -448,114 +493,272 @@ class PlanCompraClass extends \parametros
         }
 
 
+        // Variables que se van enviar al UPDATE
         $COSTO_UNIT = $costo_unitario_final_usd;
         $COSTO_UNITS = $costo_unitario_final_pesos;
+        $CST_TOTLTARGET = $total_target_usd;
+        $COSTO_TOT = $total_fob_usd;
+        $COSTO_TOTS = $costo_total_pesos;
+        $MKUP = $nuevo_mkup;
+        $GM = $nuevo_gm;
+        $PROVEEDOR = $ALIAS_PROV;
+        $PAIS = $NOM_PAIS;
+        $NOM_PAIS = $NOM_PAIS_NUMERO;
+        $VIA = $NOM_VIA;
+        $NOM_VIA = $NOM_VIA_NUMERO;
+        $FACTOR_EST = $factor_est_campo;
+        $TARGET = $COSTO_TARGET;
+        // Nombres Propios (Cálculo Curvado)
+        // $CURVA_UNID_AJUST       //  unid ajust
+        // $CURVA_POR_AJUSTE       //  porcenajust
+        // $CURVA_N_CAJAS          //  N° CAJAS
+        // $CURVA_UNID_FINAL       //  unidfinal
+        // $CURVA_PRIMERA_CARGA    //  primera carga
+        // $CURVA_TDAS             //  tiendas
+        // $CURVA_UNIDAJUSTXTALLA  //  unidadesajustXtalla
+        $UNIDADES_FINALES = $CAN;
+        $UNIDADES_INICIALES = $UNID_OPCION_INICIO;
+        $cluster_ = $SEG_ASIG;
+        //$marca_ =
+
+        /*
+        $marca_=" + marcas + "&debut_=" + debut_reorder + "&tipo_emp_=" + tipo_empaque + "&formatos_=" + formato+"&precioRetail_=" + costo_retail+"&precio_blanco_=" + precio_blanco+ "&COSTO=" + costo_total_pesos;
+*/
         
 
-        $CST_TOTLTARGET=" + total_target_usd + "&COSTO_TOT=" + total_fob_usd + "&COSTO_TOTS=" + costo_total_pesos + "&MKUP=" + nuevo_mkup + "&GM=" + nuevo_gm + "&PROVEEDOR=" + provedor + "&PAIS=" + pais + "&VIA=" + via + "&FACTOR_EST=" + factor_est_campo + "&NOM_VIA=" + nuevo_nom_via + "&NOM_PAIS=" + nuevo_nom_pais + "&TARGET=" + target + "&und_ajust=" + und_ajust + "&porcent_ajust=" + porcent_ajust + "&n_cajas=" + n_cajas + "&primera_carga=" + primera_carga + "&tiendas=" + tiendas + "&unida_ajust_xtallas=" + unida_ajust_xtallas + "&UNIDADES_FINALES=" + unidades_finales + "&UNIDADES_INICIALES=" + und_iniciales + "&cluster_=" + cluster + "&marca_=" + marcas + "&debut_=" + debut_reorder + "&tipo_emp_=" + tipo_empaque + "&formatos_=" + formato+"&precioRetail_=" + costo_retail+"&precio_blanco_=" + precio_blanco+ "&COSTO=" + costo_total_pesos;
-
-        
-        // $ID_COLOR3,$COSTO_FOB,$COSTO_INSP,$COSTO_RFID,$COSTO_UNIT,$COSTO_UNITS 
-
-        // SOLO edito si me llegan las variables que actualmente son editables
-        // si me llegan las variables que hay que actualizar, realizo el update
-        // Se listan "Todas" las columnas, bloquear las que no se van a actualizar
-        $sql = "UPDATE PLC_PLAN_COMPRA_COLOR_3 SET";
-        // $sql .= "ID_COLOR3 = $ID_COLOR3,";
-        $sql .= "GRUPO_COMPRA = $GRUPO_COMPRA,";
-        $sql .= "NVL(TEMP,1) COD_TEMP,";
-        $sql .= "NOM_LINEA = $LINEA,";
-        $sql .= "NOM_SUBLINEA = $SUBLINEA,";
-        $sql .= "NOM_MARCA = $MARCA,";
-        $sql .= "DES_ESTILO = $ESTILO,";
-        $sql .= "SHORT_NAME = $SHORT_NAME,";
-        $sql .= "ID_CORPORATIVO = $ID_CORPORATIVO,";
-        $sql .= "DESCMODELO = $DESCMODELO,";
-        $sql .= "DESCRIP_INTERNET = $DESCRIP_INTERNET,";
-        $sql .= "NOMBRE_COMPRADOR = $NOMBRE_COMPRADOR,";
-        $sql .= "NOMBRE_DISENADOR = $NOMBRE_DISENADOR,";
-        $sql .= "COMPOSICION = $COMPOSICION,";
-        $sql .= "TIPO_TELA = $TIPO_TELA,";
-        $sql .= "FORRO = $FORRO,";
-        $sql .= "COLECCION = $COLECCION,";
-        $sql .= "EVENTO = $EVENTO,";
-        $sql .= "NOM_ESTILOVIDA = $COD_ESTILO_VIDA,";
-        $sql .= "CALIDAD = $CALIDAD,";
-        $sql .= "NOM_OCACIONUSO = $NOM_OCACIONUSO,";//$COD_OCASION_USO
-        $sql .= "NOM_PIRAMIDEMIX = $NOM_PIRAMIDEMIX,";
-        $sql .= "NOM_VENTANA = $NOM_VENTANA,";
-        $sql .= "NOM_RNK = $NOM_RNK,";
-        $sql .= "NOM_LIFECYCLE = $NOM_LIFECYCLE,";
-        $sql .= "NUM_EMB = $NUM_EMB,";
-        $sql .= "NOM_COLOR = $NOM_COLOR,";
-        $sql .= "TIPO_PRODUCTO = $TIPO_PRODUCTO,";
-        $sql .= "TIPO_EXHIBICION = $TIPO_EXHIBICION,";
-        $sql .= "DESTALLA = $DESTALLA,";
-        $sql .= "TIPO_EMPAQUE = $TIPO_EMPAQUE,";
-        $sql .= "PORTALLA_1_INI = $PORTALLA_1_INI,";
-        $sql .= "PORTALLA_1 = $PORTALLA_1,";
-        $sql .= "CURVATALLA = $CURVATALLA,";
-        $sql .= "CURVAMIN = $CURVAMIN,";
-        $sql .= "UNID_OPCION_INICIO = $UNID_OPCION_INICIO,";
-        $sql .= "UNID_OPCION_AJUSTADA = $UNID_OPCION_AJUSTADA,";
-        $sql .= "UNIDADES = $UNIDADES,";
-        $sql .= "MTR_PACK = $MTR_PACK,";
-        $sql .= "CANT_INNER = $CANT_INNER,";
-        $sql .= "SEG_ASIG = $SEG_ASIG,";
-        $sql .= "FORMATO = $FORMATO,";
-        $sql .= "TDAS = $TDAS,";
-        $sql .= "A = $A,";
-        $sql .= "B = $B,";
-        $sql .= "C = $C,";
-        $sql .= "I = $I,";
-        $sql .= "UND_ASIG_INI = $UND_ASIG_INI,";
-        $sql .= "ROT = $ROT,";
-        $sql .= "NOM_PRECEDENCIA = $NOM_PRECEDENCIA,";
-        $sql .= "NOM_VIA = $NOM_VIA,";
-        $sql .= "NOM_PAIS = $NOM_PAIS,";
-        $sql .= "VIAJE = $VIAJE,";
-        $sql .= "MKUP = $MKUP,";
-        $sql .= "PRECIO_BLANCO = $PRECIO_BLANCO,";
-        $sql .= "OFERTA = $OFERTA,";
-        $sql .= "GM = $GM,";
-        $sql .= "NOM_MONEDA = $NOM_MONEDA,";
-        $sql .= "COSTO_TARGET = $COSTO_TARGET,";
-        $sql .= "COSTO_FOB = $COSTO_FOB,";
-        $sql .= "COSTO_INSP = $COSTO_INSP,";
-        $sql .= "COSTO_RFID = $COSTO_RFID,";
-        $sql .= "ROYALTY_POR = $ROYALTY_POR,";
-        $sql .= "COSTO_UNIT = $COSTO_UNIT,";
-        $sql .= "COSTO_UNITS = $COSTO_UNITS,";
-        $sql .= "CST_TOTLTARGET = $CST_TOTLTARGET,";
-        $sql .= "COSTO_TOT = $COSTO_TOT,";
-        $sql .= "COSTO_TOTS = $COSTO_TOTS,";
-        $sql .= "RETAIL = $RETAIL,";
-        $sql .= "DEBUT_REODER = $DEBUT_REODER,";
-        $sql .= "SEM_INI = $SEM_INI,";
-        $sql .= "SEM_FIN = $SEM_FIN,";
-        $sql .= "CICLO = $CICLO,";
-        $sql .= "AGOT_OBJ = $AGOT_OBJ,";
-        $sql .= "SEMLIQ = $SEMLIQ,";
-        $sql .= "ALIAS_PROV = $ALIAS_PROV,";
-        $sql .= "COD_PROVEEDOR = $COD_PROVEEDOR,";
-        $sql .= "COD_TRADER = $COD_TRADER,";
-        $sql .= "AFTER_MEETING_REMARKS = $AFTER_MEETING_REMARKS,";
-        $sql .= "CODSKUPROVEEDOR = $CODSKUPROVEEDOR,";
-        $sql .= "PROFORMA = $PROFORMA,";
-        $sql .= "ESTADO = $ESTADO,";
-        $sql .= "VENTANA_LLEGADA = $VENTANA_LLEGADA,";
-        $sql .= "FROM PLC_PLAN_COMPRA_COLOR_3
-                WHERE COD_TEMPORADA = $TEMPORADA AND DEP_DEPTO = '" . $DEPTO . "'
-                AND ID_COLOR3 = $ID_COLOR3
-                ";
-
-        //$data = \database::getInstancia()->getConsulta($sql);
-        return "OK";
 
     }
 
 
-    // Calcula el Curvado para los campos editados en el plan de compra
+
+    public static function GuardaProforma($temporada, $depto, $login, $proforma, $id_insertar, $archivo)
+    {
+
+        if ($archivo == 1) {
+
+            // 1.- Guarda Registro en plc_plan_compra_oc
+
+            // Agrego el registro del archivo en plan_compra_oc
+            $sql_plan_compra_oc = "INSERT INTO plc_plan_compra_oc (cod_temporada,dep_depto,niv_jer1,cod_jer1,niv_jer2,cod_jer2,item,cod_sublin,cod_estilo,des_estilo,vent_emb,proforma,archivo,id_color3, estado_oc,estilo_pmm)
+                SELECT
+                      C.COD_TEMPORADA,
+                      C.DEP_DEPTO,
+                      0 NJ1,
+                      0 CJ1,
+                      0 NJ2,
+                      C.COD_JER2,
+                      0 ITEM,
+                      C.COD_SUBLIN,
+                      0 COD_ESTILO,
+                      C.DES_ESTILO,
+                      C.VENTANA_LLEGADA,
+                      '" . $proforma . "',
+                      'Cargado..' ARCHIVO,
+                      C.ID_COLOR3,
+                      '' Estado_oc,
+                      '' estilo_pmm
+                      FROM PLC_PLAN_COMPRA_COLOR_3 C
+                      LEFT JOIN PLC_PLAN_COMPRA_OC O ON C.COD_TEMPORADA = O.COD_TEMPORADA
+                      AND C.DEP_DEPTO = O.DEP_DEPTO AND C.ID_COLOR3 = O.ID_COLOR3
+                WHERE C.COD_TEMPORADA = $temporada AND C.DEP_DEPTO =  '" . $depto . "'
+                AND C.ID_COLOR3 = $id_insertar
+                ";
+
+            // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+            if (!file_exists('../archivos/log_querys/' . $login)) {
+                mkdir('../archivos/log_querys/' . $login, 0775, true);
+            }
+            $stamp = date("Y-m-d_H-i-s");
+            $rand = rand(1, 999);
+            $content = $sql_plan_compra_oc;
+            $fp = fopen("../archivos/log_querys/" . $login . "/ACTPROFORMA--COND2--INSCOMPRAOC--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+            fwrite($fp, $content);
+            fclose($fp);
+
+            $data_plan_compra_oc = \database::getInstancia()->getConsulta($sql_plan_compra_oc);
+
+
+            // Aquí voy a buscar todos los registros de plan color 3 que tengan la misma PI (Excluyendo el id_color 3 ya ingresado) y los agrego a plc_plan_compra_oc
+
+
+            // Si puedo guardar en plc_plan_compra_oc, actualizo plc_plan_compra_color_3
+            if ($data_plan_compra_oc) {
+
+                // 2.- Actualiza plc_plan_compra_color3 estado=18 y proforma = $proforma
+                $sql_plan_compra_color_3 = "UPDATE plc_plan_compra_color_3
+                SET proforma = '" . $proforma . "',
+                estado = 18
+                WHERE cod_temporada = $temporada
+                AND dep_depto = '" . $depto . "'
+                AND id_color3 = $id_insertar
+                ";
+
+                // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+                if (!file_exists('../archivos/log_querys/' . $login)) {
+                    mkdir('../archivos/log_querys/' . $login, 0775, true);
+                }
+                $stamp = date("Y-m-d_H-i-s");
+                $rand = rand(1, 999);
+                $content = $sql_plan_compra_color_3;
+                $fp = fopen("../archivos/log_querys/" . $login . "/ACTPROFORMA--COND2--UPDPLANCOLOR3--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+                fwrite($fp, $content);
+                fclose($fp);
+
+                $data_plan_compra_color_3 = \database::getInstancia()->getConsulta($sql_plan_compra_color_3);
+
+                // Si se pudo actualizar plc_plan_compra_color_3, guardo en el historial
+                if ($data_plan_compra_color_3) {
+
+                    // 3.- Guarda Historial (Incluye el registro + los datos de la PI)
+                    $sql_historial = "INSERT INTO plc_plan_compra_historica (temp,dpto,linea,sublinea,marca,estilo,ventana,color,user_login,user_nom,fecha,hora,pi,oc,estado,id_color3,nom_linea,nom_sublinea,nom_marca,nom_ventana,nom_color)
+                SELECT
+                      C.COD_TEMPORADA,
+                      C.DEP_DEPTO,
+                      C.COD_JER2 LINEA,         -- linea
+                      C.COD_SUBLIN SUBLINEA,    -- sublinea
+                      C.COD_MARCA,              -- marca
+                      C.DES_ESTILO ESTILO,      -- estilo
+                      C.VENTANA_LLEGADA,        -- Ventana
+                      NVL(COD_COLOR,0)COLOR,    -- Color
+                      '" . $login . "',
+                      (SELECT NOM_USR FROM PLC_USUARIO WHERE COD_USR = '" . $login . "'),
+                      (SELECT SUBSTR(TO_CHAR(SYSDATE, 'DD-MM-YYYY'),1,10)N FROM DUAL),
+                      (SELECT TO_CHAR(SYSDATE, 'HH24:MI:SS') FROM DUAL),
+                      '" . $proforma . "',
+                      O.PO_NUMBER,
+                      C.ESTADO,
+                      C.ID_COLOR3,
+                      C.NOM_LINEA LINEA,
+                      C.NOM_SUBLINEA SUBLINEA,
+                      C.NOM_MARCA MARCA,
+                      C.NOM_VENTANA VENTANA,
+                      C.NOM_COLOR COD_COLOR
+                      FROM PLC_PLAN_COMPRA_COLOR_3 C
+                      LEFT JOIN PLC_PLAN_COMPRA_OC O ON C.COD_TEMPORADA = O.COD_TEMPORADA
+                      AND C.DEP_DEPTO = O.DEP_DEPTO AND C.ID_COLOR3 = O.ID_COLOR3
+                WHERE C.COD_TEMPORADA = $temporada AND C.DEP_DEPTO =  '" . $depto . "'
+                AND C.ID_COLOR3 = $id_insertar
+                ";
+
+                    // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+                    if (!file_exists('../archivos/log_querys/' . $login)) {
+                        mkdir('../archivos/log_querys/' . $login, 0775, true);
+                    }
+                    $stamp = date("Y-m-d_H-i-s");
+                    $rand = rand(1, 999);
+                    $content = $sql_historial;
+                    $fp = fopen("../archivos/log_querys/" . $login . "/ACTPROFORMA--COND2--INSERTHISTORIAL--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+                    fwrite($fp, $content);
+                    fclose($fp);
+
+                    $data_historial = \database::getInstancia()->getConsulta($sql_historial);
+
+                    if ($data_historial) {
+                        return "OK";
+                    } else {
+                        return "ERROR";
+                    }
+
+
+                } else {
+                    return "ERROR";
+                }
+
+
+            } else {
+                return "ERROR";
+            }
+
+
+            // No llega con archivo
+        } else {
+
+            // 1.- Actualiza plc_plan_compra_color3 proforma = $proforma
+            // Actualizo plan_compra_color3 estado=18 y proforma=$proforma
+            $sql_plan_compra_color_3 = "UPDATE plc_plan_compra_color_3
+                SET proforma = '" . $proforma . "'
+                WHERE cod_temporada = $temporada
+                AND dep_depto = '" . $depto . "'
+                AND id_color3 = $id_insertar
+                ";
+
+            // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+            if (!file_exists('../archivos/log_querys/' . $login)) {
+                mkdir('../archivos/log_querys/' . $login, 0775, true);
+            }
+            $stamp = date("Y-m-d_H-i-s");
+            $rand = rand(1, 999);
+            $content = $sql_plan_compra_color_3;
+            $fp = fopen("../archivos/log_querys/" . $login . "/ACTPROFORMA--COND2--UPDPLANCOLOR3--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+            fwrite($fp, $content);
+            fclose($fp);
+
+            $data_plan_compra_color_3 = \database::getInstancia()->getConsulta($sql_plan_compra_color_3);
+
+            // 2.- Guarda Historial
+            if ($data_plan_compra_color_3) {
+
+                // Guardo Historial
+                $sql_historial = "INSERT INTO plc_plan_compra_historica (temp,dpto,linea,sublinea,marca,estilo,ventana,color,user_login,user_nom,fecha,hora,pi,oc,estado,id_color3,nom_linea,nom_sublinea,nom_marca,nom_ventana,nom_color)
+                SELECT
+                      C.COD_TEMPORADA,
+                      C.DEP_DEPTO,
+                      C.COD_JER2 LINEA,         -- linea
+                      C.COD_SUBLIN SUBLINEA,    -- sublinea
+                      C.COD_MARCA,              -- marca
+                      C.DES_ESTILO ESTILO,      -- estilo
+                      C.VENTANA_LLEGADA,        -- Ventana
+                      NVL(COD_COLOR,0)COLOR,    -- Color
+                      '" . $login . "',
+                      (SELECT NOM_USR FROM PLC_USUARIO WHERE COD_USR = '" . $login . "'),
+                      (SELECT SUBSTR(TO_CHAR(SYSDATE, 'DD-MM-YYYY'),1,10)N FROM DUAL),
+                      (SELECT TO_CHAR(SYSDATE, 'HH24:MI:SS') FROM DUAL),
+                      C.PROFORMA,
+                      O.PO_NUMBER,
+                      C.ESTADO,
+                      C.ID_COLOR3,
+                      C.NOM_LINEA LINEA,
+                      C.NOM_SUBLINEA SUBLINEA,
+                      C.NOM_MARCA MARCA,
+                      C.NOM_VENTANA VENTANA,
+                      C.NOM_COLOR COD_COLOR
+                      FROM PLC_PLAN_COMPRA_COLOR_3 C
+                      LEFT JOIN PLC_PLAN_COMPRA_OC O ON C.COD_TEMPORADA = O.COD_TEMPORADA
+                      AND C.DEP_DEPTO = O.DEP_DEPTO AND C.ID_COLOR3 = O.ID_COLOR3
+                WHERE C.COD_TEMPORADA = $temporada AND C.DEP_DEPTO =  '" . $depto . "'
+                AND C.ID_COLOR3 = $id_insertar
+                ";
+
+                // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+                if (!file_exists('../archivos/log_querys/' . $login)) {
+                    mkdir('../archivos/log_querys/' . $login, 0775, true);
+                }
+                $stamp = date("Y-m-d_H-i-s");
+                $rand = rand(1, 999);
+                $content = $sql_historial;
+                $fp = fopen("../archivos/log_querys/" . $login . "/ACTPROFORMA--COND2--INSERTHISTORIAL--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+                fwrite($fp, $content);
+                fclose($fp);
+
+                $data_historial = \database::getInstancia()->getConsulta($sql_historial);
+
+                if ($data_historial) {
+                    return "OK";
+                } else {
+                    return "ERROR";
+                }
+
+
+            } else {
+                return "ERROR";
+            }
+
+        }
+
+
+    }
+
+
 
     public static function BuscaNumeroPais($pais)
     {
@@ -598,6 +801,7 @@ class PlanCompraClass extends \parametros
 
     }
 
+    // Buscar Tipo de Cambio
     public static function BuscaTipoCambio($cod_temporada, $depto, $moneda, $ventana)
     {
 
@@ -616,8 +820,8 @@ class PlanCompraClass extends \parametros
 
     }
 
-    // Buscar Tipo de Cambio
 
+    
     public static function CalculoCurvadoPlanCompra($tipo_empaque, $tallas, $curvas_talla, $und_iniciales, $cluster, $formato
         , $A, $B, $C, $I, $debut_reoder, $PORTALLA_1_INI, $depto, $cod_tempo, $marca, $N_CURVASXCAJAS
         , $cod_linea, $cod_sublinea, $id_color3, $Guardado)
@@ -1251,8 +1455,7 @@ class PlanCompraClass extends \parametros
           die();*/
     }
 
-    // Listar País
-
+    // Listar Historial
     public static function ListarHistorial($temporada, $depto, $id_color3)
     {
 
@@ -1289,7 +1492,6 @@ class PlanCompraClass extends \parametros
     }
 
     // Listar País
-
     public static function ListarPais($cod_temporada, $depto)
     {
 
@@ -1304,7 +1506,6 @@ class PlanCompraClass extends \parametros
     }
 
     // Busca Formatos Grilla Editar
-
     public static function ListarFormato($temporada, $depto)
     {
 

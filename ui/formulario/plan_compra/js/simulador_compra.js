@@ -208,6 +208,40 @@ $(function () {
                         bloqueo_columnas_oc.enable(false);
 
 
+                        var range_via = spreadsheet.activeSheet().range("AY2:AY"+total_registros_listados);
+                        range_via.validation({
+                            dataType: "list",
+                            showButton: true,
+                            comparerType: "list",
+                            from: '"AEREA,MARITIMO,TERRESTRE"',
+                            allowNulls: false,
+                            type: "reject",
+                            messageTemplate: "Las opciones permitidas son: AEREA, MARITIMO o TERRESTRE."
+                        });
+
+                        var range_tipo_embarque = spreadsheet.activeSheet().range("AE2:AE"+total_registros_listados);
+                        range_tipo_embarque.validation({
+                            dataType: "list",
+                            showButton: true,
+                            comparerType: "list",
+                            from: '"CURVADO,SOLIDO"',
+                            allowNulls: false,
+                            type: "reject",
+                            messageTemplate: "Las opciones permitidas son: CURVADO o SOLIDO."
+                        });
+
+                        var range_ventana = spreadsheet.activeSheet().range("W2:W"+total_registros_listados);
+                        range_ventana.validation({
+                            dataType: "list",
+                            showButton: true,
+                            comparerType: "list",
+                            from: '"A,B,C,D,E,F,G,H,I"',
+                            allowNulls: false,
+                            type: "reject",
+                            messageTemplate: "La ventana ingresada, no se encuentra dentro de las permitidas. (Recuerde ingresarla en Mayúsculas.)"
+                        });
+
+
 
                     }, {recalc: true});
 
