@@ -266,10 +266,10 @@ class PlanCompraClass extends \parametros
     {
 
         // 1.- Si la proforma base no es igual a la que nos llega, hay que aplicar la función de guardado de proforma.
-        if( ($PROFORMA_BASE != $PROFORMA) && (is_null($PROFORMA_BASE)) ){
+        if (($PROFORMA_BASE != $PROFORMA) && (is_null($PROFORMA_BASE))) {
 
             // Si llega $PROFORMA y $ID_COLOR3
-            if( (!empty($PROFORMA)) && (!empty($ID_COLOR3)) && ($ESTADO_C1==0) ){
+            if ((!empty($PROFORMA)) && (!empty($ID_COLOR3)) && ($ESTADO_C1 == 0)) {
 
                 $sube_archivo = 0;
                 if ($ARCHIVO == "Cargado..") {
@@ -278,17 +278,17 @@ class PlanCompraClass extends \parametros
 
 
                 // Aplicar guardado de proforma
-                $query_proforma = PlanCompraClass::GuardaProforma($TEMPORADA, $DEPTO, $LOGIN,$PROFORMA,$ID_COLOR3,$sube_archivo);
-                if(!$query_proforma){
+                $query_proforma = PlanCompraClass::GuardaProforma($TEMPORADA, $DEPTO, $LOGIN, $PROFORMA, $ID_COLOR3, $sube_archivo);
+                if (!$query_proforma) {
                     return " No se pudo realizar la actualización de la proforma.";
                     die();
                 }
 
 
-            // Fin Validación Campos Necesarios
+                // Fin Validación Campos Necesarios
             }
 
-        // Fin validación PROFORMA
+            // Fin validación PROFORMA
         }
 
 
@@ -299,11 +299,9 @@ class PlanCompraClass extends \parametros
         //3.- Si no hay cambios en datos curvados, utilizar 2.2 (Separar guardado y posibles errores)
 
 
-
-
         // Validar Campo $COSTO_TARGET
         $COSTO_TARGET = str_replace(",", ".", $COSTO_TARGET);
-        if (empty($COSTO_TARGET) || (!is_numeric($COSTO_TARGET)) || ($COSTO_TARGET == null ) || ($COSTO_TARGET == '' ) ) {
+        if (empty($COSTO_TARGET) || (!is_numeric($COSTO_TARGET)) || ($COSTO_TARGET == null) || ($COSTO_TARGET == '')) {
             $COSTO_TARGET = 0;
         }
         // Si el primer caracter es solo un punto, le concateno un "cero" para poder trabajar con el
@@ -313,7 +311,7 @@ class PlanCompraClass extends \parametros
 
         // Validar Campo $COSTO_FOB
         $COSTO_FOB = str_replace(",", ".", $COSTO_FOB);
-        if (empty($COSTO_FOB) || (!is_numeric($COSTO_FOB)) || ($COSTO_FOB == null ) || ($COSTO_FOB == '' ) ) {
+        if (empty($COSTO_FOB) || (!is_numeric($COSTO_FOB)) || ($COSTO_FOB == null) || ($COSTO_FOB == '')) {
             $COSTO_FOB = 0;
         }
         // Si el primer caracter es solo un punto, le concateno un "cero" para poder trabajar con el
@@ -323,7 +321,7 @@ class PlanCompraClass extends \parametros
 
         // Validar Campo $COSTO_INSP
         $COSTO_INSP = str_replace(",", ".", $COSTO_INSP);
-        if (empty($COSTO_INSP) || (!is_numeric($COSTO_INSP)) || ($COSTO_INSP == null ) || ($COSTO_INSP == '' ) ) {
+        if (empty($COSTO_INSP) || (!is_numeric($COSTO_INSP)) || ($COSTO_INSP == null) || ($COSTO_INSP == '')) {
             $COSTO_INSP = 0;
         }
         // Si el primer caracter es solo un punto, le concateno un "cero" para poder trabajar con el
@@ -333,7 +331,7 @@ class PlanCompraClass extends \parametros
 
         // Validar Campo $COSTO_RFID
         $COSTO_RFID = str_replace(",", ".", $COSTO_RFID);
-        if (empty($COSTO_RFID) || (!is_numeric($COSTO_RFID)) || ($COSTO_RFID == null ) || ($COSTO_RFID == '' ) ) {
+        if (empty($COSTO_RFID) || (!is_numeric($COSTO_RFID)) || ($COSTO_RFID == null) || ($COSTO_RFID == '')) {
             $COSTO_RFID = 0;
         }
         // Si el primer caracter es solo un punto, le concateno un "cero" para poder trabajar con el
@@ -387,13 +385,13 @@ class PlanCompraClass extends \parametros
 
 
         // Validar que llega la Vía
-        if( ($NOM_VIA!="MARITIMO") || ($NOM_VIA!="AEREA") || ($NOM_VIA!="TERRESTRE") ){
+        if (($NOM_VIA != "MARITIMO") || ($NOM_VIA != "AEREA") || ($NOM_VIA != "TERRESTRE")) {
             return " El valor enviado en la columna Vía, no corresponde.";
             die();
         }
 
         // Transforma a Número el "Nombre de la Vía"
-        $NOM_VIA_NUMERO=0;
+        $NOM_VIA_NUMERO = 0;
         if ($NOM_VIA == "MARITIMO") {
             $NOM_VIA_NUMERO = 1;
         } elseif ($NOM_VIA == "AEREA") {
@@ -456,10 +454,10 @@ class PlanCompraClass extends \parametros
 
         if ($query_factor > 0) {
             $costo_unitario_final_pesos = $costo_unitario_final_usd * $query_factor;
-            $costo_unitario_final_pesos = round($costo_unitario_final_pesos,0);
+            $costo_unitario_final_pesos = round($costo_unitario_final_pesos, 0);
         } else {
             $costo_unitario_final_pesos = $costo_unitario_final_usd * $query_tipo_cambio;
-            $costo_unitario_final_pesos = round($costo_unitario_final_pesos,0);
+            $costo_unitario_final_pesos = round($costo_unitario_final_pesos, 0);
         }
 
         // Costo Total Pesos : Costo unitarios final Pesos  *  unidades
@@ -481,15 +479,15 @@ class PlanCompraClass extends \parametros
             $factor_est_campo = $query_tipo_cambio;
         }
 
-                                                                                                                                                                                                                                                                                                                                // +"&TIPO_EMPAQUE="+TIPO_EMPAQUE+"&FORMATO="+FORMATO+"&NOM_VENTANA="+NOM_VENTANA
+        // +"&TIPO_EMPAQUE="+TIPO_EMPAQUE+"&FORMATO="+FORMATO+"&NOM_VENTANA="+NOM_VENTANA
         if ($COSTO_FOB > 0) {
             $total_fob_usd = number_format($total_fob_usd, 2, '.', '');
         }
 
         $costo_retail = 0;
         // total retail
-        if ( ($PRECIO_BLANCO > 0) &&  ($CAN > 0) ){
-            $costo_retail = round((($PRECIO_BLANCO * $CAN)/1.19),0,PHP_ROUND_HALF_UP);
+        if (($PRECIO_BLANCO > 0) && ($CAN > 0)) {
+            $costo_retail = round((($PRECIO_BLANCO * $CAN) / 1.19), 0, PHP_ROUND_HALF_UP);
         }
 
 
@@ -524,11 +522,9 @@ class PlanCompraClass extends \parametros
         /*
         $marca_=" + marcas + "&debut_=" + debut_reorder + "&tipo_emp_=" + tipo_empaque + "&formatos_=" + formato+"&precioRetail_=" + costo_retail+"&precio_blanco_=" + precio_blanco+ "&COSTO=" + costo_total_pesos;
 */
-        
 
 
     }
-
 
 
     public static function GuardaProforma($temporada, $depto, $login, $proforma, $id_insertar, $archivo)
@@ -571,7 +567,7 @@ class PlanCompraClass extends \parametros
             $stamp = date("Y-m-d_H-i-s");
             $rand = rand(1, 999);
             $content = $sql_plan_compra_oc;
-            $fp = fopen("../archivos/log_querys/" . $login . "/ACTPROFORMA--COND2--INSCOMPRAOC--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+            $fp = fopen("../archivos/log_querys/" . $login . "/ACTPROFORMA-COND1A-INSCOMPRAOC-" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
             fwrite($fp, $content);
             fclose($fp);
 
@@ -600,7 +596,7 @@ class PlanCompraClass extends \parametros
                 $stamp = date("Y-m-d_H-i-s");
                 $rand = rand(1, 999);
                 $content = $sql_plan_compra_color_3;
-                $fp = fopen("../archivos/log_querys/" . $login . "/ACTPROFORMA--COND2--UPDPLANCOLOR3--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+                $fp = fopen("../archivos/log_querys/" . $login . "/ACTPROFORMA-COND1A-UPDPLANCOLOR3-" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
                 fwrite($fp, $content);
                 fclose($fp);
 
@@ -647,7 +643,7 @@ class PlanCompraClass extends \parametros
                     $stamp = date("Y-m-d_H-i-s");
                     $rand = rand(1, 999);
                     $content = $sql_historial;
-                    $fp = fopen("../archivos/log_querys/" . $login . "/ACTPROFORMA--COND2--INSERTHISTORIAL--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+                    $fp = fopen("../archivos/log_querys/" . $login . "/ACTPROFORMA-COND1A-INSERTHISTORIAL-" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
                     fwrite($fp, $content);
                     fclose($fp);
 
@@ -689,7 +685,7 @@ class PlanCompraClass extends \parametros
             $stamp = date("Y-m-d_H-i-s");
             $rand = rand(1, 999);
             $content = $sql_plan_compra_color_3;
-            $fp = fopen("../archivos/log_querys/" . $login . "/ACTPROFORMA--COND2--UPDPLANCOLOR3--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+            $fp = fopen("../archivos/log_querys/" . $login . "/ACTPROFORMA-COND2SA-UPDPLANCOLOR3-" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
             fwrite($fp, $content);
             fclose($fp);
 
@@ -736,7 +732,7 @@ class PlanCompraClass extends \parametros
                 $stamp = date("Y-m-d_H-i-s");
                 $rand = rand(1, 999);
                 $content = $sql_historial;
-                $fp = fopen("../archivos/log_querys/" . $login . "/ACTPROFORMA--COND2--INSERTHISTORIAL--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+                $fp = fopen("../archivos/log_querys/" . $login . "/ACTPROFORMA-COND2SA-INSERTHISTORIAL-" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
                 fwrite($fp, $content);
                 fclose($fp);
 
@@ -757,7 +753,6 @@ class PlanCompraClass extends \parametros
 
 
     }
-
 
 
     public static function BuscaNumeroPais($pais)
@@ -821,7 +816,6 @@ class PlanCompraClass extends \parametros
     }
 
 
-    
     public static function CalculoCurvadoPlanCompra($tipo_empaque, $tallas, $curvas_talla, $und_iniciales, $cluster, $formato
         , $A, $B, $C, $I, $debut_reoder, $PORTALLA_1_INI, $depto, $cod_tempo, $marca, $N_CURVASXCAJAS
         , $cod_linea, $cod_sublinea, $id_color3, $Guardado)

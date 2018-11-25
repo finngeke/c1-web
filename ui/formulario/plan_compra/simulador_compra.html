@@ -1,5 +1,5 @@
+<span id="span_data_temp_depto" name="span_data_temp_depto" style="display: none;">{{@depto_form}}-{{@NOM_TEMPORADA_CORTO}}</span>
 <div id="div_grilla_telerik_pc">
-
     <!-- Despliega el menú del top simulador_compra_menu_top.ja-->
     <div id="toolbar_plan_compra" class="demo-section k-content wide"></div>
 
@@ -16,7 +16,6 @@
 
     <!-- POPUP Carga Archivo PI -->
     <div id="POPUP_carga_archivo_pi">
-        <form method="POST" action="guardar/archivo_pi_server" id="pi_upload_ajax" name="pi_upload_ajax" enctype="multipart/form-data">
             <ul id="fieldlist">
                 <li>
                     <label for="NombrePI">PROFORMA:</label>
@@ -26,11 +25,7 @@
                     <br>
                     <input name="txt_archivo_pi" id="txt_archivo_pi" type="file" aria-label="txt_archivo_pi" />
                 </li>
-                <li>
-                    <br><button type="submit" class="k-button k-primary" id="carga_pi_server_archivo" >Guardar Archivo</button>
-                </li>
             </ul>
-        </form>
     </div>
 
     <!-- POPUP Historial -->
@@ -54,7 +49,7 @@
     </div>
 
 
-    <!-- TAG de los mensajes de alert -->
+    <!-- TAG de los mensajes de alert, dejar siempre al final -->
     <span id="popupNotification"></span>
 
 

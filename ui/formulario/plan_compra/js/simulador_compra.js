@@ -431,19 +431,23 @@ $(function () {
 
 
 
-    // ####################### OTRAS FUNCIONES ASOCIADAS A LA GRILLA #######################
+    // ################## OTRAS FUNCIONES ASOCIADAS A LA ESTRUCTURA DE LAGRILLA ####################
+    // #############################################################################################
+    // ################################# AQUÍ NO VAN ACCIONES JS ###################################
+    // ################### AQUÍ SE DEFINE SOLO LA ESTRUCTURA DEL PLAN DE COMPRA ####################
+    // ################################### SÓLO CODIGO TELERIK #####################################
 
     // Se define POPUP de notificación
     var popupNotification = $("#popupNotification").kendoNotification().data("kendoNotification");
 
-    // Función Guardar cambios en Grilla
+    // Función Guardar Cambios Plan de Compra
     $("#guardar_cambios_pc").click(function () {
         if (!$(this).hasClass("k-state-disabled")) {
             dataSource.sync();
         }
     });
 
-    // Función Cancelar cambios en Grilla
+    // Función Cancelar Plan de Compra
     $("#cancelar_cambios_pc").click(function () {
         if (!$(this).hasClass("k-state-disabled")) {
             dataSource.cancelChanges();
@@ -451,7 +455,7 @@ $(function () {
     });
 
 
-    // Agrega ContextMenu para cargar la PI a un registro
+    // Agrega ContextMenu en Plan de Compra
     var spreadsheet_contextual = $("#spreadsheet").data("kendoSpreadsheet");
     var menu_celda_archivopi = spreadsheet_contextual._controller.cellContextMenu;
     menu_celda_archivopi.append([
@@ -460,9 +464,11 @@ $(function () {
         { text: "Ajuste Compra" },
         { text: "Ajuste N° Cajas" },
         { text: "Detalle Error" },
-        { text: "Descarga Archivo PI" },
         { cssClass: "k-separator" },
-        { text: "Cargar Archivo PI" }
+        { text: "Descarga Archivo PI" },
+        { text: "Cargar Archivo PI" },
+        { cssClass: "k-separator" },
+        { text: "Match" }
     ]);
     menu_celda_archivopi.bind("select",
         function (e) {
@@ -473,9 +479,18 @@ $(function () {
             var ID_COLOR3 ="";
             var DEBUTREORDER ="";
             var PROFORMA ="";
+            var ESTADOC1 ="";
             var spreadsheet_id_color3 = $("#spreadsheet").data("kendoSpreadsheet");
             var sheet = spreadsheet_id_color3.activeSheet();
             var range = sheet.selection();
+
+            // Busco datos de Temporada y Depto
+            var descragapi_data_temp_depto = $("#span_data_temp_depto").text();
+                descragapi_data_temp_depto = descragapi_data_temp_depto.toString().replace(/[^a-z0-9\-\_]/gi, '');
+            var descragapi_data_separa_barra = descragapi_data_temp_depto.split("-");
+            var TemporadaArchivoPI = descragapi_data_separa_barra[0];
+            var DeptoArchivoPI = descragapi_data_separa_barra[1];
+
 
             range.forEachCell(function (row, column, value) {
                 //console.log(row, column, value);
@@ -487,6 +502,8 @@ $(function () {
                 DEBUTREORDER = range_debutreorder.values();
                 var range_proforma = sheet.range("CD"+fila_id);
                 PROFORMA = range_proforma.values();
+                var range_estadoc1 = sheet.range("CP"+fila_id);
+                ESTADOC1 = range_estadoc1.values();
 
             });
 
@@ -494,7 +511,7 @@ $(function () {
 
             if(command == "Historial") {
 
-                if( (ID_COLOR3=="ID") || (ID_COLOR3=="") || (ID_COLOR3==null) ){
+                if( (ID_COLOR3=="ID") || (ID_COLOR3=="") || (ID_COLOR3==null) || (ID_COLOR3.length==0) ){
                     popupNotification.show(" Historial no disponible para este registro.", "error");
                 }else{
 
@@ -585,7 +602,17 @@ $(function () {
             }
 
             if(command == "Descarga Archivo PI") {
+
                 // Descarga PI
+                if (ESTADOC1 != 0) {
+
+                    var valFileDownloadPath = '../archivos/pi/PI_' + TemporadaArchivoPI + '_' + DeptoArchivoPI + '_' + PROFORMA + '.xlsx';
+                    window.open(valFileDownloadPath, '_blank');
+
+                }
+
+
+            // Fin descarga archivo
             }
 
             if(command == "Cargar Archivo PI") {
@@ -596,12 +623,14 @@ $(function () {
                 selection.background("green");
                 */
 
-                if( (PROFORMA.length==0) ){
+                if( (PROFORMA.length==0) || (PROFORMA==null) || (PROFORMA=="")  ){
                     popupNotification.show(" Seleccione un registro con proforma.", "error");
                 }else {
 
+                    // Le asigno el nombre de la Proforma al campo de texto
                     $("#NombrePI").val(PROFORMA);
 
+                    // Levantamos el popup
                     var popupArchivoPI = $("#POPUP_carga_archivo_pi");
                     popupArchivoPI.data("kendoWindow").open();
 
@@ -610,29 +639,25 @@ $(function () {
 
             }
 
+            if(command == "Match") {
 
+                if( (PROFORMA.length==0) || (PROFORMA==null) || (PROFORMA=="")  ){
+                    popupNotification.show(" Seleccione un registro con proforma.", "error");
+                }else {
+
+                    // Le asigno el nombre de la Proforma al campo de texto
+                    $("#NombrePI").val(PROFORMA);
+
+                    // Levantamos el popup
+                    var popupArchivoPI = $("#POPUP_carga_archivo_pi");
+                    popupArchivoPI.data("kendoWindow").open();
+
+                }
+
+
+            }
 
         });
-
-
-
-
-
-
-
-
-
-
-    // revisar su uso
-    function onSelect(arg) {
-        var cellvalue = arg.range.value();
-        var topLeft = arg.range.topLeft();
-        var row = topLeft.row;
-        var col = topLeft.col;
-
-        console.log(row);
-        console.log(col);
-    }
 
 
 
