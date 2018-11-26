@@ -82,7 +82,7 @@ $(function () {
     }).data("kendoWindow").center();
 
     // Le da la estructura a la grilla
-    $("#POPUP_historial").kendoGrid({
+    $("#grid_popup_historial").kendoGrid({
         schema: {
             model: {
                 fields: {
@@ -150,6 +150,65 @@ $(function () {
         ]/*,
                 close: onClose*/
     }).data("kendoWindow").center();
+
+
+    // ############################ MATCH ############################
+
+    // Le da la estructura a la ventana POPUP
+    var ventana_match = $("#POPUP_match");
+    ventana_match.kendoWindow({
+        width: "700px",
+        height: "320px",
+        title: "Match",
+        visible: false,
+        actions: [
+            //"Pin",
+            "Minimize",
+            "Maximize",
+            "Close"
+        ]/*,
+                close: onClose*/
+    }).data("kendoWindow").center();
+
+    // Le da la estructura a la grilla pmm
+    $("#grid_match_pmm").kendoGrid({
+        schema: {
+            model: {
+                fields: {
+                    ID: {type: "number"},
+                    PI: {type: "string"},
+                    USUARIO: {type: "string"},
+                    ESTADO: {type: "string"}
+                }
+            }
+        },
+        height: 300,
+        sortable: true
+    });
+
+
+    // Le da la estructura a la grilla plan
+    $("#grid_match_plan").kendoGrid({
+        schema: {
+            model: {
+                fields: {
+                    FECHA: {type: "string"},
+                    HORA: {type: "string"},
+                    USUARIO: {type: "string"},
+                    ESTADO: {type: "string"}
+                }
+            }
+        },
+        height: 300,
+        sortable: true
+    });
+
+
+
+
+
+
+
 
 
 });

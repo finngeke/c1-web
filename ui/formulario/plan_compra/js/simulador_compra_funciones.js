@@ -27,7 +27,12 @@ $(function () {
 
     }
 
+    // Función Limpia Caracteres
+    function limpia_caracteres(string) {
 
+        return string.replace(/[^a-z0-9\-\_]/gi, '-');
+
+    }
 
 
 // Fin del JS

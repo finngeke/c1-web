@@ -520,7 +520,7 @@ $(function () {
                     popupHistorial.data("kendoWindow").open();
 
                     // Antes de volver a cargar la data, reseteo lo existente
-                    $("#POPUP_historial").data("kendoGrid").dataSource.data([]);
+                    $("#grid_popup_historial").data("kendoGrid").dataSource.data([]);
 
                     // Seteo DataSet
                     var dataSource_historial = new kendo.data.DataSource({
@@ -534,7 +534,7 @@ $(function () {
                     });
 
                     // Asigno el DataSet al Grid
-                    var spreadsheet_hist = $("#POPUP_historial").data("kendoGrid");
+                    var spreadsheet_hist = $("#grid_popup_historial").data("kendoGrid");
                     spreadsheet_hist.setDataSource(dataSource_historial, [
                         { field: "FECHA", title: "FECHA" },
                         { field: "HORA", title: "HORA" },
@@ -609,6 +609,8 @@ $(function () {
                     var valFileDownloadPath = '../archivos/pi/PI_' + TemporadaArchivoPI + '_' + DeptoArchivoPI + '_' + PROFORMA + '.xlsx';
                     window.open(valFileDownloadPath, '_blank');
 
+                }else{
+                    popupNotification.show(" En estado Ingresado,No puede descargar el archivo.", "error");
                 }
 
 
@@ -641,17 +643,79 @@ $(function () {
 
             if(command == "Match") {
 
+                // no lectura
+                //if ((orden_compra != 0) && (proforma != "") && (proforma != 0) && (check_estado_oc == 19)) {
                 if( (PROFORMA.length==0) || (PROFORMA==null) || (PROFORMA=="")  ){
                     popupNotification.show(" Seleccione un registro con proforma.", "error");
                 }else {
 
-                    // Le asigno el nombre de la Proforma al campo de texto
-                    $("#NombrePI").val(PROFORMA);
+                    // Levantar el POPUP
+                    var popupMatch = $("#POPUP_match");
+                    popupMatch.data("kendoWindow").open();
 
-                    // Levantamos el popup
-                    var popupArchivoPI = $("#POPUP_carga_archivo_pi");
-                    popupArchivoPI.data("kendoWindow").open();
+                    // Antes de volver a cargar la data, reseteo lo existente
+                    $("#grid_match_pmm").data("kendoGrid").dataSource.data([]);
+                    $("#grid_match_plan").data("kendoGrid").dataSource.data([]);
 
+                    // Seteo DataSet
+                    var dataSource_match_pmm = new kendo.data.DataSource({
+                        transport: {
+                            read:  {
+                                url: "TelerikPlanCompra/ListarMatchPMM",
+                                dataType: "json",
+                                data:{ID_COLOR3: kendo.parseInt(ID_COLOR3)}
+                            }
+                        }
+                    });
+
+                    var dataSource_match_plan = new kendo.data.DataSource({
+                        transport: {
+                            read:  {
+                                url: "TelerikPlanCompra/ListarMatchPLAN",
+                                dataType: "json",
+                                data:{ID_COLOR3: kendo.parseInt(ID_COLOR3)}
+                            }
+                        }
+                    });
+
+                    // Asigno el DataSet al Grid de PMM
+                    var spreadsheet_match_pmm = $("#grid_match_pmm").data("kendoGrid");
+                    spreadsheet_match_pmm.setDataSource(dataSource_match_pmm, [
+                        { field: "FECHA", title: "ID" },
+                        { field: "HORA", title: "PI" },
+                        { field: "USUARIO", title: ">Cod. Línea" },
+                        { field: "ESTADO", title: "Línea" },
+                        { field: "ESTADO", title: "Cod. Sublinea" },
+                        { field: "ESTADO", title: "Sublinea" },
+                        { field: "ESTADO", title: "Estilo" },
+                        { field: "ESTADO", title: "N° Estilo" },
+                        { field: "ESTADO", title: "Color" },
+                        { field: "ESTADO", title: "Cod. Color" }
+                    ]);
+
+
+                    // Asigno el DataSet al Grid de PLAN
+                    var spreadsheet_match_plan = $("#grid_match_plan").data("kendoGrid");
+                    spreadsheet_match_plan.setDataSource(dataSource_match_plan, [
+                        { field: "FECHA", title: "ID" },
+                        { field: "HORA", title: "PI" },
+                        { field: "USUARIO", title: ">Cod. Línea" },
+                        { field: "ESTADO", title: "Línea" },
+                        { field: "ESTADO", title: "Cod. Sublinea" },
+                        { field: "ESTADO", title: "Sublinea" },
+                        { field: "ESTADO", title: "Estilo" },
+                        { field: "ESTADO", title: "Color" },
+                        { field: "ESTADO", title: "Cod. Color" },
+                        { field: "ESTADO", title: "Valor Línea" },
+                        { field: "ESTADO", title: "Valor SubLínea" },
+                        { field: "ESTADO", title: "Valor Color" },
+                        { field: "ESTADO", title: "Valor Estilo" },
+                        { field: "ESTADO", title: "Correlativo" }
+                    ]);
+
+
+
+                // Fin Else
                 }
 
 
