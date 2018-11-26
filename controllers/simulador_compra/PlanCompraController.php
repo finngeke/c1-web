@@ -17,7 +17,6 @@ class PlanCompraController extends \Control
         echo json_encode(\simulador_compra\PlanCompraClass::ListarPlanCompra($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO')));
     }
 
-
     // Actualiza Plan de Compra
     public function ProcesaDataPlanCompra($f3)
     {
@@ -74,7 +73,7 @@ class PlanCompraController extends \Control
             $CAN = $columna["CAN"];
             $MTR_PACK = $columna["MTR_PACK"];
             $CANT_INNER = $columna["CANT_INNER"];
-            $SEG_ASIG = $columna["SEG_ASIG"];
+            $SEG_ASIG = str_replace(" ", "+", $columna["SEG_ASIG"]);//$columna["SEG_ASIG"];
             $FORMATO = $columna["FORMATO"];
             $TDAS = $columna["TDAS"];
             $A = $columna["A"];
@@ -98,7 +97,7 @@ class PlanCompraController extends \Control
             $COSTO_RFID = $columna["COSTO_RFID"];
             $ROYALTY_POR = $columna["ROYALTY_POR"];
             $COSTO_UNIT = $columna["COSTO_UNIT"];
-            $COSTO_UNITS = $columna["COSTO_UNITS"];
+            $COSTO_UNITS = round($columna["COSTO_UNITS"], 0); //$columna["COSTO_UNITS"]
             $CST_TOTLTARGET = $columna["CST_TOTLTARGET"];
             $COSTO_TOT = $columna["COSTO_TOT"];
             $COSTO_TOTS = $columna["COSTO_TOTS"];
@@ -141,6 +140,7 @@ class PlanCompraController extends \Control
             $N_CURVASXCAJAS = $columna["N_CURVASXCAJAS"];
             $COD_JER2 = $columna["COD_JER2"];
             $COD_SUBLIN = $columna["COD_SUBLIN"];
+            $ARCHIVO_BASE = $columna["ARCHIVO_BASE"];
 
 
             echo json_encode(\simulador_compra\PlanCompraClass::ProcesaDataPlanCompra(
@@ -148,7 +148,13 @@ class PlanCompraController extends \Control
                 $ID_COLOR3, $GRUPO_COMPRA, $COD_TEMP, $LINEA, $SUBLINEA, $MARCA, $ESTILO, $SHORT_NAME, $ID_CORPORATIVO, $DESCMODELO, $DESCRIP_INTERNET,
                 $NOMBRE_COMPRADOR, $NOMBRE_DISENADOR, $COMPOSICION, $TIPO_TELA, $FORRO, $COLECCION, $EVENTO, $COD_ESTILO_VIDA, $CALIDAD, $COD_OCASION_USO,
                 $COD_PIRAMIX, $NOM_VENTANA, $COD_RANKVTA, $LIFE_CYCLE, $NUM_EMB, $COD_COLOR, $TIPO_PRODUCTO, $TIPO_EXHIBICION, $DESTALLA, $TIPO_EMPAQUE,
-                $PORTALLA_1_INI, $PORTALLA_1, $CURVATALLA, $CURVAMIN, $UNID_OPCION_INICIO, $UNID_OPCION_AJUSTADA, $CAN, $MTR_PACK, $CANT_INNER, $SEG_ASIG, $FORMATO, $TDAS, $A, $B, $C, $I, $UND_ASIG_INI, $ROT, $NOM_PRECEDENCIA, $NOM_VIA, $NOM_PAIS, $VIAJE, $MKUP, $PRECIO_BLANCO, $OFERTA, $GM, $COD_TIP_MON, $COSTO_TARGET, $COSTO_FOB, $COSTO_INSP, $COSTO_RFID, $ROYALTY_POR, $COSTO_UNIT, $COSTO_UNITS, $CST_TOTLTARGET, $COSTO_TOT, $COSTO_TOTS, $RETAIL, $DEBUT_REODER, $SEM_INI, $SEM_FIN, $CICLO, $AGOT_OBJ, $SEMLIQ, $ALIAS_PROV, $COD_PROVEEDOR, $COD_TRADER, $AFTER_MEETING_REMARKS, $CODSKUPROVEEDOR, $SKU, $PROFORMA, $ARCHIVO, $ESTILO_PMM, $ESTADO_MATCH, $PO_NUMBER, $ESTADO_OC, $FECHA_ACORDADA, $FECHA_EMBARQUE, $FECHA_ETA, $FECHA_RECEPCION, $DIAS_ATRASO, $CODESTADO, $ESTADO_C1, $VENTANA_LLEGADA, $PROFORMA_BASE, $TIPO_EMPAQUE_BASE, $UNI_INICIALES_BASE, $PRECIO_BLANCO_BASE, $COSTO_TARGET_BASE, $COSTO_FOB_BASE, $COSTO_INSP_BASE, $COSTO_RFID_BASE, $COD_MARCA, $N_CURVASXCAJAS, $COD_JER2, $COD_SUBLIN));
+                $PORTALLA_1_INI, $PORTALLA_1, $CURVATALLA, $CURVAMIN, $UNID_OPCION_INICIO, $UNID_OPCION_AJUSTADA, $CAN, $MTR_PACK, $CANT_INNER, $SEG_ASIG,
+                $FORMATO, $TDAS, $A, $B, $C, $I, $UND_ASIG_INI, $ROT, $NOM_PRECEDENCIA, $NOM_VIA, $NOM_PAIS, $VIAJE, $MKUP, $PRECIO_BLANCO, $OFERTA, $GM,
+                $COD_TIP_MON, $COSTO_TARGET, $COSTO_FOB, $COSTO_INSP, $COSTO_RFID, $ROYALTY_POR, $COSTO_UNIT, $COSTO_UNITS, $CST_TOTLTARGET, $COSTO_TOT, $COSTO_TOTS,
+                $RETAIL, $DEBUT_REODER, $SEM_INI, $SEM_FIN, $CICLO, $AGOT_OBJ, $SEMLIQ, $ALIAS_PROV, $COD_PROVEEDOR, $COD_TRADER, $AFTER_MEETING_REMARKS, $CODSKUPROVEEDOR,
+                $SKU, $PROFORMA, $ARCHIVO, $ESTILO_PMM, $ESTADO_MATCH, $PO_NUMBER, $ESTADO_OC, $FECHA_ACORDADA, $FECHA_EMBARQUE, $FECHA_ETA, $FECHA_RECEPCION, $DIAS_ATRASO,
+                $CODESTADO, $ESTADO_C1, $VENTANA_LLEGADA, $PROFORMA_BASE, $TIPO_EMPAQUE_BASE, $UNI_INICIALES_BASE, $PRECIO_BLANCO_BASE, $COSTO_TARGET_BASE, $COSTO_FOB_BASE,
+                $COSTO_INSP_BASE, $COSTO_RFID_BASE, $COD_MARCA, $N_CURVASXCAJAS, $COD_JER2, $COD_SUBLIN, $ARCHIVO_BASE));
 
 
             // Fin del each que recorre el JSON
@@ -157,7 +163,6 @@ class PlanCompraController extends \Control
 
         // Fin del actualizar grilla
     }
-
 
     // Calcula el Curvado para los campos editados en el plan de compra
     public function CalculoCurvadoPlanCompra($f3)
@@ -222,52 +227,8 @@ class PlanCompraController extends \Control
     }
 
 
-    // Actualizar grilla en plan_compra_color3
-    public function actualiza_grilla_plan_compra_color3($f3)
+    public function GuardaArhcivoPI($f3)
     {
-
-        $COSTO_UNITS = round($f3->get('GET.COSTO_UNITS'), 0);
-
-        /* ECHO ($f3->get('GET.und_ajust')."|".
-            $f3->get('GET.porcent_ajust')."|".
-            $f3->get('GET.n_cajas')."|".
-            $f3->get('GET.primera_carga')."|".
-            $f3->get('GET.tiendas')."|".
-            $f3->get('GET.unida_ajust_xtallas')."|".
-            $f3->get('GET.UNIDADES_FINALES')."|".
-            $f3->get('GET.marca_')."|".
-            $f3->get('GET.cluster_')."|".
-            $f3->get('GET.debut_')."|".
-            $f3->get('GET.tipo_emp_')."|".
-            $f3->get('GET.formatos_')."|".
-            $f3->get('GET.UNIDADES_INICIALES'));*/
-
-        $cluster = str_replace(" ", "+", $f3->get('GET.cluster_'));
-
-        echo \simulador_compra\cbx_grilla_compra::actualiza_grilla_plan_compra_color3($f3->get('SESSION.COD_TEMPORADA')
-            , $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $f3->get('GET.ID_COLOR3')
-            , $f3->get('GET.COSTO_FOB'), $f3->get('GET.COSTO_INSP'), $f3->get('GET.COSTO_RFID')
-            , $f3->get('GET.COSTO_UNIT'), $COSTO_UNITS, $f3->get('GET.CST_TOTLTARGET')
-            , $f3->get('GET.COSTO_TOT'), $f3->get('GET.COSTO_TOTS'), $f3->get('GET.MKUP')
-            , $f3->get('GET.GM'), $f3->get('GET.PROVEEDOR'), $f3->get('GET.VIA')
-            , $f3->get('GET.PAIS'), $f3->get('GET.FACTOR_EST'), $f3->get('GET.NOM_VIA')
-            , $f3->get('GET.NOM_PAIS'), $f3->get('GET.TARGET')
-            , $f3->get('GET.tipo_emp_'), $f3->get('GET.UNIDADES_INICIALES'), $f3->get('GET.und_ajust'), $f3->get('GET.UNIDADES_FINALES'),
-            $f3->get('GET.porcent_ajust'), $f3->get('GET.tiendas'), $f3->get('GET.formatos_'), $f3->get('GET.n_cajas'),
-            $f3->get('GET.unida_ajust_xtallas'), $f3->get('GET.marca_'), $cluster, $f3->get('GET.debut_'), $f3->get('GET.precioRetail_'), $f3->get('GET.precio_blanco_')
-            , $f3->get('GET.COSTO'));
-    }
-
-    // Actualizar grilla en PLC_PLAN_COMPRA_COLOR_CIC
-    public function actualiza_grilla_plan_compra_color_cic($f3)
-    {
-        echo \simulador_compra\cbx_grilla_compra::actualiza_grilla_plan_compra_color_cic($f3->get('SESSION.COD_TEMPORADA')
-            , $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login')
-            , $f3->get('GET.ID_COLOR3'), $f3->get('GET.COSTO')
-            , $f3->get('GET.precioRetail_'));
-    }
-
-    public function GuardaArhcivoPI($f3) {
 
         // Obtener el nombre del temporal del archivo
         $file = $_FILES;
@@ -275,7 +236,7 @@ class PlanCompraController extends \Control
         // Llega el nombre de la PI por POST
         $json = $_POST;
         $archivo_proforma = $json["NombreArchivoProforma"];
-        $nombre_archivo = "PI_".$f3->get('SESSION.COD_TEMPORADA')."_".$f3->get('SESSION.COD_DEPTO')."_".$archivo_proforma.".xlsx";
+        $nombre_archivo = "PI_" . $f3->get('SESSION.COD_TEMPORADA') . "_" . $f3->get('SESSION.COD_DEPTO') . "_" . $archivo_proforma . ".xlsx";
 
         // Ruta
         $dir_subida = $f3->get('UPLOADS_PI');
@@ -291,12 +252,12 @@ class PlanCompraController extends \Control
 
     }
 
-    // ######################## TRABAJO CON CONCURRENCIA ########################
-    // Actualiza la fecha del registro de concurrencia
-    public function actualiza_fecha_concurrencia($f3) {
-        echo \simulador_compra\cbx_grilla_compra::actualiza_fecha_concurrencia($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'));
+    // ######################## TRABAJO CON CONCURRENCIA ############################
+    // ############ Actualiza la fecha del registro de concurrencia #################
+    public function actualiza_fecha_concurrencia($f3){
+        echo \simulador_compra\PlanCompraClass::actualiza_fecha_concurrencia($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'));
     }
-// ######################## FIN TRABAJO CON CONCURRENCIA ########################
+    // ######################## FIN TRABAJO CON CONCURRENCIA ########################
 
     // Listar País
     public function ListarPais($f3)
