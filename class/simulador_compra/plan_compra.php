@@ -5325,84 +5325,91 @@ class plan_compra extends \parametros {
                 ,"Sublinea"=> utf8_encode($va1[6])
                 ,"Marca"=> utf8_encode($va1[7])
                 ,"Nom Estilo"=> utf8_encode($va1[8])
-                ,"Nombre Corto"=> utf8_encode($va1[85])
-                ,"Cod Corp"=> utf8_encode($va1[9])
-                ,"Descripción"=> utf8_encode($va1[10])
-                ,"Desc Internet"=> utf8_encode($va1[11])
-                ,"Composición"=> utf8_encode($va1[12])
-                ,"Colección"=> utf8_encode($va1[13])
-                ,"Evento"=> utf8_encode($va1[14])
-                ,"Estilo de Vida"=> utf8_encode($va1[15])
-                ,"Calidad"=> utf8_encode($va1[16])
-                ,"Ocasión de Uso"=> utf8_encode($va1[17])
-                ,"Pirámide Mix"=> utf8_encode($va1[18])
-                ,"Ventana"=> utf8_encode($va1[19])
-                ,"Rank Vta"=> utf8_encode($va1[20])
-                ,"Life Cycle"=> utf8_encode($va1[21])
-                ,"Color"=> utf8_encode($va1[22])
-                ,"Tipo Producto"=> utf8_encode($va1[23])
-                ,"Tipo Exhibición"=> utf8_encode($va1[24])
-                ,"Tallas"=> utf8_encode($va1[25])
-                ,"Tipo Empaque"=> utf8_encode($va1[86])
-                ,"% Compra Ini"=> utf8_encode($va1[26])
-                ,"% Compra Ajustada"=> utf8_encode($va1[27])
-                ,"Curvas de Reparto"=> utf8_encode($va1[28])
-                ,"Curva Min"=> utf8_encode($va1[29])
-                ,"Unid Ini"=> utf8_encode($va1[30])
-                ,"Unid Ajust"=> utf8_encode($va1[31])
-                ,"Unid Final"=> utf8_encode($va1[32])
-                ,"Mtr Pack"=> utf8_encode($va1[33])
-                ,"N° Cajas"=> utf8_encode($va1[34])
-                ,"Clúster"=> utf8_encode($va1[35])
-                ,"Formato"=> utf8_encode($va1[36])
-                ,"Tdas"=> utf8_encode($va1[37])
-                ,"A"=> utf8_encode($va1[38])
-                ,"B"=> utf8_encode($va1[39])
-                ,"C"=> utf8_encode($va1[40])
-                ,"I"=> utf8_encode($va1[41])
-                ,"Primera Carga"=> utf8_encode($va1[42])
-                ,"%Tiendas"=> utf8_encode($va1[43])
-                ,"Proced"=>utf8_encode( $va1[44])
-                ,"Vía"=> utf8_encode($va1[45])
-                ,"País"=> utf8_encode($va1[46])
-                ,"Viaje"=> utf8_encode($va1[47])
-                ,"Mkup Blanco"=> utf8_encode($va1[48])
-                ,"Precio Blanco"=> utf8_encode($va1[49])
-                ,"GM Blanco"=>utf8_encode($va1[50])
-                ,"Moneda"=> utf8_encode($va1[51])
-                ,"Target"=> utf8_encode($va1[52])
-                ,"FOB"=> utf8_encode($va1[53])
-                ,"Insp"=> utf8_encode($va1[54])
-                ,"RFID"=> utf8_encode($va1[55])
-                ,"Royalty(%)"=> utf8_encode($va1[56])
-                ,"Costo Unitario Final US$"=> utf8_encode($va1[57])
-                ,"Costo Unitario Final Pesos"=> utf8_encode($va1[58])
-                ,"Total Target US$"=> utf8_encode($va1[59])
-                ,"Total Fob US$"=> utf8_encode($va1[60])
-                ,"Costo Total Pesos"=> utf8_encode($va1[61])
-                ,"Total Retail Pesos(Sin IVA)"=> utf8_encode($va1[62])
-                ,"Debut/Reorder"=> utf8_encode($va1[63])
-                ,"Sem Ini"=> utf8_encode($va1[64])
-                ,"Sem Fin"=> utf8_encode($va1[65])
-                ,"Semanas Ciclo de Vida"=> utf8_encode($va1[66])
-                ,"Agot Obj"=> utf8_encode($va1[67])
-                ,"Semanas Liquidación"=> utf8_encode($va1[68])
-                ,"Proveedor"=> utf8_encode($va1[69])
-                ,"Razon Social"=> utf8_encode($va1[70])
-                ,"Trader"=> utf8_encode($va1[71])
-                ,"Cod Sku Proveedor"=> utf8_encode($va1[72])
-                ,"Cod. Padre"=> utf8_encode($va1[73])
-                ,"Proforma"=> utf8_encode($va1[74])
-                ,"Archivo"=> utf8_encode($va1[75])
-                ,"Estilo PMM"=> utf8_encode($va1[76])
-                ,"Estado Match"=> utf8_encode($va1[77])
-                ,"N° OC"=> utf8_encode($va1[78])
-                ,"Estado OC"=> utf8_encode($va1[79])
-                ,"Fecha Embarque"=> utf8_encode($va1[80])
-                ,"Fecha ETA"=> utf8_encode($va1[81])
-                ,"Fecha Recepción CD"=> utf8_encode($va1[82])
-                ,"Días Atraso CD"=> utf8_encode($va1[83])
-                ,"Estado Opción"=> utf8_encode($va1[84])
+                ,"Nombre Corto"=> utf8_encode($va1[9])
+                ,"Cod Corp"=> utf8_encode($va1[10])
+                ,"Descripción"=> utf8_encode($va1[11])
+                ,"Desc Internet"=> utf8_encode($va1[12])
+                ,"Nombre Comprador"=> utf8_encode($va1[13])
+                ,"Nombre Disenador"=> utf8_encode($va1[14])
+                ,"Composición"=> utf8_encode($va1[15])
+                ,"Tipo de Tela"=> utf8_encode($va1[16])
+                ,"Forro"=> utf8_encode($va1[17])
+                ,"Colección"=> utf8_encode($va1[18])
+                ,"Evento"=> utf8_encode($va1[19])
+                ,"Estilo de Vida"=> utf8_encode($va1[20])
+                ,"Calidad"=> utf8_encode($va1[21])
+                ,"Ocasión de Uso"=> utf8_encode($va1[22])
+                ,"Pirámide Mix"=> utf8_encode($va1[23])
+                ,"Ventana"=> utf8_encode($va1[24])
+                ,"Rank Vta"=> utf8_encode($va1[25])
+                ,"Life Cycle"=> utf8_encode($va1[26])
+                ,"Color"=> utf8_encode($va1[27])
+                ,"Tipo Producto"=> utf8_encode($va1[28])
+                ,"Tipo Exhibición"=> utf8_encode($va1[29])
+                ,"Tallas"=> utf8_encode($va1[30])
+                ,"Tipo Empaque"=> utf8_encode($va1[31])
+                ,"% Compra Ini"=> utf8_encode($va1[32])
+                ,"% Compra Ajustada"=> utf8_encode($va1[33])
+                ,"Curvas de Reparto"=> utf8_encode($va1[34])
+                ,"Curva Min"=> utf8_encode($va1[35])
+                ,"Unid Ini"=> utf8_encode($va1[36])
+                ,"Unid Ajust"=> utf8_encode($va1[37])
+                ,"Unid Final"=> utf8_encode($va1[38])
+                ,"Mtr Pack"=> utf8_encode($va1[39])
+                ,"N° Cajas"=> utf8_encode($va1[40])
+                ,"Clúster"=> utf8_encode($va1[41])
+                ,"Formato"=> utf8_encode($va1[42])
+                ,"Tdas"=> utf8_encode($va1[43])
+                ,"A"=> utf8_encode($va1[44])
+                ,"B"=> utf8_encode($va1[45])
+                ,"C"=> utf8_encode($va1[46])
+                ,"I"=> utf8_encode($va1[47])
+                ,"Primera Carga"=> utf8_encode($va1[48])
+                ,"%Tiendas"=> utf8_encode($va1[49])
+                ,"Proced"=>utf8_encode( $va1[50])
+                ,"Vía"=> utf8_encode($va1[51])
+                ,"País"=> utf8_encode($va1[52])
+                ,"Viaje"=> utf8_encode($va1[53])
+                ,"Mkup Blanco"=> utf8_encode($va1[54])
+                ,"Precio Blanco"=> utf8_encode($va1[55])
+                ,"GM Blanco"=>utf8_encode($va1[56])
+                ,"Oferta"=>utf8_encode($va1[57])
+                ,"Moneda"=> utf8_encode($va1[58])
+                ,"Target"=> utf8_encode($va1[59])
+                ,"FOB"=> utf8_encode($va1[60])
+                ,"Insp"=> utf8_encode($va1[61])
+                ,"RFID"=> utf8_encode($va1[62])
+                ,"Royalty(%)"=> utf8_encode($va1[63])
+                ,"Costo Unitario Final US$"=> utf8_encode($va1[64])
+                ,"Costo Unitario Final Pesos"=> utf8_encode($va1[65])
+                ,"Total Target US$"=> utf8_encode($va1[66])
+                ,"Total Fob US$"=> utf8_encode($va1[67])
+                ,"Costo Total Pesos"=> utf8_encode($va1[68])
+                ,"Total Retail Pesos(Sin IVA)"=> utf8_encode($va1[69])
+                ,"Debut/Reorder"=> utf8_encode($va1[70])
+                ,"Sem Ini"=> utf8_encode($va1[71])
+                ,"Sem Fin"=> utf8_encode($va1[72])
+                ,"Semanas Ciclo de Vida"=> utf8_encode($va1[73])
+                ,"Agot Obj"=> utf8_encode($va1[74])
+                ,"Semanas Liquidación"=> utf8_encode($va1[75])
+                ,"Proveedor"=> utf8_encode($va1[76])
+                ,"Razon Social"=> utf8_encode($va1[77])
+                ,"Trader"=> utf8_encode($va1[78])
+                ,"Comentarios Post Negociacion"=> utf8_encode($va1[79])
+                ,"Cod Sku Proveedor"=> utf8_encode($va1[80])
+                ,"Cod. Padre"=> utf8_encode($va1[81])
+                ,"Proforma"=> utf8_encode($va1[82])
+                ,"Archivo"=> utf8_encode($va1[83])
+                ,"Estilo PMM"=> utf8_encode($va1[84])
+                ,"Estado Match"=> utf8_encode($va1[85])
+                ,"N° OC"=> utf8_encode($va1[86])
+                ,"Estado OC"=> utf8_encode($va1[87])
+                ,"Fecha Embarque Acordada"=> utf8_encode($va1[88])
+                ,"Fecha Embarque"=> utf8_encode($va1[89])
+                ,"Fecha ETA"=> utf8_encode($va1[90])
+                ,"Fecha Recepción CD"=> utf8_encode($va1[91])
+                ,"Días Atraso CD"=> utf8_encode($va1[92])
+                ,"Estado Opción"=> utf8_encode($va1[93])
                 )
             );
         }
@@ -5494,122 +5501,26 @@ class plan_compra extends \parametros {
     }
 
     Public static Function Export_asorment($tempo,$depto){
-        $array1 = [];
-        $sql = "select * 
+        $sql = "select DEP_DEPTO,DPTO,MARCA,CODIGO_MARCA,NOMBRE_COMPRADOR,NOMBRE_DISENADOR,SEASON,LINEA,COD_LINEA,SUBLINEA,COD_SUBLINEA
+                       ,CODIGO_CORPORATIVO,NOMBRE_ESTILO,ESTILO_CORTO,DESCRIPCION_ESTILO,NUM_EMB AS COD_OPCION,COLOR,COD_COLOR
+                       ,COMPOSICION,TIPO_DE_TELA,FORRO,EVENTO, GRUPO_DE_COMPRA,VENTANA,TIPO_EXHIBICION,TIPO_PRODUCTO, DEBUT_O_REORDER
+                       ,TEMPORADA,PRECIO,OFERTA, RANKING_DE_VENTA, CICLO_DE_VIDA, PIRAMIDE_MIX, RATIO_COMPRA, FACTOR_AMPLIFICACION
+                       ,RATIO_COMPRA_FINAL, CLUSTER_, FORMATO, COMPRA_UNIDADES_ASSORTMENT, COMPRA_UNIDADES_FINAL,VAR_PORCE
+                       ,TARGET_USD, FOB_USD, RFID_USD, VIA, PAIS, PROVEEDOR, COMENTARIOS_POST_NEGOCIACION, FECHA_EMBARQUE_ACORDADA
+                       ,FACTOR, COSTO_TOTAL, RETAIL_TOTAL_SIN_IVA, MUP_COMPRA, EXHIBICION, TALLA1, TALLA2
+                       ,TALLA3, TALLA4, TALLA5, TALLA6, TALLA7, TALLA8, TALLA9,INNER , CURVA1, CURVA2, CURVA3, CURVA4, CURVA5, CURVA6, CURVA7, CURVA8
+                       ,CURVA9, VALIDADOR_MASTERPACK_INNER, TIPO_DE_EMPAQUE, N_CURVAS_POR_CAJA_CURVADAS, UNO_POR, DOS_POR, TRES_POR
+                       ,CUATRO_POR, CINCO_POR, SEIS_POR, SIETE_POR, OCHO_POR, NUEVE_POR, TIENDASA, TIENDASB, TIENDASC, TIENDASI
+                       ,CLUSTERA, CLUSTERB, CLUSTERC, CLUSTERI, SIZE_1, SIZE_2, SIZE_3, SIZE_4, SIZE_5
+                       ,SIZE_6, SIZE_7, SIZE_8, SIZE_9,UNIDADES
                   from plc_historial_assortment 
                   WHERE COD_TEMPORADA = ".$tempo."
                   and dep_depto IN (".$depto.")
                   ORDER BY DEP_DEPTO,CODIGO_MARCA asc";
 
-        $data = \database::getInstancia()->getFilas($sql);
 
-        foreach ($data as $va1){
-            array_push($array1,
-                array("DEP_DEPTO"=> $va1[1]
-                ,"DPTO"=> $va1[2]
-                ,"MARCA"=> $va1[3]
-                ,"CODIGO_MARCA"=> $va1[4]
-                ,"SEASON"=> $va1[5]
-                ,"LINEA"=> $va1[6]
-                ,"COD_LINEA"=> $va1[7]
-                ,"SUBLINEA"=> $va1[8]
-                ,"COD_SUBLINEA"=> $va1[9]
-                ,"CODIGO_CORPORATIVO"=> $va1[10]
-                ,"NOMBRE_ESTILO"=> $va1[11]
-                ,"ESTILO_CORTO"=> $va1[12]
-                ,"DESCRIPCION_ESTILO"=> $va1[13]
-                ,"COLOR"=> $va1[14]
-                ,"COD_COLOR"=> $va1[15]
-                ,"EVENTO"=> $va1[16]
-                ,"GRUPO_DE_COMPRA"=> $va1[17]
-                ,"VENTANA_DEBUT"=> $va1[18]
-                ,"TIPO_EXHIBICION"=> $va1[19]
-                ,"TIPO_PRODUCTO"=> $va1[20]
-                ,"DEBUT_O_REORDER"=> $va1[21]
-                ,"TEMPORADA"=> $va1[22]
-                ,"PRECIO"=> $va1[23]
-                ,"RANKING_DE_VENTA"=> $va1[24]
-                ,"CICLO_DE_VIDA"=> $va1[25]
-                ,"PIRAMIDE_MIX"=> $va1[26]
-                ,"RATIO_COMPRA"=> $va1[27]
-                ,"FACTOR_AMPLIFICACION"=> $va1[28]
-                ,"RATIO_COMPRA_FINAL"=> $va1[29]
-                ,"CLUSTER_"=> $va1[30]
-                ,"FORMATO"=> $va1[31]
-                ,"COMPRA_UNIDADES_ASSORTMENT"=> $va1[32]
-                ,"COMPRA_UNIDADES_FINAL"=> $va1[33]
-                ,"VAR_PORCE"=> $va1[34]
-                ,"TARGET_USD"=> $va1[35]
-                ,"RFID_USD"=> $va1[36]
-                ,"VIA"=> $va1[37]
-                ,"PAIS"=> $va1[38]
-                ,"FACTOR"=> $va1[39]
-                ,"COSTO_TOTAL"=> $va1[40]
-                ,"RETAIL_TOTAL_SIN_IVA"=> $va1[41]
-                ,"MUP_COMPRA"=> $va1[42]
-                ,"EXHIBICION"=> $va1[43]
-                ,"TALLA1"=> $va1[44]
-                ,"TALLA2"=> $va1[45]
-                ,"TALLA3"=> $va1[46]
-                ,"TALLA4"=> $va1[47]
-                ,"TALLA5"=> $va1[48]
-                ,"TALLA6"=> $va1[49]
-                ,"TALLA7"=> $va1[50]
-                ,"TALLA8"=> $va1[51]
-                ,"TALLA9"=> $va1[52]
-                ,"INNER"=> $va1[53]
-                ,"CURVA1"=> $va1[54]
-                ,"CURVA2"=> $va1[55]
-                ,"CURVA3"=> $va1[56]
-                ,"CURVA4"=> $va1[57]
-                ,"CURVA5"=> $va1[58]
-                ,"CURVA6"=> $va1[59]
-                ,"CURVA7"=> $va1[60]
-                ,"CURVA8"=> $va1[61]
-                ,"CURVA9"=> $va1[62]
-                ,"VALIDADOR_MASTERPACK_INNER"=> $va1[63]
-                ,"TIPO_DE_EMPAQUE"=> $va1[64]
-                ,"N_CURVAS_POR_CAJA_CURVADAS"=> $va1[65]
-                ,"UNO_POR"=> $va1[66]
-                ,"DOS_POR"=> $va1[67]
-                ,"TRES_POR"=> $va1[68]
-                ,"CUATRO_POR"=> $va1[69]
-                ,"CINCO_POR"=> $va1[70]
-                ,"SEIS_POR"=> $va1[71]
-                ,"SIETE_POR"=> $va1[72]
-                ,"OCHO_POR"=> $va1[73]
-                ,"NUEVE_POR"=> $va1[74]
-                ,"TIENDASA"=> $va1[75]
-                ,"TIENDASB"=> $va1[76]
-                ,"TIENDASC"=> $va1[77]
-                ,"TIENDASI"=> $va1[78]
-                ,"CLUSTERA"=> $va1[79]
-                ,"CLUSTERB"=> $va1[80]
-                ,"CLUSTERC"=> $va1[81]
-                ,"CLUSTERI"=> $va1[82]
-                ,"SIZE_1"=> $va1[83]
-                ,"SIZE_2"=> $va1[84]
-                ,"SIZE_3"=> $va1[85]
-                ,"SIZE_4"=> $va1[86]
-                ,"SIZE_5"=> $va1[87]
-                ,"SIZE_6"=> $va1[88]
-                ,"SIZE_7"=> $va1[89]
-                ,"SIZE_8"=> $va1[90]
-                ,"SIZE_9"=> $va1[91]
-                ,"VENTA"=> $va1[92]
-                ,"VENTB"=> $va1[93]
-                ,"VENTC"=> $va1[94]
-                ,"VENTD"=> $va1[95]
-                ,"VENTE"=> $va1[96]
-                ,"VENTF"=> $va1[97]
-                ,"VENTG"=> $va1[98]
-                ,"VENTH"=> $va1[99]
-                ,"VENTI"=> $va1[100]
-                ,"COD_OPCION"=> $va1[101]
-                )
-            );
-        }
-        return $array1;
+        $data = \database::getInstancia()->getFilas($sql);
+        return $data;
     }
 
     Public static Function Exportcomex_c1_comex($tempo,$depto_cadena,$estado)
