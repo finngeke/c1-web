@@ -38,7 +38,7 @@ class PlanCompraClass extends \parametros
                 '' CALIDAD,                      -- 19 Calidad
                 C.NOM_OCACIONUSO COD_OCASION_USO,-- 20 ocacion uso
                 C.NOM_PIRAMIDEMIX COD_PIRAMIX,   -- 21 piramide mix
-                C.NOM_VENTANA,       -- 22 ventana
+                C.NOM_VENTANA,                   -- 22 ventana
                 C.NOM_RNK COD_RANKVTA,           -- 23 rank vta
                 C.NOM_LIFECYCLE LIFE_CYCLE,      -- 24 ciclo vida
                 C.NUM_EMB,                       -- 25 num_emb
@@ -124,7 +124,8 @@ class PlanCompraClass extends \parametros
                 C.COD_MARCA,                              -- 103 COD_MARCA  
                 C.N_CURVASXCAJAS,                         -- 104 N_CURVASXCAJAS
                 C.COD_JER2,                               -- 105 cod_linea
-                C.COD_SUBLIN                              -- 106 cod_sublin
+                C.COD_SUBLIN,                             -- 106 cod_sublin
+                O.ARCHIVO ARCHIVO_BASE                    -- 107 Archivo
                 
                 FROM PLC_PLAN_COMPRA_COLOR_3 C
                 LEFT JOIN PLC_PLAN_COMPRA_OC O ON C.COD_TEMPORADA = O.COD_TEMPORADA
@@ -261,12 +262,41 @@ class PlanCompraClass extends \parametros
     }
 
 
-    // Actualiza Plan de Compra
-    public static function ProcesaDataPlanCompra($TEMPORADA, $DEPTO, $LOGIN, $ID_COLOR3, $GRUPO_COMPRA, $COD_TEMP, $LINEA, $SUBLINEA, $MARCA, $ESTILO, $SHORT_NAME, $ID_CORPORATIVO, $DESCMODELO, $DESCRIP_INTERNET, $NOMBRE_COMPRADOR, $NOMBRE_DISENADOR, $COMPOSICION, $TIPO_TELA, $FORRO, $COLECCION, $EVENTO, $COD_ESTILO_VIDA, $CALIDAD, $COD_OCASION_USO, $COD_PIRAMIX, $NOM_VENTANA, $COD_RANKVTA, $LIFE_CYCLE, $NUM_EMB, $COD_COLOR, $TIPO_PRODUCTO, $TIPO_EXHIBICION, $DESTALLA, $TIPO_EMPAQUE, $PORTALLA_1_INI, $PORTALLA_1, $CURVATALLA, $CURVAMIN, $UNID_OPCION_INICIO, $UNID_OPCION_AJUSTADA, $CAN, $MTR_PACK, $CANT_INNER, $SEG_ASIG, $FORMATO, $TDAS, $A, $B, $C, $I, $UND_ASIG_INI, $ROT, $NOM_PRECEDENCIA, $NOM_VIA, $NOM_PAIS, $VIAJE, $MKUP, $PRECIO_BLANCO, $OFERTA, $GM, $COD_TIP_MON, $COSTO_TARGET, $COSTO_FOB, $COSTO_INSP, $COSTO_RFID, $ROYALTY_POR, $COSTO_UNIT, $COSTO_UNITS, $CST_TOTLTARGET, $COSTO_TOT, $COSTO_TOTS, $RETAIL, $DEBUT_REODER, $SEM_INI, $SEM_FIN, $CICLO, $AGOT_OBJ, $SEMLIQ, $ALIAS_PROV, $COD_PROVEEDOR, $COD_TRADER, $AFTER_MEETING_REMARKS, $CODSKUPROVEEDOR, $SKU, $PROFORMA, $ARCHIVO, $ESTILO_PMM, $ESTADO_MATCH, $PO_NUMBER, $ESTADO_OC, $FECHA_ACORDADA, $FECHA_EMBARQUE, $FECHA_ETA, $FECHA_RECEPCION, $DIAS_ATRASO, $CODESTADO, $ESTADO_C1, $VENTANA_LLEGADA, $PROFORMA_BASE, $TIPO_EMPAQUE_BASE, $UNI_INICIALES_BASE, $PRECIO_BLANCO_BASE, $COSTO_TARGET_BASE, $COSTO_FOB_BASE, $COSTO_INSP_BASE, $COSTO_RFID_BASE, $COD_MARCA, $N_CURVASXCAJAS, $COD_JER2, $COD_SUBLIN)
+    // Procesar el JSON que llega
+    public static function ProcesaDataPlanCompra($TEMPORADA, $DEPTO, $LOGIN, $ID_COLOR3, $GRUPO_COMPRA, $COD_TEMP, $LINEA, $SUBLINEA, $MARCA, $ESTILO, $SHORT_NAME, $ID_CORPORATIVO, $DESCMODELO, $DESCRIP_INTERNET, $NOMBRE_COMPRADOR, $NOMBRE_DISENADOR, $COMPOSICION, $TIPO_TELA, $FORRO, $COLECCION, $EVENTO, $COD_ESTILO_VIDA, $CALIDAD, $COD_OCASION_USO, $COD_PIRAMIX, $NOM_VENTANA, $COD_RANKVTA, $LIFE_CYCLE, $NUM_EMB, $COD_COLOR, $TIPO_PRODUCTO, $TIPO_EXHIBICION, $DESTALLA, $TIPO_EMPAQUE, $PORTALLA_1_INI, $PORTALLA_1, $CURVATALLA, $CURVAMIN, $UNID_OPCION_INICIO, $UNID_OPCION_AJUSTADA, $CAN, $MTR_PACK, $CANT_INNER, $SEG_ASIG, $FORMATO, $TDAS, $A, $B, $C, $I, $UND_ASIG_INI, $ROT, $NOM_PRECEDENCIA, $NOM_VIA, $NOM_PAIS, $VIAJE, $MKUP, $PRECIO_BLANCO, $OFERTA, $GM, $COD_TIP_MON, $COSTO_TARGET, $COSTO_FOB, $COSTO_INSP, $COSTO_RFID, $ROYALTY_POR, $COSTO_UNIT, $COSTO_UNITS, $CST_TOTLTARGET, $COSTO_TOT, $COSTO_TOTS, $RETAIL, $DEBUT_REODER, $SEM_INI, $SEM_FIN, $CICLO, $AGOT_OBJ, $SEMLIQ, $ALIAS_PROV, $COD_PROVEEDOR, $COD_TRADER, $AFTER_MEETING_REMARKS, $CODSKUPROVEEDOR, $SKU, $PROFORMA, $ARCHIVO, $ESTILO_PMM, $ESTADO_MATCH, $PO_NUMBER, $ESTADO_OC, $FECHA_ACORDADA, $FECHA_EMBARQUE, $FECHA_ETA, $FECHA_RECEPCION, $DIAS_ATRASO, $CODESTADO, $ESTADO_C1, $VENTANA_LLEGADA, $PROFORMA_BASE, $TIPO_EMPAQUE_BASE, $UNI_INICIALES_BASE, $PRECIO_BLANCO_BASE, $COSTO_TARGET_BASE, $COSTO_FOB_BASE, $COSTO_INSP_BASE, $COSTO_RFID_BASE, $COD_MARCA, $N_CURVASXCAJAS, $COD_JER2, $COD_SUBLIN, $ARCHIVO_BASE)
     {
 
+        // ############################################# VALIDACIONES #############################################
+        // Validar Ventana
+        if (($NOM_VENTANA == null) || ($NOM_VENTANA == "") || ($NOM_VENTANA == "null")) {
+            return "error-(" . $ID_COLOR3 . ") Se ha enviado un registro sin ventana.";
+            die();
+        }
+
+        // Validar Tipo Empaque
+        if (($TIPO_EMPAQUE == null) || ($TIPO_EMPAQUE == "") || ($TIPO_EMPAQUE == "null")) {
+            return "error-(" . $ID_COLOR3 . ") Se ha enviado un empaque vacio.";
+            die();
+        }
+
+        // Validar que llega la Vía
+        if (($NOM_VIA != "MARITIMO") || ($NOM_VIA != "AEREA") || ($NOM_VIA != "TERRESTRE")) {
+            return "error-(" . $ID_COLOR3 . ") El valor enviado en la columna Vía, no corresponde.";
+            die();
+        }
+
+        // Validar que lleguen los datos asociados al curvado
+        if (!isset($TIPO_EMPAQUE) || !isset($PORTALLA_1_INI) || !isset($DESTALLA) || !isset($CURVATALLA) || ($UNID_OPCION_INICIO <= 0) || ($SEG_ASIG == null) || ($SEG_ASIG == '')) {
+            return "error-(" . $ID_COLOR3 . ") No pueden estar en blanco los Campos: Tipo Empaque, Porcent Ini,Tallas,Curvas,Und Iniciales.";
+            die();
+        }
+        // ########################################### FIN VALIDACIONES ###########################################
+
+
+        // ############################################# GUARDADO PROFORMA #############################################
+        // ############################ (Independiente de Curvado y Otras Actualizaciones) #############################
         // 1.- Si la proforma base no es igual a la que nos llega, hay que aplicar la función de guardado de proforma.
-        if (($PROFORMA_BASE != $PROFORMA) && (is_null($PROFORMA_BASE))) {
+        if ((($PROFORMA_BASE != $PROFORMA) && (is_null($PROFORMA_BASE))) || ($ARCHIVO_BASE != $ARCHIVO)) {
 
             // Si llega $PROFORMA y $ID_COLOR3
             if ((!empty($PROFORMA)) && (!empty($ID_COLOR3)) && ($ESTADO_C1 == 0)) {
@@ -275,7 +305,6 @@ class PlanCompraClass extends \parametros
                 if ($ARCHIVO == "Cargado..") {
                     $sube_archivo = 1;
                 }
-
 
                 // Aplicar guardado de proforma
                 $query_proforma = PlanCompraClass::GuardaProforma($TEMPORADA, $DEPTO, $LOGIN, $PROFORMA, $ID_COLOR3, $sube_archivo);
@@ -290,15 +319,10 @@ class PlanCompraClass extends \parametros
 
             // Fin validación PROFORMA
         }
+        // ########################################## FIN GUARDADO PROFORMA ############################################
 
 
-        // 2.- Verificar si hay cambios en algún dato que implique curvado -> 2.1 Aplicar Guardado solo Curvado.
-        //                                                                 -> 2.2 Aplicar Guardado Resto de los Campos.
-
-
-        //3.- Si no hay cambios en datos curvados, utilizar 2.2 (Separar guardado y posibles errores)
-
-
+        // ############################################# SETEO DE VARIABLES #############################################
         // Validar Campo $COSTO_TARGET
         $COSTO_TARGET = str_replace(",", ".", $COSTO_TARGET);
         if (empty($COSTO_TARGET) || (!is_numeric($COSTO_TARGET)) || ($COSTO_TARGET == null) || ($COSTO_TARGET == '')) {
@@ -338,57 +362,36 @@ class PlanCompraClass extends \parametros
         if (substr($COSTO_RFID, 0, 1) == ".") {
             $COSTO_RFID = "0" . $COSTO_RFID;
         }
+        // ########################################## FIN SETEO DE VARIABLES ############################################
 
 
-        $factor = 0;
-        $tipocambio = 0;
-        $factor_est_campo = 0;
-        //Curvado
-        $und_ajust = 0;
-        $porcent_ajust = "";
-        $n_cajas = 0;
-        $primera_carga = 0;
-        $tiendas = "";
-        $unida_ajust_xtallas = "";
+        // 2.- Aplicar Guardado solo Curvado.
+        // 2.1- Aplicar Guardado Resto de los Campos.
 
 
-        //validaciones
-        /*if ( !isset($TIPO_EMPAQUE) || !isset($PORTALLA_1_INI) || !isset($DESTALLA) || !isset($CURVATALLA) || ($UNID_OPCION_INICIO<=0) || ($SEG_ASIG==null) || ($SEG_ASIG=='') ){
-            return " No pueden estar en blanco los Campos: Tipo Empaque, Porcent Ini,Tallas,Curvas,Und Iniciales.";
-            //return " TIPO_EMPAQUE:".$TIPO_EMPAQUE." PORTALLA_1_INI: ".$PORTALLA_1_INI." DESTALLA: ".$DESTALLA." CURVATALLA: ".$CURVATALLA." UND_ASIG_INI: ".$UND_ASIG_INI." SEG_ASIG: ".$SEG_ASIG;
-            die();
-        }
+        // 3.- Si no hay cambios en datos curvados, utilizar 2.1 (Para separar guardado y posibles errores)
 
 
         // Hay que ir a buscar el Curvado
-        $query_curva = PlanCompraClass::CalculoCurvadoPlanCompra($TIPO_EMPAQUE,$DESTALLA,$CURVATALLA,$UNID_OPCION_INICIO,$SEG_ASIG,$FORMATO,$A,$B,$C,$I,$DEBUT_REODER,$PORTALLA_1_INI,$DEPTO,$TEMPORADA,$COD_MARCA,$N_CURVASXCAJAS,$COD_JER2,$COD_SUBLIN,$ID_COLOR3,1);
-
+        $query_curva = PlanCompraClass::CalculoCurvadoPlanCompra($TIPO_EMPAQUE, $DESTALLA, $CURVATALLA, $UNID_OPCION_INICIO, $SEG_ASIG, $FORMATO, $A, $B, $C, $I, $DEBUT_REODER, $PORTALLA_1_INI, $DEPTO, $TEMPORADA, $COD_MARCA, $N_CURVASXCAJAS, $COD_JER2, $COD_SUBLIN, $ID_COLOR3, 1);
         // Valido que se pueda realizar la QUERY
-        if(!$query_curva){
-            return " No se pudo realizar la query del curvado.";
+        if (!$query_curva) {
+            return "error-(" . $ID_COLOR3 . ") No se pudo buscar curvado.";
             die();
         }
-
-        $CURVA_UNID_AJUST       = $query_curva[0]; //  unid ajust
-        $CURVA_POR_AJUSTE       = $query_curva[1]; //  porcenajust
-        $CURVA_N_CAJAS          = $query_curva[2]; //  N° CAJAS
-        $CURVA_UNID_FINAL       = $query_curva[3]; //  unidfinal
-        $CURVA_PRIMERA_CARGA    = $query_curva[4]; //  primera carga
-        $CURVA_TDAS             = $query_curva[5]; //  tiendas
-        $CURVA_UNIDAJUSTXTALLA  = $query_curva[6]; //  unidadesajustXtalla
-
+        $CURVA_UNID_AJUST = $query_curva[0]; //  unid ajust
+        $CURVA_POR_AJUSTE = $query_curva[1]; //  porcenajust
+        $CURVA_N_CAJAS = $query_curva[2]; //  N° CAJAS
+        $CURVA_UNID_FINAL = $query_curva[3]; //  unidfinal
+        $CURVA_PRIMERA_CARGA = $query_curva[4]; //  primera carga
+        $CURVA_TDAS = $query_curva[5]; //  tiendas
+        $CURVA_UNIDAJUSTXTALLA = $query_curva[6]; //  unidadesajustXtalla
         // Valido que lleguen todos los datos de la QUERY
-        if( empty($CURVA_UNID_AJUST) || empty($CURVA_POR_AJUSTE) || empty($CURVA_N_CAJAS) || empty($CURVA_UNID_FINAL) || empty($CURVA_PRIMERA_CARGA) || empty($CURVA_TDAS) || empty($CURVA_UNIDAJUSTXTALLA) ){
-            return " No se pudo obtener los datos del curvado, revise la data ingresada.";
-            die();
-        }*/
-
-
-        // Validar que llega la Vía
-        if (($NOM_VIA != "MARITIMO") || ($NOM_VIA != "AEREA") || ($NOM_VIA != "TERRESTRE")) {
-            return " El valor enviado en la columna Vía, no corresponde.";
+        if (empty($CURVA_UNID_AJUST) || empty($CURVA_POR_AJUSTE) || empty($CURVA_N_CAJAS) || empty($CURVA_UNID_FINAL) || empty($CURVA_PRIMERA_CARGA) || empty($CURVA_TDAS) || empty($CURVA_UNIDAJUSTXTALLA)) {
+            return "error-(" . $ID_COLOR3 . ") No se pudo obtener los datos del curvado, revise la data ingresada.";
             die();
         }
+
 
         // Transforma a Número el "Nombre de la Vía"
         $NOM_VIA_NUMERO = 0;
@@ -404,7 +407,7 @@ class PlanCompraClass extends \parametros
         $query_numero_pais = PlanCompraClass::BuscaNumeroPais($NOM_PAIS);
         $NOM_PAIS_NUMERO = $query_numero_pais[0];
         if (empty($NOM_PAIS_NUMERO)) {
-            return " No pudimos encontrar el nombre de país ingresado, verifique que el texto ingresado existe.";
+            return "error-(" . $ID_COLOR3 . ") No pudimos encontrar el nombre de país ingresado, verifique que el texto ingresado existe.";
             die();
         }
 
@@ -423,13 +426,10 @@ class PlanCompraClass extends \parametros
 
         // Valido que factor y tipo de cambio no sean cero
         if (($query_factor == 0) && ($query_tipo_cambio == 0)) {
-            return " Factor y Tipo de Cambio llegan en Cero(0).";
+            return "error-(" . $ID_COLOR3 . ") Factor y Tipo de Cambio llegan en Cero(0).";
             die();
         }
 
-
-        // Definir la Ruta de Guardado
-        //var url_PLC_PLAN_COMPRA_COLOR_3 = 'ajax_simulador_cbx/actualiza_grilla_plan_compra_color3';
 
         $total_fob_usd = 0;
         $total_target_usd = 0;
@@ -507,25 +507,37 @@ class PlanCompraClass extends \parametros
         $FACTOR_EST = $factor_est_campo;
         $TARGET = $COSTO_TARGET;
         // Nombres Propios (Cálculo Curvado)
-        // $CURVA_UNID_AJUST       //  unid ajust
-        // $CURVA_POR_AJUSTE       //  porcenajust
-        // $CURVA_N_CAJAS          //  N° CAJAS
+        // $CURVA_UNID_AJUST       //  unid ajust (Enviado a ActualizaPlanCompra)
+        // $CURVA_POR_AJUSTE       //  porcenajust (Enviado a ActualizaPlanCompra)
+        // $CURVA_N_CAJAS          //  N° CAJAS (Enviado a ActualizaPlanCompra)
         // $CURVA_UNID_FINAL       //  unidfinal
         // $CURVA_PRIMERA_CARGA    //  primera carga
-        // $CURVA_TDAS             //  tiendas
-        // $CURVA_UNIDAJUSTXTALLA  //  unidadesajustXtalla
+        // $CURVA_TDAS             //  tiendas (Enviado a ActualizaPlanCompra)
+        // $CURVA_UNIDAJUSTXTALLA  //  unidadesajustXtalla (Enviado a ActualizaPlanCompra)
         $UNIDADES_FINALES = $CAN;
         $UNIDADES_INICIALES = $UNID_OPCION_INICIO;
         $cluster_ = $SEG_ASIG;
-        //$marca_ =
+        $marca_ = $COD_MARCA;
+        $debut_ = $DEBUT_REODER;
+        $tipo_emp_ = $TIPO_EMPAQUE;
+        $formatos_ = $FORMATO;
+        $precioRetail_ = $costo_retail;
+        $precio_blanco_ = $PRECIO_BLANCO;
+        $COSTO = $costo_total_pesos;
 
-        /*
-        $marca_=" + marcas + "&debut_=" + debut_reorder + "&tipo_emp_=" + tipo_empaque + "&formatos_=" + formato+"&precioRetail_=" + costo_retail+"&precio_blanco_=" + precio_blanco+ "&COSTO=" + costo_total_pesos;
-*/
+
+        // Actualizar PLC_PLAN_COMPRA_COLOR_3 incluye PLC_PLAN_COMPRA_COLOR_CIC
+        $query_tipo_cambio = PlanCompraClass::ActualizaPlanCompra($TEMPORADA, $DEPTO, $LOGIN, $ID_COLOR3, $COSTO_FOB, $COSTO_INSP, $COSTO_RFID, $COSTO_UNIT, $COSTO_UNITS, $CST_TOTLTARGET,
+            $COSTO_TOT, $COSTO_TOTS, $MKUP, $GM, $PROVEEDOR, $VIA, $PAIS, $FACTOR_EST, $NOM_VIA, $NOM_PAIS, $TARGET, $tipo_emp_, $UNIDADES_INICIALES, $CURVA_UNID_AJUST, $UNIDADES_FINALES,
+            $CURVA_POR_AJUSTE, $CURVA_TDAS, $formatos_, $CURVA_N_CAJAS, $CURVA_UNIDAJUSTXTALLA, $marca_, $cluster_, $debut_, $precioRetail_, $precio_blanco_, $COSTO);
+        if (!$query_tipo_cambio) {
+            return "error-(" . $ID_COLOR3 . ") No se pudo ejecutar la función ActualizaPlanCompra.";
+            die();
+        }
 
 
+        // Fin ProcesaDataPlanCompra
     }
-
 
     public static function GuardaProforma($temporada, $depto, $login, $proforma, $id_insertar, $archivo)
     {
@@ -753,68 +765,6 @@ class PlanCompraClass extends \parametros
 
 
     }
-
-
-    public static function BuscaNumeroPais($pais)
-    {
-
-        $sql = "SELECT CNTRY_LVL_CHILD
-                FROM plc_pais
-                WHERE UPPER(CNTRY_NAME) = '" . $pais . "'
-                ";
-
-        $data = \database::getInstancia()->getFilas($sql);
-        //return $data;
-
-        foreach ($data as $va1) {
-            return $va1[0];
-        }
-
-
-    }
-
-
-    // Carga POPUP de Historial en Plan de Compra
-
-    public static function BuscaFactor($cod_temporada, $depto, $pais, $via, $moneda, $ventana)
-    {
-
-        $sql = "SELECT " . $ventana . " FROM PLC_FACTOR_EST F
-                WHERE  F.COD_TEMPORADA   = $cod_temporada
-                AND    F.DEP_DEPTO       = '" . $depto . "'
-                AND    F.CNTRY_LVL_CHILD = $pais
-                AND    F.COD_VIA         = $via
-                AND    F.COD_TIP_MON     = $moneda
-                ";
-
-        $data = \database::getInstancia()->getFilas($sql);
-        //return $data;
-
-        foreach ($data as $va1) {
-            return $va1[0];
-        }
-
-    }
-
-    // Buscar Tipo de Cambio
-    public static function BuscaTipoCambio($cod_temporada, $depto, $moneda, $ventana)
-    {
-
-        $sql = "SELECT  " . $ventana . "
-                FROM   PLC_TIPO_CAMBIO P
-                WHERE  P.COD_TEMPORADA = $cod_temporada
-                AND    P.COD_TIP_MON = $moneda
-                ";
-
-        $data = \database::getInstancia()->getFilas($sql);
-        //return $data;
-
-        foreach ($data as $va1) {
-            return $va1[0];
-        }
-
-    }
-
 
     public static function CalculoCurvadoPlanCompra($tipo_empaque, $tallas, $curvas_talla, $und_iniciales, $cluster, $formato
         , $A, $B, $C, $I, $debut_reoder, $PORTALLA_1_INI, $depto, $cod_tempo, $marca, $N_CURVASXCAJAS
@@ -1449,6 +1399,230 @@ class PlanCompraClass extends \parametros
           die();*/
     }
 
+
+    public static function ActualizaPlanCompra($temporada, $depto, $login, $ID_COLOR3, $COSTO_FOB, $COSTO_INSP, $COSTO_RFID, $COSTO_UNIT, $COSTO_UNITS, $CST_TOTLTARGET, $COSTO_TOT,
+                                               $COSTO_TOTS, $MKUP, $GM, $PROVEEDOR
+        , $VIA, $PAIS, $FACTOR_EST, $NOM_VIA, $NOM_PAIS, $TARGET
+        , $tipo_empaque, $und_inicial, $und_ajust, $und_final, $porcent_ajust, $porcent_tdas, $formato
+        , $cant_cajas, $und_ajust_xtallas, $cod_marca, $cluster, $debut_, $retail, $precio_blanco, $COSTO)
+    {
+
+
+        $_Error = false;
+        $und_ajust_xtallas = str_replace("\"", "", $und_ajust_xtallas);
+        $und_ajust = str_replace("\"", "", $und_ajust);
+        $dtdivicantidad = plan_compra::Division_cantidades($und_ajust_xtallas);
+        $dtdiviporcent = plan_compra::Division_porcent($porcent_ajust);
+
+        $tdas = 0;
+        if (strtoupper($debut_) == "DEBUT") {
+            $tdas = plan_compra::get_N_tdas($depto
+                , $cod_marca
+                , $temporada
+                , $cluster
+                , $formato);
+        }
+        //UPDATE PLC_PLAN_COMPRA_COLOR_3
+        $sql = "UPDATE PLC_PLAN_COMPRA_COLOR_3 
+                    SET COSTO_FOB = $COSTO_FOB,
+                    COSTO_INSP = $COSTO_INSP,
+                    COSTO_RFID = $COSTO_RFID,
+                    COSTO_UNIT = $COSTO_UNIT,
+                    COSTO_UNITS = $COSTO_UNITS,
+                    CST_TOTLTARGET = $CST_TOTLTARGET,
+                    COSTO_TOT = $COSTO_TOT,
+                    COSTO_TOTS = $COSTO_TOTS,
+                    MKUP = $MKUP,
+                    GM = $GM,
+                    ALIAS_PROV = '" . $PROVEEDOR . "',
+                    VIA = $VIA,
+                    PAIS = $PAIS,
+                    NOM_VIA = '" . $NOM_VIA . "', 
+                    NOM_PAIS = '" . $NOM_PAIS . "',
+                    FACTOR_EST = $FACTOR_EST,
+                    USR_MOD = '" . $login . "',
+                    COSTO_TARGET = $TARGET,
+                    FEC_MOD = current_date,
+                     tipo_empaque = '" . $tipo_empaque . "' 
+                    ,unid_opcion_inicio = $und_inicial
+                    ,unid_opcion_ajustada = $und_ajust
+                    ,unidades = $und_final
+                    ,PORTALLA_1 = '" . $porcent_ajust . "' 
+                    ,tdas  = $tdas--NUMERO DE TIENDAS
+                    ,ROT  = $porcent_tdas --%TIENDAS
+                    ,formato = '" . $formato . "' 
+                    ,CANT_INNER = $cant_cajas
+                    ,Cant_T1 = $dtdivicantidad[0]
+                    ,Cant_T2 = $dtdivicantidad[1]
+                    ,Cant_T3 = $dtdivicantidad[2]
+                    ,Cant_T4 = $dtdivicantidad[3]
+                    ,Cant_T5 = $dtdivicantidad[4]
+                    ,Cant_T6 = $dtdivicantidad[5]
+                    ,Cant_T7 = $dtdivicantidad[6]
+                    ,Cant_T8 = $dtdivicantidad[7]
+                    ,Cant_T9 = $dtdivicantidad[8]
+                    ,PORCEN_T1 = '" . $dtdiviporcent[0] . "' 
+                    ,PORCEN_T2 = '" . $dtdiviporcent[1] . "'
+                    ,PORCEN_T3 = '" . $dtdiviporcent[2] . "'
+                    ,PORCEN_T4 = '" . $dtdiviporcent[3] . "'
+                    ,PORCEN_T5 = '" . $dtdiviporcent[4] . "'
+                    ,PORCEN_T6 = '" . $dtdiviporcent[5] . "'
+                    ,PORCEN_T7 = '" . $dtdiviporcent[6] . "'
+                    ,PORCEN_T8 = '" . $dtdiviporcent[7] . "'
+                    ,PORCEN_T9 = '" . $dtdiviporcent[8] . "'
+                    ,retail = $retail
+                    ,precio_blanco = $precio_blanco
+                WHERE COD_TEMPORADA = $temporada
+                    AND DEP_DEPTO = '" . $depto . "'
+                    AND ID_COLOR3 = $ID_COLOR3
+                ";
+
+        // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+        if (!file_exists('../archivos/log_querys/' . $login)) {
+            mkdir('../archivos/log_querys/' . $login, 0775, true);
+        }
+
+        $stamp = date("Y-m-d_H-i-s");
+        $rand = rand(1, 999);
+        $content = $sql;
+        $fp = fopen("../archivos/log_querys/" . $login . "/EDITAGRILLA-PLC_PLAN_COMPRA_COLOR_3--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+        fwrite($fp, $content);
+        fclose($fp);
+        if (\database::getInstancia()->getConsulta($sql)) {
+            $_Error = true;
+        }
+
+        //UPDATE PLC_PLAN_COMPRA_COLOR_CIC
+        if ($_Error == true) {
+            $sql = "UPDATE PLC_PLAN_COMPRA_COLOR_CIC 
+                SET COSTO = $COSTO,
+                    USR_MOD = '" . $login . "',
+                    FEC_MOD = current_date,
+                    VTA_CDSCTO = $retail
+                WHERE COD_TEMPORADA = $temporada
+                    AND DEP_DEPTO = '" . $depto . "'
+                    AND ID_COLOR3 = $ID_COLOR3
+                ";
+
+            // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+            if (!file_exists('../archivos/log_querys/' . $login)) {
+                mkdir('../archivos/log_querys/' . $login, 0775, true);
+            }
+            $stamp = date("Y-m-d_H-i-s");
+            $rand = rand(1, 999);
+            $content = $sql;
+            $fp = fopen("../archivos/log_querys/" . $login . "/EDITAGRILLA-PLC_PLAN_COMPRA_COLOR_CIC--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+            fwrite($fp, $content);
+            fclose($fp);
+
+            if (\database::getInstancia()->getConsulta($sql)) {
+                return 1;
+            } else {
+                return 0;
+            }
+        } else {
+            return 0;
+        }
+    }
+
+
+
+    // Actualiza la fecha del registro de concurrencia
+    public static function actualiza_fecha_concurrencia($temporada, $depto, $login)
+    {
+
+        $sql = "UPDATE PLC_CONCURRENCIA
+                SET FECHA = SYSDATE
+                WHERE COD_USR = '" . $login . "'
+                AND COD_TEMPORADA =  $temporada
+                AND DEP_DEPTO = '" . $depto . "' 
+                ";
+
+        // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+        if (!file_exists('../archivos/log_querys/' . $login)) {
+            mkdir('../archivos/log_querys/' . $login, 0775, true);
+        }
+        $stamp = date("Y-m-d_H-i-s");
+        $rand = rand(1, 999);
+        $content = $sql;
+        $fp = fopen("../archivos/log_querys/" . $login . "/PERMISO-ACTFECHA--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+        fwrite($fp, $content);
+        fclose($fp);
+
+        $data = \database::getInstancia()->getConsulta($sql);
+
+        if ($data) {
+            return 0;
+        } else {
+            return 1;
+        }
+
+
+    }
+
+
+    // Busca Numero País por Nombre Ingresado
+    public static function BuscaNumeroPais($pais)
+    {
+
+        $sql = "SELECT CNTRY_LVL_CHILD
+                FROM plc_pais
+                WHERE UPPER(CNTRY_NAME) = '" . $pais . "'
+                ";
+
+        $data = \database::getInstancia()->getFilas($sql);
+        //return $data;
+
+        foreach ($data as $va1) {
+            return $va1[0];
+        }
+
+
+    }
+
+
+    // Busca Factor
+    public static function BuscaFactor($cod_temporada, $depto, $pais, $via, $moneda, $ventana)
+    {
+
+        $sql = "SELECT " . $ventana . " FROM PLC_FACTOR_EST F
+                WHERE  F.COD_TEMPORADA   = $cod_temporada
+                AND    F.DEP_DEPTO       = '" . $depto . "'
+                AND    F.CNTRY_LVL_CHILD = $pais
+                AND    F.COD_VIA         = $via
+                AND    F.COD_TIP_MON     = $moneda
+                ";
+
+        $data = \database::getInstancia()->getFilas($sql);
+        //return $data;
+
+        foreach ($data as $va1) {
+            return $va1[0];
+        }
+
+    }
+
+
+    // Buscar Tipo de Cambio
+    public static function BuscaTipoCambio($cod_temporada, $depto, $moneda, $ventana)
+    {
+
+        $sql = "SELECT  " . $ventana . "
+                FROM   PLC_TIPO_CAMBIO P
+                WHERE  P.COD_TEMPORADA = $cod_temporada
+                AND    P.COD_TIP_MON = $moneda
+                ";
+
+        $data = \database::getInstancia()->getFilas($sql);
+        //return $data;
+
+        foreach ($data as $va1) {
+            return $va1[0];
+        }
+
+    }
+
+
     // Listar Historial
     public static function ListarHistorial($temporada, $depto, $id_color3)
     {
@@ -1485,6 +1659,7 @@ class PlanCompraClass extends \parametros
 
     }
 
+
     // Listar País
     public static function ListarPais($cod_temporada, $depto)
     {
@@ -1498,6 +1673,7 @@ class PlanCompraClass extends \parametros
         return $data;
 
     }
+
 
     // Busca Formatos Grilla Editar
     public static function ListarFormato($temporada, $depto)
@@ -1517,6 +1693,7 @@ class PlanCompraClass extends \parametros
         return $data;
 
     }
+
 
     // Busca Ventana Grilla Editar
     public static function ListarVentana($temporada, $depto)
