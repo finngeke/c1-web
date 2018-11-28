@@ -1,11 +1,12 @@
 <?php
-	
+
 	/**
 	 * CONTROLADOR de PROVEEDOR
 	 * Descripción:
 	 * Fecha: 2018-05-16
 	 * @author JOSÉ MIGUEL CANDIA
 	 */
+
 	class ControlProveedor extends Control {
 		private $estiloCabecera = array(
 			'borders' => array(
@@ -140,17 +141,103 @@
 			$result = array("data" => $json);
 			echo json_encode($result);
 		}
-		
+
 		public function download_templates($f3) {
+
 			ControlProveedor::cargaMain($f3);
 			$data = \proveedor\proveedor::getOrdenesCompra($f3->get('GET.cod_proveedor'));
+
+            $u = 0;
+            foreach ($data as $t){
+               array_push( $data[$u],"","Chile");
+            $u++;
+            }
+
+            $_SESSION['RutaArchivoPeru']= "D:/ftp/Peru/";
+            $nom_proveedorChile =$f3->get('GET.nom_proveedor');
+                //extracion de oc peruanas
+                $_SESSION['Archivos']= "";
+                ControlProveedor::obtener_estructura_directorios($_SESSION['RutaArchivoPeru']);
+                $dtarchivos =  explode("$" ,(substr($_SESSION['Archivos'], 0, -1)));
+                $dtlogproveedor= [];
+                foreach ($dtarchivos as $val){
+                  $stringarchiv = explode("_" ,$val);
+                  $key = 0;$_exist = false; $oc = "";
+                  //busca el proveedor peru vs chile
+                  foreach ($stringarchiv as $c){$key++;
+                      if($key==2){$_exist2 = false;
+                          foreach ($dtlogproveedor as $var){
+                              if ($var == $c) {
+                                  $_exist2 = true;
+                              }
+                          }
+                          if ($_exist2 == false){
+                              $nom_Proveedorperu = \proveedor\proveedor::get_cod_nom_Prov_Peru($c);
+                              if ($nom_Proveedorperu <> "" and $nom_Proveedorperu == $nom_proveedorChile){
+                                  array_push($dtlogproveedor,$c);
+                                  $_exist = true;
+                              }
+                          }
+                      }elseif ($key == 4 and $_exist == true){
+                              $oc = $c; break;
+                      }
+                  }
+
+                  if ($_exist == true){
+                      array_push($data,array("",$oc,0,"",0,0,$val,"Peru"));
+                  }
+                }
+
+
 			$f3->set('nombre_form', 'PO\'s and Packing Instructions');
 			$f3->set('lista_oc', $data);
 			$f3->set('contenido', 'proveedor/download_templates.html');
 			echo Template::instance()->render('layout_proveedor.php');
+
+        }
+
+
+
+        function obtener_estructura_directorios($ruta){
+            // Se comprueba que realmente sea la ruta de un directorio
+            if (is_dir($ruta)){
+                // Abre un gestor de directorios para la ruta indicada
+                $gestor = opendir($ruta);
+               // echo "<ul>";
+
+                // Recorre todos los elementos del directorio
+                while (($archivo = readdir($gestor)) !== false)  {
+
+                    $ruta_completa = $ruta . "/" . $archivo;
+
+                    // Se muestran todos los archivos y carpetas excepto "." y ".."
+                    if ($archivo != "." && $archivo != "..") {
+                        // Si es un directorio se recorre recursivamente
+                        if (is_dir($ruta_completa)) {
+                            //echo "$" . $archivo ;
+                            ControlProveedor::obtener_estructura_directorios($ruta_completa);
+                            $_SESSION['Archivos'] =  $_SESSION['Archivos'].$archivo."$";
+
+                        } else {
+                            $_SESSION['Archivos'] =  $_SESSION['Archivos'].$archivo."$";
+                            //echo "$" . $archivo ;
+                        }
+                    }
+                }
+
+                // Cierra el gestor de directorios
+                closedir($gestor);
+                //echo "</ul>";
+            } else {
+                //echo "No es una ruta de directorio valida<br/>";
 		}
-		
+        }
+
+
+
 		public function download_packing_instructions($f3) {
+
+            if ($f3->get('GET.pais') == "Chile"){
 			$po_number = $f3->get('GET.po_number');
 			$file = "packingInstructions_$po_number.xlsx";
 			$objPHPExcel = new PHPExcel();
@@ -236,9 +323,31 @@
 			header("Content-Disposition: attachment; filename=$file");
 			$objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
 			$objWriter->save('php://output');
+
+            }elseif ($f3->get('GET.pais') == "Peru"){
+                            $file =$f3->get('GET.Archivo'); // Decode URL-encoded string
+                            $filepath = $_SESSION['RutaArchivoPeru'] . $file;
+
+                            // Process download
+                            if(file_exists($filepath)) {
+                                header('Content-Description: File Transfer');
+                                header('Content-Type: application/octet-stream');
+                                header('Content-Disposition: attachment; filename="'.$file.'"');
+                                header('Expires: 0');
+                                header('Cache-Control: must-revalidate');
+                                header('Pragma: public');
+                                header('Content-Length: ' . filesize($filepath));
+
+                                flush(); // Flush system output buffer
+                                readfile($filepath);
+                                exit;
+                            }
+            }
 		}
 		
 		public function download_label_data($f3) {
+
+            if ($f3->get('GET.pais') == "Chile") {
 			$po_number = $f3->get('GET.po_number');
 			$file = "labelData_$po_number.xlsx";
 			$objPHPExcel = new PHPExcel();
@@ -270,9 +379,31 @@
 			header("Content-Disposition: attachment; filename=$file");
 			$objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
 			$objWriter->save('php://output');
+
+            }elseif ($f3->get('GET.pais') == "Peru"){
+                $file =str_replace("INST","LPN",$f3->get('GET.Archivo')); // Decode URL-encoded string
+                $filepath = $_SESSION['RutaArchivoPeru'] . $file;
+                // Process download
+                if(file_exists($filepath)) {
+                    header('Content-Description: File Transfer');
+                    header('Content-Type: application/octet-stream');
+                    header('Content-Disposition: attachment; filename="'.$file.'"');
+                    header('Expires: 0');
+                    header('Cache-Control: must-revalidate');
+                    header('Pragma: public');
+                    header('Content-Length: ' . filesize($filepath));
+
+                    flush(); // Flush system output buffer
+                    readfile($filepath);
+                    exit;
+                }
+
+
+            }
 		}
 		
 		public function download_packing_list($f3) {
+            if ($f3->get('GET.pais') == "Chile") {
 			$po_number = $f3->get('GET.po_number');
 			$file = "packingList_$po_number.xlsx";
 			$objPHPExcel = new PHPExcel();
@@ -285,14 +416,14 @@
 			$objPHPExcel->getActiveSheet()->SetCellValue("A2", "");
 			$objPHPExcel->getActiveSheet()->getStyle("A2")->applyFromArray($this->estiloCabeceraR);
 			$objPHPExcel->getActiveSheet()->SetCellValue("B2", "Ripley Information");
-			
+
 			$objPHPExcel->getActiveSheet()->SetCellValue("A4", "Invoice Number");
 			$objPHPExcel->getActiveSheet()->getStyle("A4")->applyFromArray($this->estiloCabeceraP);
 			$objPHPExcel->getActiveSheet()->getStyle("B4")->applyFromArray($this->estiloCelda);
 			$objPHPExcel->getActiveSheet()->SetCellValue("A5", "Invoice Date");
 			$objPHPExcel->getActiveSheet()->getStyle("A5")->applyFromArray($this->estiloCabeceraP);
 			$objPHPExcel->getActiveSheet()->getStyle("B5")->applyFromArray($this->estiloCelda);
-			
+
 			for ($x = 1; $x <= 10; $x++) {
 				$c = \LibraryHelper::getColumnNameFromNumber($x);
 				$objPHPExcel->getActiveSheet()->mergeCells($c . "7:" . $c . "8");
@@ -302,7 +433,7 @@
 				$c = \LibraryHelper::getColumnNameFromNumber($x);
 				$objPHPExcel->getActiveSheet()->mergeCells($c . "7:" . $c . "8");
 			}
-			
+
 			$objPHPExcel->getActiveSheet()->getStyle("A7:A8")->applyFromArray($this->estiloCabeceraP);
 			$objPHPExcel->getActiveSheet()->getStyle("B7:C8")->applyFromArray($this->estiloCabeceraR);
 			$objPHPExcel->getActiveSheet()->getStyle("D7:D8")->applyFromArray($this->estiloCabeceraP);
@@ -311,7 +442,7 @@
 			$objPHPExcel->getActiveSheet()->getStyle("H7:AE8")->applyFromArray($this->estiloCabeceraR);
 			$objPHPExcel->getActiveSheet()->getStyle("AF7:AM8")->applyFromArray($this->estiloCabeceraP);
 			$objPHPExcel->getActiveSheet()->getStyle("K8:AA8")->applyFromArray($this->estiloCabeceraR);
-			
+
 			$objPHPExcel->getActiveSheet()->SetCellValue("A7", "CONTAINER");
 			$objPHPExcel->getActiveSheet()->SetCellValue("B7", "PI NUMBER");
 			$objPHPExcel->getActiveSheet()->SetCellValue("C7", "PO NUMBER");
@@ -335,12 +466,12 @@
 			$objPHPExcel->getActiveSheet()->SetCellValue("AK7", "SUB N.W. (KGS)");
 			$objPHPExcel->getActiveSheet()->SetCellValue("AL7", "MEASUREMENT PER CTN (CBM)");
 			$objPHPExcel->getActiveSheet()->SetCellValue("AM7", "SUB VOLUME (CBM)");
-			
+
 			for ($i = 1; $i <= 17; $i++) {
 				$c = \LibraryHelper::getColumnNameFromNumber($i + 10);
 				$objPHPExcel->getActiveSheet()->SetCellValue($c . "8", "SIZE $i");
 			}
-			
+
 			// Muestra los datos
 			$data = \proveedor\proveedor::getPackingList($po_number);
 			$r = 9;
@@ -361,6 +492,27 @@
 			header("Content-Disposition: attachment; filename=$file");
 			$objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
 			$objWriter->save('php://output');
+		}
+            elseif ($f3->get('GET.pais') == "Peru"){
+                $file =str_replace("INST","PL",$f3->get('GET.Archivo')); // Decode URL-encoded string
+                $filepath = $_SESSION['RutaArchivoPeru'] . $file;
+                // Process download
+                if(file_exists($filepath)) {
+                    header('Content-Description: File Transfer');
+                    header('Content-Type: application/octet-stream');
+                    header('Content-Disposition: attachment; filename="'.$file.'"');
+                    header('Expires: 0');
+                    header('Cache-Control: must-revalidate');
+                    header('Pragma: public');
+                    header('Content-Length: ' . filesize($filepath));
+
+                    flush(); // Flush system output buffer
+                    readfile($filepath);
+                    exit;
+                }
+
+
+            }
 		}
 		
 		public function invoice_income($f3) {

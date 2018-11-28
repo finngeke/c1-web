@@ -243,5 +243,21 @@
 			$sql = "BEGIN PLC_PKG_PROVEEDOR.PRC_PACKING_LIST_LPN($cod_proveedor, '$nro_factura'); END;";
 			return \database::getInstancia()->getConsulta($sql);
 		}
+
+
+		public static function get_cod_nom_Prov_Peru($cod_provPeru){
+            $nombre = "";
+		    $sql = "SELECT nom_proveedor 
+                    FROM PLC_PROVEEDORES_PERU  
+                    where cod_proveedor =  $cod_provPeru";
+
+
+            $data= \database::getInstancia()->getFila($sql);
+            if (count($data)<>0){
+                $nombre =$data[0];
+            }
+            return $nombre;
+        }
+
 // Fin de la clase
 	}

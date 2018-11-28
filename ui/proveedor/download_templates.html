@@ -19,9 +19,10 @@
 			<!-- general form elements -->
 			<div class="box box-primary">
 				<section class="content">
-					<table class="table table-hover table-condensed" style="width:100%">
+					<table class="table table-hover table-condensed" style="width:100%;font-size:90%">
 						<thead>
 							<tr>
+                                <th style="text-align: center; width:10px">País</th>
 								<th style="text-align: center;">PO Date</th>
 								<th style="text-align: center;">PO Number</th>
 								<th style="text-align: center;">PI Number</th>
@@ -35,25 +36,27 @@
 						<tbody>
 							<repeat group="{{ @lista_oc }}" value="{{ @lista_oc }}">
 								<tr>
+									<td style="text-align: center;"><img src="../ui/image/bandera {{@lista_oc[7]}}.jpg"width="25px" height="25px"/></td>
 									<td style="text-align: center;">{{@lista_oc[0]}}</td>
 									<td style="text-align: right;">{{@lista_oc[1]}}</td>
 									<td>{{@lista_oc[3]}}</td>
 									<td style="text-align: right;">{{@lista_oc[4]}}</td>
 									<td style="text-align: right;">{{@lista_oc[5]}}</td>
 									<td style="text-align: center;">
-										<a href="download_packing_instructions?po_number={{@lista_oc[1]}}" target="_blank" class="btn btn-success btn-xs"><i class="fa fa-download"></i> Download</a>
+										<a href="download_packing_instructions?po_number={{@lista_oc[1]}}&pais={{@lista_oc[7]}}&Archivo={{@lista_oc[6]}}" target="_blank" class="btn btn-success btn-xs"><i class="fa fa-download"></i> Download</a>
 									</td>
 									<td style="text-align: center;">
-										<a href="download_label_data?po_number={{@lista_oc[1]}}" target="_blank" class="btn btn-success btn-xs"><i class="fa fa-download"></i> Download</a>
+										<a href="download_label_data?po_number={{@lista_oc[1]}}&pais={{@lista_oc[7]}}&Archivo={{@lista_oc[6]}}" target="_blank" class="btn btn-success btn-xs"><i class="fa fa-download"></i> Download</a>
 									</td>
 									<td style="text-align: center;">
-										<a href="download_packing_list?po_number={{@lista_oc[1]}}" target="_blank" class="btn btn-success btn-xs"><i class="fa fa-download"></i> Download</a>
+										<a href="download_packing_list?po_number={{@lista_oc[1]}}&pais={{@lista_oc[7]}}&Archivo={{@lista_oc[6]}}" target="_blank" class="btn btn-success btn-xs"><i class="fa fa-download"></i> Download</a>
 									</td>
 								</tr>
 							</repeat>
 						</tbody>
 						<tfoot>
 							<tr>
+								<th></th>
 								<th style="text-align: center;">
 									<input class="form-control input-sm" type="text" style="width: 100px;"></th>
 								<th style="text-align: center;">
