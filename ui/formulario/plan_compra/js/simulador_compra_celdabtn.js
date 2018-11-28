@@ -29,10 +29,30 @@ $(function () {
         },
         upload: AntesCargaArchivoPI,
         complete: function () {
+
             //$(".k-widget.k-upload").find("ul").remove();
+
+            // Obtengo el nombre de la PI que estoy cargando
+            var proforma = $("#NombrePI").val();
+
+            // Calcular Totales en el grilla y rango de datos
+            var spreadsheet_carga_pi = $("#spreadsheet").data("kendoSpreadsheet");
+            var sheet_carga_pi = spreadsheet_carga_pi.activeSheet();
+            var data_conteo_total = sheet_carga_pi.toJSON();
+            var total_registros_listados = data_conteo_total.rows.length;
+
+            var range_carga_pi = sheet_carga_pi.range("CD1:CD"+total_registros_listados);
+
+            // Recorre la Grilla y con la PROFORMA que me llega asignar el texto "Cargado.." a las filas que coincidan.
+            range_carga_pi.forEachCell(function (row, column, value) {
+                if(sheet_carga_pi.range("CD"+row).value() == proforma){
+                    sheet_carga_pi.range("CE"+row).value("Cargado..");
+                }
+            // Fin del Recorrer la Grilla
+            });
+
         },
         success: function () {
-
             // Avisar que el archivo se subió
             var popupNotification = $("#popupNotification").kendoNotification().data("kendoNotification");
             popupNotification.show(" El archivo asociado a la Proforma: "+$("#NombrePI").val()+" fue guardado.", "success");

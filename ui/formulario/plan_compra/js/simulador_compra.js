@@ -38,7 +38,7 @@ $(function () {
         $.ajax({
             url: crudServiceBaseUrl + "ListarPlanCompra",
             dataType: "json",
-            type: 'POST',
+            //type: 'POST',
             success: function (result) {
                 options.success(result);
                 //kendo.console(result);
@@ -468,7 +468,6 @@ $(function () {
         }
     });
 
-
     // Agrega ContextMenu en Plan de Compra
     var spreadsheet_contextual = $("#spreadsheet").data("kendoSpreadsheet");
     var menu_celda_archivopi = spreadsheet_contextual._controller.cellContextMenu;
@@ -490,10 +489,10 @@ $(function () {
             var command = $(e.item).text();
 
             // Busco el ID_COLOR3
-            var ID_COLOR3 ="";
-            var DEBUTREORDER ="";
-            var PROFORMA ="";
-            var ESTADOC1 ="";
+            var ID_COLOR3 = "";
+            var DEBUTREORDER = "";
+            var PROFORMA = "";
+            var ESTADOC1 = "";
             var spreadsheet_id_color3 = $("#spreadsheet").data("kendoSpreadsheet");
             var sheet = spreadsheet_id_color3.activeSheet();
             var range = sheet.selection();
@@ -542,6 +541,7 @@ $(function () {
                             read:  {
                                 url: "TelerikPlanCompra/ListarHistorial",
                                 dataType: "json",
+                                //type: 'POST',
                                 data:{ID_COLOR3: kendo.parseInt(ID_COLOR3)}
                             }
                         }
@@ -736,9 +736,12 @@ $(function () {
             }
 
         });
+    // Fin del menú contextual
 
 
 
 
 
+
+// Fin del document ready
 });
