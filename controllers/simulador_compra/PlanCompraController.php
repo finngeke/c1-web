@@ -15,7 +15,15 @@ class PlanCompraController extends \Control
     public function ListarPlanCompra($f3)
     {
         echo json_encode(\simulador_compra\PlanCompraClass::ListarPlanCompra($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO')));
+
+        //header("Content-Type: application/json");
+        //$json = \JsonHelper::encode(\simulador_compra\PlanCompraClass::ListarPlanCompra($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO')),JSON_PRETTY_PRINT);
+        // echo $json;
+
+
+
     }
+
 
     // Actualiza Plan de Compra
     public function ProcesaDataPlanCompra($f3)
@@ -164,6 +172,7 @@ class PlanCompraController extends \Control
         // Fin del actualizar grilla
     }
 
+
     // Calcula el Curvado para los campos editados en el plan de compra
     public function CalculoCurvadoPlanCompra($f3)
     {
@@ -207,6 +216,7 @@ class PlanCompraController extends \Control
 
         echo json_encode($varibles);
     }
+
 
     // Carga POPUP de Historial en Plan de Compra
     public function ListarHistorial($f3)
@@ -259,17 +269,20 @@ class PlanCompraController extends \Control
     }
     // ######################## FIN TRABAJO CON CONCURRENCIA ########################
 
+
     // Listar País
     public function ListarPais($f3)
     {
         echo json_encode(\simulador_compra\PlanCompraClass::ListarPais($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO')));
     }
 
+
     // Listar Formatos Grilla Editar
     public function ListarFormato($f3)
     {
         echo json_encode(\simulador_compra\PlanCompraClass::ListarFormato($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO')));
     }
+
 
     // Listar Ventana Grilla Editar
     public function ListarVentana($f3)
