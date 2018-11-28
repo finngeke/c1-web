@@ -24,7 +24,7 @@ $(function () {
             saveField: "JSONGuardaArhcivoPI"
             /*,removeUrl: "TelerikGuardar/QuitarArhcivoPI"*/
         },validation: {
-            allowedExtensions: [".xlsx",".XLSX",".xls",".xlsx"],
+            allowedExtensions: [".xlsx",".XLSX",".xls",".XLS"],
             maxFileSize: 30000000
         },
         upload: AntesCargaArchivoPI,

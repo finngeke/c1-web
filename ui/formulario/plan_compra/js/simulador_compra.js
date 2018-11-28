@@ -38,6 +38,7 @@ $(function () {
         $.ajax({
             url: crudServiceBaseUrl + "ListarPlanCompra",
             dataType: "json",
+            type: 'POST',
             success: function (result) {
                 options.success(result);
                 //kendo.console(result);
@@ -47,6 +48,7 @@ $(function () {
             }
         });
     }
+
 
     // Variable siempre a true, para cambiar las cabeceras
     var shouldPopulateHeader = true;
@@ -241,6 +243,17 @@ $(function () {
                             messageTemplate: "La ventana ingresada, no se encuentra dentro de las permitidas. (Recuerde ingresarla en Mayúsculas.)"
                         });
 
+                        /*var range_pais = spreadsheet.activeSheet().range("AZ2:AZ"+total_registros_listados);
+                        range_pais.validation({
+                            dataType: "list",
+                            showButton: true,
+                            comparerType: "list",
+                            from: '"A,B,C,D,E,F,G,H,I"',
+                            allowNulls: false,
+                            type: "reject",
+                            messageTemplate: "La ventana ingresada, no se encuentra dentro de las permitidas. (Recuerde ingresarla en Mayúsculas.)"
+                        });*/
+
 
 
                     }, {recalc: true});
@@ -366,7 +379,8 @@ $(function () {
                     COD_MARCA: {type: "number"},
                     N_CURVASXCAJAS: {type: "number"},
                     COD_JER2: {type: "number"},
-                    COD_SUBLIN: {type: "number"}
+                    COD_SUBLIN: {type: "number"},
+                    ARCHIVO_BASE: {type: "string"}
 
                 }
             }
