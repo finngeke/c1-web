@@ -134,7 +134,6 @@ class PlanCompraClass extends \parametros
                 ORDER BY C.ID_COLOR3, C.COD_JER2,C.COD_SUBLIN,C.COD_ESTILO,NVL(COD_COLOR,0) ,C.VENTANA_LLEGADA,C.DEBUT_REODER";
 
         $data = \database::getInstancia()->getFilas($sql);
-        /*return $data;*/
 
         // Transformo a array asociativo
         $array1 = [];
@@ -147,108 +146,107 @@ class PlanCompraClass extends \parametros
                 , "LINEA" => $va1[3]
                 , "SUBLINEA" => $va1[4]
                 , "MARCA" => $va1[5]
-                , "ESTILO" => $va1[6]
+                , "ESTILO" => utf8_encode($va1[6])
                 , "SHORT_NAME" => $va1[7]
                 , "ID_CORPORATIVO" => $va1[8]
-                , "DESCMODELO" => $va1[9]
-                , "DESCRIP_INTERNET" => $va1[10]
-                , "NOMBRE_COMPRADOR" => $va1[11]
-                , "NOMBRE_DISENADOR" => $va1[12]
-                , "COMPOSICION" => $va1[13]
-                , "TIPO_TELA" => $va1[14]
-                , "FORRO" => $va1[15]
-                , "COLECCION" => $va1[16]
-                , "EVENTO" => $va1[17]
-                , "COD_ESTILO_VIDA" => $va1[18]
-                , "CALIDAD" => $va1[19]
-                , "COD_OCASION_USO" => $va1[20]
-                , "COD_PIRAMIX" => $va1[21]
-                , "NOM_VENTANA" => $va1[22] //ventana
-                , "COD_RANKVTA" => $va1[23]
-                , "LIFE_CYCLE" => $va1[24]
-                , "NUM_EMB" => $va1[25]
-                , "COD_COLOR" => $va1[26]
-                , "TIPO_PRODUCTO" => $va1[27]
-                , "TIPO_EXHIBICION" => $va1[28]
-                , "DESTALLA" => $va1[29]
-                , "TIPO_EMPAQUE" => $va1[30]
-                , "PORTALLA_1_INI" => $va1[31]
-                , "PORTALLA_1" => $va1[32]
-                , "CURVATALLA" => $va1[33]
-                , "CURVAMIN" => $va1[34]
-                , "UNID_OPCION_INICIO" => $va1[35]
-                , "UNID_OPCION_AJUSTADA" => $va1[36]
-                , "CAN" => $va1[37]
-                , "MTR_PACK" => $va1[38]
-                , "CANT_INNER" => $va1[39]
-                , "SEG_ASIG" => $va1[40]
-                , "FORMATO" => $va1[41]
-                , "TDAS" => $va1[42]
-                , "A" => $va1[43]
-                , "B" => $va1[44]
-                , "C" => $va1[45]
-                , "I" => $va1[46]
-                , "UND_ASIG_INI" => $va1[47]
-                , "ROT" => $va1[48]
-                , "NOM_PRECEDENCIA" => $va1[49]
-                , "NOM_VIA" => $va1[50]
-                , "NOM_PAIS" => $va1[51]
-                , "VIAJE" => $va1[52]
-                , "MKUP" => $va1[53]
-                , "PRECIO_BLANCO" => $va1[54]
-                , "OFERTA" => $va1[55]
-                , "GM" => $va1[56]
-                , "COD_TIP_MON" => $va1[57]
-                , "COSTO_TARGET" => $va1[58]
-                , "COSTO_FOB" => $va1[59]
-                , "COSTO_INSP" => $va1[60]
-                , "COSTO_RFID" => $va1[61]
-                , "ROYALTY_POR" => $va1[62]
-                , "COSTO_UNIT" => $va1[63]
-                , "COSTO_UNITS" => $va1[64]
-                , "CST_TOTLTARGET" => $va1[65]
-                , "COSTO_TOT" => $va1[66]
-                , "COSTO_TOTS" => $va1[67]
-                , "RETAIL" => $va1[68]
-                , "DEBUT_REODER" => $va1[69]
-                , "SEM_INI" => $va1[70]
-                , "SEM_FIN" => $va1[71]
-                , "CICLO" => $va1[72]
-                , "AGOT_OBJ" => $va1[73]
-                , "SEMLIQ" => $va1[74]
-                , "ALIAS_PROV" => $va1[75]
-                , "COD_PROVEEDOR" => $va1[76]
-                , "COD_TRADER" => $va1[77]
-                , "AFTER_MEETING_REMARKS" => $va1[78]
-                , "CODSKUPROVEEDOR" => $va1[79]
-                , "SKU" => $va1[80]
-                , "PROFORMA" => $va1[81]
-                , "ARCHIVO" => $va1[82]
-                , "ESTILO_PMM" => $va1[83]
-                , "ESTADO_MATCH" => $va1[84]
-                , "PO_NUMBER" => $va1[85]
-                , "ESTADO_OC" => $va1[86]
-                , "FECHA_ACORDADA" => $va1[87]
-                , "FECHA_EMBARQUE" => $va1[88]
-                , "FECHA_ETA" => $va1[89]
-                , "FECHA_RECEPCION" => $va1[90]
-                , "DIAS_ATRASO" => $va1[91]
-                , "CODESTADO" => $va1[92]
-                , "ESTADO_C1" => $va1[93]
-                , "VENTANA_LLEGADA" => $va1[94]
-                , "PROFORMA_BASE" => $va1[95]
-                , "TIPO_EMPAQUE_BASE" => $va1[96]
-                , "UNI_INICIALES_BASE" => $va1[97]
-                , "PRECIO_BLANCO_BASE" => $va1[98]
-                , "COSTO_TARGET_BASE" => $va1[99]
-                , "COSTO_FOB_BASE" => $va1[100]
-                , "COSTO_INSP_BASE" => $va1[101]
-                , "COSTO_RFID_BASE" => $va1[102]
-
-                , "COD_MARCA" => $va1[103]
-                , "N_CURVASXCAJAS" => $va1[104]
-                , "COD_JER2" => $va1[105] //cod_linea
-                , "COD_SUBLIN" => $va1[106]
+                    , "DESCMODELO" => utf8_encode($va1[9])
+                    , "DESCRIP_INTERNET" => utf8_encode($va1[10])
+                    , "NOMBRE_COMPRADOR" => utf8_encode($va1[11])
+                    , "NOMBRE_DISENADOR" => utf8_encode($va1[12])
+                    , "COMPOSICION" => utf8_encode($va1[13])
+                    , "TIPO_TELA" => utf8_encode($va1[14])
+                    , "FORRO" => utf8_encode($va1[15])
+                    , "COLECCION" => utf8_encode($va1[16])
+                    , "EVENTO" => utf8_encode($va1[17])
+                    , "COD_ESTILO_VIDA" => utf8_encode($va1[18])
+                    , "CALIDAD" => utf8_encode($va1[19])
+                    , "COD_OCASION_USO" => utf8_encode($va1[20])
+                    , "COD_PIRAMIX" => utf8_encode($va1[21])
+                    , "NOM_VENTANA" => utf8_encode($va1[22]) //ventana
+                    , "COD_RANKVTA" => utf8_encode($va1[23])
+                    , "LIFE_CYCLE" => utf8_encode($va1[24])
+                    , "NUM_EMB" => utf8_encode($va1[25])
+                    , "COD_COLOR" => utf8_encode($va1[26])
+                    , "TIPO_PRODUCTO" => utf8_encode($va1[27])
+                    , "TIPO_EXHIBICION" => utf8_encode($va1[28])
+                    , "DESTALLA" => utf8_encode($va1[29])
+                    , "TIPO_EMPAQUE" => utf8_encode($va1[30])
+                    , "PORTALLA_1_INI" => utf8_encode($va1[31])
+                    , "PORTALLA_1" => utf8_encode($va1[32])
+                    , "CURVATALLA" => utf8_encode($va1[33])
+                    , "CURVAMIN" => utf8_encode($va1[34])
+                    , "UNID_OPCION_INICIO" => $va1[35]
+                    , "UNID_OPCION_AJUSTADA" => $va1[36]
+                    , "CAN" => $va1[37]
+                    , "MTR_PACK" => $va1[38]
+                    , "CANT_INNER" => $va1[39]
+                    , "SEG_ASIG" => utf8_encode($va1[40])
+                    , "FORMATO" => utf8_encode($va1[41])
+                    , "TDAS" => utf8_encode($va1[42])
+                    , "A" => $va1[43]
+                    , "B" => $va1[44]
+                    , "C" => $va1[45]
+                    , "I" => $va1[46]
+                    , "UND_ASIG_INI" => $va1[47]
+                    , "ROT" => $va1[48]
+                    , "NOM_PRECEDENCIA" => utf8_encode($va1[49])
+                    , "NOM_VIA" => utf8_encode($va1[50])
+                    , "NOM_PAIS" => utf8_encode($va1[51])
+                    , "VIAJE" => utf8_encode($va1[52])
+                    , "MKUP" => utf8_encode($va1[53])
+                    , "PRECIO_BLANCO" => $va1[54]
+                    , "OFERTA" => utf8_encode($va1[55])
+                    , "GM" => $va1[56]
+                    , "COD_TIP_MON" => utf8_encode($va1[57])
+                    , "COSTO_TARGET" => $va1[58]
+                    , "COSTO_FOB" => $va1[59]
+                    , "COSTO_INSP" => $va1[60]
+                    , "COSTO_RFID" => $va1[61]
+                    , "ROYALTY_POR" => $va1[62]
+                    , "COSTO_UNIT" => $va1[63]
+                    , "COSTO_UNITS" => $va1[64]
+                    , "CST_TOTLTARGET" => $va1[65]
+                    , "COSTO_TOT" => $va1[66]
+                    , "COSTO_TOTS" => $va1[67]
+                    , "RETAIL" => $va1[68]
+                    , "DEBUT_REODER" => utf8_encode($va1[69])
+                    , "SEM_INI" => $va1[70]
+                    , "SEM_FIN" => $va1[71]
+                    , "CICLO" => utf8_encode($va1[72])
+                    , "AGOT_OBJ" => $va1[73]
+                    , "SEMLIQ" => $va1[74]
+                    , "ALIAS_PROV" => utf8_encode($va1[75])
+                    , "COD_PROVEEDOR" => utf8_encode($va1[76])
+                    , "COD_TRADER" => utf8_encode($va1[77])
+                    , "AFTER_MEETING_REMARKS" => utf8_encode($va1[78])
+                    , "CODSKUPROVEEDOR" => utf8_encode($va1[79])
+                    , "SKU" => utf8_encode($va1[80])
+                    , "PROFORMA" => utf8_encode($va1[81])
+                    , "ARCHIVO" => utf8_encode($va1[82])
+                    , "ESTILO_PMM" => utf8_encode($va1[83])
+                    , "ESTADO_MATCH" => utf8_encode($va1[84])
+                    , "PO_NUMBER" => utf8_encode($va1[85])
+                    , "ESTADO_OC" => utf8_encode($va1[86])
+                    , "FECHA_ACORDADA" => $va1[87]
+                    , "FECHA_EMBARQUE" => $va1[88]
+                    , "FECHA_ETA" => $va1[89]
+                    , "FECHA_RECEPCION" => $va1[90]
+                    , "DIAS_ATRASO" => $va1[91]
+                    , "CODESTADO" => utf8_encode($va1[92])
+                    , "ESTADO_C1" => $va1[93]
+                    , "VENTANA_LLEGADA" => utf8_encode($va1[94])
+                    , "PROFORMA_BASE" => utf8_encode($va1[95])
+                    , "TIPO_EMPAQUE_BASE" => utf8_encode($va1[96])
+                    , "UNI_INICIALES_BASE" => $va1[97]
+                    , "PRECIO_BLANCO_BASE" => $va1[98]
+                    , "COSTO_TARGET_BASE" => $va1[99]
+                    , "COSTO_FOB_BASE" => $va1[100]
+                    , "COSTO_INSP_BASE" => $va1[101]
+                    , "COSTO_RFID_BASE" => $va1[102]
+                    , "COD_MARCA" => $va1[103]
+                    , "N_CURVASXCAJAS" => $va1[104]
+                    , "COD_JER2" => $va1[105] //cod_linea
+                    , "COD_SUBLIN" => $va1[106]
 
 
                 )
@@ -257,6 +255,8 @@ class PlanCompraClass extends \parametros
 
 
         return $array1;
+
+
 
 
     }
@@ -362,36 +362,6 @@ class PlanCompraClass extends \parametros
         if (substr($COSTO_RFID, 0, 1) == ".") {
             $COSTO_RFID = "0" . $COSTO_RFID;
         }
-        // ########################################## FIN SETEO DE VARIABLES ############################################
-
-
-        // 2.- Aplicar Guardado solo Curvado.
-        // 2.1- Aplicar Guardado Resto de los Campos.
-
-
-        // 3.- Si no hay cambios en datos curvados, utilizar 2.1 (Para separar guardado y posibles errores)
-
-
-        // Hay que ir a buscar el Curvado
-        $query_curva = PlanCompraClass::CalculoCurvadoPlanCompra($TIPO_EMPAQUE, $DESTALLA, $CURVATALLA, $UNID_OPCION_INICIO, $SEG_ASIG, $FORMATO, $A, $B, $C, $I, $DEBUT_REODER, $PORTALLA_1_INI, $DEPTO, $TEMPORADA, $COD_MARCA, $N_CURVASXCAJAS, $COD_JER2, $COD_SUBLIN, $ID_COLOR3, 1);
-        // Valido que se pueda realizar la QUERY
-        if (!$query_curva) {
-            return "error-(" . $ID_COLOR3 . ") No se pudo buscar curvado.";
-            die();
-        }
-        $CURVA_UNID_AJUST = $query_curva[0]; //  unid ajust
-        $CURVA_POR_AJUSTE = $query_curva[1]; //  porcenajust
-        $CURVA_N_CAJAS = $query_curva[2]; //  N° CAJAS
-        $CURVA_UNID_FINAL = $query_curva[3]; //  unidfinal
-        $CURVA_PRIMERA_CARGA = $query_curva[4]; //  primera carga
-        $CURVA_TDAS = $query_curva[5]; //  tiendas
-        $CURVA_UNIDAJUSTXTALLA = $query_curva[6]; //  unidadesajustXtalla
-        // Valido que lleguen todos los datos de la QUERY
-        if (empty($CURVA_UNID_AJUST) || empty($CURVA_POR_AJUSTE) || empty($CURVA_N_CAJAS) || empty($CURVA_UNID_FINAL) || empty($CURVA_PRIMERA_CARGA) || empty($CURVA_TDAS) || empty($CURVA_UNIDAJUSTXTALLA)) {
-            return "error-(" . $ID_COLOR3 . ") No se pudo obtener los datos del curvado, revise la data ingresada.";
-            die();
-        }
-
 
         // Transforma a Número el "Nombre de la Vía"
         $NOM_VIA_NUMERO = 0;
@@ -417,7 +387,6 @@ class PlanCompraClass extends \parametros
             $query_factor = 0;
         }
 
-
         // Traer tipo de cambio
         $query_tipo_cambio = PlanCompraClass::BuscaTipoCambio($TEMPORADA, $DEPTO, 2, $NOM_VENTANA);
         if (empty($query_tipo_cambio[0])) {
@@ -429,8 +398,10 @@ class PlanCompraClass extends \parametros
             return "error-(" . $ID_COLOR3 . ") Factor y Tipo de Cambio llegan en Cero(0).";
             die();
         }
+        // ########################################## FIN SETEO DE VARIABLES ############################################
 
 
+        // ############################### CÁLCULO CON LAS VARIABLES DEFINIDAS PREVIAMENTE ##############################
         $total_fob_usd = 0;
         $total_target_usd = 0;
         $costo_unitario_final_usd = 0;
@@ -491,6 +462,44 @@ class PlanCompraClass extends \parametros
         }
 
 
+        // 1.- Primero realizar el actualizado de los campos que no están asociados al curvado (Si hay problema con el curvado, que el usuario no pierda la otra data actualizada)
+        // ################# ACTUALIZAR EN ESTA QUERY, TODOS LOS CAMPO QUE NO REQUIEREN CALCULO ##################
+        $query_campos_sin_calculo = PlanCompraClass::ActualizaCampoSinCalculo();
+        if (!$query_campos_sin_calculo) {
+            return "error-(" . $ID_COLOR3 . ") No se pudo actualizar el registro.";
+            die();
+        }
+
+
+        // 2.- Realizar cálculos del curvado... siempre y cuando los datos que llegan sean distinto de los datos base
+
+
+
+
+
+
+        // Hay que ir a buscar el Curvado
+        $query_curva = PlanCompraClass::CalculoCurvadoPlanCompra($TIPO_EMPAQUE, $DESTALLA, $CURVATALLA, $UNID_OPCION_INICIO, $SEG_ASIG, $FORMATO, $A, $B, $C, $I, $DEBUT_REODER, $PORTALLA_1_INI, $DEPTO, $TEMPORADA, $COD_MARCA, $N_CURVASXCAJAS, $COD_JER2, $COD_SUBLIN, $ID_COLOR3, 1);
+        // Valido que se pueda realizar la QUERY
+        if (!$query_curva) {
+            return "error-(" . $ID_COLOR3 . ") No se pudo buscar curvado.";
+            die();
+        }
+        $CURVA_UNID_AJUST = $query_curva[0]; //  unid ajust
+        $CURVA_POR_AJUSTE = $query_curva[1]; //  porcenajust
+        $CURVA_N_CAJAS = $query_curva[2]; //  N° CAJAS
+        $CURVA_UNID_FINAL = $query_curva[3]; //  unidfinal
+        $CURVA_PRIMERA_CARGA = $query_curva[4]; //  primera carga
+        $CURVA_TDAS = $query_curva[5]; //  tiendas
+        $CURVA_UNIDAJUSTXTALLA = $query_curva[6]; //  unidadesajustXtalla
+        // Valido que lleguen todos los datos de la QUERY
+        if (empty($CURVA_UNID_AJUST) || empty($CURVA_POR_AJUSTE) || empty($CURVA_N_CAJAS) || empty($CURVA_UNID_FINAL) || empty($CURVA_PRIMERA_CARGA) || empty($CURVA_TDAS) || empty($CURVA_UNIDAJUSTXTALLA)) {
+            return "error-(" . $ID_COLOR3 . ") No se pudo obtener los datos del curvado, revise la data ingresada.";
+            die();
+        }
+
+
+
         // Variables que se van enviar al UPDATE
         $COSTO_UNIT = $costo_unitario_final_usd;
         $COSTO_UNITS = $costo_unitario_final_pesos;
@@ -536,7 +545,7 @@ class PlanCompraClass extends \parametros
         }
 
 
-        // Fin ProcesaDataPlanCompra
+    // Fin ProcesaDataPlanCompra
     }
 
     public static function GuardaProforma($temporada, $depto, $login, $proforma, $id_insertar, $archivo)
@@ -1671,6 +1680,21 @@ class PlanCompraClass extends \parametros
 
         $data = \database::getInstancia()->getFilas($sql);
         return $data;
+
+        // Transformo a array asociativo
+        /*$array1 = [];
+        foreach ($data as $va1) {
+            array_push($array1
+                , array(
+                    "CNTRY_LVL_CHILD" => $va1[0]
+                , "CNTRY_NAME" => $va1[1]
+                )
+            );
+        }
+
+
+        return $array1;*/
+
 
     }
 
