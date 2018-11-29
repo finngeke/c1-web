@@ -371,8 +371,8 @@
 			ControlFormularioMantenedores::tipo_ppto_costo($f3);
 			ControlFormularioMantenedores::tipo_ppto_retail($f3);
 			
-			$f3->set('contenido', 'formulario/plan_compra/simulador_compra2.html');
-			echo Template::instance()->render('layout_simuladorB.php');
+			$f3->set('contenido', 'formulario/plan_compra/simulador_compra.html');
+			echo Template::instance()->render('layout_plan_compra.php');
 			
 		}
 		
