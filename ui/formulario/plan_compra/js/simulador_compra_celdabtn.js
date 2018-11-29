@@ -177,8 +177,8 @@ $(function () {
     // Le da la estructura a la ventana POPUP
     var ventana_match = $("#POPUP_match");
     ventana_match.kendoWindow({
-        width: "700px",
-        height: "320px",
+        width: "750px",
+        height: "350px",
         title: "Match",
         visible: false,
         actions: [

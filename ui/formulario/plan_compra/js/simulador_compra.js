@@ -493,6 +493,9 @@ $(function () {
             var DEBUTREORDER = "";
             var PROFORMA = "";
             var ESTADOC1 = "";
+            var ARCHIVO = "";
+            var OC = "";
+            var LINKEADA = "";
             var spreadsheet_id_color3 = $("#spreadsheet").data("kendoSpreadsheet");
             var sheet = spreadsheet_id_color3.activeSheet();
             var range = sheet.selection();
@@ -515,8 +518,14 @@ $(function () {
                 DEBUTREORDER = range_debutreorder.values();
                 var range_proforma = sheet.range("CD"+fila_id);
                 PROFORMA = range_proforma.values();
+                var range_oc = sheet.range("CH"+fila_id);
+                OC = range_oc.values();
+                var range_linkeada = sheet.range("CG"+fila_id);
+                LINKEADA = range_linkeada.values();
                 var range_estadoc1 = sheet.range("CP"+fila_id);
                 ESTADOC1 = range_estadoc1.values();
+                var range_archivo = sheet.range("CE"+fila_id);
+                ARCHIVO = range_archivo.values();
 
             });
 
@@ -639,8 +648,8 @@ $(function () {
                 selection.background("green");
                 */
 
-                if( (PROFORMA.length==0) || (PROFORMA==null) || (PROFORMA=="")  ){
-                    popupNotification.show(" Seleccione un registro con proforma.", "error");
+                if( (PROFORMA.length==0) || (PROFORMA==null) || (PROFORMA=="") || (ARCHIVO=="Cargado..") ){
+                    popupNotification.show(" Seleccione un registro con proforma y archivo sin cargar.", "error");
                 }else {
 
                     // Le asigno el nombre de la Proforma al campo de texto
@@ -657,10 +666,13 @@ $(function () {
 
             if(command == "Match") {
 
-                // no lectura
-                //if ((orden_compra != 0) && (proforma != "") && (proforma != 0) && (check_estado_oc == 19)) {
-                if( (PROFORMA.length==0) || (PROFORMA==null) || (PROFORMA=="")  ){
-                    popupNotification.show(" Seleccione un registro con proforma.", "error");
+                // BLOQUEAR si el usuario es solo de lectura
+
+                // Que llegue la proforma y el estado sea Pendiente de Aprobación sin Match
+                if( (PROFORMA.length==0) || (PROFORMA==null) || (PROFORMA=="") || (ESTADOC1==19) ){
+
+                    popupNotification.show(" Seleccione un registro con Proforma,Pendiente de Aprobacion sin Match y OC no Linkeada.", "error");
+
                 }else {
 
                     // Levantar el POPUP
@@ -675,9 +687,9 @@ $(function () {
                     var dataSource_match_pmm = new kendo.data.DataSource({
                         transport: {
                             read:  {
-                                url: "TelerikPlanCompra/ListarMatchPMM",
+                                url: "TelerikPlanCompra/MatchLlenarGridPMM",
                                 dataType: "json",
-                                data:{ID_COLOR3: kendo.parseInt(ID_COLOR3)}
+                                data:{ID_COLOR3: kendo.parseInt(ID_COLOR3), OC: OC, PI:PROFORMA}
                             }
                         }
                     });
@@ -685,9 +697,9 @@ $(function () {
                     var dataSource_match_plan = new kendo.data.DataSource({
                         transport: {
                             read:  {
-                                url: "TelerikPlanCompra/ListarMatchPLAN",
+                                url: "TelerikPlanCompra/MatchLlenarGridPlan",
                                 dataType: "json",
-                                data:{ID_COLOR3: kendo.parseInt(ID_COLOR3)}
+                                data:{ID_COLOR3: kendo.parseInt(ID_COLOR3), OC: OC, PI:PROFORMA}
                             }
                         }
                     });
