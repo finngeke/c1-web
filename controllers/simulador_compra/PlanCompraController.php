@@ -32,10 +32,8 @@ class PlanCompraController extends \Control
         $tempData = html_entity_decode($_REQUEST['models']);
         $json = json_decode($tempData, true);
 
-
         // var_dump($json['updated']);
         // die();
-
 
         // Recorrer el JSON
         foreach ($json['updated'] as $columna) {
@@ -63,7 +61,7 @@ class PlanCompraController extends \Control
             $CALIDAD = $columna["CALIDAD"];
             $COD_OCASION_USO = $columna["COD_OCASION_USO"];
             $COD_PIRAMIX = $columna["COD_PIRAMIX"];
-            $NOM_VENTANA = $columna["NOM_VENTANA"];
+            $NOM_VENTANA = strtoupper($columna["NOM_VENTANA"]); // Pasamos a mayúscula la ventana que llega
             $COD_RANKVTA = $columna["COD_RANKVTA"];
             $LIFE_CYCLE = $columna["LIFE_CYCLE"];
             $NUM_EMB = $columna["NUM_EMB"];
@@ -288,6 +286,26 @@ class PlanCompraController extends \Control
     public function ListarVentana($f3)
     {
         echo json_encode(\simulador_compra\PlanCompraClass::ListarVentana($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO')));
+    }
+
+
+    public function ConsultaOCLinkeada($f3) {
+        echo json_encode(\simulador_compra\PlanCompraClass::ConsultaOCLinkeada($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $f3->get('GET.OC')));
+    }
+
+
+    public function MatchLlenarGridPMM($f3) {
+
+        echo "<pre>";
+        echo var_dump($_GET);
+        die();
+
+        echo json_encode(\simulador_compra\PlanCompraClass::MatchLlenarGridPMM($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $f3->get('GET.OC'), $f3->get('GET.PI')));
+
+    }
+
+    public function MatchLlenarGridPlan($f3) {
+        echo json_encode(\simulador_compra\PlanCompraClass::valida_tablab_cuza_color3($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $f3->get('GET.OC'), $f3->get('GET.PI')));
     }
 
 
