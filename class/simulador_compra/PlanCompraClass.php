@@ -135,7 +135,7 @@ class PlanCompraClass extends \parametros
 
         $data = \database::getInstancia()->getFilas($sql);
 
-        // Transformo a array asociativo
+        // Transformo a array asociativo (Para campos de texto utilizar UTF-8)
         $array1 = [];
         foreach ($data as $va1) {
             array_push($array1
@@ -258,7 +258,6 @@ class PlanCompraClass extends \parametros
 
 
 
-
     }
 
 
@@ -309,15 +308,15 @@ class PlanCompraClass extends \parametros
                 // Aplicar guardado de proforma
                 $query_proforma = PlanCompraClass::GuardaProforma($TEMPORADA, $DEPTO, $LOGIN, $PROFORMA, $ID_COLOR3, $sube_archivo);
                 if (!$query_proforma) {
-                    return " No se pudo realizar la actualización de la proforma.";
+                    return "error-(" . $ID_COLOR3 . ") No se pudo realizar la actualización de la proforma.";
                     die();
                 }
 
 
-                // Fin Validación Campos Necesarios
+            // Fin Validación Campos Necesarios
             }
 
-            // Fin validación PROFORMA
+        // Fin validación PROFORMA
         }
         // ########################################## FIN GUARDADO PROFORMA ############################################
 
@@ -548,6 +547,7 @@ class PlanCompraClass extends \parametros
     // Fin ProcesaDataPlanCompra
     }
 
+
     public static function GuardaProforma($temporada, $depto, $login, $proforma, $id_insertar, $archivo)
     {
 
@@ -774,6 +774,7 @@ class PlanCompraClass extends \parametros
 
 
     }
+
 
     public static function CalculoCurvadoPlanCompra($tipo_empaque, $tallas, $curvas_talla, $und_iniciales, $cluster, $formato
         , $A, $B, $C, $I, $debut_reoder, $PORTALLA_1_INI, $depto, $cod_tempo, $marca, $N_CURVASXCAJAS
@@ -1729,6 +1730,334 @@ class PlanCompraClass extends \parametros
         return $data;
 
     }
+
+
+    // Consultar OC Linkeada
+    public static function ConsultaOCLinkeada($temporada, $depto, $login, $oc){
+
+        // Devuelve el estado de la OC, para saber si se encuentra linkeada (Funcionando)
+        $sql = "SELECT ESTADO_MATCH
+                  FROM PLC_PLAN_COMPRA_OC
+                  WHERE PO_NUMBER = '" . $oc . "'
+                  AND ESTADO_MATCH = 'Linkeada'
+                  AND COD_TEMPORADA = $temporada
+                  AND DEP_DEPTO = '" . $depto . "'
+            ";
+        $data = \database::getInstancia()->getFilas($sql);
+        return $data;
+
+    }
+
+
+    // Quitar OC Eliminada
+    public static function QuitarOCCancelada($pi)
+    {
+        $sql = " DELETE FROM B
+                 WHERE PI = '" . $pi . "'
+                ";
+
+        $data = \database::getInstancia()->getConsulta($sql);
+        //return $data;
+
+        if($data){
+            return 1;
+        }else{
+            return 0;
+        }
+
+    }
+
+
+    // Trabajando en MATCH llenar tabla PMM
+    public static function MatchLlenarGridPMM($temporada, $depto, $login, $oc, $pi)
+    {
+
+
+
+        $temporada = 11;
+        $depto = "D141";
+        $oc = "9131698";
+        $pi = "2018HM1033";
+
+        // Consulta OC Linkeada (Revisar, no se agrega por que se valida antes de levantar popup match)
+
+        // Quitar OC Cancelada
+        $query_quitar_OC_cancelada = PlanCompraClass::QuitarOCCancelada($pi);
+        if ($query_quitar_OC_cancelada == 1) {
+            return "error-No se pudo quitar las OC Canceladas.";
+            die();
+        // Se quitaron las OC Canceladas
+        }else{
+
+            // Traer Datos OC desde WS
+            $query_trae_datos_oc = json_decode(PlanCompraClass::BrokerTraerDatosOC($pi));
+
+            echo $query_trae_datos_oc;
+            die();
+
+
+
+            if (!$query_trae_datos_oc) {
+                return "error-No conecta a BROKER para Traer Datos OC.";
+                die();
+            }else{
+
+                // each de los resultados
+                $query_agrega_registro_tabla_b = PlanCompraClass::AgregaRegistrosTablaB($temporada, $depto, $login, $oc, $pi, $V_NOMBRE_ESTILO, $V_NRO_ESTILO, $V_ESTADO_ESTILO, $V_NOMBRE_VARIACION, $V_NRO_VARIACION, $V_COLOR, $V_COD_COLOR, $V_NOMBRE_LINEA, $V_NRO_LINEA, $V_NOMBRE_SUB_LINEA, $V_NRO_SUB_LINEA, $V_TEMPORADA, $V_CICLO_VIDA, $V_ESTADO_OC, $V_FECHA_EMBARQUE, $V_FECHA_ETA, $V_UNIDADES, $V_COSTO, $V_MONEDA, $V_PAIS);
+                // fin each de los resultados
+
+
+                /*if (($query_trae_datos_oc->Body->fault->faultCode == 0) and (count($query_trae_datos_oc->Body->detalleConsultaOrdenCompra->detalle)) > 0) {
+                    $orden_compra = $query_trae_datos_oc->Body->detalleConsultaOrdenCompra->detalle[0]->ordenCompra;
+                    $estadoOc = $query_trae_datos_oc->Body->detalleConsultaOrdenCompra->detalle[0]->estadoOC;
+                    $f_embarque = $query_trae_datos_oc->Body->detalleConsultaOrdenCompra->detalle[0]->fechaEmbarque;
+                    $f_eta = $query_trae_datos_oc->Body->detalleConsultaOrdenCompra->detalle[0]->fechaEta;
+                    $f_recepcion = date("d-m-Y", (strtotime(date($f_eta) . "+ 15 days")));
+                }*/
+                //array_push($dtPIs, array($proforma, $orden_compra, $estadoOc, $f_embarque, $f_eta, $f_recepcion, $dias_atrasado,$ESTADO,$nom_estado));
+
+
+
+
+
+
+
+            }
+
+        // Fin del si no puedo quitar OC Canceladas
+        }
+
+        // Listar Grilla PMM (Tabla B)
+        $sql = "SELECT ORDEN_DE_COMPRA, PI, NOMBRE_LINEA, NOMBRE_SUB_LINEA, NOMBRE_ESTILO, NRO_ESTILO, COLOR, COD_COLOR, NRO_LINEA, NRO_SUB_LINEA
+                FROM B
+                WHERE ORDEN_DE_COMPRA = '" . $oc . "'
+                AND PI = '" . $pi . "'
+                GROUP BY NOMBRE_ESTILO, NRO_ESTILO, COD_COLOR, ORDEN_DE_COMPRA, PI, NOMBRE_LINEA, NOMBRE_SUB_LINEA, COLOR, NRO_LINEA, NRO_SUB_LINEA
+                ORDER BY NRO_LINEA,NRO_SUB_LINEA,COD_COLOR
+            ";
+        $data = \database::getInstancia()->getFilas($sql);
+        return $data;
+
+    }
+
+
+    // Trabajando en MATCH llenar tabla PLAN
+    public static function MatchLlenarGridPlan($temporada, $depto, $login, $oc, $pi)
+    {
+
+        /*$sql = "begin PLC_PKG_UTILS.PRC_LISTAR_OCPMMIN('" . $oc . "','" . $pi . "',$temporada,'" . $depto . "', :data); end;";
+        $data = \database::getInstancia()->getConsultaSP($sql, 1);
+        return $data;*/
+
+
+        $sql = "SELECT c.id_color3 ID,
+                     c.proforma,
+                     nvl(C.NOM_LINEA,'Sin Informacion') LINEA,
+                     c.cod_jer2 cod_linea,
+                     nvl(C.NOM_SUBLINEA,'Sin Informacion') SUB_LINEA,
+                     c.cod_sublin cod_sublinea,
+                     nvl(c.DES_ESTILO,'Sin Informacion') ESTILO,
+                     nvl(c.Nom_Color,'Sin Informacion') COLOR,
+                     c.cod_color 
+                FROM  plc_plan_compra_color_3 c
+                WHERE C.PROFORMA = '" . $pi . "' 
+                AND C.COD_TEMPORADA = $temporada 
+                AND C.DEP_DEPTO = '" . $depto . "' 
+                ORDER BY COD_LINEA,COD_SUBLINEA,COD_COLOR
+               ";
+
+        $data = \database::getInstancia()->getFilas($sql);
+        return $data;
+
+    }
+
+
+    // Llenar Tabla llenar_tabla_historial (POPUP de la Grilla)
+    public static function BrokerTraerDatosOC($pi, $puerto, $url)
+    {
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_PORT => $puerto,
+            CURLOPT_URL => $url . "/consultaOrdenComprarst/v1/consultaOrdenCompra",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            //CURLOPT_POSTFIELDS => "{\n\t\"HeaderRply\": {\n\t\t\"servicio\": {\n\t\t\t\"nombreServicio\": \"string\",\n\t\t\t\"operacion\": \"string\",\n\t\t\t\"idTransaccion\": \"string\",\n\t\t\t\"tipoMensaje\": \"string\",\n\t\t\t\"tipoTransaccion\": \"string\",\n\t\t\t\"usuario\": \"string\",\n\t\t\t\"dominioPais\": \"string\",\n\t\t\t\"ipOrigen\": \"string\",\n\t\t\t\"servidor\": \"string\",\n\t\t\t\"timeStamp\": \"string\"\n\t\t},\n\t\t\"paginacion\": {\n\t\t\t\"numPagina\": \"string\",\n\t\t\t\"cantidadRegistros\": \"string\",\n\t\t\t\"totalRegistros\": \"string\"\n\t\t},\n\t\t\"track\": {\n\t\t\t\"idTrack\": \"string\",\n\t\t\t\"codSistema\": \"string\",\n\t\t\t\"codAplicacion\": \"string\",\n\t\t\t\"componente\": \"string\",\n\t\t\t\"estado\": \"string\",\n\t\t\t\"dataLogger\": \"string\",\n\t\t\t\"flagTracking\": \"string\",\n\t\t\t\"flagLog\": \"string\"\n\t\t},\n\t\t\"error\": [\n\t\t\t{\n\t\t\t\t\"errorCode\": \"string\",\n\t\t\t\t\"errorGlosa\": \"string\"\n\t\t\t}\n\t\t],\n\t\t\"reproceso\": {\n\t\t\t\"countReproceso\": \"string\",\n\t\t\t\"intervaloReintento\": \"string\",\n\t\t\t\"objetoReproceso\": \"string\"\n\t\t},\n\t\t\"filler\": \"string\"\n\t},\n\t\"Body\": {\n\t\t\"headerServicio\": {\n\t\t\t\"version\": \"string\",\n\t\t\t\"canal\": \"string\",\n\t\t\t\"estado\": \"string\",\n\t\t\t\"comercio\": \"string\",\n\t\t\t\"fecha\": \"string\",\n\t\t\t\"hora\": \"string\",\n\t\t\t\"nroTransaccion\": \"string\",\n\t\t\t\"sucursal\": \"string\",\n\t\t\t\"terminal\": \"string\",\n\t\t\t\"tipoTransaccion\": \"string\",\n\t\t\t\"codigoUsusario\": \"string\",\n\t\t\t\"entidad\": \"string\",\n\t\t\t\"dominioPais\": \"string\"\n\t\t},\n\t\t\"ordenCompra\": \"".$po."\",\n\t\t\"numeroPI\": \"".$pi."\"\n\t}\n}",
+            CURLOPT_POSTFIELDS => "{
+               \"HeaderRply\": {
+                              \"servicio\": {
+                                            \"nombreServicio\": \"string\",
+                                            \"operacion\": \"string\",
+                                            \"idTransaccion\": \"string\",
+                                            \"tipoMensaje\": \"string\",
+                                            \"tipoTransaccion\": \"string\",
+                                            \"usuario\": \"string\",
+                                            \"dominioPais\": \"string\",
+                                            \"ipOrigen\": \"string\",
+                                            \"servidor\": \"string\",
+                                            \"timeStamp\": \"string\"
+                              },
+                              \"paginacion\": {
+                                            \"numPagina\": \"string\",
+                                            \"cantidadRegistros\": \"string\",
+                                            \"totalRegistros\": \"string\"
+                              },
+                              \"track\": {
+                                            \"idTrack\": \"string\",
+                                            \"codSistema\": \"string\",
+                                            \"codAplicacion\": \"string\",
+                                            \"componente\": \"string\",
+                                            \"estado\": \"string\",
+                                            \"dataLogger\": \"string\",
+                                            \"flagTracking\": \"string\",
+                                            \"flagLog\": \"string\"
+                              },
+                              \"error\": [
+                                            {
+                                                           \"errorCode\": \"string\",
+                                                           \"errorGlosa\": \"string\"
+                                            }
+                              ],
+                              \"reproceso\": {
+                                            \"countReproceso\": \"string\",
+                                            \"intervaloReintento\": \"string\",
+                                            \"objetoReproceso\": \"string\"
+                              },
+                              \"filler\": \"string\"
+               },
+               \"Body\": {
+                              \"headerServicio\": {
+                                            \"version\": \"string\",
+                                            \"canal\": \"string\",
+                                            \"estado\": \"string\",
+                                            \"comercio\": \"string\",
+                                            \"fecha\": \"string\",
+                                            \"hora\": \"string\",
+                                            \"nroTransaccion\": \"string\",
+                                            \"sucursal\": \"string\",
+                                            \"terminal\": \"string\",
+                                            \"tipoTransaccion\": \"string\",
+                                            \"codigoUsusario\": \"string\",
+                                            \"entidad\": \"string\",
+                                            \"dominioPais\": \"string\"
+                              },
+                              \"ordenCompra\": \"0\",
+                              \"numeroPI\": \"" . $pi . "\"
+               }
+}",
+            CURLOPT_HTTPHEADER => array(
+                "Content-Type: application/json"
+            ),
+        ));
+
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+
+        curl_close($curl);
+
+        if ($err) {
+            return $err;
+        } else {
+            return $response;
+        }
+
+
+    }
+
+
+    // Agrega registros que llegan del WS a la Tabla B
+    public static function AgregaRegistrosTablaB($temporada, $depto, $login, $oc, $pi, $V_NOMBRE_ESTILO, $V_NRO_ESTILO, $V_ESTADO_ESTILO, $V_NOMBRE_VARIACION, $V_NRO_VARIACION, $V_COLOR, $V_COD_COLOR, $V_NOMBRE_LINEA, $V_NRO_LINEA, $V_NOMBRE_SUB_LINEA, $V_NRO_SUB_LINEA, $V_TEMPORADA, $V_CICLO_VIDA, $V_ESTADO_OC, $V_FECHA_EMBARQUE, $V_FECHA_ETA, $V_UNIDADES, $V_COSTO, $V_MONEDA, $V_PAIS)
+    {
+
+        /*$sql = "begin PLC_PKG_UTILS.PRC_ADD_OC_B($oc,'".$pi."','".$V_NOMBRE_ESTILO."',$V_NRO_ESTILO,'".$V_ESTADO_ESTILO."','".$V_NOMBRE_VARIACION."',$V_NRO_VARIACION,'".$V_COLOR."',$V_COD_COLOR,'".$V_NOMBRE_LINEA."','".$V_NRO_LINEA."','".$V_NOMBRE_SUB_LINEA."','".$V_NRO_SUB_LINEA."','".$V_TEMPORADA."','".$V_CICLO_VIDA."','".$V_ESTADO_OC."','".$V_FECHA_EMBARQUE."','".$V_FECHA_ETA."','".$V_UNIDADES."',$V_COSTO,'".$V_MONEDA."','".$V_PAIS."',:error, :data); end;";
+
+        // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+        if (!file_exists('../archivos/log_querys/'.$login)) {
+            mkdir('../archivos/log_querys/'.$login, 0775, true);
+        }
+
+        $stamp = date("Y-m-d_H-i-s");
+        $rand = rand(1, 999);
+        $content = $sql;
+        $fp = fopen("../archivos/log_querys/".$login."/MATCH-REGISTROSWSOCATABLAB--".$login."-".$stamp." R".$rand.".txt","wb");
+        fwrite($fp,$content);
+        fclose($fp);
+
+        $data = \database::getInstancia()->getConsultaSP($sql, 2);
+        return $data;*/
+
+
+        $sql = "INSERT INTO B(
+                     ORDEN_DE_COMPRA
+                    ,PI
+                    ,NOMBRE_ESTILO
+                    ,NRO_ESTILO
+                    ,ESTADO_ESTILO
+                    ,NOMBRE_VARIACION
+                    ,NRO_VARIACION
+                    ,COLOR
+                    ,COD_COLOR
+                    ,NOMBRE_LINEA
+                    ,NRO_LINEA
+                    ,NOMBRE_SUB_LINEA
+                    ,NRO_SUB_LINEA
+                    ,TEMPORADA
+                    ,CICLO_VIDA
+                    ,ESTADO_OC
+                    ,FECHA_EMBARQUE
+                    ,FECHA_ETA
+                    ,UNIDADES
+                    ,COSTO
+                    ,MONEDA
+                    ,PAIS)
+            VALUES(  $oc
+                    ,'" . $pi . "'
+                    ,'" . $V_NOMBRE_ESTILO . "'
+                    ,$V_NRO_ESTILO
+                    ,'" . $V_ESTADO_ESTILO . "'
+                    ,'" . $V_NOMBRE_VARIACION . "'
+                    ,$V_NRO_VARIACION
+                    ,'" . $V_COLOR . "'
+                    ,$V_COD_COLOR
+                    ,'" . $V_NOMBRE_LINEA . "'
+                    ,'" . $V_NRO_LINEA . "'
+                    ,'" . $V_NOMBRE_SUB_LINEA . "'
+                    ,'" . $V_NRO_SUB_LINEA . "'
+                    ,'" . $V_TEMPORADA . "'
+                    ,'" . $V_CICLO_VIDA . "'
+                    ,'" . $V_ESTADO_OC . "'
+                    ,to_date('" . $V_FECHA_EMBARQUE . "','YYYY-MM-DD')
+                    ,to_date('" . $V_FECHA_ETA . "','YYYY-MM-DD')
+                    ," . $V_UNIDADES . "
+                    ," . $V_COSTO . "
+                    ,'" . $V_MONEDA . "'
+                    ,'" . $V_PAIS . "')
+";
+
+        // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+        if (!file_exists('../archivos/log_querys/' . $login)) {
+            mkdir('../archivos/log_querys/' . $login, 0775, true);
+        }
+
+        $stamp = date("Y-m-d_H-i-s");
+        $rand = rand(1, 999);
+        $content = $sql;
+        $fp = fopen("../archivos/log_querys/" . $login . "/MATCH-REGISTROSWSOCATABLAB--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+        fwrite($fp, $content);
+        fclose($fp);
+
+        $data = \database::getInstancia()->getConsulta($sql);
+        return $data;
+
+
+    }
+
+
 
 
 // Fin de la Clase
