@@ -73,7 +73,7 @@
                         foreach ($dt2021 as $valor){
                             if ($valor[1] == $val["PO_NUMBER"]){
                                 $_exist2 = true;
-                                if ($valor[2] == ""){
+                                if ($valor[4] == ""){
                                     $orden_compra ="";
                                 }else{
                                 $orden_compra =$valor[1];
