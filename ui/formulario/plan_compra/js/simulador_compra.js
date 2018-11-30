@@ -689,7 +689,26 @@ $(function () {
                             read:  {
                                 url: "TelerikPlanCompra/MatchLlenarGridPMM",
                                 dataType: "json",
-                                data:{ID_COLOR3: kendo.parseInt(ID_COLOR3), OC: OC, PI:PROFORMA}
+                                //type: 'POST',
+                                data:{OC:kendo.parseInt(OC),PROFORMA:String(PROFORMA)}
+                            }
+                        },
+                        schema: {
+                            model: {
+                                fields: {
+                                    ORDEN_DE_COMPRA: {type: "number"},
+                                    PI: {type: "string"},
+                                    NOMBRE_LINEA: {type: "string"},
+                                    NRO_LINEA: {type: "number"},
+                                    NOMBRE_SUB_LINEA: {type: "string"},
+                                    NRO_SUB_LINEA: {type: "number"},
+                                    NOMBRE_ESTILO: {type: "string"},
+                                    NRO_ESTILO: {type: "number"},
+                                    COLOR: {type: "string"},
+                                    COD_COLOR: {type: "number"}
+                                }
+
+
                             }
                         }
                     });
@@ -699,29 +718,62 @@ $(function () {
                             read:  {
                                 url: "TelerikPlanCompra/MatchLlenarGridPlan",
                                 dataType: "json",
-                                data:{ID_COLOR3: kendo.parseInt(ID_COLOR3), OC: OC, PI:PROFORMA}
+                                //type: 'POST',
+                                data:{OC:kendo.parseInt(OC),PROFORMA:String(PROFORMA)}
+                            }
+                        },
+                        schema: {
+                            model: {
+                                id: "ID",
+                                fields: {
+                                    ID: {type: "number"},
+                                    PROFORMA: {type: "string"},
+                                    LINEA: {type: "string"},
+                                    COD_LINEA: {type: "number"},
+                                    SUB_LINEA: {type: "string"},
+                                    COD_SUBLINEA: {type: "number"},
+                                    ESTILO: {type: "string"},
+                                    COLOR: {type: "number"},
+                                    COD_COLOR: {type: "number"}
+                                }
                             }
                         }
                     });
 
+
                     // Asigno el DataSet al Grid de PMM
-                    var spreadsheet_match_pmm = $("#grid_match_pmm").data("kendoGrid");
+                    /*var spreadsheet_match_pmm = $("#grid_match_pmm").data("kendoGrid");
                     spreadsheet_match_pmm.setDataSource(dataSource_match_pmm, [
-                        { field: "FECHA", title: "ID" },
-                        { field: "HORA", title: "PI" },
-                        { field: "USUARIO", title: ">Cod. Línea" },
-                        { field: "ESTADO", title: "Línea" },
-                        { field: "ESTADO", title: "Cod. Sublinea" },
-                        { field: "ESTADO", title: "Sublinea" },
-                        { field: "ESTADO", title: "Estilo" },
-                        { field: "ESTADO", title: "N° Estilo" },
-                        { field: "ESTADO", title: "Color" },
-                        { field: "ESTADO", title: "Cod. Color" }
-                    ]);
+                        { field: "ORDEN_DE_COMPRA", title: "OC" },
+                        { field: "PI", title: "PI" },
+                        { field: "NRO_LINEA", title: "Cod. Línea" },
+                        { field: "NOMBRE_LINEA", title: "Línea" },
+                        { field: "NRO_SUB_LINEA", title: "Cod. Sublinea" },
+                        { field: "NOMBRE_SUB_LINEA", title: "Sublinea" },
+                        { field: "NOMBRE_ESTILO", title: "Estilo" },
+                        { field: "NRO_ESTILO", title: "N° Estilo" },
+                        { field: "COLOR", title: "Color" },
+                        { field: "COD_COLOR", title: "Cod. Color" }
+                    ]);*/
+                    $("#grid_match_pmm").kendoGrid({
+                        columns: [
+                            { hidden: true, field: "ORDEN_DE_COMPRA" },
+                            { hidden: true, field: "PI" },
+                            { field: "NOMBRE_LINEA", title: "Línea" },
+                            { field: "NRO_LINEA", title: "Cod. Linea", width: 70 },
+                            { field: "NOMBRE_SUB_LINEA", title: "SubLínea" },
+                            { field: "NRO_SUB_LINEA", title: "Cod. SubLínea", width: 70 },
+                            { field: "NOMBRE_ESTILO", title: "Estilo", width:150 },
+                            { field: "NRO_ESTILO", title: "N° Estilo", width: 70 },
+                            { field: "COLOR", title: "Color", width: 90 },
+                            { field: "COD_COLOR", title: "Cod. Color", width: 70 }
+                        ],
+                        dataSource: dataSource_match_pmm
+                    });
 
 
                     // Asigno el DataSet al Grid de PLAN
-                    var spreadsheet_match_plan = $("#grid_match_plan").data("kendoGrid");
+                    /*var spreadsheet_match_plan = $("#grid_match_plan").data("kendoGrid");
                     spreadsheet_match_plan.setDataSource(dataSource_match_plan, [
                         { field: "FECHA", title: "ID" },
                         { field: "HORA", title: "PI" },
@@ -737,7 +789,23 @@ $(function () {
                         { field: "ESTADO", title: "Valor Color" },
                         { field: "ESTADO", title: "Valor Estilo" },
                         { field: "ESTADO", title: "Correlativo" }
-                    ]);
+                    ]);*/
+                    $("#grid_match_plan").kendoGrid({
+                        toolbar: ["save", "cancel"],
+                        editable: true,
+                        columns: [
+                            { field: "ID" },
+                            { hidden: true, field: "PROFORMA" },
+                            { field: "LINEA", title: "Línea" },
+                            { field: "COD_LINEA", title: "Cod. Línea", width: 70 },
+                            { field: "SUB_LINEA", title: "SubLínea" },
+                            { field: "COD_SUBLINEA", title: "Cod. SubLínea", width: 70 },
+                            { field: "ESTILO", title: "Estilo", width:150 },
+                            { field: "COLOR", title: "Color", width: 90 },
+                            { field: "COD_COLOR", title: "Cod. Color", width: 70 }
+                        ],
+                        dataSource: dataSource_match_plan
+                    });
 
 
 
