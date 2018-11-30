@@ -296,16 +296,21 @@ class PlanCompraController extends \Control
 
     public function MatchLlenarGridPMM($f3) {
 
-        echo "<pre>";
-        echo var_dump($_GET);
-        die();
+        $array_data = $_GET;
 
-        echo json_encode(\simulador_compra\PlanCompraClass::MatchLlenarGridPMM($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $f3->get('GET.OC'), $f3->get('GET.PI')));
+        /*echo $array_data["OC"];
+        echo "<br>";
+        echo $array_data["PROFORMA"];*/
+
+        echo json_encode(\simulador_compra\PlanCompraClass::MatchLlenarGridPMM($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $array_data["OC"], $array_data["PROFORMA"], $f3->get('CURLOPT_PORT'), $f3->get('CURLOPT_URL')));
 
     }
 
     public function MatchLlenarGridPlan($f3) {
-        echo json_encode(\simulador_compra\PlanCompraClass::valida_tablab_cuza_color3($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $f3->get('GET.OC'), $f3->get('GET.PI')));
+
+        $array_data = $_GET;
+
+        echo json_encode(\simulador_compra\PlanCompraClass::MatchLlenarGridPlan($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $array_data["OC"], $array_data["PROFORMA"], $f3->get('CURLOPT_PORT'), $f3->get('CURLOPT_URL') ));
     }
 
 
