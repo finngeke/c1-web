@@ -2078,10 +2078,11 @@ class cbx_grilla_compra extends \parametros
                 WHERE C.PROFORMA = '" . $pi . "' 
                 AND C.COD_TEMPORADA = $temporada 
                 AND C.DEP_DEPTO = '" . $depto . "' 
+                AND C.ESTADO <> 24
                 ORDER BY COD_LINEA,COD_SUBLINEA,COD_COLOR
                ";
-
         $data = \database::getInstancia()->getFilas($sql);
+
         return $data;
 
     }
@@ -2286,66 +2287,12 @@ class cbx_grilla_compra extends \parametros
 
     }
 
-    // 5.1 Quitar quita_registro_variacion
-    public static function quita_registro_variacion($temporada, $depto, $login, $oc, $pi)
-    {
-
-        // Variacion (plc_oc_variacion)
-        $sql_plc_oc_variacion = "DELETE FROM PLC_OC_VARIACION
-                                 WHERE ORDEN_DE_COMPRA = $oc
-                                 ";
-
-        // New Variación (plc_plan_compra_variacion)
-        $sql_plc_plan_compra_variacion = "DELETE FROM plc_plan_compra_variacion
-                                          WHERE COD_TEMPORADA = $temporada
-                                          AND DEP_DEPTO = '" . $depto . "'
-                                          AND ORDEN_DE_COMPRA = $oc
-                                          ";
-
-        // Ejecuto la Query
-        // \database::getInstancia()->getConsulta($sql_plc_oc_variacion);
-        // \database::getInstancia()->getConsulta($sql_plc_plan_compra_variacion);
-
-        // Quitar Variacion
-        if (!file_exists('../archivos/log_querys/' . $login)) {
-            mkdir('../archivos/log_querys/' . $login, 0775, true);
-        }
-        $stamp = date("Y-m-d_H-i-s");
-        $rand = rand(1, 999);
-        $content = $sql_plc_oc_variacion;
-        $fp = fopen("../archivos/log_querys/" . $login . "/MATCH-QUITARVARIACION_VARIACION--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
-        fwrite($fp, $content);
-        fclose($fp);
-
-        // Quitar New Variacion
-        if (!file_exists('../archivos/log_querys/' . $login)) {
-            mkdir('../archivos/log_querys/' . $login, 0775, true);
-        }
-        $stamp = date("Y-m-d_H-i-s");
-        $rand = rand(1, 999);
-        $content = $sql_plc_plan_compra_variacion;
-        $fp = fopen("../archivos/log_querys/" . $login . "/MATCH-QUITARVARIACION_NEWVARIACION--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
-        fwrite($fp, $content);
-        fclose($fp);
-
-        if ((\database::getInstancia()->getConsulta($sql_plc_oc_variacion)) && (\database::getInstancia()->getConsulta($sql_plc_plan_compra_variacion))) {
-            return 1;
-        } else {
-            return 0;
-        }
-
-        // Anterior
-        // $data = \database::getInstancia()->getConsulta($sql_plc_plan_compra_variacion);
-        // return $data;
-
-        // Fin quitar registro variaciòn
-    }
-
     // 6 Agregar OC Variación
-    public static function agregar_oc_variacion($temporada, $depto, $login, $oc, $proforma)
+    public static function agregar_oc_variacion($login, $oc, $proforma)
     {
 
         $sql = "begin PLC_PKG_UTILS.PRC_AGREGAR_OC_VARIACION2('" . $oc . "','" . $proforma . "', :error, :data); end;";
+
 
         // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
         if (!file_exists('../archivos/log_querys/' . $login)) {
@@ -2358,9 +2305,9 @@ class cbx_grilla_compra extends \parametros
         fwrite($fp, $content);
         fclose($fp);
 
+
         $data = \database::getInstancia()->getConsultaSP($sql, 2);
         //return $data;
-
         if ($data) {
             return 1;
         } else {
@@ -2370,75 +2317,10 @@ class cbx_grilla_compra extends \parametros
     }
 
     // 7 Agregar New OC Variación
-    public static function agregar_new_oc_variacion($temporada, $depto, $login)
+    public static function agregar_new_oc_variacion($temporada, $depto,$oc, $login)
     {
 
-        $sql = "insert into plc_plan_compra_variacion
-                select p.cod_temporada
-                       ,p.dep_depto
-                       ,p.niv_jer1
-                       ,p.cod_jer1
-                       ,p.niv_jer2
-                       ,p.cod_jer2
-                       ,p.cod_sublin
-                       ,p.cod_estilo
-                       ,p.des_estilo
-                       ,p.cod_color
-                       ,p.cod_piramix
-                       ,p.unidades
-                       ,p.sem_ini
-                       ,p.sem_fin
-                       ,p.ciclo                 Semanas
-                       ,p.cod_rankvta
-                       ,p.evento
-                       ,p.gmb                   grossmargin
-                       ,p.costo_unit            costo_unitario_pesos
-                       ,p.precio_blanco
-                       ,p.costo_units           costo_unitario_dolar
-                       ,p.life_cycle
-                       ,p.ventana_llegada
-                       ,p.debut_reoder
-                       ,p.tipo_producto
-                       ,p.tipo_exhibicion
-                       ,p.id_corporativo
-                       ,p.mkup
-                       ,p.composicion
-                       ,p.temp
-                       ,p.coleccion
-                       ,p.cod_estilo_vida
-                       ,p.descmodelo
-                       ,p.cod_ocasion_uso
-                       ,p.id_color3
-                       ,p.cod_tip_mon
-                       ,p.cod_marca
-                       ,v.orden_de_compra
-                       ,v.pi
-                       ,v.nombre_variacion
-                       ,v.nro_variacion
-                       ,v.fecha_embarque
-                       ,v.fecha_eta
-                       ,v.unidades
-                       ,v.costo_total_fob_mo$
-                       ,p.nom_pais
-                       ,p.nom_tempo
-                       ,p.nom_linea
-                       ,p.nom_sublinea
-                       ,p.nom_marca
-                       ,p.nom_estilovida
-                       ,p.nom_calidad
-                       ,p.nom_ocacionuso
-                       ,p.nom_piramidemix
-                       ,p.nom_ventana
-                       ,p.nom_lifecycle
-                       ,p.nom_color
-                       ,p.nom_moneda
-                       ,p.nom_rnk
-                       ,v.talla
-                       ,0
-                from PLC_PLAN_COMPRA_COLOR_3 P
-                inner join plc_oc_variacion v on to_number(p.cod_jer2) = to_number(v.nro_linea) and trim(p.cod_sublin) = trim(v.nro_sub_linea) and upper(trim(p.des_estilo)) = upper(trim(v.nombre_estilo))and trim(p.cod_color) = (v.cod_color)
-                where dep_Depto  = '" . $depto . "'
-                ";
+        $sql = "begin PLC_PKG_UTILS.PRC_AGREGAR_NUEVA_VARIACION(" . $temporada . ",'" . $depto . "','" . $oc . "', :error, :data); end;";
 
         if (!file_exists('../archivos/log_querys/' . $login)) {
             mkdir('../archivos/log_querys/' . $login, 0775, true);
@@ -2451,7 +2333,7 @@ class cbx_grilla_compra extends \parametros
         fwrite($fp, $content);
         fclose($fp);
 
-        $data = \database::getInstancia()->getConsulta($sql);
+        $data = \database::getInstancia()->getConsultaSP($sql, 2);
         //return $data;
 
         if ($data) {

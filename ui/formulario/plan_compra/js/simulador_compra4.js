@@ -2624,31 +2624,20 @@ $('#btn_generar_match_oc').on('click', function () {
         var delay = 4000;
         setTimeout(function () {
 
-            // 5_1.- Quitar los registros asociados a las variaciones (Con el fin de limpiar cargas pre-existentes)
-            var url_quita_registro_variacion = 'ajax_simulador_cbx/quita_registro_variacion';
-            $.getJSON(url_quita_registro_variacion, {OC: oc, PI: proforma}).done(function (data) {
-
                 // 6.- Agregar OC Variación ( PLC_PKG_UTILS.PRC_AGREGAR_OC_VARIACION )
                 var url_agrega_oc_variacion = 'ajax_simulador_cbx/agregar_oc_variacion';
                 $.getJSON(url_agrega_oc_variacion, {OC: oc, PI: proforma}).done(function (data) {
 
                     // 7.- Agregar New OC Variación ( PLC_PKG_UTILS.PRC_AGREGAR_NUEVA_VARIACION )
                     var url_agrega_new_oc_variacion = 'ajax_simulador_cbx/agregar_new_oc_variacion';
-                    $.getJSON(url_agrega_new_oc_variacion).done(function (data) {
-
+                    $.getJSON(url_agrega_new_oc_variacion,{OC:oc}).done(function (data) {
                         alert("Orden de Compra Linkeada.");
                         $('#match_oc').modal('hide');
                         location.reload(true);
-
                         // Fin de url_agrega_new_oc_variacion
                     });
-
                     // Fin de url_agrega_oc_variacion
                 });
-
-                // Fin del quitar variaciones
-            });
-
         }, delay);
 
     });
