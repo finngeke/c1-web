@@ -729,7 +729,7 @@ $(function () {
                                 fields: {
                                     ID: {type: "number"},
                                     PROFORMA: {type: "string"},
-                                    LINEA: {defaultValue: { LIN_LINEA: "002009", LIN_DESCRIPCION: "ABRIGOS"}}, //type: "string",
+                                    //LINEA: {defaultValue: { LIN_LINEA: "002009", LIN_DESCRIPCION: "ABRIGOS"}}, //type: "string",
                                     COD_LINEA: {type: "number"},
                                     SUB_LINEA: {type: "string"},
                                     COD_SUBLINEA: {type: "number"},
@@ -818,7 +818,7 @@ $(function () {
                         columns: [
                             { field: "ID" },
                             { hidden: true, field: "PROFORMA" },
-                            { field: "LINEA", title: "Línea", editor: MatchPaisDropDownEditor, template: "#=LINEA.LIN_DESCRIPCION#" },
+                            { field: "LINEA", title: "Línea", editor: MatchPaisDropDownEditor }, //, template: "#=LINEA.LIN_DESCRIPCION#"
                             { field: "COD_LINEA", title: "Cod. Línea", width: 90 },
                             { field: "SUB_LINEA", title: "SubLínea", width:120 },
                             { field: "COD_SUBLINEA", title: "Cod. SubLínea", width: 100 },
@@ -840,6 +840,11 @@ $(function () {
 
             }
 
+
+
+
+
+        // Fin del (e)
         });
     // Fin del menú contextual
 
