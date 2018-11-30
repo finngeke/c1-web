@@ -1757,7 +1757,6 @@ class PlanCompraClass extends \parametros
                 ";
 
         $data = \database::getInstancia()->getConsulta($sql);
-        //return $data;
 
         if($data){
             return 1;
@@ -1769,105 +1768,158 @@ class PlanCompraClass extends \parametros
 
 
     // Trabajando en MATCH llenar tabla PMM
-    public static function MatchLlenarGridPMM($temporada, $depto, $login, $oc, $pi)
+    public static function MatchLlenarGridPMM($temporada, $depto, $login, $oc, $pi,$puerto,$url)
     {
-
-
-
-        $temporada = 11;
-        $depto = "D141";
-        $oc = "9131698";
-        $pi = "2018HM1033";
 
         // Consulta OC Linkeada (Revisar, no se agrega por que se valida antes de levantar popup match)
 
         // Quitar OC Cancelada
         $query_quitar_OC_cancelada = PlanCompraClass::QuitarOCCancelada($pi);
-        if ($query_quitar_OC_cancelada == 1) {
+        if ($query_quitar_OC_cancelada == 0) {
             return "error-No se pudo quitar las OC Canceladas.";
             die();
         // Se quitaron las OC Canceladas
         }else{
 
             // Traer Datos OC desde WS
-            $query_trae_datos_oc = json_decode(PlanCompraClass::BrokerTraerDatosOC($pi));
-
-            echo $query_trae_datos_oc;
-            die();
-
-
-
-            if (!$query_trae_datos_oc) {
-                return "error-No conecta a BROKER para Traer Datos OC.";
+            $query_trae_datos_oc = json_decode(PlanCompraClass::BrokerTraerDatosOC($pi,$puerto,$url));
+            if ($query_trae_datos_oc->Body->fault->faultCode != 0) {
+                return "error-No Conecta a BROKER para Traer Datos OC.";
                 die();
             }else{
 
-                // each de los resultados
-                $query_agrega_registro_tabla_b = PlanCompraClass::AgregaRegistrosTablaB($temporada, $depto, $login, $oc, $pi, $V_NOMBRE_ESTILO, $V_NRO_ESTILO, $V_ESTADO_ESTILO, $V_NOMBRE_VARIACION, $V_NRO_VARIACION, $V_COLOR, $V_COD_COLOR, $V_NOMBRE_LINEA, $V_NRO_LINEA, $V_NOMBRE_SUB_LINEA, $V_NRO_SUB_LINEA, $V_TEMPORADA, $V_CICLO_VIDA, $V_ESTADO_OC, $V_FECHA_EMBARQUE, $V_FECHA_ETA, $V_UNIDADES, $V_COSTO, $V_MONEDA, $V_PAIS);
-                // fin each de los resultados
+                // Recorre los Datos y los guarda en tabla B
+                $flag_incremental = 0;
+                foreach ($query_trae_datos_oc->Body->detalleConsultaOrdenCompra as $columna){
+                    foreach($columna as $columna2){
+
+                        $ordenCompra = $columna[$flag_incremental]->ordenCompra;
+                        $PI = $columna[$flag_incremental]->PI;
+                        $nombreEstilo = $columna[$flag_incremental]->nombreEstilo;
+                        $numeroEstilo = $columna[$flag_incremental]->numeroEstilo;
+                        $estado = $columna[$flag_incremental]->estado;
+                        $nombreVariacion = $columna[$flag_incremental]->nombreVariacion;
+                        $numeroVariacion = $columna[$flag_incremental]->numeroVariacion;
+                        $color = $columna[$flag_incremental]->color;
+                        $codColor = $columna[$flag_incremental]->codColor;
+                        $nombreLinea = $columna[$flag_incremental]->nombreLinea;
+                        $numeroLinea = $columna[$flag_incremental]->numeroLinea;
+                        $nombreSubLinea = $columna[$flag_incremental]->nombreSubLinea;
+                        $numeroSubLinea = $columna[$flag_incremental]->numeroSubLinea;
+                        $temporada2 = $columna[$flag_incremental]->temporada;
+                        $cicloVida = $columna[$flag_incremental]->cicloVida;
+                        $estadoOC = $columna[$flag_incremental]->estadoOC;
+                        $fechaEmbarque = $columna[$flag_incremental]->fechaEmbarque;
+                        $fechaEta = $columna[$flag_incremental]->fechaEta;
+                        $unidades = $columna[$flag_incremental]->unidades;
+                        $costo = $columna[$flag_incremental]->costo;
+                        $moneda = $columna[$flag_incremental]->moneda;
+                        $pais = $columna[$flag_incremental]->pais;
 
 
-                /*if (($query_trae_datos_oc->Body->fault->faultCode == 0) and (count($query_trae_datos_oc->Body->detalleConsultaOrdenCompra->detalle)) > 0) {
-                    $orden_compra = $query_trae_datos_oc->Body->detalleConsultaOrdenCompra->detalle[0]->ordenCompra;
-                    $estadoOc = $query_trae_datos_oc->Body->detalleConsultaOrdenCompra->detalle[0]->estadoOC;
-                    $f_embarque = $query_trae_datos_oc->Body->detalleConsultaOrdenCompra->detalle[0]->fechaEmbarque;
-                    $f_eta = $query_trae_datos_oc->Body->detalleConsultaOrdenCompra->detalle[0]->fechaEta;
-                    $f_recepcion = date("d-m-Y", (strtotime(date($f_eta) . "+ 15 days")));
-                }*/
-                //array_push($dtPIs, array($proforma, $orden_compra, $estadoOc, $f_embarque, $f_eta, $f_recepcion, $dias_atrasado,$ESTADO,$nom_estado));
+                        $query_agrega_registro_tabla_b = PlanCompraClass::AgregaRegistrosTablaB($temporada, $depto, $login, $oc, $pi, $nombreEstilo, $numeroEstilo,$estado, $nombreVariacion, $numeroVariacion, $color, $codColor, $nombreLinea, $numeroLinea, $nombreSubLinea, $numeroSubLinea, $temporada2, $cicloVida, $estadoOC, $fechaEmbarque, $fechaEta, $unidades, $costo, $moneda, $pais);
+                        if ($query_agrega_registro_tabla_b == 0) {
+                            return "error-No se pudo insertar en Tabla B, intente cargar nuevamente.";
+                            die();
+                        }
+
+                    // Incremental
+                        $flag_incremental++;
+
+                    }
+                }
+
+
+                // Listar Grilla PMM (Tabla B)
+                $sql = "SELECT ORDEN_DE_COMPRA, PI, NOMBRE_LINEA, NRO_LINEA, NOMBRE_SUB_LINEA, NRO_SUB_LINEA, NOMBRE_ESTILO, NRO_ESTILO, COLOR, COD_COLOR
+                        FROM B
+                        WHERE ORDEN_DE_COMPRA = '" . $oc . "'
+                        AND PI = '" . $pi . "'
+                        GROUP BY NOMBRE_ESTILO, NRO_ESTILO, COD_COLOR, ORDEN_DE_COMPRA, PI, NOMBRE_LINEA, NOMBRE_SUB_LINEA, COLOR, NRO_LINEA, NRO_SUB_LINEA
+                        ORDER BY NRO_LINEA,NRO_SUB_LINEA,COD_COLOR
+                    ";
+                $data = \database::getInstancia()->getFilas($sql);
+
+                // Transformo a array asociativo (Para campos de texto utilizar UTF-8)
+                $array1 = [];
+                foreach ($data as $va1) {
+                    array_push($array1
+                        , array(
+                          "ORDEN_DE_COMPRA" => $va1[0]
+                        , "PI" => $va1[1]
+                        , "NOMBRE_LINEA" => utf8_encode($va1[2])
+                        , "NRO_LINEA" => $va1[3]
+                        , "NOMBRE_SUB_LINEA" => utf8_encode($va1[4])
+                        , "NRO_SUB_LINEA" => utf8_encode($va1[5])
+                        , "NOMBRE_ESTILO" => utf8_encode($va1[6])
+                        , "NRO_ESTILO" => $va1[7]
+                        , "COLOR" => utf8_encode($va1[8])
+                        , "COD_COLOR" => $va1[9]
+                        )
+                    );
+                }
+
+                return $array1;
 
 
 
-
-
-
-
+            // Fin del else trae data
             }
 
         // Fin del si no puedo quitar OC Canceladas
         }
 
-        // Listar Grilla PMM (Tabla B)
-        $sql = "SELECT ORDEN_DE_COMPRA, PI, NOMBRE_LINEA, NOMBRE_SUB_LINEA, NOMBRE_ESTILO, NRO_ESTILO, COLOR, COD_COLOR, NRO_LINEA, NRO_SUB_LINEA
-                FROM B
-                WHERE ORDEN_DE_COMPRA = '" . $oc . "'
-                AND PI = '" . $pi . "'
-                GROUP BY NOMBRE_ESTILO, NRO_ESTILO, COD_COLOR, ORDEN_DE_COMPRA, PI, NOMBRE_LINEA, NOMBRE_SUB_LINEA, COLOR, NRO_LINEA, NRO_SUB_LINEA
-                ORDER BY NRO_LINEA,NRO_SUB_LINEA,COD_COLOR
-            ";
-        $data = \database::getInstancia()->getFilas($sql);
-        return $data;
+
+
 
     }
 
 
     // Trabajando en MATCH llenar tabla PLAN
-    public static function MatchLlenarGridPlan($temporada, $depto, $login, $oc, $pi)
+    public static function MatchLlenarGridPlan($temporada, $depto, $login, $oc, $pi, $puerto, $url)
     {
-
-        /*$sql = "begin PLC_PKG_UTILS.PRC_LISTAR_OCPMMIN('" . $oc . "','" . $pi . "',$temporada,'" . $depto . "', :data); end;";
-        $data = \database::getInstancia()->getConsultaSP($sql, 1);
-        return $data;*/
 
 
         $sql = "SELECT c.id_color3 ID,
-                     c.proforma,
+                     c.proforma PROFORMA,
                      nvl(C.NOM_LINEA,'Sin Informacion') LINEA,
-                     c.cod_jer2 cod_linea,
+                     c.cod_jer2 COD_LINEA,
                      nvl(C.NOM_SUBLINEA,'Sin Informacion') SUB_LINEA,
-                     c.cod_sublin cod_sublinea,
+                     c.cod_sublin COD_SUBLINEA,
                      nvl(c.DES_ESTILO,'Sin Informacion') ESTILO,
                      nvl(c.Nom_Color,'Sin Informacion') COLOR,
-                     c.cod_color 
+                     c.cod_color COD_COLOR  
                 FROM  plc_plan_compra_color_3 c
                 WHERE C.PROFORMA = '" . $pi . "' 
                 AND C.COD_TEMPORADA = $temporada 
                 AND C.DEP_DEPTO = '" . $depto . "' 
+                AND C.ESTADO !=24
                 ORDER BY COD_LINEA,COD_SUBLINEA,COD_COLOR
                ";
 
         $data = \database::getInstancia()->getFilas($sql);
-        return $data;
+        // return $data;
+
+        // Transformo a array asociativo (Para campos de texto utilizar UTF-8)
+        $array1 = [];
+        foreach ($data as $va1) {
+            array_push($array1
+                , array(
+                  "ID" => $va1[0]
+                , "PROFORMA" => $va1[1]
+                , "LINEA" => $va1[2]
+                , "COD_LINEA" => utf8_encode($va1[3])
+                , "SUB_LINEA" => utf8_encode($va1[4])
+                , "COD_SUBLINEA" => utf8_encode($va1[5])
+                , "ESTILO" => utf8_encode($va1[6])
+                , "COLOR" => utf8_encode($va1[7])
+                , "COD_COLOR" => $va1[8]
+                )
+            );
+        }
+
+        return $array1;
+
 
     }
 
@@ -1971,26 +2023,10 @@ class PlanCompraClass extends \parametros
 
 
     // Agrega registros que llegan del WS a la Tabla B
-    public static function AgregaRegistrosTablaB($temporada, $depto, $login, $oc, $pi, $V_NOMBRE_ESTILO, $V_NRO_ESTILO, $V_ESTADO_ESTILO, $V_NOMBRE_VARIACION, $V_NRO_VARIACION, $V_COLOR, $V_COD_COLOR, $V_NOMBRE_LINEA, $V_NRO_LINEA, $V_NOMBRE_SUB_LINEA, $V_NRO_SUB_LINEA, $V_TEMPORADA, $V_CICLO_VIDA, $V_ESTADO_OC, $V_FECHA_EMBARQUE, $V_FECHA_ETA, $V_UNIDADES, $V_COSTO, $V_MONEDA, $V_PAIS)
+    public static function AgregaRegistrosTablaB($temporada, $depto, $login, $oc, $pi, $nombreEstilo, $numeroEstilo,$estado, $nombreVariacion, $numeroVariacion, $color,
+                                                 $codColor, $nombreLinea, $numeroLinea, $nombreSubLinea, $numeroSubLinea, $temporada2, $cicloVida, $estadoOC, $fechaEmbarque,
+                                                 $fechaEta, $unidades, $costo, $moneda, $pais)
     {
-
-        /*$sql = "begin PLC_PKG_UTILS.PRC_ADD_OC_B($oc,'".$pi."','".$V_NOMBRE_ESTILO."',$V_NRO_ESTILO,'".$V_ESTADO_ESTILO."','".$V_NOMBRE_VARIACION."',$V_NRO_VARIACION,'".$V_COLOR."',$V_COD_COLOR,'".$V_NOMBRE_LINEA."','".$V_NRO_LINEA."','".$V_NOMBRE_SUB_LINEA."','".$V_NRO_SUB_LINEA."','".$V_TEMPORADA."','".$V_CICLO_VIDA."','".$V_ESTADO_OC."','".$V_FECHA_EMBARQUE."','".$V_FECHA_ETA."','".$V_UNIDADES."',$V_COSTO,'".$V_MONEDA."','".$V_PAIS."',:error, :data); end;";
-
-        // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
-        if (!file_exists('../archivos/log_querys/'.$login)) {
-            mkdir('../archivos/log_querys/'.$login, 0775, true);
-        }
-
-        $stamp = date("Y-m-d_H-i-s");
-        $rand = rand(1, 999);
-        $content = $sql;
-        $fp = fopen("../archivos/log_querys/".$login."/MATCH-REGISTROSWSOCATABLAB--".$login."-".$stamp." R".$rand.".txt","wb");
-        fwrite($fp,$content);
-        fclose($fp);
-
-        $data = \database::getInstancia()->getConsultaSP($sql, 2);
-        return $data;*/
-
 
         $sql = "INSERT INTO B(
                      ORDEN_DE_COMPRA
@@ -2017,26 +2053,26 @@ class PlanCompraClass extends \parametros
                     ,PAIS)
             VALUES(  $oc
                     ,'" . $pi . "'
-                    ,'" . $V_NOMBRE_ESTILO . "'
-                    ,$V_NRO_ESTILO
-                    ,'" . $V_ESTADO_ESTILO . "'
-                    ,'" . $V_NOMBRE_VARIACION . "'
-                    ,$V_NRO_VARIACION
-                    ,'" . $V_COLOR . "'
-                    ,$V_COD_COLOR
-                    ,'" . $V_NOMBRE_LINEA . "'
-                    ,'" . $V_NRO_LINEA . "'
-                    ,'" . $V_NOMBRE_SUB_LINEA . "'
-                    ,'" . $V_NRO_SUB_LINEA . "'
-                    ,'" . $V_TEMPORADA . "'
-                    ,'" . $V_CICLO_VIDA . "'
-                    ,'" . $V_ESTADO_OC . "'
-                    ,to_date('" . $V_FECHA_EMBARQUE . "','YYYY-MM-DD')
-                    ,to_date('" . $V_FECHA_ETA . "','YYYY-MM-DD')
-                    ," . $V_UNIDADES . "
-                    ," . $V_COSTO . "
-                    ,'" . $V_MONEDA . "'
-                    ,'" . $V_PAIS . "')
+                    ,'" . $nombreEstilo . "'
+                    ,$numeroEstilo
+                    ,'" . $estado . "'
+                    ,'" . $nombreVariacion . "'
+                    ,$numeroVariacion
+                    ,'" . $color . "'
+                    ,$codColor
+                    ,'" . $nombreLinea . "'
+                    ,'" . $numeroLinea . "'
+                    ,'" . $nombreSubLinea . "'
+                    ,'" . $numeroSubLinea . "'
+                    ,'" . $temporada2 . "'
+                    ,'" . $cicloVida . "'
+                    ,'" . $estadoOC . "'
+                    ,to_date('" . $fechaEmbarque . "','YYYY-MM-DD')
+                    ,to_date('" . $fechaEta . "','YYYY-MM-DD')
+                    ," . $unidades . "
+                    ," . $costo . "
+                    ,'" . $moneda . "'
+                    ,'" . $pais . "')
 ";
 
         // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
@@ -2052,7 +2088,14 @@ class PlanCompraClass extends \parametros
         fclose($fp);
 
         $data = \database::getInstancia()->getConsulta($sql);
-        return $data;
+        //return $data;
+
+        if($data){
+            return 1;
+        }else{
+            return 0;
+        }
+
 
 
     }
