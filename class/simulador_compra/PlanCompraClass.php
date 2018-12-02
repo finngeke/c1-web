@@ -1850,7 +1850,7 @@ class PlanCompraClass extends \parametros
                         , "NOMBRE_LINEA" => utf8_encode($va1[2])
                         , "NRO_LINEA" => $va1[3]
                         , "NOMBRE_SUB_LINEA" => utf8_encode($va1[4])
-                        , "NRO_SUB_LINEA" => utf8_encode($va1[5])
+                        , "NRO_SUB_LINEA" => $va1[5]
                         , "NOMBRE_ESTILO" => utf8_encode($va1[6])
                         , "NRO_ESTILO" => $va1[7]
                         , "COLOR" => utf8_encode($va1[8])
@@ -1887,6 +1887,7 @@ class PlanCompraClass extends \parametros
                      nvl(C.NOM_SUBLINEA,'Sin Informacion') SUB_LINEA,
                      c.cod_sublin COD_SUBLINEA,
                      nvl(c.DES_ESTILO,'Sin Informacion') ESTILO,
+                     'No Disponible' NRO_ESTILO,
                      nvl(c.Nom_Color,'Sin Informacion') COLOR,
                      c.cod_color COD_COLOR  
                 FROM  plc_plan_compra_color_3 c
@@ -1907,13 +1908,14 @@ class PlanCompraClass extends \parametros
                 , array(
                   "ID" => $va1[0]
                 , "PROFORMA" => $va1[1]
-                , "LINEA" => $va1[2]
-                , "COD_LINEA" => utf8_encode($va1[3])
-                , "SUB_LINEA" => utf8_encode($va1[4])
-                , "COD_SUBLINEA" => utf8_encode($va1[5])
+                , "LINEA" => utf8_encode("(".$va1[3].") - ".$va1[2])
+                , "COD_LINEA" => $va1[3]
+                , "SUB_LINEA" => utf8_encode("(".$va1[5].") - ".$va1[4])
+                , "COD_SUBLINEA" => $va1[5]
                 , "ESTILO" => utf8_encode($va1[6])
-                , "COLOR" => utf8_encode($va1[7])
-                , "COD_COLOR" => $va1[8]
+                , "NRO_ESTILO" => $va1[7]
+                , "COLOR" => utf8_encode("(".$va1[9].") - ".$va1[8])
+                , "COD_COLOR" => $va1[9]
                 )
             );
         }
@@ -2098,6 +2100,147 @@ class PlanCompraClass extends \parametros
 
 
 
+    }
+
+
+
+
+    // Listar CBX Línea en Match
+    public static function ListarLineaCBXMatch($temporada, $depto)
+    {
+
+        $sql = "SELECT TRIM( L.PRD_LVL_NUMBER ) AS LIN_LINEA,
+                       TRIM( L.PRD_NAME_FULL ) AS LIN_DESCRIPCION
+                FROM   PRDMSTEE         P,
+                       PRDMSTEE         L
+                WHERE  P.PRD_LVL_NUMBER = RPAD('" . $depto . "', 15, ' ' )
+                AND    P.PRD_LVL_CHILD  = L.PRD_LVL_PARENT
+                AND    L.PRD_STATUS = 0
+                ORDER BY 2 ASC
+                ";
+
+        $data = \database::getInstancia()->getFilas($sql);
+        //return $data;
+
+        // Transformo a array asociativo (Para campos de texto utilizar UTF-8)
+        $array1 = [];
+        foreach ($data as $va1) {
+            array_push($array1
+                , array(
+                    "LIN_LINEA" => utf8_encode($va1[0])
+                , "LIN_DESCRIPCION" => utf8_encode("(".$va1[0].") - ".$va1[1])
+                )
+            );
+        }
+
+        return $array1;
+
+    }
+
+    // Listar CBX SubLinea en Match
+    public static function ListarSubLineaCBXMatch($temporada, $depto, $id_linea)
+    {
+
+        $sql = "SELECT TRIM( L.PRD_LVL_NUMBER ) AS SLI_SUBLINEA,
+                       TRIM( L.PRD_NAME_FULL ) AS SLI_DESCRIPCION
+                FROM   PRDMSTEE         P,
+                       PRDMSTEE         L
+                WHERE  P.PRD_LVL_NUMBER = RPAD( '" . $id_linea . "', 15, ' ' )
+                AND    P.PRD_LVL_CHILD  = L.PRD_LVL_PARENT
+                AND    L.PRD_STATUS = 0
+                ORDER BY 2 ASC
+                ";
+
+        $data = \database::getInstancia()->getFilas($sql);
+        // return $data;
+
+        // Transformo a array asociativo (Para campos de texto utilizar UTF-8)
+        $array1 = [];
+        foreach ($data as $va1) {
+            array_push($array1
+                , array(
+                    "SLI_SUBLINEA" => utf8_encode($va1[0])
+                , "SLI_DESCRIPCION" => utf8_encode("(".$va1[0].") - ".$va1[1])
+                )
+            );
+        }
+
+        return $array1;
+
+    }
+
+    // Listar CBX Color en Match
+     public static function ListarColorCBXMatch($temporada, $depto)
+    {
+
+        $sql = "SELECT
+                REPLACE(REPLACE(trim(t.codigo),CHR(10),''),CHR(13),'') AS COD_COLOR,
+                convert(REPLACE(REPLACE(INITCAP( t.descripcion),CHR(10),''),CHR(13),''),'utf8','us7ascii') AS NOM_COLOR
+                FROM PLC_MAEDIM T
+                WHERE T.TIPO = 'C'
+                ORDER BY t.descripcion ASC
+                ";
+        $data = \database::getInstancia()->getFilas($sql);
+
+        // Transformo a array asociativo (Para campos de texto utilizar UTF-8)
+        $array1 = [];
+        foreach ($data as $va1) {
+            array_push($array1
+                , array(
+                    "COD_COLOR" => utf8_encode($va1[0])
+                , "NOM_COLOR" => utf8_encode("(".$va1[0].") - ".$va1[1])
+                )
+            );
+        }
+
+        return $array1;
+
+    }
+
+
+    public static function ActualizaPlanMATCH($temporada, $depto, $login, $id_color, $linea, $sublinea, $estilo, $color)
+    {
+
+        $LINEA_EXPLODE = explode(" - ", $linea);
+        $LINEA_REPLACE1 =  str_replace("(","",$LINEA_EXPLODE[0]);
+        $LINEA_REPLACE2 = str_replace(")","",$LINEA_REPLACE1);
+        $LINEA = $LINEA_REPLACE2;
+
+        $SUBLINEA_EXPLODE = explode(" - ", $sublinea);
+        $SUBLINEA_REPLACE1 = str_replace("(","",$SUBLINEA_EXPLODE[0]);
+        $SUBLINEA_REPLACE2 = str_replace(")","",$SUBLINEA_REPLACE1);
+        $SUB_LINEA = $SUBLINEA_REPLACE2;
+
+        $COLOR_EXPLODE = explode(" - ", $color);
+        $COLOR_REPLACE1 = str_replace("(","",$COLOR_EXPLODE[0]);
+        $COLOR_REPLACE2 = str_replace(")","",$COLOR_REPLACE1);
+        $COLOR = $COLOR_REPLACE2;
+
+        $sql = "begin PLC_PKG_DESARROLLO.PRC_UPDATE_COLOR3_OC($temporada,'" . $depto . "',$id_color, '" . $LINEA . "', '" . $SUB_LINEA . "', '" . $estilo . "', '" . $COLOR . "',:error, :data); end;";
+
+        // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+        if (!file_exists('../archivos/log_querys/' . $login)) {
+            mkdir('../archivos/log_querys/' . $login, 0775, true);
+        }
+
+        $stamp = date("Y-m-d_H-i-s");
+        $rand = rand(1, 999);
+        $content = $sql;
+        $fp = fopen("../archivos/log_querys/" . $login . "/MATCH-ACTUALIZACAMPOS--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+        fwrite($fp, $content);
+        fclose($fp);
+
+        $data = \database::getInstancia()->getConsultaSP($sql, 2);
+
+        if ($data) {
+            return 1;
+        } else {
+            return 0;
+        }
+
+
+
+    // Fin del ActualizaPlanMATCH
     }
 
 

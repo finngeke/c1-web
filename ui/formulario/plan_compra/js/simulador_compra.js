@@ -682,17 +682,90 @@ $(function () {
                     // Antes de volver a cargar la data, reseteo lo existente
                     $("#grid_match_pmm").data("kendoGrid").dataSource.data([]);
                     $("#grid_match_plan").data("kendoGrid").dataSource.data([]);
+                    var gridMatchPLAN = $("#grid_match_plan").data("kendoGrid");
+                    gridMatchPLAN.destroy();
+
+
+                    // CBX de País
+                    function MatchPaisDropDownEditor(container, options) {
+                        $('<input required name="' + options.field + '"/>')
+                            .appendTo(container)
+                            .kendoDropDownList({
+                                autoBind: false,
+                                dataTextField: "LIN_DESCRIPCION",
+                                dataValueField: "LIN_LINEA",
+                                dataSource: {
+                                    transport: {
+                                        read:  {
+                                            url: "TelerikPlanCompra/ListarLineaCBXMatch",
+                                            dataType: "json"
+                                            //type: "POST"
+                                        }
+                                    }
+                                }
+                            });
+                    }
+
+                    // CBX de SubLínea
+                    function MatchSubLineaDropDownEditor(container, options) {
+                        $('<input required name="' + options.field + '"/>')
+                            .appendTo(container)
+                            .kendoDropDownList({
+                                autoBind: false,
+                                dataTextField: "SLI_DESCRIPCION",
+                                dataValueField: "SLI_SUBLINEA",
+                                dataSource: {
+                                    transport: {
+                                        read:  {
+                                            url: "TelerikPlanCompra/ListarSubLineaCBXMatch",
+                                            data:{LINEA:kendo.parseInt(OC)},
+                                            dataType: "json"
+                                            //type: "POST"
+                                        }
+                                    }
+                                }
+                            });
+                    }
+
+                    // CBX de Color
+                    function MatchColorDropDownEditor(container, options) {
+                        $('<input required name="' + options.field + '"/>')
+                            .appendTo(container)
+                            .kendoDropDownList({
+                                autoBind: false,
+                                dataTextField: "NOM_COLOR",
+                                dataValueField: "COD_COLOR",
+                                dataSource: {
+                                    transport: {
+                                        read:  {
+                                            url: "TelerikPlanCompra/ListarColorCBXMatch",
+                                            dataType: "json"
+                                            //type: "POST"
+                                        }
+                                    }
+                                }
+                            });
+                    }
+
+
 
                     // Seteo DataSet
                     var dataSource_match_pmm = new kendo.data.DataSource({
                         transport: {
+
                             read:  {
                                 url: "TelerikPlanCompra/MatchLlenarGridPMM",
                                 dataType: "json",
                                 //type: 'POST',
                                 data:{OC:kendo.parseInt(OC),PROFORMA:String(PROFORMA)}
                             }
+
                         },
+                        //complete: TerminaCargaPMM
+                        //success: TerminaCargaPMM,
+                        //requestEnd: TerminaCargaPMM,
+                        //change: TerminaCargaPMM,
+                        requestEnd: TerminaCargaPMM,
                         schema: {
                             model: {
                                 fields: {
@@ -720,9 +793,29 @@ $(function () {
                                 dataType: "json",
                                 //type: 'POST',
                                 data:{OC:kendo.parseInt(OC),PROFORMA:String(PROFORMA)}
+                            },update: {
+                                url: "TelerikPlanCompra/ActualizaPlanMATCH",
+                                dataType: "json"
                             }
-                        },
+                        },/*
+                        change: function(e) {
+
+                            // Cantidad de registros de PLAN
+                            var TotalRegistroGrillaPMM = this.data();
+                            // Cantidad de Registros de PMM
+                            var TotalRegistroGrillaPLAN = dataSource_match_pmm.data();
+
+
+                            console.log(TotalRegistroGrillaPMM.length);
+                            console.log(TotalRegistroGrillaPLAN.length);
+
+
+                        },*/
                         //autoSync: true,
+                        //complete: TerminaCargaPMM
+                        //success: TerminaCargaPMM,
+                        //requestEnd: TerminaCargaPMM,
+                        change: TerminaCargaPLAN,
                         schema: {
                             model: {
                                 id: "ID",
@@ -743,92 +836,119 @@ $(function () {
                     });
 
 
+
+                    // Cuando Termina la Carga del DataSet de PMM
+                    function TerminaCargaPMM(container, options) {
+                        // Cantidad de Registros del DatasSet PMM
+                        //var data = dataSource_match_pmm.data();
+                        //alert(data.length);
+
+                        // Una vez cargado el grid de PMM, cargo el del PLAN
+                        dataSource_match_plan.read();
+
+                    }
+
+                    // Cuando Termina la Carga del DataSet de PLAN
+                    function TerminaCargaPLAN(container, options) {
+
+                        // Cantidad de Registros del DatasSet PMM
+                        var dataPMM = dataSource_match_pmm.data();
+                        // Cantidad de Registros del DatasSet PLAN
+                        var dataPLAN = dataSource_match_plan.data();
+                        //alert(data.length);
+
+                    if(dataPMM.length == dataPLAN.length){
+                        popupNotification.show(" La Cantidad de Registros de PMM y PLAN, no son iguales.", "error");
+
+                        // Bloquear todos los BTNs (Falta Bloquear Link del BTN)
+                        // $(".k-grid-save-changes").kendoButton({ enable: false }).data("kendoButton").enable(false);
+                        // $(".k-grid-cancel-changes").kendoButton({ enable: false }).data("kendoButton").enable(false);
+                        // Ocultar la Botonera
+                        $("#grid_match_plan .k-grid-toolbar").hide();
+
+
+                    }else{
+
+                        // Revisar las diferencia entre PMM y PLAN
+
+                    }
+
+
+
+                    // Fin TerminaCargaPLAN
+                    }
+
+                    $("#grid_match_plan .k-grid-custom").click(function(e){
+                        // handler body
+                        console.log("hola");
+                    });
+
                     // Asigno el DataSet al Grid de PMM
-                    /*var spreadsheet_match_pmm = $("#grid_match_pmm").data("kendoGrid");
-                    spreadsheet_match_pmm.setDataSource(dataSource_match_pmm, [
-                        { field: "ORDEN_DE_COMPRA", title: "OC" },
-                        { field: "PI", title: "PI" },
-                        { field: "NRO_LINEA", title: "Cod. Línea" },
-                        { field: "NOMBRE_LINEA", title: "Línea" },
-                        { field: "NRO_SUB_LINEA", title: "Cod. Sublinea" },
-                        { field: "NOMBRE_SUB_LINEA", title: "Sublinea" },
-                        { field: "NOMBRE_ESTILO", title: "Estilo" },
-                        { field: "NRO_ESTILO", title: "N° Estilo" },
-                        { field: "COLOR", title: "Color" },
-                        { field: "COD_COLOR", title: "Cod. Color" }
-                    ]);*/
                     $("#grid_match_pmm").kendoGrid({
                         columns: [
                             { hidden: true, field: "ORDEN_DE_COMPRA" },
                             { hidden: true, field: "PI" },
                             { field: "NOMBRE_LINEA", title: "Línea" },
                             { field: "NRO_LINEA", title: "Cod. Linea", width: 90 },
-                            { field: "NOMBRE_SUB_LINEA", title: "SubLínea", width:120 },
+                            { field: "NOMBRE_SUB_LINEA", title: "SubLínea", width:150 },
                             { field: "NRO_SUB_LINEA", title: "Cod. SubLínea", width: 100 },
-                            { field: "NOMBRE_ESTILO", title: "Estilo", width:230 },
+                            { field: "NOMBRE_ESTILO", title: "Estilo", width:280 },
                             { field: "NRO_ESTILO", title: "N° Estilo", width: 90 },
-                            { field: "COLOR", title: "Color", width: 110 },
+                            { field: "COLOR", title: "Color", width: 200 },
                             { field: "COD_COLOR", title: "Cod. Color", width: 90 }
                         ],
                         dataSource: dataSource_match_pmm
                     });
 
+                    function grid_dataBinding(e) {
 
-                    function MatchPaisDropDownEditor(container, options) {
-                        $('<input required name="' + options.field + '"/>')
-                            .appendTo(container)
-                            .kendoDropDownList({
-                                autoBind: false,
-                                dataTextField: "LIN_DESCRIPCION",
-                                dataValueField: "LIN_LINEA",
-                                dataSource: {
-                                    transport: {
-                                        read:  {
-                                            url: "TelerikPlanCompra/ListarLineaCBXMatch",
-                                            dataType: "json"
-                                            //type: "POST"
-                                        }
-                                    }
-                                }
-                            });
+                        // console.log("dataBinding");
+
+                        // get the index of the UnitsInStock cell
+                        var columns = e.sender.columns;
+                        var columnIndex = this.wrapper.find(".k-grid-header [data-field=" + "NOMBRE_ESTILO" + "]").index();
+
+                        // iterate the data items and apply row styles where necessary
+                        /*var dataItems = e.sender.dataSource.view();
+                        for (var j = 0; j < dataItems.length; j++) {
+                            var discontinued = dataItems[j].get("Discontinued");
+                            var row = e.sender.tbody.find("[data-uid='" + dataItems[j].uid + "']");
+                            if (discontinued) {
+                                row.addClass("discontinued");
+                            }
+                        }*/
+
+
                     }
 
                     // Asigno el DataSet al Grid de PLAN
-                    /*var spreadsheet_match_plan = $("#grid_match_plan").data("kendoGrid");
-                    spreadsheet_match_plan.setDataSource(dataSource_match_plan, [
-                        { field: "FECHA", title: "ID" },
-                        { field: "HORA", title: "PI" },
-                        { field: "USUARIO", title: ">Cod. Línea" },
-                        { field: "ESTADO", title: "Línea" },
-                        { field: "ESTADO", title: "Cod. Sublinea" },
-                        { field: "ESTADO", title: "Sublinea" },
-                        { field: "ESTADO", title: "Estilo" },
-                        { field: "ESTADO", title: "Color" },
-                        { field: "ESTADO", title: "Cod. Color" },
-                        { field: "ESTADO", title: "Valor Línea" },
-                        { field: "ESTADO", title: "Valor SubLínea" },
-                        { field: "ESTADO", title: "Valor Color" },
-                        { field: "ESTADO", title: "Valor Estilo" },
-                        { field: "ESTADO", title: "Correlativo" }
-                    ]);*/
                     $("#grid_match_plan").kendoGrid({
+                        autoBind:false,
                         dataSource: dataSource_match_plan,
-                        toolbar: ["save", "cancel"],
+                        //toolbar: ["save", "cancel"],
+                        toolbar: [
+                            { name: "save", text: "Actualizar Registros", iconClass: "k-icon k-i-copy" },
+                            { name: "cancel", text: "Cancelar Modificaciones" },
+                            { name: "custom", text: "Realizar Match" }
+                        ],
                         editable: true,
                         columns: [
-                            { field: "ID" },
+                            { hidden: true,field: "ID" },
                             { hidden: true, field: "PROFORMA" },
                             { field: "LINEA", title: "Línea", editor: MatchPaisDropDownEditor }, //, template: "#=LINEA.LIN_DESCRIPCION#"
-                            { field: "COD_LINEA", title: "Cod. Línea", width: 90 },
-                            { field: "SUB_LINEA", title: "SubLínea", width:120 },
-                            { field: "COD_SUBLINEA", title: "Cod. SubLínea", width: 100 },
-                            { field: "ESTILO", title: "Estilo", width:230 },
-                            { field: "NRO_ESTILO", title: "N° Estilo", width: 90 },
-                            { field: "COLOR", title: "Color", width: 110 },
-                            { field: "COD_COLOR", title: "Cod. Color", width: 90 }
+                            { field: "COD_LINEA", title: "Cod. Línea", editable: false, width: 90 },
+                            { field: "SUB_LINEA", title: "SubLínea", editor: MatchSubLineaDropDownEditor, width:150 },
+                            { field: "COD_SUBLINEA", title: "Cod. SubLínea", editable: false, width: 100 },
+                            { field: "ESTILO", title: "Estilo", width:280 },
+                            { field: "NRO_ESTILO", title: "N° Estilo", editable: false, width: 90 },
+                            { field: "COLOR", title: "Color", editor: MatchColorDropDownEditor, width: 200 },
+                            { field: "COD_COLOR", title: "Cod. Color", editable: false, width: 90 }
                         ]
 
                     });
+                    var grid = $("#grid_match_plan").data("kendoGrid");
+                    grid.bind("dataBinding", grid_dataBinding);
+                    grid.dataSource.fetch();
 
 
 
