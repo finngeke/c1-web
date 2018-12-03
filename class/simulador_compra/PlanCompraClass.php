@@ -1887,7 +1887,7 @@ class PlanCompraClass extends \parametros
                      nvl(C.NOM_SUBLINEA,'Sin Informacion') SUB_LINEA,
                      c.cod_sublin COD_SUBLINEA,
                      nvl(c.DES_ESTILO,'Sin Informacion') ESTILO,
-                     'No Disponible' NRO_ESTILO,
+                     'ND' NRO_ESTILO,
                      nvl(c.Nom_Color,'Sin Informacion') COLOR,
                      c.cod_color COD_COLOR  
                 FROM  plc_plan_compra_color_3 c
@@ -2127,7 +2127,7 @@ class PlanCompraClass extends \parametros
         foreach ($data as $va1) {
             array_push($array1
                 , array(
-                  "LIN_LINEA" => utf8_encode(trim($va1[0]))
+                  "LIN_LINEA" => utf8_encode("(".trim($va1[0]).") - ".trim($va1[1]))        //utf8_encode(trim($va1[0]))
                 , "LIN_DESCRIPCION" => utf8_encode("(".trim($va1[0]).") - ".trim($va1[1]))
                 )
             );
@@ -2159,7 +2159,7 @@ class PlanCompraClass extends \parametros
         foreach ($data as $va1) {
             array_push($array1
                 , array(
-                    "SLI_SUBLINEA" => utf8_encode(trim($va1[0]))
+                    "SLI_SUBLINEA" => utf8_encode("(".trim($va1[0]).") - ".trim($va1[1]))   //utf8_encode(trim($va1[0]))
                 , "SLI_DESCRIPCION" => utf8_encode("(".trim($va1[0]).") - ".trim($va1[1]))
                 )
             );
@@ -2187,7 +2187,7 @@ class PlanCompraClass extends \parametros
         foreach ($data as $va1) {
             array_push($array1
                 , array(
-                    "COD_COLOR" => utf8_encode(trim($va1[0]))
+                  "COD_COLOR" => utf8_encode("(".trim($va1[0]).") - ".trim($va1[1]))        //utf8_encode(trim($va1[0]))
                 , "NOM_COLOR" => utf8_encode("(".trim($va1[0]).") - ".trim($va1[1]))
                 )
             );

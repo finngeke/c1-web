@@ -698,6 +698,7 @@ $(function () {
                             .appendTo(container)
                             .kendoDropDownList({
                                 autoBind: false,
+                                filter: "contains",
                                 dataTextField: "LIN_DESCRIPCION",
                                 dataValueField: "LIN_LINEA",
                                 dataSource: {
@@ -708,8 +709,20 @@ $(function () {
                                             //type: "POST"
                                         }
                                     }
-                                }
+                                }//,select: CambiaLineaMatchDropDown
                             });
+                    }
+
+                    // Revisar, asociado a select: CambiaLineaMatchDropDown
+                    function CambiaLineaMatchDropDown(e){
+
+                            if (e.dataItem) {
+                                console.log(e.dataItem);
+                                var dataItem = e.dataItem;
+                                console.log("event :: select (" + dataItem.text + " : " + dataItem.value + ")");
+                            } else {
+                                console.log("event :: select");
+                            }
                     }
 
                     // CBX de SubLínea
@@ -718,6 +731,7 @@ $(function () {
                             .appendTo(container)
                             .kendoDropDownList({
                                 autoBind: false,
+                                filter: "contains",
                                 dataTextField: "SLI_DESCRIPCION",
                                 dataValueField: "SLI_SUBLINEA",
                                 dataSource: {
@@ -739,6 +753,7 @@ $(function () {
                             .appendTo(container)
                             .kendoDropDownList({
                                 autoBind: false,
+                                filter: "contains",
                                 dataTextField: "NOM_COLOR",
                                 dataValueField: "COD_COLOR",
                                 dataSource: {
@@ -778,13 +793,13 @@ $(function () {
                                     ORDEN_DE_COMPRA: {type: "number"},
                                     PI: {type: "string"},
                                     NOMBRE_LINEA: {type: "string"},
-                                    NRO_LINEA: {type: "number"},
+                                    NRO_LINEA: {type: "string"},
                                     NOMBRE_SUB_LINEA: {type: "string"},
                                     NRO_SUB_LINEA: {type: "string"},
                                     NOMBRE_ESTILO: {type: "string"},
-                                    NRO_ESTILO: {type: "number"},
+                                    NRO_ESTILO: {type: "string"},
                                     COLOR: {type: "string"},
-                                    COD_COLOR: {type: "number"}
+                                    COD_COLOR: {type: "string"}
                                 }
 
 
@@ -829,13 +844,13 @@ $(function () {
                                     ID: {type: "number"},
                                     PROFORMA: {type: "string"},
                                     //LINEA: {type: "string"}, //type: "string", defaultValue: { LIN_LINEA: "002009", LIN_DESCRIPCION: "ABRIGOS"}
-                                    COD_LINEA: {type: "number"},
+                                    COD_LINEA: {type: "string"},
                                     SUB_LINEA: {type: "string"},
                                     COD_SUBLINEA: {type: "string"},
                                     ESTILO: {type: "string"},
                                     NRO_ESTILO: {type: "string"},
                                     COLOR: {type: "string"},
-                                    COD_COLOR: {type: "number"}
+                                    COD_COLOR: {type: "string"}
                                 }
                             }
                         }
@@ -908,6 +923,8 @@ $(function () {
                     $("#grid_match_plan").kendoGrid({
                         autoBind:false,
                         dataSource: dataSource_match_plan,
+                        dataBound: MatchPlanOnDataBound,
+                        dataBinding: MatchPlanOnDataBinding,
                         //toolbar: ["save", "cancel"],
                         toolbar: [
                             { name: "save", text: "Actualizar Registros", iconClass: "k-icon k-i-copy" },
@@ -1031,31 +1048,35 @@ $(function () {
                     });
 
 
-                    function grid_dataBinding(e) {
+                    function MatchPlanOnDataBound(e){
 
-                        // console.log("dataBinding");
+                        var revisa_grid_match_pmm = $("#grid_match_pmm").data("kendoGrid");
+                        var revisa_grid_pmm = revisa_grid_match_pmm.dataSource.view();
 
-                        // get the index of the UnitsInStock cell
-                        /*var columns = e.sender.columns;
-                        var columnIndex = this.wrapper.find(".k-grid-header [data-field=" + "NOMBRE_ESTILO" + "]").index();
+                        var revisa_grid_match_plan = $("#grid_match_plan").data("kendoGrid");
+                        var revisa_grid_plan = revisa_grid_match_plan.dataSource.view();
 
-                        // iterate the data items and apply row styles where necessary
-                        var dataItems = e.sender.dataSource.view();
-                        for (var j = 0; j < dataItems.length; j++) {
-                            var discontinued = dataItems[j].get("VEST CORT ALMENDRA BNX ESS W198");
-                            var row = e.sender.tbody.find("[data-uid='" + dataItems[j].uid + "']");
-                            if (discontinued) {
-                                //row.addClass("discontinued");
-                                console.log("Encontrado");
-                            }
-                        }*/
+                        // Recorro la tabla de Plan
+                        for (var i = 0; i < revisa_grid_plan.length; i++) {
 
 
+                            alert(revisa_grid_plan[i].ID);
+
+
+                            /*if (gridData[i].SomeProperty == SomeValue) {
+                                grid.table.find("tr[data-uid='" + gridData[i].uid + "']").addClass("errormatch-row");
+                            }*/
+
+                        // Fin recorrer la tabla Plan
+                        }
+
+
+                    // Fin del MatchPlanOnDataBound
                     }
-                    // DataBind
-                    /*var grid = $("#grid_match_plan").data("kendoGrid");
-                    grid.bind("dataBinding", grid_dataBinding);
-                    grid.dataSource.fetch();*/
+
+                    function MatchPlanOnDataBinding(e){
+                        //alert("onDataBinding");
+                    }
 
 
 

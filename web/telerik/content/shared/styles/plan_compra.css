@@ -686,3 +686,11 @@ ul.keyboard-legend li a {
     display: block;
   }
 }
+
+/* Colorea Error en Match */
+.errormatch-row {
+    background-color: #eeffee;
+}
+.errormatch-row.k-alt {
+    background-color: #ccffcc;
+}
