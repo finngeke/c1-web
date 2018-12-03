@@ -534,6 +534,7 @@ $(function () {
             if(command == "Historial") {
 
                 if( (ID_COLOR3=="ID") || (ID_COLOR3=="") || (ID_COLOR3==null) || (ID_COLOR3.length==0) ){
+                    popupNotification.getNotifications().parent().remove();
                     popupNotification.show(" Historial no disponible para este registro.", "error");
                 }else{
 
@@ -575,6 +576,7 @@ $(function () {
             if(command == "Ajuste Compra") {
 
                 if( (ID_COLOR3=="ID") || (ID_COLOR3=="") || (ID_COLOR3==null) || (DEBUTREORDER=="REORDER")){
+                    popupNotification.getNotifications().parent().remove();
                     popupNotification.show(" Las opciones REORDER no tienen ajuste de compra.", "error");
                 }else{
 
@@ -633,6 +635,7 @@ $(function () {
                     window.open(valFileDownloadPath, '_blank');
 
                 }else{
+                    popupNotification.getNotifications().parent().remove();
                     popupNotification.show(" En estado Ingresado,No puede descargar el archivo.", "error");
                 }
 
@@ -649,6 +652,7 @@ $(function () {
                 */
 
                 if( (PROFORMA.length==0) || (PROFORMA==null) || (PROFORMA=="") || (ARCHIVO=="Cargado..") ){
+                    popupNotification.getNotifications().parent().remove();
                     popupNotification.show(" Seleccione un registro con proforma y archivo sin cargar.", "error");
                 }else {
 
@@ -671,6 +675,7 @@ $(function () {
                 // Que llegue la proforma y el estado sea Pendiente de Aprobación sin Match
                 if( (PROFORMA.length==0) || (PROFORMA==null) || (PROFORMA=="") || (ESTADOC1==19) ){
 
+                    popupNotification.getNotifications().parent().remove();
                     popupNotification.show(" Seleccione un registro con Proforma,Pendiente de Aprobacion sin Match y OC no Linkeada.", "error");
 
                 }else {
@@ -859,6 +864,7 @@ $(function () {
 
                     if(dataPMM.length == dataPLAN.length){
 
+                        popupNotification.getNotifications().parent().remove();
                         popupNotification.show(" La Cantidad de Registros de PMM y PLAN, no son iguales.", "error");
 
                         // Bloquear todos los BTNs (Falta Bloquear Link del BTN)
@@ -964,8 +970,7 @@ $(function () {
 
                                                 // Aquí comenzamos con el Insertar de Variaciones
 
-
-
+                                                
                                             }else{
                                                 popupNotification.getNotifications().parent().remove();
                                                 popupNotification.show(" Problema al Insertar Variaciones.", "error");
@@ -990,7 +995,6 @@ $(function () {
                                     popupNotification.getNotifications().parent().remove();
                                     popupNotification.show(" Problemas al Generar Match o Info Devuelta.", "error");
                                 }
-
 
 
                             },
