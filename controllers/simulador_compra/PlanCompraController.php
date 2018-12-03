@@ -348,7 +348,13 @@ class PlanCompraController extends \Control
         echo \simulador_compra\PlanCompraClass::GenerarMatch($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $array_data["OC"], $array_data["PROFORMA"]);
     }
 
+    // Match - Agrega Variaciones
+    public function GenerarMatchVariaciones($f3) {
 
+        $array_data = $_GET;
+        echo \simulador_compra\PlanCompraClass::GenerarMatchVariaciones($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $array_data["OC"], $array_data["PROFORMA"]);
+
+    }
 
 
 

@@ -268,25 +268,25 @@ class PlanCompraClass extends \parametros
         // ############################################# VALIDACIONES #############################################
         // Validar Ventana
         if (($NOM_VENTANA == null) || ($NOM_VENTANA == "") || ($NOM_VENTANA == "null")) {
-            return "error-(" . $ID_COLOR3 . ") Se ha enviado un registro sin ventana.";
+            return json_encode("error-(" . $ID_COLOR3 . ") Se ha enviado un registro sin ventana.");
             die();
         }
 
         // Validar Tipo Empaque
         if (($TIPO_EMPAQUE == null) || ($TIPO_EMPAQUE == "") || ($TIPO_EMPAQUE == "null")) {
-            return "error-(" . $ID_COLOR3 . ") Se ha enviado un empaque vacio.";
+            return json_encode("error-(" . $ID_COLOR3 . ") Se ha enviado un empaque vacio.");
             die();
         }
 
         // Validar que llega la Vía
         if (($NOM_VIA != "MARITIMO") || ($NOM_VIA != "AEREA") || ($NOM_VIA != "TERRESTRE")) {
-            return "error-(" . $ID_COLOR3 . ") El valor enviado en la columna Vía, no corresponde.";
+            return json_encode("error-(" . $ID_COLOR3 . ") El valor enviado en la columna Vía, no corresponde.");
             die();
         }
 
         // Validar que lleguen los datos asociados al curvado
         if (!isset($TIPO_EMPAQUE) || !isset($PORTALLA_1_INI) || !isset($DESTALLA) || !isset($CURVATALLA) || ($UNID_OPCION_INICIO <= 0) || ($SEG_ASIG == null) || ($SEG_ASIG == '')) {
-            return "error-(" . $ID_COLOR3 . ") No pueden estar en blanco los Campos: Tipo Empaque, Porcent Ini,Tallas,Curvas,Und Iniciales.";
+            return json_encode("error-(" . $ID_COLOR3 . ") No pueden estar en blanco los Campos: Tipo Empaque, Porcent Ini,Tallas,Curvas,Und Iniciales.");
             die();
         }
         // ########################################### FIN VALIDACIONES ###########################################
@@ -308,7 +308,7 @@ class PlanCompraClass extends \parametros
                 // Aplicar guardado de proforma
                 $query_proforma = PlanCompraClass::GuardaProforma($TEMPORADA, $DEPTO, $LOGIN, $PROFORMA, $ID_COLOR3, $sube_archivo);
                 if (!$query_proforma) {
-                    return "error-(" . $ID_COLOR3 . ") No se pudo realizar la actualización de la proforma.";
+                    return json_encode("error-(" . $ID_COLOR3 . ") No se pudo realizar la actualización de la proforma.");
                     die();
                 }
 
@@ -376,7 +376,7 @@ class PlanCompraClass extends \parametros
         $query_numero_pais = PlanCompraClass::BuscaNumeroPais($NOM_PAIS);
         $NOM_PAIS_NUMERO = $query_numero_pais[0];
         if (empty($NOM_PAIS_NUMERO)) {
-            return "error-(" . $ID_COLOR3 . ") No pudimos encontrar el nombre de país ingresado, verifique que el texto ingresado existe.";
+            return json_encode("error-(" . $ID_COLOR3 . ") No pudimos encontrar el nombre de país ingresado, verifique que el texto ingresado existe.");
             die();
         }
 
@@ -394,7 +394,7 @@ class PlanCompraClass extends \parametros
 
         // Valido que factor y tipo de cambio no sean cero
         if (($query_factor == 0) && ($query_tipo_cambio == 0)) {
-            return "error-(" . $ID_COLOR3 . ") Factor y Tipo de Cambio llegan en Cero(0).";
+            return json_encode("error-(" . $ID_COLOR3 . ") Factor y Tipo de Cambio llegan en Cero(0).");
             die();
         }
         // ########################################## FIN SETEO DE VARIABLES ############################################
@@ -465,7 +465,7 @@ class PlanCompraClass extends \parametros
         // ################# ACTUALIZAR EN ESTA QUERY, TODOS LOS CAMPO QUE NO REQUIEREN CALCULO ##################
         $query_campos_sin_calculo = PlanCompraClass::ActualizaCampoSinCalculo();
         if (!$query_campos_sin_calculo) {
-            return "error-(" . $ID_COLOR3 . ") No se pudo actualizar el registro.";
+            return json_encode("error-(" . $ID_COLOR3 . ") No se pudo actualizar el registro.");
             die();
         }
 
@@ -481,7 +481,7 @@ class PlanCompraClass extends \parametros
         $query_curva = PlanCompraClass::CalculoCurvadoPlanCompra($TIPO_EMPAQUE, $DESTALLA, $CURVATALLA, $UNID_OPCION_INICIO, $SEG_ASIG, $FORMATO, $A, $B, $C, $I, $DEBUT_REODER, $PORTALLA_1_INI, $DEPTO, $TEMPORADA, $COD_MARCA, $N_CURVASXCAJAS, $COD_JER2, $COD_SUBLIN, $ID_COLOR3, 1);
         // Valido que se pueda realizar la QUERY
         if (!$query_curva) {
-            return "error-(" . $ID_COLOR3 . ") No se pudo buscar curvado.";
+            return json_encode("error-(" . $ID_COLOR3 . ") No se pudo buscar curvado.");
             die();
         }
         $CURVA_UNID_AJUST = $query_curva[0]; //  unid ajust
@@ -493,7 +493,7 @@ class PlanCompraClass extends \parametros
         $CURVA_UNIDAJUSTXTALLA = $query_curva[6]; //  unidadesajustXtalla
         // Valido que lleguen todos los datos de la QUERY
         if (empty($CURVA_UNID_AJUST) || empty($CURVA_POR_AJUSTE) || empty($CURVA_N_CAJAS) || empty($CURVA_UNID_FINAL) || empty($CURVA_PRIMERA_CARGA) || empty($CURVA_TDAS) || empty($CURVA_UNIDAJUSTXTALLA)) {
-            return "error-(" . $ID_COLOR3 . ") No se pudo obtener los datos del curvado, revise la data ingresada.";
+            return json_encode("error-(" . $ID_COLOR3 . ") No se pudo obtener los datos del curvado, revise la data ingresada.");
             die();
         }
 
@@ -2247,9 +2247,13 @@ class PlanCompraClass extends \parametros
     public static function GenerarMatch($temporada, $depto, $login, $oc, $proforma)
     {
 
+        // Prueba de Recepción de GRID Telerik
+        return json_encode("OK");
+        die();
+
+
         // Traigo la Misma Data del Plan que ve el usuario
-        $sql_trae_data = "SELECT
-                                C.ID_COLOR3,                  
+        $sql_trae_data = "SELECT  C.ID_COLOR3,                  
                                 C.DES_ESTILO ESTILO,
                                 C.VENTANA_LLEGADA VENTANA,
                                 C.PROFORMA,
@@ -2271,8 +2275,7 @@ class PlanCompraClass extends \parametros
                             WHERE C.COD_TEMPORADA = $temporada
                             AND C.DEP_DEPTO = '" . $depto . "'
                             AND C.ESTADO = 19
-                            AND C.PROFORMA = '" . $proforma . "'
-                            ";
+                            AND C.PROFORMA = '" . $proforma . "' ";
         $data = \database::getInstancia()->getFilas($sql_trae_data);
 
         if($data){
@@ -2341,7 +2344,7 @@ class PlanCompraClass extends \parametros
                                             ,'" . $va1[13] . "'
                                             ,'" . $va1[14] . "' )";
                     $data_historial = \database::getInstancia()->getConsulta($sql_historial);
-                    return $data_historial;
+                    //return $data_historial;
 
                 // Fin del FOREACH2
                 }
@@ -2350,28 +2353,73 @@ class PlanCompraClass extends \parametros
             // Fin FOREACH
             }
 
+            // Trabajo con las Variaciones
+            $sql_agrega_variacion = "begin PLC_PKG_UTILS.PRC_AGREGAR_OC_VARIACION2('" . $oc . "','" . $proforma . "', :error, :data); end;";
+            $data_agrega_variacion = \database::getInstancia()->getConsultaSP($sql_agrega_variacion, 2);
+
+            // Si se pudo realizar el ingreso de la primera variación, continueo con el de la nueva variación
+            if ($data_agrega_variacion) {
+
+                // Agregamos la Nueva Variación
+                $sql = "begin PLC_PKG_UTILS.PRC_AGREGAR_NUEVA_VARIACION(" . $temporada . ",'" . $depto . "','" . $oc . "', :error, :data); end;";
+                $data = \database::getInstancia()->getConsultaSP($sql, 2);
+                if ($data) {
+                    return json_encode("OK");
+                } else {
+                    return json_encode(" No hemos podido agregar la Segunda Variación.");
+                    die();
+                }
+
+
+            } else {
+                return json_encode(" No hemos podido agregar la Primera Variación.");
+                die();
+            }
+
+
         }else{
-            return "error-(" . $proforma . ") No hemos podido encontrar la información asociada a la Proforma.";
+            return json_encode(" No hemos podido encontrar la información asociada a la Proforma.");
+            die();
+        }
+
+
+    }
+
+    // Generar Match Variacion
+    public static function GenerarMatchVariaciones($temporada, $depto, $login, $oc, $proforma)
+    {
+
+        // Prueba de Recepción de GRID Telerik
+        return json_encode("OK");
+        die();
+
+        // Trabajo con las Variaciones
+        $sql_agrega_variacion = "begin PLC_PKG_UTILS.PRC_AGREGAR_OC_VARIACION2('" . $oc . "','" . $proforma . "', :error, :data); end;";
+        $data_agrega_variacion = \database::getInstancia()->getConsultaSP($sql_agrega_variacion, 2);
+
+        // Si se pudo realizar el ingreso de la primera variación, continueo con el de la nueva variación
+        if ($data_agrega_variacion) {
+
+            // Agregamos la Nueva Variación
+            $sql = "begin PLC_PKG_UTILS.PRC_AGREGAR_NUEVA_VARIACION(" . $temporada . ",'" . $depto . "','" . $oc . "', :error, :data); end;";
+            $data = \database::getInstancia()->getConsultaSP($sql, 2);
+            if ($data) {
+                return json_encode("OK");
+            } else {
+                return json_encode(" No hemos podido agregar la Segunda Variación.");
+                die();
+            }
+
+
+        } else {
+            return json_encode(" No hemos podido agregar la Primera Variación.");
             die();
         }
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
     }
-
-
 
 
 // Fin de la Clase

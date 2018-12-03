@@ -935,20 +935,79 @@ $(function () {
                             //contentType: "application/json",
                             dataType: "json",
                             success: function (result) {
-                                //kendo.log(result);
+
+                                // kendo.log(result);
                                 /*e.success(result.Updated, "update");
                                 e.success(result.Created, "create");
                                 e.success(result.Destroyed, "destroy");*/
 
-                            // Avisar OK
+                                if(result=="OK"){
+
+                                    // Avisamos que el Match se encuentra OK
+                                    popupNotification.getNotifications().parent().remove();
+                                    popupNotification.show(" Match OK, Esperando Variaciones...", "success");
+
+                                    // Aquí comenzamos con el Insertar de Variaciones
+                                    $.ajax({
+                                        //type: "POST",
+                                        url: "TelerikPlanCompra/GenerarMatchVariaciones",
+                                        data: {OC:kendo.parseInt(OC),PROFORMA:String(PROFORMA)},
+                                        //contentType: "application/json",
+                                        dataType: "json",
+                                        success: function (result) {
+
+                                            if(result=="OK"){
+
+                                                // Avisamos que el Match se encuentra OK
+                                                popupNotification.getNotifications().parent().remove();
+                                                popupNotification.show(" Variaciones OK, Hemos Finalizado.", "success");
+
+                                                // Aquí comenzamos con el Insertar de Variaciones
+
+
+
+                                            }else{
+                                                popupNotification.getNotifications().parent().remove();
+                                                popupNotification.show(" Problema al Insertar Variaciones.", "error");
+                                            }
+
+                                        },
+                                        error: function (xhr, httpStatusMessage, customErrorMessage) {
+
+                                            // Tipo Consola
+                                            console.log(xhr.responseText);
+                                            console.log(httpStatusMessage);
+                                            console.log(customErrorMessage);
+
+                                            popupNotification.getNotifications().parent().remove();
+                                            popupNotification.show(" Problemas la Transferencia de la Data - VARIACIONES.", "error");
+
+                                        }
+                                    });
+
+
+                                }else{
+                                    popupNotification.getNotifications().parent().remove();
+                                    popupNotification.show(" Problemas al Generar Match o Info Devuelta.", "error");
+                                }
+
+
 
                             },
                             error: function (xhr, httpStatusMessage, customErrorMessage) {
+
+                                // Tipo Alerta
                                 /*alert(xhr.responseText);
                                 alert(httpStatusMessage);
                                 alert(customErrorMessage);*/
 
-                                // Avisar Error
+                                // Tipo Consola
+                                console.log(xhr.responseText);
+                                console.log(httpStatusMessage);
+                                console.log(customErrorMessage);
+
+                                popupNotification.getNotifications().parent().remove();
+                                popupNotification.show(" Problemas la Transferencia de la Data - MATCH.", "error");
 
                             }
                         });
