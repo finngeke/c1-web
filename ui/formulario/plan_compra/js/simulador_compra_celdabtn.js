@@ -174,6 +174,10 @@ $(function () {
 
     // ############################ MATCH ############################
 
+    function cerrarPopUpMATCH(){
+        location.reload();
+    }
+
     // Le da la estructura a la ventana POPUP
     var ventana_match = $("#POPUP_match");
     ventana_match.kendoWindow({
@@ -186,8 +190,8 @@ $(function () {
             "Minimize",
             "Maximize",
             "Close"
-        ]/*,
-                close: onClose*/
+        ],
+        close: cerrarPopUpMATCH
     }).data("kendoWindow").center();
 
     // Le da la estructura a la grilla pmm

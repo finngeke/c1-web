@@ -687,12 +687,13 @@ $(function () {
                     // Antes de volver a cargar la data, reseteo lo existente
                     $("#grid_match_pmm").data("kendoGrid").dataSource.data([]);
                     $("#grid_match_plan").data("kendoGrid").dataSource.data([]);
+                    // Destruimos el GRID del PLAN
                     var gridMatchPLAN = $("#grid_match_plan").data("kendoGrid");
                     gridMatchPLAN.destroy();
 
 
                     // CBX de País
-                    function MatchPaisDropDownEditor(container, options) {
+                    function MatchLineaDropDownEditor(container, options) {
                         $('<input required name="' + options.field + '"/>')
                             .appendTo(container)
                             .kendoDropDownList({
@@ -779,7 +780,7 @@ $(function () {
                                     NOMBRE_LINEA: {type: "string"},
                                     NRO_LINEA: {type: "number"},
                                     NOMBRE_SUB_LINEA: {type: "string"},
-                                    NRO_SUB_LINEA: {type: "number"},
+                                    NRO_SUB_LINEA: {type: "string"},
                                     NOMBRE_ESTILO: {type: "string"},
                                     NRO_ESTILO: {type: "number"},
                                     COLOR: {type: "string"},
@@ -816,10 +817,10 @@ $(function () {
 
 
                         },*/
-                        //autoSync: true,
-                        //complete: TerminaCargaPMM
-                        //success: TerminaCargaPMM,
-                        //requestEnd: TerminaCargaPMM,
+                        // autoSync: true,
+                        // complete: TerminaCargaPMM
+                        // success: TerminaCargaPMM,
+                        // requestEnd: TerminaCargaPMM,
                         change: TerminaCargaPLAN,
                         schema: {
                             model: {
@@ -827,12 +828,12 @@ $(function () {
                                 fields: {
                                     ID: {type: "number"},
                                     PROFORMA: {type: "string"},
-                                    //LINEA: {defaultValue: { LIN_LINEA: "002009", LIN_DESCRIPCION: "ABRIGOS"}}, //type: "string",
+                                    //LINEA: {type: "string"}, //type: "string", defaultValue: { LIN_LINEA: "002009", LIN_DESCRIPCION: "ABRIGOS"}
                                     COD_LINEA: {type: "number"},
                                     SUB_LINEA: {type: "string"},
-                                    COD_SUBLINEA: {type: "number"},
+                                    COD_SUBLINEA: {type: "string"},
                                     ESTILO: {type: "string"},
-                                    NRO_ESTILO: {type: "number"},
+                                    NRO_ESTILO: {type: "string"},
                                     COLOR: {type: "string"},
                                     COD_COLOR: {type: "number"}
                                 }
@@ -864,15 +865,15 @@ $(function () {
 
                     if(dataPMM.length == dataPLAN.length){
 
-                        popupNotification.getNotifications().parent().remove();
-                        popupNotification.show(" La Cantidad de Registros de PMM y PLAN, no son iguales.", "error");
-
                         // Bloquear todos los BTNs (Falta Bloquear Link del BTN)
                         // $(".k-grid-save-changes").kendoButton({ enable: false }).data("kendoButton").enable(false);
                         // $(".k-grid-cancel-changes").kendoButton({ enable: false }).data("kendoButton").enable(false);
+
                         // Ocultar la Botonera
                         //$("#grid_match_plan .k-grid-toolbar").hide();
 
+                        popupNotification.getNotifications().parent().remove();
+                        popupNotification.show(" La Cantidad de Registros de PMM y PLAN, no son iguales.", "error");
 
                     }else{
 
@@ -917,7 +918,7 @@ $(function () {
                         columns: [
                             { hidden: true,field: "ID" },
                             { hidden: true, field: "PROFORMA" },
-                            { field: "LINEA", title: "Línea", editor: MatchPaisDropDownEditor }, //, template: "#=LINEA.LIN_DESCRIPCION#"
+                            { field: "LINEA", title: "Línea", editor: MatchLineaDropDownEditor }, //, template: "#=LINEA.LIN_DESCRIPCION#"
                             { field: "COD_LINEA", title: "Cod. Línea", editable: false, width: 90 },
                             { field: "SUB_LINEA", title: "SubLínea", editor: MatchSubLineaDropDownEditor, width:150 },
                             { field: "COD_SUBLINEA", title: "Cod. SubLínea", editable: false, width: 100 },
@@ -951,7 +952,7 @@ $(function () {
 
                                     // Avisamos que el Match se encuentra OK
                                     popupNotification.getNotifications().parent().remove();
-                                    popupNotification.show(" Match OK, Esperando Variaciones...", "success");
+                                    popupNotification.show(" Match OK, Esperando Variaciones ...", "success");
 
                                     // Aquí comenzamos con el Insertar de Variaciones
                                     $.ajax({
@@ -965,14 +966,24 @@ $(function () {
                                             if(result=="OK"){
 
                                                 // Avisamos que el Match se encuentra OK
-                                                popupNotification.getNotifications().parent().remove();
+                                                //popupNotification.getNotifications().parent().remove();
                                                 popupNotification.show(" Variaciones OK, Hemos Finalizado.", "success");
 
-                                                // Aquí comenzamos con el Insertar de Variaciones
+                                                // Se Registró MATCH y Variaciones
 
-                                                
+                                                // Recargo el DATASOURCE
+                                                //$("#spreadsheet").data("kendoSpreadsheet").dataSource.read();
+                                                //$("#spreadsheet").data("kendoSpreadsheet").refresh();
+
+                                                // Cierro el POPUP de MATCH
+                                                popupMatch.data("kendoWindow").close();
+
+                                                // Recargar
+                                                location.reload();
+
+
                                             }else{
-                                                popupNotification.getNotifications().parent().remove();
+                                                //popupNotification.getNotifications().parent().remove();
                                                 popupNotification.show(" Problema al Insertar Variaciones.", "error");
                                             }
 

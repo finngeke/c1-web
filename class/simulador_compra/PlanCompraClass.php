@@ -1845,15 +1845,15 @@ class PlanCompraClass extends \parametros
                 foreach ($data as $va1) {
                     array_push($array1
                         , array(
-                          "ORDEN_DE_COMPRA" => $va1[0]
-                        , "PI" => $va1[1]
+                          "ORDEN_DE_COMPRA" => trim($va1[0])
+                        , "PI" => trim($va1[1])
                         , "NOMBRE_LINEA" => utf8_encode($va1[2])
-                        , "NRO_LINEA" => $va1[3]
+                        , "NRO_LINEA" => trim($va1[3])
                         , "NOMBRE_SUB_LINEA" => utf8_encode($va1[4])
-                        , "NRO_SUB_LINEA" => $va1[5]
+                        , "NRO_SUB_LINEA" => utf8_encode(trim($va1[5]))
                         , "NOMBRE_ESTILO" => utf8_encode($va1[6])
                         , "NRO_ESTILO" => $va1[7]
-                        , "COLOR" => utf8_encode($va1[8])
+                        , "COLOR" => utf8_encode(trim($va1[8]))
                         , "COD_COLOR" => $va1[9]
                         )
                     );
@@ -1908,13 +1908,13 @@ class PlanCompraClass extends \parametros
                 , array(
                   "ID" => $va1[0]
                 , "PROFORMA" => $va1[1]
-                , "LINEA" => utf8_encode("(".$va1[3].") - ".$va1[2])
+                , "LINEA" => utf8_encode("(".trim($va1[3]).") - ".trim($va1[2]))
                 , "COD_LINEA" => $va1[3]
-                , "SUB_LINEA" => utf8_encode("(".$va1[5].") - ".$va1[4])
-                , "COD_SUBLINEA" => $va1[5]
+                , "SUB_LINEA" => utf8_encode("(".trim($va1[5]).") - ".trim($va1[4]))
+                , "COD_SUBLINEA" => trim($va1[5])
                 , "ESTILO" => utf8_encode($va1[6])
                 , "NRO_ESTILO" => $va1[7]
-                , "COLOR" => utf8_encode("(".$va1[9].") - ".$va1[8])
+                , "COLOR" => utf8_encode("(".trim($va1[9]).") - ".trim($va1[8]))
                 , "COD_COLOR" => $va1[9]
                 )
             );
@@ -2127,8 +2127,8 @@ class PlanCompraClass extends \parametros
         foreach ($data as $va1) {
             array_push($array1
                 , array(
-                    "LIN_LINEA" => utf8_encode($va1[0])
-                , "LIN_DESCRIPCION" => utf8_encode("(".$va1[0].") - ".$va1[1])
+                  "LIN_LINEA" => utf8_encode(trim($va1[0]))
+                , "LIN_DESCRIPCION" => utf8_encode("(".trim($va1[0]).") - ".trim($va1[1]))
                 )
             );
         }
@@ -2159,8 +2159,8 @@ class PlanCompraClass extends \parametros
         foreach ($data as $va1) {
             array_push($array1
                 , array(
-                    "SLI_SUBLINEA" => utf8_encode($va1[0])
-                , "SLI_DESCRIPCION" => utf8_encode("(".$va1[0].") - ".$va1[1])
+                    "SLI_SUBLINEA" => utf8_encode(trim($va1[0]))
+                , "SLI_DESCRIPCION" => utf8_encode("(".trim($va1[0]).") - ".trim($va1[1]))
                 )
             );
         }
@@ -2187,8 +2187,8 @@ class PlanCompraClass extends \parametros
         foreach ($data as $va1) {
             array_push($array1
                 , array(
-                    "COD_COLOR" => utf8_encode($va1[0])
-                , "NOM_COLOR" => utf8_encode("(".$va1[0].") - ".$va1[1])
+                    "COD_COLOR" => utf8_encode(trim($va1[0]))
+                , "NOM_COLOR" => utf8_encode("(".trim($va1[0]).") - ".trim($va1[1]))
                 )
             );
         }
