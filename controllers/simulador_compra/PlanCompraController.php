@@ -340,7 +340,13 @@ class PlanCompraController extends \Control
     // Fin del ActualizaPlanMATCH
     }
 
+    // Match - Generar Match
+    public function GenerarMatch($f3) {
 
+        $array_data = $_GET;
+
+        echo \simulador_compra\PlanCompraClass::GenerarMatch($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $array_data["OC"], $array_data["PROFORMA"]);
+    }
 
 
 

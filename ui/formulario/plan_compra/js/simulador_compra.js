@@ -858,13 +858,14 @@ $(function () {
                         //alert(data.length);
 
                     if(dataPMM.length == dataPLAN.length){
+
                         popupNotification.show(" La Cantidad de Registros de PMM y PLAN, no son iguales.", "error");
 
                         // Bloquear todos los BTNs (Falta Bloquear Link del BTN)
                         // $(".k-grid-save-changes").kendoButton({ enable: false }).data("kendoButton").enable(false);
                         // $(".k-grid-cancel-changes").kendoButton({ enable: false }).data("kendoButton").enable(false);
                         // Ocultar la Botonera
-                        $("#grid_match_plan .k-grid-toolbar").hide();
+                        //$("#grid_match_plan .k-grid-toolbar").hide();
 
 
                     }else{
@@ -878,10 +879,6 @@ $(function () {
                     // Fin TerminaCargaPLAN
                     }
 
-                    $("#grid_match_plan .k-grid-custom").click(function(e){
-                        // handler body
-                        console.log("hola");
-                    });
 
                     // Asigno el DataSet al Grid de PMM
                     $("#grid_match_pmm").kendoGrid({
@@ -900,27 +897,6 @@ $(function () {
                         dataSource: dataSource_match_pmm
                     });
 
-                    function grid_dataBinding(e) {
-
-                        // console.log("dataBinding");
-
-                        // get the index of the UnitsInStock cell
-                        var columns = e.sender.columns;
-                        var columnIndex = this.wrapper.find(".k-grid-header [data-field=" + "NOMBRE_ESTILO" + "]").index();
-
-                        // iterate the data items and apply row styles where necessary
-                        /*var dataItems = e.sender.dataSource.view();
-                        for (var j = 0; j < dataItems.length; j++) {
-                            var discontinued = dataItems[j].get("Discontinued");
-                            var row = e.sender.tbody.find("[data-uid='" + dataItems[j].uid + "']");
-                            if (discontinued) {
-                                row.addClass("discontinued");
-                            }
-                        }*/
-
-
-                    }
-
                     // Asigno el DataSet al Grid de PLAN
                     $("#grid_match_plan").kendoGrid({
                         autoBind:false,
@@ -929,7 +905,7 @@ $(function () {
                         toolbar: [
                             { name: "save", text: "Actualizar Registros", iconClass: "k-icon k-i-copy" },
                             { name: "cancel", text: "Cancelar Modificaciones" },
-                            { name: "custom", text: "Realizar Match" }
+                            { name: 'guardamatch',text: "Realizar Match", iconClass: "k-icon k-i-save" }
                         ],
                         editable: true,
                         columns: [
@@ -946,9 +922,66 @@ $(function () {
                         ]
 
                     });
-                    var grid = $("#grid_match_plan").data("kendoGrid");
+
+                    $(".k-grid-guardamatch").click(function(e){
+
+                        // Actualiza la Fecha de la Concurrencia
+                        // act_fecha_concurrencia();
+
+                        $.ajax({
+                            //type: "POST",
+                            url: "TelerikPlanCompra/GenerarMatch",
+                            data: {OC:kendo.parseInt(OC),PROFORMA:String(PROFORMA)},
+                            //contentType: "application/json",
+                            dataType: "json",
+                            success: function (result) {
+                                //kendo.log(result);
+                                /*e.success(result.Updated, "update");
+                                e.success(result.Created, "create");
+                                e.success(result.Destroyed, "destroy");*/
+
+                            // Avisar OK
+
+                            },
+                            error: function (xhr, httpStatusMessage, customErrorMessage) {
+                                /*alert(xhr.responseText);
+                                alert(httpStatusMessage);
+                                alert(customErrorMessage);*/
+
+                                // Avisar Error
+
+                            }
+                        });
+
+
+                    });
+
+
+                    function grid_dataBinding(e) {
+
+                        // console.log("dataBinding");
+
+                        // get the index of the UnitsInStock cell
+                        /*var columns = e.sender.columns;
+                        var columnIndex = this.wrapper.find(".k-grid-header [data-field=" + "NOMBRE_ESTILO" + "]").index();
+
+                        // iterate the data items and apply row styles where necessary
+                        var dataItems = e.sender.dataSource.view();
+                        for (var j = 0; j < dataItems.length; j++) {
+                            var discontinued = dataItems[j].get("VEST CORT ALMENDRA BNX ESS W198");
+                            var row = e.sender.tbody.find("[data-uid='" + dataItems[j].uid + "']");
+                            if (discontinued) {
+                                //row.addClass("discontinued");
+                                console.log("Encontrado");
+                            }
+                        }*/
+
+
+                    }
+                    // DataBind
+                    /*var grid = $("#grid_match_plan").data("kendoGrid");
                     grid.bind("dataBinding", grid_dataBinding);
-                    grid.dataSource.fetch();
+                    grid.dataSource.fetch();*/
 
 
 

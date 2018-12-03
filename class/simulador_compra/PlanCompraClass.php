@@ -2197,7 +2197,7 @@ class PlanCompraClass extends \parametros
 
     }
 
-
+    // Actualizar Plan de Compra
     public static function ActualizaPlanMATCH($temporada, $depto, $login, $id_color, $linea, $sublinea, $estilo, $color)
     {
 
@@ -2241,6 +2241,134 @@ class PlanCompraClass extends \parametros
 
 
     // Fin del ActualizaPlanMATCH
+    }
+
+    // Generar Match (En estado 19)
+    public static function GenerarMatch($temporada, $depto, $login, $oc, $proforma)
+    {
+
+        // Traigo la Misma Data del Plan que ve el usuario
+        $sql_trae_data = "SELECT
+                                C.ID_COLOR3,                  
+                                C.DES_ESTILO ESTILO,
+                                C.VENTANA_LLEGADA VENTANA,
+                                C.PROFORMA,
+                                O.PO_NUMBER OC,
+                                C.COD_JER2 LINEA,
+                                C.COD_SUBLIN SUBLINEA,
+                                C.COD_MARCA MARCA,
+                                NVL(COD_COLOR,0) COLOR,
+                                C.ESTADO,
+                                C.NOM_LINEA NOM_LINEA,
+                                C.NOM_SUBLINEA NOM_SUBLINEA,
+                                C.NOM_MARCA NOM_MARCA,
+                                C.NOM_VENTANA NOM_VENTANA,
+                                C.NOM_COLOR NOM_COLOR,
+                                O.ESTADO_MATCH ESTADO_OC
+                            FROM PLC_PLAN_COMPRA_COLOR_3 C
+                            LEFT JOIN PLC_PLAN_COMPRA_OC O ON C.COD_TEMPORADA = O.COD_TEMPORADA
+                                                           AND C.DEP_DEPTO = O.DEP_DEPTO AND C.ID_COLOR3 = O.ID_COLOR3
+                            WHERE C.COD_TEMPORADA = $temporada
+                            AND C.DEP_DEPTO = '" . $depto . "'
+                            AND C.ESTADO = 19
+                            AND C.PROFORMA = '" . $proforma . "'
+                            ";
+        $data = \database::getInstancia()->getFilas($sql_trae_data);
+
+        if($data){
+
+            // Recorro los resultados
+            foreach ($data as $va1) {
+
+                // Generar Match                                                                   Estilo        Ventana
+                $sql_genera_match = "begin PLC_PKG_UTILS.PRC_GENERAR_MATCH('" . $proforma . "','" . $va1[1] . "', $va1[2],'" . $depto . "',$temporada,'" . $oc . "', :error, :data); end;";
+                $data_genera_match = \database::getInstancia()->getConsultaSP($sql_genera_match, 2);
+
+                // Aprobar Opcion                                                                           ID_COLOR3
+                $sql_aprobar_opcion = "begin PLC_PKG_UTILS.PRC_APROBACION_PLAN_2($temporada,'" . $depto . "',$va1[1],'" . $proforma . "', :error, :data); end;";
+                $data_aprobar_opcion = \database::getInstancia()->getConsultaSP($sql_aprobar_opcion, 2);
+
+
+                // PLC_PKG_MIGRACION.PRC_LIS_COLOR3_IDCOLOR3
+                $sql_parte2 = "begin PLC_PKG_MIGRACION.PRC_LIS_COLOR3_IDCOLOR3($temporada,'" . $depto . "',$va1[1], :data); end;";
+                $data_parte2 = \database::getInstancia()->getConsultaSP($sql_parte2, 1);
+
+                // Recorro los resultados de PLC_PKG_MIGRACION.PRC_LIS_COLOR3_IDCOLOR3
+                foreach ($data_parte2 as $va2) {
+
+                    $sql_historial = "INSERT INTO PLC_PLAN_COMPRA_HISTORICA (
+                                             DPTO
+                                            ,LINEA
+                                            ,SUBLINEA
+                                            ,MARCA
+                                            ,ESTILO
+                                            ,VENTANA
+                                            ,COLOR
+                                            ,USER_LOGIN
+                                            ,USER_NOM
+                                            ,FECHA
+                                            ,HORA
+                                            ,PI
+                                            ,OC
+                                            ,ESTADO
+                                            ,TEMP
+                                            ,ID_COLOR3
+                                            ,NOM_LINEA
+                                            ,NOM_MARCA
+                                            ,NOM_VENTANA
+                                            ,NOM_COLOR
+                                            ,NOM_SUBLINEA)
+
+                                     VALUES ('" . $depto . "'
+                                            ,'" . $va1[5] . "'
+                                            ,'" . $va1[6] . "'
+                                            ,$va1[7]
+                                            ,'" . $va1[1] . "'
+                                            ,$va1[2]
+                                            ,$va1[8]
+                                            ,'" . $login . "'
+                                            ,(SELECT NOM_USR FROM PLC_USUARIO WHERE COD_USR = '" . $login . "')
+                                            ,(SELECT SUBSTR(TO_CHAR(SYSDATE, 'DD-MM-YYYY'),1,10)N FROM DUAL)
+                                            ,(SELECT TO_CHAR(SYSDATE, 'HH24:MI:SS') FROM DUAL)
+                                            ,'" . $proforma . "'
+                                            ,'" . $oc . "'
+                                            ,$va2[1]
+                                            ,$temporada
+                                            ,$va1[0]
+                                            ,'" . $va1[10] . "'
+                                            ,'" . $va1[11] . "'
+                                            ,'" . $va1[12] . "'
+                                            ,'" . $va1[13] . "'
+                                            ,'" . $va1[14] . "' )";
+                    $data_historial = \database::getInstancia()->getConsulta($sql_historial);
+                    return $data_historial;
+
+                // Fin del FOREACH2
+                }
+
+
+            // Fin FOREACH
+            }
+
+        }else{
+            return "error-(" . $proforma . ") No hemos podido encontrar la información asociada a la Proforma.";
+            die();
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 
 
