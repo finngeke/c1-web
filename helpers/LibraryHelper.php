@@ -38,4 +38,23 @@
 			}
 			return null;
 		}
+		
+		public static function guid() {
+			/*if (function_exists('com_create_guid') === true)
+			{
+				return trim(com_create_guid(), '{}');
+			}*/
+			return sprintf('%04X%04X-%04X-%04X-%04X-%04X%04X%04X', mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(16384, 20479), mt_rand(32768, 49151), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535));
+		}
+		
+		public static function array_to_xml($array, &$data, $tag = "item") {
+			foreach ($array as $key => $value) {
+				if (is_array($value)) {
+					$node = $data->addChild("$tag");
+					self::array_to_xml($value, $node, $key);
+				} else {
+					$data->addChild("$key", htmlspecialchars("$value"));
+				}
+			}
+		}
 	}

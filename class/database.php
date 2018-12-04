@@ -133,6 +133,29 @@
 			return $this->consultaSP($sql, $retornos);
 		}
 		
+		public function getConsultaClob($sql, $clob) {
+			$code = 0;
+			$message = "";
+			$conn = oci_connect(_USR_, _PWD_, _TNSNAMES_);
+			$stmt = oci_parse($conn, $sql);
+			$lob = oci_new_descriptor($conn, OCI_D_LOB);
+			oci_bind_by_name($stmt, ":clob", $lob, -1, OCI_B_CLOB);
+			oci_bind_by_name($stmt, ":code", $code, -1, SQLT_INT);
+			oci_bind_by_name($stmt, ":message", $message, -1, SQLT_CHR);
+			try {
+				$lob->writeTemporary($clob);
+				oci_execute($stmt);
+				$lob->close();
+				oci_free_statement($stmt);
+				/*if ($code != 0) {
+					throw new Exception($message, $code);
+				}*/
+				return array("code"=>$code,"message"=>$message);
+			} catch (Exception $e) {
+				throw $e;
+			}
+		}
+		
 		private function consultaSP($sql, $retornos) {
 			
 			$conn = ocilogon(_USR_, _PWD_, _TNSNAMES_);
