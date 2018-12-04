@@ -227,10 +227,10 @@ class PlanCompraClass extends \parametros
                     , "ESTADO_MATCH" => utf8_encode($va1[84])
                     , "PO_NUMBER" => utf8_encode($va1[85])
                     , "ESTADO_OC" => utf8_encode($va1[86])
-                    , "FECHA_ACORDADA" => $va1[87]
-                    , "FECHA_EMBARQUE" => $va1[88]
-                    , "FECHA_ETA" => $va1[89]
-                    , "FECHA_RECEPCION" => $va1[90]
+                    , "FECHA_ACORDADA" => utf8_encode($va1[87])
+                    , "FECHA_EMBARQUE" => utf8_encode($va1[88])
+                    , "FECHA_ETA" => utf8_encode($va1[89])
+                    , "FECHA_RECEPCION" => utf8_encode($va1[90])
                     , "DIAS_ATRASO" => $va1[91]
                     , "CODESTADO" => utf8_encode($va1[92])
                     , "ESTADO_C1" => $va1[93]
@@ -1755,10 +1755,15 @@ class PlanCompraClass extends \parametros
     // Quitar OC Eliminada
     public static function QuitarOCCancelada($login,$pi,$oc)
     {
-        $sql = " DELETE FROM B
-                 WHERE PI = '" . $pi . "'
-                 OR ORDEN_DE_COMPRA = $oc
-                ";
+
+        // Quito Registros Extras por OC
+        $sql_oc = "DELETE FROM B
+                   WHERE ORDEN_DE_COMPRA = $oc";
+        $data_oc = \database::getInstancia()->getConsulta($sql_oc);
+
+        // Quito los registros por PI
+        $sql_pi = "DELETE FROM B
+                   WHERE PI = '" . $pi . "'";
 
         // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
         if (!file_exists('../archivos/log_querys/' . $login)) {
@@ -1766,12 +1771,12 @@ class PlanCompraClass extends \parametros
         }
         $stamp = date("Y-m-d_H-i-s");
         $rand = rand(1, 999);
-        $content = $sql;
+        $content = $sql_pi;
         $fp = fopen("../archivos/log_querys/" . $login . "/MATCH-QUITAOCCANCELADA--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
         fwrite($fp, $content);
         fclose($fp);
 
-        $data = \database::getInstancia()->getConsulta($sql);
+        $data = \database::getInstancia()->getConsulta($sql_pi);
 
         if($data){
             return 1;
@@ -1812,9 +1817,9 @@ class PlanCompraClass extends \parametros
                         $ordenCompra = $columna[$flag_incremental]->ordenCompra;
                         $PI = $columna[$flag_incremental]->PI;
                         $nombreEstilo = trim($columna[$flag_incremental]->nombreEstilo);
-                        $numeroEstilo = $columna[$flag_incremental]->numeroEstilo;
+                        $numeroEstilo = trim($columna[$flag_incremental]->numeroEstilo);
                         $estado = $columna[$flag_incremental]->estado;
-                        $nombreVariacion = $columna[$flag_incremental]->nombreVariacion;
+                        $nombreVariacion = trim($columna[$flag_incremental]->nombreVariacion);
                         $numeroVariacion = trim($columna[$flag_incremental]->numeroVariacion);
                         $color = $columna[$flag_incremental]->color;
                         $codColor = trim($columna[$flag_incremental]->codColor);
@@ -1928,7 +1933,7 @@ class PlanCompraClass extends \parametros
                 , "COD_LINEA" => $va1[3]
                 , "SUB_LINEA" => utf8_encode("(".trim($va1[5]).") - ".trim($va1[4]))
                 , "COD_SUBLINEA" => trim($va1[5])
-                , "ESTILO" => utf8_encode($va1[6])
+                , "ESTILO" => utf8_encode(trim($va1[6]))
                 , "NRO_ESTILO" => $va1[7]
                 , "COLOR" => utf8_encode("(".trim($va1[9]).") - ".trim($va1[8]))
                 , "COD_COLOR" => $va1[9]
@@ -2412,18 +2417,20 @@ class PlanCompraClass extends \parametros
                                 // Fin del FOREACH2
                             }
 
+                            return json_encode("OK");
+
                         }else{
-                            return json_encode(" Problemas en PRC_LIS_COLOR3_IDCOLOR3.");
+                            return json_encode("Problemas en PRC_LIS_COLOR3_IDCOLOR3.");
                             die();
                         }
 
                     }else{
-                        return json_encode(" Problemas en PRC_APROBACION_PLAN_2.");
+                        return json_encode("Problemas en PRC_APROBACION_PLAN_2.");
                         die();
                     }
 
                 }else{
-                    return json_encode(" Problemas en PRC_GENERAR_MATCH.");
+                    return json_encode("Problemas en PRC_GENERAR_MATCH.");
                     die();
                 }
 
@@ -2433,7 +2440,7 @@ class PlanCompraClass extends \parametros
 
 
         }else{
-            return json_encode(" No hemos podido encontrar la información asociada a la Proforma.");
+            return json_encode("No hemos podido encontrar la información asociada a la Proforma.");
             die();
         }
 
@@ -2483,13 +2490,13 @@ class PlanCompraClass extends \parametros
             if ($data) {
                 return json_encode("OK");
             } else {
-                return json_encode(" Problemas en PRC_AGREGAR_NUEVA_VARIACION.");
+                return json_encode("Problemas en PRC_AGREGAR_NUEVA_VARIACION.");
                 die();
             }
 
 
         } else{
-            return json_encode(" Problemas en PRC_AGREGAR_OC_VARIACION2.");
+            return json_encode("Problemas en PRC_AGREGAR_OC_VARIACION2.");
             die();
         }
 

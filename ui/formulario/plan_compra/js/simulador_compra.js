@@ -363,9 +363,9 @@ $(function () {
                     PO_NUMBER: {type: "number"},
                     ESTADO_OC: {type: "string"},
                     FECHA_ACORDADA: {type: "string"},
-                    FECHA_EMBARQUE: {type: "date"},
-                    FECHA_ETA: {type: "date"},
-                    FECHA_RECEPCION: {type: "date"},
+                    FECHA_EMBARQUE: {type: "string"},
+                    FECHA_ETA: {type: "string"},
+                    FECHA_RECEPCION: {type: "string"},
                     DIAS_ATRASO: {type: "number"},
                     CODESTADO: {type: "string"},
                     ESTADO_C1: {type: "string"},
@@ -1043,7 +1043,7 @@ $(function () {
                                 /*e.success(result.Updated, "update");
                                 e.success(result.Created, "create");
                                 e.success(result.Destroyed, "destroy");*/
-
+alert(result);
                                 if(result=="OK"){
 
                                     // Avisamos que el Match se encuentra OK
