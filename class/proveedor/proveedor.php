@@ -239,7 +239,7 @@
 			return \database::getInstancia()->getFila($sql);
 		}
 		
-		public static function crearDetalleLPN($cod_proveedor, $nro_factura){
+		public static function crearDetalleLPN($cod_proveedor, $nro_factura) {
 			$sql = "BEGIN PLC_PKG_PROVEEDOR.PRC_PACKING_LIST_LPN($cod_proveedor, '$nro_factura'); END;";
 			return \database::getInstancia()->getConsulta($sql);
 		}
@@ -259,5 +259,9 @@
             return $nombre;
         }
 
+public static function guardarPL($pl_id, $clob) {
+			$sql = "BEGIN PLC_PKG_PROVEEDOR.PRC_INSERTAR_PL('$pl_id', :clob,:code,:message); END;";
+			return \database::getInstancia()->getConsultaClob($sql, $clob);
+		}
 // Fin de la clase
 	}

@@ -6,7 +6,6 @@
 	 * Fecha: 2018-05-16
 	 * @author JOSÉ MIGUEL CANDIA
 	 */
-
 	class ControlProveedor extends Control {
 		private $estiloCabecera = array(
 			'borders' => array(
@@ -428,21 +427,23 @@
 				$c = \LibraryHelper::getColumnNameFromNumber($x);
 				$objPHPExcel->getActiveSheet()->mergeCells($c . "7:" . $c . "8");
 			}
-			$objPHPExcel->getActiveSheet()->mergeCells("K7:AA7");
-			for ($x = 28; $x <= 39; $x++) {
+			$objPHPExcel->getActiveSheet()->mergeCells("K7:AE7");
+			$objPHPExcel->getActiveSheet()->mergeCells("AF7:AZ7");
+			$objPHPExcel->getActiveSheet()->mergeCells("BA7:BU7");
+			for ($x = 74; $x <= 85; $x++) {
 				$c = \LibraryHelper::getColumnNameFromNumber($x);
 				$objPHPExcel->getActiveSheet()->mergeCells($c . "7:" . $c . "8");
 			}
-
+			
 			$objPHPExcel->getActiveSheet()->getStyle("A7:A8")->applyFromArray($this->estiloCabeceraP);
 			$objPHPExcel->getActiveSheet()->getStyle("B7:C8")->applyFromArray($this->estiloCabeceraR);
 			$objPHPExcel->getActiveSheet()->getStyle("D7:D8")->applyFromArray($this->estiloCabeceraP);
 			$objPHPExcel->getActiveSheet()->getStyle("E7:E8")->applyFromArray($this->estiloCabeceraR);
 			$objPHPExcel->getActiveSheet()->getStyle("F7:G8")->applyFromArray($this->estiloCabeceraP);
-			$objPHPExcel->getActiveSheet()->getStyle("H7:AE8")->applyFromArray($this->estiloCabeceraR);
-			$objPHPExcel->getActiveSheet()->getStyle("AF7:AM8")->applyFromArray($this->estiloCabeceraP);
-			$objPHPExcel->getActiveSheet()->getStyle("K8:AA8")->applyFromArray($this->estiloCabeceraR);
-
+			$objPHPExcel->getActiveSheet()->getStyle("H7:BY8")->applyFromArray($this->estiloCabeceraR);
+			$objPHPExcel->getActiveSheet()->getStyle("BZ7:CG8")->applyFromArray($this->estiloCabeceraP);
+			$objPHPExcel->getActiveSheet()->getStyle("K8:BU8")->applyFromArray($this->estiloCabeceraR);
+			
 			$objPHPExcel->getActiveSheet()->SetCellValue("A7", "CONTAINER");
 			$objPHPExcel->getActiveSheet()->SetCellValue("B7", "PI NUMBER");
 			$objPHPExcel->getActiveSheet()->SetCellValue("C7", "PO NUMBER");
@@ -454,29 +455,35 @@
 			$objPHPExcel->getActiveSheet()->SetCellValue("I7", "STYLE DESCRIPTION (RIPLEY)");
 			$objPHPExcel->getActiveSheet()->SetCellValue("J7", "COLOR");
 			$objPHPExcel->getActiveSheet()->SetCellValue("K7", "SIZE BREAKDOWN");
-			$objPHPExcel->getActiveSheet()->SetCellValue("AB7", "#CURVES/CTN");
-			$objPHPExcel->getActiveSheet()->SetCellValue("AC7", "PCS/SETS PER CTN");
-			$objPHPExcel->getActiveSheet()->SetCellValue("AD7", "# CARTONS");
-			$objPHPExcel->getActiveSheet()->SetCellValue("AE7", "TOTAL PCS/SETS");
-			$objPHPExcel->getActiveSheet()->SetCellValue("AF7", "UNIT COST (ORIGEN CURRENCY) ");
-			$objPHPExcel->getActiveSheet()->SetCellValue("AG7", "SUBTOTAL AMOUNT");
-			$objPHPExcel->getActiveSheet()->SetCellValue("AH7", "G.W PER CTN (KGS)");
-			$objPHPExcel->getActiveSheet()->SetCellValue("AI7", "SUB G.W. (KGS)");
-			$objPHPExcel->getActiveSheet()->SetCellValue("AJ7", "N.W PER CTN (KGS)");
-			$objPHPExcel->getActiveSheet()->SetCellValue("AK7", "SUB N.W. (KGS)");
-			$objPHPExcel->getActiveSheet()->SetCellValue("AL7", "MEASUREMENT PER CTN (CBM)");
-			$objPHPExcel->getActiveSheet()->SetCellValue("AM7", "SUB VOLUME (CBM)");
-
-			for ($i = 1; $i <= 17; $i++) {
+			$objPHPExcel->getActiveSheet()->SetCellValue("AF7", "SKU BREAKDOWN");
+			$objPHPExcel->getActiveSheet()->SetCellValue("BA7", "SIZE NAME BREAKDOWN");
+			$objPHPExcel->getActiveSheet()->SetCellValue("BV7", "#CURVES/CTN");
+			$objPHPExcel->getActiveSheet()->SetCellValue("BW7", "PCS/SETS PER CTN");
+			$objPHPExcel->getActiveSheet()->SetCellValue("BX7", "# CARTONS");
+			$objPHPExcel->getActiveSheet()->SetCellValue("BY7", "TOTAL PCS/SETS");
+			$objPHPExcel->getActiveSheet()->SetCellValue("BZ7", "UNIT COST (ORIGEN CURRENCY) ");
+			$objPHPExcel->getActiveSheet()->SetCellValue("CA7", "SUBTOTAL AMOUNT");
+			$objPHPExcel->getActiveSheet()->SetCellValue("CB7", "G.W PER CTN (KGS)");
+			$objPHPExcel->getActiveSheet()->SetCellValue("CC7", "SUB G.W. (KGS)");
+			$objPHPExcel->getActiveSheet()->SetCellValue("CD7", "N.W PER CTN (KGS)");
+			$objPHPExcel->getActiveSheet()->SetCellValue("CE7", "SUB N.W. (KGS)");
+			$objPHPExcel->getActiveSheet()->SetCellValue("CF7", "MEASUREMENT PER CTN (CBM)");
+			$objPHPExcel->getActiveSheet()->SetCellValue("CG7", "SUB VOLUME (CBM)");
+			
+			for ($i = 1; $i <= 21; $i++) {
 				$c = \LibraryHelper::getColumnNameFromNumber($i + 10);
 				$objPHPExcel->getActiveSheet()->SetCellValue($c . "8", "SIZE $i");
+				$c = \LibraryHelper::getColumnNameFromNumber($i + 31);
+				$objPHPExcel->getActiveSheet()->SetCellValue($c . "8", "SKU SIZE $i");
+				$c = \LibraryHelper::getColumnNameFromNumber($i + 52);
+				$objPHPExcel->getActiveSheet()->SetCellValue($c . "8", "NAME SIZE $i");
 			}
-
+			
 			// Muestra los datos
 			$data = \proveedor\proveedor::getPackingList($po_number);
 			$r = 9;
 			foreach ($data as $row) {
-				for ($i = 1; $i <= 39; $i++) {
+				for ($i = 1; $i <= 85; $i++) {
 					$c = \LibraryHelper::getColumnNameFromNumber($i);
 					$objPHPExcel->getActiveSheet()->SetCellValue($c . $r, $row[$i - 1]);
 				}
@@ -629,292 +636,67 @@
 						$f3->reroute("/invoices?cod_proveedor=$cod_proveedor");
 					}
 					
-					$registros = [];
-					
-					$total_unidades = 0;
-					$total_costo = 0;
-					
+					$pl_id = \LibraryHelper::guid();
+					$filas = [];
 					for ($row = 9; $row <= $lastRow; $row++) {
-						$po_number = $worksheet->getCell("C$row")->getCalculatedValue();
-						$cod_padre = $worksheet->getCell("H$row")->getCalculatedValue();
-						$color = strtoupper(trim($worksheet->getCell("J$row")->getCalculatedValue()));
-						
-						if ($po_number == "") {
-							unlink($key);
-							$f3->set('SESSION.error', "The purchase order number in row $row can not be empty. Please check de file.");
-							$f3->reroute("/invoices?cod_proveedor=$cod_proveedor");
-						}
-						
-						$existe = \proveedor\proveedor::existeFacturaPO($invoiceNumber, $po_number);
-						if ($existe[0] == 0) {
-							unlink($key);
-							$f3->set('SESSION.error', "The purchase order number '$po_number' in row $row is not associated with the invoice number '$invoiceNumber'. Please check de file.");
-							$f3->reroute("/invoices?cod_proveedor=$cod_proveedor");
-						}
-						
-						// Obtiene los datos para la cabecera
-						$etapa = "getPlanData";
-						$datosPlan = \proveedor\proveedor::getPlanData($po_number, $cod_padre, $color);
-						if (!$datosPlan) {
-							unlink($key);
-							//$f3->set('SESSION.error', "The purchase order number '$po_number' with style number '$cod_padre' and color '$color' in row $row does not match any purchase plan. Please check the file and try again.");
-							$f3->set('SESSION.error', "The purchase order number '$po_number' in row $row does not match any purchase plan. Please check the file and try again.");
-							$f3->reroute("/invoices?cod_proveedor=$cod_proveedor");
-						}
-						$etapa = "setVariables";
-						$pi_number = trim($worksheet->getCell("B$row")->getCalculatedValue());
-						$pack_type = trim($worksheet->getCell("E$row")->getCalculatedValue());
-						$initial_lpn = trim($worksheet->getCell("F$row")->getCalculatedValue());
-						$final_lpn = trim($worksheet->getCell("G$row")->getCalculatedValue());
-						
-						if (trim($initial_lpn) == "") {
-							unlink($key);
-							$f3->set('SESSION.error', "The field 'Initial LPN Number' in row $row can not be empty. Please check the file and try again.");
-							$f3->reroute("/invoices?cod_proveedor=$cod_proveedor");
-						}
-						
-						if (trim($final_lpn) == "") {
-							unlink($key);
-							$f3->set('SESSION.error', "The field 'Final LPN Number' in row $row can not be empty. Please check the file and try again.");
-							$f3->reroute("/invoices?cod_proveedor=$cod_proveedor");
-						}
-						
-						// Valida que el prefijo coincida con el tipo de empaque
-						if ($f3->get("PL_VALIDAR_PREFIJO_LPN") == 1) {
-							$prefijo = (strtoupper(trim($pack_type)) == "CURVED") ? "ICC" : "ISC";
-							$prefijo_lpn = strtoupper(substr($initial_lpn, 0, 3));
-							if ($prefijo != $prefijo_lpn) {
-								unlink($key);
-								$f3->set('SESSION.error', "The prefix '$prefijo_lpn' of the initial LPN number in row $row does not correspond to pack type. Please check the file and try again.");
-								$f3->reroute("/invoices?cod_proveedor=$cod_proveedor");
-							}
-							$prefijo_lpn = strtoupper(substr($final_lpn, 0, 3));
-							if ($prefijo != $prefijo_lpn) {
-								unlink($key);
-								$f3->set('SESSION.error', "The prefix '$prefijo_lpn' of the final LPN number in row $row does not correspond to pack type. Please check the file and try again.");
-								$f3->reroute("/invoices?cod_proveedor=$cod_proveedor");
-							}
-						}
-						
-						// Valida que el número de OC del LPN coincida con el del archivo
-						if ($f3->get("PL_VALIDAR_OC_LPN") == 1) {
-							$oc_lpn = \LibraryHelper::convertNumber(substr($initial_lpn, 3, 8));
-							if ($po_number != $oc_lpn) {
-								unlink($key);
-								$f3->set('SESSION.error', "The initial LPN number in row $row does not correspond to Purchase Order $po_number. Please check the file and try again.");
-								$f3->reroute("/invoices?cod_proveedor=$cod_proveedor");
-							}
-							$oc_lpn = \LibraryHelper::convertNumber(substr($final_lpn, 3, 8));
-							if ($po_number != $oc_lpn) {
-								unlink($key);
-								$f3->set('SESSION.error', "The final LPN number in row $row does not correspond to Purchase Order $po_number. Please check the file and try again.");
-								$f3->reroute("/invoices?cod_proveedor=$cod_proveedor");
-							}
-						}
-						
-						// Valida que el número de LPNs coincida con el número de cajas
-						$lpn_i = intval(substr($initial_lpn, -8));
-						$lpn_f = intval(substr($final_lpn, -8));
-						$n_cartons = intval($worksheet->getCell("AD$row")->getCalculatedValue());
-						if ($n_cartons != ($lpn_f - $lpn_i + 1)) {
-							unlink($key);
-							$f3->set('SESSION.error', "The number of LPNs in row $row does not match the number of cartons. Please check the file and try again.");
-							$f3->reroute("/invoices?cod_proveedor=$cod_proveedor");
-						}
-						
-						if ($pi_number != $datosPlan[0][3]) {
-							unlink($key);
-							$f3->set('SESSION.error', "The purchase order number '$po_number' in row $row does not match PI number. Please check the file and try again.");
-							$f3->reroute("/invoices?cod_proveedor=$cod_proveedor");
-						}
-						$etapa = "addRecord";
-						$registros[] = array(
-							"cod_temporada" => $datosPlan[0][0],
-							"dep_depto" => $datosPlan[0][1],
-							"id_color3" => $datosPlan[0][2],
-							"cod_proveedor" => $cod_proveedor,
-							"nro_factura" => $invoiceNumber,
-							"container" => $worksheet->getCell("A$row")->getCalculatedValue(),
-							"pi_number" => $pi_number,
-							"po_number" => $po_number,
-							"bl_fcr" => $worksheet->getCell("D$row")->getCalculatedValue(),
-							"pack_type" => $worksheet->getCell("E$row")->getCalculatedValue(),
-							"initial_lpn" => $initial_lpn,
-							"final_lpn" => $final_lpn,
-							"style_number" => $worksheet->getCell("H$row")->getCalculatedValue(),
-							"style_description" => $worksheet->getCell("I$row")->getCalculatedValue(),
-							"color" => $worksheet->getCell("J$row")->getCalculatedValue(),
-							"size_01" => $worksheet->getCell("K$row")->getCalculatedValue(),
-							"size_02" => $worksheet->getCell("L$row")->getCalculatedValue(),
-							"size_03" => $worksheet->getCell("M$row")->getCalculatedValue(),
-							"size_04" => $worksheet->getCell("N$row")->getCalculatedValue(),
-							"size_05" => $worksheet->getCell("O$row")->getCalculatedValue(),
-							"size_06" => $worksheet->getCell("P$row")->getCalculatedValue(),
-							"size_07" => $worksheet->getCell("Q$row")->getCalculatedValue(),
-							"size_08" => $worksheet->getCell("R$row")->getCalculatedValue(),
-							"size_09" => $worksheet->getCell("S$row")->getCalculatedValue(),
-							"size_10" => $worksheet->getCell("T$row")->getCalculatedValue(),
-							"size_11" => $worksheet->getCell("U$row")->getCalculatedValue(),
-							"size_12" => $worksheet->getCell("V$row")->getCalculatedValue(),
-							"size_13" => $worksheet->getCell("W$row")->getCalculatedValue(),
-							"size_14" => $worksheet->getCell("X$row")->getCalculatedValue(),
-							"size_15" => $worksheet->getCell("Y$row")->getCalculatedValue(),
-							"size_16" => $worksheet->getCell("Z$row")->getCalculatedValue(),
-							"size_17" => $worksheet->getCell("AA$row")->getCalculatedValue(),
-							"n_curves_ctn" => $worksheet->getCell("AB$row")->getCalculatedValue(),
-							"pcs_sets_per_ctn" => $worksheet->getCell("AC$row")->getCalculatedValue(),
-							"n_cartons" => $n_cartons,
-							"total_pcs_sets" => $worksheet->getCell("AE$row")->getCalculatedValue(),
-							"unit_cost" => $worksheet->getCell("AF$row")->getCalculatedValue(),
-							"subtotal_amount" => $worksheet->getCell("AG$row")->getCalculatedValue(),
-							"gw_per_ctn" => $worksheet->getCell("AH$row")->getCalculatedValue(),
-							"sub_gw" => $worksheet->getCell("AI$row")->getCalculatedValue(),
-							"nw_per_ctn" => $worksheet->getCell("AJ$row")->getCalculatedValue(),
-							"sub_nw" => $worksheet->getCell("AK$row")->getCalculatedValue(),
-							"measurement_per_ctn" => $worksheet->getCell("AL$row")->getCalculatedValue(),
-							"sub_volume" => $worksheet->getCell("AM$row")->getCalculatedValue()
-						);
-						
-						$total_unidades += $worksheet->getCell("AE$row")->getCalculatedValue();
-						$total_costo += $worksheet->getCell("AG$row")->getCalculatedValue();
-					}
-					
-					/*// Valida los montos de la factura
-					$etapa = "validateInvoiceAmount";
-					$valor_fila = number_format(\LibraryHelper::convertNumber($data[0][3]), 2, ".", "");
-					$total_costo = number_format($total_costo, 2, ".", "");
-					if ($total_costo !== $valor_fila) {
-						unlink($key);
-						$f3->set('SESSION.error', "The total amount of the packing list ($total_costo) does not match to the total amount of the invoice '$invoiceNumber' ($valor_fila). Please check de file.");
-						$f3->reroute("/invoices?cod_proveedor=$cod_proveedor");
-					}
-					// Valida las unidades de la factura
-					$etapa = "validateInvoiceQuantity";
-					$valor_fila = number_format(\LibraryHelper::convertNumber($data[0][4]), 2, ".", "");
-					$total_unidades = number_format($total_unidades, 2, ".", "");
-					if ($total_unidades != $valor_fila) {
-						unlink($key);
-						$f3->set('SESSION.error', "The quantity of units in the packing list ($total_unidades) does not match to the quantity of units in the invoice '$invoiceNumber' ($valor_fila). Please check de file.");
-						$f3->reroute("/invoices?cod_proveedor=$cod_proveedor");
-					}*/
-					
-					$temp_u = [];
-					$temp_m = [];
-					foreach ($registros as $registro) {
-						$idx = "'" . $registro['po_number'] . "'";
-						if (!array_key_exists($idx, $temp_u)) {
-							$temp_u[$idx] = 0;
-						}
-						if (!array_key_exists($idx, $temp_m)) {
-							$temp_m[$idx] = 0;
-						}
-						$temp_u[$idx] += $registro['total_pcs_sets'];
-						$temp_m[$idx] += $registro['subtotal_amount'];
-					}
-					
-					// Valida los costos por PO
-					/*$etapa = "validatePOAmount";
-					foreach ($temp_m as $llave => $valor) {
-						//TODO: Busca los montos de la PO
-						$r = \proveedor\proveedor::getInfoPO($llave);
-						$valor_po = number_format(\LibraryHelper::convertNumber($r[1]), 2, ".", "");
-						$min_tolerancia = $valor_po * 0.97;
-						$max_tolerancia = $valor_po * 1.03;
-						$valor_pl = number_format(\LibraryHelper::convertNumber($valor), 2, ".", "");
-						//if (!($min_tolerancia <= $valor_pl && $valor_pl <= $max_tolerancia)) {
-						if ($valor_pl >= $max_tolerancia) {
-							unlink($key);
-							$f3->set('SESSION.error', "The total amount in the packing list can not be greater than total amount loaded to purchase order number '$llave'. Please check de file.");
-							$f3->reroute("/invoices?cod_proveedor=$cod_proveedor");
-						}
-					}
-					
-					// Valida las unidades por PO
-					$etapa = "validatePOQuantity";
-					foreach ($temp_u as $llave => $valor) {
-						//TODO: Busca las unidades de la PO
-						$r = \proveedor\proveedor::getInfoPO($llave);
-						$valor_po = number_format(\LibraryHelper::convertNumber($r[0]), 2, ".", "");
-						$min_tolerancia = $valor_po * 0.97;
-						$max_tolerancia = $valor_po * 1.03;
-						$valor_pl = number_format(\LibraryHelper::convertNumber($valor), 2, ".", "");
-						//if (!($min_tolerancia <= $valor_pl && $valor_pl <= $max_tolerancia)) {
-						if ($valor_pl >= $max_tolerancia) {
-							unlink($key);
-							$f3->set('SESSION.error', "The quantity of units in the packing list can not be greater than total units loaded to purchase order number '$llave'. Please check de file.");
-							$f3->reroute("/invoices?cod_proveedor=$cod_proveedor");
-						}
-					}*/
-					
-					$etapa = "clearInvoicePLData";
-					foreach ($registros as $registro) {
-						\proveedor\proveedor::clearInvoicePLData($registro['nro_factura'], $registro['po_number']);
-					}
-					
-					$etapa = "insertInvoicePL";
-					foreach ($registros as $registro) {
-						\proveedor\proveedor::insertInvoicePL(
-							$registro['cod_temporada'],
-							$registro['dep_depto'],
-							$registro['id_color3'],
-							$registro['cod_proveedor'],
-							$registro['nro_factura'],
-							$registro['container'],
-							$registro['pi_number'],
-							$registro['po_number'],
-							$registro['bl_fcr'],
-							$registro['pack_type'],
-							$registro['initial_lpn'],
-							$registro['final_lpn'],
-							$registro['style_number'],
-							$registro['style_description'],
-							$registro['color'],
-							intval($registro['size_01']),
-							intval($registro['size_02']),
-							intval($registro['size_03']),
-							intval($registro['size_04']),
-							intval($registro['size_05']),
-							intval($registro['size_06']),
-							intval($registro['size_07']),
-							intval($registro['size_08']),
-							intval($registro['size_09']),
-							intval($registro['size_10']),
-							intval($registro['size_11']),
-							intval($registro['size_12']),
-							intval($registro['size_13']),
-							intval($registro['size_14']),
-							intval($registro['size_15']),
-							intval($registro['size_16']),
-							intval($registro['size_17']),
-							intval($registro['n_curves_ctn']),
-							$registro['pcs_sets_per_ctn'],
-							$registro['n_cartons'],
-							$registro['total_pcs_sets'],
-							$registro['unit_cost'],
-							$registro['subtotal_amount'],
-							$registro['gw_per_ctn'],
-							$registro['sub_gw'],
-							$registro['nw_per_ctn'],
-							$registro['sub_nw'],
-							$registro['measurement_per_ctn'],
-							$registro['sub_volume']
+						$filas[] = array(
+							"PL_ID" => $pl_id,
+							"NRO_FILA" => $row,
+							"COD_PROVEEDOR" => $cod_proveedor,
+							"NRO_FACTURA" => $invoiceNumber,
+							"CONTAINER" => $worksheet->getCell("A$row")->getCalculatedValue(),
+							"PI_NUMBER" => trim($worksheet->getCell("B$row")->getCalculatedValue()),
+							"PO_NUMBER" => $worksheet->getCell("C$row")->getCalculatedValue(),
+							"BL_FCR" => $worksheet->getCell("D$row")->getCalculatedValue(),
+							"PACK_TYPE" => trim($worksheet->getCell("E$row")->getCalculatedValue()),
+							"INITIAL_LPN_NUMBER" => trim($worksheet->getCell("F$row")->getCalculatedValue()),
+							"FINAL_LPN_NUMBER" => trim($worksheet->getCell("G$row")->getCalculatedValue()),
+							"STYLE_NUMBER" => $worksheet->getCell("H$row")->getCalculatedValue(),
+							"STYLE_DESCRIPTION" => $worksheet->getCell("I$row")->getCalculatedValue(),
+							"COLOR" => $worksheet->getCell("J$row")->getCalculatedValue(),
+							"SIZE_01" => $worksheet->getCell("K$row")->getCalculatedValue(),
+							"SIZE_02" => $worksheet->getCell("L$row")->getCalculatedValue(),
+							"SIZE_03" => $worksheet->getCell("M$row")->getCalculatedValue(),
+							"SIZE_04" => $worksheet->getCell("N$row")->getCalculatedValue(),
+							"SIZE_05" => $worksheet->getCell("O$row")->getCalculatedValue(),
+							"SIZE_06" => $worksheet->getCell("P$row")->getCalculatedValue(),
+							"SIZE_07" => $worksheet->getCell("Q$row")->getCalculatedValue(),
+							"SIZE_08" => $worksheet->getCell("R$row")->getCalculatedValue(),
+							"SIZE_09" => $worksheet->getCell("S$row")->getCalculatedValue(),
+							"SIZE_10" => $worksheet->getCell("T$row")->getCalculatedValue(),
+							"SIZE_11" => $worksheet->getCell("U$row")->getCalculatedValue(),
+							"SIZE_12" => $worksheet->getCell("V$row")->getCalculatedValue(),
+							"SIZE_13" => $worksheet->getCell("W$row")->getCalculatedValue(),
+							"SIZE_14" => $worksheet->getCell("X$row")->getCalculatedValue(),
+							"SIZE_15" => $worksheet->getCell("Y$row")->getCalculatedValue(),
+							"SIZE_16" => $worksheet->getCell("Z$row")->getCalculatedValue(),
+							"SIZE_17" => $worksheet->getCell("AA$row")->getCalculatedValue(),
+							"N_CURVES_CTN" => \LibraryHelper::convertNumber($worksheet->getCell("AB$row")->getCalculatedValue()),
+							"PCS_SETS_PER_CTN" => $worksheet->getCell("AC$row")->getCalculatedValue(),
+							"N_CARTONS" => intval($worksheet->getCell("AD$row")->getCalculatedValue()),
+							"TOTAL_PCS_SETS" => $worksheet->getCell("AE$row")->getCalculatedValue(),
+							"UNIT_COST" => $worksheet->getCell("AF$row")->getCalculatedValue(),
+							"SUB_TOTAL_AMOUNT" => $worksheet->getCell("AG$row")->getCalculatedValue(),
+							"GW_PER_CTN" => $worksheet->getCell("AH$row")->getCalculatedValue(),
+							"SUB_GW" => $worksheet->getCell("AI$row")->getCalculatedValue(),
+							"NW_PER_CTN" => $worksheet->getCell("AJ$row")->getCalculatedValue(),
+							"SUB_NEW" => $worksheet->getCell("AK$row")->getCalculatedValue(),
+							"MEASUREMENT_PER_CTN" => $worksheet->getCell("AL$row")->getCalculatedValue(),
+							"SUB_VOLUME" => $worksheet->getCell("AM$row")->getCalculatedValue()
 						);
 					}
+					$xml = new SimpleXMLElement("<filas />");
+					\LibraryHelper::array_to_xml($filas, $xml, "fila");
+					$clob = $xml->asXML();
+					$data = \proveedor\proveedor::guardarPL($pl_id, $clob);
 					
-					//TODO: Crear detalle LPN
+					if ($data["code"] != 0){
+							unlink($key);
+						$f3->set('SESSION.error', $data["message"]);
+							$f3->reroute("/invoices?cod_proveedor=$cod_proveedor");
+						}
+					
 					\proveedor\proveedor::crearDetalleLPN($cod_proveedor, $invoiceNumber);
-					//$this::crearDetalleLPN($f3, $cod_proveedor, $invoiceNumber);
-					
-					/*$curlopt_url = $f3->get('CURLOPT_URL') . "/facturaComexrst/v1/facturaComex";
-					$curlopt_port = $f3->get('CURLOPT_PORT');
-					
-					$etapa = "sendInvoice";
-					$resp = $this->enviarFacturas($cod_proveedor, $invoiceNumber, $curlopt_url, $curlopt_port);
-					
-					if ($resp != "") {
-						$f3->set('SESSION.warning', "An error occurred while sending the file: $resp");
-						$f3->reroute("/invoices?cod_proveedor=$cod_proveedor");
-					}*/
 					
 				} catch (Exception $e) {
 					$msj = $e->getMessage();
@@ -941,55 +723,6 @@
 			$nro_factura = $f3->get('GET.nro_factura');
 			$etapa = "setFacturaAprobada";
 			try {
-				/*$etapa = "getInvoiceHeader";
-				$facturas = \proveedor\proveedor::getEncabezadoFacturaLPN($cod_proveedor, $nro_factura);
-				$registros = [];
-				foreach ($facturas as $factura) {
-					$nro_factura = $factura[0];
-					$numeroOC = $factura[1];
-					$detalles = \proveedor\proveedor::getDetalleFactura($cod_proveedor, $nro_factura, $numeroOC);
-					foreach ($detalles as $detalle) {
-						$nro_estilo = $detalle[0];
-						$etapa = "getSKUInfo";
-						$color = strtoupper(trim($detalle[22]));
-						$skus = \proveedor\proveedor::getSKU($numeroOC, $nro_estilo, $color);
-						$talla = 0;
-						foreach ($skus as $sku) {
-							$talla++;
-							if ($talla <= 17) {
-								$nro_variacion = $sku[0];
-								$prefijo = strtoupper($detalle[21]);
-								$cantidadEmbarcada = \LibraryHelper::convertNumber($detalle[$talla]);
-								$valorUnitarioFactura = \LibraryHelper::convertNumber($detalle[18]);
-								if ($cantidadEmbarcada > 0) {
-									for ($lpn = $detalle[19]; $lpn <= $detalle[20]; $lpn++) {
-										$etapa = "getSKUInfo_LPN$lpn";
-										$registros[] = array(
-											"cod_temporada" => $detalle[23],
-											"dep_depto" => $detalle[24],
-											"id_color3" => $detalle[25],
-											"lpn_number" => $lpn,
-											"nro_variacion" => $nro_variacion,
-											"nro_factura" => $nro_factura,
-											"pi_number" => $detalle[26],
-											"po_number" => $numeroOC,
-											"costo" => $valorUnitarioFactura,
-											"cantidad" => $cantidadEmbarcada,
-											"prefijo" => $prefijo
-										);
-									}
-								}
-							} else {
-								break;
-							}
-						}
-					}
-				}
-				$etapa = "saveLPNDetail";
-				foreach ($registros as $registro) {
-					$etapa = "saveLPNDetail_" . $registro["po_number"] . "_" . $registro["nro_variacion"];
-					\proveedor\proveedor::saveLPNDetail($registro);
-				}*/
 				\proveedor\proveedor::setFacturaAprobada($cod_proveedor, $nro_factura);
 			} catch (Exception $e) {
 				$msj = $e->getMessage();
@@ -998,71 +731,5 @@
 			}
 			$f3->set('SESSION.success', "Invoice approved correctly.");
 			$f3->reroute("/invoices?cod_proveedor=$cod_proveedor");
-		}
-		
-		private function crearDetalleLPN($f3, $cod_proveedor, $nro_factura) {
-			$etapa = "generateLPNDetail";
-			try {
-				$etapa = "getInvoiceHeader";
-				$facturas = \proveedor\proveedor::getEncabezadoFacturaLPN($cod_proveedor, $nro_factura);
-				$registros = [];
-				foreach ($facturas as $factura) {
-					$nro_factura = $factura[0];
-					$numeroOC = $factura[1];
-					$detalles = \proveedor\proveedor::getDetalleFactura($cod_proveedor, $nro_factura, $numeroOC);
-					foreach ($detalles as $detalle) {
-						$nro_estilo = $detalle[0];
-						$etapa = "getSKUInfo";
-						$color = strtoupper(trim($detalle[22]));
-						$skus = \proveedor\proveedor::getSKU($numeroOC, $nro_estilo, $color);
-						$talla = 0;
-						$nro_contenedor = $detalle[27];
-						$bl = $detalle[28];
-						foreach ($skus as $sku) {
-							$talla++;
-							if ($talla <= 17) {
-								$nro_variacion = $sku[0];
-								$cantidadEmbarcada = \LibraryHelper::convertNumber($detalle[$talla]);
-								$valorUnitarioFactura = \LibraryHelper::convertNumber($detalle[18]);
-								if ($cantidadEmbarcada > 0) {
-									$prefijo = substr($detalle[19], 0, strlen($detalle[19]) - 8);
-									$lpn_i = \LibraryHelper::convertNumber(substr($detalle[19], -8));
-									$lpn_f = \LibraryHelper::convertNumber(substr($detalle[20], -8));
-									for ($lpn = $lpn_i; $lpn <= $lpn_f; $lpn++) {
-										$lpn_new = $prefijo . str_pad($lpn, 8, '0', STR_PAD_LEFT);
-										$etapa = "getSKUInfo_LPN$lpn";
-										$registros[] = array(
-											"cod_temporada" => $detalle[23],
-											"dep_depto" => $detalle[24],
-											"id_color3" => $detalle[25],
-											"lpn_number" => $lpn_new,
-											"nro_variacion" => $nro_variacion,
-											"nro_factura" => $nro_factura,
-											"pi_number" => $detalle[26],
-											"po_number" => $numeroOC,
-											"costo" => $valorUnitarioFactura,
-											"cantidad" => $cantidadEmbarcada,
-											"prefijo" => strtoupper($detalle[21]),
-											"nro_contenedor" => $nro_contenedor,
-											"b_l" => $bl
-										);
-									}
-								}
-							} else {
-								break;
-							}
-						}
-					}
-				}
-				$etapa = "saveLPNDetail";
-				foreach ($registros as $registro) {
-					$etapa = "saveLPNDetail_" . $registro["po_number"] . "_" . $registro["nro_variacion"];
-					\proveedor\proveedor::saveLPNDetail($registro);
-				}
-			} catch (Exception $e) {
-				$msj = $e->getMessage();
-				$f3->set('SESSION.error', "An error occurred while processing the file: $msj ($etapa)");
-				$f3->reroute("/invoices?cod_proveedor=$cod_proveedor");
-			}
 		}
 	}
