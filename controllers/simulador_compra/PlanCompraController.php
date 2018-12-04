@@ -32,8 +32,8 @@ class PlanCompraController extends \Control
         $tempData = html_entity_decode($_REQUEST['models']);
         $json = json_decode($tempData, true);
 
-        // var_dump($json['updated']);
-        // die();
+         // var_dump($json['updated']);
+         // die();
 
         // Recorrer el JSON
         foreach ($json['updated'] as $columna) {
@@ -344,8 +344,8 @@ class PlanCompraController extends \Control
     public function GenerarMatch($f3) {
 
         $array_data = $_GET;
-
         echo \simulador_compra\PlanCompraClass::GenerarMatch($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $array_data["OC"], $array_data["PROFORMA"]);
+
     }
 
     // Match - Agrega Variaciones

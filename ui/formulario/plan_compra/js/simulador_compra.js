@@ -168,6 +168,8 @@ $(function () {
                         var data_conteo_total = sheet_conteo_total.toJSON();
                         var total_registros_listados = data_conteo_total.rows.length;
 
+                        $("#span_data_spreadsheet_total").val(total_registros_listados);
+
                         // Ocultar Columnas
                         var oculta_columna_spread = spreadsheet_conteo_total.activeSheet();
                         oculta_columna_spread.hideColumn(93);
@@ -391,7 +393,7 @@ $(function () {
     // Asigna la estructura visual de la Grilla tipo Excel
     $("#spreadsheet").kendoSpreadsheet({
         columns: 103, //103 Siempre visible
-        //rows: 10,
+        rows: 400,
         //toolbar: true,
         toolbar: {
             data: [
@@ -673,7 +675,7 @@ $(function () {
                 // BLOQUEAR si el usuario es solo de lectura
 
                 // Que llegue la proforma y el estado sea Pendiente de Aprobación sin Match
-                if( (PROFORMA.length==0) || (PROFORMA==null) || (PROFORMA=="") || (ESTADOC1==19) ){
+                if( (PROFORMA.length==0) || (PROFORMA==null) || (PROFORMA=="") || (ESTADOC1!=19) ){
 
                     popupNotification.getNotifications().parent().remove();
                     popupNotification.show(" Seleccione un registro con Proforma,Pendiente de Aprobacion sin Match y OC no Linkeada.", "error");
@@ -814,7 +816,8 @@ $(function () {
                                 dataType: "json",
                                 //type: 'POST',
                                 data:{OC:kendo.parseInt(OC),PROFORMA:String(PROFORMA)}
-                            },update: {
+                            },
+                            update: {
                                 url: "TelerikPlanCompra/ActualizaPlanMATCH",
                                 dataType: "json"
                             }
@@ -833,9 +836,9 @@ $(function () {
 
                         },*/
                         // autoSync: true,
-                        // complete: TerminaCargaPMM
-                        // success: TerminaCargaPMM,
-                        // requestEnd: TerminaCargaPMM,
+                        // complete: TerminaCargaPLAN
+                        // success: TerminaCargaPLAN,
+                        // requestEnd: TerminaCargaPLAN,
                         change: TerminaCargaPLAN,
                         schema: {
                             model: {
@@ -878,14 +881,14 @@ $(function () {
                         var dataPLAN = dataSource_match_plan.data();
                         //alert(data.length);
 
-                    if(dataPMM.length == dataPLAN.length){
+                    if(dataPMM.length != dataPLAN.length){
 
                         // Bloquear todos los BTNs (Falta Bloquear Link del BTN)
                         // $(".k-grid-save-changes").kendoButton({ enable: false }).data("kendoButton").enable(false);
                         // $(".k-grid-cancel-changes").kendoButton({ enable: false }).data("kendoButton").enable(false);
 
                         // Ocultar la Botonera
-                        //$("#grid_match_plan .k-grid-toolbar").hide();
+                        $("#grid_match_plan .k-grid-toolbar").hide();
 
                         popupNotification.getNotifications().parent().remove();
                         popupNotification.show(" La Cantidad de Registros de PMM y PLAN, no son iguales.", "error");
@@ -893,6 +896,82 @@ $(function () {
                     }else{
 
                         // Revisar las diferencia entre PMM y PLAN
+                        /*var revisa_grid_match_pmm = $("#grid_match_pmm").data("kendoGrid");
+                        var revisa_grid_pmm = revisa_grid_match_pmm.dataSource.view();
+
+                        var revisa_grid_match_plan = $("#grid_match_plan").data("kendoGrid");
+                        var revisa_grid_plan = revisa_grid_match_plan.dataSource.view();
+
+                        var flag_errores_match = 0;
+
+                        // El String de Validación (Seba)
+                        // Estilo-CodLinea-CodSubLinea-CodColor
+
+                        // Recorro la tabla de Plan
+                        loop1:
+                        for (var i = 0; i < revisa_grid_plan.length; i++) {
+
+                            var pre_linea = revisa_grid_plan[i].LINEA;
+                            pre_linea = pre_linea.split(' - ');
+                            var compara_linea = pre_linea[0].substring(1, pre_linea[0].length-1);
+
+
+                            var pre_sublinea = revisa_grid_plan[i].SUB_LINEA;
+                            pre_sublinea = pre_sublinea.split(' - ');
+                            var compara_sublinea =  pre_sublinea[0].substring(1, pre_sublinea[0].length-1);
+
+                            var pre_color = revisa_grid_plan[i].COLOR;
+                            pre_color = pre_color.split(' - ');
+                            var compara_color =  pre_color[0].substring(1, pre_color[0].length-1);
+
+                            var compara_estilo = revisa_grid_plan[i].ESTILO;
+
+
+
+                            for (var j = 0; j < revisa_grid_pmm.length; j++) {
+
+                                if( (compara_linea==revisa_grid_pmm[j].NRO_LINEA) && (compara_sublinea==revisa_grid_pmm[j].NRO_SUB_LINEA) && (compara_color==revisa_grid_pmm[j].COD_COLOR) && (compara_estilo==revisa_grid_pmm[j].NOMBRE_ESTILO)  ){
+
+                                    // Remuevo la Clase
+                                     revisa_grid_match_plan.table.find("tr[data-uid='" + revisa_grid_plan[i].uid + "']").removeClass("errormatch-row");
+
+                                    // Se Corrige Error, Quito el flag
+                                    // flag_errores_match--;
+
+                                    // Salir
+                                    // return false;
+                                    // return
+                                     break;
+                                    // break loop1;
+
+                                }else{
+
+                                    // Hay error, Incremento el flag
+                                    flag_errores_match++;
+
+                                    // Coloreo la Celda
+                                    revisa_grid_match_plan.table.find("tr[data-uid='" + revisa_grid_plan[i].uid + "']").addClass("errormatch-row");
+                                    // revisa_grid_match_plan.table.find("tr[data-uid='" + revisa_grid_plan[i].uid + "']").css('background-color', 'red');
+
+                                    // Remover el Item y Agregarlo Arriba
+                                    //revisa_grid_match_plan.dataSource.remove(dataItem);
+                                    //revisa_grid_match_plan.dataSource.insert(0, dataItem);
+
+                                }
+
+
+                            }
+
+
+                            // Fin recorrer la tabla Plan
+                        }
+
+                        // Si hay Errores, oculto el BTN de Match
+                        if(flag_errores_match>0){
+                            $(".k-grid-guardamatch").hide();
+                        }*/
+
+
 
                     }
 
@@ -924,7 +1003,7 @@ $(function () {
                         autoBind:false,
                         dataSource: dataSource_match_plan,
                         dataBound: MatchPlanOnDataBound,
-                        dataBinding: MatchPlanOnDataBinding,
+                        //dataBinding: MatchPlanOnDataBinding,
                         //toolbar: ["save", "cancel"],
                         toolbar: [
                             { name: "save", text: "Actualizar Registros", iconClass: "k-icon k-i-copy" },
@@ -996,7 +1075,7 @@ $(function () {
                                                 popupMatch.data("kendoWindow").close();
 
                                                 // Recargar
-                                                location.reload();
+                                                //location.reload();
 
 
                                             }else{
@@ -1048,6 +1127,7 @@ $(function () {
                     });
 
 
+
                     function MatchPlanOnDataBound(e){
 
                         var revisa_grid_match_pmm = $("#grid_match_pmm").data("kendoGrid");
@@ -1056,18 +1136,71 @@ $(function () {
                         var revisa_grid_match_plan = $("#grid_match_plan").data("kendoGrid");
                         var revisa_grid_plan = revisa_grid_match_plan.dataSource.view();
 
+                        var flag_errores_match = 0;
+
+                        // El String de Validación (Seba)
+                        // Estilo-CodLinea-CodSubLinea-CodColor
+
                         // Recorro la tabla de Plan
+                        loop1:
                         for (var i = 0; i < revisa_grid_plan.length; i++) {
 
+                            var pre_linea = revisa_grid_plan[i].LINEA;
+                                pre_linea = pre_linea.split(' - ');
+                            var compara_linea = pre_linea[0].substring(1, pre_linea[0].length-1);
 
-                            alert(revisa_grid_plan[i].ID);
+                            var pre_sublinea = revisa_grid_plan[i].SUB_LINEA;
+                                pre_sublinea = pre_sublinea.split(' - ');
+                            var compara_sublinea =  pre_sublinea[0].substring(1, pre_sublinea[0].length-1);
+
+                            var pre_color = revisa_grid_plan[i].COLOR;
+                                pre_color = pre_color.split(' - ');
+                            var compara_color =  pre_color[0].substring(1, pre_color[0].length-1);
+
+                            var compara_estilo = revisa_grid_plan[i].ESTILO;
+
+                            loop2:
+                            for (var j = 0; j < revisa_grid_pmm.length; j++) {
+
+                                if( (compara_linea==revisa_grid_pmm[j].NRO_LINEA) && (compara_sublinea==revisa_grid_pmm[j].NRO_SUB_LINEA) && (compara_color==revisa_grid_pmm[j].COD_COLOR) && (compara_estilo==revisa_grid_pmm[j].NOMBRE_ESTILO)  ){
+console.log("O"+i+" "+revisa_grid_plan[i].uid);
+                                    // Remuevo la Clase
+                                    revisa_grid_match_plan.table.find("tr[data-uid='" + revisa_grid_plan[i].uid + "']").removeClass("errormatch-row");
+
+                                    // Hay error, Incremento el flag
+                                    //flag_errores_match=0;
+
+                                    //salgo
+                                    break loop2;
+
+                                }else{
+console.log("E"+i+" "+revisa_grid_plan[i].uid);
+                                    // Coloreo la Celda
+                                    revisa_grid_match_plan.table.find("tr[data-uid='" + revisa_grid_plan[i].uid + "']").addClass("errormatch-row");
+
+                                    // Hay error, Incremento el flag
+                                    flag_errores_match++;
+
+                                    // Remover el Item y Agregarlo Arriba (Pensiente Seba)
+                                    //revisa_grid_match_plan.dataSource.remove(dataItem);
+                                    //revisa_grid_match_plan.dataSource.insert(0, dataItem);
+
+                                }
 
 
-                            /*if (gridData[i].SomeProperty == SomeValue) {
-                                grid.table.find("tr[data-uid='" + gridData[i].uid + "']").addClass("errormatch-row");
-                            }*/
+                            }
+
 
                         // Fin recorrer la tabla Plan
+                        }
+
+
+
+                        // Si hay Errores, oculto el BTN de Match
+                        if(flag_errores_match>0){
+                            $(".k-grid-guardamatch").hide();
+                        }else{
+                            $(".k-grid-guardamatch").show();
                         }
 
 
@@ -1075,11 +1208,12 @@ $(function () {
                     }
 
                     function MatchPlanOnDataBinding(e){
-                        //alert("onDataBinding");
+                        // alert("onDataBinding");
                     }
 
 
-
+                    // Recargar Data Source
+                    // $("#grid_match_plan").data("kendoGrid").dataSource.read();
 
 
                 // Fin Else
