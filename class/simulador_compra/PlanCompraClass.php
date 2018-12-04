@@ -1791,7 +1791,7 @@ class PlanCompraClass extends \parametros
     public static function MatchLlenarGridPMM($temporada, $depto, $login, $oc, $pi,$puerto,$url)
     {
 
-        //$oc = 9146497;
+        $oc = 9146497;
         // Consulta OC Linkeada (Revisar, no se agrega por que se valida antes de levantar popup match)
 
         // Quitar OC Cancelada
@@ -2268,7 +2268,7 @@ class PlanCompraClass extends \parametros
     public static function GenerarMatch($temporada, $depto, $login, $oc, $proforma)
     {
 
-        //$oc = 9146497;
+        $oc = 9146497;
 
         // Prueba de Recepción de GRID Telerik
         //return json_encode("OK");
@@ -2455,7 +2455,7 @@ class PlanCompraClass extends \parametros
         // return json_encode("OK");
         // die();
 
-         //$oc = 9146497;
+         $oc = 9146497;
 
         // Trabajo con las Variaciones
         $sql_agrega_variacion = "begin PLC_PKG_UTILS.PRC_AGREGAR_OC_VARIACION2('" . $oc . "','" . $proforma . "', :error, :data); end;";
