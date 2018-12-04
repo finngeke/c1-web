@@ -1753,10 +1753,11 @@ class PlanCompraClass extends \parametros
 
 
     // Quitar OC Eliminada
-    public static function QuitarOCCancelada($login,$pi)
+    public static function QuitarOCCancelada($login,$pi,$oc)
     {
         $sql = " DELETE FROM B
                  WHERE PI = '" . $pi . "'
+                 OR ORDEN_DE_COMPRA = $oc
                 ";
 
         // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
@@ -1785,11 +1786,11 @@ class PlanCompraClass extends \parametros
     public static function MatchLlenarGridPMM($temporada, $depto, $login, $oc, $pi,$puerto,$url)
     {
 
-        $oc = 9146497;
+        //$oc = 9146497;
         // Consulta OC Linkeada (Revisar, no se agrega por que se valida antes de levantar popup match)
 
         // Quitar OC Cancelada
-        $query_quitar_OC_cancelada = PlanCompraClass::QuitarOCCancelada($login,$pi);
+        $query_quitar_OC_cancelada = PlanCompraClass::QuitarOCCancelada($login,$pi,$oc);
         if ($query_quitar_OC_cancelada == 0) {
             return json_encode("error-No se pudo quitar las OC Canceladas.");
             die();
@@ -1810,17 +1811,17 @@ class PlanCompraClass extends \parametros
 
                         $ordenCompra = $columna[$flag_incremental]->ordenCompra;
                         $PI = $columna[$flag_incremental]->PI;
-                        $nombreEstilo = $columna[$flag_incremental]->nombreEstilo;
+                        $nombreEstilo = trim($columna[$flag_incremental]->nombreEstilo);
                         $numeroEstilo = $columna[$flag_incremental]->numeroEstilo;
                         $estado = $columna[$flag_incremental]->estado;
                         $nombreVariacion = $columna[$flag_incremental]->nombreVariacion;
-                        $numeroVariacion = $columna[$flag_incremental]->numeroVariacion;
+                        $numeroVariacion = trim($columna[$flag_incremental]->numeroVariacion);
                         $color = $columna[$flag_incremental]->color;
-                        $codColor = $columna[$flag_incremental]->codColor;
+                        $codColor = trim($columna[$flag_incremental]->codColor);
                         $nombreLinea = $columna[$flag_incremental]->nombreLinea;
-                        $numeroLinea = $columna[$flag_incremental]->numeroLinea;
+                        $numeroLinea = trim($columna[$flag_incremental]->numeroLinea);
                         $nombreSubLinea = $columna[$flag_incremental]->nombreSubLinea;
-                        $numeroSubLinea = $columna[$flag_incremental]->numeroSubLinea;
+                        $numeroSubLinea = trim($columna[$flag_incremental]->numeroSubLinea);
                         $temporada2 = $columna[$flag_incremental]->temporada;
                         $cicloVida = $columna[$flag_incremental]->cicloVida;
                         $estadoOC = $columna[$flag_incremental]->estadoOC;
@@ -2262,7 +2263,7 @@ class PlanCompraClass extends \parametros
     public static function GenerarMatch($temporada, $depto, $login, $oc, $proforma)
     {
 
-        $oc = 9146497;
+        //$oc = 9146497;
 
         // Prueba de Recepción de GRID Telerik
         //return json_encode("OK");
@@ -2431,51 +2432,6 @@ class PlanCompraClass extends \parametros
             }
 
 
-            
-            // Trabajo con las Variaciones
-            $sql_agrega_variacion = "begin PLC_PKG_UTILS.PRC_AGREGAR_OC_VARIACION2('" . $oc . "','" . $proforma . "', :error, :data); end;";
-                // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
-                if (!file_exists('../archivos/log_querys/' . $login)) {
-                    mkdir('../archivos/log_querys/' . $login, 0775, true);
-                }
-                $stamp = date("Y-m-d_H-i-s");
-                $rand = rand(1, 999);
-                $content = $sql_agrega_variacion;
-                $fp = fopen("../archivos/log_querys/" . $login . "/MATCH-PRC_AGREGAR_OC_VARIACION2--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
-                fwrite($fp, $content);
-                fclose($fp);
-            $data_agrega_variacion = \database::getInstancia()->getConsultaSP($sql_agrega_variacion, 2);
-
-            // Si se pudo realizar el ingreso de la primera variación, continueo con el de la nueva variación
-            if ($data_agrega_variacion) {
-
-                // Agregamos la Nueva Variación
-                $sql_nueva_variacion = "begin PLC_PKG_UTILS.PRC_AGREGAR_NUEVA_VARIACION(" . $temporada . ",'" . $depto . "','" . $oc . "', :error, :data); end;";
-                    // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
-                    if (!file_exists('../archivos/log_querys/' . $login)) {
-                        mkdir('../archivos/log_querys/' . $login, 0775, true);
-                    }
-                    $stamp = date("Y-m-d_H-i-s");
-                    $rand = rand(1, 999);
-                    $content = $sql_nueva_variacion;
-                    $fp = fopen("../archivos/log_querys/" . $login . "/MATCH-PRC_AGREGAR_OC_VARIACION2--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
-                    fwrite($fp, $content);
-                    fclose($fp);
-                $data_nueva_variacion = \database::getInstancia()->getConsultaSP($sql_nueva_variacion, 2);
-                if ($data_nueva_variacion) {
-                    return json_encode("OK");
-                } else {
-                    return json_encode(" No hemos podido agregar la Segunda Variación.");
-                    die();
-                }
-
-
-            } else {
-                return json_encode(" No hemos podido agregar la Primera Variación.");
-                die();
-            }
-
-
         }else{
             return json_encode(" No hemos podido encontrar la información asociada a la Proforma.");
             die();
@@ -2492,28 +2448,48 @@ class PlanCompraClass extends \parametros
         // return json_encode("OK");
         // die();
 
-         $oc = 9146497;
+         //$oc = 9146497;
 
         // Trabajo con las Variaciones
         $sql_agrega_variacion = "begin PLC_PKG_UTILS.PRC_AGREGAR_OC_VARIACION2('" . $oc . "','" . $proforma . "', :error, :data); end;";
+            // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+            if (!file_exists('../archivos/log_querys/' . $login)) {
+                mkdir('../archivos/log_querys/' . $login, 0775, true);
+            }
+            $stamp = date("Y-m-d_H-i-s");
+            $rand = rand(1, 999);
+            $content = $sql_agrega_variacion;
+            $fp = fopen("../archivos/log_querys/" . $login . "/MATCH-PRC_AGREGAR_OC_VARIACION2--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+            fwrite($fp, $content);
+            fclose($fp);
         $data_agrega_variacion = \database::getInstancia()->getConsultaSP($sql_agrega_variacion, 2);
 
         // Si se pudo realizar el ingreso de la primera variación, continueo con el de la nueva variación
         if ($data_agrega_variacion) {
 
             // Agregamos la Nueva Variación
-            $sql = "begin PLC_PKG_UTILS.PRC_AGREGAR_NUEVA_VARIACION(" . $temporada . ",'" . $depto . "','" . $oc . "', :error, :data); end;";
-            $data = \database::getInstancia()->getConsultaSP($sql, 2);
+            $sql_nueva_variacion = "begin PLC_PKG_UTILS.PRC_AGREGAR_NUEVA_VARIACION(" . $temporada . ",'" . $depto . "','" . $oc . "', :error, :data); end;";
+                // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+                if (!file_exists('../archivos/log_querys/' . $login)) {
+                    mkdir('../archivos/log_querys/' . $login, 0775, true);
+                }
+                $stamp = date("Y-m-d_H-i-s");
+                $rand = rand(1, 999);
+                $content = $sql_nueva_variacion;
+                $fp = fopen("../archivos/log_querys/" . $login . "/MATCH-PRC_AGREGAR_NUEVA_VARIACION--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+                fwrite($fp, $content);
+                fclose($fp);
+            $data = \database::getInstancia()->getConsultaSP($sql_nueva_variacion, 2);
             if ($data) {
                 return json_encode("OK");
             } else {
-                return json_encode(" No hemos podido agregar la Segunda Variación.");
+                return json_encode(" Problemas en PRC_AGREGAR_NUEVA_VARIACION.");
                 die();
             }
 
 
-        } else {
-            return json_encode(" No hemos podido agregar la Primera Variación.");
+        } else{
+            return json_encode(" Problemas en PRC_AGREGAR_OC_VARIACION2.");
             die();
         }
 

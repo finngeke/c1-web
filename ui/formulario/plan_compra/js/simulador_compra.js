@@ -1100,7 +1100,7 @@ $(function () {
 
                                 }else{
                                     popupNotification.getNotifications().parent().remove();
-                                    popupNotification.show(" Problemas al Generar Match o Info Devuelta.", "error");
+                                    popupNotification.show(" Problemas al Generar Match o Info Devuelta. "+result, "error");
                                 }
 
 
@@ -1118,7 +1118,7 @@ $(function () {
                                 console.log(customErrorMessage);
 
                                 popupNotification.getNotifications().parent().remove();
-                                popupNotification.show(" Problemas la Transferencia de la Data - MATCH.", "error");
+                                popupNotification.show(" Problemas con la Transferencia de la Data - MATCH.", "error");
 
                             }
                         });
