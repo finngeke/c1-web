@@ -32,8 +32,8 @@ class PlanCompraController extends \Control
         $tempData = html_entity_decode($_REQUEST['models']);
         $json = json_decode($tempData, true);
 
-        // var_dump($json['updated']);
-        // die();
+         // var_dump($json['updated']);
+         // die();
 
         // Recorrer el JSON
         foreach ($json['updated'] as $columna) {
@@ -288,12 +288,12 @@ class PlanCompraController extends \Control
         echo json_encode(\simulador_compra\PlanCompraClass::ListarVentana($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO')));
     }
 
-
+    // Match - Consulta OC Linekada
     public function ConsultaOCLinkeada($f3) {
         echo json_encode(\simulador_compra\PlanCompraClass::ConsultaOCLinkeada($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $f3->get('GET.OC')));
     }
 
-
+    // Match - Listar PMM
     public function MatchLlenarGridPMM($f3) {
 
         $array_data = $_GET;
@@ -306,12 +306,57 @@ class PlanCompraController extends \Control
 
     }
 
+    // Match - Listar PLAN
     public function MatchLlenarGridPlan($f3) {
 
         $array_data = $_GET;
 
         echo json_encode(\simulador_compra\PlanCompraClass::MatchLlenarGridPlan($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $array_data["OC"], $array_data["PROFORMA"], $f3->get('CURLOPT_PORT'), $f3->get('CURLOPT_URL') ));
     }
+
+    // Match - Listar CBX Línea en Match
+    public function ListarLineaCBXMatch($f3) {
+        echo json_encode(\simulador_compra\PlanCompraClass::ListarLineaCBXMatch($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO')));
+    }
+
+    // Match - Listar CBX SubLínea en Match
+    public function ListarSubLineaCBXMatch($f3) {
+        echo json_encode(\simulador_compra\PlanCompraClass::ListarSubLineaCBXMatch($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('GET.ID_LINEA')));
+    }
+
+    // Match - Listar CBX Color enMatch
+    public function ListarColorCBXMatch($f3) {
+        echo json_encode(\simulador_compra\PlanCompraClass::ListarColorCBXMatch($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO')), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    }
+
+    // Match - Actualiza Plan de Compra
+    public function ActualizaPlanMATCH($f3)
+    {
+
+        $array_data = $_GET;
+
+        echo \simulador_compra\PlanCompraClass::ActualizaPlanMATCH($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $array_data["ID"], $array_data["LINEA"], $array_data["SUB_LINEA"], $array_data["ESTILO"], $array_data["COLOR"]);
+
+    // Fin del ActualizaPlanMATCH
+    }
+
+    // Match - Generar Match
+    public function GenerarMatch($f3) {
+
+        $array_data = $_GET;
+        echo \simulador_compra\PlanCompraClass::GenerarMatch($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $array_data["OC"], $array_data["PROFORMA"]);
+
+    }
+
+    // Match - Agrega Variaciones
+    public function GenerarMatchVariaciones($f3) {
+
+        $array_data = $_GET;
+        echo \simulador_compra\PlanCompraClass::GenerarMatchVariaciones($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $array_data["OC"], $array_data["PROFORMA"]);
+
+    }
+
+
 
 
 // Termina Clase

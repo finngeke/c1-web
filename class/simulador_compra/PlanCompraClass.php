@@ -247,6 +247,7 @@ class PlanCompraClass extends \parametros
                     , "N_CURVASXCAJAS" => $va1[104]
                     , "COD_JER2" => $va1[105] //cod_linea
                     , "COD_SUBLIN" => $va1[106]
+                    , "ARCHIVO_BASE" => $va1[107]
 
 
                 )
@@ -267,30 +268,30 @@ class PlanCompraClass extends \parametros
 
         // ############################################# VALIDACIONES #############################################
         // Validar Ventana
-        if (($NOM_VENTANA == null) || ($NOM_VENTANA == "") || ($NOM_VENTANA == "null")) {
-            return "error-(" . $ID_COLOR3 . ") Se ha enviado un registro sin ventana.";
+        /*if (($NOM_VENTANA == null) || ($NOM_VENTANA == "") || ($NOM_VENTANA == "null")) {
+            return json_encode("error-(" . $ID_COLOR3 . ") Se ha enviado un registro sin ventana.");
             die();
         }
 
         // Validar Tipo Empaque
         if (($TIPO_EMPAQUE == null) || ($TIPO_EMPAQUE == "") || ($TIPO_EMPAQUE == "null")) {
-            return "error-(" . $ID_COLOR3 . ") Se ha enviado un empaque vacio.";
+            return json_encode("error-(" . $ID_COLOR3 . ") Se ha enviado un empaque vacio.");
             die();
         }
 
         // Validar que llega la Vía
         if (($NOM_VIA != "MARITIMO") || ($NOM_VIA != "AEREA") || ($NOM_VIA != "TERRESTRE")) {
-            return "error-(" . $ID_COLOR3 . ") El valor enviado en la columna Vía, no corresponde.";
+            return json_encode("error-(" . $ID_COLOR3 . ") El valor enviado en la columna Vía, no corresponde.");
             die();
         }
 
         // Validar que lleguen los datos asociados al curvado
         if (!isset($TIPO_EMPAQUE) || !isset($PORTALLA_1_INI) || !isset($DESTALLA) || !isset($CURVATALLA) || ($UNID_OPCION_INICIO <= 0) || ($SEG_ASIG == null) || ($SEG_ASIG == '')) {
-            return "error-(" . $ID_COLOR3 . ") No pueden estar en blanco los Campos: Tipo Empaque, Porcent Ini,Tallas,Curvas,Und Iniciales.";
+            return json_encode("error-(" . $ID_COLOR3 . ") No pueden estar en blanco los Campos: Tipo Empaque, Porcent Ini,Tallas,Curvas,Und Iniciales.");
             die();
         }
         // ########################################### FIN VALIDACIONES ###########################################
-
+*/
 
         // ############################################# GUARDADO PROFORMA #############################################
         // ############################ (Independiente de Curvado y Otras Actualizaciones) #############################
@@ -308,8 +309,10 @@ class PlanCompraClass extends \parametros
                 // Aplicar guardado de proforma
                 $query_proforma = PlanCompraClass::GuardaProforma($TEMPORADA, $DEPTO, $LOGIN, $PROFORMA, $ID_COLOR3, $sube_archivo);
                 if (!$query_proforma) {
-                    return "error-(" . $ID_COLOR3 . ") No se pudo realizar la actualización de la proforma.";
+                    return json_encode("error-(" . $ID_COLOR3 . ") No se pudo realizar la actualización de la proforma.");
                     die();
+                }else{
+                    return "OK";
                 }
 
 
@@ -323,7 +326,7 @@ class PlanCompraClass extends \parametros
 
         // ############################################# SETEO DE VARIABLES #############################################
         // Validar Campo $COSTO_TARGET
-        $COSTO_TARGET = str_replace(",", ".", $COSTO_TARGET);
+        /*$COSTO_TARGET = str_replace(",", ".", $COSTO_TARGET);
         if (empty($COSTO_TARGET) || (!is_numeric($COSTO_TARGET)) || ($COSTO_TARGET == null) || ($COSTO_TARGET == '')) {
             $COSTO_TARGET = 0;
         }
@@ -376,7 +379,7 @@ class PlanCompraClass extends \parametros
         $query_numero_pais = PlanCompraClass::BuscaNumeroPais($NOM_PAIS);
         $NOM_PAIS_NUMERO = $query_numero_pais[0];
         if (empty($NOM_PAIS_NUMERO)) {
-            return "error-(" . $ID_COLOR3 . ") No pudimos encontrar el nombre de país ingresado, verifique que el texto ingresado existe.";
+            return json_encode("error-(" . $ID_COLOR3 . ") No pudimos encontrar el nombre de país ingresado, verifique que el texto ingresado existe.");
             die();
         }
 
@@ -394,7 +397,7 @@ class PlanCompraClass extends \parametros
 
         // Valido que factor y tipo de cambio no sean cero
         if (($query_factor == 0) && ($query_tipo_cambio == 0)) {
-            return "error-(" . $ID_COLOR3 . ") Factor y Tipo de Cambio llegan en Cero(0).";
+            return json_encode("error-(" . $ID_COLOR3 . ") Factor y Tipo de Cambio llegan en Cero(0).");
             die();
         }
         // ########################################## FIN SETEO DE VARIABLES ############################################
@@ -465,7 +468,7 @@ class PlanCompraClass extends \parametros
         // ################# ACTUALIZAR EN ESTA QUERY, TODOS LOS CAMPO QUE NO REQUIEREN CALCULO ##################
         $query_campos_sin_calculo = PlanCompraClass::ActualizaCampoSinCalculo();
         if (!$query_campos_sin_calculo) {
-            return "error-(" . $ID_COLOR3 . ") No se pudo actualizar el registro.";
+            return json_encode("error-(" . $ID_COLOR3 . ") No se pudo actualizar el registro.");
             die();
         }
 
@@ -481,7 +484,7 @@ class PlanCompraClass extends \parametros
         $query_curva = PlanCompraClass::CalculoCurvadoPlanCompra($TIPO_EMPAQUE, $DESTALLA, $CURVATALLA, $UNID_OPCION_INICIO, $SEG_ASIG, $FORMATO, $A, $B, $C, $I, $DEBUT_REODER, $PORTALLA_1_INI, $DEPTO, $TEMPORADA, $COD_MARCA, $N_CURVASXCAJAS, $COD_JER2, $COD_SUBLIN, $ID_COLOR3, 1);
         // Valido que se pueda realizar la QUERY
         if (!$query_curva) {
-            return "error-(" . $ID_COLOR3 . ") No se pudo buscar curvado.";
+            return json_encode("error-(" . $ID_COLOR3 . ") No se pudo buscar curvado.");
             die();
         }
         $CURVA_UNID_AJUST = $query_curva[0]; //  unid ajust
@@ -493,7 +496,7 @@ class PlanCompraClass extends \parametros
         $CURVA_UNIDAJUSTXTALLA = $query_curva[6]; //  unidadesajustXtalla
         // Valido que lleguen todos los datos de la QUERY
         if (empty($CURVA_UNID_AJUST) || empty($CURVA_POR_AJUSTE) || empty($CURVA_N_CAJAS) || empty($CURVA_UNID_FINAL) || empty($CURVA_PRIMERA_CARGA) || empty($CURVA_TDAS) || empty($CURVA_UNIDAJUSTXTALLA)) {
-            return "error-(" . $ID_COLOR3 . ") No se pudo obtener los datos del curvado, revise la data ingresada.";
+            return json_encode("error-(" . $ID_COLOR3 . ") No se pudo obtener los datos del curvado, revise la data ingresada.");
             die();
         }
 
@@ -542,7 +545,7 @@ class PlanCompraClass extends \parametros
             return "error-(" . $ID_COLOR3 . ") No se pudo ejecutar la función ActualizaPlanCompra.";
             die();
         }
-
+*/
 
     // Fin ProcesaDataPlanCompra
     }
@@ -1750,11 +1753,22 @@ class PlanCompraClass extends \parametros
 
 
     // Quitar OC Eliminada
-    public static function QuitarOCCancelada($pi)
+    public static function QuitarOCCancelada($login,$pi)
     {
         $sql = " DELETE FROM B
                  WHERE PI = '" . $pi . "'
                 ";
+
+        // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+        if (!file_exists('../archivos/log_querys/' . $login)) {
+            mkdir('../archivos/log_querys/' . $login, 0775, true);
+        }
+        $stamp = date("Y-m-d_H-i-s");
+        $rand = rand(1, 999);
+        $content = $sql;
+        $fp = fopen("../archivos/log_querys/" . $login . "/MATCH-QUITAOCCANCELADA--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+        fwrite($fp, $content);
+        fclose($fp);
 
         $data = \database::getInstancia()->getConsulta($sql);
 
@@ -1771,12 +1785,13 @@ class PlanCompraClass extends \parametros
     public static function MatchLlenarGridPMM($temporada, $depto, $login, $oc, $pi,$puerto,$url)
     {
 
+        $oc = 9146497;
         // Consulta OC Linkeada (Revisar, no se agrega por que se valida antes de levantar popup match)
 
         // Quitar OC Cancelada
-        $query_quitar_OC_cancelada = PlanCompraClass::QuitarOCCancelada($pi);
+        $query_quitar_OC_cancelada = PlanCompraClass::QuitarOCCancelada($login,$pi);
         if ($query_quitar_OC_cancelada == 0) {
-            return "error-No se pudo quitar las OC Canceladas.";
+            return json_encode("error-No se pudo quitar las OC Canceladas.");
             die();
         // Se quitaron las OC Canceladas
         }else{
@@ -1784,7 +1799,7 @@ class PlanCompraClass extends \parametros
             // Traer Datos OC desde WS
             $query_trae_datos_oc = json_decode(PlanCompraClass::BrokerTraerDatosOC($pi,$puerto,$url));
             if ($query_trae_datos_oc->Body->fault->faultCode != 0) {
-                return "error-No Conecta a BROKER para Traer Datos OC.";
+                return json_encode("error-No Conecta a BROKER para Traer Datos OC.");
                 die();
             }else{
 
@@ -1819,7 +1834,7 @@ class PlanCompraClass extends \parametros
 
                         $query_agrega_registro_tabla_b = PlanCompraClass::AgregaRegistrosTablaB($temporada, $depto, $login, $oc, $pi, $nombreEstilo, $numeroEstilo,$estado, $nombreVariacion, $numeroVariacion, $color, $codColor, $nombreLinea, $numeroLinea, $nombreSubLinea, $numeroSubLinea, $temporada2, $cicloVida, $estadoOC, $fechaEmbarque, $fechaEta, $unidades, $costo, $moneda, $pais);
                         if ($query_agrega_registro_tabla_b == 0) {
-                            return "error-No se pudo insertar en Tabla B, intente cargar nuevamente.";
+                            return json_encode("error-No se pudo insertar en Tabla B, intente cargar nuevamente.");
                             die();
                         }
 
@@ -1845,15 +1860,15 @@ class PlanCompraClass extends \parametros
                 foreach ($data as $va1) {
                     array_push($array1
                         , array(
-                          "ORDEN_DE_COMPRA" => $va1[0]
-                        , "PI" => $va1[1]
+                          "ORDEN_DE_COMPRA" => trim($va1[0])
+                        , "PI" => trim($va1[1])
                         , "NOMBRE_LINEA" => utf8_encode($va1[2])
-                        , "NRO_LINEA" => $va1[3]
+                        , "NRO_LINEA" => trim($va1[3])
                         , "NOMBRE_SUB_LINEA" => utf8_encode($va1[4])
-                        , "NRO_SUB_LINEA" => utf8_encode($va1[5])
+                        , "NRO_SUB_LINEA" => utf8_encode(trim($va1[5]))
                         , "NOMBRE_ESTILO" => utf8_encode($va1[6])
                         , "NRO_ESTILO" => $va1[7]
-                        , "COLOR" => utf8_encode($va1[8])
+                        , "COLOR" => utf8_encode(trim($va1[8]))
                         , "COD_COLOR" => $va1[9]
                         )
                     );
@@ -1887,6 +1902,7 @@ class PlanCompraClass extends \parametros
                      nvl(C.NOM_SUBLINEA,'Sin Informacion') SUB_LINEA,
                      c.cod_sublin COD_SUBLINEA,
                      nvl(c.DES_ESTILO,'Sin Informacion') ESTILO,
+                     'ND' NRO_ESTILO,
                      nvl(c.Nom_Color,'Sin Informacion') COLOR,
                      c.cod_color COD_COLOR  
                 FROM  plc_plan_compra_color_3 c
@@ -1907,13 +1923,14 @@ class PlanCompraClass extends \parametros
                 , array(
                   "ID" => $va1[0]
                 , "PROFORMA" => $va1[1]
-                , "LINEA" => $va1[2]
-                , "COD_LINEA" => utf8_encode($va1[3])
-                , "SUB_LINEA" => utf8_encode($va1[4])
-                , "COD_SUBLINEA" => utf8_encode($va1[5])
+                , "LINEA" => utf8_encode("(".trim($va1[3]).") - ".trim($va1[2]))
+                , "COD_LINEA" => $va1[3]
+                , "SUB_LINEA" => utf8_encode("(".trim($va1[5]).") - ".trim($va1[4]))
+                , "COD_SUBLINEA" => trim($va1[5])
                 , "ESTILO" => utf8_encode($va1[6])
-                , "COLOR" => utf8_encode($va1[7])
-                , "COD_COLOR" => $va1[8]
+                , "NRO_ESTILO" => $va1[7]
+                , "COLOR" => utf8_encode("(".trim($va1[9]).") - ".trim($va1[8]))
+                , "COD_COLOR" => $va1[9]
                 )
             );
         }
@@ -2101,6 +2118,409 @@ class PlanCompraClass extends \parametros
     }
 
 
+
+
+    // Listar CBX Línea en Match
+    public static function ListarLineaCBXMatch($temporada, $depto)
+    {
+
+        $sql = "SELECT TRIM( L.PRD_LVL_NUMBER ) AS LIN_LINEA,
+                       TRIM( L.PRD_NAME_FULL ) AS LIN_DESCRIPCION
+                FROM   PRDMSTEE         P,
+                       PRDMSTEE         L
+                WHERE  P.PRD_LVL_NUMBER = RPAD('" . $depto . "', 15, ' ' )
+                AND    P.PRD_LVL_CHILD  = L.PRD_LVL_PARENT
+                AND    L.PRD_STATUS = 0
+                ORDER BY 2 ASC
+                ";
+
+        $data = \database::getInstancia()->getFilas($sql);
+        //return $data;
+
+        // Transformo a array asociativo (Para campos de texto utilizar UTF-8)
+        $array1 = [];
+        foreach ($data as $va1) {
+            array_push($array1
+                , array(
+                  "LIN_LINEA" => utf8_encode("(".trim($va1[0]).") - ".trim($va1[1]))        //utf8_encode(trim($va1[0]))
+                , "LIN_DESCRIPCION" => utf8_encode("(".trim($va1[0]).") - ".trim($va1[1]))
+                )
+            );
+        }
+
+        return $array1;
+
+    }
+
+    // Listar CBX SubLinea en Match
+    public static function ListarSubLineaCBXMatch($temporada, $depto, $id_linea)
+    {
+
+        $sql = "SELECT TRIM( L.PRD_LVL_NUMBER ) AS SLI_SUBLINEA,
+                       TRIM( L.PRD_NAME_FULL ) AS SLI_DESCRIPCION
+                FROM   PRDMSTEE         P,
+                       PRDMSTEE         L
+                WHERE  P.PRD_LVL_NUMBER = RPAD( '" . $id_linea . "', 15, ' ' )
+                AND    P.PRD_LVL_CHILD  = L.PRD_LVL_PARENT
+                AND    L.PRD_STATUS = 0
+                ORDER BY 2 ASC
+                ";
+
+        $data = \database::getInstancia()->getFilas($sql);
+        // return $data;
+
+        // Transformo a array asociativo (Para campos de texto utilizar UTF-8)
+        $array1 = [];
+        foreach ($data as $va1) {
+            array_push($array1
+                , array(
+                    "SLI_SUBLINEA" => utf8_encode("(".trim($va1[0]).") - ".trim($va1[1]))   //utf8_encode(trim($va1[0]))
+                , "SLI_DESCRIPCION" => utf8_encode("(".trim($va1[0]).") - ".trim($va1[1]))
+                )
+            );
+        }
+
+        return $array1;
+
+    }
+
+    // Listar CBX Color en Match
+     public static function ListarColorCBXMatch($temporada, $depto)
+    {
+
+        $sql = "SELECT
+                REPLACE(REPLACE(trim(t.codigo),CHR(10),''),CHR(13),'') AS COD_COLOR,
+                convert(REPLACE(REPLACE(INITCAP( t.descripcion),CHR(10),''),CHR(13),''),'utf8','us7ascii') AS NOM_COLOR
+                FROM PLC_MAEDIM T
+                WHERE T.TIPO = 'C'
+                ORDER BY t.descripcion ASC
+                ";
+        $data = \database::getInstancia()->getFilas($sql);
+
+        // Transformo a array asociativo (Para campos de texto utilizar UTF-8)
+        $array1 = [];
+        foreach ($data as $va1) {
+            array_push($array1
+                , array(
+                  "COD_COLOR" => utf8_encode("(".trim($va1[0]).") - ".trim($va1[1]))        //utf8_encode(trim($va1[0]))
+                , "NOM_COLOR" => utf8_encode("(".trim($va1[0]).") - ".trim($va1[1]))
+                )
+            );
+        }
+
+        return $array1;
+
+    }
+
+    // Actualizar Plan de Compra
+    public static function ActualizaPlanMATCH($temporada, $depto, $login, $id_color, $linea, $sublinea, $estilo, $color)
+    {
+
+        $LINEA_EXPLODE = explode(" - ", $linea);
+        $LINEA_REPLACE1 =  str_replace("(","",$LINEA_EXPLODE[0]);
+        $LINEA_REPLACE2 = str_replace(")","",$LINEA_REPLACE1);
+        $LINEA = $LINEA_REPLACE2;
+
+        $SUBLINEA_EXPLODE = explode(" - ", $sublinea);
+        $SUBLINEA_REPLACE1 = str_replace("(","",$SUBLINEA_EXPLODE[0]);
+        $SUBLINEA_REPLACE2 = str_replace(")","",$SUBLINEA_REPLACE1);
+        $SUB_LINEA = $SUBLINEA_REPLACE2;
+
+        $COLOR_EXPLODE = explode(" - ", $color);
+        $COLOR_REPLACE1 = str_replace("(","",$COLOR_EXPLODE[0]);
+        $COLOR_REPLACE2 = str_replace(")","",$COLOR_REPLACE1);
+        $COLOR = $COLOR_REPLACE2;
+
+        $sql = "begin PLC_PKG_DESARROLLO.PRC_UPDATE_COLOR3_OC($temporada,'" . $depto . "',$id_color, '" . $LINEA . "', '" . $SUB_LINEA . "', '" . $estilo . "', '" . $COLOR . "',:error, :data); end;";
+
+        // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+        if (!file_exists('../archivos/log_querys/' . $login)) {
+            mkdir('../archivos/log_querys/' . $login, 0775, true);
+        }
+
+        $stamp = date("Y-m-d_H-i-s");
+        $rand = rand(1, 999);
+        $content = $sql;
+        $fp = fopen("../archivos/log_querys/" . $login . "/MATCH-ACTUALIZACAMPOS--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+        fwrite($fp, $content);
+        fclose($fp);
+
+        $data = \database::getInstancia()->getConsultaSP($sql, 2);
+
+        if ($data) {
+            return 1;
+        } else {
+            return 0;
+        }
+
+
+
+    // Fin del ActualizaPlanMATCH
+    }
+
+    // Generar Match (En estado 19)
+    public static function GenerarMatch($temporada, $depto, $login, $oc, $proforma)
+    {
+
+        $oc = 9146497;
+
+        // Prueba de Recepción de GRID Telerik
+        //return json_encode("OK");
+        //die();
+
+
+        // Traigo la Misma Data del Plan que ve el usuario
+        $sql_trae_data = "SELECT  C.ID_COLOR3,                  
+                                C.DES_ESTILO ESTILO,
+                                C.VENTANA_LLEGADA VENTANA,
+                                C.PROFORMA,
+                                O.PO_NUMBER OC,
+                                C.COD_JER2 LINEA,
+                                C.COD_SUBLIN SUBLINEA,
+                                C.COD_MARCA MARCA,
+                                NVL(COD_COLOR,0) COLOR,
+                                C.ESTADO,
+                                C.NOM_LINEA NOM_LINEA,
+                                C.NOM_SUBLINEA NOM_SUBLINEA,
+                                C.NOM_MARCA NOM_MARCA,
+                                C.NOM_VENTANA NOM_VENTANA,
+                                C.NOM_COLOR NOM_COLOR,
+                                O.ESTADO_MATCH ESTADO_OC
+                            FROM PLC_PLAN_COMPRA_COLOR_3 C
+                            LEFT JOIN PLC_PLAN_COMPRA_OC O ON C.COD_TEMPORADA = O.COD_TEMPORADA
+                                                           AND C.DEP_DEPTO = O.DEP_DEPTO AND C.ID_COLOR3 = O.ID_COLOR3
+                            WHERE C.COD_TEMPORADA = $temporada
+                            AND C.DEP_DEPTO = '" . $depto . "'
+                            AND C.ESTADO = 19
+                            AND C.PROFORMA = '" . $proforma . "' ";
+        $data = \database::getInstancia()->getFilas($sql_trae_data);
+
+        if($data){
+
+            // Recorro los resultados
+            foreach ($data as $va1) {
+
+                // Generar Match                                                                   Estilo        Ventana
+                $sql_genera_match = "begin PLC_PKG_UTILS.PRC_GENERAR_MATCH('" . $proforma . "','" . $va1[1] . "', $va1[2],'" . $depto . "',$temporada,'" . $oc . "', :error, :data); end;";
+                    // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+                    if (!file_exists('../archivos/log_querys/' . $login)) {
+                        mkdir('../archivos/log_querys/' . $login, 0775, true);
+                    }
+                    $stamp = date("Y-m-d_H-i-s");
+                    $rand = rand(1, 999);
+                    $content = $sql_genera_match;
+                    $fp = fopen("../archivos/log_querys/" . $login . "/MATCH-PRC_GENERAR_MATCH--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+                    fwrite($fp, $content);
+                    fclose($fp);
+                $data_genera_match = \database::getInstancia()->getConsultaSP($sql_genera_match, 2);
+
+                if($data_genera_match){
+
+                    // Aprobar Opcion                                                                           ID_COLOR3
+                    $sql_aprobar_opcion = "begin PLC_PKG_UTILS.PRC_APROBACION_PLAN_2($temporada,'" . $depto . "',$va1[0],'" . $proforma . "', :error, :data); end;";
+                    // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+                    if (!file_exists('../archivos/log_querys/' . $login)) {
+                        mkdir('../archivos/log_querys/' . $login, 0775, true);
+                    }
+                    $stamp = date("Y-m-d_H-i-s");
+                    $rand = rand(1, 999);
+                    $content = $sql_aprobar_opcion;
+                    $fp = fopen("../archivos/log_querys/" . $login . "/MATCH-PRC_APROBACION_PLAN_2--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+                    fwrite($fp, $content);
+                    fclose($fp);
+                    $data_aprobar_opcion = \database::getInstancia()->getConsultaSP($sql_aprobar_opcion, 2);
+
+                    if($data_aprobar_opcion){
+
+                        // PLC_PKG_MIGRACION.PRC_LIS_COLOR3_IDCOLOR3                                              ID_COLOR3
+                        $sql_parte2 = "begin PLC_PKG_MIGRACION.PRC_LIS_COLOR3_IDCOLOR3($temporada,'" . $depto . "',$va1[0], :data); end;";
+                        // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+                        if (!file_exists('../archivos/log_querys/' . $login)) {
+                            mkdir('../archivos/log_querys/' . $login, 0775, true);
+                        }
+                        $stamp = date("Y-m-d_H-i-s");
+                        $rand = rand(1, 999);
+                        $content = $sql_parte2;
+                        $fp = fopen("../archivos/log_querys/" . $login . "/MATCH-PRC_LIS_COLOR3_IDCOLOR3--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+                        fwrite($fp, $content);
+                        fclose($fp);
+                        $data_parte2 = \database::getInstancia()->getConsultaSP($sql_parte2, 1);
+
+                        if($data_parte2){
+
+                            // Recorro los resultados de PLC_PKG_MIGRACION.PRC_LIS_COLOR3_IDCOLOR3
+                            foreach ($data_parte2 as $va2) {
+
+                                $sql_historial = "INSERT INTO PLC_PLAN_COMPRA_HISTORICA (
+                                                             DPTO
+                                                            ,LINEA
+                                                            ,SUBLINEA
+                                                            ,MARCA
+                                                            ,ESTILO
+                                                            ,VENTANA
+                                                            ,COLOR
+                                                            ,USER_LOGIN
+                                                            ,USER_NOM
+                                                            ,FECHA
+                                                            ,HORA
+                                                            ,PI
+                                                            ,OC
+                                                            ,ESTADO
+                                                            ,TEMP
+                                                            ,ID_COLOR3
+                                                            ,NOM_LINEA
+                                                            ,NOM_MARCA
+                                                            ,NOM_VENTANA
+                                                            ,NOM_COLOR
+                                                            ,NOM_SUBLINEA)
+                
+                                                     VALUES ('" . $depto . "'
+                                                            ,'" . $va1[5] . "'
+                                                            ,'" . $va1[6] . "'
+                                                            ,$va1[7]
+                                                            ,'" . $va1[1] . "'
+                                                            ,$va1[2]
+                                                            ,$va1[8]
+                                                            ,'" . $login . "'
+                                                            ,(SELECT NOM_USR FROM PLC_USUARIO WHERE COD_USR = '" . $login . "')
+                                                            ,(SELECT SUBSTR(TO_CHAR(SYSDATE, 'DD-MM-YYYY'),1,10)N FROM DUAL)
+                                                            ,(SELECT TO_CHAR(SYSDATE, 'HH24:MI:SS') FROM DUAL)
+                                                            ,'" . $proforma . "'
+                                                            ,'" . $oc . "'
+                                                            ,$va2[1]
+                                                            ,$temporada
+                                                            ,$va1[0]
+                                                            ,'" . $va1[10] . "'
+                                                            ,'" . $va1[11] . "'
+                                                            ,'" . $va1[12] . "'
+                                                            ,'" . $va1[13] . "'
+                                                            ,'" . $va1[14] . "' )";
+                                // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+                                if (!file_exists('../archivos/log_querys/' . $login)) {
+                                    mkdir('../archivos/log_querys/' . $login, 0775, true);
+                                }
+                                $stamp = date("Y-m-d_H-i-s");
+                                $rand = rand(1, 999);
+                                $content = $sql_historial;
+                                $fp = fopen("../archivos/log_querys/" . $login . "/MATCH-PLC_PLAN_COMPRA_HISTORICA--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+                                fwrite($fp, $content);
+                                fclose($fp);
+                                $data_historial = \database::getInstancia()->getConsulta($sql_historial);
+                                //return $data_historial;
+
+                                // Fin del FOREACH2
+                            }
+
+                        }else{
+                            return json_encode(" Problemas en PRC_LIS_COLOR3_IDCOLOR3.");
+                            die();
+                        }
+
+                    }else{
+                        return json_encode(" Problemas en PRC_APROBACION_PLAN_2.");
+                        die();
+                    }
+
+                }else{
+                    return json_encode(" Problemas en PRC_GENERAR_MATCH.");
+                    die();
+                }
+
+
+            // Fin FOREACH
+            }
+
+
+            
+            // Trabajo con las Variaciones
+            $sql_agrega_variacion = "begin PLC_PKG_UTILS.PRC_AGREGAR_OC_VARIACION2('" . $oc . "','" . $proforma . "', :error, :data); end;";
+                // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+                if (!file_exists('../archivos/log_querys/' . $login)) {
+                    mkdir('../archivos/log_querys/' . $login, 0775, true);
+                }
+                $stamp = date("Y-m-d_H-i-s");
+                $rand = rand(1, 999);
+                $content = $sql_agrega_variacion;
+                $fp = fopen("../archivos/log_querys/" . $login . "/MATCH-PRC_AGREGAR_OC_VARIACION2--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+                fwrite($fp, $content);
+                fclose($fp);
+            $data_agrega_variacion = \database::getInstancia()->getConsultaSP($sql_agrega_variacion, 2);
+
+            // Si se pudo realizar el ingreso de la primera variación, continueo con el de la nueva variación
+            if ($data_agrega_variacion) {
+
+                // Agregamos la Nueva Variación
+                $sql_nueva_variacion = "begin PLC_PKG_UTILS.PRC_AGREGAR_NUEVA_VARIACION(" . $temporada . ",'" . $depto . "','" . $oc . "', :error, :data); end;";
+                    // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+                    if (!file_exists('../archivos/log_querys/' . $login)) {
+                        mkdir('../archivos/log_querys/' . $login, 0775, true);
+                    }
+                    $stamp = date("Y-m-d_H-i-s");
+                    $rand = rand(1, 999);
+                    $content = $sql_nueva_variacion;
+                    $fp = fopen("../archivos/log_querys/" . $login . "/MATCH-PRC_AGREGAR_OC_VARIACION2--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+                    fwrite($fp, $content);
+                    fclose($fp);
+                $data_nueva_variacion = \database::getInstancia()->getConsultaSP($sql_nueva_variacion, 2);
+                if ($data_nueva_variacion) {
+                    return json_encode("OK");
+                } else {
+                    return json_encode(" No hemos podido agregar la Segunda Variación.");
+                    die();
+                }
+
+
+            } else {
+                return json_encode(" No hemos podido agregar la Primera Variación.");
+                die();
+            }
+
+
+        }else{
+            return json_encode(" No hemos podido encontrar la información asociada a la Proforma.");
+            die();
+        }
+
+
+    }
+
+    // Generar Match Variacion
+    public static function GenerarMatchVariaciones($temporada, $depto, $login, $oc, $proforma)
+    {
+
+        // Prueba de Recepción de GRID Telerik
+        // return json_encode("OK");
+        // die();
+
+         $oc = 9146497;
+
+        // Trabajo con las Variaciones
+        $sql_agrega_variacion = "begin PLC_PKG_UTILS.PRC_AGREGAR_OC_VARIACION2('" . $oc . "','" . $proforma . "', :error, :data); end;";
+        $data_agrega_variacion = \database::getInstancia()->getConsultaSP($sql_agrega_variacion, 2);
+
+        // Si se pudo realizar el ingreso de la primera variación, continueo con el de la nueva variación
+        if ($data_agrega_variacion) {
+
+            // Agregamos la Nueva Variación
+            $sql = "begin PLC_PKG_UTILS.PRC_AGREGAR_NUEVA_VARIACION(" . $temporada . ",'" . $depto . "','" . $oc . "', :error, :data); end;";
+            $data = \database::getInstancia()->getConsultaSP($sql, 2);
+            if ($data) {
+                return json_encode("OK");
+            } else {
+                return json_encode(" No hemos podido agregar la Segunda Variación.");
+                die();
+            }
+
+
+        } else {
+            return json_encode(" No hemos podido agregar la Primera Variación.");
+            die();
+        }
+
+
+
+
+    }
 
 
 // Fin de la Clase
