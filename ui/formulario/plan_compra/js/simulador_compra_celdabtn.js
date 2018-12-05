@@ -228,6 +228,173 @@ $(function () {
     });
 
 
+    // ############################ CAMBIO DE ESTADO ############################
+
+    // Le da la estructura a la ventana POPUP
+    var ventana_cambio_estado = $("#POPUP_cambio_estado");
+    ventana_cambio_estado.kendoWindow({
+        width: "360px",
+        title: "Cambio de Estado",
+        visible: false,
+        actions: [
+            //"Pin",
+            "Minimize",
+            "Maximize",
+            "Close"
+        ]
+    }).data("kendoWindow").center();
+
+    // Revisamos el cambio de selección en el CBX
+    function verificaCambioEstadoCBX(){
+        var cbxCambioEstado = $("#NuevoEstadoPopUp").val();
+
+        // <option value="0">Crear Modificación</option>
+        // <option value="1">Solicitud Corrección PI</option>
+        // <option value="2">Eliminar Opción</option>
+
+        if(cbxCambioEstado==1){
+            $("#comentSolicitaCorreccionPILI").css("display","");
+        }else{
+            $("#comentSolicitaCorreccionPILI").css("display","none");
+        }
+
+    }
+
+    // Estructura CXB
+    $("#NuevoEstadoPopUp").kendoDropDownList({
+        change : verificaCambioEstadoCBX
+    });
+
+    // Estructura Campo Texto
+    $("#comentSolicitaCorreccionPI").kendoEditor({
+        tools: []
+    });
+
+    // BTN que Genera el Cambio de Estado
+    $("#btn_genera_cambio_estado").on('click', function () {
+
+        var popupNotification = $("#popupNotification").kendoNotification().data("kendoNotification");
+
+        var respuesta = confirm("¿Quiere realizar los cambios?");
+
+        if (respuesta == true) {
+
+            var url_cambio_estado = 'TelerikPlanCompra/ModificaEstadoDinamico';
+            var url_cambio_estado_coreccion = 'TelerikPlanCompra/ModificaEstadoDinamicoCorreccion';
+
+            // Seteo Variables
+            var ID_COLOR3 = "";
+            var PROFORMA = "";
+            var ESTADOC1 = "";
+
+            // Obterer las celdas seleccionadas
+            var spreadsheet_id_color3 = $("#spreadsheet").data("kendoSpreadsheet");
+            var sheet = spreadsheet_id_color3.activeSheet();
+            var range = sheet.selection();
+
+            // Traigo el Valor del CBX
+            var cbxCambioEstadoSeleccionado = $("#NuevoEstadoPopUp").val();
+            // Traigo el Valor eel Comentario
+            var comentarioEstadoSeleccionado = $("#comentSolicitaCorreccionPI").val();
+
+            range.forEachCell(function (row, column, value) {
+
+                var fila_id = row+1;
+                var range_color3 = sheet.range("A"+fila_id);
+                ID_COLOR3 = range_color3.values();
+                var range_proforma = sheet.range("CD"+fila_id);
+                PROFORMA = range_proforma.values();
+                var range_oc = sheet.range("CH"+fila_id);
+                OC = range_oc.values();
+                var range_estadoc1 = sheet.range("CP"+fila_id);
+                ESTADOC1 = range_estadoc1.values();
+
+                // Crear Modificación
+                if(cbxCambioEstadoSeleccionado == 0){
+
+                    // estado_c1 != 24 && Proforma
+                    if( (ESTADOC1!=24) && (PROFORMA.length>0) ){
+
+                        //$.getJSON(url_cambio_estado, {ID_COLOR3: ID_COLOR3, ESTADO_INSERT: 0, PROFORMA: PROFORMA, ESTADO_UPDATE: 3});
+
+                        $.ajax({
+                            //type: "POST",
+                            url: url_cambio_estado,
+                            data: {ID_COLOR3: kendo.parseInt(ID_COLOR3), ESTADO_INSERT: kendo.parseInt(0), PROFORMA: String(PROFORMA), ESTADO_UPDATE: kendo.parseInt(3)},
+                            // contentType: "application/json",
+                            dataType: "json"
+                        });
+
+
+                    }else{
+
+                        // Descripción - Color
+                        // Agregar al arreglo de errores
+
+                    }
+
+
+                // Solicitud Corrección PI
+                }else if(cbxCambioEstadoSeleccionado == 1){
+
+                    // estado_c1 == 18
+                    if( ESTADOC1==18){
+
+                        // $.getJSON(url_cambio_estado_coreccion, {ID_COLOR3: ID_COLOR3, ESTADO_INSERT: 23, PROFORMA: PROFORMA, ESTADO_UPDATE: 5, COMENTARIO: comentarioEstadoSeleccionado});
+
+                        $.ajax({
+                            //type: "POST",
+                            url: url_cambio_estado_coreccion,
+                            data: {ID_COLOR3: kendo.parseInt(ID_COLOR3), ESTADO_INSERT: kendo.parseInt(24), PROFORMA: String(PROFORMA), ESTADO_UPDATE: kendo.parseInt(4), COMENTARIO: String(comentarioEstadoSeleccionado)},
+                            // contentType: "application/json",
+                            dataType: "json"
+                        });
+
+                    }else{
+
+                        // Descripción - Color
+                        // Agregar al arreglo de errores
+
+                    }
+
+
+                 // Eliminar Opción
+                }else if(cbxCambioEstadoSeleccionado == 2){
+
+                    // estado_c1 != 21 && Proforma
+                    if( (ESTADOC1!=21) && (PROFORMA.length>0) ){
+
+                        // $.getJSON(url_cambio_estado, {ID_COLOR3: ID_COLOR3, ESTADO_INSERT: 24, PROFORMA: PROFORMA, ESTADO_UPDATE: 4});
+
+                        $.ajax({
+                            //type: "POST",
+                            url: url_cambio_estado,
+                            data: {ID_COLOR3: kendo.parseInt(ID_COLOR3), ESTADO_INSERT: kendo.parseInt(24), PROFORMA: String(PROFORMA), ESTADO_UPDATE: kendo.parseInt(4)},
+                            // contentType: "application/json",
+                            dataType: "json"
+                        });
+
+                    }else{
+
+                        // Descripción - Color
+                        // Agregar al arreglo de errores
+
+                    }
+
+                }
+
+
+            });
+
+            // Al Finalizar los cambios de estado
+            popupNotification.getNotifications().parent().remove();
+            popupNotification.show(" Favor de Revisar los Estados.", "info");
+
+        // Si el usuario no acepta realizar cambios
+        } else {
+            popupNotification.getNotifications().parent().remove();
+            popupNotification.show(" No se han realizado Cambios de Estado.", "info");
+        }
 
 
 
@@ -235,4 +402,16 @@ $(function () {
 
 
 
+
+
+    });
+
+
+
+
+
+
+
+
+// Fin de la función
 });

@@ -168,8 +168,6 @@ $(function () {
                         var data_conteo_total = sheet_conteo_total.toJSON();
                         var total_registros_listados = data_conteo_total.rows.length;
 
-                        $("#span_data_spreadsheet_total").val(total_registros_listados);
-
                         // Ocultar Columnas
                         var oculta_columna_spread = spreadsheet_conteo_total.activeSheet();
                         oculta_columna_spread.hideColumn(93);
@@ -403,9 +401,8 @@ $(function () {
                     imageUrl: "../web/telerik/content/web/toolbar/save.png",
                     //spriteCssClass: "k-icon k-font-icon k-i-cog",
                     click: function() {
-                        //window.alert("custom tool");
-                        var myWindow = $("#POPUP_carga_archivo_pi");
-                        myWindow.data("kendoWindow").open();
+
+
                     }
                 }
             ]
@@ -415,7 +412,7 @@ $(function () {
             name: "Nombre Pestaña",
             dataSource: dataSource,
             columns: [
-                {width: 80},
+                {width: 20},
                 {width: 100},
                 {width: 100},
                 {width: 150},
@@ -474,23 +471,25 @@ $(function () {
     var spreadsheet_contextual = $("#spreadsheet").data("kendoSpreadsheet");
     var menu_celda_archivopi = spreadsheet_contextual._controller.cellContextMenu;
     menu_celda_archivopi.append([
-        { cssClass: "k-separator" },
+        /*{ cssClass: "k-separator" },
         { text: "Historial" },
         { text: "Ajuste Compra" },
         { text: "Ajuste N° Cajas" },
-        { text: "Detalle Error" },
+        { text: "Detalle Error" },*/
         { cssClass: "k-separator" },
         { text: "Descarga Archivo PI" },
         { text: "Cargar Archivo PI" },
         { cssClass: "k-separator" },
-        { text: "Match" }
+        { text: "Match" },
+        { cssClass: "k-separator" },
+        { text: "Cambio Estado" }
     ]);
     menu_celda_archivopi.bind("select",
         function (e) {
 
             var command = $(e.item).text();
 
-            // Busco el ID_COLOR3
+            // Seteo Variable
             var ID_COLOR3 = "";
             var DEBUTREORDER = "";
             var PROFORMA = "";
@@ -511,6 +510,7 @@ $(function () {
 
 
             range.forEachCell(function (row, column, value) {
+
                 //console.log(row, column, value);
 
                 var fila_id = row+1;
@@ -531,102 +531,8 @@ $(function () {
 
             });
 
+
             // NO ejecutar acciones cuando el ID_COLOR3 = 0, vacio o null
-
-            if(command == "Historial") {
-
-                if( (ID_COLOR3=="ID") || (ID_COLOR3=="") || (ID_COLOR3==null) || (ID_COLOR3.length==0) ){
-                    popupNotification.getNotifications().parent().remove();
-                    popupNotification.show(" Historial no disponible para este registro.", "error");
-                }else{
-
-                    // Levantar el POPUP
-                    var popupHistorial = $("#POPUP_historial");
-                    popupHistorial.data("kendoWindow").open();
-
-                    // Antes de volver a cargar la data, reseteo lo existente
-                    $("#grid_popup_historial").data("kendoGrid").dataSource.data([]);
-
-                    // Seteo DataSet
-                    var dataSource_historial = new kendo.data.DataSource({
-                        transport: {
-                            read:  {
-                                url: "TelerikPlanCompra/ListarHistorial",
-                                dataType: "json",
-                                //type: 'POST',
-                                data:{ID_COLOR3: kendo.parseInt(ID_COLOR3)}
-                            }
-                        }
-                    });
-
-                    // Asigno el DataSet al Grid
-                    var spreadsheet_hist = $("#grid_popup_historial").data("kendoGrid");
-                    spreadsheet_hist.setDataSource(dataSource_historial, [
-                        { field: "FECHA", title: "FECHA" },
-                        { field: "HORA", title: "HORA" },
-                        { field: "USUARIO", title: "USUARIO" },
-                        { field: "ESTADO", title: "ESTADO" }
-                    ]);
-
-
-                }
-
-
-
-            }
-
-            if(command == "Ajuste Compra") {
-
-                if( (ID_COLOR3=="ID") || (ID_COLOR3=="") || (ID_COLOR3==null) || (DEBUTREORDER=="REORDER")){
-                    popupNotification.getNotifications().parent().remove();
-                    popupNotification.show(" Las opciones REORDER no tienen ajuste de compra.", "error");
-                }else{
-
-                    // Levantar el POPUP
-                    var popupAjusteCompra = $("#POPUP_ajuste_compra");
-                    popupAjusteCompra.data("kendoWindow").open();
-
-                    // Antes de volver a cargar la data, reseteo lo existente
-                    $("#POPUP_ajuste_compra").data("kendoGrid").dataSource.data([]);
-
-                    // Seteo DataSet
-                    var dataSource_ajuste_compra = new kendo.data.DataSource({
-                        transport: {
-                            read:  {
-                                url: "TelerikPlanCompra/ListarHistorial",
-                                dataType: "json",
-                                data:{ID_COLOR3: kendo.parseInt(ID_COLOR3)}
-                            }
-                        }
-                    });
-
-                    // Asigno el DataSet al Grid
-                    var spreadsheet_ajuste_compra = $("#POPUP_ajuste_compra").data("kendoGrid");
-                    spreadsheet_ajuste_compra.setDataSource(dataSource_ajuste_compra, [
-                        { field: "FECHA", title: "FECHA" },
-                        { field: "HORA", title: "HORA" },
-                        { field: "USUARIO", title: "USUARIO" },
-                        { field: "ESTADO", title: "ESTADO" }
-                    ]);
-
-
-
-                // Fin del else
-                }
-
-
-
-            }
-
-            if(command == "Ajuste N° Cajas") {
-                var popupAjusteCajas = $("#POPUP_ajuste_cajas");
-                popupAjusteCajas.data("kendoWindow").open();
-            }
-
-            if(command == "Detalle Error") {
-                var popupDetalleError = $("#POPUP_detalle_error");
-                popupDetalleError.data("kendoWindow").open();
-            }
 
             if(command == "Descarga Archivo PI") {
 
@@ -1043,7 +949,7 @@ $(function () {
                                 /*e.success(result.Updated, "update");
                                 e.success(result.Created, "create");
                                 e.success(result.Destroyed, "destroy");*/
-alert(result);
+
                                 if(result=="OK"){
 
                                     // Avisamos que el Match se encuentra OK
@@ -1092,7 +998,7 @@ alert(result);
                                             console.log(customErrorMessage);
 
                                             popupNotification.getNotifications().parent().remove();
-                                            popupNotification.show(" Problemas la Transferencia de la Data - VARIACIONES.", "error");
+                                            popupNotification.show(" Problemas la Transferencia de la Data - VARIACIONES. "+result, "error");
 
                                         }
                                     });
@@ -1163,7 +1069,7 @@ alert(result);
                             for (var j = 0; j < revisa_grid_pmm.length; j++) {
 
                                 if( (compara_linea==revisa_grid_pmm[j].NRO_LINEA) && (compara_sublinea==revisa_grid_pmm[j].NRO_SUB_LINEA) && (compara_color==revisa_grid_pmm[j].COD_COLOR) && (compara_estilo==revisa_grid_pmm[j].NOMBRE_ESTILO)  ){
-console.log("O"+i+" "+revisa_grid_plan[i].uid);
+// console.log("O"+i+" "+revisa_grid_plan[i].uid);
                                     // Remuevo la Clase
                                     revisa_grid_match_plan.table.find("tr[data-uid='" + revisa_grid_plan[i].uid + "']").removeClass("errormatch-row");
 
@@ -1174,7 +1080,7 @@ console.log("O"+i+" "+revisa_grid_plan[i].uid);
                                     break loop2;
 
                                 }else{
-console.log("E"+i+" "+revisa_grid_plan[i].uid);
+// console.log("E"+i+" "+revisa_grid_plan[i].uid);
                                     // Coloreo la Celda
                                     revisa_grid_match_plan.table.find("tr[data-uid='" + revisa_grid_plan[i].uid + "']").addClass("errormatch-row");
 
@@ -1222,7 +1128,35 @@ console.log("E"+i+" "+revisa_grid_plan[i].uid);
 
             }
 
+            if(command == "Cambio Estado") {
 
+
+                if( (ID_COLOR3=="ID") || (ID_COLOR3=="") || (ID_COLOR3==null) || (ID_COLOR3.length==0) ){
+                    popupNotification.getNotifications().parent().remove();
+                    popupNotification.show(" Cambio Estado no disponible para este registro.", "error");
+                }else{
+
+                    // Levantar el POPUP
+                    var popupCambioEstado = $("#POPUP_cambio_estado");
+                    popupCambioEstado.data("kendoWindow").open();
+
+                    // Seteo TextArea en Blanco
+                    $("#comentSolicitaCorreccionPI").val("");
+
+                    /*range.forEachCell(function (row, column, value) {
+                        console.log(row);
+                    });*/
+
+
+
+                }
+
+
+
+
+
+            // Fin del IF Cambio de Estado
+            }
 
 
 
