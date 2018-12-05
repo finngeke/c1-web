@@ -230,10 +230,14 @@ $(function () {
 
     // ############################ CAMBIO DE ESTADO ############################
 
+    function cerrarPopUpCambioEstado(){
+        location.reload();
+    }
+
     // Le da la estructura a la ventana POPUP
     var ventana_cambio_estado = $("#POPUP_cambio_estado");
     ventana_cambio_estado.kendoWindow({
-        width: "360px",
+        width: "550px",
         title: "Cambio de Estado",
         visible: false,
         actions: [
@@ -241,7 +245,8 @@ $(function () {
             "Minimize",
             "Maximize",
             "Close"
-        ]
+        ],
+        close: cerrarPopUpCambioEstado
     }).data("kendoWindow").center();
 
     // Revisamos el cambio de selección en el CBX
@@ -270,6 +275,35 @@ $(function () {
         tools: []
     });
 
+    $("#gridErrorCambioEstado").kendoGrid({
+        dataSource: {
+            schema: {
+                model: {
+                    fields: {
+                        DESCRIPCION: { type: "string" },
+                        COLOR: { type: "string" },
+                        MOTIVO: { type: "string" }
+                    }
+                }
+            },
+            pageSize: 20
+        },
+        height: 250,
+        scrollable: true,
+        sortable: true,
+        /*pageable: {
+            input: true,
+            numeric: false
+        },*/
+        columns: [
+            { field: "DESCRIPCION" },
+            { field: "COLOR" },
+            { field: "MOTIVO" }
+        ]
+    });
+
+
+
     // BTN que Genera el Cambio de Estado
     $("#btn_genera_cambio_estado").on('click', function () {
 
@@ -279,13 +313,20 @@ $(function () {
 
         if (respuesta == true) {
 
+            // Ocultar el BTN
+            $("#btn_genera_cambio_estado").hide();
+
+
             var url_cambio_estado = 'TelerikPlanCompra/ModificaEstadoDinamico';
             var url_cambio_estado_coreccion = 'TelerikPlanCompra/ModificaEstadoDinamicoCorreccion';
 
             // Seteo Variables
             var ID_COLOR3 = "";
             var PROFORMA = "";
+            var OC = "";
             var ESTADOC1 = "";
+            var DESCRIPCION = "";
+            var COLOR = "";
 
             // Obterer las celdas seleccionadas
             var spreadsheet_id_color3 = $("#spreadsheet").data("kendoSpreadsheet");
@@ -296,6 +337,9 @@ $(function () {
             var cbxCambioEstadoSeleccionado = $("#NuevoEstadoPopUp").val();
             // Traigo el Valor eel Comentario
             var comentarioEstadoSeleccionado = $("#comentSolicitaCorreccionPI").val();
+
+           // Var Arreglo Errores
+            var arregloErrores = [];
 
             range.forEachCell(function (row, column, value) {
 
@@ -308,6 +352,10 @@ $(function () {
                 OC = range_oc.values();
                 var range_estadoc1 = sheet.range("CP"+fila_id);
                 ESTADOC1 = range_estadoc1.values();
+                var range_descripcion = sheet.range("J"+fila_id);
+                DESCRIPCION = range_descripcion.values();
+                var range_color = sheet.range("AA"+fila_id);
+                COLOR = range_color.values();
 
                 // Crear Modificación
                 if(cbxCambioEstadoSeleccionado == 0){
@@ -330,6 +378,7 @@ $(function () {
 
                         // Descripción - Color
                         // Agregar al arreglo de errores
+                        arregloErrores.push({"DESCRIPCION": String(DESCRIPCION), "COLOR": String(COLOR), "MOTIVO": "Estado Eliminado o Sin Proforma"});
 
                     }
 
@@ -354,6 +403,7 @@ $(function () {
 
                         // Descripción - Color
                         // Agregar al arreglo de errores
+                        arregloErrores.push({"DESCRIPCION": String(DESCRIPCION), "COLOR": String(COLOR), "MOTIVO": "Estado distinto a: Compra Confirmada con PI"});
 
                     }
 
@@ -378,6 +428,7 @@ $(function () {
 
                         // Descripción - Color
                         // Agregar al arreglo de errores
+                        arregloErrores.push({"DESCRIPCION": String(DESCRIPCION), "COLOR": String(COLOR), "MOTIVO": "Estado Aprobado o Sin Proforma"});
 
                     }
 
@@ -386,9 +437,29 @@ $(function () {
 
             });
 
+
+            // Desplegar Grilla con Info
+            //console.log(arregloErrores);
+            if(arregloErrores.length > 0){
+
+                $("#resumenErrorCorreccionPILI").css("display","");
+
+                var gridtest = $("#gridErrorCambioEstado").data("kendoGrid");
+                var sel = gridtest.select();
+                var sel_idx = sel.index();
+                var item = gridtest.dataItem(sel);              // Get the item
+                var idx = gridtest.dataSource.indexOf(item);    // Get the index in the DataSource (not in current page of the grid)
+                arregloErrores.forEach(function(err, index) {
+                    gridtest.dataSource.insert(idx + 1, { DESCRIPCION: err.DESCRIPCION, COLOR: err.COLOR, MOTIVO: err.MOTIVO });
+                });
+            }else{
+                $("#resumenErrorCorreccionPILI").css("display","none");
+            }
+
             // Al Finalizar los cambios de estado
             popupNotification.getNotifications().parent().remove();
             popupNotification.show(" Favor de Revisar los Estados.", "info");
+
 
         // Si el usuario no acepta realizar cambios
         } else {
