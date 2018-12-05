@@ -1,5 +1,4 @@
 <span id="span_data_temp_depto" name="span_data_temp_depto" style="display: none;">{{@depto_form}}-{{@NOM_TEMPORADA_CORTO}}</span>
-<span id="span_data_spreadsheet_total" name="span_data_spreadsheet_total" style="display: none;"></span>
 <div id="div_grilla_telerik_pc">
     <!-- Despliega el menú del top simulador_compra_menu_top.ja-->
     <div id="toolbar_plan_compra" class="demo-section k-content wide"></div>
@@ -57,6 +56,35 @@
                 <div id="grid_match_plan" style="width: 100%; float: left;"></div>
 
     </div>
+
+
+    <!-- POPUP Cambio Estado -->
+    <div id="POPUP_cambio_estado">
+        <ul id="fieldlist_cambio_estado">
+            <li>
+                <label for="NuevoEstadoPopUp">Estado:</label>
+                <select id="NuevoEstadoPopUp" style="width: 100%;" >
+                    <option value="0">Crear Modificación</option>
+                    <option value="1">Solicitud Corrección PI</option>
+                    <option value="2">Eliminar Opción</option>
+                </select>
+            </li>
+            <li id="comentSolicitaCorreccionPILI" style="display: none">
+                <br>
+                <label for="comentSolicitaCorreccionPI">Comentario:</label>
+                <textarea id="comentSolicitaCorreccionPI" rows="10" cols="30" style="height:220px" aria-label="comentSolicitaCorreccionPI"></textarea>
+            </li>
+            <li>
+                <br>
+                <input name="btn_genera_cambio_estado" id="btn_genera_cambio_estado" type="button" aria-label="btn_genera_cambio_estado" value="Generar Cambio Estado"/>
+            </li>
+        </ul>
+    </div>
+
+
+
+
+
 
 
 
