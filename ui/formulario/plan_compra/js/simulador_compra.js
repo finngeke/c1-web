@@ -22,6 +22,13 @@ $(function () {
                 e.success(result.Updated, "update");
                 e.success(result.Created, "create");
                 e.success(result.Destroyed, "destroy");
+
+                // Recargar PlanCompra
+                var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
+                var sheet = spreadsheet.activeSheet();
+                sheet.dataSource.read();
+
+
             },
             error: function (xhr, httpStatusMessage, customErrorMessage) {
                 alert(xhr.responseText);
