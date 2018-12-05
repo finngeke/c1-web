@@ -190,8 +190,8 @@ $(function () {
             "Minimize",
             "Maximize",
             "Close"
-        ],
-        close: cerrarPopUpMATCH
+        ]/*,
+        close: cerrarPopUpMATCH*/
     }).data("kendoWindow").center();
 
     // Le da la estructura a la grilla pmm
@@ -231,7 +231,13 @@ $(function () {
     // ############################ CAMBIO DE ESTADO ############################
 
     function cerrarPopUpCambioEstado(){
-        location.reload();
+
+        // location.reload();
+
+        var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
+        var sheet = spreadsheet.activeSheet();
+        sheet.dataSource.read();
+
     }
 
     // Le da la estructura a la ventana POPUP

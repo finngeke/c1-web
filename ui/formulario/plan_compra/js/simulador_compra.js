@@ -403,6 +403,7 @@ $(function () {
                     click: function() {
 
 
+
                     }
                 }
             ]
@@ -412,7 +413,7 @@ $(function () {
             name: "Nombre Pestaña",
             dataSource: dataSource,
             columns: [
-                {width: 20},
+                {width: 40},
                 {width: 100},
                 {width: 100},
                 {width: 150},
@@ -974,8 +975,9 @@ $(function () {
                                                 // Se Registró MATCH y Variaciones
 
                                                 // Recargo el DATASOURCE
-                                                //$("#spreadsheet").data("kendoSpreadsheet").dataSource.read();
-                                                //$("#spreadsheet").data("kendoSpreadsheet").refresh();
+                                                var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
+                                                var sheet = spreadsheet.activeSheet();
+                                                sheet.dataSource.read();
 
                                                 // Cierro el POPUP de MATCH
                                                 popupMatch.data("kendoWindow").close();
