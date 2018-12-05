@@ -357,6 +357,25 @@ class PlanCompraController extends \Control
     }
 
 
+    // ######################## INICIO Trabajo con flujo de aprobación ########################
+
+    public function ModificaEstadoDinamico($f3) {
+
+        $array_data = $_GET;
+
+        echo \simulador_compra\PlanCompraClass::ModificaEstadoDinamico($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $array_data["ID_COLOR3"], $array_data["ESTADO_INSERT"], $array_data["PROFORMA"], $array_data["ESTADO_UPDATE"]);
+
+    }
+
+    public function ModificaEstadoDinamicoCorreccion($f3) {
+
+        $array_data = $_GET;
+
+        echo \simulador_compra\PlanCompraClass::ModificaEstadoDinamicoCorreccion($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $array_data["ID_COLOR3"], $array_data["ESTADO_INSERT"], $array_data["PROFORMA"], $array_data["ESTADO_UPDATE"], $array_data["COMENTARIO"]);
+
+    }
+
+    // ######################## FIN Trabajo con flujo de aprobación ########################
 
 
 // Termina Clase
