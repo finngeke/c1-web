@@ -12,7 +12,7 @@ class PlanCompraClass extends \parametros
 {
 
     // Lista el Plan de Compra, según temporada seleccionada
-    public static function ListarPlanCompra($temporada, $depto)
+    public static function ListarPlanCompra($temporada, $depto, $login,$CURLOPT_PORT,$CURLOPT_URL)
     {
 
         $sql = "SELECT
@@ -111,7 +111,7 @@ class PlanCompraClass extends \parametros
                 convert((SELECT nom_est_c1 FROM plc_estado_c1 WHERE cod_est_c1= C.ESTADO),'utf8','us7ascii')CODESTADO,  -- 92 Estado Opcion
                 C.ESTADO ESTADO_C1,              -- 93 Estado C1
                 C.VENTANA_LLEGADA,               -- 94 Ventana Llegada
-                -- REPLACE((SELECT DISTINCT FECHA_RECEPCD FROM plc_ventana_emb V WHERE V.cod_temporada = C.COD_TEMPORADA AND V.cod_ventana = C.VENT_EMB),'/','-') FECHA_RECEPCD_C1 -- 95 Fecha recepcion CD
+               
                 C.PROFORMA PROFORMA_BASE,         -- 95 Proforma Base
                 C.TIPO_EMPAQUE TIPO_EMPAQUE_BASE, -- 96 Tipo empaque Base
                 C.UNID_OPCION_INICIO UNI_INICIALES_BASE,  -- 97 Unidades Iniciales Base
@@ -125,8 +125,8 @@ class PlanCompraClass extends \parametros
                 C.N_CURVASXCAJAS,                         -- 104 N_CURVASXCAJAS
                 C.COD_JER2,                               -- 105 cod_linea
                 C.COD_SUBLIN,                             -- 106 cod_sublin
-                O.ARCHIVO ARCHIVO_BASE                    -- 107 Archivo
-                
+                O.ARCHIVO ARCHIVO_BASE,                    -- 107 Archivo
+                REPLACE((SELECT DISTINCT FECHA_RECEPCD FROM plc_ventana_emb V WHERE V.cod_temporada = C.COD_TEMPORADA AND V.cod_ventana = C.VENT_EMB),'/','-') FECHA_RECEPCD_C1 -- 95 Fecha recepcion CD
                 FROM PLC_PLAN_COMPRA_COLOR_3 C
                 LEFT JOIN PLC_PLAN_COMPRA_OC O ON C.COD_TEMPORADA = O.COD_TEMPORADA
 				AND C.DEP_DEPTO = O.DEP_DEPTO AND C.ID_COLOR3 = O.ID_COLOR3
@@ -134,10 +134,152 @@ class PlanCompraClass extends \parametros
                 ORDER BY C.ID_COLOR3, C.COD_JER2,C.COD_SUBLIN,C.COD_ESTILO,NVL(COD_COLOR,0) ,C.VENTANA_LLEGADA,C.DEBUT_REODER";
 
         $data = \database::getInstancia()->getFilas($sql);
+        $dtPIs =[];$dt2021 =[];
 
         // Transformo a array asociativo (Para campos de texto utilizar UTF-8)
         $array1 = [];
         foreach ($data as $va1) {
+
+            #region Vista oc + Cambio de estado Automatica
+            $proforma = utf8_encode($va1["PROFORMA"]);$orden_compra = ""; $estadoOc = "";$f_embarque = "";$f_eta = "";$f_recepcion = "";$dias_atrasado = ""; $_exist = false; $ESTADO= $va1["ESTADO_C1"];$nom_estado= $va1["CODESTADO"];$estilo_pmm = utf8_encode($va1["ESTILO_PMM"]);$estado_match = utf8_encode($va1["ESTADO_MATCH"]);
+            if ($proforma <> 'null' and $proforma <> null and $proforma <> '0' and $proforma <> '' and
+                ($va1["ESTADO_C1"] == 18 or $va1["ESTADO_C1"] == 19 or $va1["ESTADO_C1"] == 22)) {
+
+                //si ya paso por esta pi
+                foreach ($dtPIs as $valor){
+                    if ($valor[0] == $proforma){
+                        $_exist = true;
+                        $orden_compra =$valor[1];
+                        $estadoOc = $valor[2];
+                        $f_embarque =$valor[3];
+                        $f_eta = $valor[4];
+                        $f_recepcion = $valor[5];
+                        $dias_atrasado = $valor[6];
+                        $ESTADO = $valor[7];
+                        $nom_estado =  $valor[8];
+                    }
+                }
+                if ($_exist == false) {
+                    //extracion broker por pi
+                    $dt = json_decode(\simulador_compra\PlanCompraClass::TraerDatosOC2($proforma,0, $CURLOPT_PORT, $CURLOPT_URL));
+
+                    if (($dt->Body->fault->faultCode == 0) and (count($dt->Body->detalleConsultaOrdenCompra->detalle)) > 0) {
+                        $orden_compra = $dt->Body->detalleConsultaOrdenCompra->detalle[0]->ordenCompra;
+                        $estadoOc = $dt->Body->detalleConsultaOrdenCompra->detalle[0]->estadoOC;
+                        $f_embarque = $dt->Body->detalleConsultaOrdenCompra->detalle[0]->fechaEmbarque;
+                        $f_eta = $dt->Body->detalleConsultaOrdenCompra->detalle[0]->fechaEta;
+                        $f_recepcion = date("d-m-Y", (strtotime(date($f_eta) . "+ 15 days")));
+
+                        try {
+                            $datetime1 = date_create($f_recepcion);
+                            $datetime2 = date_create($va1["FECHA_RECEPCD_C1"]);
+                            $interval = date_diff($datetime2, $datetime1);
+                            $dias_atrasado = $interval->format('%R%a');
+                        } catch (Exception $e) {
+                            $dias_atrasado = "";
+                        }
+
+                        $ESTADO = 19;
+                        $nom_estado =  "Pendiente de Aprobacion sin Match";
+                        //actualizamos el flujo de estado automatico
+                        \simulador_compra\PlanCompraClass::UpdateEstavoVistaOC($temporada
+                            , $depto
+                            , $va1["ESTADO_C1"]
+                            , $login
+                            , $orden_compra
+                            , $proforma
+                            , $estadoOc);
+                    }
+                    array_push($dtPIs, array($proforma, $orden_compra, $estadoOc, $f_embarque, $f_eta, $f_recepcion, $dias_atrasado,$ESTADO,$nom_estado));
+                }
+            }
+            elseif (($va1["ESTADO_C1"] == 20 or $va1["ESTADO_C1"] == 21) and $va1["PO_NUMBER"] <> null and $va1["PO_NUMBER"] <> ''){$_exist2 = false;
+                //si ya paso por esta oc
+                foreach ($dt2021 as $valor){
+                    if ($valor[1] == $va1["PO_NUMBER"]){
+                        $_exist2 = true;
+                        if ($valor[4] == ""){
+                            $orden_compra ="";
+                        }else{
+                            $orden_compra =$valor[1];
+                        }
+                        $estadoOc = $valor[2];
+                        $f_embarque =$valor[3];
+                        $f_eta = $valor[4];
+                        $f_recepcion = $valor[5];
+                        $dias_atrasado = $valor[6];
+                        $ESTADO = $valor[7];
+                        $nom_estado =  $valor[8];
+                        $estilo_pmm =  $valor[9];
+                        $estado_match =  $valor[10];
+                    }
+                }
+                if ($_exist2 == false){
+                    //extracion broker por oc
+                    $dt = \simulador_compra\PlanCompraClass::TraerDatosOC3(utf8_encode($va1["PO_NUMBER"]));
+                    if(count($dt) > 0) {
+                        if ($dt[0]["COD_ESTADO"] == 7){
+                            //actualizamos el flujo de estado automatico con oc estado cancelado
+                            \simulador_compra\PlanCompraClass::UpdateEstavoVistaOC($temporada, $depto, $va1["ESTADO_C1"], $login, utf8_encode($va1["PO_NUMBER"]), $proforma, "");
+                            $orden_compra =  "";
+                            $estadoOc =  "";
+                            $f_embarque = "";
+                            $f_eta =  "";
+                            $f_recepcion =  "";
+                            $dias_atrasado =  "";
+                            $ESTADO= 0;
+                            $nom_estado= "Ingresado";
+                            $estilo_pmm = "";
+                            $estado_match="";
+                            ;
+                            array_push($dt2021, array($proforma, $va1["PO_NUMBER"], $estadoOc, $f_embarque, $f_eta, $f_recepcion, $dias_atrasado,$ESTADO,$nom_estado,$estilo_pmm,$estado_match));
+                        }
+                        elseif ($va1["ESTADO_C1"] == 20 and $dt[0]["COD_ESTADO"] == 4 and $dt[0]["COD_ESTADO"] == 5 and $dt[0]["COD_ESTADO"] == 6 ){
+                            $estadoOc = $dt[0]["NOM_ESTADO"];
+                            $orden_compra =  utf8_encode($va1["PO_NUMBER"]);
+                            $f_embarque = utf8_encode($va1["FECHA_EMBARQUE"]);
+                            $f_eta =  utf8_encode($va1["FECHA_ETA"]);
+                            $f_recepcion =  utf8_encode($va1["FECHA_RECEPCION"]);
+                            $dias_atrasado =  utf8_encode($va1["DIAS_ATRASO"]);
+                            $ESTADO= 21;
+                            $nom_estado= "Aprobado";
+                            //actualizamos el flujo de estado automatico
+                            \simulador_compra\PlanCompraClass::UpdateEstavoVistaOC($temporada
+                                , $depto
+                                , $va1["ESTADO_C1"]
+                                , $login
+                                , $orden_compra
+                                , $proforma
+                                , $estadoOc);
+                            array_push($dt2021, array($proforma, $va1["PO_NUMBER"], $estadoOc, $f_embarque, $f_eta, $f_recepcion, $dias_atrasado,$ESTADO,$nom_estado,$estilo_pmm,$estado_match));
+                        }
+                        else{
+                            $orden_compra = $va1["PO_NUMBER"];
+                            $estadoOc = ($va1["ESTADO_OC"]<> null ? ($va1["ESTADO_OC"]) :"");
+                            $f_embarque =$va1["FECHA_EMBARQUE"];
+                            $f_eta = $va1["FECHA_ETA"];
+                            $f_recepcion = $va1["FECHA_RECEPCION"];
+                            $dias_atrasado = ($va1["DIAS_ATRASO"]<> null ? ($va1["DIAS_ATRASO"]) :"");
+                            $ESTADO= $va1["ESTADO_C1"];
+                            $nom_estado= $va1["CODESTADO"];
+                            array_push($dt2021, array($proforma, $va1["PO_NUMBER"], $estadoOc, $f_embarque, $f_eta, $f_recepcion, $dias_atrasado,$ESTADO,$nom_estado,$estilo_pmm,$estado_match));
+                        }
+                    }
+                    else{
+                        $orden_compra = $va1["PO_NUMBER"];
+                        $estadoOc = ($va1["ESTADO_OC"]<> null ? ($va1["ESTADO_OC"]) :"");
+                        $f_embarque =$va1["FECHA_EMBARQUE"];
+                        $f_eta = $va1["FECHA_ETA"];
+                        $f_recepcion = $va1["FECHA_RECEPCION"];
+                        $dias_atrasado = ($va1["DIAS_ATRASO"]<> null ? ($va1["DIAS_ATRASO"]) :"");
+                        $ESTADO= $va1["ESTADO_C1"];
+                        $nom_estado= $va1["CODESTADO"];
+                        array_push($dt2021, array($proforma, utf8_encode($va1["PO_NUMBER"]), $estadoOc, $f_embarque, $f_eta, $f_recepcion, $dias_atrasado,$ESTADO,$nom_estado));
+                    }
+                }
+            }
+#endregion
+
             array_push($array1
                 , array(
                     "ID_COLOR3" => $va1[0]
@@ -149,109 +291,111 @@ class PlanCompraClass extends \parametros
                 , "ESTILO" => utf8_encode($va1[6])
                 , "SHORT_NAME" => $va1[7]
                 , "ID_CORPORATIVO" => $va1[8]
-                    , "DESCMODELO" => utf8_encode($va1[9])
-                    , "DESCRIP_INTERNET" => utf8_encode($va1[10])
-                    , "NOMBRE_COMPRADOR" => utf8_encode($va1[11])
-                    , "NOMBRE_DISENADOR" => utf8_encode($va1[12])
-                    , "COMPOSICION" => utf8_encode($va1[13])
-                    , "TIPO_TELA" => utf8_encode($va1[14])
-                    , "FORRO" => utf8_encode($va1[15])
-                    , "COLECCION" => utf8_encode($va1[16])
-                    , "EVENTO" => utf8_encode($va1[17])
-                    , "COD_ESTILO_VIDA" => utf8_encode($va1[18])
-                    , "CALIDAD" => utf8_encode($va1[19])
-                    , "COD_OCASION_USO" => utf8_encode($va1[20])
-                    , "COD_PIRAMIX" => utf8_encode($va1[21])
-                    , "NOM_VENTANA" => utf8_encode($va1[22]) //ventana
-                    , "COD_RANKVTA" => utf8_encode($va1[23])
-                    , "LIFE_CYCLE" => utf8_encode($va1[24])
-                    , "NUM_EMB" => utf8_encode($va1[25])
-                    , "COD_COLOR" => utf8_encode($va1[26])
-                    , "TIPO_PRODUCTO" => utf8_encode($va1[27])
-                    , "TIPO_EXHIBICION" => utf8_encode($va1[28])
-                    , "DESTALLA" => utf8_encode($va1[29])
-                    , "TIPO_EMPAQUE" => utf8_encode($va1[30])
-                    , "PORTALLA_1_INI" => utf8_encode($va1[31])
-                    , "PORTALLA_1" => utf8_encode($va1[32])
-                    , "CURVATALLA" => utf8_encode($va1[33])
-                    , "CURVAMIN" => utf8_encode($va1[34])
-                    , "UNID_OPCION_INICIO" => $va1[35]
-                    , "UNID_OPCION_AJUSTADA" => $va1[36]
-                    , "CAN" => $va1[37]
-                    , "MTR_PACK" => $va1[38]
-                    , "CANT_INNER" => $va1[39]
-                    , "SEG_ASIG" => utf8_encode($va1[40])
-                    , "FORMATO" => utf8_encode($va1[41])
-                    , "TDAS" => utf8_encode($va1[42])
-                    , "A" => $va1[43]
-                    , "B" => $va1[44]
-                    , "C" => $va1[45]
-                    , "I" => $va1[46]
-                    , "UND_ASIG_INI" => $va1[47]
-                    , "ROT" => $va1[48]
-                    , "NOM_PRECEDENCIA" => utf8_encode($va1[49])
-                    , "NOM_VIA" => utf8_encode($va1[50])
-                    , "NOM_PAIS" => utf8_encode($va1[51])
-                    , "VIAJE" => utf8_encode($va1[52])
-                    , "MKUP" => utf8_encode($va1[53])
-                    , "PRECIO_BLANCO" => $va1[54]
-                    , "OFERTA" => utf8_encode($va1[55])
-                    , "GM" => $va1[56]
-                    , "COD_TIP_MON" => utf8_encode($va1[57])
-                    , "COSTO_TARGET" => $va1[58]
-                    , "COSTO_FOB" => $va1[59]
-                    , "COSTO_INSP" => $va1[60]
-                    , "COSTO_RFID" => $va1[61]
-                    , "ROYALTY_POR" => $va1[62]
-                    , "COSTO_UNIT" => $va1[63]
-                    , "COSTO_UNITS" => $va1[64]
-                    , "CST_TOTLTARGET" => $va1[65]
-                    , "COSTO_TOT" => $va1[66]
-                    , "COSTO_TOTS" => $va1[67]
-                    , "RETAIL" => $va1[68]
-                    , "DEBUT_REODER" => utf8_encode($va1[69])
-                    , "SEM_INI" => $va1[70]
-                    , "SEM_FIN" => $va1[71]
-                    , "CICLO" => utf8_encode($va1[72])
-                    , "AGOT_OBJ" => $va1[73]
-                    , "SEMLIQ" => $va1[74]
-                    , "ALIAS_PROV" => utf8_encode($va1[75])
-                    , "COD_PROVEEDOR" => utf8_encode($va1[76])
-                    , "COD_TRADER" => utf8_encode($va1[77])
-                    , "AFTER_MEETING_REMARKS" => utf8_encode($va1[78])
-                    , "CODSKUPROVEEDOR" => utf8_encode($va1[79])
-                    , "SKU" => utf8_encode($va1[80])
-                    , "PROFORMA" => utf8_encode($va1[81])
-                    , "ARCHIVO" => utf8_encode($va1[82])
-                    , "ESTILO_PMM" => utf8_encode($va1[83])
-                    , "ESTADO_MATCH" => utf8_encode($va1[84])
-                    , "PO_NUMBER" => utf8_encode($va1[85])
-                    , "ESTADO_OC" => utf8_encode($va1[86])
-                    , "FECHA_ACORDADA" => utf8_encode($va1[87])
-                    , "FECHA_EMBARQUE" => utf8_encode($va1[88])
-                    , "FECHA_ETA" => utf8_encode($va1[89])
-                    , "FECHA_RECEPCION" => utf8_encode($va1[90])
-                    , "DIAS_ATRASO" => $va1[91]
-                    , "CODESTADO" => utf8_encode($va1[92])
-                    , "ESTADO_C1" => $va1[93]
-                    , "VENTANA_LLEGADA" => utf8_encode($va1[94])
-                    , "PROFORMA_BASE" => utf8_encode($va1[95])
-                    , "TIPO_EMPAQUE_BASE" => utf8_encode($va1[96])
-                    , "UNI_INICIALES_BASE" => $va1[97]
-                    , "PRECIO_BLANCO_BASE" => $va1[98]
-                    , "COSTO_TARGET_BASE" => $va1[99]
-                    , "COSTO_FOB_BASE" => $va1[100]
-                    , "COSTO_INSP_BASE" => $va1[101]
-                    , "COSTO_RFID_BASE" => $va1[102]
-                    , "COD_MARCA" => $va1[103]
-                    , "N_CURVASXCAJAS" => $va1[104]
-                    , "COD_JER2" => $va1[105] //cod_linea
-                    , "COD_SUBLIN" => $va1[106]
-                    , "ARCHIVO_BASE" => $va1[107]
+                , "DESCMODELO" => utf8_encode($va1[9])
+                , "DESCRIP_INTERNET" => utf8_encode($va1[10])
+                , "NOMBRE_COMPRADOR" => utf8_encode($va1[11])
+                , "NOMBRE_DISENADOR" => utf8_encode($va1[12])
+                , "COMPOSICION" => utf8_encode($va1[13])
+                , "TIPO_TELA" => utf8_encode($va1[14])
+                , "FORRO" => utf8_encode($va1[15])
+                , "COLECCION" => utf8_encode($va1[16])
+                , "EVENTO" => utf8_encode($va1[17])
+                , "COD_ESTILO_VIDA" => utf8_encode($va1[18])
+                , "CALIDAD" => utf8_encode($va1[19])
+                , "COD_OCASION_USO" => utf8_encode($va1[20])
+                , "COD_PIRAMIX" => utf8_encode($va1[21])
+                , "NOM_VENTANA" => utf8_encode($va1[22]) //ventana
+                , "COD_RANKVTA" => utf8_encode($va1[23])
+                , "LIFE_CYCLE" => utf8_encode($va1[24])
+                , "NUM_EMB" => utf8_encode($va1[25])
+                , "COD_COLOR" => utf8_encode($va1[26])
+                , "TIPO_PRODUCTO" => utf8_encode($va1[27])
+                , "TIPO_EXHIBICION" => utf8_encode($va1[28])
+                , "DESTALLA" => utf8_encode($va1[29])
+                , "TIPO_EMPAQUE" => utf8_encode($va1[30])
+                , "PORTALLA_1_INI" => utf8_encode($va1[31])
+                , "PORTALLA_1" => utf8_encode($va1[32])
+                , "CURVATALLA" => utf8_encode($va1[33])
+                , "CURVAMIN" => utf8_encode($va1[34])
+                , "UNID_OPCION_INICIO" => $va1[35]
+                , "UNID_OPCION_AJUSTADA" => $va1[36]
+                , "CAN" => $va1[37]
+                , "MTR_PACK" => $va1[38]
+                , "CANT_INNER" => $va1[39]
+                , "SEG_ASIG" => utf8_encode($va1[40])
+                , "FORMATO" => utf8_encode($va1[41])
+                , "TDAS" => utf8_encode($va1[42])
+                , "A" => $va1[43]
+                , "B" => $va1[44]
+                , "C" => $va1[45]
+                , "I" => $va1[46]
+                , "UND_ASIG_INI" => $va1[47]
+                , "ROT" => $va1[48]
+                , "NOM_PRECEDENCIA" => utf8_encode($va1[49])
+                , "NOM_VIA" => utf8_encode($va1[50])
+                , "NOM_PAIS" => utf8_encode($va1[51])
+                , "VIAJE" => utf8_encode($va1[52])
+                , "MKUP" => utf8_encode($va1[53])
+                , "PRECIO_BLANCO" => $va1[54]
+                , "OFERTA" => utf8_encode($va1[55])
+                , "GM" => $va1[56]
+                , "COD_TIP_MON" => utf8_encode($va1[57])
+                , "COSTO_TARGET" => $va1[58]
+                , "COSTO_FOB" => $va1[59]
+                , "COSTO_INSP" => $va1[60]
+                , "COSTO_RFID" => $va1[61]
+                , "ROYALTY_POR" => $va1[62]
+                , "COSTO_UNIT" => $va1[63]
+                , "COSTO_UNITS" => $va1[64]
+                , "CST_TOTLTARGET" => $va1[65]
+                , "COSTO_TOT" => $va1[66]
+                , "COSTO_TOTS" => $va1[67]
+                , "RETAIL" => $va1[68]
+                , "DEBUT_REODER" => utf8_encode($va1[69])
+                , "SEM_INI" => $va1[70]
+                , "SEM_FIN" => $va1[71]
+                , "CICLO" => utf8_encode($va1[72])
+                , "AGOT_OBJ" => $va1[73]
+                , "SEMLIQ" => $va1[74]
+                , "ALIAS_PROV" => utf8_encode($va1[75])
+                , "COD_PROVEEDOR" => utf8_encode($va1[76])
+                , "COD_TRADER" => utf8_encode($va1[77])
+                , "AFTER_MEETING_REMARKS" => utf8_encode($va1[78])
+                , "CODSKUPROVEEDOR" => utf8_encode($va1[79])
+                , "SKU" => utf8_encode($va1[80])
+                , "PROFORMA" => utf8_encode($va1[81])
+                , "ARCHIVO" => utf8_encode($va1[82])
+                , "ESTILO_PMM" => utf8_encode($estilo_pmm)
+                , "ESTADO_MATCH" => utf8_encode($estado_match)
+                , "PO_NUMBER" => utf8_encode($orden_compra)
+                , "ESTADO_OC" => utf8_encode($estadoOc)
+                , "FECHA_ACORDADA" => $va1[87]
+                , "FECHA_EMBARQUE" => $f_embarque
+                , "FECHA_ETA" => $f_eta
+                , "FECHA_RECEPCION" => $f_recepcion
+                , "DIAS_ATRASO" => $dias_atrasado
+                , "CODESTADO" => utf8_encode($nom_estado)
+                , "ESTADO_C1" => $ESTADO
+                , "VENTANA_LLEGADA" => utf8_encode($va1[94])
+                , "PROFORMA_BASE" => utf8_encode($va1[95])
+                , "TIPO_EMPAQUE_BASE" => utf8_encode($va1[96])
+                , "UNI_INICIALES_BASE" => $va1[97]
+                , "PRECIO_BLANCO_BASE" => $va1[98]
+                , "COSTO_TARGET_BASE" => $va1[99]
+                , "COSTO_FOB_BASE" => $va1[100]
+                , "COSTO_INSP_BASE" => $va1[101]
+                , "COSTO_RFID_BASE" => $va1[102]
+                , "COD_MARCA" => $va1[103]
+                , "N_CURVASXCAJAS" => $va1[104]
+                , "COD_JER2" => $va1[105] //cod_linea
+                , "COD_SUBLIN" => $va1[106]
+                , "ARCHIVO_BASE" => $va1[107]
 
 
                 )
             );
+
+
         }
 
 
@@ -261,10 +405,377 @@ class PlanCompraClass extends \parametros
 
     }
 
+    //extraer datos orden de compra poc OC o PI
+    public static function TraerDatosOC2($pi,$oc,$puerto,$url){
+        $curl = curl_init();
+
+
+
+        if ($pi){
+            $oc = "";
+        }elseif($oc){
+            $pi = "";
+        }
+
+        curl_setopt_array($curl, array(
+            CURLOPT_PORT => $puerto,
+            CURLOPT_URL => $url . "/consultaOrdenComprarst/v1/consultaOrdenCompra",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            //CURLOPT_POSTFIELDS => "{\n\t\"HeaderRply\": {\n\t\t\"servicio\": {\n\t\t\t\"nombreServicio\": \"string\",\n\t\t\t\"operacion\": \"string\",\n\t\t\t\"idTransaccion\": \"string\",\n\t\t\t\"tipoMensaje\": \"string\",\n\t\t\t\"tipoTransaccion\": \"string\",\n\t\t\t\"usuario\": \"string\",\n\t\t\t\"dominioPais\": \"string\",\n\t\t\t\"ipOrigen\": \"string\",\n\t\t\t\"servidor\": \"string\",\n\t\t\t\"timeStamp\": \"string\"\n\t\t},\n\t\t\"paginacion\": {\n\t\t\t\"numPagina\": \"string\",\n\t\t\t\"cantidadRegistros\": \"string\",\n\t\t\t\"totalRegistros\": \"string\"\n\t\t},\n\t\t\"track\": {\n\t\t\t\"idTrack\": \"string\",\n\t\t\t\"codSistema\": \"string\",\n\t\t\t\"codAplicacion\": \"string\",\n\t\t\t\"componente\": \"string\",\n\t\t\t\"estado\": \"string\",\n\t\t\t\"dataLogger\": \"string\",\n\t\t\t\"flagTracking\": \"string\",\n\t\t\t\"flagLog\": \"string\"\n\t\t},\n\t\t\"error\": [\n\t\t\t{\n\t\t\t\t\"errorCode\": \"string\",\n\t\t\t\t\"errorGlosa\": \"string\"\n\t\t\t}\n\t\t],\n\t\t\"reproceso\": {\n\t\t\t\"countReproceso\": \"string\",\n\t\t\t\"intervaloReintento\": \"string\",\n\t\t\t\"objetoReproceso\": \"string\"\n\t\t},\n\t\t\"filler\": \"string\"\n\t},\n\t\"Body\": {\n\t\t\"headerServicio\": {\n\t\t\t\"version\": \"string\",\n\t\t\t\"canal\": \"string\",\n\t\t\t\"estado\": \"string\",\n\t\t\t\"comercio\": \"string\",\n\t\t\t\"fecha\": \"string\",\n\t\t\t\"hora\": \"string\",\n\t\t\t\"nroTransaccion\": \"string\",\n\t\t\t\"sucursal\": \"string\",\n\t\t\t\"terminal\": \"string\",\n\t\t\t\"tipoTransaccion\": \"string\",\n\t\t\t\"codigoUsusario\": \"string\",\n\t\t\t\"entidad\": \"string\",\n\t\t\t\"dominioPais\": \"string\"\n\t\t},\n\t\t\"ordenCompra\": \"".$po."\",\n\t\t\"numeroPI\": \"".$pi."\"\n\t}\n}",
+            CURLOPT_POSTFIELDS => "{
+               \"HeaderRply\": {
+                              \"servicio\": {
+                                            \"nombreServicio\": \"string\",
+                                            \"operacion\": \"string\",
+                                            \"idTransaccion\": \"string\",
+                                            \"tipoMensaje\": \"string\",
+                                            \"tipoTransaccion\": \"string\",
+                                            \"usuario\": \"string\",
+                                            \"dominioPais\": \"string\",
+                                            \"ipOrigen\": \"string\",
+                                            \"servidor\": \"string\",
+                                            \"timeStamp\": \"string\"
+                              },
+                              \"paginacion\": {
+                                            \"numPagina\": \"string\",
+                                            \"cantidadRegistros\": \"string\",
+                                            \"totalRegistros\": \"string\"
+                              },
+                              \"track\": {
+                                            \"idTrack\": \"string\",
+                                            \"codSistema\": \"string\",
+                                            \"codAplicacion\": \"string\",
+                                            \"componente\": \"string\",
+                                            \"estado\": \"string\",
+                                            \"dataLogger\": \"string\",
+                                            \"flagTracking\": \"string\",
+                                            \"flagLog\": \"string\"
+                              },
+                              \"error\": [
+                                            {
+                                                           \"errorCode\": \"string\",
+                                                           \"errorGlosa\": \"string\"
+                                            }
+                              ],
+                              \"reproceso\": {
+                                            \"countReproceso\": \"string\",
+                                            \"intervaloReintento\": \"string\",
+                                            \"objetoReproceso\": \"string\"
+                              },
+                              \"filler\": \"string\"
+               },
+               \"Body\": {
+                              \"headerServicio\": {
+                                            \"version\": \"string\",
+                                            \"canal\": \"string\",
+                                            \"estado\": \"string\",
+                                            \"comercio\": \"string\",
+                                            \"fecha\": \"string\",
+                                            \"hora\": \"string\",
+                                            \"nroTransaccion\": \"string\",
+                                            \"sucursal\": \"string\",
+                                            \"terminal\": \"string\",
+                                            \"tipoTransaccion\": \"string\",
+                                            \"codigoUsusario\": \"string\",
+                                            \"entidad\": \"string\",
+                                            \"dominioPais\": \"string\"
+                              },
+                              \"ordenCompra\": \"" . $oc . "\",
+                              \"numeroPI\": \"" . $pi . "\"
+               }
+}",
+            CURLOPT_HTTPHEADER => array(
+                "Content-Type: application/json"
+            ),
+        ));
+
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+
+        curl_close($curl);
+        if ($err) {
+            return $err;
+        } else {
+            return $response;
+        }
+
+
+    }
+
+    public static function UpdateEstavoVistaOC($temporada, $depto, $estado, $login, $po_number, $proforma,$estado_oc)
+    {
+
+        if ($estado == 20){
+            //actualiza el estado color3 en 21 (aprobado)
+            $sql = "update plc_plan_compra_color_3
+                    set estado = 21
+                    where cod_temporada = " . $temporada . "
+                    and dep_depto =  '" . $depto . "'
+                    and PROFORMA = '" . $proforma . "'";
+            \database::getInstancia()->getConsulta($sql);
+
+            //dt id_color actualizar para historial
+            $sql = "select distinct id_color3 from plc_plan_compra_color_3
+                    where cod_temporada = " . $temporada . "
+                    and dep_depto =  '" . $depto . "'
+                    and PROFORMA = '" . $proforma . "'";
+            $id_color3s = \database::getInstancia()->getFilas($sql);
+
+            $sql = "update plc_plan_compra_oc
+                   set estado_oc = '" . $estado_oc . "'
+                    where cod_temporada = " . $temporada . "
+                    and dep_depto =  '" . $depto . "'
+                    and PROFORMA = '" . $proforma . "'";
+
+            if (!file_exists('../archivos/log_querys/' . $login)) {
+                mkdir('../archivos/log_querys/' . $login, 0775, true);
+            }
+            $stamp = date("Y-m-d_H-i-s");
+            $rand = rand(1, 999);
+            $content = $sql;
+            $fp = fopen("../archivos/log_querys/" . $login . "/update20oc--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+            fwrite($fp, $content);
+            fclose($fp);
+            \database::getInstancia()->getConsulta($sql);
+
+            foreach ($id_color3s as $val) {
+                $id_color3 = $val['ID_COLOR3'];
+                $sql_insert = "INSERT INTO PLC_PLAN_COMPRA_HISTORICA (DPTO,LINEA,SUBLINEA,MARCA,ESTILO,VENTANA,COLOR,USER_LOGIN,USER_NOM,FECHA,HORA,PI,OC,ESTADO,TEMP,ID_COLOR3,NOM_LINEA,NOM_MARCA,NOM_VENTANA,NOM_COLOR,NOM_SUBLINEA)
+                                    SELECT C.DEP_DEPTO,
+                                            C.COD_JER2 LINEA,         -- linea
+                                            C.COD_SUBLIN SUBLINEA,    -- sublinea
+                                            C.COD_MARCA,              -- marca
+                                            C.DES_ESTILO ESTILO,      -- estilo
+                                            C.VENTANA_LLEGADA,        -- Ventana
+                                            NVL(COD_COLOR,0)COLOR,    -- Color
+                                            '" . $login . "',
+                                            (SELECT NOM_USR FROM PLC_USUARIO WHERE COD_USR = '" . $login . "'),
+                                            (SELECT SUBSTR(TO_CHAR(SYSDATE, 'DD-MM-YYYY'),1,10)N FROM DUAL),
+                                            (SELECT TO_CHAR(SYSDATE, 'HH24:MI:SS') FROM DUAL),
+                                            C.PROFORMA,
+                                            $po_number,
+                                            21,
+                                            C.COD_TEMPORADA,
+                                            C.ID_COLOR3,
+                                            C.NOM_LINEA LINEA,
+                                            C.NOM_MARCA MARCA,
+                                            C.NOM_VENTANA VENTANA,
+                                            C.NOM_COLOR COD_COLOR,
+                                            C.NOM_SUBLINEA SUBLINEA
+                                      FROM PLC_PLAN_COMPRA_COLOR_3 C
+                                      WHERE C.COD_TEMPORADA = $temporada AND C.DEP_DEPTO =  '" . $depto . "'
+                                      AND C.ID_COLOR3 = $id_color3";
+                \database::getInstancia()->getConsulta($sql_insert);
+            }
+        }
+        elseif($estado == 18 or $estado == 19 or $estado == 22){
+            //actualiza el estado color3 en 19 (pendiente de aprobacion sin match)
+            $sql = "update plc_plan_compra_color_3
+                    set estado = 19
+                    where cod_temporada = " . $temporada . "
+                    and dep_depto =  '" . $depto . "'
+                    and PROFORMA = '" . $proforma . "'";
+            \database::getInstancia()->getConsulta($sql);
+
+            if ($estado <> 19) {
+                //dt id_color actualizar para historial
+                $sql = "select distinct id_color3 from plc_plan_compra_color_3
+                    where cod_temporada = " . $temporada . "
+                    and dep_depto =  '" . $depto . "'
+                    and PROFORMA = '" . $proforma . "'";
+                $id_color3s = \database::getInstancia()->getFilas($sql);
+                //insert historial
+                foreach ($id_color3s as $val) {
+                    $id_color3 = $val['ID_COLOR3'];
+                    $count = 0;
+                    if ($estado == 18) {
+                        $count = 2;
+                    } else {
+                        $count = 1;
+                    };
+                    for ($i = 1; $i <= $count; $i++) {
+                        $estadofor = 0;
+                        if ($i == 1) {
+                            $estadofor = 22;
+                        } else {
+                            $estadofor = 19;
+                        };
+                        $sql_insert = "INSERT INTO PLC_PLAN_COMPRA_HISTORICA (DPTO,LINEA,SUBLINEA,MARCA,ESTILO,VENTANA,COLOR,USER_LOGIN,USER_NOM,FECHA,HORA,PI,OC,ESTADO,TEMP,ID_COLOR3,NOM_LINEA,NOM_MARCA,NOM_VENTANA,NOM_COLOR,NOM_SUBLINEA)
+                                    SELECT C.DEP_DEPTO,
+                                            C.COD_JER2 LINEA,         -- linea
+                                            C.COD_SUBLIN SUBLINEA,    -- sublinea
+                                            C.COD_MARCA,              -- marca
+                                            C.DES_ESTILO ESTILO,      -- estilo
+                                            C.VENTANA_LLEGADA,        -- Ventana
+                                            NVL(COD_COLOR,0)COLOR,    -- Color
+                                            '" . $login . "',
+                                            (SELECT NOM_USR FROM PLC_USUARIO WHERE COD_USR = '" . $login . "'),
+                                            (SELECT SUBSTR(TO_CHAR(SYSDATE, 'DD-MM-YYYY'),1,10)N FROM DUAL),
+                                            (SELECT TO_CHAR(SYSDATE, 'HH24:MI:SS') FROM DUAL),
+                                            C.PROFORMA,
+                                            $po_number,
+                                            $estadofor,
+                                            C.COD_TEMPORADA,
+                                            C.ID_COLOR3,
+                                            C.NOM_LINEA LINEA,
+                                            C.NOM_MARCA MARCA,
+                                            C.NOM_VENTANA VENTANA,
+                                            C.NOM_COLOR COD_COLOR,
+                                            C.NOM_SUBLINEA SUBLINEA
+                                      FROM PLC_PLAN_COMPRA_COLOR_3 C
+                                      WHERE C.COD_TEMPORADA = $temporada AND C.DEP_DEPTO =  '" . $depto . "'
+                                      AND C.ID_COLOR3 = $id_color3";
+                        \database::getInstancia()->getConsulta($sql_insert);
+                    }
+                }
+            } else {
+                $sql = "update plc_plan_compra_oc
+                   set po_number = NULL
+                       ,estado_oc = NULL
+                       ,fecha_embarque = NULL
+                       ,fecha_eta = NULL
+                       ,fecha_recepcion = NULL
+                       ,dias_atraso = NULL
+                       ,COD_PADRE = NULL
+                       ,ESTADO_MATCH = NULL
+                       ,ESTILO_PMM = NULL
+                    where cod_temporada = " . $temporada . "
+                    and dep_depto =  '" . $depto . "'
+                    and PROFORMA = '" . $proforma . "'";
+
+                \database::getInstancia()->getConsulta($sql);
+            }
+        }
+        elseif($estado == 21){
+
+            //dt id_color actualizar
+            $sql = "select distinct id_color3 from plc_plan_compra_oc
+                    where cod_temporada = " . $temporada . "
+                    and dep_depto =  '" . $depto . "'
+                    and po_number = '" . $po_number . "'";
+            $id_color3s = \database::getInstancia()->getFilas($sql);
+
+            if (count($id_color3s)> 0){
+                $ids = "";
+                foreach ($id_color3s as $val) {
+                    $ids = $ids.$val['ID_COLOR3'].",";
+                }
+                $ids = substr ($ids, 0, -1);
+
+                //actualiza el estado color3 en 0 (ingresado)
+                $sql = "update plc_plan_compra_color_3
+                    set estado = 0
+                        ,proforma = null
+                    where cod_temporada = " . $temporada . "
+                    and dep_depto =  '" . $depto . "'
+                    and id_color3 in(" . $ids . ")";
+                \database::getInstancia()->getConsulta($sql);
+
+                //insert historial
+                $sql_insert = "INSERT INTO PLC_PLAN_COMPRA_HISTORICA (DPTO,LINEA,SUBLINEA,MARCA,ESTILO,VENTANA,COLOR,USER_LOGIN,USER_NOM,FECHA,HORA,PI,OC,ESTADO,TEMP,ID_COLOR3,NOM_LINEA,NOM_MARCA,NOM_VENTANA,NOM_COLOR,NOM_SUBLINEA)
+                                    SELECT C.DEP_DEPTO,
+                                            C.COD_JER2 LINEA,         -- linea
+                                            C.COD_SUBLIN SUBLINEA,    -- sublinea
+                                            C.COD_MARCA,              -- marca
+                                            C.DES_ESTILO ESTILO,      -- estilo
+                                            C.VENTANA_LLEGADA,        -- Ventana
+                                            NVL(COD_COLOR,0)COLOR,    -- Color
+                                            '" . $login . "',
+                                            'OC=" . $po_number . "',
+                                            (SELECT SUBSTR(TO_CHAR(SYSDATE, 'DD-MM-YYYY'),1,10)N FROM DUAL),
+                                            (SELECT TO_CHAR(SYSDATE, 'HH24:MI:SS') FROM DUAL),
+                                            C.PROFORMA,
+                                            $po_number,
+                                            25,
+                                            C.COD_TEMPORADA,
+                                            C.ID_COLOR3,
+                                            C.NOM_LINEA LINEA,
+                                            C.NOM_MARCA MARCA,
+                                            C.NOM_VENTANA VENTANA,
+                                            C.NOM_COLOR COD_COLOR,
+                                            C.NOM_SUBLINEA SUBLINEA
+                                      FROM PLC_PLAN_COMPRA_COLOR_3 C
+                                      WHERE C.COD_TEMPORADA = $temporada AND C.DEP_DEPTO =  '" . $depto . "'
+                                      AND C.ID_COLOR3 IN (".$ids.")";
+                \database::getInstancia()->getConsulta($sql_insert);
+
+
+                //borramos la  compra_oc
+                $sql = "delete plc_plan_compra_oc
+                    where cod_temporada = " . $temporada . "
+                    and dep_depto =  '" . $depto . "'
+                    and id_color3 in(" . $ids . ")";;
+                \database::getInstancia()->getConsulta($sql);
+            }
+        }
+    }
+
+    Public static function TraerDatosOC3($oc){
+        $sql = "select po_number
+                       ,cod_estado 
+                       ,case when cod_estado = 1 then 'Modo Ingreso' 
+                             when cod_estado = 2 then 'Pendiente Autorizacion'
+                             when cod_estado = 3 then 'Autorizada'
+                             when cod_estado = 4 then 'On Order'
+                             when cod_estado = 5 then 'Recepcion Parcial'
+                             when cod_estado = 6 then 'Recepcion Completa'
+                             when cod_estado = 7 then 'Cancelada' end  NOM_ESTADO
+                from plc_ordenes_compra_pmm
+                where po_number = ". $oc ;
+
+        $data = \database::getInstancia()->getFilas($sql);
+        return $data;
+    }
+
+
+
+
+    //##################################################### FIN LISTAR PLANCOMPRA ##########################################################
+
 
     // Procesar el JSON que llega
     public static function ProcesaDataPlanCompra($TEMPORADA, $DEPTO, $LOGIN, $ID_COLOR3, $GRUPO_COMPRA, $COD_TEMP, $LINEA, $SUBLINEA, $MARCA, $ESTILO, $SHORT_NAME, $ID_CORPORATIVO, $DESCMODELO, $DESCRIP_INTERNET, $NOMBRE_COMPRADOR, $NOMBRE_DISENADOR, $COMPOSICION, $TIPO_TELA, $FORRO, $COLECCION, $EVENTO, $COD_ESTILO_VIDA, $CALIDAD, $COD_OCASION_USO, $COD_PIRAMIX, $NOM_VENTANA, $COD_RANKVTA, $LIFE_CYCLE, $NUM_EMB, $COD_COLOR, $TIPO_PRODUCTO, $TIPO_EXHIBICION, $DESTALLA, $TIPO_EMPAQUE, $PORTALLA_1_INI, $PORTALLA_1, $CURVATALLA, $CURVAMIN, $UNID_OPCION_INICIO, $UNID_OPCION_AJUSTADA, $CAN, $MTR_PACK, $CANT_INNER, $SEG_ASIG, $FORMATO, $TDAS, $A, $B, $C, $I, $UND_ASIG_INI, $ROT, $NOM_PRECEDENCIA, $NOM_VIA, $NOM_PAIS, $VIAJE, $MKUP, $PRECIO_BLANCO, $OFERTA, $GM, $COD_TIP_MON, $COSTO_TARGET, $COSTO_FOB, $COSTO_INSP, $COSTO_RFID, $ROYALTY_POR, $COSTO_UNIT, $COSTO_UNITS, $CST_TOTLTARGET, $COSTO_TOT, $COSTO_TOTS, $RETAIL, $DEBUT_REODER, $SEM_INI, $SEM_FIN, $CICLO, $AGOT_OBJ, $SEMLIQ, $ALIAS_PROV, $COD_PROVEEDOR, $COD_TRADER, $AFTER_MEETING_REMARKS, $CODSKUPROVEEDOR, $SKU, $PROFORMA, $ARCHIVO, $ESTILO_PMM, $ESTADO_MATCH, $PO_NUMBER, $ESTADO_OC, $FECHA_ACORDADA, $FECHA_EMBARQUE, $FECHA_ETA, $FECHA_RECEPCION, $DIAS_ATRASO, $CODESTADO, $ESTADO_C1, $VENTANA_LLEGADA, $PROFORMA_BASE, $TIPO_EMPAQUE_BASE, $UNI_INICIALES_BASE, $PRECIO_BLANCO_BASE, $COSTO_TARGET_BASE, $COSTO_FOB_BASE, $COSTO_INSP_BASE, $COSTO_RFID_BASE, $COD_MARCA, $N_CURVASXCAJAS, $COD_JER2, $COD_SUBLIN, $ARCHIVO_BASE)
     {
+
+        // ############################################# GUARDADO PROFORMA #############################################
+        // ############################ (Independiente de Curvado y Otras Actualizaciones) #############################
+        // 1.- Si la proforma base no es igual a la que nos llega, hay que aplicar la función de guardado de proforma.
+        if ((($PROFORMA_BASE != $PROFORMA) && (is_null($PROFORMA_BASE))) || ($ARCHIVO_BASE != $ARCHIVO)) {
+
+            // Si llega $PROFORMA y $ID_COLOR3
+            if ((!empty($PROFORMA)) && (!empty($ID_COLOR3)) && ($ESTADO_C1 == 0)) {
+
+                $sube_archivo = 0;
+                if ($ARCHIVO == "Cargado..") {
+                    $sube_archivo = 1;
+                }
+
+                // Aplicar guardado de proforma
+                $query_proforma = PlanCompraClass::GuardaProforma($TEMPORADA, $DEPTO, $LOGIN, $PROFORMA, $ID_COLOR3, $sube_archivo);
+                if (!$query_proforma) {
+                    return json_encode("error-(" . $ID_COLOR3 . ") No se pudo realizar la actualización de la proforma.");
+                    die();
+                }else{
+                    return "OK";
+                }
+
+
+                // Fin Validación Campos Necesarios
+            }
+
+            // Fin validación PROFORMA
+        }
+        // ########################################## FIN GUARDADO PROFORMA ############################################
+
+
+
+        // OJO Separar el guardado de los campos libres de los calculados
+
 
         // ############################################# VALIDACIONES #############################################
         // Validar Ventana
@@ -293,35 +804,7 @@ class PlanCompraClass extends \parametros
         // ########################################### FIN VALIDACIONES ###########################################
 */
 
-        // ############################################# GUARDADO PROFORMA #############################################
-        // ############################ (Independiente de Curvado y Otras Actualizaciones) #############################
-        // 1.- Si la proforma base no es igual a la que nos llega, hay que aplicar la función de guardado de proforma.
-        if ((($PROFORMA_BASE != $PROFORMA) && (is_null($PROFORMA_BASE))) || ($ARCHIVO_BASE != $ARCHIVO)) {
 
-            // Si llega $PROFORMA y $ID_COLOR3
-            if ((!empty($PROFORMA)) && (!empty($ID_COLOR3)) && ($ESTADO_C1 == 0)) {
-
-                $sube_archivo = 0;
-                if ($ARCHIVO == "Cargado..") {
-                    $sube_archivo = 1;
-                }
-
-                // Aplicar guardado de proforma
-                $query_proforma = PlanCompraClass::GuardaProforma($TEMPORADA, $DEPTO, $LOGIN, $PROFORMA, $ID_COLOR3, $sube_archivo);
-                if (!$query_proforma) {
-                    return json_encode("error-(" . $ID_COLOR3 . ") No se pudo realizar la actualización de la proforma.");
-                    die();
-                }else{
-                    return "OK";
-                }
-
-
-            // Fin Validación Campos Necesarios
-            }
-
-        // Fin validación PROFORMA
-        }
-        // ########################################## FIN GUARDADO PROFORMA ############################################
 
 
         // ############################################# SETEO DE VARIABLES #############################################
@@ -1791,7 +2274,7 @@ class PlanCompraClass extends \parametros
     public static function MatchLlenarGridPMM($temporada, $depto, $login, $oc, $pi,$puerto,$url)
     {
 
-        //$oc = 9146497;
+        // $oc = 9146497;
         // Consulta OC Linkeada (Revisar, no se agrega por que se valida antes de levantar popup match)
 
         // Quitar OC Cancelada
@@ -2159,14 +2642,19 @@ class PlanCompraClass extends \parametros
     }
 
     // Listar CBX SubLinea en Match
-    public static function ListarSubLineaCBXMatch($temporada, $depto, $id_linea)
+    public static function ListarSubLineaCBXMatch($temporada, $depto, $linea)
     {
+
+        $LINEA_EXPLODE = explode(" - ", $linea);
+        $LINEA_REPLACE1 =  str_replace("(","",$LINEA_EXPLODE[0]);
+        $LINEA_REPLACE2 = str_replace(")","",$LINEA_REPLACE1);
+        $LINEA = $LINEA_REPLACE2;
 
         $sql = "SELECT TRIM( L.PRD_LVL_NUMBER ) AS SLI_SUBLINEA,
                        TRIM( L.PRD_NAME_FULL ) AS SLI_DESCRIPCION
                 FROM   PRDMSTEE         P,
                        PRDMSTEE         L
-                WHERE  P.PRD_LVL_NUMBER = RPAD( '" . $id_linea . "', 15, ' ' )
+                WHERE  P.PRD_LVL_NUMBER = RPAD( '" . $LINEA . "', 15, ' ' )
                 AND    P.PRD_LVL_CHILD  = L.PRD_LVL_PARENT
                 AND    L.PRD_STATUS = 0
                 ORDER BY 2 ASC
