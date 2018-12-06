@@ -8,14 +8,33 @@ $(function () {
     // Función que envia la Data al PHP
     function onSubmit(e) {
 
-        /*var url_tabla = 'ajax_simulador_cbx/actualiza_tabla2';
-        $.getJSON(url_tabla, {models: kendo.stringify(e.data)});*/
+        // alert(e.data.updated.length);
+
+        var arregloGuardado = [];
+        var i = 0;
+
+        for (i; i < e.data.updated.length; i++) {
+            arregloGuardado.push({
+                "ID_COLOR3": kendo.parseInt(e.data.updated[i]["ID_COLOR3"]),
+                "ESTADO_C1": kendo.parseInt(e.data.updated[i]["ESTADO_C1"]),
+                "PROFORMA": String(e.data.updated[i]["PROFORMA"]),
+                "ARCHIVO": String(e.data.updated[i]["ARCHIVO"]),
+                "PROFORMA_BASE": String(e.data.updated[i]["PROFORMA_BASE"]),
+                "ARCHIVO_BASE": String(e.data.updated[i]["ARCHIVO_BASE"])
+            });
+        }
+
+
+        //console.log(arregloGuardado);
+
+        // console.log(e.data.updated[0]["ALIAS_PROV"]);
 
         $.ajax({
-            //type: "POST",
             url: crudServiceBaseUrl + "ProcesaDataPlanCompra",
-            data: {models: kendo.stringify(e.data)},
+            //data: {models: kendo.stringify(e.data)},
+            data: {models: kendo.stringify(arregloGuardado)},
             contentType: "application/json",
+            //type: "POST",
             //dataType: "json",
             success: function (result) {
                 //kendo.log(result);
@@ -31,12 +50,9 @@ $(function () {
 
             },
             error: function (xhr, httpStatusMessage, customErrorMessage) {
-                alert(xhr.responseText);
-                alert(httpStatusMessage);
-                alert(customErrorMessage);
+                console.log(xhr.responseText+" / "+httpStatusMessage+" / "+customErrorMessage);
             }
         });
-
 
     }
 
@@ -691,8 +707,8 @@ $(function () {
                                     transport: {
                                         read:  {
                                             url: "TelerikPlanCompra/ListarLineaCBXMatch",
-                                            dataType: "json"
-                                            //type: "POST"
+                                            dataType: "json"/*
+                                            type: "POST"*/
                                         }
                                     }
                                 }//,select: CambiaLineaMatchDropDown
@@ -726,8 +742,8 @@ $(function () {
                                             url: "TelerikPlanCompra/ListarSubLineaCBXMatch",
                                             //data:{LINEA:kendo.parseInt(OC)},
                                             data:{LINEA:String(options.model.LINEA)},
-                                            dataType: "json"
-                                            //type: "POST"
+                                            dataType: "json"/*,
+                                            type: "POST"*/
                                         }
                                     }
                                 }
@@ -747,8 +763,8 @@ $(function () {
                                     transport: {
                                         read:  {
                                             url: "TelerikPlanCompra/ListarColorCBXMatch",
-                                            dataType: "json"
-                                            //type: "POST"
+                                            dataType: "json"/*,
+                                            type: "POST"*/
                                         }
                                     }
                                 }
@@ -764,7 +780,7 @@ $(function () {
                             read:  {
                                 url: "TelerikPlanCompra/MatchLlenarGridPMM",
                                 dataType: "json",
-                                //type: 'POST',
+                                //type: "POST",
                                 data:{OC:kendo.parseInt(OC),PROFORMA:String(PROFORMA)}
                             }
 
@@ -804,22 +820,10 @@ $(function () {
                             },
                             update: {
                                 url: "TelerikPlanCompra/ActualizaPlanMATCH",
-                                dataType: "json"
+                                dataType: "json"/*,
+                                type: "POST"*/
                             }
-                        },/*
-                        change: function(e) {
-
-                            // Cantidad de registros de PLAN
-                            var TotalRegistroGrillaPMM = this.data();
-                            // Cantidad de Registros de PMM
-                            var TotalRegistroGrillaPLAN = dataSource_match_pmm.data();
-
-
-                            console.log(TotalRegistroGrillaPMM.length);
-                            console.log(TotalRegistroGrillaPLAN.length);
-
-
-                        },*/
+                        },
                         // autoSync: true,
                         // complete: TerminaCargaPLAN
                         // success: TerminaCargaPLAN,
