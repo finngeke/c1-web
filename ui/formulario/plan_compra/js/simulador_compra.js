@@ -814,17 +814,24 @@ $(function () {
 
                     // Asigno el DataSet al Grid de PMM
                     $("#grid_match_pmm").kendoGrid({
-                        columns: [
-                            { hidden: true, field: "ORDEN_DE_COMPRA" },
-                            { hidden: true, field: "PI" },
-                            { field: "NOMBRE_LINEA", title: "Línea" },
-                            { field: "NRO_LINEA", title: "Cod. Linea", width: 90 },
-                            { field: "NOMBRE_SUB_LINEA", title: "SubLínea", width:250 },
-                            { field: "NRO_SUB_LINEA", title: "Cod. SubLínea", width: 100 },
-                            { field: "NOMBRE_ESTILO", title: "Estilo", width:280 },
-                            { field: "NRO_ESTILO", title: "N° Estilo", width: 90 },
-                            { field: "COLOR", title: "Color", width: 200 },
-                            { field: "COD_COLOR", title: "Cod. Color", width: 90 }
+                        columns:[
+                            {title: "PMM",
+                                headerAttributes: {
+                                    style: "text-align: center"
+                                },
+                                columns: [
+                                    { hidden: true, field: "ORDEN_DE_COMPRA" },
+                                    { hidden: true, field: "PI" },
+                                    { field: "NOMBRE_LINEA", title: "Línea" },
+                                    { field: "NRO_LINEA", title: "Cod. Linea", width: 90 },
+                                    { field: "NOMBRE_SUB_LINEA", title: "SubLínea", width:250 },
+                                    { field: "NRO_SUB_LINEA", title: "Cod. SubLínea", width: 100 },
+                                    { field: "NOMBRE_ESTILO", title: "Estilo", width:280 },
+                                    { field: "NRO_ESTILO", title: "N° Estilo", width: 90 },
+                                    { field: "COLOR", title: "Color", width: 200 },
+                                    { field: "COD_COLOR", title: "Cod. Color", width: 90 }
+                                ]
+                            }
                         ],
                         dataSource: dataSource_match_pmm
                     });
@@ -908,18 +915,25 @@ $(function () {
                             { name: 'guardamatch',text: "Realizar Match", iconClass: "k-icon k-i-save" }
                         ],
                         editable: true,
-                        columns: [
-                            { hidden: true,field: "ID" },
-                            { hidden: true, field: "PROFORMA" },
-                            { field: "LINEA", title: "Línea", editor: MatchLineaDropDownEditor }, //, template: "#=LINEA.LIN_DESCRIPCION#"
-                            { field: "COD_LINEA", title: "Cod. Línea", editable: false, width: 90 },
-                            { field: "SUB_LINEA", title: "SubLínea", editor: MatchSubLineaDropDownEditor, width:250 },
-                            { field: "COD_SUBLINEA", title: "Cod. SubLínea", editable: false, width: 100 },
-                            { field: "ESTILO", title: "Estilo", width:280 },
-                            { field: "NRO_ESTILO", title: "N° Estilo", editable: false, width: 90 },
-                            { field: "COLOR", title: "Color", editor: MatchColorDropDownEditor, width: 200 },
-                            { field: "COD_COLOR", title: "Cod. Color", editable: false, width: 90 }
+                        columns:[
+                            {title: "PLAN DE COMPRA",
+                                headerAttributes: {
+                                    style: "text-align: center"
+                                },
+                            columns: [
+                                { hidden: true,field: "ID" },
+                                { hidden: true, field: "PROFORMA" },
+                                { field: "LINEA", title: "Línea", editor: MatchLineaDropDownEditor }, //, template: "#=LINEA.LIN_DESCRIPCION#"
+                                { field: "COD_LINEA", title: "Cod. Línea", editable: false, width: 90 },
+                                { field: "SUB_LINEA", title: "SubLínea", editor: MatchSubLineaDropDownEditor, width:250 },
+                                { field: "COD_SUBLINEA", title: "Cod. SubLínea", editable: false, width: 100 },
+                                { field: "ESTILO", title: "Estilo", width:280 },
+                                { field: "NRO_ESTILO", title: "N° Estilo", editable: false, width: 90 },
+                                { field: "COLOR", title: "Color", editor: MatchColorDropDownEditor, width: 200 },
+                                { field: "COD_COLOR", title: "Cod. Color", editable: false, width: 90 }
+                            ]}
                         ]
+
 
                     });
 
