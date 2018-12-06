@@ -175,7 +175,14 @@ $(function () {
     // ############################ MATCH ############################
 
     function cerrarPopUpMATCH(){
-        location.reload();
+
+        //location.reload();
+
+        // Recargo el DATASOURCE
+        var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
+        var sheet = spreadsheet.activeSheet();
+        sheet.dataSource.read();
+
     }
 
     // Le da la estructura a la ventana POPUP

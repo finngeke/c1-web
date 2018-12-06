@@ -798,95 +798,11 @@ $(function () {
 
                     if(dataPMM.length != dataPLAN.length){
 
-                        // Bloquear todos los BTNs (Falta Bloquear Link del BTN)
-                        // $(".k-grid-save-changes").kendoButton({ enable: false }).data("kendoButton").enable(false);
-                        // $(".k-grid-cancel-changes").kendoButton({ enable: false }).data("kendoButton").enable(false);
-
                         // Ocultar la Botonera
                         $("#grid_match_plan .k-grid-toolbar").hide();
 
                         popupNotification.getNotifications().parent().remove();
                         popupNotification.show(" La Cantidad de Registros de PMM y PLAN, no son iguales.", "error");
-
-                    }else{
-
-                        // Revisar las diferencia entre PMM y PLAN
-                        /*var revisa_grid_match_pmm = $("#grid_match_pmm").data("kendoGrid");
-                        var revisa_grid_pmm = revisa_grid_match_pmm.dataSource.view();
-
-                        var revisa_grid_match_plan = $("#grid_match_plan").data("kendoGrid");
-                        var revisa_grid_plan = revisa_grid_match_plan.dataSource.view();
-
-                        var flag_errores_match = 0;
-
-                        // El String de Validación (Seba)
-                        // Estilo-CodLinea-CodSubLinea-CodColor
-
-                        // Recorro la tabla de Plan
-                        loop1:
-                        for (var i = 0; i < revisa_grid_plan.length; i++) {
-
-                            var pre_linea = revisa_grid_plan[i].LINEA;
-                            pre_linea = pre_linea.split(' - ');
-                            var compara_linea = pre_linea[0].substring(1, pre_linea[0].length-1);
-
-
-                            var pre_sublinea = revisa_grid_plan[i].SUB_LINEA;
-                            pre_sublinea = pre_sublinea.split(' - ');
-                            var compara_sublinea =  pre_sublinea[0].substring(1, pre_sublinea[0].length-1);
-
-                            var pre_color = revisa_grid_plan[i].COLOR;
-                            pre_color = pre_color.split(' - ');
-                            var compara_color =  pre_color[0].substring(1, pre_color[0].length-1);
-
-                            var compara_estilo = revisa_grid_plan[i].ESTILO;
-
-
-
-                            for (var j = 0; j < revisa_grid_pmm.length; j++) {
-
-                                if( (compara_linea==revisa_grid_pmm[j].NRO_LINEA) && (compara_sublinea==revisa_grid_pmm[j].NRO_SUB_LINEA) && (compara_color==revisa_grid_pmm[j].COD_COLOR) && (compara_estilo==revisa_grid_pmm[j].NOMBRE_ESTILO)  ){
-
-                                    // Remuevo la Clase
-                                     revisa_grid_match_plan.table.find("tr[data-uid='" + revisa_grid_plan[i].uid + "']").removeClass("errormatch-row");
-
-                                    // Se Corrige Error, Quito el flag
-                                    // flag_errores_match--;
-
-                                    // Salir
-                                    // return false;
-                                    // return
-                                     break;
-                                    // break loop1;
-
-                                }else{
-
-                                    // Hay error, Incremento el flag
-                                    flag_errores_match++;
-
-                                    // Coloreo la Celda
-                                    revisa_grid_match_plan.table.find("tr[data-uid='" + revisa_grid_plan[i].uid + "']").addClass("errormatch-row");
-                                    // revisa_grid_match_plan.table.find("tr[data-uid='" + revisa_grid_plan[i].uid + "']").css('background-color', 'red');
-
-                                    // Remover el Item y Agregarlo Arriba
-                                    //revisa_grid_match_plan.dataSource.remove(dataItem);
-                                    //revisa_grid_match_plan.dataSource.insert(0, dataItem);
-
-                                }
-
-
-                            }
-
-
-                            // Fin recorrer la tabla Plan
-                        }
-
-                        // Si hay Errores, oculto el BTN de Match
-                        if(flag_errores_match>0){
-                            $(".k-grid-guardamatch").hide();
-                        }*/
-
-
 
                     }
 
@@ -949,19 +865,12 @@ $(function () {
                                 loop1:
                                 itemsPMM.forEach(function(el2){
 
+                                    console.log("#######################################################");
+                                    console.log(compara_linea+" / "+el2.NRO_LINEA);
+                                    console.log(compara_sublinea+" / "+el2.NRO_SUB_LINEA);
+                                    console.log(compara_color+" / "+el2.COD_COLOR);
+                                    console.log(compara_estilo+" / "+el2.NOMBRE_ESTILO);
 
-                                    /*if(el2.id == el.id){ //'id' is the field that you could check for equality
-                                        $("[data-uid='"+el.uid+"']").css("background", "#aaa");
-                                    }*/
-
-                                    console.log(compara_linea);
-                                    console.log(el2.NRO_LINEA);
-                                    console.log(compara_sublinea);
-                                    console.log(el2.NRO_SUB_LINEA);
-                                    console.log(compara_color);
-                                    console.log(el2.COD_COLOR);
-                                    console.log(compara_estilo);
-                                    console.log(el2.NOMBRE_ESTILO);
 
                                     loop2:
                                     if( (compara_linea != el2.NRO_LINEA) || (compara_sublinea != el2.NRO_SUB_LINEA) || (compara_color != el2.COD_COLOR) || (compara_estilo != el2.NOMBRE_ESTILO)  ){
