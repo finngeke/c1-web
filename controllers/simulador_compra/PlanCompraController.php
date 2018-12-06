@@ -14,13 +14,11 @@ class PlanCompraController extends \Control
     // Lista el Plan de Compra, según temporada seleccionada
     public function ListarPlanCompra($f3)
     {
-        echo json_encode(\simulador_compra\PlanCompraClass::ListarPlanCompra($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO')));
 
-        //header("Content-Type: application/json");
-        //$json = \JsonHelper::encode(\simulador_compra\PlanCompraClass::ListarPlanCompra($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO')),JSON_PRETTY_PRINT);
-        // echo $json;
+        echo json_encode(\simulador_compra\PlanCompraClass::ListarPlanCompra($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $f3->get('CURLOPT_PORT'), $f3->get('CURLOPT_URL')));
 
-
+        // Original
+        // echo json_encode(\simulador_compra\PlanCompraClass::ListarPlanCompra($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO')));
 
     }
 
@@ -321,7 +319,10 @@ class PlanCompraController extends \Control
 
     // Match - Listar CBX SubLínea en Match
     public function ListarSubLineaCBXMatch($f3) {
-        echo json_encode(\simulador_compra\PlanCompraClass::ListarSubLineaCBXMatch($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('GET.ID_LINEA')));
+
+        $array_data = $_GET;
+        echo json_encode(\simulador_compra\PlanCompraClass::ListarSubLineaCBXMatch($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $array_data["LINEA"]));
+
     }
 
     // Match - Listar CBX Color enMatch
