@@ -654,7 +654,8 @@ $(function () {
                                     transport: {
                                         read:  {
                                             url: "TelerikPlanCompra/ListarSubLineaCBXMatch",
-                                            data:{LINEA:kendo.parseInt(OC)},
+                                            //data:{LINEA:kendo.parseInt(OC)},
+                                            data:{LINEA:String(options.model.LINEA)},
                                             dataType: "json"
                                             //type: "POST"
                                         }
@@ -902,7 +903,7 @@ $(function () {
                             { hidden: true, field: "PI" },
                             { field: "NOMBRE_LINEA", title: "Línea" },
                             { field: "NRO_LINEA", title: "Cod. Linea", width: 90 },
-                            { field: "NOMBRE_SUB_LINEA", title: "SubLínea", width:150 },
+                            { field: "NOMBRE_SUB_LINEA", title: "SubLínea", width:250 },
                             { field: "NRO_SUB_LINEA", title: "Cod. SubLínea", width: 100 },
                             { field: "NOMBRE_ESTILO", title: "Estilo", width:280 },
                             { field: "NRO_ESTILO", title: "N° Estilo", width: 90 },
@@ -916,8 +917,81 @@ $(function () {
                     $("#grid_match_plan").kendoGrid({
                         autoBind:false,
                         dataSource: dataSource_match_plan,
-                        dataBound: MatchPlanOnDataBound,
+                        //dataBound: MatchPlanOnDataBound,
                         //dataBinding: MatchPlanOnDataBinding,
+                        dataBound: function(e){
+
+                            var grid1PMM = $("#grid_match_pmm").getKendoGrid();
+                            var itemsPMM = grid1PMM.dataSource.data();
+                            var itemsPLAN = e.sender.dataSource.data();
+
+                            var flag_errores_match = 0;
+
+                            // Comparar los registros de las grillas
+                            itemsPLAN.forEach(function(el){
+
+                                //console.log(el.LINEA);
+
+                                var pre_linea = el.LINEA;
+                                pre_linea = pre_linea.split(' - ');
+                                var compara_linea = pre_linea[0].substring(1, pre_linea[0].length-1);
+
+                                var pre_sublinea = el.SUB_LINEA;
+                                pre_sublinea = pre_sublinea.split(' - ');
+                                var compara_sublinea =  pre_sublinea[0].substring(1, pre_sublinea[0].length-1);
+
+                                var pre_color = el.COLOR;
+                                pre_color = pre_color.split(' - ');
+                                var compara_color =  pre_color[0].substring(1, pre_color[0].length-1);
+
+                                var compara_estilo = el.ESTILO;
+
+                                loop1:
+                                itemsPMM.forEach(function(el2){
+
+
+                                    /*if(el2.id == el.id){ //'id' is the field that you could check for equality
+                                        $("[data-uid='"+el.uid+"']").css("background", "#aaa");
+                                    }*/
+
+                                    console.log(compara_linea);
+                                    console.log(el2.NRO_LINEA);
+                                    console.log(compara_sublinea);
+                                    console.log(el2.NRO_SUB_LINEA);
+                                    console.log(compara_color);
+                                    console.log(el2.COD_COLOR);
+                                    console.log(compara_estilo);
+                                    console.log(el2.NOMBRE_ESTILO);
+
+                                    loop2:
+                                    if( (compara_linea != el2.NRO_LINEA) || (compara_sublinea != el2.NRO_SUB_LINEA) || (compara_color != el2.COD_COLOR) || (compara_estilo != el2.NOMBRE_ESTILO)  ){
+
+                                        $("[data-uid='"+el.uid+"']").css("background", "#FF2D00");
+                                        flag_errores_match++;
+
+                                    }else{
+
+                                        $("[data-uid='"+el.uid+"']").css("background", "");
+                                        break loop2;
+
+                                    }
+
+
+
+
+                                })
+
+                            })
+
+                            // Si hay Errores, oculto el BTN de Match
+                            if(flag_errores_match>0){
+                                $(".k-grid-guardamatch").hide();
+                            }else{
+                                $(".k-grid-guardamatch").show();
+                            }
+
+
+                        },
                         //toolbar: ["save", "cancel"],
                         toolbar: [
                             { name: "save", text: "Actualizar Registros", iconClass: "k-icon k-i-copy" },
@@ -930,7 +1004,7 @@ $(function () {
                             { hidden: true, field: "PROFORMA" },
                             { field: "LINEA", title: "Línea", editor: MatchLineaDropDownEditor }, //, template: "#=LINEA.LIN_DESCRIPCION#"
                             { field: "COD_LINEA", title: "Cod. Línea", editable: false, width: 90 },
-                            { field: "SUB_LINEA", title: "SubLínea", editor: MatchSubLineaDropDownEditor, width:150 },
+                            { field: "SUB_LINEA", title: "SubLínea", editor: MatchSubLineaDropDownEditor, width:250 },
                             { field: "COD_SUBLINEA", title: "Cod. SubLínea", editable: false, width: 100 },
                             { field: "ESTILO", title: "Estilo", width:280 },
                             { field: "NRO_ESTILO", title: "N° Estilo", editable: false, width: 90 },
@@ -940,6 +1014,7 @@ $(function () {
 
                     });
 
+                    // BTN Guardar Match
                     $(".k-grid-guardamatch").click(function(e){
 
                         // Actualiza la Fecha de la Concurrencia
@@ -1040,95 +1115,6 @@ $(function () {
 
 
                     });
-
-
-
-                    function MatchPlanOnDataBound(e){
-
-                        var revisa_grid_match_pmm = $("#grid_match_pmm").data("kendoGrid");
-                        var revisa_grid_pmm = revisa_grid_match_pmm.dataSource.view();
-
-                        var revisa_grid_match_plan = $("#grid_match_plan").data("kendoGrid");
-                        var revisa_grid_plan = revisa_grid_match_plan.dataSource.view();
-
-                        var flag_errores_match = 0;
-
-                        // El String de Validación (Seba)
-                        // Estilo-CodLinea-CodSubLinea-CodColor
-
-                        // Recorro la tabla de Plan
-                        loop1:
-                        for (var i = 0; i < revisa_grid_plan.length; i++) {
-
-                            var pre_linea = revisa_grid_plan[i].LINEA;
-                                pre_linea = pre_linea.split(' - ');
-                            var compara_linea = pre_linea[0].substring(1, pre_linea[0].length-1);
-
-                            var pre_sublinea = revisa_grid_plan[i].SUB_LINEA;
-                                pre_sublinea = pre_sublinea.split(' - ');
-                            var compara_sublinea =  pre_sublinea[0].substring(1, pre_sublinea[0].length-1);
-
-                            var pre_color = revisa_grid_plan[i].COLOR;
-                                pre_color = pre_color.split(' - ');
-                            var compara_color =  pre_color[0].substring(1, pre_color[0].length-1);
-
-                            var compara_estilo = revisa_grid_plan[i].ESTILO;
-
-                            loop2:
-                            for (var j = 0; j < revisa_grid_pmm.length; j++) {
-
-                                if( (compara_linea==revisa_grid_pmm[j].NRO_LINEA) && (compara_sublinea==revisa_grid_pmm[j].NRO_SUB_LINEA) && (compara_color==revisa_grid_pmm[j].COD_COLOR) && (compara_estilo==revisa_grid_pmm[j].NOMBRE_ESTILO)  ){
-// console.log("O"+i+" "+revisa_grid_plan[i].uid);
-                                    // Remuevo la Clase
-                                    revisa_grid_match_plan.table.find("tr[data-uid='" + revisa_grid_plan[i].uid + "']").removeClass("errormatch-row");
-
-                                    // Hay error, Incremento el flag
-                                    //flag_errores_match=0;
-
-                                    //salgo
-                                    break loop2;
-
-                                }else{
-// console.log("E"+i+" "+revisa_grid_plan[i].uid);
-                                    // Coloreo la Celda
-                                    revisa_grid_match_plan.table.find("tr[data-uid='" + revisa_grid_plan[i].uid + "']").addClass("errormatch-row");
-
-                                    // Hay error, Incremento el flag
-                                    flag_errores_match++;
-
-                                    // Remover el Item y Agregarlo Arriba (Pensiente Seba)
-                                    //revisa_grid_match_plan.dataSource.remove(dataItem);
-                                    //revisa_grid_match_plan.dataSource.insert(0, dataItem);
-
-                                }
-
-
-                            }
-
-
-                        // Fin recorrer la tabla Plan
-                        }
-
-
-
-                        // Si hay Errores, oculto el BTN de Match
-                        if(flag_errores_match>0){
-                            $(".k-grid-guardamatch").hide();
-                        }else{
-                            $(".k-grid-guardamatch").show();
-                        }
-
-
-                    // Fin del MatchPlanOnDataBound
-                    }
-
-                    function MatchPlanOnDataBinding(e){
-                        // alert("onDataBinding");
-                    }
-
-
-                    // Recargar Data Source
-                    // $("#grid_match_plan").data("kendoGrid").dataSource.read();
 
 
                 // Fin Else
