@@ -417,34 +417,104 @@ $(function () {
         },
         sheetsbar: false,
         sheets: [{
-            name: "Nombre Pestaña",
+            name: "PlanDeCompra",
             dataSource: dataSource,
             columns: [
-                {width: 40},
-                {width: 100},
-                {width: 100},
-                {width: 150},
-                {width: 150},
-                {width: 130},
-                {width: 130}
-            ]/*,
+                {width: 40},    // id
+                {width: 100},   // G. Compra
+                {width: 100},   // Temp
+                {width: 150},   // Línea
+                {width: 150},   // Sub Línea
+                {width: 130},   // Marca
+                {width: 230},   // Estilo
+                {width: 200},   // Estilo Corto
+                {width: 130},   // Cod. Corp
+                {width: 250},   // Descripción
+                {width: 250},   // Descripción Internet
+                {width: 130},   // Nombre Comprador
+                {width: 130},   // Nombre Diseñador
+                {width: 200},   // Composición
+                {width: 130},   // Tipo Tela
+                {width: 130},   // Forro
+                {width: 250},   // Colección
+                {width: 200},   // Evento
+                {width: 130},   // Estilo Vida
+                {width: 130},   // Calidad
+                {width: 200},   // Ocación de Uso
+                {width: 150},   // Pirámide Mix
+                {width: 80},    // Ventana
+                {width: 200},   // Rank Vta
+                {width: 150},   // Life Cycle
+                {width: 130},   // Num. Emb
+                {width: 100},   // Color
+                {width: 120},   // Tipo Producto
+                {width: 150},   // Tipo Exhibición
+                {width: 140},   // Tallas
+                {width: 130},   // Tipo Empaque
+                {width: 300},   // % Compra Inicial
+                {width: 300},   // % Compra Ajustada
+                {width: 150},   // Curvas de Reparto
+                {width: 100},   // Curvas Min
+                {width: 100},   // Unid Ini
+                {width: 100},   // Unid Ajust
+                {width: 100},   // Unid Final
+                {width: 100},   // Mtr Pack
+                {width: 100},   // N Cajas
+                {width: 100},   // Cluster
+                {width: 100},   // Formato
+                {width: 80},   // Tdas
+                {width: 90},   // A
+                {width: 90},   // B
+                {width: 90},   // C
+                {width: 90},   // I
+                {width: 100},   // Primera Carga
+                {width: 100},   // % Tiendas
+                {width: 100},   // Proced
+                {width: 100},   // Vía
+                {width: 200},   // País
+                {width: 100},   // Viaje
+                {width: 90},    // Mkup
+                {width: 90},    // Precio Blanco
+                {width: 90},    // GM
+                {width: 90},    // Oferta
+                {width: 90},    // Moneda
+                {width: 90},    // Target
+                {width: 90},    // FOB
+                {width: 90},    // Insp
+                {width: 90},    // RFID
+                {width: 90},    // Royalty
+                {width: 150},   // Costo Unitario Final USD
+                {width: 160},   // Costo Unitario Final Pesos
+                {width: 110},   // Total Target USD
+                {width: 100},   // Total FOB USD
+                {width: 100},   // Costo Total
+                {width: 100},   // Total Retail
+                {width: 90},    // Debut/Reorder
+                {width: 90},    // Sem Ini
+                {width: 90},    // Sem Fin
+                {width: 130},   // Sem Ciclo Vida
+                {width: 90},    // Agot Obj
+                {width: 120},   // Semanas Liquidación
+                {width: 250},   // Proveedor
+                {width: 100},   // Razón Social
+                {width: 100},   // Trader
+                {width: 150},   // After Meeting Remark
+                {width: 100},   // Cod. SKU Proveedor
+                {width: 100},   // Cod. Padre
+                {width: 150},   // Proforma
+                {width: 90},    // Archivo
+                {width: 230},   // Estilo PMM
+                {width: 90},    // Estado Match
+                {width: 90},    // N OC
+                {width: 90},    // Estado OC
+                {width: 100},   // Fecha Acordada
+                {width: 100},   // Fecha Embarque
+                {width: 100},   // Fecha ETA
+                {width: 100},   // Fecha Recep CD
+                {width: 100},   // Dias Atraso
+                {width: 120}    // Estado Opcion
 
-            rows: [{
-                cells: [
-                    {value: "Select item:", bold: true},
-                    {
-                        background: "#fef0cd",
-                        validation: {
-                            dataType: "list",
-                            showButton: true,
-                            comparerType: "list",
-                            from: '"Foo item 1,Bar item 2,Baz item 3"',
-                            allowNulls: true,
-                            type: "reject"
-                        }
-                    }
-                ]
-            }]*/
+            ]
 
 
         }]
