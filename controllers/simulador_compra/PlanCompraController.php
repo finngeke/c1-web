@@ -27,18 +27,26 @@ class PlanCompraController extends \Control
     public function ProcesaDataPlanCompra($f3)
     {
 
+        // var_dump($_REQUEST);
+        // die();
+
         $tempData = html_entity_decode($_REQUEST['models']);
         $json = json_decode($tempData, true);
 
-         // var_dump($json['updated']);
-         // die();
+
 
         // Recorrer el JSON
-        foreach ($json['updated'] as $columna) {
-            // echo $columna['ID_COLOR3'];
+        // foreach ($json['updated'] as $columna) {
+        foreach ($json as $columna) {
 
             $ID_COLOR3 = $columna["ID_COLOR3"];
-            $GRUPO_COMPRA = $columna["GRUPO_COMPRA"];
+            $PROFORMA = $columna["PROFORMA"];
+            $ARCHIVO = $columna["ARCHIVO"];
+            $PROFORMA_BASE = $columna["PROFORMA_BASE"];
+            $ARCHIVO_BASE = $columna["ARCHIVO_BASE"];
+            $ESTADO_C1 = $columna["ESTADO_C1"];
+
+            /*$GRUPO_COMPRA = $columna["GRUPO_COMPRA"];
             $COD_TEMP = $columna["COD_TEMP"];
             $LINEA = $columna["LINEA"];
             $SUBLINEA = $columna["SUBLINEA"];
@@ -118,8 +126,6 @@ class PlanCompraController extends \Control
             $AFTER_MEETING_REMARKS = $columna["AFTER_MEETING_REMARKS"];
             $CODSKUPROVEEDOR = $columna["CODSKUPROVEEDOR"];
             $SKU = $columna["SKU"];
-            $PROFORMA = $columna["PROFORMA"];
-            $ARCHIVO = $columna["ARCHIVO"];
             $ESTILO_PMM = $columna["ESTILO_PMM"];
             $ESTADO_MATCH = $columna["ESTADO_MATCH"];
             $PO_NUMBER = $columna["PO_NUMBER"];
@@ -130,9 +136,9 @@ class PlanCompraController extends \Control
             $FECHA_RECEPCION = $columna["FECHA_RECEPCION"];
             $DIAS_ATRASO = $columna["DIAS_ATRASO"];
             $CODESTADO = $columna["CODESTADO"];
-            $ESTADO_C1 = $columna["ESTADO_C1"];
+
             $VENTANA_LLEGADA = $columna["VENTANA_LLEGADA"];
-            $PROFORMA_BASE = $columna["PROFORMA_BASE"];
+
             $TIPO_EMPAQUE_BASE = $columna["TIPO_EMPAQUE_BASE"];
             $UNI_INICIALES_BASE = $columna["UNI_INICIALES_BASE"];
             $PRECIO_BLANCO_BASE = $columna["PRECIO_BLANCO_BASE"];
@@ -144,9 +150,12 @@ class PlanCompraController extends \Control
             $N_CURVASXCAJAS = $columna["N_CURVASXCAJAS"];
             $COD_JER2 = $columna["COD_JER2"];
             $COD_SUBLIN = $columna["COD_SUBLIN"];
-            $ARCHIVO_BASE = $columna["ARCHIVO_BASE"];
+            */
 
 
+            echo json_encode(\simulador_compra\PlanCompraClass::ProcesaDataPlanCompra($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'),$ID_COLOR3,$ESTADO_C1, $PROFORMA, $ARCHIVO,$PROFORMA_BASE,$ARCHIVO_BASE));
+
+            /*
             echo json_encode(\simulador_compra\PlanCompraClass::ProcesaDataPlanCompra(
                 $f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'),
                 $ID_COLOR3, $GRUPO_COMPRA, $COD_TEMP, $LINEA, $SUBLINEA, $MARCA, $ESTILO, $SHORT_NAME, $ID_CORPORATIVO, $DESCMODELO, $DESCRIP_INTERNET,
@@ -157,8 +166,10 @@ class PlanCompraController extends \Control
                 $COD_TIP_MON, $COSTO_TARGET, $COSTO_FOB, $COSTO_INSP, $COSTO_RFID, $ROYALTY_POR, $COSTO_UNIT, $COSTO_UNITS, $CST_TOTLTARGET, $COSTO_TOT, $COSTO_TOTS,
                 $RETAIL, $DEBUT_REODER, $SEM_INI, $SEM_FIN, $CICLO, $AGOT_OBJ, $SEMLIQ, $ALIAS_PROV, $COD_PROVEEDOR, $COD_TRADER, $AFTER_MEETING_REMARKS, $CODSKUPROVEEDOR,
                 $SKU, $PROFORMA, $ARCHIVO, $ESTILO_PMM, $ESTADO_MATCH, $PO_NUMBER, $ESTADO_OC, $FECHA_ACORDADA, $FECHA_EMBARQUE, $FECHA_ETA, $FECHA_RECEPCION, $DIAS_ATRASO,
-                $CODESTADO, $ESTADO_C1, $VENTANA_LLEGADA, $PROFORMA_BASE, $TIPO_EMPAQUE_BASE, $UNI_INICIALES_BASE, $PRECIO_BLANCO_BASE, $COSTO_TARGET_BASE, $COSTO_FOB_BASE,
-                $COSTO_INSP_BASE, $COSTO_RFID_BASE, $COD_MARCA, $N_CURVASXCAJAS, $COD_JER2, $COD_SUBLIN, $ARCHIVO_BASE));
+                $CODESTADO, $ESTADO_C1, $VENTANA_LLEGADA, $TIPO_EMPAQUE_BASE, $UNI_INICIALES_BASE, $PRECIO_BLANCO_BASE, $COSTO_TARGET_BASE, $COSTO_FOB_BASE,
+                $COSTO_INSP_BASE, $COSTO_RFID_BASE, $COD_MARCA, $N_CURVASXCAJAS, $COD_JER2, $COD_SUBLIN));
+
+            */
 
 
             // Fin del each que recorre el JSON
