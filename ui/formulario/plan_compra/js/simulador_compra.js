@@ -1049,7 +1049,7 @@ $(function () {
             if(command == "Cambio Estado") {
 
 
-                if( (ID_COLOR3=="ID") || (ID_COLOR3=="") || (ID_COLOR3==null) || (ID_COLOR3.length==0) ){
+                if( (ID_COLOR3=="ID") || (ID_COLOR3=="") || (ID_COLOR3==null) || (ID_COLOR3.length==0) || (PROFORMA.length==0) || (PROFORMA==null) || (PROFORMA=="")){
                     popupNotification.getNotifications().parent().remove();
                     popupNotification.show(" Cambio Estado no disponible para este registro.", "error");
                 }else{
