@@ -473,6 +473,11 @@ $(function () {
             popupNotification.getNotifications().parent().remove();
             popupNotification.show(" Favor de Revisar los Estados.", "info");
 
+            // Recargo el DATASOURCE
+            var spreadsheet_reload = $("#spreadsheet").data("kendoSpreadsheet");
+            var sheet_reload = spreadsheet_reload.activeSheet();
+            sheet_reload.dataSource.read();
+
 
         // Si el usuario no acepta realizar cambios
         } else {

@@ -1058,6 +1058,9 @@ $(function () {
                     var popupCambioEstado = $("#POPUP_cambio_estado");
                     popupCambioEstado.data("kendoWindow").open();
 
+                    // Desplegar el BTN de Cambio de Estado
+                    $("#btn_genera_cambio_estado").show();
+
                     // Seteo TextArea en Blanco
                     $("#comentSolicitaCorreccionPI").val("");
 
