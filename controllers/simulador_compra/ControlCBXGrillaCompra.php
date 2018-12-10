@@ -532,7 +532,7 @@
 		}
 		
 		public function btn_actualizar_match($f3) {
-			echo \simulador_compra\cbx_grilla_compra::btn_actualizar_match($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $f3->get('GET.ID_COLOR3'), $f3->get('GET.LINEA'), $f3->get('GET.SUBLINEA'), $f3->get('GET.ESTILO'), $f3->get('GET.COLOR'));
+			echo \simulador_compra\cbx_grilla_compra::btn_actualizar_match($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $f3->get('GET.ID_COLOR3'), $f3->get('GET.LINEA'), $f3->get('GET.SUBLINEA'), $f3->get('GET.ESTILO'), $f3->get('GET.COLOR'), $f3->get('GET.COLOR_NOMBRE'));
 		}
 		
 		public function listar_plan_compra_color($f3) {
