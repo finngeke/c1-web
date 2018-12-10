@@ -27,8 +27,10 @@ class PlanCompraController extends \Control
     public function ProcesaDataPlanCompra($f3)
     {
 
-        // var_dump($_REQUEST);
-        // die();
+        /*echo "<pre>";
+        var_dump($_REQUEST);
+        echo "</pre>";
+        die();*/
 
         $tempData = html_entity_decode($_REQUEST['models']);
         $json = json_decode($tempData, true);
@@ -40,12 +42,48 @@ class PlanCompraController extends \Control
         foreach ($json as $columna) {
 
             $ID_COLOR3 = $columna["ID_COLOR3"];
-            $PROFORMA = $columna["PROFORMA"];
-            $ARCHIVO = $columna["ARCHIVO"];
-            $PROFORMA_BASE = $columna["PROFORMA_BASE"];
-            $ARCHIVO_BASE = $columna["ARCHIVO_BASE"];
             $ESTADO_C1 = $columna["ESTADO_C1"];
+            $PROFORMA = trim($columna["PROFORMA"]);
+            $ARCHIVO = trim($columna["ARCHIVO"]);
+            $PROFORMA_BASE = trim($columna["PROFORMA_BASE"]);
+            $ARCHIVO_BASE = trim($columna["ARCHIVO_BASE"]);
+            $ALIAS_PROV = trim($columna["ALIAS_PROV"]);
+            $NOM_VENTANA = trim(strtoupper($columna["NOM_VENTANA"])); // Pasamos a mayúscula la ventana que llega
+            $DESTALLA = trim($columna["DESTALLA"]);
+            $TIPO_EMPAQUE = $columna["TIPO_EMPAQUE"];
+            $PORTALLA_1_INI = trim($columna["PORTALLA_1_INI"]);
+            $CURVATALLA = trim($columna["CURVATALLA"]);
+            $UNID_OPCION_INICIO = $columna["UNID_OPCION_INICIO"];
+            $CAN = $columna["CAN"];
+            $SEG_ASIG = str_replace(" ", "+", trim($columna["SEG_ASIG"]));
+            $FORMATO = $columna["FORMATO"];
+            $A = $columna["A"];
+            $B = $columna["B"];
+            $C = $columna["C"];
+            $I = $columna["I"];
+            $NOM_VIA = trim($columna["NOM_VIA"]);
+            $NOM_PAIS = trim($columna["NOM_PAIS"]);
+            $PRECIO_BLANCO = $columna["PRECIO_BLANCO"];
+            $COSTO_TARGET = $columna["COSTO_TARGET"];
+            $COSTO_FOB = $columna["COSTO_FOB"];
+            $COSTO_INSP = $columna["COSTO_INSP"];
+            $COSTO_RFID = $columna["COSTO_RFID"];
+            $DEBUT_REODER = trim(strtoupper($columna["DEBUT_REODER"]));
+            $TIPO_EMPAQUE_BASE = trim(strtoupper($columna["TIPO_EMPAQUE_BASE"]));
+            $UNI_INICIALES_BASE = $columna["UNI_INICIALES_BASE"];
+            $PRECIO_BLANCO_BASE = $columna["PRECIO_BLANCO_BASE"];
+            $COSTO_TARGET_BASE = $columna["COSTO_TARGET_BASE"];
+            $COSTO_FOB_BASE = $columna["COSTO_FOB_BASE"];
+            $COSTO_INSP_BASE = $columna["COSTO_INSP_BASE"];
+            $COSTO_RFID_BASE = $columna["COSTO_RFID_BASE"];
+            $COD_MARCA = $columna["COD_MARCA"];
+            $N_CURVASXCAJAS = $columna["N_CURVASXCAJAS"];
+            $COD_JER2 = $columna["COD_JER2"];
+            $COD_SUBLIN = $columna["COD_SUBLIN"];
+            $FORMATO_BASE = $columna["FORMATO_BASE"];
 
+
+            // OTRAS VARIABLES
             /*$GRUPO_COMPRA = $columna["GRUPO_COMPRA"];
             $COD_TEMP = $columna["COD_TEMP"];
             $LINEA = $columna["LINEA"];
@@ -67,46 +105,26 @@ class PlanCompraController extends \Control
             $CALIDAD = $columna["CALIDAD"];
             $COD_OCASION_USO = $columna["COD_OCASION_USO"];
             $COD_PIRAMIX = $columna["COD_PIRAMIX"];
-            $NOM_VENTANA = strtoupper($columna["NOM_VENTANA"]); // Pasamos a mayúscula la ventana que llega
             $COD_RANKVTA = $columna["COD_RANKVTA"];
             $LIFE_CYCLE = $columna["LIFE_CYCLE"];
             $NUM_EMB = $columna["NUM_EMB"];
             $COD_COLOR = $columna["COD_COLOR"];
             $TIPO_PRODUCTO = $columna["TIPO_PRODUCTO"];
             $TIPO_EXHIBICION = $columna["TIPO_EXHIBICION"];
-            $DESTALLA = $columna["DESTALLA"];
-            $TIPO_EMPAQUE = $columna["TIPO_EMPAQUE"];
-            $PORTALLA_1_INI = $columna["PORTALLA_1_INI"];
             $PORTALLA_1 = $columna["PORTALLA_1"];
-            $CURVATALLA = $columna["CURVATALLA"];
             $CURVAMIN = $columna["CURVAMIN"];
-            $UNID_OPCION_INICIO = $columna["UNID_OPCION_INICIO"];
             $UNID_OPCION_AJUSTADA = $columna["UNID_OPCION_AJUSTADA"];
-            $CAN = $columna["CAN"];
             $MTR_PACK = $columna["MTR_PACK"];
             $CANT_INNER = $columna["CANT_INNER"];
-            $SEG_ASIG = str_replace(" ", "+", $columna["SEG_ASIG"]);//$columna["SEG_ASIG"];
-            $FORMATO = $columna["FORMATO"];
             $TDAS = $columna["TDAS"];
-            $A = $columna["A"];
-            $B = $columna["B"];
-            $C = $columna["C"];
-            $I = $columna["I"];
             $UND_ASIG_INI = $columna["UND_ASIG_INI"];
             $ROT = $columna["ROT"];
             $NOM_PRECEDENCIA = $columna["NOM_PRECEDENCIA"];
-            $NOM_VIA = $columna["NOM_VIA"];
-            $NOM_PAIS = $columna["NOM_PAIS"];
             $VIAJE = $columna["VIAJE"];
             $MKUP = $columna["MKUP"];
-            $PRECIO_BLANCO = $columna["PRECIO_BLANCO"];
             $OFERTA = $columna["OFERTA"];
             $GM = $columna["GM"];
             $COD_TIP_MON = $columna["COD_TIP_MON"];
-            $COSTO_TARGET = $columna["COSTO_TARGET"];
-            $COSTO_FOB = $columna["COSTO_FOB"];
-            $COSTO_INSP = $columna["COSTO_INSP"];
-            $COSTO_RFID = $columna["COSTO_RFID"];
             $ROYALTY_POR = $columna["ROYALTY_POR"];
             $COSTO_UNIT = $columna["COSTO_UNIT"];
             $COSTO_UNITS = round($columna["COSTO_UNITS"], 0); //$columna["COSTO_UNITS"]
@@ -114,13 +132,11 @@ class PlanCompraController extends \Control
             $COSTO_TOT = $columna["COSTO_TOT"];
             $COSTO_TOTS = $columna["COSTO_TOTS"];
             $RETAIL = $columna["RETAIL"];
-            $DEBUT_REODER = $columna["DEBUT_REODER"];
             $SEM_INI = $columna["SEM_INI"];
             $SEM_FIN = $columna["SEM_FIN"];
             $CICLO = $columna["CICLO"];
             $AGOT_OBJ = $columna["AGOT_OBJ"];
             $SEMLIQ = $columna["SEMLIQ"];
-            $ALIAS_PROV = $columna["ALIAS_PROV"];
             $COD_PROVEEDOR = $columna["COD_PROVEEDOR"];
             $COD_TRADER = $columna["COD_TRADER"];
             $AFTER_MEETING_REMARKS = $columna["AFTER_MEETING_REMARKS"];
@@ -136,24 +152,20 @@ class PlanCompraController extends \Control
             $FECHA_RECEPCION = $columna["FECHA_RECEPCION"];
             $DIAS_ATRASO = $columna["DIAS_ATRASO"];
             $CODESTADO = $columna["CODESTADO"];
-
             $VENTANA_LLEGADA = $columna["VENTANA_LLEGADA"];
 
-            $TIPO_EMPAQUE_BASE = $columna["TIPO_EMPAQUE_BASE"];
-            $UNI_INICIALES_BASE = $columna["UNI_INICIALES_BASE"];
-            $PRECIO_BLANCO_BASE = $columna["PRECIO_BLANCO_BASE"];
-            $COSTO_TARGET_BASE = $columna["COSTO_TARGET_BASE"];
-            $COSTO_FOB_BASE = $columna["COSTO_FOB_BASE"];
-            $COSTO_INSP_BASE = $columna["COSTO_INSP_BASE"];
-            $COSTO_RFID_BASE = $columna["COSTO_RFID_BASE"];
-            $COD_MARCA = $columna["COD_MARCA"];
-            $N_CURVASXCAJAS = $columna["N_CURVASXCAJAS"];
-            $COD_JER2 = $columna["COD_JER2"];
-            $COD_SUBLIN = $columna["COD_SUBLIN"];
             */
 
-
-            echo json_encode(\simulador_compra\PlanCompraClass::ProcesaDataPlanCompra($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'),$ID_COLOR3,$ESTADO_C1, $PROFORMA, $ARCHIVO,$PROFORMA_BASE,$ARCHIVO_BASE));
+if($ESTADO_C1!=24){
+            echo json_encode(\simulador_compra\PlanCompraClass::ProcesaDataPlanCompra($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'),
+                $ID_COLOR3,$ESTADO_C1, $PROFORMA, $ARCHIVO,$PROFORMA_BASE,$ARCHIVO_BASE,$ALIAS_PROV,
+                $NOM_VENTANA,$DESTALLA, $TIPO_EMPAQUE, $PORTALLA_1_INI, $CURVATALLA, $UNID_OPCION_INICIO,
+                $CAN, $SEG_ASIG, $FORMATO, $A, $B, $C, $I, $NOM_VIA, $NOM_PAIS, $PRECIO_BLANCO, $COSTO_TARGET,
+                $COSTO_FOB, $COSTO_INSP, $COSTO_RFID, $DEBUT_REODER, $TIPO_EMPAQUE_BASE, $UNI_INICIALES_BASE,
+                $PRECIO_BLANCO_BASE, $COSTO_TARGET_BASE, $COSTO_FOB_BASE, $COSTO_INSP_BASE, $COSTO_RFID_BASE, $COD_MARCA,
+                $N_CURVASXCAJAS, $COD_JER2, $COD_SUBLIN, $FORMATO_BASE
+            ));
+}
 
             /*
             echo json_encode(\simulador_compra\PlanCompraClass::ProcesaDataPlanCompra(
@@ -172,7 +184,7 @@ class PlanCompraController extends \Control
             */
 
 
-            // Fin del each que recorre el JSON
+        // Fin del each que recorre el JSON
         }
 
 
