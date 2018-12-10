@@ -120,13 +120,13 @@ class PlanCompraClass extends \parametros
                 C.COSTO_FOB COSTO_FOB_BASE,               -- 100 FOB Base
                 C.COSTO_INSP COSTO_INSP_BASE,             -- 101 Insp Base
                 C.COSTO_RFID COSTO_RFID_BASE,             -- 102 RFID Base
-                
                 C.COD_MARCA,                              -- 103 COD_MARCA  
                 C.N_CURVASXCAJAS,                         -- 104 N_CURVASXCAJAS
                 C.COD_JER2,                               -- 105 cod_linea
                 C.COD_SUBLIN,                             -- 106 cod_sublin
-                O.ARCHIVO ARCHIVO_BASE,                    -- 107 Archivo
-                REPLACE((SELECT DISTINCT FECHA_RECEPCD FROM plc_ventana_emb V WHERE V.cod_temporada = C.COD_TEMPORADA AND V.cod_ventana = C.VENT_EMB),'/','-') FECHA_RECEPCD_C1 -- 95 Fecha recepcion CD
+                O.ARCHIVO ARCHIVO_BASE,                   -- 107 Archivo
+                REPLACE((SELECT DISTINCT FECHA_RECEPCD FROM plc_ventana_emb V WHERE V.cod_temporada = C.COD_TEMPORADA AND V.cod_ventana = C.VENT_EMB),'/','-') FECHA_RECEPCD_C1, -- 95 Fecha recepcion CD
+                C.FORMATO FORMATO_BASE                   -- 41 Formato
                 FROM PLC_PLAN_COMPRA_COLOR_3 C
                 LEFT JOIN PLC_PLAN_COMPRA_OC O ON C.COD_TEMPORADA = O.COD_TEMPORADA
 				AND C.DEP_DEPTO = O.DEP_DEPTO AND C.ID_COLOR3 = O.ID_COLOR3
@@ -278,7 +278,7 @@ class PlanCompraClass extends \parametros
                     }
                 }
             }
-#endregion
+
 
             array_push($array1
                 , array(
@@ -364,7 +364,7 @@ class PlanCompraClass extends \parametros
                 , "CODSKUPROVEEDOR" => utf8_encode($va1[79])
                 , "SKU" => utf8_encode($va1[80])
                 , "PROFORMA" => utf8_encode($va1[81])
-                , "ARCHIVO" => utf8_encode($va1[82])
+                , "ARCHIVO" => str_replace("null","",utf8_encode($va1[82]))
                 , "ESTILO_PMM" => utf8_encode($estilo_pmm)
                 , "ESTADO_MATCH" => utf8_encode($estado_match)
                 , "PO_NUMBER" => utf8_encode($orden_compra)
@@ -390,6 +390,7 @@ class PlanCompraClass extends \parametros
                 , "COD_JER2" => $va1[105] //cod_linea
                 , "COD_SUBLIN" => $va1[106]
                 , "ARCHIVO_BASE" => $va1[107]
+                , "FORMATO_BASE" => utf8_encode($va1[41])
 
 
                 )
@@ -732,16 +733,17 @@ class PlanCompraClass extends \parametros
         return $data;
     }
 
-
     //##################################################### FIN LISTAR PLANCOMPRA ##########################################################
 
 
     // Procesar el JSON que llega
     // public static function ProcesaDataPlanCompra($TEMPORADA, $DEPTO, $LOGIN, $ID_COLOR3, $GRUPO_COMPRA, $COD_TEMP, $LINEA, $SUBLINEA, $MARCA, $ESTILO, $SHORT_NAME, $ID_CORPORATIVO, $DESCMODELO, $DESCRIP_INTERNET, $NOMBRE_COMPRADOR, $NOMBRE_DISENADOR, $COMPOSICION, $TIPO_TELA, $FORRO, $COLECCION, $EVENTO, $COD_ESTILO_VIDA, $CALIDAD, $COD_OCASION_USO, $COD_PIRAMIX, $NOM_VENTANA, $COD_RANKVTA, $LIFE_CYCLE, $NUM_EMB, $COD_COLOR, $TIPO_PRODUCTO, $TIPO_EXHIBICION, $DESTALLA, $TIPO_EMPAQUE, $PORTALLA_1_INI, $PORTALLA_1, $CURVATALLA, $CURVAMIN, $UNID_OPCION_INICIO, $UNID_OPCION_AJUSTADA, $CAN, $MTR_PACK, $CANT_INNER, $SEG_ASIG, $FORMATO, $TDAS, $A, $B, $C, $I, $UND_ASIG_INI, $ROT, $NOM_PRECEDENCIA, $NOM_VIA, $NOM_PAIS, $VIAJE, $MKUP, $PRECIO_BLANCO, $OFERTA, $GM, $COD_TIP_MON, $COSTO_TARGET, $COSTO_FOB, $COSTO_INSP, $COSTO_RFID, $ROYALTY_POR, $COSTO_UNIT, $COSTO_UNITS, $CST_TOTLTARGET, $COSTO_TOT, $COSTO_TOTS, $RETAIL, $DEBUT_REODER, $SEM_INI, $SEM_FIN, $CICLO, $AGOT_OBJ, $SEMLIQ, $ALIAS_PROV, $COD_PROVEEDOR, $COD_TRADER, $AFTER_MEETING_REMARKS, $CODSKUPROVEEDOR, $SKU, $PROFORMA, $ARCHIVO, $ESTILO_PMM, $ESTADO_MATCH, $PO_NUMBER, $ESTADO_OC, $FECHA_ACORDADA, $FECHA_EMBARQUE, $FECHA_ETA, $FECHA_RECEPCION, $DIAS_ATRASO, $CODESTADO, $ESTADO_C1, $VENTANA_LLEGADA, $PROFORMA_BASE, $TIPO_EMPAQUE_BASE, $UNI_INICIALES_BASE, $PRECIO_BLANCO_BASE, $COSTO_TARGET_BASE, $COSTO_FOB_BASE, $COSTO_INSP_BASE, $COSTO_RFID_BASE, $COD_MARCA, $N_CURVASXCAJAS, $COD_JER2, $COD_SUBLIN, $ARCHIVO_BASE)
-    public static function ProcesaDataPlanCompra($TEMPORADA, $DEPTO, $LOGIN, $ID_COLOR3,$ESTADO_C1, $PROFORMA, $ARCHIVO,$PROFORMA_BASE,$ARCHIVO_BASE)
+    // public static function ProcesaDataPlanCompra($TEMPORADA, $DEPTO, $LOGIN, $ID_COLOR3, $NOM_VENTANA,$DESTALLA, $TIPO_EMPAQUE, $PORTALLA_1_INI, $CURVATALLA, $UNID_OPCION_INICIO, $CAN, $SEG_ASIG, $FORMATO, $A, $B, $C, $I, $NOM_VIA, $NOM_PAIS, $PRECIO_BLANCO, $COSTO_TARGET, $COSTO_FOB, $COSTO_INSP, $COSTO_RFID, $DEBUT_REODER, $TIPO_EMPAQUE_BASE, $UNI_INICIALES_BASE, $PRECIO_BLANCO_BASE, $COSTO_TARGET_BASE, $COSTO_FOB_BASE, $COSTO_INSP_BASE, $COSTO_RFID_BASE, $COD_MARCA, $N_CURVASXCAJAS, $COD_JER2, $COD_SUBLIN)
+     public static function ProcesaDataPlanCompra($TEMPORADA, $DEPTO, $LOGIN, $ID_COLOR3,$ESTADO_C1, $PROFORMA, $ARCHIVO,$PROFORMA_BASE,$ARCHIVO_BASE,$ALIAS_PROV, $NOM_VENTANA,$DESTALLA, $TIPO_EMPAQUE, $PORTALLA_1_INI, $CURVATALLA, $UNID_OPCION_INICIO, $CAN, $SEG_ASIG, $FORMATO, $A, $B, $C, $I, $NOM_VIA, $NOM_PAIS, $PRECIO_BLANCO, $COSTO_TARGET, $COSTO_FOB, $COSTO_INSP, $COSTO_RFID, $DEBUT_REODER, $TIPO_EMPAQUE_BASE, $UNI_INICIALES_BASE, $PRECIO_BLANCO_BASE, $COSTO_TARGET_BASE, $COSTO_FOB_BASE, $COSTO_INSP_BASE, $COSTO_RFID_BASE, $COD_MARCA, $N_CURVASXCAJAS, $COD_JER2, $COD_SUBLIN,$FORMATO_BASE)
     {
 
-        // ############################################# GUARDADO PROFORMA #############################################
+
+        // ############################################# 2 GUARDADO PROFORMA ###########################################
         // ############################ (Independiente de Curvado y Otras Actualizaciones) #############################
         // 1.- Si la proforma base no es igual a la que nos llega, hay que aplicar la función de guardado de proforma.
         if ((($PROFORMA_BASE != $PROFORMA) && (is_null($PROFORMA_BASE))) || ($ARCHIVO_BASE != $ARCHIVO)) {
@@ -757,10 +759,10 @@ class PlanCompraClass extends \parametros
                 // Aplicar guardado de proforma
                 $query_proforma = PlanCompraClass::GuardaProforma($TEMPORADA, $DEPTO, $LOGIN, $PROFORMA, $ID_COLOR3, $sube_archivo);
                 if (!$query_proforma) {
-                    return json_encode("error-(" . $ID_COLOR3 . ") No se pudo realizar la actualización de la proforma.");
+                    return json_encode("(" . $ID_COLOR3 . ") No se pudo realizar la actualización de la proforma.");
                     die();
                 }else{
-                    return "OK";
+                    return "OK"; // Ver si hay que devolver OK o nada para seguir con las otras otras actualizaciones
                 }
 
 
@@ -772,117 +774,148 @@ class PlanCompraClass extends \parametros
         // ########################################## FIN GUARDADO PROFORMA ############################################
 
 
-
-        // OJO Separar el guardado de los campos libres de los calculados
-
-
-        // ############################################# VALIDACIONES #############################################
-        // Validar Ventana
-        /*if (($NOM_VENTANA == null) || ($NOM_VENTANA == "") || ($NOM_VENTANA == "null")) {
-            return json_encode("error-(" . $ID_COLOR3 . ") Se ha enviado un registro sin ventana.");
+        // ###################################### 2 GUARDADO CAMPOS DE TEXTO SIMPLE ####################################
+        // ######################### (Campos de Texto que no requieren validación, update directo) #####################
+        $query_campos_libres = PlanCompraClass::ActualizaPlanCompraCamposLibre($TEMPORADA, $DEPTO, $LOGIN, $ID_COLOR3,$ALIAS_PROV);
+        if(!$query_campos_libres){
+            return json_encode("No se pudo Actualizar un Campos Libre.");
             die();
         }
 
+
+
+        // ############################################# VALIDACIONES #############################################
+
         // Validar Tipo Empaque
         if (($TIPO_EMPAQUE == null) || ($TIPO_EMPAQUE == "") || ($TIPO_EMPAQUE == "null")) {
-            return json_encode("error-(" . $ID_COLOR3 . ") Se ha enviado un empaque vacio.");
+            return json_encode("(" . $ID_COLOR3 . ") Se ha enviado un empaque vacio.");
+            die();
+        }
+
+        // Validar Unidades Iniciales
+        if (($UNID_OPCION_INICIO == null) || ($UNID_OPCION_INICIO == "") || ($UNID_OPCION_INICIO == "null") || (!$UNID_OPCION_INICIO)) {
+            return json_encode("(" . $ID_COLOR3 . ") Se ha enviado Unidad Iniciales vacia.");
+            die();
+        }
+
+        // Validar Formato
+        if (($FORMATO == null) || ($FORMATO == "") || ($FORMATO == "null")) {
+            return json_encode("(" . $ID_COLOR3 . ") Se ha enviado un formato vacio.");
+            die();
+        }
+
+
+        // Validar Ventana
+        if (($NOM_VENTANA == null) || ($NOM_VENTANA == "") || ($NOM_VENTANA == "null")) {
+            return json_encode("(" . $ID_COLOR3 . ") Se ha enviado un registro sin ventana.");
             die();
         }
 
         // Validar que llega la Vía
         if (($NOM_VIA != "MARITIMO") || ($NOM_VIA != "AEREA") || ($NOM_VIA != "TERRESTRE")) {
-            return json_encode("error-(" . $ID_COLOR3 . ") El valor enviado en la columna Vía, no corresponde.");
+            return json_encode("(" . $ID_COLOR3 . ") El valor enviado en la columna Vía, no corresponde.");
             die();
         }
 
         // Validar que lleguen los datos asociados al curvado
         if (!isset($TIPO_EMPAQUE) || !isset($PORTALLA_1_INI) || !isset($DESTALLA) || !isset($CURVATALLA) || ($UNID_OPCION_INICIO <= 0) || ($SEG_ASIG == null) || ($SEG_ASIG == '')) {
-            return json_encode("error-(" . $ID_COLOR3 . ") No pueden estar en blanco los Campos: Tipo Empaque, Porcent Ini,Tallas,Curvas,Und Iniciales.");
+            return json_encode("(" . $ID_COLOR3 . ") No pueden estar en blanco los Campos: Tipo Empaque, Porcent Ini,Tallas,Curvas,Und Iniciales.");
             die();
         }
         // ########################################### FIN VALIDACIONES ###########################################
-*/
-
-
 
 
         // ############################################# SETEO DE VARIABLES #############################################
-        // Validar Campo $COSTO_TARGET
-        /*$COSTO_TARGET = str_replace(",", ".", $COSTO_TARGET);
-        if (empty($COSTO_TARGET) || (!is_numeric($COSTO_TARGET)) || ($COSTO_TARGET == null) || ($COSTO_TARGET == '')) {
-            $COSTO_TARGET = 0;
-        }
-        // Si el primer caracter es solo un punto, le concateno un "cero" para poder trabajar con el
-        if (substr($COSTO_TARGET, 0, 1) == ".") {
-            $COSTO_TARGET = "0" . $COSTO_TARGET;
-        }
+         // Validar Campo $COSTO_TARGET
+         $COSTO_TARGET = str_replace(",", ".", $COSTO_TARGET);
+         if (empty($COSTO_TARGET) || (!is_numeric($COSTO_TARGET)) || ($COSTO_TARGET == null) || ($COSTO_TARGET == '')) {
+             $COSTO_TARGET = 0;
+         }
+         // Si el primer caracter es solo un punto, le concateno un "cero" para poder trabajar con el
+         if (substr($COSTO_TARGET, 0, 1) == ".") {
+             $COSTO_TARGET = "0" . $COSTO_TARGET;
+         }
 
-        // Validar Campo $COSTO_FOB
-        $COSTO_FOB = str_replace(",", ".", $COSTO_FOB);
-        if (empty($COSTO_FOB) || (!is_numeric($COSTO_FOB)) || ($COSTO_FOB == null) || ($COSTO_FOB == '')) {
-            $COSTO_FOB = 0;
-        }
-        // Si el primer caracter es solo un punto, le concateno un "cero" para poder trabajar con el
-        if (substr($COSTO_FOB, 0, 1) == ".") {
-            $COSTO_FOB = "0" . $COSTO_FOB;
-        }
+         // Validar Campo $COSTO_FOB
+         $COSTO_FOB = str_replace(",", ".", $COSTO_FOB);
+         if (empty($COSTO_FOB) || (!is_numeric($COSTO_FOB)) || ($COSTO_FOB == null) || ($COSTO_FOB == '')) {
+             $COSTO_FOB = 0;
+         }
+         // Si el primer caracter es solo un punto, le concateno un "cero" para poder trabajar con el
+         if (substr($COSTO_FOB, 0, 1) == ".") {
+             $COSTO_FOB = "0" . $COSTO_FOB;
+         }
 
-        // Validar Campo $COSTO_INSP
-        $COSTO_INSP = str_replace(",", ".", $COSTO_INSP);
-        if (empty($COSTO_INSP) || (!is_numeric($COSTO_INSP)) || ($COSTO_INSP == null) || ($COSTO_INSP == '')) {
-            $COSTO_INSP = 0;
-        }
-        // Si el primer caracter es solo un punto, le concateno un "cero" para poder trabajar con el
-        if (substr($COSTO_INSP, 0, 1) == ".") {
-            $COSTO_INSP = "0" . $COSTO_INSP;
-        }
+         // Validar Campo $COSTO_INSP
+         $COSTO_INSP = str_replace(",", ".", $COSTO_INSP);
+         if (empty($COSTO_INSP) || (!is_numeric($COSTO_INSP)) || ($COSTO_INSP == null) || ($COSTO_INSP == '')) {
+             $COSTO_INSP = 0;
+         }
+         // Si el primer caracter es solo un punto, le concateno un "cero" para poder trabajar con el
+         if (substr($COSTO_INSP, 0, 1) == ".") {
+             $COSTO_INSP = "0" . $COSTO_INSP;
+         }
 
-        // Validar Campo $COSTO_RFID
-        $COSTO_RFID = str_replace(",", ".", $COSTO_RFID);
-        if (empty($COSTO_RFID) || (!is_numeric($COSTO_RFID)) || ($COSTO_RFID == null) || ($COSTO_RFID == '')) {
-            $COSTO_RFID = 0;
-        }
-        // Si el primer caracter es solo un punto, le concateno un "cero" para poder trabajar con el
-        if (substr($COSTO_RFID, 0, 1) == ".") {
-            $COSTO_RFID = "0" . $COSTO_RFID;
-        }
+         // Validar Campo $COSTO_RFID
+         $COSTO_RFID = str_replace(",", ".", $COSTO_RFID);
+         if (empty($COSTO_RFID) || (!is_numeric($COSTO_RFID)) || ($COSTO_RFID == null) || ($COSTO_RFID == '')) {
+             $COSTO_RFID = 0;
+         }
+         // Si el primer caracter es solo un punto, le concateno un "cero" para poder trabajar con el
+         if (substr($COSTO_RFID, 0, 1) == ".") {
+             $COSTO_RFID = "0" . $COSTO_RFID;
+         }
 
-        // Transforma a Número el "Nombre de la Vía"
-        $NOM_VIA_NUMERO = 0;
-        if ($NOM_VIA == "MARITIMO") {
-            $NOM_VIA_NUMERO = 1;
-        } elseif ($NOM_VIA == "AEREA") {
-            $NOM_VIA_NUMERO = 2;
-        } elseif ($NOM_VIA == "TERRESTRE") {
-            $NOM_VIA_NUMERO = 3;
-        }
+         // Transforma a Número el "Nombre de la Vía"
+         $NOM_VIA_NUMERO = 0;
+         if ($NOM_VIA == "MARITIMO") {
+             $NOM_VIA_NUMERO = 1;
+         } elseif ($NOM_VIA == "AEREA") {
+             $NOM_VIA_NUMERO = 2;
+         } elseif ($NOM_VIA == "TERRESTRE") {
+             $NOM_VIA_NUMERO = 3;
+         }
 
-        // Traer Número País
-        $query_numero_pais = PlanCompraClass::BuscaNumeroPais($NOM_PAIS);
-        $NOM_PAIS_NUMERO = $query_numero_pais[0];
-        if (empty($NOM_PAIS_NUMERO)) {
-            return json_encode("error-(" . $ID_COLOR3 . ") No pudimos encontrar el nombre de país ingresado, verifique que el texto ingresado existe.");
-            die();
-        }
+         // Traer Número País
+         $query_numero_pais = PlanCompraClass::BuscaNumeroPais($NOM_PAIS);
+         $NOM_PAIS_NUMERO = $query_numero_pais[0];
+         if (empty($NOM_PAIS_NUMERO)) {
+             return json_encode("error-(" . $ID_COLOR3 . ") No pudimos encontrar el nombre de país ingresado, verifique que el texto ingresado existe.");
+             die();
+         }
 
-        // Traer factor
-        $query_factor = PlanCompraClass::BuscaFactor($TEMPORADA, $DEPTO, $NOM_PAIS_NUMERO, $NOM_VIA_NUMERO, 2, $NOM_VENTANA);
-        if (empty($query_factor[0])) {
-            $query_factor = 0;
-        }
+         // Traer factor
+         $query_factor = PlanCompraClass::BuscaFactor($TEMPORADA, $DEPTO, $NOM_PAIS_NUMERO, $NOM_VIA_NUMERO, 2, $NOM_VENTANA);
+         if (empty($query_factor[0])) {
+             $query_factor = 0;
+         }
 
-        // Traer tipo de cambio
-        $query_tipo_cambio = PlanCompraClass::BuscaTipoCambio($TEMPORADA, $DEPTO, 2, $NOM_VENTANA);
-        if (empty($query_tipo_cambio[0])) {
-            $query_tipo_cambio = 0;
-        }
+         // Traer tipo de cambio
+         $query_tipo_cambio = PlanCompraClass::BuscaTipoCambio($TEMPORADA, $DEPTO, 2, $NOM_VENTANA);
+         if (empty($query_tipo_cambio[0])) {
+             $query_tipo_cambio = 0;
+         }
 
-        // Valido que factor y tipo de cambio no sean cero
-        if (($query_factor == 0) && ($query_tipo_cambio == 0)) {
-            return json_encode("error-(" . $ID_COLOR3 . ") Factor y Tipo de Cambio llegan en Cero(0).");
-            die();
-        }
-        // ########################################## FIN SETEO DE VARIABLES ############################################
+         // Valido que factor y tipo de cambio no sean cero
+         if (($query_factor == 0) && ($query_tipo_cambio == 0)) {
+             return json_encode("error-(" . $ID_COLOR3 . ") Factor y Tipo de Cambio llegan en Cero(0).");
+             die();
+         }
+         // ########################################## FIN SETEO DE VARIABLES ############################################
+
+
+
+
+
+
+        // CURVADO Si hay Cambio en: Tipo Empaque($TIPO_EMPAQUE), Uni Iniciales($UNID_OPCION_INICIO) o Formato($FORMATO)
+        /*if( ($TIPO_EMPAQUE!=$TIPO_EMPAQUE_BASE) || ($UNID_OPCION_INICIO!=$UNI_INICIALES_BASE) || ($FORMATO!=$FORMATO_BASE) ){
+
+        }*/
+
+
+
+
 
 
         // ############################### CÁLCULO CON LAS VARIABLES DEFINIDAS PREVIAMENTE ##############################
@@ -896,7 +929,7 @@ class PlanCompraClass extends \parametros
         if ($COSTO_FOB > 0) {
             $costo_unitario_final_usd = $COSTO_FOB + $COSTO_INSP + $COSTO_RFID;
             $costo_unitario_final_usd = number_format($costo_unitario_final_usd, 2, '.', '');
-            $total_fob_usd = $costo_unitario_final_usd * $CAN; //$UNID_OPCION_INICIO=iniciales
+            $total_fob_usd = $costo_unitario_final_usd * $CAN;
         } else {
             $costo_unitario_final_usd = $COSTO_TARGET + $COSTO_INSP + $COSTO_RFID;
             $costo_unitario_final_usd = number_format($costo_unitario_final_usd, 2, '.', '');
@@ -946,27 +979,14 @@ class PlanCompraClass extends \parametros
         }
 
 
-        // 1.- Primero realizar el actualizado de los campos que no están asociados al curvado (Si hay problema con el curvado, que el usuario no pierda la otra data actualizada)
-        // ################# ACTUALIZAR EN ESTA QUERY, TODOS LOS CAMPO QUE NO REQUIEREN CALCULO ##################
-        $query_campos_sin_calculo = PlanCompraClass::ActualizaCampoSinCalculo();
-        if (!$query_campos_sin_calculo) {
-            return json_encode("error-(" . $ID_COLOR3 . ") No se pudo actualizar el registro.");
-            die();
-        }
 
-
-        // 2.- Realizar cálculos del curvado... siempre y cuando los datos que llegan sean distinto de los datos base
-
-
-
-
-
+        // 1.- Realizar cálculos del curvado... siempre y cuando los datos que llegan sean distinto de los datos base
 
         // Hay que ir a buscar el Curvado
         $query_curva = PlanCompraClass::CalculoCurvadoPlanCompra($TIPO_EMPAQUE, $DESTALLA, $CURVATALLA, $UNID_OPCION_INICIO, $SEG_ASIG, $FORMATO, $A, $B, $C, $I, $DEBUT_REODER, $PORTALLA_1_INI, $DEPTO, $TEMPORADA, $COD_MARCA, $N_CURVASXCAJAS, $COD_JER2, $COD_SUBLIN, $ID_COLOR3, 1);
         // Valido que se pueda realizar la QUERY
         if (!$query_curva) {
-            return json_encode("error-(" . $ID_COLOR3 . ") No se pudo buscar curvado.");
+            return json_encode("(" . $ID_COLOR3 . ") No se pudo buscar curvado.");
             die();
         }
         $CURVA_UNID_AJUST = $query_curva[0]; //  unid ajust
@@ -978,10 +998,9 @@ class PlanCompraClass extends \parametros
         $CURVA_UNIDAJUSTXTALLA = $query_curva[6]; //  unidadesajustXtalla
         // Valido que lleguen todos los datos de la QUERY
         if (empty($CURVA_UNID_AJUST) || empty($CURVA_POR_AJUSTE) || empty($CURVA_N_CAJAS) || empty($CURVA_UNID_FINAL) || empty($CURVA_PRIMERA_CARGA) || empty($CURVA_TDAS) || empty($CURVA_UNIDAJUSTXTALLA)) {
-            return json_encode("error-(" . $ID_COLOR3 . ") No se pudo obtener los datos del curvado, revise la data ingresada.");
+            return json_encode("(" . $ID_COLOR3 . ") No se pudo obtener los datos del curvado, revise la data ingresada.");
             die();
         }
-
 
 
         // Variables que se van enviar al UPDATE
@@ -1024,10 +1043,12 @@ class PlanCompraClass extends \parametros
             $COSTO_TOT, $COSTO_TOTS, $MKUP, $GM, $PROVEEDOR, $VIA, $PAIS, $FACTOR_EST, $NOM_VIA, $NOM_PAIS, $TARGET, $tipo_emp_, $UNIDADES_INICIALES, $CURVA_UNID_AJUST, $UNIDADES_FINALES,
             $CURVA_POR_AJUSTE, $CURVA_TDAS, $formatos_, $CURVA_N_CAJAS, $CURVA_UNIDAJUSTXTALLA, $marca_, $cluster_, $debut_, $precioRetail_, $precio_blanco_, $COSTO);
         if (!$query_tipo_cambio) {
-            return "error-(" . $ID_COLOR3 . ") No se pudo ejecutar la función ActualizaPlanCompra.";
+            return "(" . $ID_COLOR3 . ") No se pudo ejecutar la función ActualizaPlanCompra.";
             die();
+        }else{
+            return json_encode("OK");
         }
-*/
+
 
     // Fin ProcesaDataPlanCompra
     }
@@ -2021,6 +2042,29 @@ class PlanCompraClass extends \parametros
     }
 
 
+    public static function ActualizaPlanCompraCamposLibre($temporada, $depto, $login, $ID_COLOR3, $ALIAS_PROV)
+    {
+
+        $sql = "UPDATE PLC_PLAN_COMPRA_COLOR_3 
+                  SET ALIAS_PROV = '" . $ALIAS_PROV . "'
+                WHERE COD_TEMPORADA = $temporada
+                    AND DEP_DEPTO = '" . $depto . "'
+                    AND ID_COLOR3 = $ID_COLOR3";
+
+        // Almacenar TXT LOG
+        if (!file_exists('../archivos/log_querys/' . $login)) {
+            mkdir('../archivos/log_querys/' . $login, 0775, true);
+        }
+
+        $stamp = date("Y-m-d_H-i-s");
+        $rand = rand(1, 999);
+        $content = $sql;
+        $fp = fopen("../archivos/log_querys/" . $login . "/PLANCOMPRA-ActualizaPlanCompraCamposLibre--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+        fwrite($fp, $content);
+        fclose($fp);
+        $data = \database::getInstancia()->getConsulta($sql);
+
+    }
 
     // Actualiza la fecha del registro de concurrencia
     public static function actualiza_fecha_concurrencia($temporada, $depto, $login)
@@ -2723,8 +2767,9 @@ class PlanCompraClass extends \parametros
         $COLOR_REPLACE1 = str_replace("(","",$COLOR_EXPLODE[0]);
         $COLOR_REPLACE2 = str_replace(")","",$COLOR_REPLACE1);
         $COLOR = $COLOR_REPLACE2;
+        $NOM_COLOR = trim($COLOR_EXPLODE[1]);
 
-        $sql = "begin PLC_PKG_DESARROLLO.PRC_UPDATE_COLOR3_OC($temporada,'" . $depto . "',$id_color, '" . $LINEA . "', '" . $SUB_LINEA . "', '" . $estilo . "', '" . $COLOR . "',:error, :data); end;";
+        $sql = "begin PLC_PKG_DESARROLLO.PRC_UPDATE_COLOR3_OC($temporada,'" . $depto . "',$id_color, '" . $LINEA . "', '" . $SUB_LINEA . "', '" . $estilo . "', '" . $COLOR . "', '" . $NOM_COLOR . "',:error, :data); end;";
 
         // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
         if (!file_exists('../archivos/log_querys/' . $login)) {
