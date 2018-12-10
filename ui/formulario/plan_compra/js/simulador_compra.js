@@ -13,15 +13,52 @@ $(function () {
         var arregloGuardado = [];
         var i = 0;
 
+        // Recorro por la cantidad de registros para asociar al arreglo
         for (i; i < e.data.updated.length; i++) {
+
             arregloGuardado.push({
                 "ID_COLOR3": kendo.parseInt(e.data.updated[i]["ID_COLOR3"]),
                 "ESTADO_C1": kendo.parseInt(e.data.updated[i]["ESTADO_C1"]),
                 "PROFORMA": String(e.data.updated[i]["PROFORMA"]),
                 "ARCHIVO": String(e.data.updated[i]["ARCHIVO"]),
                 "PROFORMA_BASE": String(e.data.updated[i]["PROFORMA_BASE"]),
-                "ARCHIVO_BASE": String(e.data.updated[i]["ARCHIVO_BASE"])
+                "ARCHIVO_BASE": String(e.data.updated[i]["ARCHIVO_BASE"]),
+                "ALIAS_PROV": String(e.data.updated[i]["ALIAS_PROV"]),
+                "NOM_VENTANA": String(e.data.updated[i]["NOM_VENTANA"]),
+                "DESTALLA": String(e.data.updated[i]["DESTALLA"]),
+                "TIPO_EMPAQUE": String(e.data.updated[i]["TIPO_EMPAQUE"]),
+                "PORTALLA_1_INI": String(e.data.updated[i]["PORTALLA_1_INI"]),
+                "CURVATALLA": String(e.data.updated[i]["CURVATALLA"]),
+                "UNID_OPCION_INICIO": kendo.parseInt(e.data.updated[i]["UNID_OPCION_INICIO"]),
+                "CAN": kendo.parseInt(e.data.updated[i]["CAN"]),
+                "SEG_ASIG": String(e.data.updated[i]["SEG_ASIG"]),
+                "FORMATO": String(e.data.updated[i]["FORMATO"]),
+                "A": kendo.parseInt(e.data.updated[i]["A"]),
+                "B": kendo.parseInt(e.data.updated[i]["B"]),
+                "C": kendo.parseInt(e.data.updated[i]["C"]),
+                "I": kendo.parseInt(e.data.updated[i]["I"]),
+                "NOM_VIA": String(e.data.updated[i]["NOM_VIA"]),
+                "NOM_PAIS": String(e.data.updated[i]["NOM_PAIS"]),
+                "PRECIO_BLANCO": kendo.parseInt(e.data.updated[i]["PRECIO_BLANCO"]),
+                "COSTO_TARGET": kendo.parseInt(e.data.updated[i]["COSTO_TARGET"]), // Decimal
+                "COSTO_FOB": kendo.parseInt(e.data.updated[i]["COSTO_FOB"]),
+                "COSTO_INSP": kendo.parseInt(e.data.updated[i]["COSTO_INSP"]),
+                "COSTO_RFID": kendo.parseInt(e.data.updated[i]["COSTO_RFID"]), // Decimal
+                "DEBUT_REODER": String(e.data.updated[i]["DEBUT_REODER"]),
+                "TIPO_EMPAQUE_BASE": String(e.data.updated[i]["TIPO_EMPAQUE_BASE"]),
+                "UNI_INICIALES_BASE": kendo.parseInt(e.data.updated[i]["UNI_INICIALES_BASE"]),
+                "PRECIO_BLANCO_BASE": kendo.parseInt(e.data.updated[i]["PRECIO_BLANCO_BASE"]),
+                "COSTO_TARGET_BASE": kendo.parseInt(e.data.updated[i]["COSTO_TARGET_BASE"]), // Decimal
+                "COSTO_FOB_BASE": kendo.parseInt(e.data.updated[i]["COSTO_FOB_BASE"]),
+                "COSTO_INSP_BASE": kendo.parseInt(e.data.updated[i]["COSTO_INSP_BASE"]),
+                "COSTO_RFID_BASE": kendo.parseInt(e.data.updated[i]["COSTO_RFID_BASE"]), // Decimal
+                "COD_MARCA": String(e.data.updated[i]["COD_MARCA"]),
+                "N_CURVASXCAJAS": kendo.parseInt(e.data.updated[i]["N_CURVASXCAJAS"]),
+                "COD_JER2": String(e.data.updated[i]["COD_JER2"]),
+                "COD_SUBLIN": String(e.data.updated[i]["COD_SUBLIN"]),
+                "FORMATO_BASE": String(e.data.updated[i]["FORMATO_BASE"])
             });
+
         }
 
 
@@ -42,10 +79,25 @@ $(function () {
                 e.success(result.Created, "create");
                 e.success(result.Destroyed, "destroy");
 
-                // Recargar PlanCompra
-                var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
-                var sheet = spreadsheet.activeSheet();
-                sheet.dataSource.read();
+                var popupNotification = $("#popupNotification").kendoNotification().data("kendoNotification");
+
+                if(result == 0){
+
+                    // Recargar PlanCompra
+                    var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
+                    var sheet = spreadsheet.activeSheet();
+                    sheet.dataSource.read();
+
+                    // Mensaje de ok
+                    popupNotification.getNotifications().parent().remove();
+                    popupNotification.show(" Cambios Almacenados Correctamente.", "success");
+
+                }else{
+                    // Mensaje de Error
+                    popupNotification.getNotifications().parent().remove();
+                    popupNotification.show(result, "error");
+                }
+
 
 
             },
@@ -115,7 +167,7 @@ $(function () {
                         sheet.range("W1").value("Ventana");
                         sheet.range("X1").value("Rank Vta");
                         sheet.range("Y1").value("Life Cycle");
-                        sheet.range("Z1").value("Num. Emb");
+                        sheet.range("Z1").value("Cod. Opción");
                         sheet.range("AA1").value("Color");
                         sheet.range("AB1").value("Tipo Producto");
                         sheet.range("AC1").value("Tipo Exhibición");
@@ -203,6 +255,12 @@ $(function () {
                         oculta_columna_spread.hideColumn(100);
                         oculta_columna_spread.hideColumn(101);
                         oculta_columna_spread.hideColumn(102);
+                        /*oculta_columna_spread.hideColumn(103);
+                        oculta_columna_spread.hideColumn(104);
+                        oculta_columna_spread.hideColumn(105);
+                        oculta_columna_spread.hideColumn(106);
+                        oculta_columna_spread.hideColumn(107);
+                        oculta_columna_spread.hideColumn(108);*/
 
                         // Bloquear columnas
                         var bloqueo_columna_id = spreadsheet_conteo_total.activeSheet().range("A1:A"+total_registros_listados);
@@ -357,7 +415,7 @@ $(function () {
                     COSTO_TARGET: {type: "number"},
                     COSTO_FOB: {type: "number"},
                     COSTO_INSP: {type: "number"},
-                    COSTO_RFID: {type: "number"},
+                    COSTO_RFID: {type: "percent"},
                     ROYALTY_POR: {type: "number"},
                     COSTO_UNIT: {type: "number"},
                     COSTO_UNITS: {type: "number"},
@@ -398,12 +456,13 @@ $(function () {
                     COSTO_TARGET_BASE: {type: "number"},
                     COSTO_FOB_BASE: {type: "number"},
                     COSTO_INSP_BASE: {type: "number"},
-                    COSTO_RFID_BASE: {type: "number"},
+                    COSTO_RFID_BASE: {type: "percent"},
                     COD_MARCA: {type: "number"},
                     N_CURVASXCAJAS: {type: "number"},
-                    COD_JER2: {type: "number"},
-                    COD_SUBLIN: {type: "number"},
-                    ARCHIVO_BASE: {type: "string"}
+                    COD_JER2: {type: "string"},
+                    COD_SUBLIN: {type: "string"},
+                    ARCHIVO_BASE: {type: "string"},
+                    FORMATO_BASE: {type: "string"}
 
                 }
             }
