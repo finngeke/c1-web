@@ -2667,6 +2667,10 @@ $('#btn_actualizar_match').on('click', function () {
                 var estilo = $(this).find("td:eq(6) input[type='text']").val();
                 //estilo = estilo.replace(/[^a-z0-9\-]/gi, ''); // Verificar como se guarda en la BD, ya que se estan quitando los campos que no sean nùmericos y /o guiòn (Comentar si existe algún problema)
                 var color = $(this).find("td:eq(7) select").val();
+                var color_nombre_cbx = $(this).find("td:eq(7) option:selected").text();
+                    color_nombre_arr = color_nombre_cbx.split(" - ");
+                    color_nombre = color_nombre_arr[1];
+
 
                 // Realizamos la carga por <tr>
                 if ((id_color3 != "") && (linea != "") && (sublinea != "") && (estilo != "") && (color != "")) {
@@ -2676,7 +2680,8 @@ $('#btn_actualizar_match').on('click', function () {
                         LINEA: linea,
                         SUBLINEA: sublinea,
                         ESTILO: estilo,
-                        COLOR: color
+                        COLOR: color,
+                        COLOR_NOMBRE: color_nombre
                     });
 
                     // Define Tiempo 1 = 1000
