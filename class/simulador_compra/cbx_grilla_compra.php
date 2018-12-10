@@ -1300,7 +1300,7 @@ class cbx_grilla_compra extends \parametros
                     and PROFORMA = '" . $proforma . "'";
          $id_color3s = \database::getInstancia()->getFilas($sql);
 
-                $sql = "update plc_plan_compra_oc
+         $sql = "update plc_plan_compra_oc
                    set estado_oc = '" . $estado_oc . "'
                     where cod_temporada = " . $temporada . "
                     and dep_depto =  '" . $depto . "'
@@ -1315,7 +1315,7 @@ class cbx_grilla_compra extends \parametros
          $fp = fopen("../archivos/log_querys/" . $login . "/update20oc--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
          fwrite($fp, $content);
          fclose($fp);
-                \database::getInstancia()->getConsulta($sql);
+         \database::getInstancia()->getConsulta($sql);
 
          foreach ($id_color3s as $val) {
              $id_color3 = $val['ID_COLOR3'];
@@ -1438,7 +1438,7 @@ class cbx_grilla_compra extends \parametros
              $ids = "";
              foreach ($id_color3s as $val) {
                  $ids = $ids.$val['ID_COLOR3'].",";
-    }
+             }
              $ids = substr ($ids, 0, -1);
 
              //actualiza el estado color3 en 0 (ingresado)
@@ -2088,31 +2088,52 @@ class cbx_grilla_compra extends \parametros
     }
 
     // Validar que tabla B Cruza con el color 3
-    public static function btn_actualizar_match($temporada, $depto, $login, $id_color, $linea, $sublinea, $estilo, $color)
+    public static function btn_actualizar_match($temporada, $depto, $login, $id_color, $linea, $sublinea, $estilo, $color, $color_nombre)
     {
 
-        $sql = "begin PLC_PKG_DESARROLLO.PRC_UPDATE_COLOR3_OC($temporada,'" . $depto . "',$id_color, '" . $linea . "', '" . $sublinea . "', '" . $estilo . "', '" . $color . "',:error, :data); end;";
-
+        $sql = "begin PLC_PKG_DESARROLLO.PRC_UPDATE_COLOR3_OC($temporada,'" . $depto . "',$id_color, '" . $linea . "', '" . $sublinea . "', '" . $estilo . "', '" . $color . "','" . $color_nombre . "',:error, :data); end;";
         // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
         if (!file_exists('../archivos/log_querys/' . $login)) {
             mkdir('../archivos/log_querys/' . $login, 0775, true);
         }
-
         $stamp = date("Y-m-d_H-i-s");
         $rand = rand(1, 999);
         $content = $sql;
         $fp = fopen("../archivos/log_querys/" . $login . "/MATCH-ACTUALIZACAMPOS--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
         fwrite($fp, $content);
         fclose($fp);
-
         $data = \database::getInstancia()->getConsultaSP($sql, 2);
-        //return $data;
+
+        /*$sql = "UPDATE PLC_PLAN_COMPRA_COLOR_3
+                SET  COD_JER2   = $linea
+                    ,COD_SUBLIN = '" . $sublinea . "'
+                    ,DES_ESTILO = '" . $estilo . "'
+                    ,COD_COLOR  = $color
+                    ,NOM_COLOR  = '" . $color_nombre . "'
+                WHERE COD_TEMPORADA = $temporada
+                AND   DEP_DEPTO     = '" . $depto . "'
+                AND   ID_COLOR3     = $id_color
+                ";
+
+        // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+        if (!file_exists('../archivos/log_querys/' . $login)) {
+            mkdir('../archivos/log_querys/' . $login, 0775, true);
+        }
+        $stamp = date("Y-m-d_H-i-s");
+        $rand = rand(1, 999);
+        $content = $sql;
+        $fp = fopen("../archivos/log_querys/" . $login . "/MATCH-ACTUALIZACAMPOS--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+        fwrite($fp, $content);
+        fclose($fp);
+        $data = \database::getInstancia()->getConsulta($sql);*/
 
         if ($data) {
             return 1;
         } else {
             return 0;
         }
+
+
 
     }
 
@@ -3083,14 +3104,14 @@ class cbx_grilla_compra extends \parametros
             fwrite($fp, $content);
             fclose($fp);
 
-        // $data = \database::getInstancia()->getConsulta($sql);
-        // return $data;
+            // $data = \database::getInstancia()->getConsulta($sql);
+            // return $data;
 
-        if (\database::getInstancia()->getConsulta($sql)) {
-            return 1;
-        } else {
-            return 0;
-        }
+            if (\database::getInstancia()->getConsulta($sql)) {
+                return 1;
+            } else {
+                return 0;
+            }
         }else{
             return 0;
         }
