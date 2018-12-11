@@ -807,7 +807,7 @@ class PlanCompraClass extends \parametros
                 // 2.- Actualiza plc_plan_compra_color3 estado=18 y proforma = $proforma
                 $sql_plan_compra_color_3 = "UPDATE plc_plan_compra_color_3
                 SET proforma = '" . $proforma . "',
-                estado = 18
+                estado = 22
                 WHERE cod_temporada = $temporada
                 AND dep_depto = '" . $depto . "'
                 AND id_color3 = $id_insertar
