@@ -494,7 +494,7 @@ ul.keyboard-legend li a {
 }
 
 .demo-section {
-    margin: 0 auto 4.5em;
+    margin: auto;
     padding: 3em;
     border: 1px solid rgba(20,53,80,0.14);
 }
