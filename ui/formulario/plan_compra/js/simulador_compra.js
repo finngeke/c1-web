@@ -159,81 +159,84 @@ $(function () {
                         sheet.range("P1").value("Forro");
                         sheet.range("Q1").value("Colección");
                         sheet.range("R1").value("Evento");
-                        sheet.range("S1").value("Estilo de Vida");
-                        sheet.range("T1").value("Calidad");
-                        sheet.range("U1").value("Ocación de Uso");
-                        sheet.range("V1").value("Pirámide Mix");
-                        sheet.range("W1").value("Ventana");
-                        sheet.range("X1").value("Rank Vta");
-                        sheet.range("Y1").value("Life Cycle");
-                        sheet.range("Z1").value("Cod. Opción");
-                        sheet.range("AA1").value("Color");
-                        sheet.range("AB1").value("Tipo Producto");
-                        sheet.range("AC1").value("Tipo Exhibición");
-                        sheet.range("AD1").value("Tallas");
-                        sheet.range("AE1").value("Tipo Empaque");
-                        sheet.range("AF1").value("% Compra Inicial");
-                        sheet.range("AG1").value("% Compra Ajustada");
-                        sheet.range("AH1").value("Curvas de Reparto");
-                        sheet.range("AI1").value("Curvas Min");
-                        sheet.range("AJ1").value("Unid Ini");
-                        sheet.range("AK1").value("Unid Ajust");
-                        sheet.range("AL1").value("Unid Final");
-                        sheet.range("AM1").value("Mtr Pack");
-                        sheet.range("AN1").value("N° Cajas");
-                        sheet.range("AO1").value("Cluster");
-                        sheet.range("AP1").value("Formato");
-                        sheet.range("AQ1").value("Tdas");
-                        sheet.range("AR1").value("A");
-                        sheet.range("AS1").value("B");
-                        sheet.range("AT1").value("C");
-                        sheet.range("AU1").value("I");
-                        sheet.range("AV1").value("Primera Carga");
-                        sheet.range("AW1").value("% Tiendas");
-                        sheet.range("AX1").value("Proced");
-                        sheet.range("AY1").value("Vía");
-                        sheet.range("AZ1").value("País");
-                        sheet.range("BA1").value("Viaje");
-                        sheet.range("BB1").value("Mkup");
-                        sheet.range("BC1").value("Precio Blanco");
-                        sheet.range("BD1").value("GM");
-                        sheet.range("BE1").value("Oferta");
-                        sheet.range("BF1").value("Moneda");
-                        sheet.range("BG1").value("Target");
-                        sheet.range("BH1").value("FOB");
-                        sheet.range("BI1").value("Insp");
-                        sheet.range("BJ1").value("RFID");
-                        sheet.range("BK1").value("Royalty(%)");
-                        sheet.range("BL1").value("Costo Unitario Final US$");
-                        sheet.range("BM1").value("Costo Unitario Final Pesos");
-                        sheet.range("BN1").value("Total Target US$");
-                        sheet.range("BO1").value("Total Fob US$");
-                        sheet.range("BP1").value("Costo Total");
-                        sheet.range("BQ1").value("Total Retail");
-                        sheet.range("BR1").value("Debut/Reorder");
-                        sheet.range("BS1").value("Sem Ini");
-                        sheet.range("BT1").value("Sem Fin");
-                        sheet.range("BU1").value("Semanas Ciclo de Vida");
-                        sheet.range("BV1").value("Agot Obj");
-                        sheet.range("BW1").value("Semanas Liquidación");
-                        sheet.range("BX1").value("Proveedor");
-                        sheet.range("BY1").value("Razón Social");
-                        sheet.range("BZ1").value("Trader");
-                        sheet.range("CA1").value("After Meeting Remark");
-                        sheet.range("CB1").value("Cod. SKU Proveedor");
-                        sheet.range("CC1").value("Cod. Padre");
-                        sheet.range("CD1").value("Proforma");
-                        sheet.range("CE1").value("Archivo");
-                        sheet.range("CF1").value("Estilo PMM");
-                        sheet.range("CG1").value("Estado Match");
-                        sheet.range("CH1").value("N° OC");
-                        sheet.range("CI1").value("Estado OC");
-                        sheet.range("CJ1").value("Fecha Acordada");
-                        sheet.range("CK1").value("Fecha Embarque");
-                        sheet.range("CL1").value("Fecha ETA");
-                        sheet.range("CM1").value("Fecha Recepción CD");
-                        sheet.range("CN1").value("Días Atraso CD");
-                        sheet.range("CO1").value("Estado Opción");
+                        sheet.range("S1").value("Evento In-Store");
+                        sheet.range("T1").value("Estilo de Vida");
+                        sheet.range("U1").value("Calidad");
+                        sheet.range("V1").value("Ocación de Uso");
+                        sheet.range("W1").value("Pirámide Mix");
+                        sheet.range("X1").value("Ventana");
+                        sheet.range("Y1").value("Rank Vta");
+                        sheet.range("Z1").value("Life Cycle");
+                        sheet.range("AA1").value("Cod. Opción");
+                        sheet.range("AB1").value("Color");
+                        sheet.range("AC1").value("Tipo Producto");
+                        sheet.range("AD1").value("Tipo Exhibición");
+                        sheet.range("AE1").value("Tallas");
+                        sheet.range("AF1").value("Tipo Empaque");
+                        sheet.range("AG1").value("% Compra Inicial");
+                        sheet.range("AH1").value("% Compra Ajustada");
+                        sheet.range("AI1").value("Curvas de Reparto");
+                        sheet.range("AJ1").value("Curvas Min");
+                        sheet.range("AK1").value("Unid Ini");
+                        sheet.range("AL1").value("Unid Ajust");
+                        sheet.range("AM1").value("Unid Final");
+                        sheet.range("AN1").value("Mtr Pack");
+                        sheet.range("AO1").value("N° Cajas");
+                        sheet.range("AP1").value("Cluster");
+                        sheet.range("AQ1").value("Formato");
+                        sheet.range("AR1").value("Tdas");
+                        sheet.range("AS1").value("A");
+                        sheet.range("AT1").value("B");
+                        sheet.range("AU1").value("C");
+                        sheet.range("AV1").value("I");
+                        sheet.range("AW1").value("Primera Carga");
+                        sheet.range("AX1").value("% Tiendas");
+                        sheet.range("AY1").value("Proced");
+                        sheet.range("AZ1").value("Vía");
+                        sheet.range("BA1").value("País");
+                        sheet.range("BB1").value("Viaje");
+                        sheet.range("BC1").value("Mkup");
+                        sheet.range("BD1").value("Precio Blanco");
+                        sheet.range("BE1").value("GM");
+                        sheet.range("BF1").value("Oferta");
+                        sheet.range("BG1").value("2X");
+                        sheet.range("BH1").value("Opex");
+                        sheet.range("BI1").value("Moneda");
+                        sheet.range("BJ1").value("Target");
+                        sheet.range("BK1").value("FOB");
+                        sheet.range("BL1").value("Insp");
+                        sheet.range("BM1").value("RFID");
+                        sheet.range("BN1").value("Royalty(%)");
+                        sheet.range("BO1").value("Costo Unitario Final US$");
+                        sheet.range("BP1").value("Costo Unitario Final Pesos");
+                        sheet.range("BQ1").value("Total Target US$");
+                        sheet.range("BR1").value("Total Fob US$");
+                        sheet.range("BS1").value("Costo Total");
+                        sheet.range("BT1").value("Total Retail");
+                        sheet.range("BU1").value("Debut/Reorder");
+                        sheet.range("BV1").value("Sem Ini");
+                        sheet.range("BW1").value("Sem Fin");
+                        sheet.range("BX1").value("Semanas Ciclo de Vida");
+                        sheet.range("BY1").value("Agot Obj");
+                        sheet.range("BZ1").value("Semanas Liquidación");
+                        sheet.range("CA1").value("Proveedor");
+                        sheet.range("CB1").value("Razón Social");
+                        sheet.range("CC1").value("Trader");
+                        sheet.range("CD1").value("After Meeting Remark");
+                        sheet.range("CE1").value("Cod. SKU Proveedor");
+                        sheet.range("CF1").value("Cod. Padre");
+                        sheet.range("CG1").value("Proforma");
+                        sheet.range("CH1").value("Archivo");
+                        sheet.range("CI1").value("Estilo PMM");
+                        sheet.range("CJ1").value("Estado Match");
+                        sheet.range("CK1").value("N° OC");
+                        sheet.range("CL1").value("Estado OC");
+                        sheet.range("CM1").value("Fecha Acordada");
+                        sheet.range("CN1").value("Fecha Embarque");
+                        sheet.range("CO1").value("Fecha ETA");
+                        sheet.range("CP1").value("Fecha Recepción CD");
+                        sheet.range("CQ1").value("Días Atraso CD");
+                        sheet.range("CR1").value("Estado Opción");
 
 
                         // Contar registros que me trae la grilla
@@ -244,9 +247,6 @@ $(function () {
 
                         // Ocultar Columnas
                         var oculta_columna_spread = spreadsheet_conteo_total.activeSheet();
-                        oculta_columna_spread.hideColumn(93);
-                        oculta_columna_spread.hideColumn(94);
-                        oculta_columna_spread.hideColumn(95);
                         oculta_columna_spread.hideColumn(96);
                         oculta_columna_spread.hideColumn(97);
                         oculta_columna_spread.hideColumn(98);
@@ -254,27 +254,24 @@ $(function () {
                         oculta_columna_spread.hideColumn(100);
                         oculta_columna_spread.hideColumn(101);
                         oculta_columna_spread.hideColumn(102);
-                        /*oculta_columna_spread.hideColumn(103);
+                        oculta_columna_spread.hideColumn(103);
                         oculta_columna_spread.hideColumn(104);
                         oculta_columna_spread.hideColumn(105);
-                        oculta_columna_spread.hideColumn(106);
-                        oculta_columna_spread.hideColumn(107);
-                        oculta_columna_spread.hideColumn(108);*/
 
                         // Bloquear columnas
                         var bloqueo_columna_id = spreadsheet_conteo_total.activeSheet().range("A1:A"+total_registros_listados);
-                        var bloqueo_columna_comprajustada = spreadsheet_conteo_total.activeSheet().range("AG1:AG"+total_registros_listados);
-                        var bloqueo_columna_uniajustada = spreadsheet_conteo_total.activeSheet().range("AK1:AK"+total_registros_listados);
-                        var bloqueo_columna_unifinal = spreadsheet_conteo_total.activeSheet().range("AL1:AL"+total_registros_listados);
-                        var bloqueo_columna_tdas = spreadsheet_conteo_total.activeSheet().range("AQ1:AQ"+total_registros_listados);
-                        var bloqueo_columna_portiendas = spreadsheet_conteo_total.activeSheet().range("AW1:AW"+total_registros_listados);
-                        var bloqueo_columna_mkup = spreadsheet_conteo_total.activeSheet().range("BB1:BB"+total_registros_listados);
-                        var bloqueo_columna_gm = spreadsheet_conteo_total.activeSheet().range("BD1:BD"+total_registros_listados);
-                        var bloqueo_columnas_costos = spreadsheet_conteo_total.activeSheet().range("BL1:BQ"+total_registros_listados);
-                        var bloqueo_columnas_semanas = spreadsheet_conteo_total.activeSheet().range("BS1:BU"+total_registros_listados);
-                        var bloqueo_columna_razonsocial = spreadsheet_conteo_total.activeSheet().range("BY1:BY"+total_registros_listados);
-                        var bloqueo_columna_codpadre = spreadsheet_conteo_total.activeSheet().range("CC1:CC"+total_registros_listados);
-                        var bloqueo_columnas_oc = spreadsheet_conteo_total.activeSheet().range("CE1:CY"+total_registros_listados);
+                        var bloqueo_columna_comprajustada = spreadsheet_conteo_total.activeSheet().range("AH1:AH"+total_registros_listados);
+                        var bloqueo_columna_uniajustada = spreadsheet_conteo_total.activeSheet().range("AL1:AL"+total_registros_listados);
+                        var bloqueo_columna_unifinal = spreadsheet_conteo_total.activeSheet().range("AM1:AM"+total_registros_listados);
+                        var bloqueo_columna_tdas = spreadsheet_conteo_total.activeSheet().range("AR1:AR"+total_registros_listados);
+                        var bloqueo_columna_portiendas = spreadsheet_conteo_total.activeSheet().range("AX1:AX"+total_registros_listados);
+                        var bloqueo_columna_mkup = spreadsheet_conteo_total.activeSheet().range("BC1:BC"+total_registros_listados);
+                        var bloqueo_columna_gm = spreadsheet_conteo_total.activeSheet().range("BE1:BE"+total_registros_listados);
+                        var bloqueo_columnas_costos = spreadsheet_conteo_total.activeSheet().range("BO1:BT"+total_registros_listados);
+                        var bloqueo_columnas_semanas = spreadsheet_conteo_total.activeSheet().range("BV1:BX"+total_registros_listados);
+                        var bloqueo_columna_razonsocial = spreadsheet_conteo_total.activeSheet().range("CB1:CB"+total_registros_listados);
+                        var bloqueo_columna_codpadre = spreadsheet_conteo_total.activeSheet().range("CF1:CF"+total_registros_listados);
+                        var bloqueo_columnas_oc = spreadsheet_conteo_total.activeSheet().range("CH1:DB"+total_registros_listados);
                         bloqueo_columna_id.enable(false);
                         bloqueo_columna_comprajustada.enable(false);
                         bloqueo_columna_uniajustada.enable(false);
@@ -290,7 +287,7 @@ $(function () {
                         bloqueo_columnas_oc.enable(false);
 
 
-                        var range_via = spreadsheet.activeSheet().range("AY2:AY"+total_registros_listados);
+                        var range_via = spreadsheet.activeSheet().range("AZ2:AZ"+total_registros_listados);
                         range_via.validation({
                             dataType: "list",
                             showButton: true,
@@ -301,7 +298,7 @@ $(function () {
                             messageTemplate: "Las opciones permitidas son: AEREA, MARITIMO o TERRESTRE."
                         });
 
-                        var range_tipo_embarque = spreadsheet.activeSheet().range("AE2:AE"+total_registros_listados);
+                        var range_tipo_embarque = spreadsheet.activeSheet().range("AF2:AF"+total_registros_listados);
                         range_tipo_embarque.validation({
                             dataType: "list",
                             showButton: true,
@@ -312,7 +309,7 @@ $(function () {
                             messageTemplate: "Las opciones permitidas son: CURVADO o SOLIDO."
                         });
 
-                        var range_ventana = spreadsheet.activeSheet().range("W2:W"+total_registros_listados);
+                        var range_ventana = spreadsheet.activeSheet().range("X2:X"+total_registros_listados);
                         range_ventana.validation({
                             dataType: "list",
                             showButton: true,
@@ -360,6 +357,7 @@ $(function () {
                     FORRO: {type: "string"},
                     COLECCION: {type: "string"},
                     EVENTO: {type: "string"},
+                    EVENTO_INSTORE: {type: "string"},
                     COD_ESTILO_VIDA: {type: "string"},
                     CALIDAD: {type: "string"},
                     COD_OCASION_USO: {type: "string"},
@@ -397,8 +395,10 @@ $(function () {
                     VIAJE: {type: "string"},
                     MKUP: {type: "number"},
                     PRECIO_BLANCO: {type: "number"},
-                    OFERTA: {type: "string"},
                     GM: {type: "number"},
+                    OFERTA: {type: "string"},
+                    DOSX: {type: "number"},
+                    OPEX: {type: "number"},
                     COD_TIP_MON: {type: "string"},
                     COSTO_TARGET: {type: "number"},
                     COSTO_FOB: {type: "number"},
@@ -460,7 +460,7 @@ $(function () {
 
     // Asigna la estructura visual de la Grilla tipo Excel
     $("#spreadsheet").kendoSpreadsheet({
-        columns: 103, //103 Siempre visible
+        columns: 106, //103 Siempre visible
         rows: 400,
         //toolbar: true,
         toolbar: {
@@ -501,6 +501,7 @@ $(function () {
                 {width: 130},   // Forro
                 {width: 250},   // Colección
                 {width: 200},   // Evento
+                {width: 200},   // Evento In-Store
                 {width: 130},   // Estilo Vida
                 {width: 130},   // Calidad
                 {width: 200},   // Ocación de Uso
@@ -541,6 +542,8 @@ $(function () {
                 {width: 90},    // GM
                 {width: 90},    // Oferta
                 {width: 90},    // Moneda
+                {width: 90},    // 2x
+                {width: 90},    // Opex
                 {width: 90},    // Target
                 {width: 90},    // FOB
                 {width: 90},    // Insp
@@ -575,7 +578,7 @@ $(function () {
                 {width: 100},   // Fecha ETA
                 {width: 100},   // Fecha Recep CD
                 {width: 100},   // Dias Atraso
-                {width: 130}    // Estado Opcion
+                {width: 210}    // Estado Opcion
 
             ]
 
@@ -659,17 +662,17 @@ $(function () {
                 var fila_id = row+1;
                 var range_color3 = sheet.range("A"+fila_id);
                 ID_COLOR3 = range_color3.values();
-                var range_debutreorder = sheet.range("BR"+fila_id);
+                var range_debutreorder = sheet.range("BU"+fila_id);
                 DEBUTREORDER = range_debutreorder.values();
-                var range_proforma = sheet.range("CD"+fila_id);
+                var range_proforma = sheet.range("CG"+fila_id);
                 PROFORMA = range_proforma.values();
-                var range_oc = sheet.range("CH"+fila_id);
+                var range_oc = sheet.range("CK"+fila_id);
                 OC = range_oc.values();
-                var range_linkeada = sheet.range("CG"+fila_id);
+                var range_linkeada = sheet.range("CJ"+fila_id);
                 LINKEADA = range_linkeada.values();
-                var range_estadoc1 = sheet.range("CP"+fila_id);
+                var range_estadoc1 = sheet.range("CS"+fila_id);
                 ESTADOC1 = range_estadoc1.values();
-                var range_archivo = sheet.range("CE"+fila_id);
+                var range_archivo = sheet.range("CH"+fila_id);
                 ARCHIVO = range_archivo.values();
 
             });
@@ -1148,7 +1151,7 @@ $(function () {
 
                                 }else{
                                     popupNotification.getNotifications().parent().remove();
-                                    popupNotification.show(" Problemas al Generar Match o Info Devuelta. "+result, "error");
+                                    popupNotification.show(" Problemas al Generar Match o Info retornada. "+result, "error");
                                 }
 
 

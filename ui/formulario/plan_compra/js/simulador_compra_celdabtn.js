@@ -375,15 +375,15 @@ $(function () {
                 var fila_id = row+1;
                 var range_color3 = sheet.range("A"+fila_id);
                 ID_COLOR3 = range_color3.values();
-                var range_proforma = sheet.range("CD"+fila_id);
+                var range_proforma = sheet.range("CG"+fila_id);
                 PROFORMA = range_proforma.values();
-                var range_oc = sheet.range("CH"+fila_id);
+                var range_oc = sheet.range("CK"+fila_id);
                 OC = range_oc.values();
-                var range_estadoc1 = sheet.range("CP"+fila_id);
+                var range_estadoc1 = sheet.range("CS"+fila_id);
                 ESTADOC1 = range_estadoc1.values();
                 var range_descripcion = sheet.range("J"+fila_id);
                 DESCRIPCION = range_descripcion.values();
-                var range_color = sheet.range("AA"+fila_id);
+                var range_color = sheet.range("AB"+fila_id);
                 COLOR = range_color.values();
 
                 // Crear Modificación
