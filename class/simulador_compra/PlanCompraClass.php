@@ -71,8 +71,8 @@ class PlanCompraClass extends \parametros
                 C.VIAJE,                         -- 52 Viaje
                 C.MKUP,                          -- 53 mkup
                 C.PRECIO_BLANCO,                 -- 54 Precio Blanco
-                '' OFERTA,                       -- 55 Oferta 
-                C.GM,                            -- 56 GM
+                C.GM,                            -- 55 GM
+                '' OFERTA,                       -- 56 Oferta 
                 C.NOM_MONEDA  COD_TIP_MON,       -- 57 Moneda
                 C.COSTO_TARGET,                  -- 58 Target
                 C.COSTO_FOB,                     -- 59 FOB
@@ -111,7 +111,6 @@ class PlanCompraClass extends \parametros
                 convert((SELECT nom_est_c1 FROM plc_estado_c1 WHERE cod_est_c1= C.ESTADO),'utf8','us7ascii')CODESTADO,  -- 92 Estado Opcion
                 C.ESTADO ESTADO_C1,              -- 93 Estado C1
                 C.VENTANA_LLEGADA,               -- 94 Ventana Llegada
-               
                 C.PROFORMA PROFORMA_BASE,         -- 95 Proforma Base
                 C.TIPO_EMPAQUE TIPO_EMPAQUE_BASE, -- 96 Tipo empaque Base
                 C.UNID_OPCION_INICIO UNI_INICIALES_BASE,  -- 97 Unidades Iniciales Base
@@ -125,8 +124,11 @@ class PlanCompraClass extends \parametros
                 C.COD_JER2,                               -- 105 cod_linea
                 C.COD_SUBLIN,                             -- 106 cod_sublin
                 O.ARCHIVO ARCHIVO_BASE,                   -- 107 Archivo
-                REPLACE((SELECT DISTINCT FECHA_RECEPCD FROM plc_ventana_emb V WHERE V.cod_temporada = C.COD_TEMPORADA AND V.cod_ventana = C.VENT_EMB),'/','-') FECHA_RECEPCD_C1, -- 95 Fecha recepcion CD
-                C.FORMATO FORMATO_BASE                   -- 41 Formato
+                REPLACE((SELECT DISTINCT FECHA_RECEPCD FROM plc_ventana_emb V WHERE V.cod_temporada = C.COD_TEMPORADA AND V.cod_ventana = C.VENT_EMB),'/','-') FECHA_RECEPCD_C1, -- 108 Fecha recepcion CD
+                C.FORMATO FORMATO_BASE,                    -- 109 Formato
+                C.EVENTO_INSTORE,                          -- 110 Evento In-Store
+                C.DOSX,                                    -- 111 2X
+                C.OPEX                                     -- 112 Opex
                 FROM PLC_PLAN_COMPRA_COLOR_3 C
                 LEFT JOIN PLC_PLAN_COMPRA_OC O ON C.COD_TEMPORADA = O.COD_TEMPORADA
 				AND C.DEP_DEPTO = O.DEP_DEPTO AND C.ID_COLOR3 = O.ID_COLOR3
@@ -314,6 +316,7 @@ class PlanCompraClass extends \parametros
                 , "FORRO" => utf8_encode($va1[15])
                 , "COLECCION" => utf8_encode($va1[16])
                 , "EVENTO" => utf8_encode($va1[17])
+                , "EVENTO_INSTORE" => utf8_encode($va1[110]) // Evento In-Store
                 , "COD_ESTILO_VIDA" => utf8_encode($va1[18])
                 , "CALIDAD" => utf8_encode($va1[19])
                 , "COD_OCASION_USO" => utf8_encode($va1[20])
@@ -351,8 +354,10 @@ class PlanCompraClass extends \parametros
                 , "VIAJE" => utf8_encode($va1[52])
                 , "MKUP" => utf8_encode($va1[53])
                 , "PRECIO_BLANCO" => $va1[54]
-                , "OFERTA" => utf8_encode($va1[55])
-                , "GM" => $va1[56]
+                , "GM" => $va1[55]
+                , "OFERTA" => utf8_encode($va1[56])
+                , "DOSX" => trim($va1[111])
+                , "OPEX" => trim($va1[112])
                 , "COD_TIP_MON" => utf8_encode($va1[57])
                 , "COSTO_TARGET" => $va1[58]
                 , "COSTO_FOB" => $va1[59]
