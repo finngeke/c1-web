@@ -11,9 +11,15 @@ $(function () {
 
     // Asigno el nombre que debe tener el archivo a subir
     function AntesCargaArchivoPI(e) {
+
+        // Este es el nombre que se le da al Archivo de la PI (Le quitamos caracteres especiales)
+        var nom_pi_popup = $("#NombrePI").val();
+        var corrige_nombre_archivo_pi = nom_pi_popup.replace(/[^a-z0-9\-\_]/gi, '-');
+
         e.data = {
-            NombreArchivoProforma: $("#NombrePI").val()
+            NombreArchivoProforma: corrige_nombre_archivo_pi //$("#NombrePI").val()
         };
+
     }
 
     // Setea el campo input para la carga de PI
@@ -55,7 +61,7 @@ $(function () {
         success: function () {
             // Avisar que el archivo se subió
             var popupNotification = $("#popupNotification").kendoNotification().data("kendoNotification");
-            popupNotification.show(" El archivo asociado a la Proforma: "+$("#NombrePI").val()+" fue guardado.", "success");
+            popupNotification.show(" Archivo asociado a la Proforma: "+$("#NombrePI").val()+" fue guardado.", "success");
 
             /*var file0Uid = e.files[0].uid;
             $(".k-file[data-uid='" + file0Uid + "']").find(".k-file-name").text("New Filename");*/
@@ -185,6 +191,7 @@ $(function () {
 
     }
 
+
     // Le da la estructura a la ventana POPUP
     var ventana_match = $("#POPUP_match");
     ventana_match.kendoWindow({
@@ -200,6 +207,7 @@ $(function () {
         ]/*,
         close: cerrarPopUpMATCH*/
     }).data("kendoWindow").center();
+
 
     // Le da la estructura a la grilla pmm
     $("#grid_match_pmm").kendoGrid({
@@ -247,6 +255,7 @@ $(function () {
 
     }
 
+
     // Le da la estructura a la ventana POPUP
     var ventana_cambio_estado = $("#POPUP_cambio_estado");
     ventana_cambio_estado.kendoWindow({
@@ -262,9 +271,13 @@ $(function () {
         close: cerrarPopUpCambioEstado
     }).data("kendoWindow").center();
 
+
     // Revisamos el cambio de selección en el CBX
     function verificaCambioEstadoCBX(){
+
         var cbxCambioEstado = $("#NuevoEstadoPopUp").val();
+
+        $("#resumenErrorCorreccionPILI").hide();
 
         // <option value="0">Crear Modificación</option>
         // <option value="1">Solicitud Corrección PI</option>
@@ -278,15 +291,18 @@ $(function () {
 
     }
 
+
     // Estructura CXB
     $("#NuevoEstadoPopUp").kendoDropDownList({
         change : verificaCambioEstadoCBX
     });
 
+
     // Estructura Campo Texto
     $("#comentSolicitaCorreccionPI").kendoEditor({
         tools: []
     });
+
 
     $("#gridErrorCambioEstado").kendoGrid({
         dataSource: {
@@ -316,7 +332,6 @@ $(function () {
     });
 
 
-
     // BTN que Genera el Cambio de Estado
     $("#btn_genera_cambio_estado").on('click', function () {
 
@@ -328,6 +343,7 @@ $(function () {
 
             // Ocultar el BTN
             $("#btn_genera_cambio_estado").hide();
+            $("#resumenErrorCorreccionPILI").hide();
 
 
             var url_cambio_estado = 'TelerikPlanCompra/ModificaEstadoDinamico';
@@ -399,15 +415,15 @@ $(function () {
                 // Solicitud Corrección PI
                 }else if(cbxCambioEstadoSeleccionado == 1){
 
-                    // estado_c1 == 18
-                    if( ESTADOC1==18){
+                    // estado_c1 == 18 (se pasa de 18 a 22)
+                    if( ESTADOC1==22){
 
                         // $.getJSON(url_cambio_estado_coreccion, {ID_COLOR3: ID_COLOR3, ESTADO_INSERT: 23, PROFORMA: PROFORMA, ESTADO_UPDATE: 5, COMENTARIO: comentarioEstadoSeleccionado});
 
                         $.ajax({
                             //type: "POST",
                             url: url_cambio_estado_coreccion,
-                            data: {ID_COLOR3: kendo.parseInt(ID_COLOR3), ESTADO_INSERT: kendo.parseInt(24), PROFORMA: String(PROFORMA), ESTADO_UPDATE: kendo.parseInt(4), COMENTARIO: String(comentarioEstadoSeleccionado)},
+                            data: {ID_COLOR3: kendo.parseInt(ID_COLOR3), ESTADO_INSERT: kendo.parseInt(23), PROFORMA: String(PROFORMA), ESTADO_UPDATE: kendo.parseInt(4), COMENTARIO: String(comentarioEstadoSeleccionado)},
                             // contentType: "application/json",
                             dataType: "json"
                         });
@@ -416,7 +432,7 @@ $(function () {
 
                         // Descripción - Color
                         // Agregar al arreglo de errores
-                        arregloErrores.push({"DESCRIPCION": String(DESCRIPCION), "COLOR": String(COLOR), "MOTIVO": "Estado distinto a: Compra Confirmada con PI"});
+                        arregloErrores.push({"DESCRIPCION": String(DESCRIPCION), "COLOR": String(COLOR), "MOTIVO": "Estado distinto a: Pendiente Generacion OC"});
 
                     }
 

@@ -79,19 +79,18 @@ $(function () {
                 e.success(result.Created, "create");
                 e.success(result.Destroyed, "destroy");
 
+                // Recargar PlanCompra
+                var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
+                var sheet = spreadsheet.activeSheet();
+                sheet.dataSource.read();
+
+                // Seteo popup de notoficacion
                 var popupNotification = $("#popupNotification").kendoNotification().data("kendoNotification");
 
                 if(result == 0){
-
-                    // Recargar PlanCompra
-                    var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
-                    var sheet = spreadsheet.activeSheet();
-                    sheet.dataSource.read();
-
                     // Mensaje de ok
                     popupNotification.getNotifications().parent().remove();
                     popupNotification.show(" Cambios Almacenados Correctamente.", "success");
-
                 }else{
                     // Mensaje de Error
                     popupNotification.getNotifications().parent().remove();
@@ -323,17 +322,6 @@ $(function () {
                             type: "reject",
                             messageTemplate: "La ventana ingresada, no se encuentra dentro de las permitidas. (Recuerde ingresarla en Mayúsculas.)"
                         });
-
-                        /*var range_pais = spreadsheet.activeSheet().range("AZ2:AZ"+total_registros_listados);
-                        range_pais.validation({
-                            dataType: "list",
-                            showButton: true,
-                            comparerType: "list",
-                            from: '"A,B,C,D,E,F,G,H,I"',
-                            allowNulls: false,
-                            type: "reject",
-                            messageTemplate: "La ventana ingresada, no se encuentra dentro de las permitidas. (Recuerde ingresarla en Mayúsculas.)"
-                        });*/
 
 
 
@@ -587,7 +575,7 @@ $(function () {
                 {width: 100},   // Fecha ETA
                 {width: 100},   // Fecha Recep CD
                 {width: 100},   // Dias Atraso
-                {width: 120}    // Estado Opcion
+                {width: 130}    // Estado Opcion
 
             ]
 
@@ -620,6 +608,7 @@ $(function () {
         }
     });
 
+
     // Agrega ContextMenu en Plan de Compra
     var spreadsheet_contextual = $("#spreadsheet").data("kendoSpreadsheet");
     var menu_celda_archivopi = spreadsheet_contextual._controller.cellContextMenu;
@@ -646,6 +635,7 @@ $(function () {
             var ID_COLOR3 = "";
             var DEBUTREORDER = "";
             var PROFORMA = "";
+            var PROFORMA_ARCHIVO = "";
             var ESTADOC1 = "";
             var ARCHIVO = "";
             var OC = "";
@@ -692,7 +682,11 @@ $(function () {
                 // Descarga PI
                 if (ESTADOC1 != 0) {
 
-                    var valFileDownloadPath = '../archivos/pi/PI_' + TemporadaArchivoPI + '_' + DeptoArchivoPI + '_' + PROFORMA + '.xlsx';
+                    // PROFORMA = Archivo Original
+
+                    PROFORMA_ARCHIVO = String(PROFORMA).replace(/[^a-z0-9\-\_]/gi, '-');
+
+                    var valFileDownloadPath = '../archivos/pi/PI_' + TemporadaArchivoPI + '_' + DeptoArchivoPI + '_' + PROFORMA_ARCHIVO + '.xlsx';
                     window.open(valFileDownloadPath, '_blank');
 
                 }else{
@@ -929,6 +923,7 @@ $(function () {
                         var dataPLAN = dataSource_match_plan.data();
                         //alert(data.length);
 
+                    // Comparo la cantidad de registros de las dos tablas
                     if(dataPMM.length != dataPLAN.length){
 
                         // Ocultar la Botonera
@@ -936,6 +931,13 @@ $(function () {
 
                         popupNotification.getNotifications().parent().remove();
                         popupNotification.show(" La Cantidad de Registros de PMM y PLAN, no son iguales.", "error");
+
+                    }else{
+
+                        // Recargo el DATASOURCE
+                        var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
+                        var sheet = spreadsheet.activeSheet();
+                        sheet.dataSource.read();
 
                     }
 
