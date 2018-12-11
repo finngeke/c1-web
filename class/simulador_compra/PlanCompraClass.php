@@ -27,15 +27,15 @@ class PlanCompraClass extends \parametros
                 C.ID_CORPORATIVO,             -- 8 cod. corp
                 C.DESCMODELO,                 -- 9 descripción
                 C.DESCRIP_INTERNET,           -- 10 Descripción Internet
-                ''NOMBRE_COMPRADOR,           -- 11
-                ''NOMBRE_DISENADOR,           -- 12 
+                C.NOMBRE_COMPRADOR,           -- 11
+                C.NOMBRE_DISENADOR,           -- 12 
                 C.COMPOSICION,                -- 13 Composicion
-                ''TIPO_TELA,                  -- 14
-                ''FORRO,                      -- 15
+                C.TIPO_TELA,                  -- 14
+                C.FORRO,                      -- 15
                 C.COLECCION,                  -- 16 Colección
                 C.EVENTO,                     -- 17 Evento
                 NOM_ESTILOVIDA COD_ESTILO_VIDA,  -- 18 estilo vida
-                '' CALIDAD,                      -- 19 Calidad
+                CALIDAD,                      -- 19 Calidad
                 C.NOM_OCACIONUSO COD_OCASION_USO,-- 20 ocacion uso
                 C.NOM_PIRAMIDEMIX COD_PIRAMIX,   -- 21 piramide mix
                 C.NOM_VENTANA,                   -- 22 ventana
@@ -72,7 +72,7 @@ class PlanCompraClass extends \parametros
                 C.MKUP,                          -- 53 mkup
                 C.PRECIO_BLANCO,                 -- 54 Precio Blanco
                 C.GM,                            -- 55 GM
-                '' OFERTA,                       -- 56 Oferta 
+                C.OFERTA,                          -- 56 Oferta 
                 C.NOM_MONEDA  COD_TIP_MON,       -- 57 Moneda
                 C.COSTO_TARGET,                  -- 58 Target
                 C.COSTO_FOB,                     -- 59 FOB
@@ -94,7 +94,7 @@ class PlanCompraClass extends \parametros
                 C.ALIAS_PROV,                    -- 75 Proveedor
                 C.COD_PROVEEDOR,                 -- 76 Razon Social
                 C.COD_TRADER,                    -- 77 Trader
-                ''AFTER_MEETING_REMARKS,         -- 78
+                C.AFTER_MEETING_REMARKS,         -- 78
                 C.CODSKUPROVEEDOR,               -- 79 Cod SKU Proveedor
                 O.COD_PADRE SKU,                 -- 80 Cod Padre
                 C.PROFORMA,                      -- 81 Proforma
@@ -103,7 +103,7 @@ class PlanCompraClass extends \parametros
                 O.ESTADO_MATCH,                  -- 84 Estado Match
                 O.PO_NUMBER,                     -- 85 N OC
                 O.ESTADO_OC,                     -- 86 Estado OC
-                '' FECHA_ACORDADA,               -- 87
+                C.FECHA_ACORDADA,               -- 87
                 O.FECHA_EMBARQUE,                -- 88 Fecha Embarque
                 O.FECHA_ETA,                     -- 89 Fecha ETA
                 O.FECHA_RECEPCION,               -- 90 Fecha Recepciòn
