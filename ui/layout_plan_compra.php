@@ -21,10 +21,11 @@
 
 
 <!-- Llamada al JS que trabaja con la Grilla -->
-<script src="{{@JQUERY}}ui/formulario/plan_compra/js/simulador_compra.js?v=A24"></script>
-<script src="{{@JQUERY}}ui/formulario/plan_compra/js/simulador_compra_menutop.js?v=A24"></script>
-<script src="{{@JQUERY}}ui/formulario/plan_compra/js/simulador_compra_celdabtn.js?v=A24"></script>
-<script src="{{@JQUERY}}ui/formulario/plan_compra/js/simulador_compra_funciones.js?v=A24"></script>
+<script src="{{@JQUERY}}ui/formulario/plan_compra/js/simulador_compra_permisos.js?v=A25"></script>
+<script src="{{@JQUERY}}ui/formulario/plan_compra/js/simulador_compra.js?v=A26"></script>
+<script src="{{@JQUERY}}ui/formulario/plan_compra/js/simulador_compra_menutop.js?v=A26"></script>
+<script src="{{@JQUERY}}ui/formulario/plan_compra/js/simulador_compra_celdabtn.js?v=A26"></script>
+<script src="{{@JQUERY}}ui/formulario/plan_compra/js/simulador_compra_funciones.js?v=A26"></script>
 
 </body>
 </html>
