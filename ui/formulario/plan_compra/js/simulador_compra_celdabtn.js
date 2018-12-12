@@ -47,12 +47,12 @@ $(function () {
             var data_conteo_total = sheet_carga_pi.toJSON();
             var total_registros_listados = data_conteo_total.rows.length;
 
-            var range_carga_pi = sheet_carga_pi.range("CD1:CD"+total_registros_listados);
+            var range_carga_pi = sheet_carga_pi.range("CH1:CH"+total_registros_listados);
 
             // Recorre la Grilla y con la PROFORMA que me llega asignar el texto "Cargado.." a las filas que coincidan.
             range_carga_pi.forEachCell(function (row, column, value) {
-                if(sheet_carga_pi.range("CD"+row).value() == proforma){
-                    sheet_carga_pi.range("CE"+row).value("Cargado..");
+                if(sheet_carga_pi.range("CG"+row).value() == proforma){
+                    sheet_carga_pi.range("CH"+row).value("Cargado..");
                 }
             // Fin del Recorrer la Grilla
             });
@@ -337,173 +337,242 @@ $(function () {
 
         var popupNotification = $("#popupNotification").kendoNotification().data("kendoNotification");
 
-        var respuesta = confirm("¿Quiere realizar los cambios?");
+        var permisoCBX = $("#NuevoEstadoPopUp").val();
 
-        if (respuesta == true) {
+        /*
+        <option value="0">Crear Modificación</option>
+        <option value="1">Solicitud Corrección PI</option>
+        <option value="2">Eliminar Opción</option>
+         */
 
-            // Ocultar el BTN
-            $("#btn_genera_cambio_estado").hide();
-            $("#resumenErrorCorreccionPILI").hide();
+        var permisoCBXmodificacion = 0;
+        var permisoCBXcorreccion = 0;
+        var permisoCBXeliminar = 0;
 
+        // [T] Estado - Crear Modificación
+        if(localStorage.getItem("T0006")){
+            permisoCBXmodificacion = 1;
+        }
 
-            var url_cambio_estado = 'TelerikPlanCompra/ModificaEstadoDinamico';
-            var url_cambio_estado_coreccion = 'TelerikPlanCompra/ModificaEstadoDinamicoCorreccion';
+        // [T] Estado - Solicitud Corrección PI
+        if(localStorage.getItem("T0007")){
+            permisoCBXcorreccion = 1;
+        }
 
-            // Seteo Variables
-            var ID_COLOR3 = "";
-            var PROFORMA = "";
-            var OC = "";
-            var ESTADOC1 = "";
-            var DESCRIPCION = "";
-            var COLOR = "";
-
-            // Obterer las celdas seleccionadas
-            var spreadsheet_id_color3 = $("#spreadsheet").data("kendoSpreadsheet");
-            var sheet = spreadsheet_id_color3.activeSheet();
-            var range = sheet.selection();
-
-            // Traigo el Valor del CBX
-            var cbxCambioEstadoSeleccionado = $("#NuevoEstadoPopUp").val();
-            // Traigo el Valor eel Comentario
-            var comentarioEstadoSeleccionado = $("#comentSolicitaCorreccionPI").val();
-
-           // Var Arreglo Errores
-            var arregloErrores = [];
-
-            range.forEachCell(function (row, column, value) {
-
-                var fila_id = row+1;
-                var range_color3 = sheet.range("A"+fila_id);
-                ID_COLOR3 = range_color3.values();
-                var range_proforma = sheet.range("CG"+fila_id);
-                PROFORMA = range_proforma.values();
-                var range_oc = sheet.range("CK"+fila_id);
-                OC = range_oc.values();
-                var range_estadoc1 = sheet.range("CS"+fila_id);
-                ESTADOC1 = range_estadoc1.values();
-                var range_descripcion = sheet.range("J"+fila_id);
-                DESCRIPCION = range_descripcion.values();
-                var range_color = sheet.range("AB"+fila_id);
-                COLOR = range_color.values();
-
-                // Crear Modificación
-                if(cbxCambioEstadoSeleccionado == 0){
-
-                    // estado_c1 != 24 && Proforma
-                    if( (ESTADOC1!=24) && (PROFORMA.length>0) ){
-
-                        //$.getJSON(url_cambio_estado, {ID_COLOR3: ID_COLOR3, ESTADO_INSERT: 0, PROFORMA: PROFORMA, ESTADO_UPDATE: 3});
-
-                        $.ajax({
-                            //type: "POST",
-                            url: url_cambio_estado,
-                            data: {ID_COLOR3: kendo.parseInt(ID_COLOR3), ESTADO_INSERT: kendo.parseInt(0), PROFORMA: String(PROFORMA), ESTADO_UPDATE: kendo.parseInt(3)},
-                            // contentType: "application/json",
-                            dataType: "json"
-                        });
-
-
-                    }else{
-
-                        // Descripción - Color
-                        // Agregar al arreglo de errores
-                        arregloErrores.push({"DESCRIPCION": String(DESCRIPCION), "COLOR": String(COLOR), "MOTIVO": "Estado Eliminado o Sin Proforma"});
-
-                    }
-
-
-                // Solicitud Corrección PI
-                }else if(cbxCambioEstadoSeleccionado == 1){
-
-                    // estado_c1 == 18 (se pasa de 18 a 22)
-                    if( ESTADOC1==22){
-
-                        // $.getJSON(url_cambio_estado_coreccion, {ID_COLOR3: ID_COLOR3, ESTADO_INSERT: 23, PROFORMA: PROFORMA, ESTADO_UPDATE: 5, COMENTARIO: comentarioEstadoSeleccionado});
-
-                        $.ajax({
-                            //type: "POST",
-                            url: url_cambio_estado_coreccion,
-                            data: {ID_COLOR3: kendo.parseInt(ID_COLOR3), ESTADO_INSERT: kendo.parseInt(23), PROFORMA: String(PROFORMA), ESTADO_UPDATE: kendo.parseInt(4), COMENTARIO: String(comentarioEstadoSeleccionado)},
-                            // contentType: "application/json",
-                            dataType: "json"
-                        });
-
-                    }else{
-
-                        // Descripción - Color
-                        // Agregar al arreglo de errores
-                        arregloErrores.push({"DESCRIPCION": String(DESCRIPCION), "COLOR": String(COLOR), "MOTIVO": "Estado distinto a: Pendiente Generacion OC"});
-
-                    }
-
-
-                 // Eliminar Opción
-                }else if(cbxCambioEstadoSeleccionado == 2){
-
-                    // estado_c1 != 21 && Proforma
-                    if( (ESTADOC1!=21) && (PROFORMA.length>0) ){
-
-                        // $.getJSON(url_cambio_estado, {ID_COLOR3: ID_COLOR3, ESTADO_INSERT: 24, PROFORMA: PROFORMA, ESTADO_UPDATE: 4});
-
-                        $.ajax({
-                            //type: "POST",
-                            url: url_cambio_estado,
-                            data: {ID_COLOR3: kendo.parseInt(ID_COLOR3), ESTADO_INSERT: kendo.parseInt(24), PROFORMA: String(PROFORMA), ESTADO_UPDATE: kendo.parseInt(4)},
-                            // contentType: "application/json",
-                            dataType: "json"
-                        });
-
-                    }else{
-
-                        // Descripción - Color
-                        // Agregar al arreglo de errores
-                        arregloErrores.push({"DESCRIPCION": String(DESCRIPCION), "COLOR": String(COLOR), "MOTIVO": "Estado Aprobado o Sin Proforma"});
-
-                    }
-
-                }
-
-
-            });
-
-
-            // Desplegar Grilla con Info
-            //console.log(arregloErrores);
-            if(arregloErrores.length > 0){
-
-                $("#resumenErrorCorreccionPILI").css("display","");
-
-                var gridtest = $("#gridErrorCambioEstado").data("kendoGrid");
-                var sel = gridtest.select();
-                var sel_idx = sel.index();
-                var item = gridtest.dataItem(sel);              // Get the item
-                var idx = gridtest.dataSource.indexOf(item);    // Get the index in the DataSource (not in current page of the grid)
-                arregloErrores.forEach(function(err, index) {
-                    gridtest.dataSource.insert(idx + 1, { DESCRIPCION: err.DESCRIPCION, COLOR: err.COLOR, MOTIVO: err.MOTIVO });
-                });
-            }else{
-                $("#resumenErrorCorreccionPILI").css("display","none");
-            }
-
-            // Al Finalizar los cambios de estado
-            popupNotification.getNotifications().parent().remove();
-            popupNotification.show(" Favor de Revisar los Estados.", "info");
-
-            // Recargo el DATASOURCE
-            var spreadsheet_reload = $("#spreadsheet").data("kendoSpreadsheet");
-            var sheet_reload = spreadsheet_reload.activeSheet();
-            sheet_reload.dataSource.read();
-
-
-        // Si el usuario no acepta realizar cambios
-        } else {
-            popupNotification.getNotifications().parent().remove();
-            popupNotification.show(" No se han realizado Cambios de Estado.", "info");
+        // [T] Estado - Eliminar Opción
+        if(localStorage.getItem("T0008")){
+            permisoCBXeliminar = 1;
         }
 
 
+        if( (permisoCBX==0) && (permisoCBXmodificacion==0)){
+            popupNotification.getNotifications().parent().remove();
+            popupNotification.show(" No tiene permisos para realizar esta acción.", "error");
+            return false;
+        }
+
+        if( (permisoCBX==1) && (permisoCBXcorreccion==0)){
+            popupNotification.getNotifications().parent().remove();
+            popupNotification.show(" No tiene permisos para realizar esta acción.", "error");
+            return false;
+        }
+
+        if( (permisoCBX==2) && (permisoCBXeliminar==0)){
+            popupNotification.getNotifications().parent().remove();
+            popupNotification.show(" No tiene permisos para realizar esta acción.", "error");
+            return false;
+        }
 
 
+         var respuesta = confirm("¿Quiere realizar los cambios?");
+
+         if (respuesta == true) {
+
+                // Ocultar el BTN
+                $("#btn_genera_cambio_estado").hide();
+                $("#resumenErrorCorreccionPILI").hide();
+
+
+                var url_cambio_estado = 'TelerikPlanCompra/ModificaEstadoDinamico';
+                var url_cambio_estado_coreccion = 'TelerikPlanCompra/ModificaEstadoDinamicoCorreccion';
+
+                // Seteo Variables
+                var ID_COLOR3 = "";
+                var PROFORMA = "";
+                var OC = "";
+                var ESTADOC1 = "";
+                var DESCRIPCION = "";
+                var COLOR = "";
+
+                // Obterer las celdas seleccionadas
+                var spreadsheet_id_color3 = $("#spreadsheet").data("kendoSpreadsheet");
+                var sheet = spreadsheet_id_color3.activeSheet();
+                var range = sheet.selection();
+
+                // Traigo el Valor del CBX
+                var cbxCambioEstadoSeleccionado = $("#NuevoEstadoPopUp").val();
+                // Traigo el Valor del Comentario
+                var comentarioEstadoSeleccionado = $("#comentSolicitaCorreccionPI").val();
+
+                // Var Arreglo Errores
+                var arregloErrores = [];
+
+                range.forEachCell(function (row, column, value) {
+
+                    var fila_id = row + 1;
+                    var range_color3 = sheet.range("A" + fila_id);
+                    ID_COLOR3 = range_color3.values();
+                    var range_proforma = sheet.range("CG" + fila_id);
+                    PROFORMA = range_proforma.values();
+                    var range_oc = sheet.range("CK" + fila_id);
+                    OC = range_oc.values();
+                    var range_estadoc1 = sheet.range("CS" + fila_id);
+                    ESTADOC1 = range_estadoc1.values();
+                    var range_descripcion = sheet.range("J" + fila_id);
+                    DESCRIPCION = range_descripcion.values();
+                    var range_color = sheet.range("AB" + fila_id);
+                    COLOR = range_color.values();
+
+                    // Crear Modificación
+                    if (cbxCambioEstadoSeleccionado == 0) {
+
+                        // estado_c1 != 24 && Proforma
+                        if ((ESTADOC1 != 24) && (PROFORMA.length > 0)) {
+
+                            $.ajax({
+                                //type: "POST",
+                                url: url_cambio_estado,
+                                data: {
+                                    ID_COLOR3: kendo.parseInt(ID_COLOR3),
+                                    ESTADO_INSERT: kendo.parseInt(0),
+                                    PROFORMA: String(PROFORMA),
+                                    ESTADO_UPDATE: kendo.parseInt(3)
+                                },
+                                // contentType: "application/json",
+                                dataType: "json"
+                            });
+
+
+                        } else {
+
+                            // Descripción - Color
+                            // Agregar al arreglo de errores
+                            arregloErrores.push({
+                                "DESCRIPCION": String(DESCRIPCION),
+                                "COLOR": String(COLOR),
+                                "MOTIVO": "Estado Eliminado o Sin Proforma"
+                            });
+
+                        }
+
+
+                        // Solicitud Corrección PI
+                    } else if (cbxCambioEstadoSeleccionado == 1) {
+
+                        // estado_c1 == 18 (se pasa de 18 a 22)
+                        if (ESTADOC1 == 22) {
+
+                            $.ajax({
+                                //type: "POST",
+                                url: url_cambio_estado_coreccion,
+                                data: {
+                                    ID_COLOR3: kendo.parseInt(ID_COLOR3),
+                                    ESTADO_INSERT: kendo.parseInt(23),
+                                    PROFORMA: String(PROFORMA),
+                                    ESTADO_UPDATE: kendo.parseInt(4),
+                                    COMENTARIO: String(comentarioEstadoSeleccionado)
+                                },
+                                // contentType: "application/json",
+                                dataType: "json"
+                            });
+
+                        } else {
+
+                            // Descripción - Color
+                            // Agregar al arreglo de errores
+                            arregloErrores.push({
+                                "DESCRIPCION": String(DESCRIPCION),
+                                "COLOR": String(COLOR),
+                                "MOTIVO": "Estado distinto a: Pendiente Generacion OC"
+                            });
+
+                        }
+
+
+                        // Eliminar Opción
+                    } else if (cbxCambioEstadoSeleccionado == 2) {
+
+                        // estado_c1 != 21 && Proforma
+                        if ((ESTADOC1 != 21) && (PROFORMA.length > 0)) {
+
+                            $.ajax({
+                                //type: "POST",
+                                url: url_cambio_estado,
+                                data: {
+                                    ID_COLOR3: kendo.parseInt(ID_COLOR3),
+                                    ESTADO_INSERT: kendo.parseInt(24),
+                                    PROFORMA: String(PROFORMA),
+                                    ESTADO_UPDATE: kendo.parseInt(4)
+                                },
+                                // contentType: "application/json",
+                                dataType: "json"
+                            });
+
+                        } else {
+
+                            // Descripción - Color
+                            // Agregar al arreglo de errores
+                            arregloErrores.push({
+                                "DESCRIPCION": String(DESCRIPCION),
+                                "COLOR": String(COLOR),
+                                "MOTIVO": "Estado Aprobado o Sin Proforma"
+                            });
+
+                        }
+
+                    }
+
+
+                });
+
+
+                // Desplegar Grilla con Info
+                //console.log(arregloErrores);
+                if (arregloErrores.length > 0) {
+
+                    $("#resumenErrorCorreccionPILI").css("display", "");
+
+                    var gridtest = $("#gridErrorCambioEstado").data("kendoGrid");
+                    var sel = gridtest.select();
+                    var sel_idx = sel.index();
+                    var item = gridtest.dataItem(sel);              // Get the item
+                    var idx = gridtest.dataSource.indexOf(item);    // Get the index in the DataSource (not in current page of the grid)
+                    arregloErrores.forEach(function (err, index) {
+                        gridtest.dataSource.insert(idx + 1, {
+                            DESCRIPCION: err.DESCRIPCION,
+                            COLOR: err.COLOR,
+                            MOTIVO: err.MOTIVO
+                        });
+                    });
+                } else {
+                    $("#resumenErrorCorreccionPILI").css("display", "none");
+                }
+
+                // Al Finalizar los cambios de estado
+                popupNotification.getNotifications().parent().remove();
+                popupNotification.show(" Favor de Revisar los Estados.", "info");
+
+                // Recargo el DATASOURCE
+                var spreadsheet_reload = $("#spreadsheet").data("kendoSpreadsheet");
+                var sheet_reload = spreadsheet_reload.activeSheet();
+                sheet_reload.dataSource.read();
+
+
+                // Si el usuario no acepta realizar cambios
+            } else {
+            popupNotification.getNotifications().parent().remove();
+            popupNotification.show(" No se han realizado Cambios de Estado.", "info");
+         }
 
 
 

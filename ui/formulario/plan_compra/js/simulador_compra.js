@@ -460,7 +460,7 @@ $(function () {
 
     // Asigna la estructura visual de la Grilla tipo Excel
     $("#spreadsheet").kendoSpreadsheet({
-        columns: 106, //103 Siempre visible
+        columns: 106, //106 Siempre visible
         rows: 400,
         //toolbar: true,
         toolbar: {
@@ -599,16 +599,43 @@ $(function () {
 
     // Función Guardar Cambios Plan de Compra
     $("#guardar_cambios_pc").click(function () {
-        if (!$(this).hasClass("k-state-disabled")) {
-            dataSource.sync();
+
+
+        // Verificar Permisos ()
+        if(localStorage.getItem("T0001")){
+
+            if (!$(this).hasClass("k-state-disabled")) {
+                dataSource.sync();
+            }
+
+        }else{
+            popupNotification.getNotifications().parent().remove();
+            popupNotification.show(" No tiene permisos para realizar esta acción.", "error");
+            // Fin Verificar Permisos
         }
+
+
+
+
     });
 
     // Función Cancelar Plan de Compra
     $("#cancelar_cambios_pc").click(function () {
-        if (!$(this).hasClass("k-state-disabled")) {
-            dataSource.cancelChanges();
+
+        // Verificar Permisos ()
+        if(localStorage.getItem("T0001")){
+
+            if (!$(this).hasClass("k-state-disabled")) {
+                dataSource.cancelChanges();
+            }
+
+        }else{
+            popupNotification.getNotifications().parent().remove();
+            popupNotification.show(" No tiene permisos para realizar esta acción.", "error");
+            // Fin Verificar Permisos
         }
+
+
     });
 
 
@@ -682,20 +709,32 @@ $(function () {
 
             if(command == "Descarga Archivo PI") {
 
-                // Descarga PI
-                if (ESTADOC1 != 0) {
 
-                    // PROFORMA = Archivo Original
+                // Verificar Permisos
+                if(localStorage.getItem("T0002")){
 
-                    PROFORMA_ARCHIVO = String(PROFORMA).replace(/[^a-z0-9\-\_]/gi, '-');
+                    // Descarga PI
+                    if (ESTADOC1 != 0) {
 
-                    var valFileDownloadPath = '../archivos/pi/PI_' + TemporadaArchivoPI + '_' + DeptoArchivoPI + '_' + PROFORMA_ARCHIVO + '.xlsx';
-                    window.open(valFileDownloadPath, '_blank');
+                        // PROFORMA = Archivo Original
+
+                        PROFORMA_ARCHIVO = String(PROFORMA).replace(/[^a-z0-9\-\_]/gi, '-');
+
+                        var valFileDownloadPath = '../archivos/pi/PI_' + TemporadaArchivoPI + '_' + DeptoArchivoPI + '_' + PROFORMA_ARCHIVO + '.xlsx';
+                        window.open(valFileDownloadPath, '_blank');
+
+                    }else{
+                        popupNotification.getNotifications().parent().remove();
+                        popupNotification.show(" En estado Ingresado,No puede descargar el archivo.", "error");
+                    }
 
                 }else{
                     popupNotification.getNotifications().parent().remove();
-                    popupNotification.show(" En estado Ingresado,No puede descargar el archivo.", "error");
+                    popupNotification.show(" No tiene permisos para realizar esta acción.", "error");
+                // Fin Verificar Permisos
                 }
+
+
 
 
             // Fin descarga archivo
@@ -709,70 +748,84 @@ $(function () {
                 selection.background("green");
                 */
 
-                if( (PROFORMA.length==0) || (PROFORMA==null) || (PROFORMA=="") || (ARCHIVO=="Cargado..") ){
+                // Verificar Permisos
+                if(localStorage.getItem("T0003")){
+
+                    if( (PROFORMA.length==0) || (PROFORMA==null) || (PROFORMA=="") || (ARCHIVO=="Cargado..") || (ESTADOC1==24)){
+                        popupNotification.getNotifications().parent().remove();
+                        popupNotification.show(" Seleccione un registro con proforma y archivo sin cargar.", "error");
+                    }else {
+
+                        // Le asigno el nombre de la Proforma al campo de texto
+                        $("#NombrePI").val(PROFORMA);
+
+                        // Levantamos el popup
+                        var popupArchivoPI = $("#POPUP_carga_archivo_pi");
+                        popupArchivoPI.data("kendoWindow").open();
+
+                    }
+
+
+                }else{
                     popupNotification.getNotifications().parent().remove();
-                    popupNotification.show(" Seleccione un registro con proforma y archivo sin cargar.", "error");
-                }else {
-
-                    // Le asigno el nombre de la Proforma al campo de texto
-                    $("#NombrePI").val(PROFORMA);
-
-                    // Levantamos el popup
-                    var popupArchivoPI = $("#POPUP_carga_archivo_pi");
-                    popupArchivoPI.data("kendoWindow").open();
-
+                    popupNotification.show(" No tiene permisos para realizar esta acción.", "error");
+                // Fin Verificar Permisos
                 }
+
+
 
 
             }
 
             if(command == "Match") {
 
-                // BLOQUEAR si el usuario es solo de lectura
 
-                // Que llegue la proforma y el estado sea Pendiente de Aprobación sin Match
-                if( (PROFORMA.length==0) || (PROFORMA==null) || (PROFORMA=="") || (ESTADOC1!=19) ){
+                // Verificar Permisos
+                if(localStorage.getItem("T0004")){
 
-                    popupNotification.getNotifications().parent().remove();
-                    popupNotification.show(" Seleccione un registro con Proforma,Pendiente de Aprobacion sin Match y OC no Linkeada.", "error");
+                    // Que llegue la proforma y el estado sea Pendiente de Aprobación sin Match
+                    if( (PROFORMA.length==0) || (PROFORMA==null) || (PROFORMA=="") || (ESTADOC1!=19) ){
 
-                }else {
+                        popupNotification.getNotifications().parent().remove();
+                        popupNotification.show(" Seleccione un registro con Proforma,Pendiente de Aprobacion sin Match y OC no Linkeada.", "error");
 
-                    // Levantar el POPUP
-                    var popupMatch = $("#POPUP_match");
-                    popupMatch.data("kendoWindow").open();
+                    }else {
 
-                    // Antes de volver a cargar la data, reseteo lo existente
-                    $("#grid_match_pmm").data("kendoGrid").dataSource.data([]);
-                    $("#grid_match_plan").data("kendoGrid").dataSource.data([]);
-                    // Destruimos el GRID del PLAN
-                    var gridMatchPLAN = $("#grid_match_plan").data("kendoGrid");
-                    gridMatchPLAN.destroy();
+                        // Levantar el POPUP
+                        var popupMatch = $("#POPUP_match");
+                        popupMatch.data("kendoWindow").open();
+
+                        // Antes de volver a cargar la data, reseteo lo existente
+                        $("#grid_match_pmm").data("kendoGrid").dataSource.data([]);
+                        $("#grid_match_plan").data("kendoGrid").dataSource.data([]);
+                        // Destruimos el GRID del PLAN
+                        var gridMatchPLAN = $("#grid_match_plan").data("kendoGrid");
+                        gridMatchPLAN.destroy();
 
 
-                    // CBX de País
-                    function MatchLineaDropDownEditor(container, options) {
-                        $('<input required name="' + options.field + '"/>')
-                            .appendTo(container)
-                            .kendoDropDownList({
-                                autoBind: false,
-                                filter: "contains",
-                                dataTextField: "LIN_DESCRIPCION",
-                                dataValueField: "LIN_LINEA",
-                                dataSource: {
-                                    transport: {
-                                        read:  {
-                                            url: "TelerikPlanCompra/ListarLineaCBXMatch",
-                                            dataType: "json"/*
+                        // CBX de País
+                        function MatchLineaDropDownEditor(container, options) {
+                            $('<input required name="' + options.field + '"/>')
+                                .appendTo(container)
+                                .kendoDropDownList({
+                                    autoBind: false,
+                                    filter: "contains",
+                                    dataTextField: "LIN_DESCRIPCION",
+                                    dataValueField: "LIN_LINEA",
+                                    dataSource: {
+                                        transport: {
+                                            read:  {
+                                                url: "TelerikPlanCompra/ListarLineaCBXMatch",
+                                                dataType: "json"/*
                                             type: "POST"*/
+                                            }
                                         }
-                                    }
-                                }//,select: CambiaLineaMatchDropDown
-                            });
-                    }
+                                    }//,select: CambiaLineaMatchDropDown
+                                });
+                        }
 
-                    // Revisar, asociado a select: CambiaLineaMatchDropDown
-                    function CambiaLineaMatchDropDown(e){
+                        // Revisar, asociado a select: CambiaLineaMatchDropDown
+                        function CambiaLineaMatchDropDown(e){
 
                             if (e.dataItem) {
                                 console.log(e.dataItem);
@@ -781,437 +834,449 @@ $(function () {
                             } else {
                                 console.log("event :: select");
                             }
-                    }
-
-                    // CBX de SubLínea
-                    function MatchSubLineaDropDownEditor(container, options) {
-                        $('<input required name="' + options.field + '"/>')
-                            .appendTo(container)
-                            .kendoDropDownList({
-                                autoBind: false,
-                                filter: "contains",
-                                dataTextField: "SLI_DESCRIPCION",
-                                dataValueField: "SLI_SUBLINEA",
-                                dataSource: {
-                                    transport: {
-                                        read:  {
-                                            url: "TelerikPlanCompra/ListarSubLineaCBXMatch",
-                                            //data:{LINEA:kendo.parseInt(OC)},
-                                            data:{LINEA:String(options.model.LINEA)},
-                                            dataType: "json"/*,
-                                            type: "POST"*/
-                                        }
-                                    }
-                                }
-                            });
-                    }
-
-                    // CBX de Color
-                    function MatchColorDropDownEditor(container, options) {
-                        $('<input required name="' + options.field + '"/>')
-                            .appendTo(container)
-                            .kendoDropDownList({
-                                autoBind: false,
-                                filter: "contains",
-                                dataTextField: "NOM_COLOR",
-                                dataValueField: "COD_COLOR",
-                                dataSource: {
-                                    transport: {
-                                        read:  {
-                                            url: "TelerikPlanCompra/ListarColorCBXMatch",
-                                            dataType: "json"/*,
-                                            type: "POST"*/
-                                        }
-                                    }
-                                }
-                            });
-                    }
-
-
-
-                    // Seteo DataSet
-                    var dataSource_match_pmm = new kendo.data.DataSource({
-                        transport: {
-
-                            read:  {
-                                url: "TelerikPlanCompra/MatchLlenarGridPMM",
-                                dataType: "json",
-                                //type: "POST",
-                                data:{OC:kendo.parseInt(OC),PROFORMA:String(PROFORMA)}
-                            }
-
-                        },
-                        //complete: TerminaCargaPMM
-                        //success: TerminaCargaPMM,
-                        //requestEnd: TerminaCargaPMM,
-                        //change: TerminaCargaPMM,
-                        requestEnd: TerminaCargaPMM,
-                        schema: {
-                            model: {
-                                fields: {
-                                    ORDEN_DE_COMPRA: {type: "number"},
-                                    PI: {type: "string"},
-                                    NOMBRE_LINEA: {type: "string"},
-                                    NRO_LINEA: {type: "string"},
-                                    NOMBRE_SUB_LINEA: {type: "string"},
-                                    NRO_SUB_LINEA: {type: "string"},
-                                    NOMBRE_ESTILO: {type: "string"},
-                                    NRO_ESTILO: {type: "string"},
-                                    COLOR: {type: "string"},
-                                    COD_COLOR: {type: "string"}
-                                }
-
-
-                            }
                         }
-                    });
 
-                    var dataSource_match_plan = new kendo.data.DataSource({
-                        transport: {
-                            read:  {
-                                url: "TelerikPlanCompra/MatchLlenarGridPlan",
-                                dataType: "json",
-                                //type: 'POST',
-                                data:{OC:kendo.parseInt(OC),PROFORMA:String(PROFORMA)}
-                            },
-                            update: {
-                                url: "TelerikPlanCompra/ActualizaPlanMATCH",
-                                dataType: "json"/*,
-                                type: "POST"*/
-                            }
-                        },
-                        // autoSync: true,
-                        // complete: TerminaCargaPLAN
-                        // success: TerminaCargaPLAN,
-                        // requestEnd: TerminaCargaPLAN,
-                        change: TerminaCargaPLAN,
-                        schema: {
-                            model: {
-                                id: "ID",
-                                fields: {
-                                    ID: {type: "number"},
-                                    PROFORMA: {type: "string"},
-                                    //LINEA: {type: "string"}, //type: "string", defaultValue: { LIN_LINEA: "002009", LIN_DESCRIPCION: "ABRIGOS"}
-                                    COD_LINEA: {type: "string"},
-                                    SUB_LINEA: {type: "string"},
-                                    COD_SUBLINEA: {type: "string"},
-                                    ESTILO: {type: "string"},
-                                    NRO_ESTILO: {type: "string"},
-                                    COLOR: {type: "string"},
-                                    COD_COLOR: {type: "string"}
-                                }
-                            }
-                        }
-                    });
-
-
-
-                    // Cuando Termina la Carga del DataSet de PMM
-                    function TerminaCargaPMM(container, options) {
-                        // Cantidad de Registros del DatasSet PMM
-                        //var data = dataSource_match_pmm.data();
-                        //alert(data.length);
-
-                        // Una vez cargado el grid de PMM, cargo el del PLAN
-                        dataSource_match_plan.read();
-
-                    }
-
-                    // Cuando Termina la Carga del DataSet de PLAN
-                    function TerminaCargaPLAN(container, options) {
-
-                        // Cantidad de Registros del DatasSet PMM
-                        var dataPMM = dataSource_match_pmm.data();
-                        // Cantidad de Registros del DatasSet PLAN
-                        var dataPLAN = dataSource_match_plan.data();
-                        //alert(data.length);
-
-                    // Comparo la cantidad de registros de las dos tablas
-                    if(dataPMM.length != dataPLAN.length){
-
-                        // Ocultar la Botonera
-                        $("#grid_match_plan .k-grid-toolbar").hide();
-
-                        popupNotification.getNotifications().parent().remove();
-                        popupNotification.show(" La Cantidad de Registros de PMM y PLAN, no son iguales.", "error");
-
-                    }else{
-
-                        // Recargo el DATASOURCE
-                        var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
-                        var sheet = spreadsheet.activeSheet();
-                        sheet.dataSource.read();
-
-                    }
-
-
-
-                    // Fin TerminaCargaPLAN
-                    }
-
-
-                    // Asigno el DataSet al Grid de PMM
-                    $("#grid_match_pmm").kendoGrid({
-                        columns:[
-                            {title: "PMM",
-                                headerAttributes: {
-                                    style: "text-align: center"
-                                },
-                                columns: [
-                                    { hidden: true, field: "ORDEN_DE_COMPRA" },
-                                    { hidden: true, field: "PI" },
-                                    { field: "NOMBRE_LINEA", title: "Línea" },
-                                    { field: "NRO_LINEA", title: "Cod. Linea", width: 90 },
-                                    { field: "NOMBRE_SUB_LINEA", title: "SubLínea", width:250 },
-                                    { field: "NRO_SUB_LINEA", title: "Cod. SubLínea", width: 100 },
-                                    { field: "NOMBRE_ESTILO", title: "Estilo", width:280 },
-                                    { field: "NRO_ESTILO", title: "N° Estilo", width: 90 },
-                                    { field: "COLOR", title: "Color", width: 200 },
-                                    { field: "COD_COLOR", title: "Cod. Color", width: 90 }
-                                ]
-                            }
-                        ],
-                        dataSource: dataSource_match_pmm
-                    });
-
-                    // Asigno el DataSet al Grid de PLAN
-                    $("#grid_match_plan").kendoGrid({
-                        autoBind:false,
-                        dataSource: dataSource_match_plan,
-                        //dataBound: MatchPlanOnDataBound,
-                        //dataBinding: MatchPlanOnDataBinding,
-                        dataBound: function(e){
-
-                            var grid1PMM = $("#grid_match_pmm").getKendoGrid();
-                            var itemsPMM = grid1PMM.dataSource.data();
-                            var itemsPLAN = e.sender.dataSource.data();
-
-                            var flag_errores_match = 0;
-
-                            // Comparar los registros de las grillas
-                            itemsPLAN.forEach(function(el){
-
-                                //console.log(el.LINEA);
-
-                                var pre_linea = el.LINEA;
-                                pre_linea = pre_linea.split(' - ');
-                                var compara_linea = pre_linea[0].substring(1, pre_linea[0].length-1);
-
-                                var pre_sublinea = el.SUB_LINEA;
-                                pre_sublinea = pre_sublinea.split(' - ');
-                                var compara_sublinea =  pre_sublinea[0].substring(1, pre_sublinea[0].length-1);
-
-                                var pre_color = el.COLOR;
-                                pre_color = pre_color.split(' - ');
-                                var compara_color =  pre_color[0].substring(1, pre_color[0].length-1);
-
-                                var compara_estilo = el.ESTILO;
-
-                                loop1:
-                                itemsPMM.forEach(function(el2){
-
-                                    console.log("#######################################################");
-                                    console.log(compara_linea+" / "+el2.NRO_LINEA);
-                                    console.log(compara_sublinea+" / "+el2.NRO_SUB_LINEA);
-                                    console.log(compara_color+" / "+el2.COD_COLOR);
-                                    console.log(compara_estilo+" / "+el2.NOMBRE_ESTILO);
-
-
-                                    loop2:
-                                    if( (compara_linea != el2.NRO_LINEA) || (compara_sublinea != el2.NRO_SUB_LINEA) || (compara_color != el2.COD_COLOR) || (compara_estilo != el2.NOMBRE_ESTILO)  ){
-
-                                        $("[data-uid='"+el.uid+"']").css("background", "#FF2D00");
-                                        flag_errores_match++;
-
-                                    }else{
-
-                                        $("[data-uid='"+el.uid+"']").css("background", "");
-                                        break loop2;
-
-                                    }
-
-
-
-
-                                })
-
-                            })
-
-                            // Si hay Errores, oculto el BTN de Match
-                            if(flag_errores_match>0){
-                                $(".k-grid-guardamatch").hide();
-                            }else{
-                                $(".k-grid-guardamatch").show();
-                            }
-
-
-                        },
-                        //toolbar: ["save", "cancel"],
-                        toolbar: [
-                            { name: "save", text: "Actualizar Registros", iconClass: "k-icon k-i-copy" },
-                            { name: "cancel", text: "Cancelar Modificaciones" },
-                            { name: 'guardamatch',text: "Realizar Match", iconClass: "k-icon k-i-save" }
-                        ],
-                        editable: true,
-                        columns:[
-                            {title: "PLAN DE COMPRA",
-                                headerAttributes: {
-                                    style: "text-align: center"
-                                },
-                            columns: [
-                                { hidden: true,field: "ID" },
-                                { hidden: true, field: "PROFORMA" },
-                                { field: "LINEA", title: "Línea", editor: MatchLineaDropDownEditor }, //, template: "#=LINEA.LIN_DESCRIPCION#"
-                                { field: "COD_LINEA", title: "Cod. Línea", editable: false, width: 90 },
-                                { field: "SUB_LINEA", title: "SubLínea", editor: MatchSubLineaDropDownEditor, width:250 },
-                                { field: "COD_SUBLINEA", title: "Cod. SubLínea", editable: false, width: 100 },
-                                { field: "ESTILO", title: "Estilo", width:280 },
-                                { field: "NRO_ESTILO", title: "N° Estilo", editable: false, width: 90 },
-                                { field: "COLOR", title: "Color", editor: MatchColorDropDownEditor, width: 200 },
-                                { field: "COD_COLOR", title: "Cod. Color", editable: false, width: 90 }
-                            ]}
-                        ]
-
-
-                    });
-
-                    // BTN Guardar Match
-                    $(".k-grid-guardamatch").click(function(e){
-
-                        // Actualiza la Fecha de la Concurrencia
-                        // act_fecha_concurrencia();
-
-                        $.ajax({
-                            //type: "POST",
-                            url: "TelerikPlanCompra/GenerarMatch",
-                            data: {OC:kendo.parseInt(OC),PROFORMA:String(PROFORMA)},
-                            //contentType: "application/json",
-                            dataType: "json",
-                            success: function (result) {
-
-                                // kendo.log(result);
-                                /*e.success(result.Updated, "update");
-                                e.success(result.Created, "create");
-                                e.success(result.Destroyed, "destroy");*/
-
-                                if(result=="OK"){
-
-                                    // Avisamos que el Match se encuentra OK
-                                    popupNotification.getNotifications().parent().remove();
-                                    popupNotification.show(" Match OK, Esperando Variaciones ...", "success");
-
-                                    // Aquí comenzamos con el Insertar de Variaciones
-                                    $.ajax({
-                                        //type: "POST",
-                                        url: "TelerikPlanCompra/GenerarMatchVariaciones",
-                                        data: {OC:kendo.parseInt(OC),PROFORMA:String(PROFORMA)},
-                                        //contentType: "application/json",
-                                        dataType: "json",
-                                        success: function (result) {
-
-                                            if(result=="OK"){
-
-                                                // Avisamos que el Match se encuentra OK
-                                                //popupNotification.getNotifications().parent().remove();
-                                                popupNotification.show(" Variaciones OK, Hemos Finalizado.", "success");
-
-                                                // Se Registró MATCH y Variaciones
-
-                                                // Recargo el DATASOURCE
-                                                var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
-                                                var sheet = spreadsheet.activeSheet();
-                                                sheet.dataSource.read();
-
-                                                // Cierro el POPUP de MATCH
-                                                popupMatch.data("kendoWindow").close();
-
-                                                // Recargar
-                                                //location.reload();
-
-
-                                            }else{
-                                                //popupNotification.getNotifications().parent().remove();
-                                                popupNotification.show(" Problema al Insertar Variaciones.", "error");
+                        // CBX de SubLínea
+                        function MatchSubLineaDropDownEditor(container, options) {
+                            $('<input required name="' + options.field + '"/>')
+                                .appendTo(container)
+                                .kendoDropDownList({
+                                    autoBind: false,
+                                    filter: "contains",
+                                    dataTextField: "SLI_DESCRIPCION",
+                                    dataValueField: "SLI_SUBLINEA",
+                                    dataSource: {
+                                        transport: {
+                                            read:  {
+                                                url: "TelerikPlanCompra/ListarSubLineaCBXMatch",
+                                                //data:{LINEA:kendo.parseInt(OC)},
+                                                data:{LINEA:String(options.model.LINEA)},
+                                                dataType: "json"/*,
+                                            type: "POST"*/
                                             }
-
-                                        },
-                                        error: function (xhr, httpStatusMessage, customErrorMessage) {
-
-                                            // Tipo Consola
-                                            console.log(xhr.responseText);
-                                            console.log(httpStatusMessage);
-                                            console.log(customErrorMessage);
-
-                                            popupNotification.getNotifications().parent().remove();
-                                            popupNotification.show(" Problemas la Transferencia de la Data - VARIACIONES. "+result, "error");
-
                                         }
-                                    });
+                                    }
+                                });
+                        }
+
+                        // CBX de Color
+                        function MatchColorDropDownEditor(container, options) {
+                            $('<input required name="' + options.field + '"/>')
+                                .appendTo(container)
+                                .kendoDropDownList({
+                                    autoBind: false,
+                                    filter: "contains",
+                                    dataTextField: "NOM_COLOR",
+                                    dataValueField: "COD_COLOR",
+                                    dataSource: {
+                                        transport: {
+                                            read:  {
+                                                url: "TelerikPlanCompra/ListarColorCBXMatch",
+                                                dataType: "json"/*,
+                                            type: "POST"*/
+                                            }
+                                        }
+                                    }
+                                });
+                        }
 
 
-                                }else{
-                                    popupNotification.getNotifications().parent().remove();
-                                    popupNotification.show(" Problemas al Generar Match o Info retornada. "+result, "error");
+
+                        // Seteo DataSet
+                        var dataSource_match_pmm = new kendo.data.DataSource({
+                            transport: {
+
+                                read:  {
+                                    url: "TelerikPlanCompra/MatchLlenarGridPMM",
+                                    dataType: "json",
+                                    //type: "POST",
+                                    data:{OC:kendo.parseInt(OC),PROFORMA:String(PROFORMA)}
                                 }
 
-
                             },
-                            error: function (xhr, httpStatusMessage, customErrorMessage) {
+                            //complete: TerminaCargaPMM
+                            //success: TerminaCargaPMM,
+                            //requestEnd: TerminaCargaPMM,
+                            //change: TerminaCargaPMM,
+                            requestEnd: TerminaCargaPMM,
+                            schema: {
+                                model: {
+                                    fields: {
+                                        ORDEN_DE_COMPRA: {type: "number"},
+                                        PI: {type: "string"},
+                                        NOMBRE_LINEA: {type: "string"},
+                                        NRO_LINEA: {type: "string"},
+                                        NOMBRE_SUB_LINEA: {type: "string"},
+                                        NRO_SUB_LINEA: {type: "string"},
+                                        NOMBRE_ESTILO: {type: "string"},
+                                        NRO_ESTILO: {type: "string"},
+                                        COLOR: {type: "string"},
+                                        COD_COLOR: {type: "string"}
+                                    }
 
-                                // Tipo Alerta
-                                /*alert(xhr.responseText);
-                                alert(httpStatusMessage);
-                                alert(customErrorMessage);*/
 
-                                // Tipo Consola
-                                console.log(xhr.responseText);
-                                console.log(httpStatusMessage);
-                                console.log(customErrorMessage);
+                                }
+                            }
+                        });
 
-                                popupNotification.getNotifications().parent().remove();
-                                popupNotification.show(" Problemas con la Transferencia de la Data - MATCH.", "error");
-
+                        var dataSource_match_plan = new kendo.data.DataSource({
+                            transport: {
+                                read:  {
+                                    url: "TelerikPlanCompra/MatchLlenarGridPlan",
+                                    dataType: "json",
+                                    //type: 'POST',
+                                    data:{OC:kendo.parseInt(OC),PROFORMA:String(PROFORMA)}
+                                },
+                                update: {
+                                    url: "TelerikPlanCompra/ActualizaPlanMATCH",
+                                    dataType: "json"/*,
+                                type: "POST"*/
+                                }
+                            },
+                            // autoSync: true,
+                            // complete: TerminaCargaPLAN
+                            // success: TerminaCargaPLAN,
+                            // requestEnd: TerminaCargaPLAN,
+                            change: TerminaCargaPLAN,
+                            schema: {
+                                model: {
+                                    id: "ID",
+                                    fields: {
+                                        ID: {type: "number"},
+                                        PROFORMA: {type: "string"},
+                                        //LINEA: {type: "string"}, //type: "string", defaultValue: { LIN_LINEA: "002009", LIN_DESCRIPCION: "ABRIGOS"}
+                                        COD_LINEA: {type: "string"},
+                                        SUB_LINEA: {type: "string"},
+                                        COD_SUBLINEA: {type: "string"},
+                                        ESTILO: {type: "string"},
+                                        NRO_ESTILO: {type: "string"},
+                                        COLOR: {type: "string"},
+                                        COD_COLOR: {type: "string"}
+                                    }
+                                }
                             }
                         });
 
 
-                    });
+
+                        // Cuando Termina la Carga del DataSet de PMM
+                        function TerminaCargaPMM(container, options) {
+                            // Cantidad de Registros del DatasSet PMM
+                            //var data = dataSource_match_pmm.data();
+                            //alert(data.length);
+
+                            // Una vez cargado el grid de PMM, cargo el del PLAN
+                            dataSource_match_plan.read();
+
+                        }
+
+                        // Cuando Termina la Carga del DataSet de PLAN
+                        function TerminaCargaPLAN(container, options) {
+
+                            // Cantidad de Registros del DatasSet PMM
+                            var dataPMM = dataSource_match_pmm.data();
+                            // Cantidad de Registros del DatasSet PLAN
+                            var dataPLAN = dataSource_match_plan.data();
+                            //alert(data.length);
+
+                            // Comparo la cantidad de registros de las dos tablas
+                            if(dataPMM.length != dataPLAN.length){
+
+                                // Ocultar la Botonera
+                                $("#grid_match_plan .k-grid-toolbar").hide();
+
+                                popupNotification.getNotifications().parent().remove();
+                                popupNotification.show(" La Cantidad de Registros de PMM y PLAN, no son iguales.", "error");
+
+                            }else{
+
+                                // Recargo el DATASOURCE
+                                var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
+                                var sheet = spreadsheet.activeSheet();
+                                sheet.dataSource.read();
+
+                            }
 
 
-                // Fin Else
+
+                            // Fin TerminaCargaPLAN
+                        }
+
+
+                        // Asigno el DataSet al Grid de PMM
+                        $("#grid_match_pmm").kendoGrid({
+                            columns:[
+                                {title: "PMM",
+                                    headerAttributes: {
+                                        style: "text-align: center"
+                                    },
+                                    columns: [
+                                        { hidden: true, field: "ORDEN_DE_COMPRA" },
+                                        { hidden: true, field: "PI" },
+                                        { field: "NOMBRE_LINEA", title: "Línea" },
+                                        { field: "NRO_LINEA", title: "Cod. Linea", width: 90 },
+                                        { field: "NOMBRE_SUB_LINEA", title: "SubLínea", width:250 },
+                                        { field: "NRO_SUB_LINEA", title: "Cod. SubLínea", width: 100 },
+                                        { field: "NOMBRE_ESTILO", title: "Estilo", width:280 },
+                                        { field: "NRO_ESTILO", title: "N° Estilo", width: 90 },
+                                        { field: "COLOR", title: "Color", width: 200 },
+                                        { field: "COD_COLOR", title: "Cod. Color", width: 90 }
+                                    ]
+                                }
+                            ],
+                            dataSource: dataSource_match_pmm
+                        });
+
+                        // Asigno el DataSet al Grid de PLAN
+                        $("#grid_match_plan").kendoGrid({
+                            autoBind:false,
+                            dataSource: dataSource_match_plan,
+                            //dataBound: MatchPlanOnDataBound,
+                            //dataBinding: MatchPlanOnDataBinding,
+                            dataBound: function(e){
+
+                                var grid1PMM = $("#grid_match_pmm").getKendoGrid();
+                                var itemsPMM = grid1PMM.dataSource.data();
+                                var itemsPLAN = e.sender.dataSource.data();
+
+                                var flag_errores_match = 0;
+
+                                // Comparar los registros de las grillas
+                                itemsPLAN.forEach(function(el){
+
+                                    //console.log(el.LINEA);
+
+                                    var pre_linea = el.LINEA;
+                                    pre_linea = pre_linea.split(' - ');
+                                    var compara_linea = pre_linea[0].substring(1, pre_linea[0].length-1);
+
+                                    var pre_sublinea = el.SUB_LINEA;
+                                    pre_sublinea = pre_sublinea.split(' - ');
+                                    var compara_sublinea =  pre_sublinea[0].substring(1, pre_sublinea[0].length-1);
+
+                                    var pre_color = el.COLOR;
+                                    pre_color = pre_color.split(' - ');
+                                    var compara_color =  pre_color[0].substring(1, pre_color[0].length-1);
+
+                                    var compara_estilo = el.ESTILO;
+
+                                    loop1:
+                                        itemsPMM.forEach(function(el2){
+
+                                            console.log("#######################################################");
+                                            console.log(compara_linea+" / "+el2.NRO_LINEA);
+                                            console.log(compara_sublinea+" / "+el2.NRO_SUB_LINEA);
+                                            console.log(compara_color+" / "+el2.COD_COLOR);
+                                            console.log(compara_estilo+" / "+el2.NOMBRE_ESTILO);
+
+
+                                            loop2:
+                                                if( (compara_linea != el2.NRO_LINEA) || (compara_sublinea != el2.NRO_SUB_LINEA) || (compara_color != el2.COD_COLOR) || (compara_estilo != el2.NOMBRE_ESTILO)  ){
+
+                                                    $("[data-uid='"+el.uid+"']").css("background", "#FF2D00");
+                                                    flag_errores_match++;
+
+                                                }else{
+
+                                                    $("[data-uid='"+el.uid+"']").css("background", "");
+                                                    break loop2;
+
+                                                }
+
+
+
+
+                                        })
+
+                                })
+
+                                // Si hay Errores, oculto el BTN de Match
+                                if(flag_errores_match>0){
+                                    $(".k-grid-guardamatch").hide();
+                                }else{
+                                    $(".k-grid-guardamatch").show();
+                                }
+
+
+                            },
+                            //toolbar: ["save", "cancel"],
+                            toolbar: [
+                                { name: "save", text: "Actualizar Registros", iconClass: "k-icon k-i-copy" },
+                                { name: "cancel", text: "Cancelar Modificaciones" },
+                                { name: 'guardamatch',text: "Realizar Match", iconClass: "k-icon k-i-save" }
+                            ],
+                            editable: true,
+                            columns:[
+                                {title: "PLAN DE COMPRA",
+                                    headerAttributes: {
+                                        style: "text-align: center"
+                                    },
+                                    columns: [
+                                        { hidden: true,field: "ID" },
+                                        { hidden: true, field: "PROFORMA" },
+                                        { field: "LINEA", title: "Línea", editor: MatchLineaDropDownEditor }, //, template: "#=LINEA.LIN_DESCRIPCION#"
+                                        { field: "COD_LINEA", title: "Cod. Línea", editable: false, width: 90 },
+                                        { field: "SUB_LINEA", title: "SubLínea", editor: MatchSubLineaDropDownEditor, width:250 },
+                                        { field: "COD_SUBLINEA", title: "Cod. SubLínea", editable: false, width: 100 },
+                                        { field: "ESTILO", title: "Estilo", width:280 },
+                                        { field: "NRO_ESTILO", title: "N° Estilo", editable: false, width: 90 },
+                                        { field: "COLOR", title: "Color", editor: MatchColorDropDownEditor, width: 200 },
+                                        { field: "COD_COLOR", title: "Cod. Color", editable: false, width: 90 }
+                                    ]}
+                            ]
+
+
+                        });
+
+                        // BTN Guardar Match
+                        $(".k-grid-guardamatch").click(function(e){
+
+                            // Actualiza la Fecha de la Concurrencia
+                            // act_fecha_concurrencia();
+
+                            $.ajax({
+                                //type: "POST",
+                                url: "TelerikPlanCompra/GenerarMatch",
+                                data: {OC:kendo.parseInt(OC),PROFORMA:String(PROFORMA)},
+                                //contentType: "application/json",
+                                dataType: "json",
+                                success: function (result) {
+
+                                    // kendo.log(result);
+                                    /*e.success(result.Updated, "update");
+                                    e.success(result.Created, "create");
+                                    e.success(result.Destroyed, "destroy");*/
+
+                                    if(result=="OK"){
+
+                                        // Avisamos que el Match se encuentra OK
+                                        popupNotification.getNotifications().parent().remove();
+                                        popupNotification.show(" Match OK, Esperando Variaciones ...", "success");
+
+                                        // Aquí comenzamos con el Insertar de Variaciones
+                                        $.ajax({
+                                            //type: "POST",
+                                            url: "TelerikPlanCompra/GenerarMatchVariaciones",
+                                            data: {OC:kendo.parseInt(OC),PROFORMA:String(PROFORMA)},
+                                            //contentType: "application/json",
+                                            dataType: "json",
+                                            success: function (result) {
+
+                                                if(result=="OK"){
+
+                                                    // Avisamos que el Match se encuentra OK
+                                                    //popupNotification.getNotifications().parent().remove();
+                                                    popupNotification.show(" Variaciones OK, Hemos Finalizado.", "success");
+
+                                                    // Se Registró MATCH y Variaciones
+
+                                                    // Recargo el DATASOURCE
+                                                    var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
+                                                    var sheet = spreadsheet.activeSheet();
+                                                    sheet.dataSource.read();
+
+                                                    // Cierro el POPUP de MATCH
+                                                    popupMatch.data("kendoWindow").close();
+
+                                                    // Recargar
+                                                    //location.reload();
+
+
+                                                }else{
+                                                    //popupNotification.getNotifications().parent().remove();
+                                                    popupNotification.show(" Problema al Insertar Variaciones.", "error");
+                                                }
+
+                                            },
+                                            error: function (xhr, httpStatusMessage, customErrorMessage) {
+
+                                                // Tipo Consola
+                                                console.log(xhr.responseText);
+                                                console.log(httpStatusMessage);
+                                                console.log(customErrorMessage);
+
+                                                popupNotification.getNotifications().parent().remove();
+                                                popupNotification.show(" Problemas la Transferencia de la Data - VARIACIONES. "+result, "error");
+
+                                            }
+                                        });
+
+
+                                    }else{
+                                        popupNotification.getNotifications().parent().remove();
+                                        popupNotification.show(" Problemas al Generar Match o Info retornada. "+result, "error");
+                                    }
+
+
+                                },
+                                error: function (xhr, httpStatusMessage, customErrorMessage) {
+
+                                    // Tipo Alerta
+                                    /*alert(xhr.responseText);
+                                    alert(httpStatusMessage);
+                                    alert(customErrorMessage);*/
+
+                                    // Tipo Consola
+                                    console.log(xhr.responseText);
+                                    console.log(httpStatusMessage);
+                                    console.log(customErrorMessage);
+
+                                    popupNotification.getNotifications().parent().remove();
+                                    popupNotification.show(" Problemas con la Transferencia de la Data - MATCH.", "error");
+
+                                }
+                            });
+
+
+                        });
+
+
+                        // Fin Else
+                    }
+
+                }else{
+                    popupNotification.getNotifications().parent().remove();
+                    popupNotification.show(" No tiene permisos para realizar esta acción.", "error");
+                // Fin Verificar Permisos
                 }
+
+
 
 
             }
 
             if(command == "Cambio Estado") {
 
+                // Verificar Permisos
+                //if(localStorage.getItem("T0002")){
 
-                if( (ID_COLOR3=="ID") || (ID_COLOR3=="") || (ID_COLOR3==null) || (ID_COLOR3.length==0) || (PROFORMA.length==0) || (PROFORMA==null) || (PROFORMA=="")){
+                    if( (ID_COLOR3=="ID") || (ID_COLOR3=="") || (ID_COLOR3==null) || (ID_COLOR3.length==0) || (PROFORMA.length==0) || (PROFORMA==null) || (PROFORMA=="") || (ESTADOC1==24) ){
+                        popupNotification.getNotifications().parent().remove();
+                        popupNotification.show(" Cambio Estado no disponible para este registro.", "error");
+                    }else{
+
+                        // Levantar el POPUP
+                        var popupCambioEstado = $("#POPUP_cambio_estado");
+                        popupCambioEstado.data("kendoWindow").open();
+
+                        // Desplegar el BTN de Cambio de Estado
+                        $("#btn_genera_cambio_estado").show();
+
+                        // Seteo TextArea en Blanco
+                        $("#comentSolicitaCorreccionPI").val("");
+
+                        /*range.forEachCell(function (row, column, value) {
+                            console.log(row);
+                        });*/
+
+
+                    }
+
+                /*}else{
                     popupNotification.getNotifications().parent().remove();
-                    popupNotification.show(" Cambio Estado no disponible para este registro.", "error");
-                }else{
-
-                    // Levantar el POPUP
-                    var popupCambioEstado = $("#POPUP_cambio_estado");
-                    popupCambioEstado.data("kendoWindow").open();
-
-                    // Desplegar el BTN de Cambio de Estado
-                    $("#btn_genera_cambio_estado").show();
-
-                    // Seteo TextArea en Blanco
-                    $("#comentSolicitaCorreccionPI").val("");
-
-                    /*range.forEachCell(function (row, column, value) {
-                        console.log(row);
-                    });*/
-
-
-
-                }
-
-
-
+                    popupNotification.show(" No tiene permisos para realizar esta acción.", "error");
+                // Fin Verificar Permisos
+                }*/
 
 
             // Fin del IF Cambio de Estado
