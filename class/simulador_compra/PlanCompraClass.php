@@ -30,12 +30,12 @@ class PlanCompraClass extends \parametros
                 C.NOMBRE_COMPRADOR,           -- 11
                 C.NOMBRE_DISENADOR,           -- 12 
                 C.COMPOSICION,                -- 13 Composicion
-                C.TIPO_TELA,                  -- 14
+                C.TIPO_DE_TELA,               -- 14
                 C.FORRO,                      -- 15
                 C.COLECCION,                  -- 16 Colección
                 C.EVENTO,                     -- 17 Evento
                 NOM_ESTILOVIDA COD_ESTILO_VIDA,  -- 18 estilo vida
-                CALIDAD,                      -- 19 Calidad
+                CALIDAD,                         -- 19 Calidad
                 C.NOM_OCACIONUSO COD_OCASION_USO,-- 20 ocacion uso
                 C.NOM_PIRAMIDEMIX COD_PIRAMIX,   -- 21 piramide mix
                 C.NOM_VENTANA,                   -- 22 ventana
@@ -72,7 +72,7 @@ class PlanCompraClass extends \parametros
                 C.MKUP,                          -- 53 mkup
                 C.PRECIO_BLANCO,                 -- 54 Precio Blanco
                 C.GM,                            -- 55 GM
-                C.OFERTA,                          -- 56 Oferta 
+                C.OFERTA,                        -- 56 Oferta 
                 C.NOM_MONEDA  COD_TIP_MON,       -- 57 Moneda
                 C.COSTO_TARGET,                  -- 58 Target
                 C.COSTO_FOB,                     -- 59 FOB
@@ -94,7 +94,7 @@ class PlanCompraClass extends \parametros
                 C.ALIAS_PROV,                    -- 75 Proveedor
                 C.COD_PROVEEDOR,                 -- 76 Razon Social
                 C.COD_TRADER,                    -- 77 Trader
-                C.AFTER_MEETING_REMARKS,         -- 78
+                C.COMENTARIOS_POST_NEGOCIACION,  -- 78
                 C.CODSKUPROVEEDOR,               -- 79 Cod SKU Proveedor
                 O.COD_PADRE SKU,                 -- 80 Cod Padre
                 C.PROFORMA,                      -- 81 Proforma
@@ -103,16 +103,16 @@ class PlanCompraClass extends \parametros
                 O.ESTADO_MATCH,                  -- 84 Estado Match
                 O.PO_NUMBER,                     -- 85 N OC
                 O.ESTADO_OC,                     -- 86 Estado OC
-                C.FECHA_ACORDADA,               -- 87
+                C.FECHA_EMBARQUE_ACORDADA,       -- 87
                 O.FECHA_EMBARQUE,                -- 88 Fecha Embarque
                 O.FECHA_ETA,                     -- 89 Fecha ETA
                 O.FECHA_RECEPCION,               -- 90 Fecha Recepciòn
                 O.DIAS_ATRASO,                   -- 91 Dias Atraso
                 convert((SELECT nom_est_c1 FROM plc_estado_c1 WHERE cod_est_c1= C.ESTADO),'utf8','us7ascii')CODESTADO,  -- 92 Estado Opcion
-                C.ESTADO ESTADO_C1,              -- 93 Estado C1
-                C.VENTANA_LLEGADA,               -- 94 Ventana Llegada
-                C.PROFORMA PROFORMA_BASE,         -- 95 Proforma Base
-                C.TIPO_EMPAQUE TIPO_EMPAQUE_BASE, -- 96 Tipo empaque Base
+                C.ESTADO ESTADO_C1,                       -- 93 Estado C1
+                C.VENTANA_LLEGADA,                        -- 94 Ventana Llegada
+                C.PROFORMA PROFORMA_BASE,                 -- 95 Proforma Base
+                C.TIPO_EMPAQUE TIPO_EMPAQUE_BASE,         -- 96 Tipo empaque Base
                 C.UNID_OPCION_INICIO UNI_INICIALES_BASE,  -- 97 Unidades Iniciales Base
                 C.PRECIO_BLANCO PRECIO_BLANCO_BASE,       -- 98 Precio Blanco Base 
                 C.COSTO_TARGET COSTO_TARGET_BASE,         -- 99 Target Base
@@ -3461,9 +3461,35 @@ class PlanCompraClass extends \parametros
     // ######################## FIN Trabajo con flujo de aprobación ########################
 
 
+    // ######################## INICIO Permisos de Usuario ########################
+    // Listar Permiso de Usuario
+    public static function ListarPermisosUsuario($temporada, $depto, $login)
+    {
+
+        $sql = "SELECT t1.id_telrik, t2.nombre_accion 
+                FROM plc_permiso_modulo_accion t1
+                INNER JOIN plc_modulo_accion t2 ON t2.id_accion=t1.id_accion
+                INNER JOIN plc_usuario t3 ON t3.cod_tipusr=t1.id_tip_usr
+                WHERE t3.cod_usr = '" . $login . "'";
+
+        $data = \database::getInstancia()->getFilas($sql);
+        return $data;
+
+        // Transformo a array asociativo
+        /*$array1 = [];
+        foreach ($data as $va1) {
+            array_push($array1
+                , array(
+                   "ID_ACCION" => $va1[0]
+                //, "NOMBRE_ACCION" => $va1[1]
+                )
+            );
+        }
+        return $array1;*/
 
 
-
+    }
+    // ######################## FIN Permisos de Usuario ########################
 
 
 
