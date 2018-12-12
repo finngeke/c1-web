@@ -381,6 +381,7 @@ if($ESTADO_C1!=24){
     }
 
 
+
     // ######################## INICIO Trabajo con flujo de aprobación ########################
 
     public function ModificaEstadoDinamico($f3) {
@@ -400,6 +401,19 @@ if($ESTADO_C1!=24){
     }
 
     // ######################## FIN Trabajo con flujo de aprobación ########################
+
+
+
+
+    // ######################## INICIO Permisos de Usuario ########################
+
+    // Listar Permisos de Usuario
+    public function ListarPermisosUsuario($f3)
+    {
+        echo json_encode(\simulador_compra\PlanCompraClass::ListarPermisosUsuario($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login')));
+    }
+
+    // ######################## FIN Permisos de Usuario ########################
 
 
 // Termina Clase
