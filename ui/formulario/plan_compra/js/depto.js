@@ -211,7 +211,7 @@ function redireccDeptoPopUp(event) {
                                                         flag_cod_tip_usr = c[0];
 
                                                         //estos perfiles ingresan como lectura
-                                                        if ((flag_cod_tip_usr == 11) || (flag_cod_tip_usr == 4) ||(flag_cod_tip_usr == 7) || (flag_cod_tip_usr == 100) || (flag_cod_tip_usr == 101)){
+                                                        if ( (flag_cod_tip_usr == 11) || (flag_cod_tip_usr == 4) ||(flag_cod_tip_usr == 7) ){
 														getjerarquia(depto);
                                                         location.href='simulador_compra?depto='+depto;
 
@@ -219,7 +219,7 @@ function redireccDeptoPopUp(event) {
                                                         }else {
 
                                                             //buscar si hay alguien del mismo grupo escritura
-                                                            $.getJSON(url_busca_session, {DEPTO:depto,COD_TIP_GRP:'1,2,3,5,8,9,10,99'}, function (data) {
+                                                            $.getJSON(url_busca_session, {DEPTO:depto,COD_TIP_GRP:'1,2,3,5,8,9,10,99,100,101,102'}, function (data) {
                                                                 $.each(data, function (i,s) {
 
                                                                     if ( (s[0] == null) || (s[0] == '') || (s[0].length < 0)|| (s[0] == 0) ){
@@ -262,7 +262,7 @@ function redireccDeptoPopUp(event) {
 
                                                                     $.getJSON(url_eliminar_concurrencia,{DEPTO:depto}).done(function (data) {
 
-                                                                        $.getJSON(url_guardar_concurrencia,{DEPTO:depto,COD_MARC:0,NUM_SESSION:0,VERSION_APP:version_app,CPU_COUNT:'0',CPU_MHZ:'0',CPU_NAME:'0',CPU_VENDOR:'0',CPU_INDENTI:'0',MEM_PHYSIC:'0',MEM_AVAPHY:'0',MEM_TOTVIR:'0',MEM_AVAVIR:'0',MEM_OSNAME:'0',COD_TIP_GRP:'1,2,3,5,8,9,10,99'},function (data2) {
+                                                                        $.getJSON(url_guardar_concurrencia,{DEPTO:depto,COD_MARC:0,NUM_SESSION:0,VERSION_APP:version_app,CPU_COUNT:'0',CPU_MHZ:'0',CPU_NAME:'0',CPU_VENDOR:'0',CPU_INDENTI:'0',MEM_PHYSIC:'0',MEM_AVAPHY:'0',MEM_TOTVIR:'0',MEM_AVAVIR:'0',MEM_OSNAME:'0',COD_TIP_GRP:'1,2,3,5,8,9,10,99,100,101,102'},function (data2) {
 
                                                                             if (data2 == 0){
 

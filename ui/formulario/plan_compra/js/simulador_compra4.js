@@ -71,7 +71,7 @@ $(window).on('load', function () {
 
                     $('#flag_top_menu_tipo_usuario').html('');
 
-                    $.getJSON(url_busca_session, {DEPTO: depto, COD_TIP_GRP: '1,2,3,5,8,9,10,99'}, function (data) {
+                    $.getJSON(url_busca_session, {DEPTO: depto, COD_TIP_GRP: '1,2,3,5,8,9,10,99,100,101,102'}, function (data) {
                         $.each(data, function (i, s) {
 
                             if ((s[0] == null) || (s[0] == '') || (s[0].length < 0) || (s[0] == 0)) {
@@ -123,7 +123,7 @@ $(window).on('load', function () {
                                     MEM_TOTVIR: '0',
                                     MEM_AVAVIR: '0',
                                     MEM_OSNAME: '0',
-                                    COD_TIP_GRP: '1,2,3,5,8,9,10,99'
+                                    COD_TIP_GRP: '1,2,3,5,8,9,10,99,100,101,102'
                                 }).done(function (data) {
                                     location.reload(true);
                                 });
