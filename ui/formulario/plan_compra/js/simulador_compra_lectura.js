@@ -1,11 +1,9 @@
 $(function () {
 
-    //######################################## BUSCA PERMISOS ########################################
+    //######################################## BUSCA CONCURRENCIA ########################################
 
     $.ajax({
-        url: "TelerikPlanCompra/ListarPermisosUsuario",
-        //type: "POST",
-        //dataType: "json",
+        url: "TelerikPlanCompra/RevisaConcurrencia",
         success: function (result) {
 
             // Limpiar el Local Storage

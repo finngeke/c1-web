@@ -364,24 +364,23 @@ $(function () {
             permisoCBXeliminar = 1;
         }
 
-
-        if( (permisoCBX==0) && (permisoCBXmodificacion==0)){
+        // Verifica si los Permisos Cumplen
+        if( (permisoCBX==0) && (permisoCBXmodificacion==0) ){
+            popupNotification.getNotifications().parent().remove();
+            popupNotification.show(" No tiene permisos para realizar esta acción.", "error");
+            return false;
+        }
+        if( (permisoCBX==1) && (permisoCBXcorreccion==0) ){
+            popupNotification.getNotifications().parent().remove();
+            popupNotification.show(" No tiene permisos para realizar esta acción.", "error");
+            return false;
+        }
+        if( (permisoCBX==2) && (permisoCBXeliminar==0) ){
             popupNotification.getNotifications().parent().remove();
             popupNotification.show(" No tiene permisos para realizar esta acción.", "error");
             return false;
         }
 
-        if( (permisoCBX==1) && (permisoCBXcorreccion==0)){
-            popupNotification.getNotifications().parent().remove();
-            popupNotification.show(" No tiene permisos para realizar esta acción.", "error");
-            return false;
-        }
-
-        if( (permisoCBX==2) && (permisoCBXeliminar==0)){
-            popupNotification.getNotifications().parent().remove();
-            popupNotification.show(" No tiene permisos para realizar esta acción.", "error");
-            return false;
-        }
 
 
          var respuesta = confirm("¿Quiere realizar los cambios?");
@@ -573,8 +572,6 @@ $(function () {
             popupNotification.getNotifications().parent().remove();
             popupNotification.show(" No se han realizado Cambios de Estado.", "info");
          }
-
-
 
 
 
