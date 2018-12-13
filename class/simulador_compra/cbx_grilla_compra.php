@@ -1940,13 +1940,8 @@ class cbx_grilla_compra extends \parametros
     public static function quitar_oc_cancelada($temporada, $depto, $login, $oc, $pi)
     {
 
-        /*$sql = " DELETE FROM B
-                 WHERE PI = '" . $pi . "'
-                 AND orden_de_compra <> '" . $oc . "'
-                ";*/
-
         $sql = " DELETE FROM B
-                 WHERE orden_de_compra = '" . $oc . "'
+                 WHERE PI = '" . $pi . "'
                 ";
 
         $data = \database::getInstancia()->getConsulta($sql);
