@@ -73,6 +73,337 @@ $(function () {
 
     });
 
+
+    // ############################ Importar Achivos ############################
+    // Ventana Pop
+    var ventana_loading= $("#Pop_loading_Archivo");
+    ventana_loading.kendoWindow({
+        width: "350px",
+        align: "400px",
+        title: "Importar Archivo",
+        visible: false,
+        close: function() {
+            $(".open-button").show();},
+        actions: [
+            //"Pin",
+            "Minimize",
+            "Maximize",
+            "Close"
+        ]/*,
+        close: onClose*/
+    }).data("kendoWindow").center();
+    $("#totalProgressBar").kendoProgressBar({
+        type: "chunk",
+        chunkCount: 4,
+        min: 0,
+        max: 4,
+        orientation: "vertical",
+
+    });
+    $("#loadingProgressBar").kendoProgressBar({
+        orientation: "vertical",
+        showStatus: false,
+        animation: false,
+    });
+    $("#gridErrores").kendoGrid({
+        dataSource: {
+            schema: {
+                model: {
+                    fields: {
+                        Errores: { type: "string" }
+                    }
+                }
+            },
+            pageSize: 0
+        },
+        height: 90,
+        scrollable: true,
+        sortable: true,
+        columns: [
+            { field: "Errores" }
+        ]
+    });
+
+    //Upload del archivo
+    $("#txt_archivo").kendoUpload({
+        async: {
+            saveUrl: "guardar/archivoAssorment",
+            autoUpload: true,
+            saveField: "JSONGuardaArhcivo"
+            /*,removeUrl: "TelerikGuardar/QuitarArhcivoPI"*/
+        },validation: {
+            allowedExtensions: [".xlsx",".XLSX",".xls",".XLS"],
+            maxFileSize: 30000000
+        },
+        upload: AntesCargaArchivo,
+        success: function () {
+            $(".chunkStatus").text(1);
+            $(".Rows1").text(0+ "/"+0);
+
+            var popupDe = $("#Pop_loading_Archivo");
+            popupDe.data("kendoWindow").open();
+            $("#gridErrores").data("kendoGrid").dataSource.data([]);
+            $("#_Errores").css("display", "none");
+            CargaAssortment();
+        }
+    });
+    function AntesCargaArchivo(e){
+        e.data = {
+            Tipo_archivo: $("#tipo_archivo").val()
+        };
+    }
+    function CargaAssortment() {
+        var pb = $("#loadingProgressBar").data("kendoProgressBar");pb.value(0);
+        var pbt = $("#totalProgressBar").data("kendoProgressBar");pbt.value(1);
+        var popupNotification = $("#popupNotification").kendoNotification().data("kendoNotification");
+
+
+        $('#Loaded').html("Extrayendo de datos.");
+        $.ajax({
+            url: "importar_archivo/ImportarAssormentExtraccionDatos",
+            dataType: "json",
+            success: function (data) {
+                if (data["Error"] == true){
+                    Msj_Errores(data["msjError"]);
+                }else{
+                    var interval = setInterval(function () {
+                        if (pb.value() < 10) {pb.value(pb.value() + 1);
+                            $(".loadingStatus").text(pb.value() + "%");
+                        }else if(pb.value() == 10) {
+//***********************************Validando Jerarquias
+                            clearInterval(interval);
+                            $('#Loaded').html("Validando Depto y Jerarquías.");
+                            $.ajax({ url: "importar_archivo/ImportarAssormentValidaciones"
+                                    ,type: 'GET'
+                                    ,data: {Tipo:1}
+                                    ,dataType: "json"
+                                    ,success: function(data) {
+                                        if (data["Error"] == true){
+                                            Msj_Errores(data["msjError"]);
+                                        }else{pb.value(10);
+                                            var interval = setInterval(function () {
+                                                if (pb.value() < 40) {
+                                                    pb.value(pb.value() + 1);
+                                                    $(".loadingStatus").text(pb.value() + "%");
+                                                }else if(pb.value() == 40) {
+//***********************************Validando datos.
+                                                    clearInterval(interval);
+                                                    $('#Loaded').html("Validando Datos.");
+                                                    $.ajax({ url: "importar_archivo/ImportarAssormentValidaciones"
+                                                            ,type: 'GET'
+                                                            ,data: {Tipo:2}
+                                                            ,dataType: "json"
+                                                            ,success: function(data) {
+                                                                if (data["Error"] == true){
+                                                                    Msj_Errores(data["msjError"]);
+                                                                }else{pb.value(40);
+                                                                    var interval = setInterval(function () {
+                                                                        if (pb.value() < 90) {
+                                                                            pb.value(pb.value() + 1);
+                                                                            $(".loadingStatus").text(pb.value() + "%");
+                                                                        }else if(pb.value() == 90) {
+//***********************************Validando limpiado datos.
+                                                                            clearInterval(interval);
+                                                                            $('#Loaded').html("Limpiando Data.");
+                                                                            $.ajax({ url: "importar_archivo/ImportarAssormentdelrows"
+                                                                                    ,type: 'GET'
+                                                                                    ,dataType: "json"
+                                                                                    ,success: function(data) {pb.value(90);
+                                                                                        var interval = setInterval(function () {
+                                                                                        if (pb.value() < 100) {
+                                                                                            pb.value(pb.value() + 1);
+                                                                                            $(".loadingStatus").text(pb.value() + "%");
+                                                                                        }else if(pb.value() == 100) {
+                                                                                            clearInterval(interval);
+                                                                                            pb.value(0);pbt.value(2);
+                                                                                            var $key = 0;var $key2 = 0;var count = data.length - 1;var _Int = 0;
+                                                                                            $(".loadingStatus").text(0 + "%");
+                                                                                            $(".chunkStatus").text(2);
+                                                                                            $('#Loaded').html("Insertanto Historial.");
+                                                                                            $(".Rows1").text(0+ "/"+count);
+
+        //***********************************Insertar historial
+                                                                                            $.each(data, function (i, o) {$key++;
+                                                                                                if ($key != 1){$key2 ++;
+                                                                                                    $.ajax({ url: "importar_archivo_3/ImportarAssormentInsHistorial"
+                                                                                                        ,type: 'POST'
+                                                                                                        ,data: {_rows:o,_delete:$key2}
+                                                                                                        ,dataType: "json"
+                                                                                                        ,success: function(data) {
+                                                                                                            if (data["Error"] == true){
+                                                                                                                Msj_Errores(data["msjError"]);
+                                                                                                            }else{
+                                                                                                                pb.value(pb.value());
+                                                                                                                _Int = Number(data["msjError"]) + Number(_Int);
+                                                                                                                var _total =  (Number(_Int)*100) /count;
+                                                                                                                var interval = setInterval(function () {
+                                                                                                                    if (pb.value() <= _total) {
+                                                                                                                        pb.value(pb.value()+1);
+                                                                                                                        $(".loadingStatus").text(pb.value() + "%");
+                                                                                                                    }else{clearInterval(interval);}
+                                                                                                                }, 30);
+                                                                                                                $(".Rows1").text(_Int+ "/"+count);
+
+                                                                                                                if (Number(_Int) == count){
+                                                                                                                    clearInterval(interval);
+                                                                                                                    pbt.value(3);pb.value(0);
+                                                                                                                    $(".chunkStatus").text(3);
+                                                                                                                    $(".loadingStatus").text(0 + "%");
+                                                                                                                    $('#Loaded').html("Limpiando Data Debut/Reorder - Costos.");
+                                                                                                                    $(".Rows1").text(0+ "/"+0);
+                                                                                                                    //***********************************Limpiando datos DEBUT- REORDER
+                                                                                                                    $.ajax({ url: "importar_archivo/ImpAssormAbrirDataVent"
+                                                                                                                            ,type: 'GET'
+                                                                                                                            ,dataType: "json"
+                                                                                                                            ,success: function(data) {
+                                                                                                                                if (data["Error"] == true){
+                                                                                                                                    Msj_Errores(data["msjError"]);
+                                                                                                                                }else{pb.value(0);
+                                                                                                                                    var interval = setInterval(function () {
+                                                                                                                                        if (pb.value() < 20) {
+                                                                                                                                            pb.value(pb.value() + 1);
+                                                                                                                                            $(".loadingStatus").text(pb.value() + "%");
+                                                                                                                                        }else if(pb.value() == 20){
+                                                                                                                                            clearInterval(interval);
+                                                                                                                                            $('#Loaded').html("Calculando Curvado - Costos.");
+//***********************************Limpiando datos DEBUT- REORDER
+                                                                                                                                            $.ajax({ url: "importar_archivo/ImpAssormCalculos"
+                                                                                                                                                    ,type: 'GET'
+                                                                                                                                                    ,dataType: "json"
+                                                                                                                                                    ,success: function(data2) {pb.value(20);
+                                                                                                                                                    var interval = setInterval(function () {
+                                                                                                                                                        if (pb.value() < 100) {
+                                                                                                                                                            pb.value(pb.value() + 1);
+                                                                                                                                                            $(".loadingStatus").text(pb.value() + "%");
+                                                                                                                                                        }else if(pb.value() == 100){
+                                                                                                                                                            clearInterval(interval);
+                                                                                                                                                            pbt.value(4);pb.value(0);
+                                                                                                                                                            var count2 = data2.length - 1;
+                                                                                                                                                            var _Int2 = 0; var _final = 0;var $key1 = 0;
+                                                                                                                                                            $(".chunkStatus").text(4);
+                                                                                                                                                            $(".loadingStatus").text(0 + "%");
+                                                                                                                                                            $('#Loaded').html("Insertanto Plan de Compra.");
+                                                                                                                                                            $(".Rows1").text(0+ "/"+count2);
+
+                                                                                                                                                            $.each(data2, function (i, o) {$key1++;
+                                                                                                                                                                if($key1 != 1){
+                                                                                                                                                                    $.ajax({ url: "importar_archivo_3/InsertarAssormentC1"
+                                                                                                                                                                        ,type: 'POST'
+                                                                                                                                                                        ,data: {_rows:o}
+                                                                                                                                                                        ,dataType: "json"
+                                                                                                                                                                        ,success: function(data3) {
+                                                                                                                                                                            if (data3["Error"] == true){
+                                                                                                                                                                                Msj_Errores(data["msjError"]);
+                                                                                                                                                                            }else{
+                                                                                                                                                                                _Int2 = Number(data3["msjError"]) + Number(_Int2);
+                                                                                                                                                                                var _total =  (Number(_Int2)*100) /count2;
+                                                                                                                                                                                pb.value(pb.value());
+                                                                                                                                                                                var interval = setInterval(function () {
+                                                                                                                                                                                    if (pb.value() < _total) {
+                                                                                                                                                                                        pb.value(pb.value()+1);
+                                                                                                                                                                                        $(".loadingStatus").text(pb.value() + "%");
+                                                                                                                                                                                        $(".Rows1").text(_Int2+ "/"+count2);
+                                                                                                                                                                                    }else if(pb.value()==100 && _final == 0 ){
+                                                                                                                                                                                        $('#Loaded').html("Importación Completa.");
+                                                                                                                                                                                        clearInterval(interval);
+                                                                                                                                                                                        $(".Rows1").text(_Int2+ "/"+count2);
+                                                                                                                                                                                        _final = 1;
+                                                                                                                                                                                        popupNotification.show(kendo.toString("Insertado Correctamente"), "success");
+                                                                                                                                                                                        var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
+                                                                                                                                                                                        var sheet = spreadsheet.activeSheet();
+                                                                                                                                                                                        sheet.dataSource.read();
+
+                                                                                                                                                                                    }else{
+                                                                                                                                                                                        clearInterval(interval);
+                                                                                                                                                                                    }
+                                                                                                                                                                                }, 30);
+                                                                                                                                                                            }
+                                                                                                                                                                        }
+                                                                                                                                                                    });
+                                                                                                                                                                }
+                                                                                                                                                            });
+                                                                                                                                                        }
+                                                                                                                                                    }, 30);
+
+                                                                                                                                                }
+                                                                                                                                            });
+                                                                                                                                        }
+                                                                                                                                    }, 30);
+                                                                                                                                }
+                                                                                                                        }
+                                                                                                                    });
+                                                                                                                }
+                                                                                                            }
+                                                                                                        }
+                                                                                                    });
+                                                                                                }
+                                                                                            });
+                                                                                        }
+                                                                                    }, 30);
+                                                                                }
+                                                                            });
+                                                                        }
+                                                                    }, 30);
+                                                                }
+                                                            }
+                                                    });
+                                                }
+                                            }, 30);
+                                        }
+                                    }
+                            });
+                        }
+                    }, 30);
+                }
+            }
+        });
+    }
+
+    function Msj_Errores(e){
+        var arregloErrores = [];
+        arregloErrores.push({"Errores":e});
+        $("#_Errores").css("display", "");
+        var grilla = $("#gridErrores").data("kendoGrid");// Get the item
+        var sel = grilla.select();
+        var item = grilla.dataItem(sel);              // Get the item
+        var idx = grilla.dataSource.indexOf(item);
+        arregloErrores.forEach(function (err, index) {
+            grilla.dataSource.insert(idx + 1, {
+                Errores: err.Errores
+            });
+        });
+    }
+
+
+    $("#editor").kendoEditor({
+        tools: [
+            "bold",
+            "italic",
+            "underline",
+            "foreColor"
+        ]
+    });
+
+
+    // Le da la estructura a la ventana POPUP
+    var ventana_import= $("#POPUP_Importar_");
+    ventana_import.kendoWindow({
+        width: "360px",
+        title: "Importar Archivo",
+        visible: false,
+        actions: [
+            //"Pin",
+            "Minimize",
+            "Maximize",
+            "Close"
+        ]/*,
+                close: onClose*/
+    }).data("kendoWindow").center();
+
+
+
+
+
     // Le da la estructura a la ventana POPUP
     var ventana_carga_pi = $("#POPUP_carga_archivo_pi");
     ventana_carga_pi.kendoWindow({
@@ -125,11 +456,10 @@ $(function () {
 
 
     // ############################ AJUSTE COMPRA ############################
-
     // Le da la estructura a la ventana POPUP
     var ventana_ajuste_compra = $("#POPUP_ajuste_compra");
     ventana_ajuste_compra.kendoWindow({
-        width: "500px",
+        width: "600px",
         title: "Ajuste Compra",
         visible: false,
         actions: [
@@ -141,13 +471,18 @@ $(function () {
                 close: onClose*/
     }).data("kendoWindow").center();
 
+    // Le da la estructura a la grilla
+    $("#grid_ajuste_compra").kendoGrid({
+        height: 164,
+        sortable: true
+    });
+
 
     // ############################ AJUSTE N CAJAS ############################
-
     // Le da la estructura a la ventana POPUP
     var ventana_ajuste_cajas = $("#POPUP_ajuste_cajas");
     ventana_ajuste_cajas.kendoWindow({
-        width: "500px",
+        width: "650px",
         title: "Ajuste N° Cajas",
         visible: false,
         actions: [
@@ -158,10 +493,20 @@ $(function () {
         ]/*,
                 close: onClose*/
     }).data("kendoWindow").center();
+    // Le da la estructura a la grilla
+    $("#grid_ajuste_cajas").kendoGrid({
+        height: 220,
+        sortable: true,
+        align : "center"
+    });
 
+    // Le da la estructura a la grilla
+    $("#grid_ajuste_cajas2").kendoGrid({
+        height: 220,
+        sortable: true
+    });
 
     // ############################ DETALLE ERROR ############################
-
     // Le da la estructura a la ventana POPUP
     var ventana_detalle_error = $("#POPUP_detalle_error");
     ventana_detalle_error.kendoWindow({
@@ -208,7 +553,6 @@ $(function () {
         close: cerrarPopUpMATCH*/
     }).data("kendoWindow").center();
 
-
     // Le da la estructura a la grilla pmm
     $("#grid_match_pmm").kendoGrid({
         schema: {
@@ -224,7 +568,6 @@ $(function () {
         height: 300,
         sortable: true
     });
-
 
     // Le da la estructura a la grilla plan
     $("#grid_match_plan").kendoGrid({
@@ -577,7 +920,61 @@ $(function () {
 
     });
 
-
+// ############################ presupuesto total ############################
+    // pop grilla presupuesto total.
+    var ventana_presupuestos = $("#POPUP_presupuestos_total");
+    ventana_presupuestos.kendoWindow({
+        width: "650px",
+        title: "Presupuestos",
+        visible: false,
+        actions: [
+            //"Pin",
+            "Minimize",
+            "Maximize",
+            "Close"
+        ]/*,
+                close: onClose*/
+    }).data("kendoWindow").center();
+    // Le da la estructura a la grilla
+    $("#grid_presupuestos_total").kendoGrid({
+        height: 127,
+        sortable: true,
+        align : "center",
+        scrollable: true,
+        columns: [
+            { field: "Tipo", width:"70px" },
+            { field: "Ac" , width:"90px", title: "A" ,attributes: {style: "background-color: rgb(240,248,255); font-size: 12px"}},
+            { field: "Bc" , width:"90px", title: "B" ,attributes: {style: "background-color: rgb(240,248,255); font-size: 12px"}},
+            { field: "Cc" , width:"90px", title: "C" ,attributes: {style: "background-color: rgb(240,248,255); font-size: 12px"}},
+            { field: "Dc" , width:"90px", title: "D" ,attributes: {style: "background-color: rgb(240,248,255); font-size: 12px"}},
+            { field: "Ec" , width:"90px", title: "E" ,attributes: {style: "background-color: rgb(240,248,255); font-size: 12px"}},
+            { field: "Fc" , width:"90px", title: "F" ,attributes: {style: "background-color: rgb(240,248,255); font-size: 12px"}},
+            { field: "Gc" , width:"90px", title: "G" ,attributes: {style: "background-color: rgb(240,248,255); font-size: 12px"}},
+            { field: "Hc" , width:"90px", title: "H" ,attributes: {style: "background-color: rgb(240,248,255); font-size: 12px"}},
+            { field: "Ic" , width:"90px", title: "I" ,attributes: {style: "background-color: rgb(240,248,255); font-size: 12px"}},
+            { field: "Totalc" , width:"100px", title: "Total" ,attributes: {style: "background-color: rgb(240,248,255); font-size: 12px"}},
+            { field: "Ar" , width:"90px", title: "A" ,attributes: {style: "background-color: rgb(255,182,193); font-size: 12px"}},
+            { field: "Br" , width:"90px", title: "B" ,attributes: {style: "background-color: rgb(255,182,193); font-size: 12px"}},
+            { field: "Cr" , width:"90px", title: "C" ,attributes: {style: "background-color: rgb(255,182,193); font-size: 12px"}},
+            { field: "Dr" , width:"90px", title: "D" ,attributes: {style: "background-color: rgb(255,182,193); font-size: 12px"}},
+            { field: "Er" , width:"90px", title: "E" ,attributes: {style: "background-color: rgb(255,182,193); font-size: 12px"}},
+            { field: "Fr" , width:"90px", title: "F" ,attributes: {style: "background-color: rgb(255,182,193); font-size: 12px"}},
+            { field: "Gr" , width:"90px", title: "G" ,attributes: {style: "background-color: rgb(255,182,193); font-size: 12px"}},
+            { field: "Hr" , width:"90px", title: "H" ,attributes: {style: "background-color: rgb(255,182,193); font-size: 12px"}},
+            { field: "Ir" , width:"90px", title: "I" ,attributes: {style: "background-color: rgb(255,182,193); font-size: 12px"}},
+            { field: "Totalr" , width:"100px", title: "Total" ,attributes: {style: "background-color: rgb(255,182,193); font-size: 12px"}},
+            { field: "Ae" , width:"60px", title: "A" ,attributes: {style: "background-color: rgb(135,206,250); font-size: 12px"}},
+            { field: "Be" , width:"60px", title: "B" ,attributes: {style: "background-color: rgb(135,206,250); font-size: 12px"}},
+            { field: "Ce" , width:"60px", title: "C" ,attributes: {style: "background-color: rgb(135,206,250); font-size: 12px"}},
+            { field: "De" , width:"60px", title: "D" ,attributes: {style: "background-color: rgb(135,206,250); font-size: 12px"}},
+            { field: "Ee" , width:"60px", title: "E" ,attributes: {style: "background-color: rgb(135,206,250); font-size: 12px"}},
+            { field: "Fe" , width:"60px", title: "F" ,attributes: {style: "background-color: rgb(135,206,250); font-size: 12px"}},
+            { field: "Ge" , width:"60px", title: "G" ,attributes: {style: "background-color: rgb(135,206,250); font-size: 12px"}},
+            { field: "He" , width:"60px", title: "H" ,attributes: {style: "background-color: rgb(135,206,250); font-size: 12px"}},
+            { field: "Ie" , width:"60px", title: "I" ,attributes: {style: "background-color: rgb(135,206,250); font-size: 12px"}},
+            { field: "Totale" , width:"60px", title: "Total",attributes: {style: "background-color: rgb(135,206,250); font-size: 12px"}}
+        ]
+    });
 
 
 

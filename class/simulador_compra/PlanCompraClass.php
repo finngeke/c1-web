@@ -1938,7 +1938,6 @@ class PlanCompraClass extends \parametros
           echo "/------5 REORDER------";
           var_dump($dtTablaReorder);
           die();*/
-
     }
 
 
@@ -3542,6 +3541,563 @@ class PlanCompraClass extends \parametros
 
 
 
+  //listar data pop ajuste de compra
+    public static function Listar_Pop_Ajuste_Compra($tempo, $depto, $id_color3, $tallas){
 
+
+        $n_tallas = explode(",", $tallas);
+        $columtallas = "";$t1= "";$t2= "";$t3= "";$t4= "";$t5= "";$t6= "";$t7= "";$t8= "";$t9= "";
+        $countt = count($n_tallas);
+        
+        $i= 0;
+        foreach($n_tallas as $val){$i++;
+            if ($i==1){$t1= trim($val);
+            }elseif($i==2){$t2= trim($val);
+            }elseif($i==3){$t3= trim($val);
+            }elseif($i==4){$t4= trim($val);
+            }elseif($i==5){$t5= trim($val);
+            }elseif($i==6){$t6= trim($val);
+            }elseif($i==7){$t7= trim($val);
+            }elseif($i==8){$t8= trim($val);
+            }elseif($i==9){$t9= trim($val);
+            }
+            $columtallas = $columtallas . "TALLA_" . $i . ",";
+        }
+        
+        $columtallas = substr($columtallas, 0, strlen($columtallas) - 1);
+        $sql = "select COLUMNAS
+                    ," . $columtallas . "
+                    ,TOTAL
+                from (select COLUMNAS
+                        ,case when COLUMNAS = 'Curva de compra Ajustada' then TALLA_1||'%' else TALLA_1 end TALLA_1
+                        ,case when COLUMNAS = 'Curva de compra Ajustada' then TALLA_2||'%' else TALLA_2 end TALLA_2
+                        ,case when COLUMNAS = 'Curva de compra Ajustada' then TALLA_3||'%' else TALLA_3 end TALLA_3
+                        ,case when COLUMNAS = 'Curva de compra Ajustada' then TALLA_4||'%' else TALLA_4 end TALLA_4
+                        ,case when COLUMNAS = 'Curva de compra Ajustada' then TALLA_5||'%' else TALLA_5 end TALLA_5
+                        ,case when COLUMNAS = 'Curva de compra Ajustada' then TALLA_6||'%' else TALLA_6 end TALLA_6
+                        ,case when COLUMNAS = 'Curva de compra Ajustada' then TALLA_7||'%' else TALLA_7 end TALLA_7
+                        ,case when COLUMNAS = 'Curva de compra Ajustada' then TALLA_8||'%' else TALLA_8 end TALLA_8
+                        ,case when COLUMNAS = 'Curva de compra Ajustada' then TALLA_9||'%' else TALLA_9 end TALLA_9
+                        ,case when COLUMNAS = 'Curva de compra Ajustada' then '-' else to_char(TOTAL) end TOTAL
+                        ,case when COLUMNAS = 'Curva de Compra' then  1
+                              when COLUMNAS = 'Curva Primer Reparto' then 2
+                              when COLUMNAS = 'Diferencial' then 3
+                              when COLUMNAS = 'Total' then 4
+                              when COLUMNAS = 'Curva de compra Ajustada' then 5 end order_
+                        from plc_ajustes_compra
+                        where cod_temporada = " . $tempo . " 
+                        and dep_depto = '" . $depto . "'
+                        and  id_color3 = " . $id_color3 . "
+                        and Tipo_ajuste = 'Ajuste de Compra')A
+                ORDER BY order_ ASC";
+
+        $data = \database::getInstancia()->getFilas($sql);
+        $array1 = [];
+        foreach ($data as $va1) {
+            if ($countt == 1){
+                array_push($array1, array("_" => $va1[0]
+                                                , "t_".$t1 => $va1[1]
+                                                , "Total" => $va1[2]
+                    )
+                );
+            }
+            elseif ($countt == 2){
+                array_push($array1, array("_" => $va1[0]
+                                                , "t_".$t1 => $va1[1]
+                                                , "t_".$t2 => $va1[2]
+                                                , "Total" => $va1[3]
+                                                )
+                );
+            }
+            elseif ($countt == 3){
+                array_push($array1, array("_" => $va1[0]
+                                                , "t_".$t1 => $va1[1]
+                                                , "t_".$t2 => $va1[2]
+                                                , "t_".$t3 => $va1[3]
+                                                , "Total" => $va1[4]
+                    )
+                );
+            }
+            elseif ($countt == 4){
+                array_push($array1, array("_" => $va1[0]
+                                                , "t_".$t1 => $va1[1]
+                                                , "t_".$t2 => $va1[2]
+                                                , "t_".$t3 => $va1[3]
+                                                , "t_".$t4 => $va1[4]
+                                                , "Total" => $va1[5]
+                    )
+                );
+            }
+            elseif ($countt == 5){
+                array_push($array1, array("_" => $va1[0]
+                                                , "t_".$t1 => $va1[1]
+                                                , "t_".$t2 => $va1[2]
+                                                , "t_".$t3 => $va1[3]
+                                                , "t_".$t4 => $va1[4]
+                                                , "t_".$t5 => $va1[5]
+                                                , "Total" => $va1[6]
+                    )
+                );
+            }
+            elseif ($countt == 6){
+                array_push($array1, array("_" => $va1[0]
+                                                , $t1 => $va1[1]
+                                                , $t2 => $va1[2]
+                                                , $t3 => $va1[3]
+                                                , $t4 => $va1[4]
+                                                , $t5 => $va1[5]
+                                                , $t6 => $va1[6]
+                                                , "Total" => $va1[7]
+                                                )
+                );
+            }
+            elseif ($countt == 7){
+                array_push($array1, array("_" => $va1[0]
+                                                , $t1 => $va1[1]
+                                                , $t2 => $va1[2]
+                                                , $t3 => $va1[3]
+                                                , $t4 => $va1[4]
+                                                , $t5 => $va1[5]
+                                                , $t6 => $va1[6]
+                                                , $t7 => $va1[7]
+                                                , "Total" => $va1[8]
+                    )
+                );
+            }
+            elseif ($countt == 8){
+                array_push($array1, array("_" => $va1[0]
+                                                , $t1 => $va1[1]
+                                                , $t2 => $va1[2]
+                                                , $t3 => $va1[3]
+                                                , $t4 => $va1[4]
+                                                , $t5 => $va1[5]
+                                                , $t6 => $va1[6]
+                                                , $t7 => $va1[7]
+                                                , $t8 => $va1[8]
+                                                , "Total" => $va1[9]
+                    )
+                );
+            }
+            elseif ($countt == 9){
+                array_push($array1, array("_" => $va1[0]
+                                                , $t1 => $va1[1]
+                                                , $t2 => $va1[2]
+                                                , $t3 => $va1[3]
+                                                , $t4 => $va1[4]
+                                                , $t5 => $va1[5]
+                                                , $t6 => $va1[6]
+                                                , $t7 => $va1[7]
+                                                , $t8 => $va1[8]
+                                                , $t9 => $va1[9]
+                                                , "Total" => $va1[10]
+                    )
+                );
+            }
+        }
+            return $array1;
+    }
+
+    public static function Listar_Pop_Ajuste_Cajas($tempo, $depto, $id_color3, $tallas, $tipo_empaque, $debut_reorder)
+    {
+
+        $sql="";
+
+        $n_tallas = explode(",", $tallas);
+        $columtallas = "";$t1= "";$t2= "";$t3= "";$t4= "";$t5= "";$t6= "";$t7= "";$t8= "";$t9= "";
+        $countt = count($n_tallas);
+
+        $i= 0;
+        foreach($n_tallas as $val){$i++;
+            if ($i==1){$t1= trim($val);
+            }elseif($i==2){$t2= trim($val);
+            }elseif($i==3){$t3= trim($val);
+            }elseif($i==4){$t4= trim($val);
+            }elseif($i==5){$t5= trim($val);
+            }elseif($i==6){$t6= trim($val);
+            }elseif($i==7){$t7= trim($val);
+            }elseif($i==8){$t8= trim($val);
+            }elseif($i==9){$t9= trim($val);
+            }
+            $columtallas = $columtallas . "TALLA_" . $i . ",";
+        }
+
+        $columtallas = substr($columtallas, 0, strlen($columtallas) - 1);
+
+        if ($tipo_empaque == "CURVADO" and $debut_reorder == "DEBUT") {
+
+
+            $sql = " select COLUMNAS," . $columtallas . ",TOTAL
+                   from(select COLUMNAS
+                               ,TALLA_1,TALLA_2,TALLA_3,TALLA_4,TALLA_5,TALLA_6,TALLA_7,TALLA_8,TALLA_9
+                                ,CASE WHEN COLUMNAS = 'N de curvas x cajas' THEN 1
+                                     WHEN COLUMNAS = 'Compra Total' THEN 2  WHEN COLUMNAS = '1er Reparto' THEN 3 WHEN COLUMNAS = 'Curva 1er Reparto' THEN 4
+                                     WHEN COLUMNAS = 'Master Curvado' THEN 5 WHEN COLUMNAS = 'Curvas a repartir' THEN 6 WHEN COLUMNAS = 'N de Cajas' THEN 7
+                                     WHEN COLUMNAS = 'Total Solido' THEN 8 WHEN COLUMNAS = 'Master Pack' THEN 9 WHEN COLUMNAS = 'N Cajas' THEN 10
+                                     WHEN COLUMNAS = 'Total Solido Ajustado' THEN 11 WHEN COLUMNAS = 'Total Unidades Final' THEN 12 WHEN COLUMNAS = 'Total N Cajas Final' THEN 13
+                                     WHEN COLUMNAS = 'Total Porcentajes Ajust Final' THEN 14 end n
+                               ,TOTAL
+                        from plc_ajustes_compra
+                  where cod_temporada = " . $tempo . "
+                  and dep_depto = '" . $depto . "'
+                  and id_color3 = " . $id_color3 . "
+                 and tipo_ajuste in ('Ajuste Curvado'))a order by n asc";
+        }
+        ELSEIF ($tipo_empaque == "SOLIDO" and $debut_reorder == "DEBUT") {
+
+            $sql = "select COLUMNAS," . $columtallas . ",TOTAL
+                     from(select COLUMNAS
+                                       ,TALLA_1,TALLA_2,TALLA_3,TALLA_4,TALLA_5,TALLA_6,TALLA_7,TALLA_8,TALLA_9
+                                       ,CASE WHEN COLUMNAS = 'Unid Ini' THEN 1 WHEN COLUMNAS = 'Primer Reparto' THEN 2
+                                             WHEN COLUMNAS = '1er Reparto' THEN 3 WHEN COLUMNAS = 'Master Pack' THEN 4
+                                             WHEN COLUMNAS = 'N Cajas' THEN 5 WHEN COLUMNAS = 'Unid Final' THEN 6 end n
+                                       ,TOTAL
+                         from plc_ajustes_compra
+                         where cod_temporada = " . $tempo . " 
+                         and dep_depto = '" . $depto . "'
+                         and id_color3 = " . $id_color3 . "
+                         and tipo_ajuste in ('Ajuste Master Pack'))a order by n asc";
+
+        }
+        ELSEIF ($tipo_empaque == "SOLIDO" and $debut_reorder == "REORDER") {
+            $sql = "select COLUMNAS," . $columtallas . ",TOTAL
+                     from(select COLUMNAS
+                                       ,TALLA_1,TALLA_2,TALLA_3,TALLA_4,TALLA_5,TALLA_6,TALLA_7,TALLA_8,TALLA_9
+                                       ,CASE WHEN COLUMNAS = 'Unid Ini' THEN 1
+                                             WHEN COLUMNAS = 'Mst Pack' THEN 2
+                                             WHEN COLUMNAS = 'N Cajas' THEN 3
+                                             WHEN COLUMNAS = 'Und Final' THEN 4 end n
+                                       ,TOTAL
+                          from plc_ajustes_compra
+                          where cod_temporada = " . $tempo . "
+                          and dep_depto = '" . $depto . "'
+                          and id_color3 = " . $id_color3 . "
+                          and tipo_ajuste in ('Ajuste Master Pack'))a order by n asc";
+        }
+
+
+
+        $data = \database::getInstancia()->getFilas($sql);
+        $array1 = [];
+        foreach ($data as $va1) {
+            if ($countt == 1){
+                array_push($array1, array($tipo_empaque => $va1[0]
+                    , "t_".$t1 => $va1[1]
+                    , "Total" => $va1[2]
+                    )
+                );
+            }
+            elseif ($countt == 2){
+                array_push($array1, array($tipo_empaque => $va1[0]
+                    , "t_".$t1 => $va1[1]
+                    , "t_".$t2 => $va1[2]
+                    , "Total" => $va1[3]
+                    )
+                );
+            }
+            elseif ($countt == 3){
+                array_push($array1, array("_" => $va1[0]
+                    , "t_".$t1 => $va1[1]
+                    , "t_".$t2 => $va1[2]
+                    , "t_".$t3 => $va1[3]
+                    , "Total" => $va1[4]
+                    )
+                );
+            }
+            elseif ($countt == 4){
+                array_push($array1, array($tipo_empaque => $va1[0]
+                    , "t_".$t1 => $va1[1]
+                    , "t_".$t2 => $va1[2]
+                    , "t_".$t3 => $va1[3]
+                    , "t_".$t4 => $va1[4]
+                    , "Total" => $va1[5]
+                    )
+                );
+            }
+            elseif ($countt == 5){
+                array_push($array1, array($tipo_empaque => $va1[0]
+                    , "t_".$t1 => $va1[1]
+                    , "t_".$t2 => $va1[2]
+                    , "t_".$t3 => $va1[3]
+                    , "t_".$t4 => $va1[4]
+                    , "t_".$t5 => $va1[5]
+                    , "Total" => $va1[6]
+                    )
+                );
+            }
+            elseif ($countt == 6){
+                array_push($array1, array($tipo_empaque => $va1[0]
+                    , $t1 => $va1[1]
+                    , $t2 => $va1[2]
+                    , $t3 => $va1[3]
+                    , $t4 => $va1[4]
+                    , $t5 => $va1[5]
+                    , $t6 => $va1[6]
+                    , "Total" => $va1[7]
+                    )
+                );
+            }
+            elseif ($countt == 7){
+                array_push($array1, array($tipo_empaque => $va1[0]
+                    , $t1 => $va1[1]
+                    , $t2 => $va1[2]
+                    , $t3 => $va1[3]
+                    , $t4 => $va1[4]
+                    , $t5 => $va1[5]
+                    , $t6 => $va1[6]
+                    , $t7 => $va1[7]
+                    , "Total" => $va1[8]
+                    )
+                );
+            }
+            elseif ($countt == 8){
+                array_push($array1, array($tipo_empaque => $va1[0]
+                    , $t1 => $va1[1]
+                    , $t2 => $va1[2]
+                    , $t3 => $va1[3]
+                    , $t4 => $va1[4]
+                    , $t5 => $va1[5]
+                    , $t6 => $va1[6]
+                    , $t7 => $va1[7]
+                    , $t8 => $va1[8]
+                    , "Total" => $va1[9]
+                    )
+                );
+            }
+            elseif ($countt == 9){
+                array_push($array1, array($tipo_empaque => $va1[0]
+                    , $t1 => $va1[1]
+                    , $t2 => $va1[2]
+                    , $t3 => $va1[3]
+                    , $t4 => $va1[4]
+                    , $t5 => $va1[5]
+                    , $t6 => $va1[6]
+                    , $t7 => $va1[7]
+                    , $t8 => $va1[8]
+                    , $t9 => $va1[9]
+                    , "Total" => $va1[10]
+                    )
+                );
+            }
+        }
+        return $array1;
+
+
+    }
+
+    public static function Listar_Pop_Ajuste_Cajas_curvado_solido($tempo, $depto, $id_color3, $tallas, $tipo_empaque, $debut_reorder)
+    {
+
+        $sql="";
+
+        $n_tallas = explode(",", $tallas);
+        $columtallas = "";$t1= "";$t2= "";$t3= "";$t4= "";$t5= "";$t6= "";$t7= "";$t8= "";$t9= "";
+        $countt = count($n_tallas);
+
+        $i= 0;
+        foreach($n_tallas as $val){$i++;
+            if ($i==1){$t1= trim($val);
+            }elseif($i==2){$t2= trim($val);
+            }elseif($i==3){$t3= trim($val);
+            }elseif($i==4){$t4= trim($val);
+            }elseif($i==5){$t5= trim($val);
+            }elseif($i==6){$t6= trim($val);
+            }elseif($i==7){$t7= trim($val);
+            }elseif($i==8){$t8= trim($val);
+            }elseif($i==9){$t9= trim($val);
+            }
+            $columtallas = $columtallas . "TALLA_" . $i . ",";
+        }
+
+        $columtallas = substr($columtallas, 0, strlen($columtallas) - 1);
+
+        if ($tipo_empaque == "CURVADO" and $debut_reorder == "DEBUT") {
+            $sql = " select COLUMNAS," . $columtallas . ",TOTAL
+                   from(select COLUMNAS
+                               ,TALLA_1,TALLA_2,TALLA_3,TALLA_4,TALLA_5,TALLA_6,TALLA_7,TALLA_8,TALLA_9
+                                ,CASE WHEN COLUMNAS = 'N de curvas x cajas' THEN 1
+                                     WHEN COLUMNAS = 'Compra Total' THEN 2  WHEN COLUMNAS = '1er Reparto' THEN 3 WHEN COLUMNAS = 'Curva 1er Reparto' THEN 4
+                                     WHEN COLUMNAS = 'Master Curvado' THEN 5 WHEN COLUMNAS = 'Curvas a repartir' THEN 6 WHEN COLUMNAS = 'N de Cajas' THEN 7
+                                     WHEN COLUMNAS = 'Total Solido' THEN 8 WHEN COLUMNAS = 'Master Pack' THEN 9 WHEN COLUMNAS = 'N Cajas' THEN 10
+                                     WHEN COLUMNAS = 'Total Solido Ajustado' THEN 11 WHEN COLUMNAS = 'Total Unidades Final' THEN 12 WHEN COLUMNAS = 'Total N Cajas Final' THEN 13
+                                     WHEN COLUMNAS = 'Total Porcentajes Ajust Final' THEN 14 end n
+                               ,TOTAL
+                        from plc_ajustes_compra
+                  where cod_temporada = " . $tempo . "
+                  and dep_depto = '" . $depto . "'
+                  and id_color3 = " . $id_color3 . "
+                 and tipo_ajuste in ('Solido Curvado'))a order by n asc";
+        }
+
+
+        $data = \database::getInstancia()->getFilas($sql);
+        $array1 = [];
+        foreach ($data as $va1) {
+            if ($countt == 1){
+                array_push($array1, array($tipo_empaque => $va1[0]
+                    , "t_".$t1 => $va1[1]
+                    , "Total" => $va1[2]
+                    )
+                );
+            }
+            elseif ($countt == 2){
+                array_push($array1, array($tipo_empaque => $va1[0]
+                    , "t_".$t1 => $va1[1]
+                    , "t_".$t2 => $va1[2]
+                    , "Total" => $va1[3]
+                    )
+                );
+            }
+            elseif ($countt == 3){
+                array_push($array1, array($tipo_empaque => $va1[0]
+                    , "t_".$t1 => $va1[1]
+                    , "t_".$t2 => $va1[2]
+                    , "t_".$t3 => $va1[3]
+                    , "Total" => $va1[4]
+                    )
+                );
+            }
+            elseif ($countt == 4){
+                array_push($array1, array($tipo_empaque => $va1[0]
+                    , "t_".$t1 => $va1[1]
+                    , "t_".$t2 => $va1[2]
+                    , "t_".$t3 => $va1[3]
+                    , "t_".$t4 => $va1[4]
+                    , "Total" => $va1[5]
+                    )
+                );
+            }
+            elseif ($countt == 5){
+                array_push($array1, array($tipo_empaque => $va1[0]
+                    , "t_".$t1 => $va1[1]
+                    , "t_".$t2 => $va1[2]
+                    , "t_".$t3 => $va1[3]
+                    , "t_".$t4 => $va1[4]
+                    , "t_".$t5 => $va1[5]
+                    , "Total" => $va1[6]
+                    )
+                );
+            }
+            elseif ($countt == 6){
+                array_push($array1, array($tipo_empaque => $va1[0]
+                    , $t1 => $va1[1]
+                    , $t2 => $va1[2]
+                    , $t3 => $va1[3]
+                    , $t4 => $va1[4]
+                    , $t5 => $va1[5]
+                    , $t6 => $va1[6]
+                    , "Total" => $va1[7]
+                    )
+                );
+            }
+            elseif ($countt == 7){
+                array_push($array1, array($tipo_empaque => $va1[0]
+                    , $t1 => $va1[1]
+                    , $t2 => $va1[2]
+                    , $t3 => $va1[3]
+                    , $t4 => $va1[4]
+                    , $t5 => $va1[5]
+                    , $t6 => $va1[6]
+                    , $t7 => $va1[7]
+                    , "Total" => $va1[8]
+                    )
+                );
+            }
+            elseif ($countt == 8){
+                array_push($array1, array($tipo_empaque => $va1[0]
+                    , $t1 => $va1[1]
+                    , $t2 => $va1[2]
+                    , $t3 => $va1[3]
+                    , $t4 => $va1[4]
+                    , $t5 => $va1[5]
+                    , $t6 => $va1[6]
+                    , $t7 => $va1[7]
+                    , $t8 => $va1[8]
+                    , "Total" => $va1[9]
+                    )
+                );
+            }
+            elseif ($countt == 9){
+                array_push($array1, array($tipo_empaque => $va1[0]
+                    , $t1 => $va1[1]
+                    , $t2 => $va1[2]
+                    , $t3 => $va1[3]
+                    , $t4 => $va1[4]
+                    , $t5 => $va1[5]
+                    , $t6 => $va1[6]
+                    , $t7 => $va1[7]
+                    , $t8 => $va1[8]
+                    , $t9 => $va1[9]
+                    , "Total" => $va1[10]
+                    )
+                );
+            }
+        }
+        return $array1;
+
+    }
+
+
+    //presupuestos
+    public static function obtienePptoCosto($temporada, $depto) {
+
+        $sql =  " SELECT PRESUPUESTO as VALOR_UNI"
+            ." FROM   PLC_PPTO_COSTO C"
+            ." WHERE  C.COD_TEMPORADA =" . $temporada
+            ." AND    C.DEP_DEPTO     = '" . $depto . "'";
+
+        $data = \database::getInstancia()->getFila($sql);
+        $data2 = (object) \database::getInstancia()->getFila($sql);
+
+        if (!$data){
+            return 0;
+        }else {
+            return $data2->VALOR_UNI;
+        }
+    }
+
+    public static function obtienePptoRetail($temporada, $depto) {
+
+        $sql =  " SELECT MATI as VALOR_UNI"
+            ." FROM   PLC_PPTO_RETAIL C"
+            ." WHERE  C.COD_TEMPORADA =" . $temporada
+            ." AND    C.DEP_DEPTO     = '" . $depto . "'";
+
+        $data = \database::getInstancia()->getFila($sql);
+        $data2 = (object) \database::getInstancia()->getFila($sql);
+
+        if (!$data){
+            return 0;
+        }else {
+            return $data2->VALOR_UNI;
+        }
+
+    }
+
+    public static function obtienePptosemb($temporada, $depto) {
+
+        $sql = "SELECT B.VENT_DESCRI,sum(A.PORCENTAJE) AS PORCENTAJE FROM  PLC_PPTO_EMB A"
+            . " INNER JOIN PLC_VENTANA B ON A.COD_VENTANA=B.COD_VENTANA"
+            . " WHERE A.COD_TEMPORADA =" . $temporada . " AND A.DEP_DEPTO='" . $depto . "' "
+            . " GROUP BY A.COD_VENTANA,B.VENT_DESCRI ORDER BY B.VENT_DESCRI ASC";
+
+        $data = \database::getInstancia()->getFilas($sql);
+        return $data;
+    }
+
+    public static function obtieneConsumo($temporada, $depto)
+    {
+
+        $sql = "SELECT PERIODO VENTANA
+                      ,SUM(COSTO) COSTO
+                      ,SUM(VTA_CDSCTO) RETAIL
+                FROM plc_plan_compra_color_CIC A
+                WHERE A.cod_temporada = " . $temporada . "
+                AND A.dep_depto = '" . $depto . "'
+                GROUP BY PERIODO
+                ";
+
+        $data = \database::getInstancia()->getFilas($sql);
+        return $data;
+    }
 // Fin de la Clase
 }

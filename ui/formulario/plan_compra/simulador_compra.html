@@ -41,11 +41,16 @@
     <!-- POPUP Ajuste N Cajas -->
     <div id="POPUP_ajuste_cajas">
         <div id="grid_ajuste_cajas"></div>
+        <div id="grid_ajuste_cajas2"></div>
     </div>
+    <!-- POPUP Ajuste N Cajas -->
+    <div id="POPUP_presupuestos_total">
+        <div id="grid_presupuestos_total"></div>
+    </div>
+
 
     <!-- POPUP Detalle Error -->
     <div id="POPUP_detalle_error">
-
     </div>
 
     <!-- Despliegue de Match -->
@@ -54,6 +59,74 @@
                 <div id="grid_match_pmm" style="width: 100%; float: left;"></div>
 
                 <div id="grid_match_plan" style="width: 100%; float: left;"></div>
+
+    </div>
+
+    <!-- POPUP importar Archivo -->
+    <div id="POPUP_Importar_" class="modal-content borde_especial">
+        <ul id="fieldlist2">
+            <li>
+                <label  style="margin-top: 2em" for="tipo_archivo">Tipo de Archivo: </label>
+                <select id="tipo_archivo" placeholder="Select size..." >
+                    <option value="1">Assortment</option>
+                </select>
+            </li>
+            <li>
+                <br>
+                <input name="txt_archivo" id="txt_archivo" type="file" aria-label="txt_archivo" />
+            </li>
+        </ul>
+    </div>
+
+    <div id="Pop_loading_Archivo">
+        <ul id="Importar">
+            <li>
+                <div class="loading">
+                        <div id="totalProgressBar"></div>
+                        <div id="loadingProgressBar"></div>
+                </div>
+                <div class="loadingInfo">
+                        <h4 id="Loaded">Importando Archivo</h4>
+                        <div class="statusContainer">
+                            <p>
+                                Loaded: <span class="loadingStatus">0%</span> <br />
+                                Rows: <span class="Rows1">0/0</span> <br />
+                                Process: <span class="chunkStatus">0</span> of 4 <br />
+                            </p>
+                        </div>
+                </div>
+            </li>
+            <br><br><br><br><br><br><br>
+            <li id="_Errores" style="display: none" >
+                <br>
+                <div id="gridErrores"></div>
+            </li>
+        </ul>
+
+        <style>
+            .k-progressbar
+            {
+                width: 8px;
+                height: 100px;
+            }
+
+            #loadingProgressBar
+            {
+                margin-left: 10px;
+            }
+
+            .loading
+            {
+                float: left;
+            }
+            .loadingInfo
+            {
+                float: left;
+                margin: 20px 0 0 30px;
+            }
+        </style>
+
+
 
     </div>
 
@@ -85,13 +158,6 @@
             </li>
         </ul>
     </div>
-
-
-
-
-
-
-
 
 
     <!-- TAG de los mensajes de alert, dejar siempre al final -->

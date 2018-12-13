@@ -449,18 +449,17 @@ public function guarda_pi_server($f3) {
 
 public function SubirAssorment($f3){
 
-    $tipo_archivo = $_POST['tipos_import'];
-
+    $tipo_archivo = $_POST['Tipo_archivo'];
     if ($tipo_archivo == 1){
             $nombre_archivo = "Assorment-".$f3->get('SESSION.COD_TEMPORADA')."-".$f3->get('SESSION.COD_DEPTO').".xls";
             $dir_subida = $f3->get('UPLOADSassorment');
             //$fichero_subido = $dir_subida . basename($_FILES['send_archivop_pi']['name']);
             $fichero_subido = $dir_subida . basename($nombre_archivo);
 
-            if (move_uploaded_file($_FILES['user_file']['tmp_name'], $fichero_subido)) {
-              echo 1;
+            if (move_uploaded_file($_FILES['JSONGuardaArhcivo']['tmp_name'], $fichero_subido)) {
+              echo "";
             } else {
-              echo 0;
+              echo "ERROR";
             }
     }else{
         $nombre_archivo = "BMT-".$f3->get('SESSION.COD_TEMPORADA')."-".$f3->get('SESSION.COD_DEPTO').".xls";
@@ -468,10 +467,10 @@ public function SubirAssorment($f3){
         //$fichero_subido = $dir_subida . basename($_FILES['send_archivop_pi']['name']);
         $fichero_subido = $dir_subida . basename($nombre_archivo);
 
-        if (move_uploaded_file($_FILES['user_file']['tmp_name'], $fichero_subido)) {
-            echo 1;
+        if (move_uploaded_file($_FILES['JSONGuardaArhcivo']['tmp_name'], $fichero_subido)) {
+            echo "";
         } else {
-            echo 0;
+            echo "ERROR";
         }
     }
 }
@@ -483,7 +482,8 @@ public function getJerarquia($f3){
     $_SESSION['dtjerarquia']= $rows;
 }
 
-public function ImportarAssormentValidaciones($f3){
+
+public function ImportarAssormentValidaciones2($f3){
 
     $cod_tempo = $f3->get('SESSION.COD_TEMPORADA');
     $depto = $f3->get('SESSION.COD_DEPTO');
@@ -706,69 +706,13 @@ public function ImportarAssormentValidaciones($f3){
      echo json_encode($_array);
 
 }
-
-public function ImportarAssormentdelrows($f3){
-
-#region {*************Extrer Excel*************}
-        error_reporting(E_ALL);
-        ini_set('memory_limit', '-1');
-        ini_set('max_execution_time', 9000000);
-
-        $nombre_archivo = "Assorment-" . $f3->get('SESSION.COD_TEMPORADA') . "-" . $f3->get('SESSION.COD_DEPTO') . ".xls";
-        $dir_subida = $f3->get('UPLOADSassorment') . $nombre_archivo;
-
-        require_once '../class/PHPExcel/IOFactory.php';
-
-        /* LEER ASSORMENT */
-        $objPHPExcel = \PHPExcel_IOFactory::load($dir_subida);
-        $worksheet = $objPHPExcel->getActiveSheet('Shopping List');
-        $rows = [];
-        $fila = 0;
-
-        foreach ($worksheet->getRowIterator() AS $row) {
-
-            $cellIterator = $row->getCellIterator();
-            $cellIterator->setIterateOnlyExistingCells(FALSE); // This loops through all cells,
-            $cells = [];
-            $column = 1;
-            $count = 0;
-            foreach ($cellIterator as $cell) {
-                $count += 1;
-                if ($count > 104) {
-                    break;
-                }
-                if ($column <= 1) {
-                    $cells[] = "s";
-                }else {
-                    $cells[] = $cell->getCalculatedValue();
-                }
-                $column++;
-            }
-            $rows[] = $cells;
-            $fila++;
-        }
-
-        $nom_columnas = array_flip($rows[2]);
-        $limite = (count($rows)-1);
-        for($i = 3;$i <= $limite; $i++){
-            array_push($rows[$i],0);
-        }
-#endregion
-        //borrar datos de basura.
-        $rows = valida_archivo_bmt::eliminardatosrows($rows,$limite,$nom_columnas);
-        echo json_encode($rows);
-
-}
-
-public function ImportarAssormentInsHistorial($f3){
+public function ImportarAssormentInsHistorial2($f3){
 
     $cod_tempo = $f3->get('SESSION.COD_TEMPORADA');
     $depto = $f3->get('SESSION.COD_DEPTO');
     $rows =  $_POST['_rows'];
     $Columnas = array_flip($_POST['_columnas']);
     $codMarca = $rows[$Columnas['Codigo Marca']];
-
-
 
    if ($_POST['_delete'] == 1 ){
         $grupo_compra = $rows[$Columnas['Grupo de compra']];
@@ -785,9 +729,8 @@ public function ImportarAssormentInsHistorial($f3){
     }
 
     echo $_val;
-}
-
-public function ImpAssormAbrirDataVent($f3){
+    }
+public function ImpAssormAbrirDataVent2($f3){
 
     $cod_tempo = $f3->get('SESSION.COD_TEMPORADA');
     $depto = $f3->get('SESSION.COD_DEPTO');
@@ -848,11 +791,13 @@ public function ImpAssormAbrirDataVent($f3){
     }
 #endregion
 
+
+
     //borrar datos de basura.
     $rows = valida_archivo_bmt::eliminardatosrows($rows,$limite,$nom_columnas);
     $limite = (count($rows)-1);
 
-    //reabrir datos por ventana
+        //reabrir datos
     $rows = valida_archivo_bmt::Limpieza_data_Assortment($rows,$nom_columnas);
     $_SESSION['dtAssorment']= $rows;
 
@@ -862,9 +807,8 @@ public function ImpAssormAbrirDataVent($f3){
         echo 0;
     }
 
-}
-
-public function ImpAssormCalculos($f3){
+    }
+public function ImpAssormCalculos2($f3){
 
         $cod_tempo = $f3->get('SESSION.COD_TEMPORADA');
         $depto = $f3->get('SESSION.COD_DEPTO');
@@ -884,8 +828,7 @@ public function ImpAssormCalculos($f3){
         $rows = plan_compra::ImpAssorCalculos($rows,$Columnas,$cod_tempo,$depto,$_SESSION['dtjerarquia'],$f3);
         echo json_encode($rows);
     }
-
-public function InsertarAssormentC1($f3){
+public function InsertarAssormentC12($f3){
 
   $cod_tempo = $f3->get('SESSION.COD_TEMPORADA');
     $depto = $f3->get('SESSION.COD_DEPTO');
@@ -903,7 +846,472 @@ public function InsertarAssormentC1($f3){
         $_val = "True".","."1";
     }
     echo $_val;
+    }
+
+Public function ImportarAssormentExtraccionDatos($f3){
+
+        #region {*************Extrer Excel*************}
+        $_array = array("Error" => "","msjError" => "");
+        try {
+            error_reporting(E_ALL);
+            ini_set('memory_limit', '-1');
+            ini_set('max_execution_time', 9000000);
+
+            $nombre_archivo = "Assorment-".$f3->get('SESSION.COD_TEMPORADA')."-".$f3->get('SESSION.COD_DEPTO').".xls";
+            $dir_subida = $f3->get('UPLOADSassorment').$nombre_archivo;
+            require_once '../class/PHPExcel/IOFactory.php';
+
+            /* LEER ASSORMENT */
+            $objPHPExcel = \PHPExcel_IOFactory::load($dir_subida);
+            $worksheet = $objPHPExcel->getActiveSheet('Shopping List');
+            $rows = [];
+            $fila = 0;
+
+            foreach ($worksheet->getRowIterator() AS $row) {
+                $cellIterator = $row->getCellIterator();
+                $cellIterator->setIterateOnlyExistingCells(FALSE); // This loops through all cells,
+                $cells = [];
+                $column = 1;
+                $count = 0;
+                foreach ($cellIterator as $cell) {
+                    $count += 1;
+                    if ($count > 104){
+                        break;
+                    }
+                    if ($column <= 1 ){
+                        $cells[] = "s";
+                    }else {
+                        $cells[] = $cell->getCalculatedValue();
+                    }
+                    $column++;
+                }
+                $rows[] = $cells;
+                $fila++;
+            }
+
+            $_SESSION['dtAssorment'] = $rows;
+            $_array["Error"] = false;
+            $_array["msjError"]= "";
+            echo json_encode($_array);
+        } catch (Exception $e) {
+
+            $_array["Error"] = true;
+            $_array["msjError"]= "Error de Carga del archivo";
+            echo json_encode($_array);
+        }
+
+
+    }
+public function ImportarAssormentValidaciones($f3){
+
+    $rows = $_SESSION['dtAssorment'];
+    $tipo = $_GET["Tipo"];
+    $_error = true;
+    $_array = array("Error" => "","msjError" => "");
+    $temporada = \temporada\temporada::getTemporadaCompra($f3->get('SESSION.COD_TEMPORADA'))->NOM_TEMPORADA_CORTO;
+
+    if ($tipo){
+        //Validacion de Columnas.
+        $_ERROR2 = valida_archivo_bmt::Val_CamposObligatorio($rows[2],1);
+
+        if ($_ERROR2 != "" ){
+            $_array["Error"] = true;
+            $_array["msjError"]= "No existe(n) en el archivo campo(s): ".$_ERROR2. ".";
+            $_error = false;
+        }
+
+
+        //Validacion de Columnas archivo en blanco
+        if ($_error == true){
+            try {$nom_columnas = array_flip($rows[2]);
+            }catch (Exception $e) {
+                $_array["Error"] = true;
+                $_array["msjError"]= "Existen colummnas en blanco.";
+                $_error = false;
+            }
+            $limite = (count($rows)-1);
+            for($i = 3;$i <= $limite; $i++){
+                array_push($rows[$i],0);
+            }
+        }
+
+
+        //validacion de temporada
+        if ($_error == true){
+            $_ERROR2 = valida_archivo_bmt::Val_Season($rows,$limite,$nom_columnas,$temporada);
+            if ($_ERROR2["Tipo"] == false ){
+                $_array["Error"] = true;
+                $_array["msjError"]= "La temporada del archivo no corresponde a la temporada seleccionada: Fila(s): " . $_ERROR2["Error"];
+                $_error = false;
+            }
+        }
+
+        //validacion de depto
+        if ($_error == true) {
+            $_ERROR2 = valida_archivo_bmt::Val_depto($rows, $limite, $nom_columnas, $f3->get('SESSION.COD_DEPTO'));
+            if ($_ERROR2["Tipo"] == false) {
+                $_array["Error"] = true;
+                $_array["msjError"]= "El código depto del archivo no corresponde a su selección en la C1: Fila(s): " . $_ERROR2["Error"];
+                $_error = false;
+            }
+        }
+
+        //validacion de grupo compra
+        if ($_error == true) {
+            $_ERROR2 = valida_archivo_bmt::val_grupo_compra($rows,$limite,$nom_columnas);
+            if ($_ERROR2["Tipo"] == false ){
+                $_array["Error"] = true;
+                $_array["msjError"]= "El archivo debe tener solo un grupo de compra.";
+                $_error = false;
+            }
+        }
+
+        //validacion de marca
+        if ($_error == true) {
+            $_ERROR2 = valida_archivo_bmt::Val_marca($rows,$limite,$nom_columnas,$f3->get('SESSION.COD_DEPTO'));
+            if ($_ERROR2["Tipo"] == false ){
+                $_array["Error"] = true;
+                $_array["msjError"]= "El código marca no corresponde departamento seleccionado en la C1: Fila(s): ".$_ERROR2["Error"];
+                $_error = false;
+            }}
+
+        //validacion existe grupo compra
+        if ($_error == true) {
+            $_ERROR2 = valida_archivo_bmt::val_grupo_compra_x_estado($f3->get('SESSION.COD_TEMPORADA'),$f3->get('SESSION.COD_DEPTO'),$rows[3][$nom_columnas['Grupo de compra']],$rows[3][$nom_columnas['Codigo Marca']]);
+            if ($_ERROR2["Tipo"] == false ){
+                $_array["Error"] = true;
+                $_array["msjError"]= $_ERROR2["Error"];
+                $_error = false;
+            }}
+
+        //validacion de una marca por assortment
+        if ($_error == true) {
+            $_ERROR2 = valida_archivo_bmt::Val_soloUnaMarca($rows,$limite,$nom_columnas,$f3->get('SESSION.COD_DEPTO'));
+            if ($_ERROR2 != "" ){
+                $_array["Error"] = true;
+                $_array["msjError"]= "Existe más de una marca en el archivo: ".$_ERROR2;
+                $_error = false;
+
+            }}
+
+        //validacion de jerarquia
+        if ($_error == true) {
+            $_ERROR2 = valida_archivo_bmt::Val_jerarquia($rows,$limite,$nom_columnas,$_SESSION['dtjerarquia']);
+            if ($_ERROR2["Tipo"] == false ){
+                $_array["Error"] = true;
+                $_array["msjError"]= "La combinación Linea y Sublinea no existen PMM: Fila(s): ".$_ERROR2["Error"];
+                $_error = false;
+            }
+        }
+        //validacion de colores
+        if ($_error == true) {
+            $_ERROR2 = valida_archivo_bmt::Val_Colores($rows,$limite,$nom_columnas);
+            if ($_ERROR2["Tipo"] == false ){
+                $_array["Error"] = true;
+                $_array["msjError"]= "El código de color no existen PMM: Fila(s): ".$_ERROR2["Error"];
+                $_error = false;
+            }
+        }
+
+        $_SESSION['dtAssorment']=$rows;
+    }
+    else{
+        $limite = (count($rows)-1);
+        $nom_columnas = array_flip($rows[2]);
+        //validacion del codigo opcion
+        if ($_error == true){
+            $_ERROR2 = valida_archivo_bmt::ValidaCodOpcion($rows,$limite,$nom_columnas,$temporada);
+            if ($_ERROR2["Tipo"] == false ){
+                $_array["Error"] = true;
+                $_array["msjError"]= "Fila(s):".$_ERROR2["Error"];
+                $_error = false;
+            }
+        }
+
+        //validacion de tipo producto y tipo de exhibicion
+        if ($_error == true) {
+            $_ERROR2 = valida_archivo_bmt::Val_Tipo_Produc_Exhibicion($rows,$limite,$nom_columnas);
+            if ($_ERROR2["Tipo"] == false ){
+                $_array["Error"] = true;
+                $_array["msjError"]= "Fila(s):".$_ERROR2["Error"];
+                $_error = false;
+            }
+        }
+
+        //validacion Campos
+        if ($_error == true) {
+            $_ERROR2 = valida_archivo_bmt::Val_Campos($rows, $limite, $nom_columnas,$f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'),$f3);
+            if ($_ERROR2["Tipo"] == false) {
+                $_array["Error"] = true;
+                $_array["msjError"]= "Fila(s):".$_ERROR2["Error"];
+                $_error = false;
+            }
+        }
+
+        //validacion de mstpack
+        if ($_error == true) {
+            $_ERROR2 = valida_archivo_bmt::val_mstpack($rows,$limite,$nom_columnas,$f3->get('SESSION.COD_DEPTO'));
+            if ($_ERROR2["Tipo"] == false ){
+                $_array["Error"] = true;
+                $_array["msjError"]= "No exísten master pack asociado o el master pack tiene que ser mayor a 0: Fila(s):".$_ERROR2["Error"];
+                $_error = false;
+            }
+        }
+
+        //validacion multiplos
+        if ($_error == true) {
+            $_ERROR2 = valida_archivo_bmt::valida_Multiplo($rows, $limite, $nom_columnas);
+            if ($_ERROR2["Tipo"] == false) {
+                $_array["Error"] = true;
+                $_array["msjError"]= "El Número de curva por clúster no es múltiple al número curvas por cajas. Fila(s): ".$_ERROR2["Error"];
+                $_error = false;
+
+            }
+        }
+    }
+    //fin de validacion
+    if ($_error == true ){
+        $_array["Error"] = false;
+        $_array["msjError"]= "";
+    }
+    echo json_encode($_array);
+
 }
+public function ImportarAssormentdelrows(){
+
+#region {*************Extrer Excel*************}
+    $rows = $_SESSION['dtAssorment'];
+    $limite = (count($rows)-1);
+    $nom_columnas = array_flip($rows[2]);
+
+        //borrar datos de basura.
+        $rows = valida_archivo_bmt::eliminardatosrows2($rows,$limite,$nom_columnas);
+        $array_asoc = [];
+        //array asociativo
+        foreach ($rows as $val){
+            array_push($array_asoc
+                ,array("s"=>$val[0],
+                    "Cod Dpto"=>$val[1],
+                    "Dpto"=>$val[2],
+                    "Marca"=>$val[3],
+                    "Codigo Marca"=>$val[4],
+                    "Nombre Comprador"=>$val[5],
+                    "Nombre Disenador"=>$val[6],
+                    "Season"=>$val[7],
+                    "Linea"=>$val[8],
+                    "Cod Linea"=>$val[9],
+                    "Sublinea"=>$val[10],
+                    "Cod Sublinea"=>$val[11],
+                    "Codigo corporativo"=>$val[12],
+                    "Nombre Estilo"=>$val[13],
+                    "Estilo Corto"=>$val[14],
+                    "Descripcion Estilo"=>$val[15],
+                    "Cod Opcion"=>$val[16],
+                    "Color"=>$val[17],
+                    "Cod Color"=>$val[18],
+                    "Composicion"=>$val[19],
+                    "Tipo de Tela"=>$val[20],
+                    "Forro"=>$val[21],
+                    "Evento"=>$val[22],
+                    "Grupo de compra"=>$val[23],
+                    "Ventana"=>$val[24],
+                    "Tipo exhibicion"=>$val[25],
+                    "Tipo Producto"=>$val[26],
+                    "Debut o Reorder"=>$val[27],
+                    "Temporada"=>$val[28],
+                    "Precio"=>$val[29],
+                    "Oferta"=>$val[30],
+                    "Ranking de venta"=>$val[31],
+                    "Ciclo de Vida"=>$val[32],
+                    "Piramide Mix"=>$val[33],
+                    "Ratio compra"=>$val[34],
+                    "Factor amplificacion"=>$val[35],
+                    "Ratio compra final"=>$val[36],
+                    "Cluster"=>$val[37],
+                    "Formato"=>$val[38],
+                    "Compra Unidades Assortment"=>$val[39],
+                    "Compra Unidades final"=>$val[40],
+                    "Var%"=>$val[41],
+                    "Target USD"=>$val[42],
+                    "FOB USD"=>$val[43],
+                    "RFID USD"=>$val[44],
+                    "Via"=>$val[45],
+                    "Pais"=>$val[46],
+                    "Proveedor"=>$val[47],
+                    "Comentarios Post Negociacion"=>$val[48],
+                    "Fecha de Embarque Acordada"=>$val[49],
+                    "Factor"=>$val[50],
+                    "Costo Total"=>$val[51],
+                    "Retail Total sin iva"=>$val[52],
+                    "MUP Compra"=>$val[53],
+                    "Exhibicion"=>$val[54],
+                    "Talla1"=>$val[55],
+                    "Talla2"=>$val[56],
+                    "Talla3"=>$val[57],
+                    "Talla4"=>$val[58],
+                    "Talla5"=>$val[59],
+                    "Talla6"=>$val[60],
+                    "Talla7"=>$val[61],
+                    "Talla8"=>$val[62],
+                    "Talla9"=>$val[63],
+                    "Inner"=>$val[64],
+                    "Curva1"=>$val[65],
+                    "Curva2"=>$val[66],
+                    "Curva3"=>$val[67],
+                    "Curva4"=>$val[68],
+                    "Curva5"=>$val[69],
+                    "Curva6"=>$val[70],
+                    "Curva7"=>$val[71],
+                    "Curva8"=>$val[72],
+                    "Curva9"=>$val[73],
+                    "Validador Masterpack/Inner"=>$val[74],
+                    "Tipo de empaque"=>$val[75],
+                    "N curvas por caja curvadas"=>$val[76],
+                    "1_%"=>$val[77],
+                    "2_%"=>$val[78],
+                    "3_%"=>$val[79],
+                    "4_%"=>$val[80],
+                    "5_%"=>$val[81],
+                    "6_%"=>$val[82],
+                    "7_%"=>$val[83],
+                    "8_%"=>$val[84],
+                    "9_%"=>$val[85],
+                    "TiendasA"=>$val[86],
+                    "TiendasB"=>$val[87],
+                    "TiendasC"=>$val[88],
+                    "TiendasI"=>$val[89],
+                    "ClusterA"=>$val[90],
+                    "ClusterB"=>$val[91],
+                    "ClusterC"=>$val[92],
+                    "ClusterI"=>$val[93],
+                    "Size%1"=>$val[94],
+                    "Size%2"=>$val[95],
+                    "Size%3"=>$val[96],
+                    "Size%4"=>$val[97],
+                    "Size%5"=>$val[98],
+                    "Size%6"=>$val[99],
+                    "Size%7"=>$val[100],
+                    "Size%8"=>$val[101],
+                    "Size%9"=>$val[102],
+                    "UNIDADES"=>$val[103],
+                    "cod_piramidemix"=>"",
+                    "und_finales"=>"",
+                    "Sem_ini"=>"",
+                    "sem_fin"=>"",
+                    "ciclo"=>"",
+                    "cod_rnk"=>"",
+                    "tdas"=>"",
+                    "GM"=>"",
+                    "cod_vent"=>"",
+                    "semliq"=>"",
+                    "cos_uni_finalUS"=>"",
+                    "cos_uni_final$"=>"",
+                    "cos_total_$"=>"",
+                    "cod_ciclo_vida"=>"",
+                    "cos_retail"=>"",
+                    "mst_pack"=>"",
+                    "mkup"=>"",
+                    "cod_via"=>"",
+                    "cod_pais"=>"",
+                    "cos_total_target"=>"",
+                    "n_cajas"=>"",
+                    "primer_reparto"=>"",
+                    "tallas"=>"",
+                    "curva_reparto"=>"",
+                    "porcent_ajust"=>"",
+                    "cod_temp"=>"",
+                    "diferencia"=>"",
+                    "nom_linea"=>"",
+                    "nom_sublinea"=>"",
+                    "nom_marca"=>"",
+                    "porcent_1"=>"",
+                    "porcent_2"=>"",
+                    "porcent_3"=>"",
+                    "porcent_4"=>"",
+                    "porcent_5"=>"",
+                    "porcent_6"=>"",
+                    "porcent_7"=>"",
+                    "porcent_8"=>"",
+                    "porcent_9"=>"",
+                    "cant_1"=>"",
+                    "cant_2"=>"",
+                    "cant_3"=>"",
+                    "cant_4"=>"",
+                    "cant_5"=>"",
+                    "cant_6"=>"",
+                    "cant_7"=>"",
+                    "cant_8"=>"",
+                    "cant_9"=>"",
+                    "porcent_ini"=>"",
+                    "opcion_ajus"=>"",
+                    "id_color3"=>"",
+                    "n_tdas"=>"",
+                    "cos_total_fob_us"=>"",
+                ));
+        }
+
+
+        $_SESSION['dtAssorment'] = $array_asoc;
+        echo json_encode($array_asoc);
+}
+public function ImportarAssormentInsHistorial($f3){
+
+        $rows =  $_POST['_rows'];
+        //borrado Historial assortment;
+        if ($_POST['_delete'] == 1 ){
+            $grupo_compra = $rows['Grupo de compra'];
+            plan_compra::InsertHistoricadelAssorment($f3->get('SESSION.COD_TEMPORADA')
+                                                    ,$f3->get('SESSION.COD_DEPTO')
+                                                    ,$rows['Codigo Marca']
+                                                    ,$grupo_compra);
+        }
+        //Insertado Historial assortment;
+        $_ERROR = plan_compra::InsertHistoricaAssortment2($rows
+                                                          ,$f3->get('SESSION.COD_TEMPORADA')
+                                                          ,$f3->get('SESSION.COD_DEPTO')
+                                                          ,$rows['Codigo Marca']);
+        echo json_encode($_ERROR);
+    }
+
+public function ImpAssormAbrirDataVent(){
+        $_array = array("Error" => "","msjError" => "");
+        $rows = $_SESSION['dtAssorment'];
+        $limite = (count($rows)-1);
+        //reabrir datos
+        $rows = valida_archivo_bmt::Limpieza_data_Assortment($rows,$limite);
+        $_SESSION['dtAssorment']= $rows;
+
+        if ( count($_SESSION['dtAssorment']) > 0){
+            $_array["Error"] = false;
+            $_array["msjError"]= "";
+        }else{
+            $_array["Error"] = true;
+            $_array["msjError"]= "No exísten datos calculables, porque no tiene la jerarquía completa.";
+        }
+        echo json_encode($_array);
+    }
+public function ImpAssormCalculos($f3){
+
+        $rows = $_SESSION['dtAssorment'];
+        $limite = (count($rows)-1);
+
+        //Calculo del curvado y costos + insert PLC_AJUSTES_COMPRA + delete rows
+        $rows = plan_compra::ImpAssorCalculos($rows,$f3->get('SESSION.COD_TEMPORADA'),$f3->get('SESSION.COD_DEPTO'),$_SESSION['dtjerarquia'],$f3,$limite);
+        
+        echo json_encode($rows);
+    }
+
+public function InsertarAssormentC1($f3){
+
+    //insertado en el plan
+        $_ERROR = plan_compra::InsertPlanCompraAssorment2($_POST['_rows']
+                                                         ,$f3->get('SESSION.COD_TEMPORADA')
+                                                         ,$f3->get('SESSION.COD_DEPTO')
+                                                         ,$f3->get('SESSION.login'));
+
+        echo json_encode($_ERROR);
+}
+
 
 public function Mensaje_Guardado($f3){
         $f3->set('SESSION.exito', 'Insertado Correctamente');

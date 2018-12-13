@@ -490,13 +490,59 @@ $(function () {
                 {
                     type: "button",
                     text: "Cargar Archivo",
-                    imageUrl: "../web/telerik/content/web/toolbar/save.png",
+                    imageUrl: "../web/telerik/content/web/toolbar/save.png"
+
+               }, { type: "button",
+                    text: "Presupuestos",
+                    showText: "both",
+                    imageUrl: "../web/telerik/content/web/16x16/Grid.png",
                     //spriteCssClass: "k-icon k-font-icon k-i-cog",
-                    click: function() {
-
-
-
+                    click: Pop_Presupuestos
+                }, { type: "button",
+                    text: "Ppto Costo",
+                    showText: "both",
+                    imageUrl: "../web/telerik/content/web/16x16/Grid.png",
+                    click: Pop_ajuste_cajas
+                }, { type: "button",
+                    text: "Ppto Retail",
+                    showText: "both",
+                    imageUrl: "../web/telerik/content/web/16x16/Grid.png",
+                    click: Pop_ajuste_cajas
+                }, { type: "button",
+                    text: "Ppto Emb",
+                    showText: "both",
+                    imageUrl: "../web/telerik/content/web/16x16/Grid.png",
+                    click: Pop_ajuste_cajas
                     }
+
+            ],
+            home: [ "open" ,
+                    "exportAs",
+                    "freeze",
+                    "filter",
+                    { type: "button",
+                        text: "Ajuste Compra",
+                        showText: "both",
+                        icon: "k-icon k-i-cog",
+                        click: Pop_ajuste_compra
+                    },
+                    { type: "button",
+                        text: "Ajuste Cajas",
+                        showText: "both",
+                        icon: "k-icon k-i-greyscale",
+                        click: Pop_ajuste_cajas
+                    },
+                    { type: "button",
+                        text: "Historial",
+                        showText: "both",
+                        icon: "k-icon k-i-clock",
+                        click: Pop_Historial
+                    },
+                    { type: "button",
+                        text: "Importar",
+                        //showText: "both",
+                        imageUrl: "../web/telerik/content/web/24x24/Upload.png",
+                        click: Pop_Importar
                 }
             ]
         },
@@ -1314,10 +1360,253 @@ $(function () {
         });
     // Fin del menú contextual
 
+    //pop ajuste de compra
+    function Pop_ajuste_compra(){
 
+        // alert($("#comentSolicitaCorreccionPI").val());
+        var spreadsheet_id_color3 = $("#spreadsheet").data("kendoSpreadsheet");
+        var sheet = spreadsheet_id_color3.activeSheet();
+        var range = sheet.selection();
+        var ID_COLOR3 = "";
+        var DEBUTREORDER = "";
+        var TALLAS = "";
+        range.forEachCell(function (row, column, value) {
+            var fila_id = row+1;
+            var range_color3 = sheet.range("A"+fila_id);
+            ID_COLOR3 = range_color3.values();
+            var range_debutreorder = sheet.range("BU"+fila_id);
+            DEBUTREORDER = range_debutreorder.values();
+            var range_tallas = sheet.range("AE"+fila_id);
+            TALLAS = range_tallas.values();
+        });
 
+        if( (ID_COLOR3=="ID") || (ID_COLOR3=="") || (ID_COLOR3==null) || (DEBUTREORDER=="REORDER")|| (TALLAS=="") ){
+            popupNotification.show(" Las opciones REORDER no tienen ajuste de compra.", "error");
+        }else{
 
+            // Levantar el POPUP
+            var popupajustes = $("#POPUP_ajuste_compra");
+            popupajustes.data("kendoWindow").open();
 
+            // Antes de volver a cargar la data, reseteo lo existente
+            $("#grid_ajuste_compra").data("kendoGrid").dataSource.data([]);
+
+            // Extrarcion Data
+            var dataSource_ajustes = new kendo.data.DataSource({
+                transport: {
+                    read:  {
+                        url: "TelerikPlanCompra/Listar_Pop_Ajuste_Compra",
+                        dataType: "json",
+                        //type: 'POST',
+                        data:{ID_COLOR3: kendo.parseInt(ID_COLOR3),_Tallas:String(TALLAS)},
+                    },
+                }
+            });
+
+            // Asignar la cabecera
+            var dtt = (String(TALLAS)).split(",");
+            var columnsConfig = [];
+            columnsConfig.push({ field: "_", title: "" ,width:"100px",attributes: {style: "background-color: rgb(255,255,224); font-size: 12px; color: red"}});
+            dtt.forEach(function(entry) {
+                var tal=entry.trim();
+                columnsConfig.push({ field: ("t_" + tal), title: (tal) ,width:"40px"});
+            });
+            columnsConfig.push({ field: "Total", title: "Total" ,width:"50px",attributes: {style: "background-color: rgb(255,255,224); font-size: 12px; color: red"}});
+            $("#grid_ajuste_compra").data("kendoGrid").setOptions({
+                columns: columnsConfig
+            });
+            dataSource_ajustes.read();
+
+            // Asignar el DataSet al Grid
+            var spreadsheet_ajustes = $("#grid_ajuste_compra").data("kendoGrid");
+            spreadsheet_ajustes.setDataSource(dataSource_ajustes);
+            // Fin del else
+        }
+    }
+
+    //pop ajuste de cajas
+    function Pop_ajuste_cajas(){
+
+    var spreadsheet_id_color3 = $("#spreadsheet").data("kendoSpreadsheet");
+    var sheet = spreadsheet_id_color3.activeSheet();
+    var range = sheet.selection();
+    var ID_COLOR3 = "";
+    var DEBUTREORDER = "";
+    var TALLAS = "";
+    var TIPO_EMPAQUE = "";
+    range.forEachCell(function (row, column, value) {
+        var fila_id = row+1;
+        var range_color3 = sheet.range("A"+fila_id);
+        ID_COLOR3 = range_color3.values();
+        var range_debutreorder = sheet.range("BU"+fila_id);
+        DEBUTREORDER = range_debutreorder.values();
+        var range_tallas = sheet.range("AE"+fila_id);
+        TALLAS = range_tallas.values();
+        var range_empaque = sheet.range("AF"+fila_id);
+        TIPO_EMPAQUE = range_empaque.values();
+    });
+    if(TALLAS=="" || TIPO_EMPAQUE == "" || DEBUTREORDER == ""){
+        popupNotification.show("No se encuentran datos.", "error");
+    }else{
+        var popupAjusteCajas = $("#POPUP_ajuste_cajas");
+        popupAjusteCajas.data("kendoWindow").open();
+
+        // Antes de volver a cargar la data, reseteo lo existente
+        $("#grid_ajuste_cajas").data("kendoGrid").dataSource.data([]);
+        $("#grid_ajuste_cajas2").data("kendoGrid").dataSource.data([]);
+        // Extrarcion Data
+        var dataSource_ajustes_cajas = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: "TelerikPlanCompra/Listar_Pop_Ajuste_Cajas",
+                    dataType: "json",
+                    //type: 'POST',
+                    data: {
+                        ID_COLOR3: kendo.parseInt(ID_COLOR3)
+                        , _Tallas: String(TALLAS)
+                        , _TipoEmpaque: String(TIPO_EMPAQUE)
+                        , _DebutReorder: String(DEBUTREORDER)
+                    },
+                },
+            }
+        });
+
+        // Asignar la cabecera
+        var dtt2 = (String(TALLAS)).split(",");
+        var columnsConfig2 = [];
+        columnsConfig2.push({ field: String(TIPO_EMPAQUE),title: String(TIPO_EMPAQUE),width:"100px"
+            ,attributes: {style: "background-color: rgb(255,255,224); font-size: 12px; color: red"}});
+        //style: "text-align: center;
+        dtt2.forEach(function(entry) {
+            var tal=entry.trim();
+            columnsConfig2.push({ field: ("t_" + tal), title: (tal),width:"40px",attributes: {style:"font-size: 12px"}});
+        });
+        columnsConfig2.push({ field: "Total", title: "Total",width:"50px"
+            ,attributes: {style: "background-color: rgb(255,255,224);font-size: 12px; color: red"}});
+        $("#grid_ajuste_cajas").data("kendoGrid").setOptions({
+            columns: columnsConfig2
+        });
+        dataSource_ajustes_cajas.read();
+
+        // Asignar el DataSet al Grid
+        var spreadsheet_ajustes_compra = $("#grid_ajuste_cajas").data("kendoGrid");
+        spreadsheet_ajustes_compra.setDataSource(dataSource_ajustes_cajas);
+
+        if (TIPO_EMPAQUE == "CURVADO"){
+            // Extrarcion Data
+            var dataSource_ajustes_cajas2 = new kendo.data.DataSource({
+                transport: {
+                    read: {
+                        url: "TelerikPlanCompra/Listar_Pop_Ajuste_Cajas_curvado_solido",
+                        dataType: "json",
+                        //type: 'POST',
+                        data: {
+                            ID_COLOR3: kendo.parseInt(ID_COLOR3)
+                            , _Tallas: String(TALLAS)
+                            , _TipoEmpaque: String(TIPO_EMPAQUE)
+                            , _DebutReorder: String(DEBUTREORDER)
+                        },
+
+                    },
+                }
+            });
+
+            // Asignar la cabecera
+            var dtt3 = (String(TALLAS)).split(",");
+            var columnsConfig3 = [];
+            columnsConfig3.push({ field: String(TIPO_EMPAQUE), title: "SOLIDO",width:"100px",attributes: {style: "background-color: rgb(255,255,224); font-size: 12px;; color: red"}
+            });
+            dtt3.forEach(function(entry) {
+                var tal=entry.trim();
+                columnsConfig3.push({ field: ("t_" + tal), title: (tal) ,width:"40px",attributes: {style: "font-size: 12px"}});
+            });
+            columnsConfig3.push({ field: "Total", title: "Total" ,width:"50px",attributes: {style: "background-color: rgb(255,255,224); font-size: 12px; color: red"}});
+            $("#grid_ajuste_cajas2").data("kendoGrid").setOptions({
+                columns: columnsConfig3
+            });
+            dataSource_ajustes_cajas2.read();
+
+            // Asignar el DataSet al Grid
+            var spreadsheet_ajustes_compra2 = $("#grid_ajuste_cajas2").data("kendoGrid");
+            spreadsheet_ajustes_compra2.setDataSource(dataSource_ajustes_cajas2);
+        }
+
+    }
+}
+
+    //pop historical
+    function Pop_Historial(){
+        // alert($("#comentSolicitaCorreccionPI").val());
+        var spreadsheet_id_color3 = $("#spreadsheet").data("kendoSpreadsheet");
+        var sheet = spreadsheet_id_color3.activeSheet();
+        var range = sheet.selection();
+        var ID_COLOR3 = "";
+        range.forEachCell(function (row, column, value) {
+            var fila_id = row+1;
+            var range_color3 = sheet.range("A"+fila_id);
+            ID_COLOR3 = range_color3.values();
+        });
+
+        if( (ID_COLOR3=="ID") || (ID_COLOR3=="") || (ID_COLOR3==null) || (ID_COLOR3.length==0) ){
+            popupNotification.show(" Historial no disponible para este registro.", "error");
+        }else{
+
+            // Levantar el POPUP
+            var popupHistorial = $("#POPUP_historial");
+            popupHistorial.data("kendoWindow").open();
+
+            // Antes de volver a cargar la data, reseteo lo existente
+            $("#grid_popup_historial").data("kendoGrid").dataSource.data([]);
+
+            // Seteo DataSet
+            var dataSource_historial = new kendo.data.DataSource({
+                transport: {
+                    read:  {
+                        url: "TelerikPlanCompra/ListarHistorial",
+                        dataType: "json",
+                        //type: 'POST',
+                        data:{ID_COLOR3: kendo.parseInt(ID_COLOR3)}
+                    }
+                }
+            });
+            // Asigno el DataSet al Grid
+            var spreadsheet_hist = $("#grid_popup_historial").data("kendoGrid");
+            spreadsheet_hist.setDataSource(dataSource_historial, [
+                { field: "FECHA", title: "FECHA" },
+                { field: "HORA", title: "HORA" },
+                { field: "USUARIO", title: "USUARIO" },
+                { field: "ESTADO", title: "ESTADO" }
+            ]);
+        }
+    }
+
+    //pop Presupuesto Total
+    function Pop_Presupuestos(){
+
+        var myWindow = $("#POPUP_presupuestos_total");
+        myWindow.data("kendoWindow").open();
+
+        var dataSource_presu = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: "TelerikPlanCompra/Listar_Pop_Presupuestos",
+                    dataType: "json",
+                    data: {}
+                }
+            }
+        });
+
+        // Asignar el DataSet al Grid
+        var spreadsheet_presupuesto = $("#grid_presupuestos_total").data("kendoGrid");
+        spreadsheet_presupuesto.setDataSource(dataSource_presu);
+
+    }
+
+    function Pop_Importar(){
+
+        var popupDe = $("#POPUP_Importar_");
+        popupDe.data("kendoWindow").open();
+    }
 
 // Fin del document ready
 });
