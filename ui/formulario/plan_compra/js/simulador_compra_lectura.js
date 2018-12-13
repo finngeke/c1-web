@@ -6,15 +6,28 @@ $(function () {
         url: "TelerikPlanCompra/RevisaConcurrencia",
         success: function (result) {
 
-            // Limpiar el Local Storage
-            localStorage.clear();
+            var popupModoIngreso = $("#popupNotification").kendoNotification().data("kendoNotification");
 
             //var arregloPermisosUsuarios = [];
-            var PermisosUsuario = JSON.parse(result);
-            $.each( PermisosUsuario, function(i, obj) {
-                localStorage.setItem(obj.ID_TELERIK, obj.NOMBRE_ACCION);
-                //arregloPermisosUsuarios.push( {ID_TELERIK: obj.ID_TELERIK} );
-            });
+            var TipoPermisos = JSON.parse(result);
+
+            // Existe ya alguien en el departamento (No es Administrador)
+            if( TipoPermisos.length > 0 ){
+
+                // Limpiar el Local Storage
+                localStorage.clear();
+
+                $.each( TipoPermisos, function(i, obj) {
+                    // Avisar Modo Lectura
+                    popupModoIngreso.getNotifications().parent().remove();
+                    popupModoIngreso.show(" Modo Lectura. " + obj.NOMBRE + " ya se encuentra en este Depto. ", "info");
+                });
+
+            }else{
+                // Avisar Modo Escritura
+                popupModoIngreso.getNotifications().parent().remove();
+                popupModoIngreso.show(" Modo Escritura. ", "success");
+            }
 
 
         },
