@@ -410,7 +410,13 @@ if($ESTADO_C1!=24){
     // Listar Permisos de Usuario
     public function ListarPermisosUsuario($f3)
     {
-        echo json_encode(\simulador_compra\PlanCompraClass::ListarPermisosUsuario($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login')));
+        echo json_encode(\simulador_compra\PlanCompraClass::ListarPermisosUsuario($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $f3->get('SESSION.cod_tipusr')));
+    }
+
+    // Revisar Concurrencia
+    public function RevisaConcurrencia($f3)
+    {
+        echo json_encode(\simulador_compra\PlanCompraClass::RevisaConcurrencia($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $f3->get('SESSION.cod_tipusr')));
     }
 
     // ######################## FIN Permisos de Usuario ########################
