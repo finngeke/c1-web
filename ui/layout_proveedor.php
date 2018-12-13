@@ -38,7 +38,9 @@
 		<include href="{{ @contenido }}" />
 	</div>
 	<!-- ./content -->
-	
+
+    <!-- TRAE LOS PERMISOS DE USUARIOS -->
+    <script src="{{@TELERIK}}ui/formulario/plan_compra/js/simulador_compra_permisos.js?v=A25"></script>
 	<!-- Bootstrap 3.3.7 -->
 	<script src="{{@BASE}}/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 	<!-- FastClick -->
