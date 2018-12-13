@@ -246,7 +246,8 @@
             <include href="../ui/formulario/plan_compra/mantenedor/popup_cambiar_clave.html"/>
         </div>
         <!-- ./wrapper -->
-
+        <!-- TRAE LOS PERMISOS DE USUARIOS -->
+        <script src="{{@JQUERY}}ui/formulario/plan_compra/js/simulador_compra_permisos.js?v=A25"></script>
         <!-- Bootstrap 3.3.7 -->
         <script src="{{@BASE}}/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
         <!-- FastClick -->
