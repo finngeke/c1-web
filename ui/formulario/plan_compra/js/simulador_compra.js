@@ -1,5 +1,27 @@
 $(function () {
 
+    // Actualiza Fecha de Concurrencia (Solo se agrega en este JS, porque desde fuera no se puede llamar)
+    function ActualizaConcurrencia() {
+
+        var url_act_fecha_concurrencia = 'TelerikPlanCompra/actualiza_fecha_concurrencia';
+
+        $.ajax({
+            type: "GET",
+            url: url_act_fecha_concurrencia,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function () {
+                // Acción al Ejecutarse correctamente
+                console.log("Se Actualiza Fecha de Concurrencia");
+            }, error: function (jqXHR, textStatus, errorThrown) {
+                console.log("Error: " + textStatus + " errorThrown: " + errorThrown);
+            }
+        }).success(function () {
+            console.log("Se realiza solicitud de Actualización de Fecha en Concurrencia");
+        });
+
+    }
+
     // ####################### FUNCIONES ASOCIADAS AL DESPLIEGUE DE DATA #######################
 
     // Defrine URL Base, para Llamar a los JSON
@@ -709,6 +731,8 @@ $(function () {
 
             if(command == "Descarga Archivo PI") {
 
+                // Actualiza Concurrencia
+                ActualizaConcurrencia();
 
                 // Verificar Permisos
                 if(localStorage.getItem("T0002")){
@@ -734,13 +758,13 @@ $(function () {
                 // Fin Verificar Permisos
                 }
 
-
-
-
             // Fin descarga archivo
             }
 
             if(command == "Cargar Archivo PI") {
+
+                // Actualiza Concurrencia
+                ActualizaConcurrencia();
 
                 /*
                 var sheet = spreadsheet.activeSheet(),
@@ -779,6 +803,8 @@ $(function () {
 
             if(command == "Match") {
 
+                // Actualiza Concurrencia
+                ActualizaConcurrencia();
 
                 // Verificar Permisos
                 if(localStorage.getItem("T0004")){
@@ -1240,12 +1266,12 @@ $(function () {
                 // Fin Verificar Permisos
                 }
 
-
-
-
             }
 
             if(command == "Cambio Estado") {
+
+                // Actualiza Concurrencia
+                ActualizaConcurrencia();
 
                 // Verificar Permisos
                 //if(localStorage.getItem("T0002")){
