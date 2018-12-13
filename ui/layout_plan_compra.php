@@ -20,12 +20,16 @@
 <include href="{{ @contenido }}"/>
 
 
-<!-- Llamada al JS que trabaja con la Grilla -->
-<script src="{{@JQUERY}}ui/formulario/plan_compra/js/simulador_compra_lectura.js?v=A27"></script>
-<script src="{{@JQUERY}}ui/formulario/plan_compra/js/simulador_compra.js?v=A27"></script>
-<script src="{{@JQUERY}}ui/formulario/plan_compra/js/simulador_compra_menutop.js?v=A27"></script>
-<script src="{{@JQUERY}}ui/formulario/plan_compra/js/simulador_compra_celdabtn.js?v=A27"></script>
-<script src="{{@JQUERY}}ui/formulario/plan_compra/js/simulador_compra_funciones.js?v=A27"></script>
+<!-- 1 En Cargar (Orden Obligatorio) -->
+<script src="{{@TELERIK}}ui/formulario/plan_compra/js/simulador_compra_lectura.js?v=A29"></script>
+<!-- 2 En Cargar (Orden Obligatorio) -->
+<script src="{{@TELERIK}}ui/formulario/plan_compra/js/simulador_compra.js?v=A29"></script>
+<!-- 3 En Cargar (Orden Obligatorio) -->
+<script src="{{@TELERIK}}ui/formulario/plan_compra/js/simulador_compra_menutop.js?v=A29"></script>
+<!-- 4 En Cargar (Orden Obligatorio) -->
+<script src="{{@TELERIK}}ui/formulario/plan_compra/js/simulador_compra_celdabtn.js?v=A29"></script>
+<!-- 5 En Cargar (Orden Obligatorio) -->
+<script src="{{@TELERIK}}ui/formulario/plan_compra/js/simulador_compra_funciones.js?v=A29"></script>
 
 </body>
 </html>
