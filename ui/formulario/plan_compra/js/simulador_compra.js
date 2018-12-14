@@ -511,6 +511,7 @@ $(function () {
         rows: 400,
         //toolbar: true,
         toolbar: {
+            insert: false,
             data: [
                 {
                     type: "button",
@@ -521,7 +522,6 @@ $(function () {
                     text: "Presupuestos",
                     showText: "both",
                     imageUrl: "../web/telerik/content/web/16x16/Grid.png",
-                    //spriteCssClass: "k-icon k-font-icon k-i-cog",
                     click: Pop_Presupuestos
                 }, { type: "button",
                     text: "Ppto Costo",
@@ -1418,7 +1418,7 @@ $(function () {
             });
 
         }
-        setInterval(VerificaConexionUsuario, 80000); //60000
+        setInterval(VerificaConexionUsuario, 80000); // 1':20'' Pregunta por Concurrencia
         VerificaConexionUsuario();
     });
 
