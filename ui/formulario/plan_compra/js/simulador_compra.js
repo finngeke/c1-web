@@ -3,7 +3,7 @@ $(function () {
     // Actualiza Fecha de Concurrencia (Solo se agrega en este JS, porque desde fuera no se puede llamar)
     function ActualizaConcurrencia() {
 
-        var url_act_fecha_concurrencia = 'TelerikPlanCompra/actualiza_fecha_concurrencia';
+        var url_act_fecha_concurrencia = 'TelerikPlanCompra/ActualizaFechaConcurrencia';
 
         $.ajax({
             type: "GET",
@@ -1400,7 +1400,7 @@ $(function () {
                     // Si llega 1 está desconectado
 
                     // El usuario está desconectado
-                    if(result==0){
+                    if(result==1){
 
                         // Levantar POPUP
                         var popupCierraSession = $("#POPUP_cierra_session");

@@ -2361,7 +2361,7 @@ class PlanCompraClass extends \parametros
     }
 
     // Actualiza la fecha del registro de concurrencia
-    public static function actualiza_fecha_concurrencia($temporada, $depto, $login)
+    public static function ActualizaFechaConcurrencia($temporada, $depto, $login)
     {
 
         $sql = "UPDATE PLC_CONCURRENCIA
