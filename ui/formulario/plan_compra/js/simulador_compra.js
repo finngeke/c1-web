@@ -66,7 +66,7 @@ $(function () {
                         // This is the result when OK is clicked. Invoke the
                         // callback with the value.
                         context.callback(model.value);
-                        console.log(model);
+                        // console.log(model);
                         dlg.close();
                     },
                     paises: new kendo.data.DataSource({

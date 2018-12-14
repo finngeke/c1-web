@@ -2538,7 +2538,22 @@ class PlanCompraClass extends \parametros
                 ";
 
         $data = \database::getInstancia()->getFilas($sql);
-        return $data;
+        // return $data;
+
+        // Transformo a array asociativo
+        $array1 = [];
+        foreach ($data as $va1) {
+            array_push($array1
+                , array(
+                    "ID" => $va1[0]
+                , "NOMBRE_FORMATO" => $va1[1]
+                )
+            );
+        }
+
+        return $array1;
+
+
 
     }
 
@@ -2943,9 +2958,6 @@ class PlanCompraClass extends \parametros
 
     }
 
-
-
-
     // Listar CBX Línea en Match
     public static function ListarLineaCBXMatch($temporada, $depto)
     {
@@ -3093,8 +3105,6 @@ class PlanCompraClass extends \parametros
     // Generar Match (En estado 19)
     public static function GenerarMatch($temporada, $depto, $login, $oc, $proforma)
     {
-
-        // $oc = 9146497;
 
         // Prueba de Recepción de GRID Telerik
         //return json_encode("OK");
@@ -3281,8 +3291,6 @@ class PlanCompraClass extends \parametros
         // return json_encode("OK");
         // die();
 
-         // $oc = 9146497;
-
         // Trabajo con las Variaciones
         $sql_agrega_variacion = "begin PLC_PKG_UTILS.PRC_AGREGAR_OC_VARIACION2('" . $oc . "','" . $proforma . "', :error, :data); end;";
             // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
@@ -3332,8 +3340,8 @@ class PlanCompraClass extends \parametros
     }
 
 
-    // ######################## INICIO Trabajo con flujo de aprobación ########################
 
+    // ######################## INICIO Trabajo con flujo de aprobación ########################
     // Trabajo con Flujo Dinámico de Aprobación
     public static function ModificaEstadoDinamico($temporada, $depto, $login, $id_color3, $estado_insert, $proforma, $estado_update)
     {
@@ -3415,7 +3423,6 @@ class PlanCompraClass extends \parametros
 
         // Fin de la clase
     }
-
     // Trabajo con Flujo Dinámico de Aprobación
     public static function ModificaEstadoDinamicoCorreccion($temporada, $depto, $login, $id_color3, $estado_insert, $proforma, $estado_update, $comentario){
 
@@ -3457,8 +3464,9 @@ class PlanCompraClass extends \parametros
 
     // Fin de ModificaEstadoDinamicoCorreccion
     }
-
     // ######################## FIN Trabajo con flujo de aprobación ########################
+
+
 
 
     // ######################## INICIO Permisos de Usuario ########################
@@ -3532,9 +3540,7 @@ class PlanCompraClass extends \parametros
 
 
     }
-
-
- // Busca Usuario Desconectado
+    // Busca Usuario Desconectado
     public static function BuscaUsuarioDesconectado($temporada, $depto, $login,$cod_tipusr)
     {
 
