@@ -2503,21 +2503,21 @@ class PlanCompraClass extends \parametros
                 ";
 
         $data = \database::getInstancia()->getFilas($sql);
-        return $data;
+        //return $data;
 
         // Transformo a array asociativo
-        /*$array1 = [];
+        $array1 = [];
         foreach ($data as $va1) {
             array_push($array1
                 , array(
-                    "CNTRY_LVL_CHILD" => $va1[0]
-                , "CNTRY_NAME" => $va1[1]
+                    "ID" => $va1[0]
+                , "NOMBRE_PAIS" => $va1[1]
                 )
             );
         }
 
 
-        return $array1;*/
+        return $array1;
 
 
     }

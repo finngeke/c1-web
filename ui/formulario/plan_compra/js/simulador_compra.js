@@ -47,6 +47,72 @@ $(function () {
 
     }
 
+    // Seteo el DropdownList si no ha sido cargado antes
+    kendo.spreadsheet.registerEditor("dropdownlist", function(){
+        var context, dlg, model;
+
+        function create() {
+            if (!dlg) {
+                model = kendo.observable({
+                    value: "#000000",
+                    ok: function() {
+                        //debugger;
+                        // This is the result when OK is clicked. Invoke the
+                        // callback with the value.
+                        context.callback(model.value);
+                        console.log(model);
+                        dlg.close();
+                    },
+                    products: new kendo.data.DataSource({
+                        transport: {
+                            read: {
+                                url: crudServiceBaseUrl+"ListarPais",
+                                dataType: "json"
+                            }
+                        }
+                    }),
+                    cancel: function() {
+                        dlg.close();
+                    }
+                });
+                var el = $("<div data-visible='true' data-role='window' data-modal='true' data-resizable='false' data-title='Seleccione País '>" +
+                    "  <div data-role='dropdownlist' data-bind='value: value, source: products' data-text-field='NOMBRE_PAIS' data-value-field='NOMBRE_PAIS'></div>" +
+                    "  <div style='margin-top: 1em; text-align: right'>" +
+                    "    <button style='width: 5em' class='k-button' data-bind='click: ok'>OK</button>" +
+                    "    <button style='width: 5em' class='k-button' data-bind='click: cancel'>Cancel</button>" +
+                    "  </div>" +
+                    "</div>");
+                kendo.bind(el, model);
+
+                // Cache the dialog.
+                dlg = el.getKendoWindow();
+            }
+        }
+
+        function open() {
+            create();
+            dlg.open();
+            dlg.center();
+
+            // If the selected cell already contains some value, reflect
+            // it in the custom editor.
+            var value = context.range.value();
+            if (value != null) {
+                model.set("value", value);
+            }
+        }
+
+        return {
+            edit: function(options) {
+                context = options;
+                open();
+            },
+            icon: "k-icon k-i-arrow-60-down"
+        };
+
+    });
+
+
     // ####################### FUNCIONES ASOCIADAS AL DESPLIEGUE DE DATA #######################
 
     // Defrine URL Base, para Llamar a los JSON
@@ -178,6 +244,17 @@ $(function () {
     var dataSource = new kendo.data.DataSource({
 
         requestEnd: function (e) {
+
+            if (e.type === 'read') {
+                setTimeout(function() {
+                    var spreadsheet = $('#spreadsheet').getKendoSpreadsheet();
+                    var sheet = spreadsheet.activeSheet();
+                    var columnB = sheet.range('BA2:BA' + (e.response.length + 1));
+
+                    columnB.editor('dropdownlist');
+                });
+            }
+
             setTimeout(function (e) {
                 if (shouldPopulateHeader) {
                     shouldPopulateHeader = false;
@@ -696,6 +773,30 @@ $(function () {
     var textoTAB = $('#spreadsheet').data('kendoSpreadsheet');
     textoTAB._view.tabstrip.tabGroup.find("li:eq(0) .k-link").text("Home");
     textoTAB._view.tabstrip.tabGroup.find("li:eq(1) .k-link").text("Presupuestos");
+
+    document.querySelector("#spreadsheet").addEventListener(['keydown' ,'dblclick'], function(ev) {
+        var spread = $("#spreadsheet").getKendoSpreadsheet();
+        var sheet = spread.activeSheet()
+        var cell = sheet.activeCell();
+
+        if(cell.topLeft.col == 1 && cell.topLeft.row == 0)  {
+            ev.stopPropagation();
+            ev.preventDefault();
+        }
+    }, true);
+
+    document.querySelector("#spreadsheet").addEventListener("dblclick", function(ev) {
+
+        var spread = $("#spreadsheet").getKendoSpreadsheet();
+        var sheet = spread.activeSheet()
+        var cell = sheet.activeCell();
+
+        if(cell.topLeft.col == 1 && cell.topLeft.row == 0)  {
+            ev.stopPropagation();
+            ev.preventDefault();
+        }
+    }, true);
+
 
     // ################## OTRAS FUNCIONES ASOCIADAS A LA ESTRUCTURA DE LAGRILLA ####################
     // #############################################################################################

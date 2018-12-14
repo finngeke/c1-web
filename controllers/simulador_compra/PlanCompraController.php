@@ -637,5 +637,10 @@ if($ESTADO_C1!=24){
         echo json_encode($dtpresupuestos);
     }
 
+
+
+
+
+
 // Termina Clase
 }
