@@ -968,7 +968,7 @@ $(function () {
         width: "615px",
         height: "320px",
         title: "Formatos",
-        //content: "../ui/formulario/plan_compra/telerik/POPUPFormato.php",
+        content: "../ui/formulario/plan_compra/telerik/POPUPFormato.php",
         visible: false/*,
         close: onClose*/
     }).data("kendoWindow").center();

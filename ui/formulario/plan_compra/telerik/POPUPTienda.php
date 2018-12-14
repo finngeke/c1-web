@@ -25,7 +25,7 @@
 
         $listBoxToolbar = new \Kendo\UI\ListBoxToolbar();
         $listBoxToolbar->position("right");
-        $listBoxToolbar->tools(array("moveUp", "moveDown", "transferTo", "transferFrom", "transferAllTo", "transferAllFrom"));
+        $listBoxToolbar->tools(array("transferTo", "transferFrom", "transferAllTo", "transferAllFrom"));
 
         $listBoxOptional = new \Kendo\UI\ListBox('optional');
 
