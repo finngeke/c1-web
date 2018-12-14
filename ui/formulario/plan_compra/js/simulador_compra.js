@@ -47,8 +47,14 @@ $(function () {
 
     }
 
+
+    // ####################### FUNCIONES ASOCIADAS AL DESPLIEGUE DE DATA #######################
+
+    // Defrine URL Base, para Llamar a los JSON
+    var crudServiceBaseUrl = "TelerikPlanCompra/";
+
     // Seteo el DropdownList si no ha sido cargado antes
-    kendo.spreadsheet.registerEditor("dropdownlist", function(){
+    kendo.spreadsheet.registerEditor("dropdownlistPais", function(){
         var context, dlg, model;
 
         function create() {
@@ -111,12 +117,6 @@ $(function () {
         };
 
     });
-
-
-    // ####################### FUNCIONES ASOCIADAS AL DESPLIEGUE DE DATA #######################
-
-    // Defrine URL Base, para Llamar a los JSON
-    var crudServiceBaseUrl = "TelerikPlanCompra/";
 
     // Función que envia la Data al PHP
     function onSubmit(e) {
@@ -245,13 +245,13 @@ $(function () {
 
         requestEnd: function (e) {
 
+            // Una vez que se carga la función de poder editar, asigno la columnaal editor
             if (e.type === 'read') {
                 setTimeout(function() {
                     var spreadsheet = $('#spreadsheet').getKendoSpreadsheet();
                     var sheet = spreadsheet.activeSheet();
-                    var columnB = sheet.range('BA2:BA' + (e.response.length + 1));
-
-                    columnB.editor('dropdownlist');
+                    var columnBA = sheet.range('BA2:BA' + (e.response.length + 1));
+                    columnBA.editor('dropdownlistPais');
                 });
             }
 
@@ -770,32 +770,39 @@ $(function () {
         }]
     });
 
+
+
+    // Cambiar Nombre a TABS de la Botonera SPREADSHEET
     var textoTAB = $('#spreadsheet').data('kendoSpreadsheet');
     textoTAB._view.tabstrip.tabGroup.find("li:eq(0) .k-link").text("Home");
     textoTAB._view.tabstrip.tabGroup.find("li:eq(1) .k-link").text("Presupuestos");
 
-    document.querySelector("#spreadsheet").addEventListener(['keydown' ,'dblclick'], function(ev) {
+    // Evitar que se editen las cabeceras (Escribir)
+    document.querySelector("#spreadsheet").addEventListener("keydown", function(ev) {
         var spread = $("#spreadsheet").getKendoSpreadsheet();
         var sheet = spread.activeSheet()
         var cell = sheet.activeCell();
 
-        if(cell.topLeft.col == 1 && cell.topLeft.row == 0)  {
+        if(cell.topLeft.col >=0 && cell.topLeft.row == 0)  {
             ev.stopPropagation();
             ev.preventDefault();
         }
     }, true);
 
+    // Evitar que se editen las cabeceras (Doble Clic)
     document.querySelector("#spreadsheet").addEventListener("dblclick", function(ev) {
 
         var spread = $("#spreadsheet").getKendoSpreadsheet();
         var sheet = spread.activeSheet()
         var cell = sheet.activeCell();
 
-        if(cell.topLeft.col == 1 && cell.topLeft.row == 0)  {
+        if(cell.topLeft.col >=0 && cell.topLeft.row == 0)  {
             ev.stopPropagation();
             ev.preventDefault();
         }
     }, true);
+
+
 
 
     // ################## OTRAS FUNCIONES ASOCIADAS A LA ESTRUCTURA DE LAGRILLA ####################
