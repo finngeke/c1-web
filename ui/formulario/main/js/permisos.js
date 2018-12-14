@@ -167,7 +167,7 @@ $('#guardar_permisos_modulo_acciones').on('click', function () {
 
             if (modulo_permiso_actualizado == 'U') {
                 $.getJSON(url_guarda_permiso_modulo_accion, {
-                    ID_ACCION: id_accion_separado,
+                    ID_TELERIK: id_accion_separado,
                     TIP_USR: id_tipo_usu,
                     ESTADO_ACCION: estado_accion,
                     ID_MODULO: id_modulo_separado,
@@ -216,7 +216,7 @@ function campo_flag_modulo(inc_modulo) {
 }
 
 function campo_flag_acciones(inc_modulo, inc_accion) {
-    //$('#select_modulo_accion_'+b[0]+'').attr("enable","enable");
+
     $("#flag_accion_" + inc_modulo + "_" + inc_accion).html('U');
 }
 
@@ -350,6 +350,7 @@ function cargar_tabla_modulos(tip_usr) {
 
             /* FIN DEL each que llenara los modulos */
             /*Each que llena las acciones(botnoes) por modulo correspondiente*/
+            // revisar el ID que se ñe asigna a cada elemento b[3] ex b[0] revisar si asigna la misma variable
             $.each(data, function (i, o) {
                 $.getJSON(url_cargar_modulos_acciones, {ID_MODULO: o[0]}, function (data_usu) {
                     $.each(data_usu, function (a, b) {
@@ -359,15 +360,15 @@ function cargar_tabla_modulos(tip_usr) {
                             '<td>' + b[2] + '</td>' +
 
                             '<td>' +
-                            '<select id="select_modulo_accion_' + b[0] + '" onchange="campo_flag_acciones(' + o[0] + ',' + b[0] + ')">' +
+                            '<select id="select_modulo_accion_' + b[3] + '" onchange="campo_flag_acciones(' + o[0] + ',\'' + b[3] + '\')">' +
                             '<option>seleccione</option>' +
                             '<option value="0">Lectura</option>' +
                             '<option value="1">Escritura</option>' +
                             '</select>' +
                             '</td>' +
 
-                            '<td  id="td_accion_' + o[0] + '_' + b[0] + '" style="display: none">' +
-                            '<span id="flag_accion_' + o[0] + '_' + b[0] + '"></span>' +
+                            '<td  id="td_accion_' + o[0] + '_' + b[3] + '" style="display: none">' +
+                            '<span id="flag_accion_' + o[0] + '_' + b[3] + '"></span>' +
                             '</td>' +
 
                             '</tr>'
@@ -376,10 +377,10 @@ function cargar_tabla_modulos(tip_usr) {
                         $.getJSON(url_cargar_accion_estados, {
                             ID_TIP_USR: tipo_usr,
                             ID_MODULO: o[0],
-                            ID_ACCION: b[0]
+                            ID_TELERIK: b[3]
                         }, function (data) {
                             $.each(data, function (i, t) {
-                                $("#select_modulo_accion_" + b[0]).val(t[1]);
+                                $("#select_modulo_accion_" + b[3]).val(t[1]);
                             });
                         });
 

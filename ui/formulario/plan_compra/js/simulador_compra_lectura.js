@@ -25,7 +25,7 @@ $(function () {
                 });
 
             }else{
-                // Avisar Modo Escritura
+                // Avisar Modo Escritura (Solo aplica cuando no hay nadie en el depto, si el que estaba se sale.. el nuevo usuario debe volver a ingresar)
                 popupModoIngreso.getNotifications().parent().remove();
                 popupModoIngreso.show(" Modo Escritura. ", "success");
             }

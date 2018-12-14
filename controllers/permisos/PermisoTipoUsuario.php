@@ -104,7 +104,7 @@ class PermisoTipoUsuario extends \Control {
 
     public function guardar_permiso_modulo_accion($f3) {
 
-        echo \permisos\permiso_usuario::guardar_permiso_modulo_accion($f3->get('GET.ID_ACCION'),$f3->get('GET.TIP_USR'),$f3->get('GET.ESTADO_ACCION'),$f3->get('GET.ID_MODULO'),$f3->get('GET.ESTADO_MODULO'),$f3->get('SESSION.login'));
+        echo \permisos\permiso_usuario::guardar_permiso_modulo_accion($f3->get('GET.ID_TELERIK'),$f3->get('GET.TIP_USR'),$f3->get('GET.ESTADO_ACCION'),$f3->get('GET.ID_MODULO'),$f3->get('GET.ESTADO_MODULO'),$f3->get('SESSION.login'));
     }
 
     public function cargar_modulos_estados($f3) {
@@ -112,7 +112,7 @@ class PermisoTipoUsuario extends \Control {
     }
 
     public function cargar_accion_estados($f3) {
-        echo json_encode(\permisos\permiso_usuario::cargar_accion_estados($f3->get('GET.ID_TIP_USR'),$f3->get('GET.ID_MODULO'),$f3->get('GET.ID_ACCION')));
+        echo json_encode(\permisos\permiso_usuario::cargar_accion_estados($f3->get('GET.ID_TIP_USR'),$f3->get('GET.ID_MODULO'),$f3->get('GET.ID_TELERIK')));
     }
 
     public function buscar_modulos_estados_desactivado($f3) {

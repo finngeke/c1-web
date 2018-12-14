@@ -222,21 +222,22 @@ class permiso_usuario extends \parametros {
 
     public static function cargar_modulos_acciones($ID_MODULO) {
 
-        $sql = "SELECT ID_ACCION,ID_MODULO,NOMBRE_ACCION FROM PLC_MODULO_ACCION
-                WHERE ID_MODULO = '".$ID_MODULO."' ";
+        $sql = "SELECT ID_ACCION,ID_MODULO,NOMBRE_ACCION,ID_TELERIK FROM PLC_MODULO_ACCION
+                WHERE ID_MODULO = $ID_MODULO";
+
 
         $data = \database::getInstancia()->getFilas($sql);
         return $data;
 
     }
 
-    public static function guardar_permiso_modulo_accion($ID_ACCION,$TIP_USR,$ESTADO_ACCION,$ID_MODULO,$ESTADO_MODULO,$login)
+    public static function guardar_permiso_modulo_accion($ID_TELERIK,$TIP_USR,$ESTADO_ACCION,$ID_MODULO,$ESTADO_MODULO,$login)
     {
         $sql_existe = "SELECT 1
                         FROM PLC_PERMISO_MODULO_ACCION 
-                        WHERE ID_ACCION = $ID_ACCION 
+                        WHERE ID_TELERIK = '".$ID_TELERIK."' 
                         AND ID_MODULO = $ID_MODULO
-                        AND ID_TIP_USR = $TIP_USR";
+                        AND ID_TIP_USR = $TIP_USR ";
 
         $existe = (int) \database::getInstancia()->getFila($sql_existe);
 
@@ -245,14 +246,14 @@ class permiso_usuario extends \parametros {
             $sql = " UPDATE PLC_PERMISO_MODULO_ACCION
                        SET   ESTADO_ACCION   =  $ESTADO_ACCION,
                              ESTADO_MODULO  =   $ESTADO_MODULO
-                       WHERE ID_ACCION = $ID_ACCION 
+                       WHERE ID_TELERIK = '".$ID_TELERIK."' 
                         AND ID_MODULO = $ID_MODULO
                         AND ID_TIP_USR = $TIP_USR";
 
         }else {
 
-            $sql = "INSERT INTO PLC_PERMISO_MODULO_ACCION (ID_ACCION,ID_TIP_USR,ESTADO_ACCION,ID_MODULO,ESTADO_MODULO)
-                          VALUES ($ID_ACCION,$TIP_USR,$ESTADO_ACCION,$ID_MODULO,$ESTADO_MODULO)";
+            $sql = "INSERT INTO PLC_PERMISO_MODULO_ACCION (ID_TIP_USR,ESTADO_ACCION,ID_MODULO,ESTADO_MODULO,ID_TELERIK)
+                          VALUES ($TIP_USR,$ESTADO_ACCION,$ID_MODULO,$ESTADO_MODULO,'".$ID_TELERIK."')";
         }
 
             // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
@@ -289,13 +290,15 @@ class permiso_usuario extends \parametros {
 
     }
 
-    public static function cargar_accion_estados($ID_TIP_USR,$ID_MODULO,$ID_ACCION) {
+    public static function cargar_accion_estados($ID_TIP_USR,$ID_MODULO,$ID_TELERIK) {
 
-        $sql = "SELECT ID_ACCION,ESTADO_ACCION,ID_MODULO FROM PLC_PERMISO_MODULO_ACCION
-                where ID_TIP_USR = $ID_TIP_USR
-                and ID_MODULO= $ID_MODULO
-                and ID_ACCION = $ID_ACCION 
-                and ID_ACCION != 0";
+        $sql = "SELECT ID_ACCION,ESTADO_ACCION,ID_MODULO,ID_TELERIK 
+                FROM PLC_PERMISO_MODULO_ACCION
+                WHERE ID_TIP_USR = $ID_TIP_USR
+                AND ID_MODULO= $ID_MODULO
+                AND ID_TELERIK = '".$ID_TELERIK."'";
+
+        // AND ID_ACCION != 0
 
         $data = \database::getInstancia()->getFilas($sql);
         return $data;

@@ -1938,6 +1938,7 @@ class PlanCompraClass extends \parametros
           echo "/------5 REORDER------";
           var_dump($dtTablaReorder);
           die();*/
+
     }
 
 
@@ -3506,34 +3507,64 @@ class PlanCompraClass extends \parametros
         // Si es administrador, le agrego todas las acciones
         if( $cod_tipusr == 99 ) {
 
-            $sql = "SELECT id_telerik, nombre_accion 
-                    FROM plc_modulo_accion";
+            return 0;
 
         } else {
 
-            $sql = "SELECT t1.id_telerik, t2.nombre_accion 
-                FROM plc_permiso_modulo_accion t1
-                INNER JOIN plc_modulo_accion t2 ON t2.id_telerik=t1.id_telerik
-                INNER JOIN plc_usuario t3 ON t3.cod_tipusr=t1.id_tip_usr
-                WHERE t3.cod_usr = '" . $login . "'
-                AND t1.estado_accion=1";
-
-        }
+            $sql = "SELECT 1 CANTIDAD, t2.nom_usr NOMBRE
+                    FROM PLC_CONCURRENCIA t1
+                    INNER JOIN plc_usuario t2 ON t2.cod_usr=t1.cod_usr
+                    WHERE t1.COD_TEMPORADA = $temporada
+                    AND t1.DEP_DEPTO = '" . $depto . "'
+                    AND t1.USER_LOGIN != '" . $login . "'";
 
         $data = \database::getInstancia()->getFilas($sql);
-        return $data;
 
-        // Transformo a array asociativo
-        /*$array1 = [];
-        foreach ($data as $va1) {
-            array_push($array1
-                , array(
-                   "ID_ACCION" => $va1[0]
-                //, "NOMBRE_ACCION" => $va1[1]
-                )
-            );
+            // Si no llega data borro mis registros anteriores y agrego uno nuevo (evaluar, revisar primero)
+            // simulando que el usuario cierrabien sessión y yo lectura recargo????
+            // (Si no trae data)
+
+            return $data;
+
+    }
+
+
+
+
+    }
+
+
+ // Busca Usuario Desconectado
+    public static function BuscaUsuarioDesconectado($temporada, $depto, $login,$cod_tipusr)
+    {
+
+        $sql = "SELECT 1 
+                    FROM PLC_CONCURRENCIA 
+                    WHERE COD_TEMPORADA = $temporada
+                    AND DEP_DEPTO = '".$depto."' 
+                    AND COD_USR = '".$cod_tipusr."'
+                    AND IS_OFFLINE = 1
+                    ";
+
+        $existe = (int) \database::getInstancia()->getFila($sql);
+
+        if ($existe == 1){
+
+            // Quitar su registro (Si el usuario recarga, va ingresar en modo lectura)
+            $sql_quitar = "DELETE FROM PLC_CONCURRENCIA
+                            WHERE COD_TEMPORADA = $temporada
+                            AND DEP_DEPTO = '".$depto."'
+                            AND COD_USR = '".$cod_tipusr."' 
+                            ";
+            $data_quitar = \database::getInstancia()->getConsulta($sql_quitar);
+
+            return 1;
+
+        }else{
+            return 0;
         }
-        return $array1;*/
+
+
 
 
     }
@@ -4099,5 +4130,10 @@ class PlanCompraClass extends \parametros
         $data = \database::getInstancia()->getFilas($sql);
         return $data;
     }
+
+
+
+
+
 // Fin de la Clase
 }

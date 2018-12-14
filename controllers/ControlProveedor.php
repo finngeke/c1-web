@@ -6,6 +6,7 @@
 	 * Fecha: 2018-05-16
 	 * @author JOSÉ MIGUEL CANDIA
 	 */
+
 	class ControlProveedor extends Control {
 		private $estiloCabecera = array(
 			'borders' => array(

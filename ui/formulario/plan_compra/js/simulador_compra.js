@@ -22,6 +22,31 @@ $(function () {
 
     }
 
+    // Despliega Reloj de Cuenta Atrás (Solo se agrega en este JS, porque desde fuera no se puede llamar)
+    function DespliegaCuentaAtras() {
+
+        var counter = 59;
+        var interval = setInterval(function() {
+
+            counter--;
+            console.log("Timer --> " + counter);
+            // Display 'counter' wherever you want to display it.
+            if (counter == 0) {
+                clearInterval(interval);
+                $('#StopCountDown').html("<h3>Saliendo...</h3>");
+                // Sacar al usuario
+                window.location.href = "inicio";
+                return;
+
+            }else{
+                $('#contador_cierra_session').html(counter);
+                //console.log("Timer --> " + counter);
+            }
+
+        }, 1000);
+
+    }
+
     // ####################### FUNCIONES ASOCIADAS AL DESPLIEGUE DE DATA #######################
 
     // Defrine URL Base, para Llamar a los JSON
@@ -1359,6 +1384,44 @@ $(function () {
         // Fin del (e)
         });
     // Fin del menú contextual
+
+
+    // ########## TRABAJO CON EL CHECK DE CONCURRENCIA ##########
+    // Comenzar a ejecutar el temporizador
+    $(function() {
+        function VerificaConexionUsuario() {
+
+            // Voy a Consultar si mi Registro se encuentra en la tabla
+            // Si el registro no se encuentra: Levanto PopUp y Ejecuto contador a tras
+            $.ajax({
+                url: "TelerikPlanCompra/BuscaUsuarioDesconectado",
+                success: function (result) {
+
+                    // Si llega 1 está desconectado
+
+                    // El usuario está desconectado
+                    if(result==0){
+
+                        // Levantar POPUP
+                        var popupCierraSession = $("#POPUP_cierra_session");
+                        popupCierraSession.data("kendoWindow").open();
+                        // Comenzamos la cuenta atrás
+                        DespliegaCuentaAtras();
+
+                    }
+
+
+                },
+                error: function (xhr, httpStatusMessage, customErrorMessage) {
+                    console.log("Detalle Error: ".xhr.responseText+" / "+httpStatusMessage+" / "+customErrorMessage);
+                }
+            });
+
+        }
+        setInterval(VerificaConexionUsuario, 80000); //60000
+        VerificaConexionUsuario();
+    });
+
 
     //pop ajuste de compra
     function Pop_ajuste_compra(){

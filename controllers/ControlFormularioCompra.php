@@ -373,6 +373,10 @@
 			
 			$f3->set('contenido', 'formulario/plan_compra/simulador_compra.html');
 			echo Template::instance()->render('layout_plan_compra.php');
+
+            /*$f3->set('contenido', 'formulario/simulador_compra4.html');
+            echo Template::instance()->render('layout_simuladorB.php');*/
+
 			
 		}
 		

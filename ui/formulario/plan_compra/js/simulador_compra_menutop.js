@@ -52,6 +52,7 @@ $(document).ready(function() {
                 id: "volver_atras_c1",
                 click: volver_atras_c1
             },
+            { type: "separator" },
             /*{
                 type: "button",
                 text: "Action",

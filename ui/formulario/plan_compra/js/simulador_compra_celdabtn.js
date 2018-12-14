@@ -456,6 +456,7 @@ $(function () {
 
 
     // ############################ AJUSTE COMPRA ############################
+
     // Le da la estructura a la ventana POPUP
     var ventana_ajuste_compra = $("#POPUP_ajuste_compra");
     ventana_ajuste_compra.kendoWindow({
@@ -479,6 +480,7 @@ $(function () {
 
 
     // ############################ AJUSTE N CAJAS ############################
+
     // Le da la estructura a la ventana POPUP
     var ventana_ajuste_cajas = $("#POPUP_ajuste_cajas");
     ventana_ajuste_cajas.kendoWindow({
@@ -507,6 +509,7 @@ $(function () {
     });
 
     // ############################ DETALLE ERROR ############################
+
     // Le da la estructura a la ventana POPUP
     var ventana_detalle_error = $("#POPUP_detalle_error");
     ventana_detalle_error.kendoWindow({
@@ -553,6 +556,7 @@ $(function () {
         close: cerrarPopUpMATCH*/
     }).data("kendoWindow").center();
 
+
     // Le da la estructura a la grilla pmm
     $("#grid_match_pmm").kendoGrid({
         schema: {
@@ -568,6 +572,7 @@ $(function () {
         height: 300,
         sortable: true
     });
+
 
     // Le da la estructura a la grilla plan
     $("#grid_match_plan").kendoGrid({
@@ -919,6 +924,23 @@ $(function () {
 
 
     });
+
+    // ############################ CIERRE DE SESSIÓN ############################
+
+    // Le da la estructura a la ventana POPUP Cierre de Session
+    var ventana_cierre_session = $("#POPUP_cierra_session");
+    ventana_cierre_session.kendoWindow({
+        width: "250px",
+        height: "90px",
+        title: "Saliendo del Plan de Compra...",
+        visible: false,
+        actions: [
+            /*"Minimize",
+            "Maximize",
+            "Close"*/
+        ]/*,
+                close: onClose*/
+    }).data("kendoWindow").center();
 
 // ############################ presupuesto total ############################
     // pop grilla presupuesto total.
