@@ -511,14 +511,56 @@ $(function () {
         rows: 400,
         //toolbar: true,
         toolbar: {
+            home: [ "open" ,
+                "exportAs",
+                "freeze",
+                "filter",
+                { type: "button",
+                    text: "Ajuste Compra",
+                    showText: "both",
+                    icon: "k-icon k-i-cog",
+                    click: Pop_ajuste_compra
+                },
+                { type: "button",
+                    text: "Ajuste Cajas",
+                    showText: "both",
+                    icon: "k-icon k-i-greyscale",
+                    click: Pop_ajuste_cajas
+                },
+                { type: "button",
+                    text: "Historial",
+                    showText: "both",
+                    icon: "k-icon k-i-clock",
+                    click: Pop_Historial
+                },
+                { type: "button",
+                    text: "Importar",
+                    //showText: "both",
+                    imageUrl: "../web/telerik/content/web/24x24/Upload.png",
+                    click: Pop_Importar
+                },
+                { type: "button",
+                    text: "Detalle Error",
+                    showText: "both",
+                    icon: "k-icon k-i-clock"/*,
+                    click: POPUPDetalleError*/
+                },
+                { type: "button",
+                    text: "Tienda",
+                    showText: "both",
+                    icon: "k-icon k-i-clock"/*,
+                    click: POPUPTienda*/
+                },
+                { type: "button",
+                    text: "Formato",
+                    showText: "both",
+                    icon: "k-icon k-i-clock"/*,
+                    click: POPUPFormato*/
+                }
+            ],
             insert: false,
             data: [
-                {
-                    type: "button",
-                    text: "Cargar Archivo",
-                    imageUrl: "../web/telerik/content/web/toolbar/save.png"
-
-               }, { type: "button",
+                { type: "button",
                     text: "Presupuestos",
                     showText: "both",
                     imageUrl: "../web/telerik/content/web/16x16/Grid.png",
@@ -540,36 +582,8 @@ $(function () {
                     click: Pop_ajuste_cajas
                     }
 
-            ],
-            home: [ "open" ,
-                    "exportAs",
-                    "freeze",
-                    "filter",
-                    { type: "button",
-                        text: "Ajuste Compra",
-                        showText: "both",
-                        icon: "k-icon k-i-cog",
-                        click: Pop_ajuste_compra
-                    },
-                    { type: "button",
-                        text: "Ajuste Cajas",
-                        showText: "both",
-                        icon: "k-icon k-i-greyscale",
-                        click: Pop_ajuste_cajas
-                    },
-                    { type: "button",
-                        text: "Historial",
-                        showText: "both",
-                        icon: "k-icon k-i-clock",
-                        click: Pop_Historial
-                    },
-                    { type: "button",
-                        text: "Importar",
-                        //showText: "both",
-                        imageUrl: "../web/telerik/content/web/24x24/Upload.png",
-                        click: Pop_Importar
-                }
             ]
+
         },
         sheetsbar: false,
         sheets: [{
@@ -679,7 +693,9 @@ $(function () {
         }]
     });
 
-
+    var textoTAB = $('#spreadsheet').data('kendoSpreadsheet');
+    textoTAB._view.tabstrip.tabGroup.find("li:eq(0) .k-link").text("Home");
+    textoTAB._view.tabstrip.tabGroup.find("li:eq(1) .k-link").text("Presupuestos");
 
     // ################## OTRAS FUNCIONES ASOCIADAS A LA ESTRUCTURA DE LAGRILLA ####################
     // #############################################################################################

@@ -53,11 +53,18 @@ $(document).ready(function() {
                 click: volver_atras_c1
             },
             { type: "separator" },
-            /*{
+            {
                 type: "button",
-                text: "Action",
-                overflow: "always"
-            },*/
+                text: "Guardar Cambios",
+                overflow: "never",
+                click: volver_atras_c1
+            },
+            {
+                type: "button",
+                text: "Cancelar Cambios",
+                overflow: "never",
+                click: volver_atras_c1
+            },
             {
                 type: "button",
                 text: "Cambiar Clave",
