@@ -69,7 +69,7 @@ $(function () {
                         console.log(model);
                         dlg.close();
                     },
-                    products: new kendo.data.DataSource({
+                    paises: new kendo.data.DataSource({
                         transport: {
                             read: {
                                 url: crudServiceBaseUrl+"ListarPais",
@@ -81,8 +81,8 @@ $(function () {
                         dlg.close();
                     }
                 });
-                var el = $("<div data-visible='true' data-role='window' data-modal='true' data-resizable='false' data-title='Seleccione País '>" +
-                    "  <div data-role='dropdownlist' data-bind='value: value, source: products' data-text-field='NOMBRE_PAIS' data-value-field='NOMBRE_PAIS'></div>" +
+                var el = $("<div data-visible='true' data-role='window' data-modal='true' data-resizable='true' data-title='Seleccione País '>" +
+                    "  <div data-role='dropdownlist' data-bind='value: value, source: paises' data-text-field='NOMBRE_PAIS' data-value-field='NOMBRE_PAIS'></div>" +
                     "  <div style='margin-top: 1em; text-align: right'>" +
                     "    <button style='width: 5em' class='k-button' data-bind='click: ok'>OK</button>" +
                     "    <button style='width: 5em' class='k-button' data-bind='click: cancel'>Cancel</button>" +
@@ -100,12 +100,12 @@ $(function () {
             dlg.open();
             dlg.center();
 
-            // If the selected cell already contains some value, reflect
-            // it in the custom editor.
+            // Si la celda ya tiene un valor, al momento de abrir el editor se carga la que contiene la celca
             var value = context.range.value();
             if (value != null) {
                 model.set("value", value);
             }
+
         }
 
         return {
