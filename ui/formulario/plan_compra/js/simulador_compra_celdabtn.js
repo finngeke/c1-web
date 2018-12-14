@@ -953,7 +953,7 @@ $(function () {
         width: "615px",
         height: "320px",
         title: "Tiendas",
-        content: "../ui/formulario/plan_compra/telerik/POPUPTienda.html",
+        content: "../ui/formulario/plan_compra/telerik/POPUPTienda.php",
         visible: false/*,
         close: onClose*/
     }).data("kendoWindow").center();
@@ -968,7 +968,7 @@ $(function () {
         width: "615px",
         height: "320px",
         title: "Formatos",
-        content: "../ui/formulario/plan_compra/telerik/POPUPFormato.html",
+        //content: "../ui/formulario/plan_compra/telerik/POPUPFormato.php",
         visible: false/*,
         close: onClose*/
     }).data("kendoWindow").center();

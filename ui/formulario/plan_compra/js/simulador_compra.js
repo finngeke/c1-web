@@ -1401,6 +1401,29 @@ $(function () {
         });
     // Fin del menú contextual
 
+    function POPUPDetalleError(){
+
+        // Levantamos el popup
+        var POPUPDetalleError = $("#POPUP_detalle_error");
+        POPUPDetalleError.data("kendoWindow").open();
+
+    }
+
+    function POPUPTienda(){
+
+        // Levantamos el popup
+        var POPUPTienda = $("#POPUP_tienda");
+        POPUPTienda.data("kendoWindow").open();
+
+    }
+
+    function POPUPFormato(){
+
+        // Levantamos el popup
+        var POPUPFormato = $("#POPUP_formato");
+        POPUPFormato.data("kendoWindow").open();
+
+    }
 
     // ########## TRABAJO CON EL CHECK DE CONCURRENCIA ##########
     // Comenzar a ejecutar el temporizador
@@ -1681,35 +1704,16 @@ $(function () {
 
     }
 
+
     function Pop_Importar(){
 
         var popupDe = $("#POPUP_Importar_");
         popupDe.data("kendoWindow").open();
     }
 
-    function POPUPDetalleError(){
 
-        // Levantamos el popup
-        var POPUPDetalleError = $("#POPUP_detalle_error");
-        POPUPDetalleError.data("kendoWindow").open();
 
-    }
 
-    function POPUPTienda(){
-
-        // Levantamos el popup
-        var POPUPTienda = $("#POPUP_tienda");
-        POPUPTienda.data("kendoWindow").open();
-
-    }
-
-    function POPUPFormato(){
-
-        // Levantamos el popup
-        var POPUPFormato = $("#POPUP_formato");
-        POPUPFormato.data("kendoWindow").open();
-
-    }
 
 
 
