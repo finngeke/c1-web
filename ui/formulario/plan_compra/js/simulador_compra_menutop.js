@@ -43,6 +43,22 @@ $(document).ready(function() {
 
     }
 
+    // BTN GuardarCambiosBTN
+    function GuardarCambiosBTN(e) {
+
+        $( "#guardar_cambios_pc" ).click();
+
+    }
+
+    // BTN CancelarCambiosBTN
+    function CancelarCambiosBTN(e) {
+
+        $( "#cancelar_cambios_pc" ).click();
+
+    }
+
+
+
     // Barra de menú superior del plan de compra
     $("#toolbar_plan_compra").kendoToolBar({
         items: [
@@ -57,13 +73,13 @@ $(document).ready(function() {
                 type: "button",
                 text: "Guardar Cambios",
                 overflow: "never",
-                click: volver_atras_c1
+                click: GuardarCambiosBTN
             },
             {
                 type: "button",
                 text: "Cancelar Cambios",
                 overflow: "never",
-                click: volver_atras_c1
+                click: CancelarCambiosBTN
             },
             {
                 type: "button",

@@ -925,6 +925,8 @@ $(function () {
 
     });
 
+
+
     // ############################ CIERRE DE SESSIÓN ############################
 
     // Le da la estructura a la ventana POPUP Cierre de Session
@@ -942,7 +944,40 @@ $(function () {
                 close: onClose*/
     }).data("kendoWindow").center();
 
-// ############################ presupuesto total ############################
+
+    // ############################ TIENDAS ############################
+
+    // Le da la estructura a la ventana POPUP
+    var ventana_tienda = $("#POPUP_tienda");
+    ventana_tienda.kendoWindow({
+        width: "615px",
+        height: "320px",
+        title: "Tiendas",
+        content: "../ui/formulario/plan_compra/telerik/POPUPTienda.html",
+        visible: false/*,
+        close: onClose*/
+    }).data("kendoWindow").center();
+
+
+
+    // ############################ FORMATOS ############################
+
+    // Le da la estructura a la ventana POPUP
+    var ventana_formato = $("#POPUP_formato");
+    ventana_formato.kendoWindow({
+        width: "615px",
+        height: "320px",
+        title: "Formatos",
+        content: "../ui/formulario/plan_compra/telerik/POPUPFormato.html",
+        visible: false/*,
+        close: onClose*/
+    }).data("kendoWindow").center();
+
+
+
+
+
+    // ############################ presupuesto total ############################
     // pop grilla presupuesto total.
     var ventana_presupuestos = $("#POPUP_presupuestos_total");
     ventana_presupuestos.kendoWindow({

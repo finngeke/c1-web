@@ -542,20 +542,20 @@ $(function () {
                 { type: "button",
                     text: "Detalle Error",
                     showText: "both",
-                    icon: "k-icon k-i-clock"/*,
-                    click: POPUPDetalleError*/
+                    icon: "k-icon k-i-clock",
+                    click: POPUPDetalleError
                 },
                 { type: "button",
                     text: "Tienda",
                     showText: "both",
-                    icon: "k-icon k-i-clock"/*,
-                    click: POPUPTienda*/
+                    icon: "k-icon k-i-clock",
+                    click: POPUPTienda
                 },
                 { type: "button",
                     text: "Formato",
                     showText: "both",
-                    icon: "k-icon k-i-clock"/*,
-                    click: POPUPFormato*/
+                    icon: "k-icon k-i-clock",
+                    click: POPUPFormato
                 }
             ],
             insert: false,
@@ -1686,6 +1686,33 @@ $(function () {
         var popupDe = $("#POPUP_Importar_");
         popupDe.data("kendoWindow").open();
     }
+
+    function POPUPDetalleError(){
+
+        // Levantamos el popup
+        var POPUPDetalleError = $("#POPUP_detalle_error");
+        POPUPDetalleError.data("kendoWindow").open();
+
+    }
+
+    function POPUPTienda(){
+
+        // Levantamos el popup
+        var POPUPTienda = $("#POPUP_tienda");
+        POPUPTienda.data("kendoWindow").open();
+
+    }
+
+    function POPUPFormato(){
+
+        // Levantamos el popup
+        var POPUPFormato = $("#POPUP_formato");
+        POPUPFormato.data("kendoWindow").open();
+
+    }
+
+
+
 
 // Fin del document ready
 });
