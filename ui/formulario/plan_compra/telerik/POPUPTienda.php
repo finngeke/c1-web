@@ -8,10 +8,62 @@
 <?php require_once '../../../../web/telerik/php/wrappers/php/lib/Kendo/Autoload.php'; ?>
 
 <div role="application">
-    <div class="demo-section k-content wide">
-        <label for="optional" id="employees">Employees</label>
-        <label for="selected">Developers</label>
-        <br />
+    <div class="caja-despliegue k-content wide">
+
+        <label for="Marcas">Marcas</label>
+        <?php
+        $marcas = new \Kendo\Data\DataSource();
+        $marcas->data(array(
+            array('text' => 'Cotton', 'value'=> 1),
+            array('text' => 'Polyester', 'value'=> 2),
+            array('text' => 'Cotton/Polyester', 'value'=> 3),
+            array('text' => 'Rib Knit', 'value'=> 4)
+        ));
+
+        $inputMarcas = new \Kendo\UI\ComboBox('Marcas');
+        $inputMarcas->dataSource($marcas)
+            ->dataTextField('text')
+            ->dataValueField('value')
+            //->filter('contains')
+            ->placeholder('Seleccione Marca')
+            //->suggest(true)
+            ->index(3)
+            ->attr('style', 'width: 100%;');
+
+        echo $inputMarcas->render();
+
+        echo "";
+        ?>
+
+        <br /><br />
+        <label for="TipoTienda">Tipo Tienda</label>
+        <?php
+        $TipoTienda = new \Kendo\Data\DataSource();
+        $TipoTienda->data(array(
+            array('text' => 'Cotton', 'value'=> 1),
+            array('text' => 'Polyester', 'value'=> 2),
+            array('text' => 'Cotton/Polyester', 'value'=> 3),
+            array('text' => 'Rib Knit', 'value'=> 4)
+        ));
+
+        $inputTipoTienda = new \Kendo\UI\ComboBox('TipoTienda');
+        $inputTipoTienda->dataSource($TipoTienda)
+            ->dataTextField('text')
+            ->dataValueField('value')
+            //->filter('contains')
+            ->placeholder('Seleccione Tipo Tienda')
+            //->suggest(true)
+            ->index(3)
+            ->attr('style', 'width: 100%;');
+
+        echo $inputTipoTienda->render();
+        echo "";
+        ?>
+
+
+        <!--<label for="optional" id="disponible">Disponible</label>
+        <label for="seleccionado">Asignado</label>-->
+        <br /><br />
         <?php
         $attendees = array(
             "Steven White",
@@ -23,57 +75,46 @@
             "Michael Suyama"
         );
 
+
+        // Caracteristicas de la Barra del Medio
         $listBoxToolbar = new \Kendo\UI\ListBoxToolbar();
         $listBoxToolbar->position("right");
         $listBoxToolbar->tools(array("transferTo", "transferFrom", "transferAllTo", "transferAllFrom"));
 
-        $listBoxOptional = new \Kendo\UI\ListBox('optional');
-
+        // Cargo Disponible
+        $listBoxOptional = new \Kendo\UI\ListBox('disponible');
         $listBoxOptional->toolbar($listBoxToolbar)
             ->dataSource($attendees)
-            ->connectWith("selected");
-
+            ->selectable("multiple")
+            ->connectWith("seleccionado");
         echo $listBoxOptional->render();
 
-        // print space for design improvements
+        // Imprime Espacio por design improvements
         echo " ";
 
-        $listBoxSelected = new \Kendo\UI\ListBox('selected');
+        // Cargo Seleccionadas
+        $listBoxSelected = new \Kendo\UI\ListBox('seleccionado');
         $listBoxSelected->dataSource(array())
             ->selectable("multiple");
-
         echo $listBoxSelected->render();
+
+
         ?>
     </div>
 </div>
 
 <style>
-    .demo-section label {
+    .caja-despliegue label {
         margin-bottom: 5px;
         font-weight: bold;
         display: inline-block;
     }
 
-    #employees {
-        width: 270px;
+    #disponible {
+        width: 250px;
     }
 
-    #example .demo-section {
-        max-width: none;
-        width: 515px;
-    }
-
-    #example .k-listbox {
-        width: 236px;
-        height: 310px;
-    }
-
-    #example .k-listbox:first-of-type {
-        width: 270px;
-        margin-right: 1px;
-    }
-
-    .demo-section label {
+    .caja-despliegue label {
         padding-left: 8px;
         margin-bottom: 8px;
         font-weight: bold;
@@ -82,6 +123,6 @@
 </style>
 
 
-<!--<script src="{{@TELERIK}}ui/formulario/plan_compra/js/simulador_compra_popuptienda.js?v=A29"></script>-->
+<!--<script src="../../../../ui/formulario/plan_compra/js/simulador_compra_popuptienda.js?v=A29"></script>-->
 </body>
 </html>
