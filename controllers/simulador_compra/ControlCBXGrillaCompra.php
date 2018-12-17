@@ -137,6 +137,8 @@
                                     $dias_atrasado = ($val["DIAS_ATRASO"]<> null ? ($val["DIAS_ATRASO"]) :"");
                                     $ESTADO= $val["ESTADO_C1"];
                                     $nom_estado= $val["CODESTADO"];
+									$estilo_pmm = $val["ESTILO_PMM"];
+                                    $estado_match = $val["ESTADO_MATCH"];
                                     array_push($dt2021, array($proforma, $val["PO_NUMBER"], $estadoOc, $f_embarque, $f_eta, $f_recepcion, $dias_atrasado,$ESTADO,$nom_estado,$estilo_pmm,$estado_match));
                             }
                         }
@@ -147,10 +149,13 @@
                                 $f_eta = $val["FECHA_ETA"];
                                 $f_recepcion = $val["FECHA_RECEPCION"];
                                 $dias_atrasado = ($val["DIAS_ATRASO"]<> null ? ($val["DIAS_ATRASO"]) :"");
-                     $ESTADO= $val["ESTADO_C1"];
-                     $nom_estado= $val["CODESTADO"];
-                                array_push($dt2021, array($proforma, utf8_encode($val["PO_NUMBER"]), $estadoOc, $f_embarque, $f_eta, $f_recepcion, $dias_atrasado,$ESTADO,$nom_estado));
-                            }
+								$ESTADO= $val["ESTADO_C1"];
+								$nom_estado= $val["CODESTADO"];                            
+								$estilo_pmm = $val["ESTILO_PMM"];
+                                $estado_match = $val["ESTADO_MATCH"];
+                                array_push($dt2021, array($proforma, utf8_encode($val["PO_NUMBER"]), $estadoOc, $f_embarque, $f_eta, $f_recepcion, $dias_atrasado,$ESTADO,$nom_estado,$estilo_pmm,$estado_match));
+                            
+							}
                         }
                     }
 
