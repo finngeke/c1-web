@@ -53,7 +53,7 @@ $(function () {
     // Defrine URL Base, para Llamar a los JSON
     var crudServiceBaseUrl = "TelerikPlanCompra/";
 
-    // Seteo el DropdownList si no ha sido cargado antes
+    // Seteo el DropdownList de País, si no ha sido cargado antes
     kendo.spreadsheet.registerEditor("dropdownlistPais", function(){
         var context, dlg, model;
 
@@ -92,6 +92,73 @@ $(function () {
 
                 // Cache the dialog.
                 dlg = el.getKendoWindow();
+            }
+        }
+
+        function open() {
+            create();
+            dlg.open();
+            dlg.center();
+
+            // Si la celda ya tiene un valor, al momento de abrir el editor se carga la que contiene la celca
+            var value = context.range.value();
+            if (value != null) {
+                model.set("value", value);
+            }
+
+        }
+
+        return {
+            edit: function(options) {
+                context = options;
+                open();
+            },
+            icon: "k-icon k-i-arrow-60-down"
+        };
+
+    });
+
+    // Seteo el DropdownList de Formato, si no ha sido cargado antes
+    kendo.spreadsheet.registerEditor("dropdownlistFormato", function(){
+        var context, dlg, model;
+
+        function create() {
+            if (!dlg) {
+                model = kendo.observable({
+                    value: "#000000",
+                    ok: function() {
+                        //debugger;
+                        // This is the result when OK is clicked. Invoke the
+                        // callback with the value.
+                        context.callback(model.value);
+                        // console.log(model);
+                        dlg.close();
+                    },
+                    formatos: new kendo.data.DataSource({
+                        transport: {
+                            read: {
+                                url: crudServiceBaseUrl+"ListarFormato",
+                                dataType: "json"
+                            }
+                        }
+                    }),
+                    cancel: function() {
+                        dlg.close();
+                    }
+                });
+
+                var elFormato = $("<div data-visible='true' data-role='window' data-modal='true' data-resizable='true' data-title='Seleccione Formato '>" +
+                    "  <div data-role='dropdownlist' data-bind='value: value, source: formatos' data-text-field='NOMBRE_FORMATO' data-value-field='NOMBRE_FORMATO'></div>" +
+                    "  <div style='margin-top: 1em; text-align: right'>" +
+                    "    <button style='width: 5em' class='k-button' data-bind='click: ok'>OK</button>" +
+                    "    <button style='width: 5em' class='k-button' data-bind='click: cancel'>Cancelar</button>" +
+                    "  </div>" +
+                    "</div>");
+                kendo.bind(elFormato, model);
+
+
+                // Cache the dialog.
+                dlg = elFormato.getKendoWindow();
             }
         }
 
@@ -248,10 +315,15 @@ $(function () {
             // Una vez que se carga la función de poder editar, asigno la columnaal editor
             if (e.type === 'read') {
                 setTimeout(function() {
+
                     var spreadsheet = $('#spreadsheet').getKendoSpreadsheet();
                     var sheet = spreadsheet.activeSheet();
                     var columnBA = sheet.range('BA2:BA' + (e.response.length + 1));
                     columnBA.editor('dropdownlistPais');
+
+                    var columnAQ = sheet.range('AQ2:AQ' + (e.response.length + 1));
+                    columnAQ.editor('dropdownlistFormato');
+
                 });
             }
 
@@ -450,6 +522,7 @@ $(function () {
 
                 }
             }, 0);
+
         },
         transport: {
             read: onRead,

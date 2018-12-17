@@ -2545,8 +2545,8 @@ class PlanCompraClass extends \parametros
         foreach ($data as $va1) {
             array_push($array1
                 , array(
-                    "ID" => $va1[0]
-                , "NOMBRE_FORMATO" => $va1[1]
+                    "ID" => $va1[1]
+                , "NOMBRE_FORMATO" => $va1[0]
                 )
             );
         }
