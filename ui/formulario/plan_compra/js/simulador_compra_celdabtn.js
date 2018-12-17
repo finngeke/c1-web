@@ -564,10 +564,14 @@ $(function () {
         change: function (e) {
 
             var dataItem = e.sender.dataItem();
+
             alert(dataItem.CODIGO);
             alert(dataItem.DESCRIPCION);
-            console.log(dataItem);
-            $("#CBXTipoTienda").attr("disabled", false);
+
+            //console.log(dataItem);
+
+            //$("#CBXTipoTienda").attr("disabled", false);
+
         }
     }).data("kendoComboBox");
 
