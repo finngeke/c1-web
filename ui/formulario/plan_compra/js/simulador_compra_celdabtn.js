@@ -557,6 +557,9 @@ $(function () {
     $("#tienda_seleccionado").kendoListBox();
 
 
+    // Definimos CBX
+
+
 
     // ############################ FORMATOS ############################
 

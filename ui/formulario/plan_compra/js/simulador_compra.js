@@ -765,19 +765,19 @@ $(function () {
                 { type: "button",
                     text: "Detalle Error",
                     showText: "both",
-                    icon: "k-icon k-i-clock",
+                    icon: "k-icon k-i-preview",
                     click: POPUPDetalleError
                 },
                 { type: "button",
                     text: "Tienda",
                     showText: "both",
-                    icon: "k-icon k-i-clock",
+                    icon: "k-icon k-i-cart",
                     click: POPUPTienda
                 },
                 { type: "button",
                     text: "Formato",
                     showText: "both",
-                    icon: "k-icon k-i-clock",
+                    icon: "k-icon k-i-select-box",
                     click: POPUPFormato
                 }
             ],
