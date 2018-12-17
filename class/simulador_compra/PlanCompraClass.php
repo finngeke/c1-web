@@ -281,7 +281,7 @@ class PlanCompraClass extends \parametros
                         $estilo_pmm = $va1["ESTILO_PMM"];
                         $estado_match = $va1["ESTADO_MATCH"];
                         array_push($dt2021, array($proforma, $va1["PO_NUMBER"], $estadoOc, $f_embarque, $f_eta, $f_recepcion, $dias_atrasado,$ESTADO,$nom_estado,$estilo_pmm,$estado_match));}
-                
+
                 }
             }
 

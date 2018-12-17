@@ -1655,6 +1655,8 @@ $(function () {
         });
     // Fin del menú contextual
 
+
+    // POPUP Detalle Error
     function POPUPDetalleError(){
 
         // Actualiza Concurrencia
@@ -1676,6 +1678,7 @@ $(function () {
 
     }
 
+    // POPUP Tienda
     function POPUPTienda(){
 
         // Actualiza Concurrencia
@@ -1684,14 +1687,16 @@ $(function () {
         // Verificar Permisos
         if(localStorage.getItem("T0016")){
 
-alert("Dentro del Listar Tiendas 2");
+            // Oculto los elementos por si se abre por segunda vez
+            $("#poptienda_tipotienda").hide();
+            $("#poptienda_asignacion").hide();
 
             // Levantamos el popup
             var POPUPTienda = $("#POPUP_tienda");
             POPUPTienda.data("kendoWindow").open();
 
 
-
+            //dataSource_cbx_marca.read();
 
 
             /*dataSourceTiendaDisponible = new kendo.data.DataSource({
@@ -1761,6 +1766,7 @@ alert("Dentro del Listar Tiendas 2");
 
     }
 
+    // POPUP Formato
     function POPUPFormato(){
 
         // Actualiza Concurrencia
@@ -1818,6 +1824,11 @@ alert("Dentro del Listar Tiendas 2");
         setInterval(VerificaConexionUsuario, 80000); // 1':20'' Pregunta por Concurrencia
         VerificaConexionUsuario();
     });
+
+
+
+
+
 
 
     //pop ajuste de compra
