@@ -1,6 +1,6 @@
 $(function () {
 
-    // Actualiza Fecha de Concurrencia (Solo se agrega en este JS, porque desde fuera no se puede llamar)
+    // Actualiza Fecha de Concurrencia (Solo se agrega en este JS, ya que desde fuera no se puede llamar)
     function ActualizaConcurrencia() {
 
         var url_act_fecha_concurrencia = 'TelerikPlanCompra/ActualizaFechaConcurrencia';
@@ -22,7 +22,7 @@ $(function () {
 
     }
 
-    // Despliega Reloj de Cuenta Atrás (Solo se agrega en este JS, porque desde fuera no se puede llamar)
+    // Despliega Reloj de Cuenta Atrás (Solo se agrega en este JS, ya que desde fuera no se puede llamar)
     function DespliegaCuentaAtras() {
 
         var counter = 59;
@@ -149,6 +149,73 @@ $(function () {
 
                 var elFormato = $("<div data-visible='true' data-role='window' data-modal='true' data-resizable='true' data-title='Seleccione Formato '>" +
                     "  <div data-role='dropdownlist' data-bind='value: value, source: formatos' data-text-field='NOMBRE_FORMATO' data-value-field='NOMBRE_FORMATO'></div>" +
+                    "  <div style='margin-top: 1em; text-align: right'>" +
+                    "    <button style='width: 5em' class='k-button' data-bind='click: ok'>OK</button>" +
+                    "    <button style='width: 5em' class='k-button' data-bind='click: cancel'>Cancelar</button>" +
+                    "  </div>" +
+                    "</div>");
+                kendo.bind(elFormato, model);
+
+
+                // Cache the dialog.
+                dlg = elFormato.getKendoWindow();
+            }
+        }
+
+        function open() {
+            create();
+            dlg.open();
+            dlg.center();
+
+            // Si la celda ya tiene un valor, al momento de abrir el editor se carga la que contiene la celca
+            var value = context.range.value();
+            if (value != null) {
+                model.set("value", value);
+            }
+
+        }
+
+        return {
+            edit: function(options) {
+                context = options;
+                open();
+            },
+            icon: "k-icon k-i-arrow-60-down"
+        };
+
+    });
+
+    // Seteo el DropdownList de Proveedores, si no ha sido cargado antes
+    kendo.spreadsheet.registerEditor("dropdownlistProveedor", function(){
+        var context, dlg, model;
+
+        function create() {
+            if (!dlg) {
+                model = kendo.observable({
+                    value: "#000000",
+                    ok: function() {
+                        //debugger;
+                        // This is the result when OK is clicked. Invoke the
+                        // callback with the value.
+                        context.callback(model.value);
+                        // console.log(model);
+                        dlg.close();
+                    },
+                    proveedores: new kendo.data.DataSource({
+                        transport: {
+                            read: {
+                                url: crudServiceBaseUrl+"ListarProveedor",
+                                dataType: "json"
+                            }
+                        }
+                    }),
+                    cancel: function() {
+                        dlg.close();
+                    }
+                });
+
+                var elFormato = $("<div data-visible='true' data-role='window' data-modal='true' data-resizable='true' data-title='Seleccione Proveedor '>" +
+                    "  <div data-role='dropdownlist' data-bind='value: value, source: proveedores' data-text-field='NOMBRE_PROVEEDOR' data-value-field='NOMBRE_PROVEEDOR'></div>" +
                     "  <div style='margin-top: 1em; text-align: right'>" +
                     "    <button style='width: 5em' class='k-button' data-bind='click: ok'>OK</button>" +
                     "    <button style='width: 5em' class='k-button' data-bind='click: cancel'>Cancelar</button>" +
@@ -316,13 +383,19 @@ $(function () {
             if (e.type === 'read') {
                 setTimeout(function() {
 
+                    // Asigno el CBX de País
                     var spreadsheet = $('#spreadsheet').getKendoSpreadsheet();
                     var sheet = spreadsheet.activeSheet();
                     var columnBA = sheet.range('BA2:BA' + (e.response.length + 1));
                     columnBA.editor('dropdownlistPais');
 
+                    // Asigno el CBX de Formato
                     var columnAQ = sheet.range('AQ2:AQ' + (e.response.length + 1));
                     columnAQ.editor('dropdownlistFormato');
+
+                    // Asigno el CBX de Formato
+                    var columnCA = sheet.range('CA2:CA' + (e.response.length + 1));
+                    columnCA.editor('dropdownlistProveedor');
 
                 });
             }

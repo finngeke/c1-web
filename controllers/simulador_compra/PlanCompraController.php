@@ -302,6 +302,12 @@ if($ESTADO_C1!=24){
         echo json_encode(\simulador_compra\PlanCompraClass::ListarFormato($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO')));
     }
 
+    // Listar Proveedores Grilla Editar
+    public function ListarProveedor($f3)
+    {
+        echo json_encode(\simulador_compra\PlanCompraClass::ListarProveedor($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO')));
+    }
+
 
     // Listar Ventana Grilla Editar
     public function ListarVentana($f3)

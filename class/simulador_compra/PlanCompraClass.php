@@ -2557,6 +2557,32 @@ class PlanCompraClass extends \parametros
 
     }
 
+    // Busca Proveedor Grilla Editar
+    public static function ListarProveedor($temporada, $depto)
+    {
+
+        $sql = "SELECT COD_PROVEEDOR,NOM_PROVEEDOR FROM plc_proveedores_pmm";
+
+        $data = \database::getInstancia()->getFilas($sql);
+        // return $data;
+
+        // Transformo a array asociativo
+        $array1 = [];
+        foreach ($data as $va1) {
+            array_push($array1
+                , array(
+                    "ID" => $va1[0]
+                , "NOMBRE_PROVEEDOR" => $va1[1]
+                )
+            );
+        }
+
+        return $array1;
+
+
+
+    }
+
 
     // Busca Ventana Grilla Editar
     public static function ListarVentana($temporada, $depto)
