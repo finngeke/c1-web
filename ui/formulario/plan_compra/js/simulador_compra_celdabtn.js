@@ -73,6 +73,548 @@ $(function () {
 
     });
 
+    // Le da la estructura a la ventana POPUP
+    var ventana_carga_pi = $("#POPUP_carga_archivo_pi");
+    ventana_carga_pi.kendoWindow({
+        width: "360px",
+        title: "Cargar Archivo PI",
+        visible: false,
+        actions: [
+            //"Pin",
+            "Minimize",
+            "Maximize",
+            "Close"
+        ]/*,
+        close: onClose*/
+    }).data("kendoWindow").center();
+
+
+
+    // ############################ MATCH ############################
+
+    function cerrarPopUpMATCH(){
+
+        //location.reload();
+
+        // Recargo el DATASOURCE
+        var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
+        var sheet = spreadsheet.activeSheet();
+        sheet.dataSource.read();
+
+    }
+
+
+    // Le da la estructura a la ventana POPUP
+    var ventana_match = $("#POPUP_match");
+    ventana_match.kendoWindow({
+        width: "750px",
+        height: "350px",
+        title: "Match",
+        visible: false,
+        actions: [
+            //"Pin",
+            "Minimize",
+            "Maximize",
+            "Close"
+        ]/*,
+        close: cerrarPopUpMATCH*/
+    }).data("kendoWindow").center();
+
+
+    // Le da la estructura a la grilla pmm
+    $("#grid_match_pmm").kendoGrid({
+        schema: {
+            model: {
+                fields: {
+                    ID: {type: "number"},
+                    PI: {type: "string"},
+                    USUARIO: {type: "string"},
+                    ESTADO: {type: "string"}
+                }
+            }
+        },
+        height: 300,
+        sortable: true
+    });
+
+
+    // Le da la estructura a la grilla plan
+    $("#grid_match_plan").kendoGrid({
+        schema: {
+            model: {
+                fields: {
+                    FECHA: {type: "string"},
+                    HORA: {type: "string"},
+                    USUARIO: {type: "string"},
+                    ESTADO: {type: "string"}
+                }
+            }
+        },
+        height: 300,
+        sortable: true
+    });
+
+
+
+    // ############################ CAMBIO DE ESTADO ############################
+
+    function cerrarPopUpCambioEstado(){
+
+        // location.reload();
+
+        var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
+        var sheet = spreadsheet.activeSheet();
+        sheet.dataSource.read();
+
+    }
+
+
+    // Le da la estructura a la ventana POPUP
+    var ventana_cambio_estado = $("#POPUP_cambio_estado");
+    ventana_cambio_estado.kendoWindow({
+        width: "550px",
+        title: "Cambio de Estado",
+        visible: false,
+        actions: [
+            //"Pin",
+            "Minimize",
+            "Maximize",
+            "Close"
+        ],
+        close: cerrarPopUpCambioEstado
+    }).data("kendoWindow").center();
+
+
+    // Revisamos el cambio de selección en el CBX
+    function verificaCambioEstadoCBX(){
+
+        var cbxCambioEstado = $("#NuevoEstadoPopUp").val();
+
+        $("#resumenErrorCorreccionPILI").hide();
+
+        // <option value="0">Crear Modificación</option>
+        // <option value="1">Solicitud Corrección PI</option>
+        // <option value="2">Eliminar Opción</option>
+
+        if(cbxCambioEstado==1){
+            $("#comentSolicitaCorreccionPILI").css("display","");
+        }else{
+            $("#comentSolicitaCorreccionPILI").css("display","none");
+        }
+
+    }
+
+
+    // Estructura CXB
+    $("#NuevoEstadoPopUp").kendoDropDownList({
+        change : verificaCambioEstadoCBX
+    });
+
+
+    // Estructura Campo Texto
+    $("#comentSolicitaCorreccionPI").kendoEditor({
+        tools: []
+    });
+
+
+    $("#gridErrorCambioEstado").kendoGrid({
+        dataSource: {
+            schema: {
+                model: {
+                    fields: {
+                        DESCRIPCION: { type: "string" },
+                        COLOR: { type: "string" },
+                        MOTIVO: { type: "string" }
+                    }
+                }
+            },
+            pageSize: 20
+        },
+        height: 250,
+        scrollable: true,
+        sortable: true,
+        /*pageable: {
+            input: true,
+            numeric: false
+        },*/
+        columns: [
+            { field: "DESCRIPCION" },
+            { field: "COLOR" },
+            { field: "MOTIVO" }
+        ]
+    });
+
+
+    // BTN que Genera el Cambio de Estado
+    $("#btn_genera_cambio_estado").on('click', function () {
+
+        var popupNotification = $("#popupNotification").kendoNotification().data("kendoNotification");
+
+        var permisoCBX = $("#NuevoEstadoPopUp").val();
+
+        /*
+        <option value="0">Crear Modificación</option>
+        <option value="1">Solicitud Corrección PI</option>
+        <option value="2">Eliminar Opción</option>
+         */
+
+        var permisoCBXmodificacion = 0;
+        var permisoCBXcorreccion = 0;
+        var permisoCBXeliminar = 0;
+
+        // [T] Estado - Crear Modificación
+        if(localStorage.getItem("T0006")){
+            permisoCBXmodificacion = 1;
+        }
+
+        // [T] Estado - Solicitud Corrección PI
+        if(localStorage.getItem("T0007")){
+            permisoCBXcorreccion = 1;
+        }
+
+        // [T] Estado - Eliminar Opción
+        if(localStorage.getItem("T0008")){
+            permisoCBXeliminar = 1;
+        }
+
+        // Verifica si los Permisos Cumplen
+        if( (permisoCBX==0) && (permisoCBXmodificacion==0) ){
+            popupNotification.getNotifications().parent().remove();
+            popupNotification.show(" No tiene permisos para realizar esta acción.", "error");
+            return false;
+        }
+        if( (permisoCBX==1) && (permisoCBXcorreccion==0) ){
+            popupNotification.getNotifications().parent().remove();
+            popupNotification.show(" No tiene permisos para realizar esta acción.", "error");
+            return false;
+        }
+        if( (permisoCBX==2) && (permisoCBXeliminar==0) ){
+            popupNotification.getNotifications().parent().remove();
+            popupNotification.show(" No tiene permisos para realizar esta acción.", "error");
+            return false;
+        }
+
+
+
+        var respuesta = confirm("¿Quiere realizar los cambios?");
+
+        if (respuesta == true) {
+
+            // Ocultar el BTN
+            $("#btn_genera_cambio_estado").hide();
+            $("#resumenErrorCorreccionPILI").hide();
+
+
+            var url_cambio_estado = 'TelerikPlanCompra/ModificaEstadoDinamico';
+            var url_cambio_estado_coreccion = 'TelerikPlanCompra/ModificaEstadoDinamicoCorreccion';
+
+            // Seteo Variables
+            var ID_COLOR3 = "";
+            var PROFORMA = "";
+            var OC = "";
+            var ESTADOC1 = "";
+            var DESCRIPCION = "";
+            var COLOR = "";
+
+            // Obterer las celdas seleccionadas
+            var spreadsheet_id_color3 = $("#spreadsheet").data("kendoSpreadsheet");
+            var sheet = spreadsheet_id_color3.activeSheet();
+            var range = sheet.selection();
+
+            // Traigo el Valor del CBX
+            var cbxCambioEstadoSeleccionado = $("#NuevoEstadoPopUp").val();
+            // Traigo el Valor del Comentario
+            var comentarioEstadoSeleccionado = $("#comentSolicitaCorreccionPI").val();
+
+            // Var Arreglo Errores
+            var arregloErrores = [];
+
+            range.forEachCell(function (row, column, value) {
+
+                var fila_id = row + 1;
+                var range_color3 = sheet.range("A" + fila_id);
+                ID_COLOR3 = range_color3.values();
+                var range_proforma = sheet.range("CG" + fila_id);
+                PROFORMA = range_proforma.values();
+                var range_oc = sheet.range("CK" + fila_id);
+                OC = range_oc.values();
+                var range_estadoc1 = sheet.range("CS" + fila_id);
+                ESTADOC1 = range_estadoc1.values();
+                var range_descripcion = sheet.range("J" + fila_id);
+                DESCRIPCION = range_descripcion.values();
+                var range_color = sheet.range("AB" + fila_id);
+                COLOR = range_color.values();
+
+                // Crear Modificación
+                if (cbxCambioEstadoSeleccionado == 0) {
+
+                    // estado_c1 != 24 && Proforma
+                    if ((ESTADOC1 != 24) && (PROFORMA.length > 0)) {
+
+                        $.ajax({
+                            //type: "POST",
+                            url: url_cambio_estado,
+                            data: {
+                                ID_COLOR3: kendo.parseInt(ID_COLOR3),
+                                ESTADO_INSERT: kendo.parseInt(0),
+                                PROFORMA: String(PROFORMA),
+                                ESTADO_UPDATE: kendo.parseInt(3)
+                            },
+                            // contentType: "application/json",
+                            dataType: "json"
+                        });
+
+
+                    } else {
+
+                        // Descripción - Color
+                        // Agregar al arreglo de errores
+                        arregloErrores.push({
+                            "DESCRIPCION": String(DESCRIPCION),
+                            "COLOR": String(COLOR),
+                            "MOTIVO": "Estado Eliminado o Sin Proforma"
+                        });
+
+                    }
+
+
+                    // Solicitud Corrección PI
+                } else if (cbxCambioEstadoSeleccionado == 1) {
+
+                    // estado_c1 == 18 (se pasa de 18 a 22)
+                    if (ESTADOC1 == 22) {
+
+                        $.ajax({
+                            //type: "POST",
+                            url: url_cambio_estado_coreccion,
+                            data: {
+                                ID_COLOR3: kendo.parseInt(ID_COLOR3),
+                                ESTADO_INSERT: kendo.parseInt(23),
+                                PROFORMA: String(PROFORMA),
+                                ESTADO_UPDATE: kendo.parseInt(4),
+                                COMENTARIO: String(comentarioEstadoSeleccionado)
+                            },
+                            // contentType: "application/json",
+                            dataType: "json"
+                        });
+
+                    } else {
+
+                        // Descripción - Color
+                        // Agregar al arreglo de errores
+                        arregloErrores.push({
+                            "DESCRIPCION": String(DESCRIPCION),
+                            "COLOR": String(COLOR),
+                            "MOTIVO": "Estado distinto a: Pendiente Generacion OC"
+                        });
+
+                    }
+
+
+                    // Eliminar Opción
+                } else if (cbxCambioEstadoSeleccionado == 2) {
+
+                    // estado_c1 != 21 && Proforma
+                    if ((ESTADOC1 != 21) && (PROFORMA.length > 0)) {
+
+                        $.ajax({
+                            //type: "POST",
+                            url: url_cambio_estado,
+                            data: {
+                                ID_COLOR3: kendo.parseInt(ID_COLOR3),
+                                ESTADO_INSERT: kendo.parseInt(24),
+                                PROFORMA: String(PROFORMA),
+                                ESTADO_UPDATE: kendo.parseInt(4)
+                            },
+                            // contentType: "application/json",
+                            dataType: "json"
+                        });
+
+                    } else {
+
+                        // Descripción - Color
+                        // Agregar al arreglo de errores
+                        arregloErrores.push({
+                            "DESCRIPCION": String(DESCRIPCION),
+                            "COLOR": String(COLOR),
+                            "MOTIVO": "Estado Aprobado o Sin Proforma"
+                        });
+
+                    }
+
+                }
+
+
+            });
+
+
+            // Desplegar Grilla con Info
+            //console.log(arregloErrores);
+            if (arregloErrores.length > 0) {
+
+                $("#resumenErrorCorreccionPILI").css("display", "");
+
+                var gridtest = $("#gridErrorCambioEstado").data("kendoGrid");
+                var sel = gridtest.select();
+                var sel_idx = sel.index();
+                var item = gridtest.dataItem(sel);              // Get the item
+                var idx = gridtest.dataSource.indexOf(item);    // Get the index in the DataSource (not in current page of the grid)
+                arregloErrores.forEach(function (err, index) {
+                    gridtest.dataSource.insert(idx + 1, {
+                        DESCRIPCION: err.DESCRIPCION,
+                        COLOR: err.COLOR,
+                        MOTIVO: err.MOTIVO
+                    });
+                });
+            } else {
+                $("#resumenErrorCorreccionPILI").css("display", "none");
+            }
+
+            // Al Finalizar los cambios de estado
+            popupNotification.getNotifications().parent().remove();
+            popupNotification.show(" Favor de Revisar los Estados.", "info");
+
+            // Recargo el DATASOURCE
+            var spreadsheet_reload = $("#spreadsheet").data("kendoSpreadsheet");
+            var sheet_reload = spreadsheet_reload.activeSheet();
+            sheet_reload.dataSource.read();
+
+
+            // Si el usuario no acepta realizar cambios
+        } else {
+            popupNotification.getNotifications().parent().remove();
+            popupNotification.show(" No se han realizado Cambios de Estado.", "info");
+        }
+
+
+
+    });
+
+
+
+    // ############################ CIERRE DE SESSIÓN ############################
+
+    // Le da la estructura a la ventana POPUP Cierre de Session
+    var ventana_cierre_session = $("#POPUP_cierra_session");
+    ventana_cierre_session.kendoWindow({
+        width: "250px",
+        height: "90px",
+        title: "Saliendo del Plan de Compra...",
+        visible: false,
+        actions: [
+            /*"Minimize",
+            "Maximize",
+            "Close"*/
+        ]/*,
+                close: onClose*/
+    }).data("kendoWindow").center();
+
+
+
+    // ############################ DETALLE ERROR ############################
+
+    // Le da la estructura a la ventana POPUP
+    var ventana_detalle_error = $("#POPUP_detalle_error");
+    ventana_detalle_error.kendoWindow({
+        width: "500px",
+        title: "Motivo - Solicitud de Modificación",
+        visible: false,
+        actions: [
+            //"Pin",
+            "Minimize",
+            "Maximize",
+            "Close"
+        ]/*,
+                close: onClose*/
+    }).data("kendoWindow").center();
+
+
+
+    // ############################ TIENDAS ############################
+
+    // Le da la estructura a la ventana POPUP
+    var ventana_tienda = $("#POPUP_tienda");
+    ventana_tienda.kendoWindow({
+        width: "360px",
+        title: "Mantenedor Tipo Tienda",
+        visible: false,
+        actions: [
+            //"Pin",
+            "Minimize",
+            "Maximize",
+            "Close"
+        ]/*,
+        close: onClose*/
+    }).data("kendoWindow").center();
+
+    $("#tienda_disponible").kendoListBox({
+        connectWith: "tienda_seleccionado",
+        toolbar: {
+            tools: ["transferTo", "transferFrom", "transferAllTo", "transferAllFrom"]
+        }
+    });
+
+    $("#tienda_seleccionado").kendoListBox();
+
+
+
+    // ############################ FORMATOS ############################
+
+    // Le da la estructura a la ventana POPUP
+    var ventana_formato = $("#POPUP_formato");
+    ventana_formato.kendoWindow({
+        width: "500px",
+        height: "360px",
+        title: "Formatos",
+        //content: "../ui/formulario/plan_compra/telerik/POPUPFormato.php",
+        visible: false/*,
+        close: onClose*/
+    }).data("kendoWindow").center();
+
+
+
+
+
+
+
+
+
+
+    // ############################ HISTORIAL ############################
+
+    // Le da la estructura a la ventana POPUP
+    var ventana_historial = $("#POPUP_historial");
+    ventana_historial.kendoWindow({
+        width: "550px",
+        height: "320px",
+        title: "Historial",
+        visible: false,
+        actions: [
+            //"Pin",
+            "Minimize",
+            "Maximize",
+            "Close"
+        ]/*,
+                close: onClose*/
+    }).data("kendoWindow").center();
+
+    // Le da la estructura a la grilla
+    $("#grid_popup_historial").kendoGrid({
+        schema: {
+            model: {
+                fields: {
+                    FECHA: {type: "string"},
+                    HORA: {type: "string"},
+                    USUARIO: {type: "string"},
+                    ESTADO: {type: "string"}
+                }
+            }
+        },
+        height: 300,
+        sortable: true
+    });
+
+
 
     // ############################ Importar Achivos ############################
     // Ventana Pop
@@ -374,7 +916,6 @@ $(function () {
         });
     }
 
-
     $("#editor").kendoEditor({
         tools: [
             "bold",
@@ -383,7 +924,6 @@ $(function () {
             "foreColor"
         ]
     });
-
 
     // Le da la estructura a la ventana POPUP
     var ventana_import= $("#POPUP_Importar_");
@@ -400,59 +940,6 @@ $(function () {
                 close: onClose*/
     }).data("kendoWindow").center();
 
-
-
-
-
-    // Le da la estructura a la ventana POPUP
-    var ventana_carga_pi = $("#POPUP_carga_archivo_pi");
-    ventana_carga_pi.kendoWindow({
-        width: "360px",
-        title: "Cargar Archivo PI",
-        visible: false,
-        actions: [
-            //"Pin",
-            "Minimize",
-            "Maximize",
-            "Close"
-        ]/*,
-        close: onClose*/
-    }).data("kendoWindow").center();
-
-
-    // ############################ HISTORIAL ############################
-
-    // Le da la estructura a la ventana POPUP
-    var ventana_historial = $("#POPUP_historial");
-    ventana_historial.kendoWindow({
-        width: "550px",
-        height: "320px",
-        title: "Historial",
-        visible: false,
-        actions: [
-            //"Pin",
-            "Minimize",
-            "Maximize",
-            "Close"
-        ]/*,
-                close: onClose*/
-    }).data("kendoWindow").center();
-
-    // Le da la estructura a la grilla
-    $("#grid_popup_historial").kendoGrid({
-        schema: {
-            model: {
-                fields: {
-                    FECHA: {type: "string"},
-                    HORA: {type: "string"},
-                    USUARIO: {type: "string"},
-                    ESTADO: {type: "string"}
-                }
-            }
-        },
-        height: 300,
-        sortable: true
-    });
 
 
     // ############################ AJUSTE COMPRA ############################
@@ -477,6 +964,7 @@ $(function () {
         height: 164,
         sortable: true
     });
+
 
 
     // ############################ AJUSTE N CAJAS ############################
@@ -507,473 +995,6 @@ $(function () {
         height: 220,
         sortable: true
     });
-
-    // ############################ DETALLE ERROR ############################
-
-    // Le da la estructura a la ventana POPUP
-    var ventana_detalle_error = $("#POPUP_detalle_error");
-    ventana_detalle_error.kendoWindow({
-        width: "500px",
-        title: "Motivo - Solicitud de Modificación",
-        visible: false,
-        actions: [
-            //"Pin",
-            "Minimize",
-            "Maximize",
-            "Close"
-        ]/*,
-                close: onClose*/
-    }).data("kendoWindow").center();
-
-
-    // ############################ MATCH ############################
-
-    function cerrarPopUpMATCH(){
-
-        //location.reload();
-
-        // Recargo el DATASOURCE
-        var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
-        var sheet = spreadsheet.activeSheet();
-        sheet.dataSource.read();
-
-    }
-
-
-    // Le da la estructura a la ventana POPUP
-    var ventana_match = $("#POPUP_match");
-    ventana_match.kendoWindow({
-        width: "750px",
-        height: "350px",
-        title: "Match",
-        visible: false,
-        actions: [
-            //"Pin",
-            "Minimize",
-            "Maximize",
-            "Close"
-        ]/*,
-        close: cerrarPopUpMATCH*/
-    }).data("kendoWindow").center();
-
-
-    // Le da la estructura a la grilla pmm
-    $("#grid_match_pmm").kendoGrid({
-        schema: {
-            model: {
-                fields: {
-                    ID: {type: "number"},
-                    PI: {type: "string"},
-                    USUARIO: {type: "string"},
-                    ESTADO: {type: "string"}
-                }
-            }
-        },
-        height: 300,
-        sortable: true
-    });
-
-
-    // Le da la estructura a la grilla plan
-    $("#grid_match_plan").kendoGrid({
-        schema: {
-            model: {
-                fields: {
-                    FECHA: {type: "string"},
-                    HORA: {type: "string"},
-                    USUARIO: {type: "string"},
-                    ESTADO: {type: "string"}
-                }
-            }
-        },
-        height: 300,
-        sortable: true
-    });
-
-
-    // ############################ CAMBIO DE ESTADO ############################
-
-    function cerrarPopUpCambioEstado(){
-
-        // location.reload();
-
-        var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
-        var sheet = spreadsheet.activeSheet();
-        sheet.dataSource.read();
-
-    }
-
-
-    // Le da la estructura a la ventana POPUP
-    var ventana_cambio_estado = $("#POPUP_cambio_estado");
-    ventana_cambio_estado.kendoWindow({
-        width: "550px",
-        title: "Cambio de Estado",
-        visible: false,
-        actions: [
-            //"Pin",
-            "Minimize",
-            "Maximize",
-            "Close"
-        ],
-        close: cerrarPopUpCambioEstado
-    }).data("kendoWindow").center();
-
-
-    // Revisamos el cambio de selección en el CBX
-    function verificaCambioEstadoCBX(){
-
-        var cbxCambioEstado = $("#NuevoEstadoPopUp").val();
-
-        $("#resumenErrorCorreccionPILI").hide();
-
-        // <option value="0">Crear Modificación</option>
-        // <option value="1">Solicitud Corrección PI</option>
-        // <option value="2">Eliminar Opción</option>
-
-        if(cbxCambioEstado==1){
-            $("#comentSolicitaCorreccionPILI").css("display","");
-        }else{
-            $("#comentSolicitaCorreccionPILI").css("display","none");
-        }
-
-    }
-
-
-    // Estructura CXB
-    $("#NuevoEstadoPopUp").kendoDropDownList({
-        change : verificaCambioEstadoCBX
-    });
-
-
-    // Estructura Campo Texto
-    $("#comentSolicitaCorreccionPI").kendoEditor({
-        tools: []
-    });
-
-
-    $("#gridErrorCambioEstado").kendoGrid({
-        dataSource: {
-            schema: {
-                model: {
-                    fields: {
-                        DESCRIPCION: { type: "string" },
-                        COLOR: { type: "string" },
-                        MOTIVO: { type: "string" }
-                    }
-                }
-            },
-            pageSize: 20
-        },
-        height: 250,
-        scrollable: true,
-        sortable: true,
-        /*pageable: {
-            input: true,
-            numeric: false
-        },*/
-        columns: [
-            { field: "DESCRIPCION" },
-            { field: "COLOR" },
-            { field: "MOTIVO" }
-        ]
-    });
-
-
-    // BTN que Genera el Cambio de Estado
-    $("#btn_genera_cambio_estado").on('click', function () {
-
-        var popupNotification = $("#popupNotification").kendoNotification().data("kendoNotification");
-
-        var permisoCBX = $("#NuevoEstadoPopUp").val();
-
-        /*
-        <option value="0">Crear Modificación</option>
-        <option value="1">Solicitud Corrección PI</option>
-        <option value="2">Eliminar Opción</option>
-         */
-
-        var permisoCBXmodificacion = 0;
-        var permisoCBXcorreccion = 0;
-        var permisoCBXeliminar = 0;
-
-        // [T] Estado - Crear Modificación
-        if(localStorage.getItem("T0006")){
-            permisoCBXmodificacion = 1;
-        }
-
-        // [T] Estado - Solicitud Corrección PI
-        if(localStorage.getItem("T0007")){
-            permisoCBXcorreccion = 1;
-        }
-
-        // [T] Estado - Eliminar Opción
-        if(localStorage.getItem("T0008")){
-            permisoCBXeliminar = 1;
-        }
-
-        // Verifica si los Permisos Cumplen
-        if( (permisoCBX==0) && (permisoCBXmodificacion==0) ){
-            popupNotification.getNotifications().parent().remove();
-            popupNotification.show(" No tiene permisos para realizar esta acción.", "error");
-            return false;
-        }
-        if( (permisoCBX==1) && (permisoCBXcorreccion==0) ){
-            popupNotification.getNotifications().parent().remove();
-            popupNotification.show(" No tiene permisos para realizar esta acción.", "error");
-            return false;
-        }
-        if( (permisoCBX==2) && (permisoCBXeliminar==0) ){
-            popupNotification.getNotifications().parent().remove();
-            popupNotification.show(" No tiene permisos para realizar esta acción.", "error");
-            return false;
-        }
-
-
-
-         var respuesta = confirm("¿Quiere realizar los cambios?");
-
-         if (respuesta == true) {
-
-                // Ocultar el BTN
-                $("#btn_genera_cambio_estado").hide();
-                $("#resumenErrorCorreccionPILI").hide();
-
-
-                var url_cambio_estado = 'TelerikPlanCompra/ModificaEstadoDinamico';
-                var url_cambio_estado_coreccion = 'TelerikPlanCompra/ModificaEstadoDinamicoCorreccion';
-
-                // Seteo Variables
-                var ID_COLOR3 = "";
-                var PROFORMA = "";
-                var OC = "";
-                var ESTADOC1 = "";
-                var DESCRIPCION = "";
-                var COLOR = "";
-
-                // Obterer las celdas seleccionadas
-                var spreadsheet_id_color3 = $("#spreadsheet").data("kendoSpreadsheet");
-                var sheet = spreadsheet_id_color3.activeSheet();
-                var range = sheet.selection();
-
-                // Traigo el Valor del CBX
-                var cbxCambioEstadoSeleccionado = $("#NuevoEstadoPopUp").val();
-                // Traigo el Valor del Comentario
-                var comentarioEstadoSeleccionado = $("#comentSolicitaCorreccionPI").val();
-
-                // Var Arreglo Errores
-                var arregloErrores = [];
-
-                range.forEachCell(function (row, column, value) {
-
-                    var fila_id = row + 1;
-                    var range_color3 = sheet.range("A" + fila_id);
-                    ID_COLOR3 = range_color3.values();
-                    var range_proforma = sheet.range("CG" + fila_id);
-                    PROFORMA = range_proforma.values();
-                    var range_oc = sheet.range("CK" + fila_id);
-                    OC = range_oc.values();
-                    var range_estadoc1 = sheet.range("CS" + fila_id);
-                    ESTADOC1 = range_estadoc1.values();
-                    var range_descripcion = sheet.range("J" + fila_id);
-                    DESCRIPCION = range_descripcion.values();
-                    var range_color = sheet.range("AB" + fila_id);
-                    COLOR = range_color.values();
-
-                    // Crear Modificación
-                    if (cbxCambioEstadoSeleccionado == 0) {
-
-                        // estado_c1 != 24 && Proforma
-                        if ((ESTADOC1 != 24) && (PROFORMA.length > 0)) {
-
-                            $.ajax({
-                                //type: "POST",
-                                url: url_cambio_estado,
-                                data: {
-                                    ID_COLOR3: kendo.parseInt(ID_COLOR3),
-                                    ESTADO_INSERT: kendo.parseInt(0),
-                                    PROFORMA: String(PROFORMA),
-                                    ESTADO_UPDATE: kendo.parseInt(3)
-                                },
-                                // contentType: "application/json",
-                                dataType: "json"
-                            });
-
-
-                        } else {
-
-                            // Descripción - Color
-                            // Agregar al arreglo de errores
-                            arregloErrores.push({
-                                "DESCRIPCION": String(DESCRIPCION),
-                                "COLOR": String(COLOR),
-                                "MOTIVO": "Estado Eliminado o Sin Proforma"
-                            });
-
-                        }
-
-
-                        // Solicitud Corrección PI
-                    } else if (cbxCambioEstadoSeleccionado == 1) {
-
-                        // estado_c1 == 18 (se pasa de 18 a 22)
-                        if (ESTADOC1 == 22) {
-
-                            $.ajax({
-                                //type: "POST",
-                                url: url_cambio_estado_coreccion,
-                                data: {
-                                    ID_COLOR3: kendo.parseInt(ID_COLOR3),
-                                    ESTADO_INSERT: kendo.parseInt(23),
-                                    PROFORMA: String(PROFORMA),
-                                    ESTADO_UPDATE: kendo.parseInt(4),
-                                    COMENTARIO: String(comentarioEstadoSeleccionado)
-                                },
-                                // contentType: "application/json",
-                                dataType: "json"
-                            });
-
-                        } else {
-
-                            // Descripción - Color
-                            // Agregar al arreglo de errores
-                            arregloErrores.push({
-                                "DESCRIPCION": String(DESCRIPCION),
-                                "COLOR": String(COLOR),
-                                "MOTIVO": "Estado distinto a: Pendiente Generacion OC"
-                            });
-
-                        }
-
-
-                        // Eliminar Opción
-                    } else if (cbxCambioEstadoSeleccionado == 2) {
-
-                        // estado_c1 != 21 && Proforma
-                        if ((ESTADOC1 != 21) && (PROFORMA.length > 0)) {
-
-                            $.ajax({
-                                //type: "POST",
-                                url: url_cambio_estado,
-                                data: {
-                                    ID_COLOR3: kendo.parseInt(ID_COLOR3),
-                                    ESTADO_INSERT: kendo.parseInt(24),
-                                    PROFORMA: String(PROFORMA),
-                                    ESTADO_UPDATE: kendo.parseInt(4)
-                                },
-                                // contentType: "application/json",
-                                dataType: "json"
-                            });
-
-                        } else {
-
-                            // Descripción - Color
-                            // Agregar al arreglo de errores
-                            arregloErrores.push({
-                                "DESCRIPCION": String(DESCRIPCION),
-                                "COLOR": String(COLOR),
-                                "MOTIVO": "Estado Aprobado o Sin Proforma"
-                            });
-
-                        }
-
-                    }
-
-
-                });
-
-
-                // Desplegar Grilla con Info
-                //console.log(arregloErrores);
-                if (arregloErrores.length > 0) {
-
-                    $("#resumenErrorCorreccionPILI").css("display", "");
-
-                    var gridtest = $("#gridErrorCambioEstado").data("kendoGrid");
-                    var sel = gridtest.select();
-                    var sel_idx = sel.index();
-                    var item = gridtest.dataItem(sel);              // Get the item
-                    var idx = gridtest.dataSource.indexOf(item);    // Get the index in the DataSource (not in current page of the grid)
-                    arregloErrores.forEach(function (err, index) {
-                        gridtest.dataSource.insert(idx + 1, {
-                            DESCRIPCION: err.DESCRIPCION,
-                            COLOR: err.COLOR,
-                            MOTIVO: err.MOTIVO
-                        });
-                    });
-                } else {
-                    $("#resumenErrorCorreccionPILI").css("display", "none");
-                }
-
-                // Al Finalizar los cambios de estado
-                popupNotification.getNotifications().parent().remove();
-                popupNotification.show(" Favor de Revisar los Estados.", "info");
-
-                // Recargo el DATASOURCE
-                var spreadsheet_reload = $("#spreadsheet").data("kendoSpreadsheet");
-                var sheet_reload = spreadsheet_reload.activeSheet();
-                sheet_reload.dataSource.read();
-
-
-                // Si el usuario no acepta realizar cambios
-            } else {
-            popupNotification.getNotifications().parent().remove();
-            popupNotification.show(" No se han realizado Cambios de Estado.", "info");
-         }
-
-
-
-    });
-
-
-
-    // ############################ CIERRE DE SESSIÓN ############################
-
-    // Le da la estructura a la ventana POPUP Cierre de Session
-    var ventana_cierre_session = $("#POPUP_cierra_session");
-    ventana_cierre_session.kendoWindow({
-        width: "250px",
-        height: "90px",
-        title: "Saliendo del Plan de Compra...",
-        visible: false,
-        actions: [
-            /*"Minimize",
-            "Maximize",
-            "Close"*/
-        ]/*,
-                close: onClose*/
-    }).data("kendoWindow").center();
-
-
-    // ############################ TIENDAS ############################
-
-    // Le da la estructura a la ventana POPUP
-    var ventana_tienda = $("#POPUP_tienda");
-    ventana_tienda.kendoWindow({
-        width: "500px",
-        height: "360px",
-        title: "Tiendas",
-        content: "../ui/formulario/plan_compra/telerik/POPUPTienda.php",
-        visible: false/*,
-        close: onClose*/
-    }).data("kendoWindow").center();
-
-
-
-    // ############################ FORMATOS ############################
-
-    // Le da la estructura a la ventana POPUP
-    var ventana_formato = $("#POPUP_formato");
-    ventana_formato.kendoWindow({
-        width: "500px",
-        height: "360px",
-        title: "Formatos",
-        content: "../ui/formulario/plan_compra/telerik/POPUPFormato.php",
-        visible: false/*,
-        close: onClose*/
-    }).data("kendoWindow").center();
-
-
 
 
 

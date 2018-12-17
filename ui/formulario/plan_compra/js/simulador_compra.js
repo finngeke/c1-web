@@ -777,7 +777,7 @@ $(function () {
     textoTAB._view.tabstrip.tabGroup.find("li:eq(0) .k-link").text("Home");
     textoTAB._view.tabstrip.tabGroup.find("li:eq(1) .k-link").text("Presupuestos");
 
-    // Evitar que se editen las cabeceras (Escribir)
+    // Evitar que se editen las cabeceras (Escribir Sobre)
     document.querySelector("#spreadsheet").addEventListener("keydown", function(ev) {
         var spread = $("#spreadsheet").getKendoSpreadsheet();
         var sheet = spread.activeSheet()
@@ -1511,27 +1511,126 @@ $(function () {
 
     function POPUPDetalleError(){
 
-        // Levantamos el popup
-        var POPUPDetalleError = $("#POPUP_detalle_error");
-        POPUPDetalleError.data("kendoWindow").open();
+        // Actualiza Concurrencia
+        ActualizaConcurrencia();
+
+        // Verificar Permisos
+        if(localStorage.getItem("T0013")){
+
+            // Levantamos el popup
+            var POPUPDetalleError = $("#POPUP_detalle_error");
+            POPUPDetalleError.data("kendoWindow").open();
+
+        }else{
+            popupNotification.getNotifications().parent().remove();
+            popupNotification.show(" No tiene permisos para realizar esta acción.", "error");
+            // Fin Verificar Permisos
+        }
+
 
     }
 
     function POPUPTienda(){
 
-        // Levantamos el popup
-        var POPUPTienda = $("#POPUP_tienda");
-        POPUPTienda.data("kendoWindow").open();
+        // Actualiza Concurrencia
+        ActualizaConcurrencia();
+
+
+        // Verificar Permisos
+        if(localStorage.getItem("T0016")){
+
+            // Levantamos el popup
+            var POPUPTienda = $("#POPUP_tienda");
+            POPUPTienda.data("kendoWindow").open();
+
+            /*dataSourceTiendaDisponible = new kendo.data.DataSource({
+                serverFiltering: false,
+                transport: {
+                    read: {
+                        url: crudServiceBaseUrl + "/Products",
+                        dataType: "jsonp"
+                    },
+                    update: {
+                        url: crudServiceBaseUrl + "/Products/Update",
+                        dataType: "jsonp"
+                    },
+                    parameterMap: function (options, operation) {
+                        if (operation !== "read" && options.models) {
+                            return { models: kendo.stringify(options.models) };
+                        }
+                    }
+                },
+                requestStart: function () {
+                    // kendo.ui.progress($(".demo-section"), true);
+                },
+                requestEnd: function () {
+                    // kendo.ui.progress($(".demo-section"), false);
+                },
+                batch: false,
+                schema: {
+                    model: {
+                        id: "ProductID",
+                        fields: {
+                            ProductID: { editable: false, nullable: true },
+                            Discontinued: { type: "boolean" },
+                        }
+                    }
+                }
+            });*/
+
+
+            /*dataSourceTiendaDisponible.fetch(function () {
+                var data = this.data();
+                var tienda_disponible = $("#tienda_disponible").data("kendoListBox");
+                var tienda_seleccionado = $("#tienda_seleccionado").data("kendoListBox");
+
+                for (var i = 0; i < data.length; i++) {
+                    if (data[i].Discontinued) {
+                        tienda_disponible.add(data[i]);
+                    }
+                    else {
+                        tienda_seleccionado.add(data[i]);
+                    }
+                }
+            });*/
+
+
+
+
+
+
+
+        }else{
+            popupNotification.getNotifications().parent().remove();
+            popupNotification.show(" No tiene permisos para realizar esta acción.", "error");
+            // Fin Verificar Permisos
+        }
+
+
 
     }
 
     function POPUPFormato(){
 
-        // Levantamos el popup
-        var POPUPFormato = $("#POPUP_formato");
-        POPUPFormato.data("kendoWindow").open();
+        // Actualiza Concurrencia
+        ActualizaConcurrencia();
+
+        // Verificar Permisos
+        if(localStorage.getItem("T0017")){
+
+            // Levantamos el popup
+            var POPUPFormato = $("#POPUP_formato");
+            POPUPFormato.data("kendoWindow").open();
+
+        }else{
+            popupNotification.getNotifications().parent().remove();
+            popupNotification.show(" No tiene permisos para realizar esta acción.", "error");
+            // Fin Verificar Permisos
+        }
+
 
     }
+
 
     // ########## TRABAJO CON EL CHECK DE CONCURRENCIA ##########
     // Comenzar a ejecutar el temporizador
