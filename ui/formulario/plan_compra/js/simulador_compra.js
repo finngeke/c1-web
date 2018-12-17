@@ -185,7 +185,7 @@ $(function () {
 
     });
 
-    // Seteo el DropdownList de Proveedores, si no ha sido cargado antes
+    // Seteo el DropdownList de Proveedor, si no ha sido cargado antes
     kendo.spreadsheet.registerEditor("dropdownlistProveedor", function(){
         var context, dlg, model;
 
@@ -214,18 +214,18 @@ $(function () {
                     }
                 });
 
-                var elFormato = $("<div data-visible='true' data-role='window' data-modal='true' data-resizable='true' data-title='Seleccione Proveedor '>" +
+                var elProveedor = $("<div data-visible='true' data-role='window' data-modal='true' data-resizable='true' data-title='Seleccione Proveedor '>" +
                     "  <div data-role='dropdownlist' data-bind='value: value, source: proveedores' data-text-field='NOMBRE_PROVEEDOR' data-value-field='NOMBRE_PROVEEDOR'></div>" +
                     "  <div style='margin-top: 1em; text-align: right'>" +
                     "    <button style='width: 5em' class='k-button' data-bind='click: ok'>OK</button>" +
                     "    <button style='width: 5em' class='k-button' data-bind='click: cancel'>Cancelar</button>" +
                     "  </div>" +
                     "</div>");
-                kendo.bind(elFormato, model);
+                kendo.bind(elProveedor, model);
 
 
                 // Cache the dialog.
-                dlg = elFormato.getKendoWindow();
+                dlg = elProveedor.getKendoWindow();
             }
         }
 

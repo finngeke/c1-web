@@ -1023,6 +1023,14 @@ class PlanCompraClass extends \parametros
 
         // ###################################### 2 GUARDADO CAMPOS DE TEXTO SIMPLE ####################################
         // ######################### (Campos de Texto que no requieren validación, update directo) #####################
+
+        // Validar Tipo Empaque
+        if (($ALIAS_PROV == null) || ($ALIAS_PROV == "") || ($ALIAS_PROV == "null") || (is_numeric($ALIAS_PROV))) {
+            return " ID: " . $ID_COLOR3 . " - Se ha enviado campo Proveedor Vacio.";
+            die();
+        }
+
+
         $query_campos_libres = PlanCompraClass::ActualizaPlanCompraCamposLibre($TEMPORADA, $DEPTO, $LOGIN, $ID_COLOR3,$ALIAS_PROV);
         if($query_campos_libres != "OK"){
             return " ID: " . $ID_COLOR3 . " - No se pudo Actualizar Campo de Libre Edicion.";
