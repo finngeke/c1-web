@@ -393,7 +393,7 @@ $(function () {
                     var columnAQ = sheet.range('AQ2:AQ' + (e.response.length + 1));
                     columnAQ.editor('dropdownlistFormato');
 
-                    // Asigno el CBX de Formato
+                    // Asigno el CBX de Proveedor
                     var columnCA = sheet.range('CA2:CA' + (e.response.length + 1));
                     columnCA.editor('dropdownlistProveedor');
 
@@ -1681,13 +1681,18 @@ $(function () {
         // Actualiza Concurrencia
         ActualizaConcurrencia();
 
-
         // Verificar Permisos
         if(localStorage.getItem("T0016")){
+
+alert("Dentro del Listar Tiendas 2");
 
             // Levantamos el popup
             var POPUPTienda = $("#POPUP_tienda");
             POPUPTienda.data("kendoWindow").open();
+
+
+
+
 
             /*dataSourceTiendaDisponible = new kendo.data.DataSource({
                 serverFiltering: false,
@@ -2033,6 +2038,7 @@ $(function () {
                 { field: "ESTADO", title: "ESTADO" }
             ]);
         }
+
     }
 
     //pop Presupuesto Total

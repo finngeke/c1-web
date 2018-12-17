@@ -3374,7 +3374,6 @@ class PlanCompraClass extends \parametros
     }
 
 
-
     // ######################## INICIO Trabajo con flujo de aprobación ########################
     // Trabajo con Flujo Dinámico de Aprobación
     public static function ModificaEstadoDinamico($temporada, $depto, $login, $id_color3, $estado_insert, $proforma, $estado_update)
@@ -3501,8 +3500,6 @@ class PlanCompraClass extends \parametros
     // ######################## FIN Trabajo con flujo de aprobación ########################
 
 
-
-
     // ######################## INICIO Permisos de Usuario ########################
     // Listar Permiso de Usuario
     public static function ListarPermisosUsuario($temporada, $depto, $login,$cod_tipusr)
@@ -3609,6 +3606,108 @@ class PlanCompraClass extends \parametros
 
     }
     // ######################## FIN Permisos de Usuario ########################
+
+
+    // ######################## INICIO Trabajo POPUP Tienda ########################
+    // Listar Marca
+    public static function ListarMarca($temporada, $depto)
+    {
+
+        /*$sql = "begin PLC_PKG_PRUEBA.PRC_LISTAR_DEPTO_MARCA('" . $depto . "', :data); end;";
+        $data = \database::getInstancia()->getConsultaSP($sql, 1);
+        return $data;*/
+
+        $sql = "SELECT DISTINCT COD_MARCA, NOM_MARCA
+        FROM PLC_DEPTO_MARCA
+        WHERE COD_DEPT = '" . $depto . "'";
+        $data = \database::getInstancia()->getFilas($sql);
+        //return $data;
+
+        // Transformo a array asociativo
+        $array1 = [];
+        foreach ($data as $va1) {
+            array_push($array1
+                , array(
+                  "CODIGO" => $va1[0]
+                , "DESCRIPCION" => $va1[1]
+                )
+            );
+        }
+        return $array1;
+
+
+    }
+    // Listar Tipo Tienda
+    public static function ListarTipoTienda($temporada, $depto)
+    {
+
+        // pregunto si tiene cluster, si no tiene los agrego y luego listo
+        $sql = "SELECT 1
+                 FROM   PLC_SEGMENTOS
+                 WHERE  COD_TEMPORADA = '" . $temporada . "'
+                 AND    DEP_DEPTO     = '" . $depto . "'
+                 ";
+
+        $existe = (int)\database::getInstancia()->getFila($sql);
+
+
+        if ($existe == 1) {
+
+            // Listar Clusters
+            $sql = "begin PLC_PKG_GENERAL.PRC_LISTAR_SEGMENTOS('" . $temporada . "','" . $depto . "',0,0, :data); end;";
+            $data = \database::getInstancia()->getConsultaSP($sql, 1);
+             //return $data;
+
+        } else {
+
+            // Inserto los Clusters
+            $sql_inserta = "INSERT INTO PLC_SEGMENTOS (cod_temporada,dep_depto,niv_jer1,cod_jer1,cod_seg,des_seg)
+                        select " . $temporada . ",'" . $depto . "',0,'0',1,'A' from dual union
+                        select " . $temporada . ",'" . $depto . "',0,'0',2,'B' from dual union
+                        select " . $temporada . ",'" . $depto . "',0,'0',3,'C' from dual union
+                        select " . $temporada . ",'" . $depto . "',0,'0',4,'I' from dual";
+
+            $data_inserta = \database::getInstancia()->getConsulta($sql_inserta);
+
+            // Listar clusters insertados previamente
+            $sql = "begin PLC_PKG_GENERAL.PRC_LISTAR_SEGMENTOS('" . $temporada . "','" . $depto . "',0,0, :data); end;";
+            $data = \database::getInstancia()->getConsultaSP($sql, 1);
+             //return $data;
+
+        }
+
+        // Transformo a array asociativo
+        $array1 = [];
+        foreach ($data as $va1) {
+            array_push($array1
+                , array(
+                    "CODIGO" => $va1[0]
+                , "DESCRIPCION" => $va1[1]
+                )
+            );
+        }
+
+
+        return $array1;
+
+
+    }
+
+
+    // ######################## FIN Trabajo POPUP Tienda ########################
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -535,19 +535,108 @@ $(function () {
     // Le da la estructura a la ventana POPUP
     var ventana_tienda = $("#POPUP_tienda");
     ventana_tienda.kendoWindow({
-        width: "360px",
+        width: "400px",
         title: "Mantenedor Tipo Tienda",
         visible: false,
         actions: [
             //"Pin",
-            "Minimize",
-            "Maximize",
+            //"Minimize",
+            //"Maximize",
             "Close"
         ]/*,
         close: onClose*/
     }).data("kendoWindow").center();
 
-    $("#tienda_disponible").kendoListBox({
+    var cbx_marca = $("#CBXMarca").kendoComboBox({
+        //filter: "contains",
+        placeholder: "Seleccione Marca...",
+        dataTextField: "DESCRIPCION",
+        dataValueField: "CODIGO",
+        dataSource: {
+            //serverFiltering: true,
+            transport: {
+                read: {
+                    url: "TelerikPlanCompra/ListarMarca",
+                    dataType: "json"
+                }
+            }
+        },
+        change: function (e) {
+
+            var dataItem = e.sender.dataItem();
+            alert(dataItem.CODIGO);
+            alert(dataItem.DESCRIPCION);
+            console.log(dataItem);
+            $("#CBXTipoTienda").attr("disabled", false);
+        }
+    }).data("kendoComboBox");
+
+
+
+    var cbx_tipotienda = $("#CBXTipoTienda").kendoComboBox({
+        autoBind: false,
+        cascadeFrom: "cbx_marca",
+        //filter: "contains",
+        placeholder: "Seleccione Tipo Tienda...",
+        dataTextField: "DESCRIPCION",
+        dataValueField: "CODIGO",
+        dataSource: {
+            transport: {
+                read: {
+                    url: "TelerikPlanCompra/ListarTipoTienda",
+                    dataType: "json"
+                }
+            }
+        }
+    }).data("kendoComboBox");
+
+
+    // Seteo DataSet CBXMarca
+    /*var dataSource_cbx_marca = new kendo.data.DataSource({
+        transport: {
+            read:  {
+                url: "TelerikPlanCompra/ListarMarca",
+                dataType: "json",
+                data:{ID_COLOR3: kendo.parseInt(ID_COLOR3)}
+            }
+        }
+    });
+    // Seteo DataSet ListarTipoTienda
+    var dataSource_cbx_tipotienda = new kendo.data.DataSource({
+        transport: {
+            read:  {
+                url: "TelerikPlanCompra/ListarTipoTienda",
+                dataType: "json",
+                data:{ID_COLOR3: kendo.parseInt(ID_COLOR3)}
+            }
+        }
+    });
+
+    // Definir estructura CBX
+    $("#CBXMarca").kendoComboBox({
+        autoBind: true,
+        placeholder: "Seleccione Marca",
+        dataTextField: "DESCRIPCION",
+        dataValueField: "CODIGO",
+        dataSource: dataSource_cbx_marca,
+        filter: "contains",
+        suggest: true,
+        index: 3
+    });
+
+    $("#CBXTipoTienda").kendoComboBox({
+        autoBind: false,
+        dataTextField: "text",
+        dataValueField: "value",
+        dataSource: dataSource_cbx_tipotienda
+    });
+
+    //dataSource_cbx_marca.read();*/
+
+
+
+
+    /*$("#tienda_disponible").kendoListBox({
         connectWith: "tienda_seleccionado",
         toolbar: {
             tools: ["transferTo", "transferFrom", "transferAllTo", "transferAllFrom"]
@@ -556,8 +645,10 @@ $(function () {
 
     $("#tienda_seleccionado").kendoListBox();
 
+*/
 
-    // Definimos CBX
+
+
 
 
 
