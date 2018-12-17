@@ -243,11 +243,13 @@ if($ESTADO_C1!=24){
         echo json_encode(\simulador_compra\PlanCompraClass::ListarHistorial($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('GET.ID_COLOR3')));
     }
 
+
     // Busca Factor
     public function BuscaFactor($f3)
     { // $pais,$via,$moneda,$ventana
         echo json_encode(\simulador_compra\PlanCompraClass::BuscaFactor($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('GET.PAIS'), $f3->get('GET.VIA'), $f3->get('GET.MONEDA'), $f3->get('GET.VENTANA')));
     }
+
 
     // Busca Factor
     public function BuscaTipoCambio($f3)
@@ -281,6 +283,7 @@ if($ESTADO_C1!=24){
 
     }
 
+
     // ######################## TRABAJO CON CONCURRENCIA ############################
     // ############ Actualiza la fecha del registro de concurrencia #################
     public function ActualizaFechaConcurrencia($f3){
@@ -302,6 +305,7 @@ if($ESTADO_C1!=24){
         echo json_encode(\simulador_compra\PlanCompraClass::ListarFormato($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO')));
     }
 
+
     // Listar Proveedores Grilla Editar
     public function ListarProveedor($f3)
     {
@@ -315,10 +319,12 @@ if($ESTADO_C1!=24){
         echo json_encode(\simulador_compra\PlanCompraClass::ListarVentana($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO')));
     }
 
+
     // Match - Consulta OC Linekada
     public function ConsultaOCLinkeada($f3) {
         echo json_encode(\simulador_compra\PlanCompraClass::ConsultaOCLinkeada($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $f3->get('GET.OC')));
     }
+
 
     // Match - Listar PMM
     public function MatchLlenarGridPMM($f3) {
@@ -333,6 +339,7 @@ if($ESTADO_C1!=24){
 
     }
 
+
     // Match - Listar PLAN
     public function MatchLlenarGridPlan($f3) {
 
@@ -341,10 +348,12 @@ if($ESTADO_C1!=24){
         echo json_encode(\simulador_compra\PlanCompraClass::MatchLlenarGridPlan($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $array_data["OC"], $array_data["PROFORMA"], $f3->get('CURLOPT_PORT'), $f3->get('CURLOPT_URL') ));
     }
 
+
     // Match - Listar CBX Línea en Match
     public function ListarLineaCBXMatch($f3) {
         echo json_encode(\simulador_compra\PlanCompraClass::ListarLineaCBXMatch($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO')));
     }
+
 
     // Match - Listar CBX SubLínea en Match
     public function ListarSubLineaCBXMatch($f3) {
@@ -354,10 +363,12 @@ if($ESTADO_C1!=24){
 
     }
 
+
     // Match - Listar CBX Color enMatch
     public function ListarColorCBXMatch($f3) {
         echo json_encode(\simulador_compra\PlanCompraClass::ListarColorCBXMatch($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO')), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
     }
+
 
     // Match - Actualiza Plan de Compra
     public function ActualizaPlanMATCH($f3)
@@ -370,6 +381,7 @@ if($ESTADO_C1!=24){
     // Fin del ActualizaPlanMATCH
     }
 
+
     // Match - Generar Match
     public function GenerarMatch($f3) {
 
@@ -377,6 +389,7 @@ if($ESTADO_C1!=24){
         echo \simulador_compra\PlanCompraClass::GenerarMatch($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $array_data["OC"], $array_data["PROFORMA"]);
 
     }
+
 
     // Match - Agrega Variaciones
     public function GenerarMatchVariaciones($f3) {
@@ -389,7 +402,6 @@ if($ESTADO_C1!=24){
 
 
     // ######################## INICIO Trabajo con flujo de aprobación ########################
-
     public function ModificaEstadoDinamico($f3) {
 
         $array_data = $_GET;
@@ -397,7 +409,6 @@ if($ESTADO_C1!=24){
         echo \simulador_compra\PlanCompraClass::ModificaEstadoDinamico($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $array_data["ID_COLOR3"], $array_data["ESTADO_INSERT"], $array_data["PROFORMA"], $array_data["ESTADO_UPDATE"]);
 
     }
-
     public function ModificaEstadoDinamicoCorreccion($f3) {
 
         $array_data = $_GET;
@@ -405,36 +416,51 @@ if($ESTADO_C1!=24){
         echo \simulador_compra\PlanCompraClass::ModificaEstadoDinamicoCorreccion($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $array_data["ID_COLOR3"], $array_data["ESTADO_INSERT"], $array_data["PROFORMA"], $array_data["ESTADO_UPDATE"], $array_data["COMENTARIO"]);
 
     }
-
     // ######################## FIN Trabajo con flujo de aprobación ########################
 
 
-
-
     // ######################## INICIO Permisos de Usuario ########################
-
     // Listar Permisos de Usuario
     public function ListarPermisosUsuario($f3)
     {
         echo json_encode(\simulador_compra\PlanCompraClass::ListarPermisosUsuario($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $f3->get('SESSION.cod_tipusr')));
     }
-
     // Revisar Concurrencia
     public function RevisaConcurrencia($f3)
     {
         echo json_encode(\simulador_compra\PlanCompraClass::RevisaConcurrencia($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $f3->get('SESSION.cod_tipusr')));
     }
-
     // Busca Usuario Desconectado
     public function BuscaUsuarioDesconectado($f3)
     {
         echo json_encode(\simulador_compra\PlanCompraClass::BuscaUsuarioDesconectado($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $f3->get('SESSION.cod_tipusr')));
     }
-
     // ######################## FIN Permisos de Usuario ########################
 
 
-// Carga POPUP Ajuste de Compra en Plan de Compra
+    // ######################## INICIO Trabajo POPUP Tiendas ########################
+    // Listar Marca
+    public function ListarMarca($f3)
+    {
+        echo json_encode(\simulador_compra\PlanCompraClass::ListarMarca($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO')));
+    }
+    // Listar Tipo Tienda
+    public function ListarTipoTienda($f3)
+    {
+        echo json_encode(\simulador_compra\PlanCompraClass::ListarTipoTienda($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO')));
+    }
+    // ######################## FIN Trabajo POPUP Tiendas ########################
+
+
+
+    // ######################## INICIO Trabajo POPUP Formatos ########################
+    // ######################## FIN Trabajo POPUP Formatos ########################
+
+
+
+
+
+    // Carga POPUP Ajuste de Compra en Plan de Compra
     public function Listar_Pop_Ajuste_Compra($f3)
     {
 
