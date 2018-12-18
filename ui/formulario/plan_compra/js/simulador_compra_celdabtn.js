@@ -621,7 +621,11 @@ $(function () {
     var dataSource_cbx_disponible = new kendo.data.DataSource({
         transport: {
             read: {
-                url: "TelerikPlanCompra/TiendaListarDisponible",
+                url: "TelerikPlanCompra/TiendaObtieneDisponible",
+                data: {
+                    MARCA: kendo.parseInt(ID_COLOR3),
+                    TIENDA: kendo.parseInt(0)
+                },
                 dataType: "json"
             }
         }
@@ -631,7 +635,11 @@ $(function () {
     var dataSource_cbx_asignado = new kendo.data.DataSource({
         transport: {
             read: {
-                url: "TelerikPlanCompra/TiendaListarAsignado",
+                url: "TelerikPlanCompra/TiendaObtieneAsignado",
+                data: {
+                    MARCA: kendo.parseInt(ID_COLOR3),
+                    TIENDA: kendo.parseInt(0)
+                },
                 dataType: "json"
             }
         }
@@ -640,18 +648,18 @@ $(function () {
 
 
     // Definimos la estructura del ListBox
-    $("#tienda_disponible").kendoListBox({
-        //autoBind: false,
-        draggable: true,
+    var cbx_disponible = $("#tienda_disponible").kendoListBox({
+        autoBind: false,
+        dataSource:dataSource_cbx_disponible,
         connectWith: "tienda_seleccionado",
         toolbar: {
             tools: ["transferTo", "transferFrom", "transferAllTo", "transferAllFrom"]
         }
     });
 
-    $("#tienda_seleccionado").kendoListBox({
+    var cbx_asignado = $("#tienda_seleccionado").kendoListBox({
         autoBind: false,
-        draggable: true
+        dataSource:dataSource_cbx_asignado
     });
 
 

@@ -35,6 +35,9 @@
 		
 		public function simulador_compra($f3) {
 
+
+            //echo parse_url($_SERVER['HTTP_REFERER'], PHP_URL_HOST);
+
             $depto_entrar = substr($_SERVER['REQUEST_URI'],-4);
 
             if (isset( $_SESSION['session_depto_validar_url'])){
@@ -53,7 +56,7 @@
                 $_SESSION['session_depto_validar_url'] = substr($_SERVER['REQUEST_URI'],-4);
             }
 
-			
+
 			ControlFormularioMain::cargaMain($f3);
 			ControlFormularioMain::cargaMensaje($f3);
 			$f3->set('temporadas', temporada\temporada::getSelect());
@@ -63,12 +66,311 @@
 			
 			$temporada = temporada\temporada::getTemporadaCompra($f3->get('SESSION.COD_TEMPORADA'));
 
+			$presupuestos = simulador_compra\grilla_cabecera::obtienePptosemb($f3->get('SESSION.COD_TEMPORADA'), $f3->get('GET.depto'));
+			$prorrateo_ppto_retail = simulador_compra\grilla_cabecera::obtienePptoRetail($f3->get('SESSION.COD_TEMPORADA'), $f3->get('GET.depto'));
+			$prorrateo_ppto_costo = simulador_compra\grilla_cabecera::obtienePptoCosto($f3->get('SESSION.COD_TEMPORADA'), $f3->get('GET.depto'));
+
+			// CALCULOS PARA LINEA DE CONSUMO EN EMBARQUE (Revisar con Datos)
+			// A Embarque = (A Consumo / Total Consumo) * 100
+			// Total Embarque = Total Costo Consumo / Total Presupuesto
+			// A Total Embarque = (A Consumo / A Presupuesto) * 100
+
+			// 1.- Cargar datos para llenar la línea de Consumo
+			$tabla1_consumo = simulador_compra\grilla_cabecera::obtieneConsumo($f3->get('SESSION.COD_TEMPORADA'), $f3->get('GET.depto'));
+
+			// 2.- Líneas de Consumo
+			$tab1_arr_consumo = array("Tipo" => "Consumo",
+				"Ac" => "0", "Bc" => "0", "Cc" => "0", "Dc" => "0", "Ec" => "0", "Fc" => "0", "Gc" => "0", "Hc" => "0", "Ic" => "0", "Totalc" => "0",
+				"Ar" => "0", "Br" => "0", "Cr" => "0", "Dr" => "0", "Er" => "0", "Fr" => "0", "Gr" => "0", "Hr" => "0", "Ir" => "0", "Totalr" => "0",
+				"Ae" => "0", "Be" => "0", "Ce" => "0", "De" => "0", "Ee" => "0", "Fe" => "0", "Ge" => "0", "He" => "0", "Ie" => "0", "Totale" => "0");
+
+			// 3.- Llenar la línea de Consumo -> Costo y Retail (Orden: Ac - Ar - Ae)
+			$key_consumo = 0;
+			foreach ($tabla1_consumo as $var) {
+				if ($tabla1_consumo[$key_consumo]['VENTANA'] == "A") {
+					$tab1_arr_consumo['Ac'] = $tabla1_consumo[$key_consumo]['COSTO'];
+					$tab1_arr_consumo['Ar'] = $tabla1_consumo[$key_consumo]['RETAIL'];
+				} elseif ($tabla1_consumo[$key_consumo]['VENTANA'] == "B") {
+					$tab1_arr_consumo['Bc'] = $tabla1_consumo[$key_consumo]['COSTO'];
+					$tab1_arr_consumo['Br'] = $tabla1_consumo[$key_consumo]['RETAIL'];
+				} elseif ($tabla1_consumo[$key_consumo]['VENTANA'] == "C") {
+					$tab1_arr_consumo['Cc'] = $tabla1_consumo[$key_consumo]['COSTO'];
+					$tab1_arr_consumo['Cr'] = $tabla1_consumo[$key_consumo]['RETAIL'];
+				} elseif ($tabla1_consumo[$key_consumo]['VENTANA'] == "D") {
+					$tab1_arr_consumo['Dc'] = $tabla1_consumo[$key_consumo]['COSTO'];
+					$tab1_arr_consumo['Dr'] = $tabla1_consumo[$key_consumo]['RETAIL'];
+				} elseif ($tabla1_consumo[$key_consumo]['VENTANA'] == "E") {
+					$tab1_arr_consumo['Ec'] = $tabla1_consumo[$key_consumo]['COSTO'];
+					$tab1_arr_consumo['Er'] = $tabla1_consumo[$key_consumo]['RETAIL'];
+				} elseif ($tabla1_consumo[$key_consumo]['VENTANA'] == "F") {
+					$tab1_arr_consumo['Fc'] = $tabla1_consumo[$key_consumo]['COSTO'];
+					$tab1_arr_consumo['Fr'] = $tabla1_consumo[$key_consumo]['RETAIL'];
+				} elseif ($tabla1_consumo[$key_consumo]['VENTANA'] == "G") {
+					$tab1_arr_consumo['Gc'] = $tabla1_consumo[$key_consumo]['COSTO'];
+					$tab1_arr_consumo['Gr'] = $tabla1_consumo[$key_consumo]['RETAIL'];
+				} elseif ($tabla1_consumo[$key_consumo]['VENTANA'] == "H") {
+					$tab1_arr_consumo['Hc'] = $tabla1_consumo[$key_consumo]['COSTO'];
+					$tab1_arr_consumo['Hr'] = $tabla1_consumo[$key_consumo]['RETAIL'];
+				} elseif ($tabla1_consumo[$key_consumo]['VENTANA'] == "I") {
+					$tab1_arr_consumo['Ic'] = $tabla1_consumo[$key_consumo]['COSTO'];
+					$tab1_arr_consumo['Ir'] = $tabla1_consumo[$key_consumo]['RETAIL'];
+				}
+				$key_consumo++;
+			}
+
+			// 4.- Línea de Consumo -> Total Costo y Total Retail
+			$tab1_arr_consumo['Totalc'] = $tab1_arr_consumo['Ac'] + $tab1_arr_consumo['Bc'] + $tab1_arr_consumo['Cc'] + $tab1_arr_consumo['Dc'] + $tab1_arr_consumo['Ec'] + $tab1_arr_consumo['Fc'] + $tab1_arr_consumo['Gc'] + $tab1_arr_consumo['Hc'] + $tab1_arr_consumo['Ic'];
+			$tab1_arr_consumo['Totalr'] = $tab1_arr_consumo['Ar'] + $tab1_arr_consumo['Br'] + $tab1_arr_consumo['Cr'] + $tab1_arr_consumo['Dr'] + $tab1_arr_consumo['Er'] + $tab1_arr_consumo['Fr'] + $tab1_arr_consumo['Gr'] + $tab1_arr_consumo['Hr'] + $tab1_arr_consumo['Ir'];
+
+
+			// 5.- Llenar la línea de Consumo -> Embarque
+			// Ae
+			if (($tab1_arr_consumo['Totalc'] == 0)) {
+				$tab1_arr_consumo['Ae'] = 0;
+			} else {
+				$tab1_arr_consumo['Ae'] = round((($tab1_arr_consumo['Ac'] / $tab1_arr_consumo['Totalc']) * 100), 2);
+			}
+
+			// Be
+			if (($tab1_arr_consumo['Totalc'] == 0)) {
+				$tab1_arr_consumo['Be'] = 0;
+			} else {
+				$tab1_arr_consumo['Be'] = round((($tab1_arr_consumo['Bc'] / $tab1_arr_consumo['Totalc']) * 100), 2);
+			}
+
+			// Ce
+			if (($tab1_arr_consumo['Totalc'] == 0)) {
+				$tab1_arr_consumo['Ce'] = 0;
+			} else {
+				$tab1_arr_consumo['Ce'] = round((($tab1_arr_consumo['Cc'] / $tab1_arr_consumo['Totalc']) * 100), 2);
+			}
+
+			// De
+			if (($tab1_arr_consumo['Totalc'] == 0)) {
+				$tab1_arr_consumo['De'] = 0;
+			} else {
+				$tab1_arr_consumo['De'] = round((($tab1_arr_consumo['Dc'] / $tab1_arr_consumo['Totalc']) * 100), 2);
+			}
+
+			// Ee
+			if (($tab1_arr_consumo['Totalc'] == 0)) {
+				$tab1_arr_consumo['Ee'] = 0;
+			} else {
+				$tab1_arr_consumo['Ee'] = round((($tab1_arr_consumo['Ec'] / $tab1_arr_consumo['Totalc']) * 100), 2);
+			}
+
+			// Fe
+			if (($tab1_arr_consumo['Totalc'] == 0)) {
+				$tab1_arr_consumo['Fe'] = 0;
+			} else {
+				$tab1_arr_consumo['Fe'] = round((($tab1_arr_consumo['Fc'] / $tab1_arr_consumo['Totalc']) * 100), 2);
+			}
+
+			// Ge
+			if (($tab1_arr_consumo['Totalc'] == 0)) {
+				$tab1_arr_consumo['Ge'] = 0;
+			} else {
+				$tab1_arr_consumo['Ge'] = round((($tab1_arr_consumo['Gc'] / $tab1_arr_consumo['Totalc']) * 100), 2);
+			}
+
+			// He
+			if (($tab1_arr_consumo['Totalc'] == 0)) {
+				$tab1_arr_consumo['He'] = 0;
+			} else {
+				$tab1_arr_consumo['He'] = round((($tab1_arr_consumo['Hc'] / $tab1_arr_consumo['Totalc']) * 100), 2);
+			}
+
+			// Ie
+			if (($tab1_arr_consumo['Totalc'] == 0)) {
+				$tab1_arr_consumo['Ie'] = 0;
+			} else {
+				$tab1_arr_consumo['Ie'] = round((($tab1_arr_consumo['Ic'] / $tab1_arr_consumo['Totalc']) * 100), 2);
+			}
+
+			// 0.- Línea de Presupuesto
+			$presu = array("Tipo" => "Ppto",
+				"Ac" => "0", "Bc" => "0", "Cc" => "0", "Dc" => "0", "Ec" => "0", "Fc" => "0", "Gc" => "0", "Hc" => "0", "Ic" => "0", "Totalc" => $prorrateo_ppto_costo,
+				"Ar" => "0", "Br" => "0", "Cr" => "0", "Dr" => "0", "Er" => "0", "Fr" => "0", "Gr" => "0", "Hr" => "0", "Ir" => "0", "Totalr" => $prorrateo_ppto_retail,
+				"Ae" => "0", "Be" => "0", "Ce" => "0", "De" => "0", "Ee" => "0", "Fe" => "0", "Ge" => "0", "He" => "0", "Ie" => "0", "Totale" => "100%");
+
+			// 0.- Llenar Línea de Ppto
+			$key3 = 0;
+			foreach ($presupuestos as $var) {
+				if ($presupuestos[$key3]['VENT_DESCRI'] == "A") {
+					$presu['Ae'] = ($presupuestos[$key3]['PORCENTAJE'] * 100) . '%';
+					$presu['Ar'] = $presupuestos[$key3]['PORCENTAJE'] * $prorrateo_ppto_retail;
+					$presu['Ac'] = $presupuestos[$key3]['PORCENTAJE'] * $prorrateo_ppto_costo;
+				} elseif ($presupuestos[$key3]['VENT_DESCRI'] == "B") {
+					$presu['Be'] = ($presupuestos[$key3]['PORCENTAJE'] * 100) . '%';
+					$presu['Br'] = $presupuestos[$key3]['PORCENTAJE'] * $prorrateo_ppto_retail;
+					$presu['Bc'] = $presupuestos[$key3]['PORCENTAJE'] * $prorrateo_ppto_costo;
+				} elseif ($presupuestos[$key3]['VENT_DESCRI'] == "C") {
+					$presu['Ce'] = ($presupuestos[$key3]['PORCENTAJE'] * 100) . '%';
+					$presu['Cr'] = $presupuestos[$key3]['PORCENTAJE'] * $prorrateo_ppto_retail;
+					$presu['Cc'] = $presupuestos[$key3]['PORCENTAJE'] * $prorrateo_ppto_costo;
+				} elseif ($presupuestos[$key3]['VENT_DESCRI'] == "D") {
+					$presu['De'] = ($presupuestos[$key3]['PORCENTAJE'] * 100) . '%';
+					$presu['Dr'] = $presupuestos[$key3]['PORCENTAJE'] * $prorrateo_ppto_retail;
+					$presu['Dc'] = $presupuestos[$key3]['PORCENTAJE'] * $prorrateo_ppto_costo;
+				} elseif ($presupuestos[$key3]['VENT_DESCRI'] == "E") {
+					$presu['Ee'] = ($presupuestos[$key3]['PORCENTAJE'] * 100) . '%';
+					$presu['Er'] = $presupuestos[$key3]['PORCENTAJE'] * $prorrateo_ppto_retail;
+					$presu['Ec'] = $presupuestos[$key3]['PORCENTAJE'] * $prorrateo_ppto_costo;
+				} elseif ($presupuestos[$key3]['VENT_DESCRI'] == "F") {
+					$presu['Fe'] = ($presupuestos[$key3]['PORCENTAJE'] * 100) . '%';
+					$presu['Fr'] = $presupuestos[$key3]['PORCENTAJE'] * $prorrateo_ppto_retail;
+					$presu['Fc'] = $presupuestos[$key3]['PORCENTAJE'] * $prorrateo_ppto_costo;
+				} elseif ($presupuestos[$key3]['VENT_DESCRI'] == "G") {
+					$presu['Ge'] = ($presupuestos[$key3]['PORCENTAJE'] * 100) . '%';
+					$presu['Gr'] = $presupuestos[$key3]['PORCENTAJE'] * $prorrateo_ppto_retail;
+					$presu['Gc'] = $presupuestos[$key3]['PORCENTAJE'] * $prorrateo_ppto_costo;
+				} elseif ($presupuestos[$key3]['VENT_DESCRI'] == "H") {
+					$presu['He'] = ($presupuestos[$key3]['PORCENTAJE'] * 100) . '%';
+					$presu['Hr'] = $presupuestos[$key3]['PORCENTAJE'] * $prorrateo_ppto_retail;
+					$presu['Hc'] = $presupuestos[$key3]['PORCENTAJE'] * $prorrateo_ppto_costo;
+				} elseif ($presupuestos[$key3]['VENT_DESCRI'] == "I") {
+					$presu['Ie'] = ($presupuestos[$key3]['PORCENTAJE'] * 100) . '%';
+					$presu['Ir'] = $presupuestos[$key3]['PORCENTAJE'] * $prorrateo_ppto_retail;
+					$presu['Ic'] = $presupuestos[$key3]['PORCENTAJE'] * $prorrateo_ppto_costo;
+				}
+				$key3++;
+			}
+			$presu['Totale'] = "100%";
+
+			$array_ppto_format = array(
+				"TIPO" => "PPTO",
+				"PPTO_COS_A" => number_format(($presu['Ac']), 0, ',', '.'),
+				"PPTO_COS_B" => number_format(($presu['Bc']), 0, ',', '.'),
+				"PPTO_COS_C" => number_format(($presu['Cc']), 0, ',', '.'),
+				"PPTO_COS_D" => number_format(($presu['Dc']), 0, ',', '.'),
+				"PPTO_COS_E" => number_format(($presu['Ec']), 0, ',', '.'),
+				"PPTO_COS_F" => number_format(($presu['Fc']), 0, ',', '.'),
+				"PPTO_COS_G" => number_format(($presu['Gc']), 0, ',', '.'),
+				"PPTO_COS_H" => number_format(($presu['Hc']), 0, ',', '.'),
+				"PPTO_COS_I" => number_format(($presu['Ic']), 0, ',', '.'),
+				"PPTO_COS_TOTAL" => number_format(($prorrateo_ppto_costo), 0, ',', '.'),
+				"PPTO_RET_A" => number_format(($presu['Ar']), 0, ',', '.'),
+				"PPTO_RET_B" => number_format(($presu['Br']), 0, ',', '.'),
+				"PPTO_RET_C" => number_format(($presu['Cr']), 0, ',', '.'),
+				"PPTO_RET_D" => number_format(($presu['Dr']), 0, ',', '.'),
+				"PPTO_RET_E" => number_format(($presu['Er']), 0, ',', '.'),
+				"PPTO_RET_F" => number_format(($presu['Fr']), 0, ',', '.'),
+				"PPTO_RET_G" => number_format(($presu['Gr']), 0, ',', '.'),
+				"PPTO_RET_H" => number_format(($presu['Hr']), 0, ',', '.'),
+				"PPTO_RET_I" => number_format(($presu['Ir']), 0, ',', '.'),
+				"PPTO_RET_TOTAL" => number_format(($prorrateo_ppto_retail), 0, ',', '.'),
+				"PPTO_EMB_A" => ($presu['Ae']),
+				"PPTO_EMB_B" => ($presu['Be']),
+				"PPTO_EMB_C" => ($presu['Ce']),
+				"PPTO_EMB_D" => ($presu['De']),
+				"PPTO_EMB_E" => ($presu['Ee']),
+				"PPTO_EMB_F" => ($presu['Fe']),
+				"PPTO_EMB_G" => ($presu['Ge']),
+				"PPTO_EMB_H" => ($presu['He']),
+				"PPTO_EMB_I" => ($presu['Ie']),
+				"PPTO_EMB_TOTAL" => "100%",
+			);
+			$array_consumo_format = array(
+				"TIPO" => "Consumo",
+				"CON_COS_A" => number_format(($tab1_arr_consumo['Ac']), 0, ',', '.'),
+				"CON_COS_B" => number_format(($tab1_arr_consumo['Bc']), 0, ',', '.'),
+				"CON_COS_C" => number_format(($tab1_arr_consumo['Cc']), 0, ',', '.'),
+				"CON_COS_D" => number_format(($tab1_arr_consumo['Dc']), 0, ',', '.'),
+				"CON_COS_E" => number_format(($tab1_arr_consumo['Ec']), 0, ',', '.'),
+				"CON_COS_F" => number_format(($tab1_arr_consumo['Fc']), 0, ',', '.'),
+				"CON_COS_G" => number_format(($tab1_arr_consumo['Gc']), 0, ',', '.'),
+				"CON_COS_H" => number_format(($tab1_arr_consumo['Hc']), 0, ',', '.'),
+				"CON_COS_I" => number_format(($tab1_arr_consumo['Ic']), 0, ',', '.'),
+				"CON_COS_TOTAL" => number_format(($tab1_arr_consumo['Totalc']), 0, ',', '.'),
+				"CON_RET_A" => number_format(($tab1_arr_consumo['Ar']), 0, ',', '.'),
+				"CON_RET_B" => number_format(($tab1_arr_consumo['Br']), 0, ',', '.'),
+				"CON_RET_C" => number_format(($tab1_arr_consumo['Cr']), 0, ',', '.'),
+				"CON_RET_D" => number_format(($tab1_arr_consumo['Dr']), 0, ',', '.'),
+				"CON_RET_E" => number_format(($tab1_arr_consumo['Er']), 0, ',', '.'),
+				"CON_RET_F" => number_format(($tab1_arr_consumo['Fr']), 0, ',', '.'),
+				"CON_RET_G" => number_format(($tab1_arr_consumo['Gr']), 0, ',', '.'),
+				"CON_RET_H" => number_format(($tab1_arr_consumo['Hr']), 0, ',', '.'),
+				"CON_RET_I" => number_format(($tab1_arr_consumo['Ir']), 0, ',', '.'),
+				"CON_RET_TOTAL" => number_format(($tab1_arr_consumo['Totalr']), 0, ',', '.'),
+				"CON_EMB_A" => ($tab1_arr_consumo['Ae']) . "%",
+				"CON_EMB_B" => ($tab1_arr_consumo['Be']) . "%",
+				"CON_EMB_C" => ($tab1_arr_consumo['Ce']) . "%",
+				"CON_EMB_D" => ($tab1_arr_consumo['De']) . "%",
+				"CON_EMB_E" => ($tab1_arr_consumo['Ee']) . "%",
+				"CON_EMB_F" => ($tab1_arr_consumo['Fe']) . "%",
+				"CON_EMB_G" => ($tab1_arr_consumo['Ge']) . "%",
+				"CON_EMB_H" => ($tab1_arr_consumo['He']) . "%",
+				"CON_EMB_I" => ($tab1_arr_consumo['Ie']) . "%",
+				"CON_EMB_TOTAL" => "100%",
+			);
+
+			// 6.- Llenar la línea de Consumo -> Total Embarque
+			if ($prorrateo_ppto_costo == 0) {
+				$tab1_arr_consumo['Totale'] = 0;
+			} else {
+				$tab1_arr_consumo['Totale'] = round((($tab1_arr_consumo['Totalc'] / $prorrateo_ppto_costo)), 2);
+			}
+
+			// 7.- Última Línea con Totales --> Ppto, Consumo y Embarque
+			$tab1_arr_total = array(
+				"Tipo" => "Total",
+				"TAc" => number_format(($presu['Ac'] - $tab1_arr_consumo['Ac']), 0, ',', '.'),
+				"TBc" => number_format(($presu['Bc'] - $tab1_arr_consumo['Bc']), 0, ',', '.'),
+				"TCc" => number_format(($presu['Cc'] - $tab1_arr_consumo['Cc']), 0, ',', '.'),
+				"TDc" => number_format(($presu['Dc'] - $tab1_arr_consumo['Dc']), 0, ',', '.'),
+				"TEc" => number_format(($presu['Ec'] - $tab1_arr_consumo['Ec']), 0, ',', '.'),
+				"TFc" => number_format(($presu['Fc'] - $tab1_arr_consumo['Fc']), 0, ',', '.'),
+				"TGc" => number_format(($presu['Gc'] - $tab1_arr_consumo['Gc']), 0, ',', '.'),
+				"THc" => number_format(($presu['Hc'] - $tab1_arr_consumo['Hc']), 0, ',', '.'),
+				"TIc" => number_format(($presu['Ic'] - $tab1_arr_consumo['Ic']), 0, ',', '.'),
+				"TTotalc" => number_format(($prorrateo_ppto_costo - $tab1_arr_consumo['Totalc']), 0, ',', '.'),
+				"TAr" => number_format(($presu['Ar'] - $tab1_arr_consumo['Ar']), 0, ',', '.'),
+				"TBr" => number_format(($presu['Br'] - $tab1_arr_consumo['Br']), 0, ',', '.'),
+				"TCr" => number_format(($presu['Cr'] - $tab1_arr_consumo['Cr']), 0, ',', '.'),
+				"TDr" => number_format(($presu['Dr'] - $tab1_arr_consumo['Dr']), 0, ',', '.'),
+				"TEr" => number_format(($presu['Er'] - $tab1_arr_consumo['Er']), 0, ',', '.'),
+				"TFr" => number_format(($presu['Fr'] - $tab1_arr_consumo['Fr']), 0, ',', '.'),
+				"TGr" => number_format(($presu['Gr'] - $tab1_arr_consumo['Gr']), 0, ',', '.'),
+				"THr" => number_format(($presu['Hr'] - $tab1_arr_consumo['Hr']), 0, ',', '.'),
+				"TIr" => number_format(($presu['Ir'] - $tab1_arr_consumo['Ir']), 0, ',', '.'),
+				"TTotalr" => number_format(($prorrateo_ppto_retail - $tab1_arr_consumo['Totalr']), 0, ',', '.'),
+				"TAe" => round(($presu['Ac'] > 0 ? (($presu['Ac'] - $tab1_arr_consumo['Ac']) / ($prorrateo_ppto_costo - $tab1_arr_consumo['Totalc'])) * 100 : 0), 2) . "%",
+				"TBe" => round(($presu['Bc'] > 0 ? (($presu['Bc'] - $tab1_arr_consumo['Bc']) / ($prorrateo_ppto_costo - $tab1_arr_consumo['Totalc'])) * 100 : 0), 2) . "%",
+				"TCe" => round(($presu['Cc'] > 0 ? (($presu['Cc'] - $tab1_arr_consumo['Cc']) / ($prorrateo_ppto_costo - $tab1_arr_consumo['Totalc'])) * 100 : 0), 2) . "%",
+				"TDe" => round(($presu['Dc'] > 0 ? (($presu['Dc'] - $tab1_arr_consumo['Dc']) / ($prorrateo_ppto_costo - $tab1_arr_consumo['Totalc'])) * 100 : 0), 2) . "%",
+				"TEe" => round(($presu['Ec'] > 0 ? (($presu['Ec'] - $tab1_arr_consumo['Ec']) / ($prorrateo_ppto_costo - $tab1_arr_consumo['Totalc'])) * 100 : 0), 2) . "%",
+				"TFe" => round(($presu['Fc'] > 0 ? (($presu['Fc'] - $tab1_arr_consumo['Fc']) / ($prorrateo_ppto_costo - $tab1_arr_consumo['Totalc'])) * 100 : 0), 2) . "%",
+				"TGe" => round(($presu['Gc'] > 0 ? (($presu['Gc'] - $tab1_arr_consumo['Gc']) / ($prorrateo_ppto_costo - $tab1_arr_consumo['Totalc'])) * 100 : 0), 2) . "%",
+				"THe" => round(($presu['Hc'] > 0 ? (($presu['Hc'] - $tab1_arr_consumo['Hc']) / ($prorrateo_ppto_costo - $tab1_arr_consumo['Totalc'])) * 100 : 0), 2) . "%",
+				"TIe" => round(($presu['Ic'] > 0 ? (($presu['Ic'] - $tab1_arr_consumo['Ic']) / ($prorrateo_ppto_costo - $tab1_arr_consumo['Totalc'])) * 100 : 0), 2) . "%",
+
+				"TTotale" => round((($presu['Ac'] > 0 ? (($presu['Ac'] - $tab1_arr_consumo['Ac']) / ($prorrateo_ppto_costo - $tab1_arr_consumo['Totalc'])) * 100 : 0) +
+						($presu['Bc'] > 0 ? (($presu['Bc'] - $tab1_arr_consumo['Bc']) / ($prorrateo_ppto_costo - $tab1_arr_consumo['Totalc'])) * 100 : 0) +
+						($presu['Cc'] > 0 ? (($presu['Cc'] - $tab1_arr_consumo['Cc']) / ($prorrateo_ppto_costo - $tab1_arr_consumo['Totalc'])) * 100 : 0) +
+						($presu['Dc'] > 0 ? (($presu['Dc'] - $tab1_arr_consumo['Dc']) / ($prorrateo_ppto_costo - $tab1_arr_consumo['Totalc'])) * 100 : 0) +
+						($presu['Ec'] > 0 ? (($presu['Ec'] - $tab1_arr_consumo['Ec']) / ($prorrateo_ppto_costo - $tab1_arr_consumo['Totalc'])) * 100 : 0) +
+						($presu['Fc'] > 0 ? (($presu['Fc'] - $tab1_arr_consumo['Fc']) / ($prorrateo_ppto_costo - $tab1_arr_consumo['Totalc'])) * 100 : 0) +
+						($presu['Gc'] > 0 ? (($presu['Gc'] - $tab1_arr_consumo['Gc']) / ($prorrateo_ppto_costo - $tab1_arr_consumo['Totalc'])) * 100 : 0) +
+						($presu['Hc'] > 0 ? (($presu['Hc'] - $tab1_arr_consumo['Hc']) / ($prorrateo_ppto_costo - $tab1_arr_consumo['Totalc'])) * 100 : 0) +
+						($presu['Ic'] > 0 ? (($presu['Ic'] - $tab1_arr_consumo['Ic']) / ($prorrateo_ppto_costo - $tab1_arr_consumo['Totalc'])) * 100 : 0)), 2) . "%"
+			);
+
+
+			$f3->set('GRILLA_CABECERA', $array_ppto_format);
+			$f3->set('TABLA1_CONSUMO', $array_consumo_format);
+			$f3->set('TABLA1_TOTAL', $tab1_arr_total);
 			$f3->set('NOM_TEMPORADA', $temporada->NOM_TEMPORADA);
 			$f3->set('NOM_TEMPORADA_CORTO', $temporada->NOM_TEMPORADA_CORTO);
 			$f3->set('COD_TEMPORADA', $f3->get('SESSION.COD_TEMPORADA'));
 			$f3->set('COD_EST_TEMP', $temporada->COD_EST_TEMP);
 			$f3->set('USR_CRE', $temporada->USR_CRE);
 			
+			ControlFormularioMantenedores::tipo_tienda($f3);
+			ControlFormularioMantenedores::formatos($f3);
+			ControlFormularioMantenedores::tipo_ventana_llegada($f3);
+			ControlFormularioMantenedores::tipo_ppto_costo($f3);
+			ControlFormularioMantenedores::tipo_ppto_retail($f3);
+
 			/*$f3->set('contenido', 'formulario/plan_compra/simulador_compra4.html');
             echo Template::instance()->render('layout_simuladorB.php');*/
 

@@ -3696,7 +3696,56 @@ class PlanCompraClass extends \parametros
 
 
     }
+    // Llenar ListBox de Disponible
+    public static function TiendaObtieneDisponible($temporada, $depto, $marca, $tienda)
+    {
 
+        $sql = "begin PLC_PKG_PRUEBA.PRC_LISTAR_TDA($temporada,'" . $depto . "',$marca, :data); end;";
+        $data = \database::getInstancia()->getConsultaSP($sql, 1);
+
+        // Transformo a array asociativo
+        $array1 = [];
+        foreach ($data as $va1) {
+            array_push($array1
+                , array(
+                    "CODIGO" => $va1[0]
+                , "DESCRIPCION" => $va1[1]
+                )
+            );
+        }
+        return $array1;
+
+    }
+    // Llenar ListBox de Asignado
+    public static function TiendaObtieneAsignado($temporada, $depto, $marca, $tienda)
+    {
+
+        $sql = "SELECT DISTINCT
+                P.COD_TDA AS COD_SUC,
+                INITCAP( TRIM( BOSACC_FUN_OBT_NOM_SUC( P.COD_TDA ) ) ) AS DES_SUC
+                 FROM   PLC_SEGMENTOS_TDA P
+                 WHERE  P.COD_TEMPORADA = $temporada
+                 AND    P.DEP_DEPTO     = '" . $depto . "'
+                 AND    P.COD_MARCA = $marca
+                 AND    DECODE( $tienda, 0, 0,P.COD_SEG ) = $tienda
+                 ORDER BY 2
+                ";
+        $data = \database::getInstancia()->getFilas($sql);
+
+        // Transformo a array asociativo
+        $array1 = [];
+        foreach ($data as $va1) {
+            array_push($array1
+                , array(
+                    "CODIGO" => $va1[0]
+                , "DESCRIPCION" => $va1[1]
+                )
+            );
+        }
+        return $array1;
+
+
+    }
 
     // ######################## FIN Trabajo POPUP Tienda ########################
 
