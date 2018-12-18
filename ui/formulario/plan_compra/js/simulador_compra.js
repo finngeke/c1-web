@@ -1691,7 +1691,6 @@ $(function () {
             $("#poptienda_tipotienda").hide();
             $("#poptienda_asignacion").hide();
 
-
             // Levantamos el popup
             var POPUPTienda = $("#POPUP_tienda");
             POPUPTienda.data("kendoWindow").open();

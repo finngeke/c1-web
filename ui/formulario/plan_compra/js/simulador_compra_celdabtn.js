@@ -556,7 +556,7 @@ $(function () {
     // Definimos la estructura del ListBox
     $("#tienda_disponible").kendoListBox({
         autoBind: true,
-        //dataSource:dataSource_cbx_disponible,
+        selectable: "multiple",
         connectWith: "tienda_seleccionado",
         dataTextField: "DESCRIPCION",
         dataValueField: "CODIGO",
@@ -567,7 +567,7 @@ $(function () {
 
     $("#tienda_seleccionado").kendoListBox({
         autoBind: true,
-        //dataSource:dataSource_cbx_asignado,
+        selectable: "multiple",
         dataTextField: "DESCRIPCION",
         dataValueField: "CODIGO"
     });
@@ -640,7 +640,17 @@ $(function () {
             if(dataItem){
                 if(dataItem.DESCRIPCION.length > 0){
 
+                    // Despliego el ListBox
                     $("#poptienda_asignacion").show();
+
+                    // Bloqueo el ListBox si el campo seleccionado es internet
+                    if(dataItem.DESCRIPCION == "I"){
+                        $("#tienda_disponible").attr("disabled","disabled");
+                        $("#tienda_seleccionado").attr("disabled","disabled");
+                    }else{
+                        /*$("#tienda_disponible").attr("disabled",false);
+                        $("#tienda_seleccionado").attr("disabled",false);*/
+                    }
 
                     // Valor del CBX poptienda_asignacion
                     cbx_tipotienda_valor = dataItem.CODIGO;
@@ -657,6 +667,15 @@ $(function () {
                                 },
                                 dataType: "json"
                             }
+                        },
+                        schema: {
+                            model: {
+                                id: "CODIGO",
+                                fields: {
+                                    CODIGO: { type: "number" },
+                                    DESCRIPCION: { type: "string" }
+                                }
+                            }
                         }
                     });
                     // Seteo DataSet Asignado
@@ -669,6 +688,24 @@ $(function () {
                                     TIENDA: kendo.parseInt(cbx_tipotienda_valor)
                                 },
                                 dataType: "json"
+                            },
+                            update: {
+                                url: "TelerikPlanCompra/TiendaObtieneAsignado",
+                                dataType: "json"
+                            },
+                            parameterMap: function (options, operation) {
+                                if (operation !== "read" && options.models) {
+                                    return { models: kendo.stringify(options.models) };
+                                }
+                            }
+                        },
+                        schema: {
+                            model: {
+                                id: "CODIGO",
+                                fields: {
+                                    CODIGO: { type: "number" },
+                                    DESCRIPCION: { type: "string" }
+                                }
                             }
                         }
                     });
