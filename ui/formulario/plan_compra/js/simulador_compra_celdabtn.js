@@ -701,8 +701,6 @@ $(function () {
                     });
 
 
-
-
                 }
             }else{
                 $("#poptienda_asignacion").hide();
