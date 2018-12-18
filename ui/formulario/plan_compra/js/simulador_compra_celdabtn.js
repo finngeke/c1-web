@@ -623,8 +623,8 @@ $(function () {
             read: {
                 url: "TelerikPlanCompra/TiendaObtieneDisponible",
                 data: {
-                    MARCA: kendo.parseInt(ID_COLOR3),
-                    TIENDA: kendo.parseInt(0)
+                    MARCA: kendo.parseInt(cbx_marca.val()),
+                    TIENDA: kendo.parseInt(cbx_tipotienda.val())
                 },
                 dataType: "json"
             }
@@ -637,8 +637,8 @@ $(function () {
             read: {
                 url: "TelerikPlanCompra/TiendaObtieneAsignado",
                 data: {
-                    MARCA: kendo.parseInt(ID_COLOR3),
-                    TIENDA: kendo.parseInt(0)
+                    MARCA: kendo.parseInt(cbx_marca.val()),
+                    TIENDA: kendo.parseInt(cbx_tipotienda.val())
                 },
                 dataType: "json"
             }
