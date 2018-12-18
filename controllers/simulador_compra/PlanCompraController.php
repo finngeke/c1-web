@@ -451,11 +451,15 @@ if($ESTADO_C1!=24){
     }
     // Llenar ListBox de Disponible
     public function TiendaObtieneDisponible($f3) {
-        echo json_encode(\simulador_compra\tipo_de_tienda::TiendaObtieneDisponible($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'),$f3->get('GET.MARCA'),$f3->get('GET.TIENDA')));
+
+        $array_data = $_GET;
+        echo json_encode(\simulador_compra\PlanCompraClass::TiendaObtieneDisponible($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'),$array_data["MARCA"],$array_data["TIENDA"]));
     }
     // Llenar ListBox de Asignado
     public function TiendaObtieneAsignado($f3) {
-        echo json_encode(\simulador_compra\tipo_de_tienda::TiendaObtieneAsignado($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'),$f3->get('GET.MARCA'),$f3->get('GET.TIENDA')));
+
+        $array_data = $_GET;
+        echo json_encode(\simulador_compra\PlanCompraClass::TiendaObtieneAsignado($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'),$array_data["MARCA"],$array_data["TIENDA"]));
     }
     // ######################## FIN Trabajo POPUP Tiendas ########################
 
