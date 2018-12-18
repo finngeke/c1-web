@@ -554,19 +554,24 @@ $(function () {
     }).data("kendoWindow").center();
 
     // Definimos la estructura del ListBox
-    var cbx_disponible = $("#tienda_disponible").kendoListBox({
+    $("#tienda_disponible").kendoListBox({
         autoBind: true,
-        dataSource:dataSource_cbx_disponible,
+        //dataSource:dataSource_cbx_disponible,
         connectWith: "tienda_seleccionado",
+        dataTextField: "DESCRIPCION",
+        dataValueField: "CODIGO",
         toolbar: {
             tools: ["transferTo", "transferFrom", "transferAllTo", "transferAllFrom"]
         }
     });
 
-    var cbx_asignado = $("#tienda_seleccionado").kendoListBox({
+    $("#tienda_seleccionado").kendoListBox({
         autoBind: true,
-        dataSource:dataSource_cbx_asignado
+        //dataSource:dataSource_cbx_asignado,
+        dataTextField: "DESCRIPCION",
+        dataValueField: "CODIGO"
     });
+
 
 
     // Seteo DataSet Marca
@@ -606,7 +611,10 @@ $(function () {
 
             if(dataItem){
                 if(dataItem.DESCRIPCION.length>0){
+
                     $("#poptienda_tipotienda").show();
+
+                    // Valor del CBX poptienda_tipotienda
                     cbx_marca_valor = dataItem.CODIGO;
                 }
             }else{
@@ -634,8 +642,10 @@ $(function () {
 
                     $("#poptienda_asignacion").show();
 
+                    // Valor del CBX poptienda_asignacion
                     cbx_tipotienda_valor = dataItem.CODIGO;
 
+                    // ############## Cargo lo DataSet ##############
                     // Seteo DataSet Disponible
                     dataSource_cbx_disponible = new kendo.data.DataSource({
                         transport: {
@@ -663,30 +673,33 @@ $(function () {
                         }
                     });
 
-                    $("#tienda_disponible").kendoListBox({
-                        autoBind: true,
-                        dataSource:dataSource_cbx_disponible,
-                        connectWith: "tienda_seleccionado",
-                        dataTextField: "DESCRIPCION",
-                        dataValueField: "CODIGO",
-                        toolbar: {
-                            tools: ["transferTo", "transferFrom", "transferAllTo", "transferAllFrom"]
+                    // ############## Cargar Elementos en los ListBox ##############
+                    // Agrego los elementos al kendoListBox
+                    dataSource_cbx_disponible.fetch(function () {
+                        var data = this.data();
+                        var dispo = $("#tienda_disponible").data("kendoListBox");
+
+                        for (var i = 0; i < data.length; i++) {
+                            if (data[i].DESCRIPCION) {
+                                dispo.add(data[i]);
+                            }
                         }
+
                     });
 
-                    $("#tienda_seleccionado").kendoListBox({
-                        autoBind: true,
-                        dataSource:dataSource_cbx_asignado,
-                        dataTextField: "DESCRIPCION",
-                        dataValueField: "CODIGO",
+                    // Agrego los elementos al kendoListBox
+                    dataSource_cbx_asignado.fetch(function () {
+                        var data = this.data();
+                        var asig = $("#tienda_seleccionado").data("kendoListBox");
+
+                        for (var i = 0; i < data.length; i++) {
+                            if (data[i].DESCRIPCION) {
+                                asig.add(data[i]);
+                            }
+                        }
+
                     });
 
-
-
-
-                    // cbx_disponible.setDataSource(dataSource_cbx_disponible);
-                    // dataSource_cbx_disponible.read();
-                    // dataSource_cbx_asignado.read();
 
 
 
