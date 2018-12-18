@@ -535,7 +535,7 @@ $(function () {
     // Le da la estructura a la ventana POPUP
     var ventana_tienda = $("#POPUP_tienda");
     ventana_tienda.kendoWindow({
-        width: "400px",
+        width: "470px",
         title: "Mantenedor Tipo Tienda",
         visible: false,
         actions: [
@@ -641,13 +641,18 @@ $(function () {
 
     // Definimos la estructura del ListBox
     $("#tienda_disponible").kendoListBox({
+        //autoBind: false,
+        draggable: true,
         connectWith: "tienda_seleccionado",
         toolbar: {
             tools: ["transferTo", "transferFrom", "transferAllTo", "transferAllFrom"]
         }
     });
 
-    $("#tienda_seleccionado").kendoListBox();
+    $("#tienda_seleccionado").kendoListBox({
+        autoBind: false,
+        draggable: true
+    });
 
 
 

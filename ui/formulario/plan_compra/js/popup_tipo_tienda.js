@@ -559,6 +559,11 @@ $('.quitar').on('click', function () {
 
 });
 
+
+
+
+
+
 // ######################### MANTENEDOR DE REPLICAR #########################
 // BTN Cancelar del modal de replicar
 $('.btn_cancelar_replicar_tienda').on('click', function () {
