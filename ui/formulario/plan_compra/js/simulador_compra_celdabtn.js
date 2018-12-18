@@ -607,8 +607,12 @@ $(function () {
             var dataItem = e.sender.dataItem();
 
             if(dataItem){
-                if(dataItem.DESCRIPCION.length>0){
+                if(dataItem.DESCRIPCION.length > 0){
+
                     $("#poptienda_asignacion").show();
+
+console.log(cbx_marca);
+
                 }
             }else{
                 $("#poptienda_asignacion").hide();
@@ -617,15 +621,16 @@ $(function () {
         }
     }).data("kendoComboBox");
 
+
     // Seteo DataSet Disponible
     var dataSource_cbx_disponible = new kendo.data.DataSource({
         transport: {
             read: {
                 url: "TelerikPlanCompra/TiendaObtieneDisponible",
-                data: {
+                /*data: {
                     MARCA: kendo.parseInt(cbx_marca.val()),
                     TIENDA: kendo.parseInt(cbx_tipotienda.val())
-                },
+                },*/
                 dataType: "json"
             }
         }
@@ -636,15 +641,14 @@ $(function () {
         transport: {
             read: {
                 url: "TelerikPlanCompra/TiendaObtieneAsignado",
-                data: {
+                /*data: {
                     MARCA: kendo.parseInt(cbx_marca.val()),
                     TIENDA: kendo.parseInt(cbx_tipotienda.val())
-                },
+                },*/
                 dataType: "json"
             }
         }
     });
-
 
 
     // Definimos la estructura del ListBox
@@ -661,7 +665,6 @@ $(function () {
         autoBind: false,
         dataSource:dataSource_cbx_asignado
     });
-
 
 
 
