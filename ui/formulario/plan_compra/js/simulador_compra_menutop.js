@@ -81,13 +81,13 @@ $(document).ready(function() {
                 overflow: "never",
                 click: CancelarCambiosBTN
             },
-            {
+            /*{
                 type: "button",
                 text: "Cambiar Clave",
                 id: "cambiaclave_c1",
                 click: cambiaclave_c1,
                 overflow: "always"
-            },
+            },*/
             {
                 type: "button",
                 text: "Salir",
