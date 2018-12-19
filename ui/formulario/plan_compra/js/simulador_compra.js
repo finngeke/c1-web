@@ -1692,6 +1692,15 @@ $(function () {
             $("#poptienda_asignacion").hide();
             $("#poptienda_btns").hide();
 
+            / Dejo en Blanco los CBX
+            $("#CBXMarca").data("kendoComboBox").value("");
+            $("#CBXTipoTienda").data("kendoComboBox").value("");
+            // Limpiar los ListBox
+            var listBox1Tienda = $("#tienda_disponible").data("kendoListBox");
+            listBox1Tienda.remove(listBox1Tienda.items());
+            var listBox2Tienda = $("#tienda_seleccionado").data("kendoListBox");
+            listBox2Tienda.remove(listBox2Tienda.items());
+
             // Levantamos el popup
             var POPUPTienda = $("#POPUP_tienda");
             POPUPTienda.data("kendoWindow").open();

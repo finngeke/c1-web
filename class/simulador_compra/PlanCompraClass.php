@@ -3869,6 +3869,9 @@ class PlanCompraClass extends \parametros
     // Actualiza Asignados Otras Marcas
     public static function TiendaActualizaAsignadoOtrasMarcas($temporada, $depto, $login, $marca, $tipo_tenda){
 
+
+        $status = 0;
+
         // 1.- Listar Todas las marcas restantes
         $sql_marca = "SELECT DISTINCT COD_MARCA, NOM_MARCA
                 FROM PLC_DEPTO_MARCA
@@ -3876,8 +3879,8 @@ class PlanCompraClass extends \parametros
                 AND COD_MARCA <> $marca";
         $data_marca = \database::getInstancia()->getFilas($sql_marca);
 
-        $status = 0;
 
+        // Recorro las marcas restantes y le asigno las mismas tiendas de mi selección actual
         foreach ($data_marca as $va1) {
 
             // Quito los Registros Existentes de Esta Marca/Tipo Tienda
@@ -3888,22 +3891,18 @@ class PlanCompraClass extends \parametros
                            AND COD_MARCA = $va1[0]";
             $data_quitar = \database::getInstancia()->getConsulta($sql_quitar);
 
-            if(!$data_quitar){
-                $status = $status + 1;
-            }
+            if(!$data_quitar){ $status = $status + 1; }
 
             $sql_agregar = "INSERT INTO PLC_SEGMENTOS_TDA (COD_TEMPORADA,DEP_DEPTO,NIV_JER1,COD_JER1,COD_SEG,COD_TDA,COD_MARCA)
-                            SELECT COD_TEMPORADA, DEP_DEPTO, 0 NIV_JER1, 0 COD_JER1,COD_SEG,COD_TDA,$va1[0] COD_MARCA FROM PLC_SEGMENTOS_TDA
+                            SELECT COD_TEMPORADA, DEP_DEPTO, 0 NIV_JER1, 0 COD_JER1,COD_SEG,COD_TDA,$va1[0] COD_MARCA 
+                            FROM PLC_SEGMENTOS_TDA
                             WHERE COD_TEMPORADA = $temporada
                             AND DEP_DEPTO = '" . $depto . "'
                             AND COD_SEG = $tipo_tenda
                             AND COD_MARCA = $marca";
             $agrega = \database::getInstancia()->getConsulta($sql_agregar);
 
-
-            if(!$agrega){
-                $status = $status + 1;
-            }
+            if(!$agrega){ $status = $status + 1; }
 
         }
 

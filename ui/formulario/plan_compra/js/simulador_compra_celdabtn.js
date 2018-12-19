@@ -810,6 +810,14 @@ $(function () {
 
                     $("#poptienda_tipotienda").show();
 
+                    // Dejo en Blanco el CBX Siguiente
+                    $("#CBXTipoTienda").data("kendoComboBox").value("");
+                    // Limpiar los ListBox
+                    var listBox1Tienda = $("#tienda_disponible").data("kendoListBox");
+                    listBox1Tienda.remove(listBox1Tienda.items());
+                    var listBox2Tienda = $("#tienda_seleccionado").data("kendoListBox");
+                    listBox2Tienda.remove(listBox2Tienda.items());
+
                     // Valor del CBX poptienda_tipotienda
                     cbx_marca_valor = dataItem.CODIGO;
                 }
@@ -839,6 +847,12 @@ $(function () {
                     // Despliego el ListBox
                     $("#poptienda_asignacion").show();
                     $("#poptienda_btns").show();
+
+                    // Limpiar los ListBox
+                    var listBox1Tienda = $("#tienda_disponible").data("kendoListBox");
+                    listBox1Tienda.remove(listBox1Tienda.items());
+                    var listBox2Tienda = $("#tienda_seleccionado").data("kendoListBox");
+                    listBox2Tienda.remove(listBox2Tienda.items());
 
 
                     // Bloqueo el ListBox si el campo seleccionado es internet
