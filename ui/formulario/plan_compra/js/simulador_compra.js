@@ -1690,6 +1690,7 @@ $(function () {
             // Oculto los elementos por si se abre por segunda vez
             $("#poptienda_tipotienda").hide();
             $("#poptienda_asignacion").hide();
+            $("#poptienda_btns").hide();
 
             // Levantamos el popup
             var POPUPTienda = $("#POPUP_tienda");

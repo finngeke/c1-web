@@ -3807,7 +3807,7 @@ class PlanCompraClass extends \parametros
     // El estado me dice si hay que quitar o agregar el registro
 
         // Elimino
-        if($estado == false){
+        if($estado == "false"){
 
             $sql_quitar = "DELETE FROM PLC_SEGMENTOS_TDA
                             WHERE cod_temporada = $temporada

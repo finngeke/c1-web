@@ -470,7 +470,6 @@ if($ESTADO_C1!=24){
     public function TiendaActualizaAsignado($f3) {
 
         $array_data = $_GET;
-        die();
 
         echo \simulador_compra\PlanCompraClass::TiendaActualizaAsignado($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $array_data["CODIGO"], $array_data["DESCRIPCION"], $array_data["ESTADO"], $array_data["MARCA"], $array_data["TIPO_TIENDA"]);
 

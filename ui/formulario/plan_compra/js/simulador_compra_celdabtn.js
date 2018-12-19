@@ -649,6 +649,8 @@ $(function () {
 
                     // Despliego el ListBox
                     $("#poptienda_asignacion").show();
+                    $("#poptienda_btns").show();
+
 
                     // Bloqueo el ListBox si el campo seleccionado es internet
                     /*if(dataItem.DESCRIPCION == "I"){
@@ -751,8 +753,8 @@ $(function () {
                 dataSource_cbxDisponibleAsignado.sync();
 
                 // Aviso que todos salió correctamente (Probar en DataSource)
-                // popupNotification.getNotifications().parent().remove();
-                // popupNotification.show(" Los cambios fueron almacenados.", "success");
+                popupNotification.getNotifications().parent().remove();
+                popupNotification.show(" Los cambios fueron realizados.", "success");
 
             // Si no aplica para una tienda
             } else {
