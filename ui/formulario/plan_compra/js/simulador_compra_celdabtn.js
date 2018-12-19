@@ -1098,7 +1098,34 @@ $(function () {
     $("#btn_replica_temporada_tienda").kendoButton({
         click: function (e) {
 
-            kendo.confirm("¿Replico la Información?").then(function () {
+            kendo.confirm("¿Replico la Información del Depto Seleccionado?").then(function () {
+
+                var tem_selecc_duplicar = $("#CBXTemporadaReplica").val();
+
+                if(cbx_marca_valor && tem_selecc_duplicar){
+                    // Llamado Ajax
+                    $.ajax({
+                        url: "TelerikPlanCompra/TiendaDuplicarTemporada",
+                        data: {
+                            MARCA:kendo.parseInt(cbx_marca_valor),
+                            TEMP_SELECCIONADA:kendo.parseInt(tem_selecc_duplicar)
+                        },
+                        dataType: "json",
+                        success: function (data) {
+
+                            if(data=="OK"){
+                                popupNotification.getNotifications().parent().remove();
+                                popupNotification.show(" Todo OK, he duplicado la temporada.", "succes");
+                            }else{
+                                popupNotification.getNotifications().parent().remove();
+                                popupNotification.show(" Ups, no pude duplicar la temporada.", "error");
+                            }
+
+                        }
+                    });
+                }else{
+                    console.log("Marca: "+cbx_marca_valor+" Temp. Selecc: "+tem_selecc_duplicar);
+                }
 
 
 
@@ -1112,14 +1139,6 @@ $(function () {
 
 
 
-    function setTiendaAgregado(e, flag) {
-        var removedItems = e.dataItems;
-        for (var i = 0; i < removedItems.length; i++) {
-            var item = dataSource_cbx_disponible.get(removedItems[i].CODIGO);
-            item.ESTADO = flag;
-            item.dirty = !item.dirty;
-        }
-    }
 
 
 

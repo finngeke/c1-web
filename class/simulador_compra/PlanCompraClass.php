@@ -3938,6 +3938,32 @@ class PlanCompraClass extends \parametros
         }
         return $array1;
     }
+    // Duplicar Temporada
+    public static function TiendaDuplicarTemporada($temporada, $depto, $login, $temp_selecc, $marca)
+    {
+
+        $sql_duplicar = "begin PLC_PKG_MIGRACION.PRC_DELFULL_CONFIGTIENDAS_WEB($temporada,$temp_selecc,'" . $depto . "',$marca, :error, :data); end;";
+
+        // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+        if (!file_exists('../archivos/log_querys/' . $login)) {
+            mkdir('../archivos/log_querys/' . $login, 0775, true);
+        }
+        $stamp = date("Y-m-d_H-i-s");
+        $rand = rand(1, 999);
+        $content = $sql_duplicar;
+        $fp = fopen("../archivos/log_querys/" . $login . "/MANTENEDORTIENDA-DUPLICARTEMPORADA--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+        fwrite($fp, $content);
+        fclose($fp);
+        $data_duplicar = \database::getInstancia()->getConsultaSP($sql_duplicar, 2);
+
+        if ($data_duplicar) {
+            return "OK";
+        } else {
+            return "ERROR";
+        }
+
+
+    }
     // ######################## FIN Trabajo POPUP Tienda ########################
 
 

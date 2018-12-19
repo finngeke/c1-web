@@ -487,6 +487,19 @@ if($ESTADO_C1!=24){
     {
         echo json_encode(\simulador_compra\PlanCompraClass::ListarTemporadasDuplicar($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login')));
     }
+    // Duplicar Temporada
+    public function TiendaDuplicarTemporada($f3) {
+
+        // TEMPORADA:    Temporada que selecciona en popup de replicar.
+        // DEPARTAMENTO: Departamento en el que me encuentro.
+        // DEPTO:        Depto desde el popup de departamento.
+        // MARCA:        Marca del CBX de marca.
+
+        $array_data = $_GET;
+
+        echo \simulador_compra\PlanCompraClass::TiendaDuplicarTemporada($f3->get('SESSION.COD_TEMPORADA'),$f3->get('SESSION.COD_DEPTO'),$f3->get('SESSION.login'),$array_data["TEMP_SELECCIONADA"],$array_data["MARCA"]);
+
+    }
     // ######################## FIN Trabajo POPUP Tiendas ########################
 
 
