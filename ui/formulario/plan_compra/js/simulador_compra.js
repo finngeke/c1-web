@@ -1696,6 +1696,7 @@ $(function () {
             // Dejo en Blanco los CBX
             $("#CBXMarca").data("kendoComboBox").value("");
             $("#CBXTipoTienda").data("kendoComboBox").value("");
+            $("#CBXTemporadaReplica").data("kendoComboBox").value("");
             // Limpiar los ListBox
             var listBox1Tienda = $("#tienda_disponible").data("kendoListBox");
             listBox1Tienda.remove(listBox1Tienda.items());

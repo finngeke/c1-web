@@ -1028,8 +1028,15 @@ $(function () {
                                 success: function (data) {
 
                                     if(data=="OK"){
+
+                                        // Recargo la Grilla Trasera
+                                        var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
+                                        var sheet = spreadsheet.activeSheet();
+                                        sheet.dataSource.read();
+
                                         popupNotification.getNotifications().parent().remove();
                                         popupNotification.show(" Todo OK, repliqué para tus otras marcas la misma configuración.", "succes");
+
                                     }else{
                                         popupNotification.getNotifications().parent().remove();
                                         popupNotification.show(" Ups, no pude realizar la asignación a tus otras Marcas.", "error");
@@ -1114,8 +1121,31 @@ $(function () {
                         success: function (data) {
 
                             if(data=="OK"){
+
+                                // Recargo la Grilla Trasera
+                                var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
+                                var sheet = spreadsheet.activeSheet();
+                                sheet.dataSource.read();
+
+                                // Oculto los elementos por si se abre por segunda vez
+                                $("#poptienda_tipotienda").hide();
+                                $("#poptienda_asignacion").hide();
+                                $("#poptienda_btns").hide();
+                                $("#btn_replica_temporada_tienda").hide();
+
+                                // Dejo en Blanco los CBX
+                                $("#CBXMarca").data("kendoComboBox").value("");
+                                $("#CBXTipoTienda").data("kendoComboBox").value("");
+                                $("#CBXTemporadaReplica").data("kendoComboBox").value("");
+                                // Limpiar los ListBox
+                                var listBox1Tienda = $("#tienda_disponible").data("kendoListBox");
+                                listBox1Tienda.remove(listBox1Tienda.items());
+                                var listBox2Tienda = $("#tienda_seleccionado").data("kendoListBox");
+                                listBox2Tienda.remove(listBox2Tienda.items());
+
                                 popupNotification.getNotifications().parent().remove();
                                 popupNotification.show(" Todo OK, he duplicado la temporada.", "succes");
+
                             }else{
                                 popupNotification.getNotifications().parent().remove();
                                 popupNotification.show(" Ups, no pude duplicar la temporada.", "error");
