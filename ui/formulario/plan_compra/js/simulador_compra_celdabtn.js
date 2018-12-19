@@ -856,19 +856,22 @@ $(function () {
 
 
                     // Bloqueo el ListBox si el campo seleccionado es internet
-                    /*if(dataItem.DESCRIPCION == "I"){
+                    if(dataItem.DESCRIPCION == "I"){
+
                         $("#tienda_disponible").attr("disabled","disabled");
                         $("#tienda_seleccionado").attr("disabled","disabled");
 
                         // Ocultar LI de Botonera
+                        $("#poptienda_btns").hide();
 
                     }else{
                         $("#tienda_disponible").attr("disabled",false);
                         $("#tienda_seleccionado").attr("disabled",false);
 
                         // Desplegar LI de Botonera
+                        $("#poptienda_btns").show();
 
-                    }*/
+                    }
 
                     // Valor del CBX poptienda_asignacion
                     cbx_tipotienda_valor = dataItem.CODIGO;
@@ -1036,7 +1039,7 @@ $(function () {
     $("#replica_temporada_tienda").kendoButton({
         click: function (e) {
 
-
+kendo.alert("test");
 
         }
     });
