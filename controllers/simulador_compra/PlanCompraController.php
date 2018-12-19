@@ -482,6 +482,11 @@ if($ESTADO_C1!=24){
         echo \simulador_compra\PlanCompraClass::TiendaActualizaAsignadoOtrasMarcas($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $array_data["MARCA"], $array_data["TIPO_TIENDA"]);
 
     }
+    // Llenar el CBX de las Temporadas a duplicar del popup
+    public function ListarTemporadasDuplicar($f3)
+    {
+        echo json_encode(\simulador_compra\PlanCompraClass::ListarTemporadasDuplicar($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login')));
+    }
     // ######################## FIN Trabajo POPUP Tiendas ########################
 
 

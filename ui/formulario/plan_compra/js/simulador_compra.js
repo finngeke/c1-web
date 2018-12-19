@@ -1691,6 +1691,7 @@ $(function () {
             $("#poptienda_tipotienda").hide();
             $("#poptienda_asignacion").hide();
             $("#poptienda_btns").hide();
+            $("#btn_replica_temporada_tienda").hide();
 
             // Dejo en Blanco los CBX
             $("#CBXMarca").data("kendoComboBox").value("");
@@ -1704,64 +1705,6 @@ $(function () {
             // Levantamos el popup
             var POPUPTienda = $("#POPUP_tienda");
             POPUPTienda.data("kendoWindow").open();
-
-
-
-            /*dataSourceTiendaDisponible = new kendo.data.DataSource({
-                serverFiltering: false,
-                transport: {
-                    read: {
-                        url: crudServiceBaseUrl + "/Products",
-                        dataType: "jsonp"
-                    },
-                    update: {
-                        url: crudServiceBaseUrl + "/Products/Update",
-                        dataType: "jsonp"
-                    },
-                    parameterMap: function (options, operation) {
-                        if (operation !== "read" && options.models) {
-                            return { models: kendo.stringify(options.models) };
-                        }
-                    }
-                },
-                requestStart: function () {
-                    // kendo.ui.progress($(".demo-section"), true);
-                },
-                requestEnd: function () {
-                    // kendo.ui.progress($(".demo-section"), false);
-                },
-                batch: false,
-                schema: {
-                    model: {
-                        id: "ProductID",
-                        fields: {
-                            ProductID: { editable: false, nullable: true },
-                            Discontinued: { type: "boolean" },
-                        }
-                    }
-                }
-            });*/
-
-
-            /*dataSourceTiendaDisponible.fetch(function () {
-                var data = this.data();
-                var tienda_disponible = $("#tienda_disponible").data("kendoListBox");
-                var tienda_seleccionado = $("#tienda_seleccionado").data("kendoListBox");
-
-                for (var i = 0; i < data.length; i++) {
-                    if (data[i].Discontinued) {
-                        tienda_disponible.add(data[i]);
-                    }
-                    else {
-                        tienda_seleccionado.add(data[i]);
-                    }
-                }
-            });*/
-
-
-
-
-
 
 
         }else{

@@ -741,6 +741,20 @@ $(function () {
         close: onClose*/
     }).data("kendoWindow").center();
 
+    var ventana_replicar_tienda = $("#POPUP_replicar_tienda");
+    ventana_replicar_tienda.kendoWindow({
+        width: "300px",
+        title: "Replicar Temporada",
+        visible: false,
+        actions: [
+            //"Pin",
+            //"Minimize",
+            //"Maximize",
+            "Close"
+        ]/*,
+        close: onClose*/
+    }).data("kendoWindow").center();
+
     // Definimos la estructura del ListBox
     $("#tienda_disponible").kendoListBox({
         autoBind: true,
@@ -790,6 +804,16 @@ $(function () {
         }
     });
 
+    // Seteo DataSet TipoTienda
+    var dataSource_cbx_duplicatemp = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: "TelerikPlanCompra/ListarTemporadasDuplicar",
+                dataType: "json"
+            }
+        }
+    });
+
     // Seteo CBX Marca
     var cbx_marca = $("#CBXMarca").kendoComboBox({
         autoBind: false,
@@ -809,6 +833,7 @@ $(function () {
                 if(dataItem.DESCRIPCION.length>0){
 
                     $("#poptienda_tipotienda").show();
+                    $("#btn_replica_temporada_tienda").hide();
 
                     // Dejo en Blanco el CBX Siguiente
                     $("#CBXTipoTienda").data("kendoComboBox").value("");
@@ -847,6 +872,7 @@ $(function () {
                     // Despliego el ListBox
                     $("#poptienda_asignacion").show();
                     $("#poptienda_btns").show();
+                    $("#btn_replica_temporada_tienda").hide();
 
                     // Limpiar los ListBox
                     var listBox1Tienda = $("#tienda_disponible").data("kendoListBox");
@@ -928,6 +954,28 @@ $(function () {
                 }
             }else{
                 $("#poptienda_asignacion").hide();
+            }
+
+        }
+    }).data("kendoComboBox");
+
+    // Seteo CBX Temporada a Replicar
+    var cbx_temp_replicar = $("#CBXTemporadaReplica").kendoComboBox({
+        autoBind: true,
+        dataSource:dataSource_cbx_duplicatemp,
+        placeholder: "Seleccione Temporada...",
+        dataTextField: "DESCRIPCION",
+        dataValueField: "CODIGO",
+        change: function (e) {
+
+            var dataItem = e.sender.dataItem();
+
+            if(dataItem){
+                if(dataItem.DESCRIPCION.length > 0){
+                    $("#btn_replica_temporada_tienda").show();
+                }
+            }else{
+                $("#btn_replica_temporada_tienda").hide();
             }
 
         }
@@ -1039,12 +1087,28 @@ $(function () {
     $("#replica_temporada_tienda").kendoButton({
         click: function (e) {
 
-kendo.alert("test");
+            // Levantamos el popup de Replicar Tienda
+            var POPUPReplicarTienda = $("#POPUP_replicar_tienda");
+            POPUPReplicarTienda.data("kendoWindow").open();
 
         }
     });
 
+    // Seteo del BTN que realiza la accion de Replicar
+    $("#btn_replica_temporada_tienda").kendoButton({
+        click: function (e) {
 
+            kendo.confirm("¿Replico la Información?").then(function () {
+
+
+
+            }, function () {
+                popupNotification.getNotifications().parent().remove();
+                popupNotification.show(" No se han realizado Cambios.", "info");
+            });
+
+        }
+    });
 
 
 
@@ -1095,8 +1159,8 @@ kendo.alert("test");
         visible: false,
         actions: [
             //"Pin",
-            "Minimize",
-            "Maximize",
+            /*"Minimize",
+            "Maximize",*/
             "Close"
         ]/*,
                 close: onClose*/

@@ -3919,6 +3919,25 @@ class PlanCompraClass extends \parametros
 
 
     }
+    // Llenar el CBX de las Temporadas a duplicar del popup
+    public static function ListarTemporadasDuplicar($temporada, $depto,$login)
+    {
+        //  PLC_PKG_MIGRACION.PRC_TEMP_CONFIGTIENDAS
+        $sql = "begin PLC_PKG_MIGRACION.PRC_TEMP_CONFIGTIENDAS($temporada, :data); end;";
+        $data = \database::getInstancia()->getConsultaSP($sql, 1);
+
+        // Transformo a array asociativo
+        $array1 = [];
+        foreach ($data as $va1) {
+            array_push($array1
+                , array(
+                    "CODIGO" => $va1[0]
+                , "DESCRIPCION" => $va1[1]
+                )
+            );
+        }
+        return $array1;
+    }
     // ######################## FIN Trabajo POPUP Tienda ########################
 
 
