@@ -532,8 +532,7 @@ $(function () {
 
     // ############################ TIENDAS ############################
 
-    var dataSource_cbx_disponible = "";
-    var dataSource_cbx_asignado = "";
+    var dataSource_cbxDisponibleAsignado = "";
     var cbx_marca_valor = "";
     var cbx_tipotienda_valor = "";
 
@@ -556,8 +555,9 @@ $(function () {
     // Definimos la estructura del ListBox
     $("#tienda_disponible").kendoListBox({
         autoBind: true,
-        selectable: "multiple",
+        //selectable: "multiple",
         connectWith: "tienda_seleccionado",
+        dropSources: ["tienda_seleccionado"],
         dataTextField: "DESCRIPCION",
         dataValueField: "CODIGO",
         toolbar: {
@@ -567,11 +567,18 @@ $(function () {
 
     $("#tienda_seleccionado").kendoListBox({
         autoBind: true,
-        selectable: "multiple",
+        //selectable: "multiple",
+        connectWith: "tienda_disponible",
+        dropSources: ["tienda_disponible"],
         dataTextField: "DESCRIPCION",
-        dataValueField: "CODIGO"
+        dataValueField: "CODIGO",
+        remove: function (e) {
+            setTiendaModificado(e, false);
+        },
+        add: function (e) {
+            setTiendaModificado(e, true);
+        }
     });
-
 
 
     // Seteo DataSet Marca
@@ -644,45 +651,23 @@ $(function () {
                     $("#poptienda_asignacion").show();
 
                     // Bloqueo el ListBox si el campo seleccionado es internet
-                    if(dataItem.DESCRIPCION == "I"){
+                    /*if(dataItem.DESCRIPCION == "I"){
                         $("#tienda_disponible").attr("disabled","disabled");
                         $("#tienda_seleccionado").attr("disabled","disabled");
                     }else{
-                        /*$("#tienda_disponible").attr("disabled",false);
-                        $("#tienda_seleccionado").attr("disabled",false);*/
-                    }
+                        $("#tienda_disponible").attr("disabled",false);
+                        $("#tienda_seleccionado").attr("disabled",false);
+                    }*/
 
                     // Valor del CBX poptienda_asignacion
                     cbx_tipotienda_valor = dataItem.CODIGO;
 
                     // ############## Cargo lo DataSet ##############
                     // Seteo DataSet Disponible
-                    dataSource_cbx_disponible = new kendo.data.DataSource({
+                    dataSource_cbxDisponibleAsignado = new kendo.data.DataSource({
                         transport: {
                             read: {
-                                url: "TelerikPlanCompra/TiendaObtieneDisponible",
-                                data: {
-                                    MARCA: kendo.parseInt(cbx_marca_valor),
-                                    TIENDA: kendo.parseInt(cbx_tipotienda_valor)
-                                },
-                                dataType: "json"
-                            }
-                        },
-                        schema: {
-                            model: {
-                                id: "CODIGO",
-                                fields: {
-                                    CODIGO: { type: "number" },
-                                    DESCRIPCION: { type: "string" }
-                                }
-                            }
-                        }
-                    });
-                    // Seteo DataSet Asignado
-                    dataSource_cbx_asignado = new kendo.data.DataSource({
-                        transport: {
-                            read: {
-                                url: "TelerikPlanCompra/TiendaObtieneAsignado",
+                                url: "TelerikPlanCompra/TiendaObtieneDisponibleAsignado",
                                 data: {
                                     MARCA: kendo.parseInt(cbx_marca_valor),
                                     TIENDA: kendo.parseInt(cbx_tipotienda_valor)
@@ -690,13 +675,8 @@ $(function () {
                                 dataType: "json"
                             },
                             update: {
-                                url: "TelerikPlanCompra/TiendaObtieneAsignado",
+                                url: "TelerikPlanCompra/TiendaActualizaAsignado",
                                 dataType: "json"
-                            },
-                            parameterMap: function (options, operation) {
-                                if (operation !== "read" && options.models) {
-                                    return { models: kendo.stringify(options.models) };
-                                }
                             }
                         },
                         schema: {
@@ -704,38 +684,31 @@ $(function () {
                                 id: "CODIGO",
                                 fields: {
                                     CODIGO: { type: "number" },
-                                    DESCRIPCION: { type: "string" }
+                                    DESCRIPCION: { type: "string" },
+                                    ESTADO: { type: "boolean" }
                                 }
                             }
                         }
                     });
 
-                    // ############## Cargar Elementos en los ListBox ##############
-                    // Agrego los elementos al kendoListBox
-                    dataSource_cbx_disponible.fetch(function () {
+                    // ############## Cargar Elementos en el ListBox ##############
+                    dataSource_cbxDisponibleAsignado.fetch(function () {
                         var data = this.data();
-                        var dispo = $("#tienda_disponible").data("kendoListBox");
+                        var disponible = $("#tienda_disponible").data("kendoListBox");
+                        var asignado = $("#tienda_seleccionado").data("kendoListBox");
 
                         for (var i = 0; i < data.length; i++) {
-                            if (data[i].DESCRIPCION) {
-                                dispo.add(data[i]);
+                            if (data[i].ESTADO) {
+                                asignado.add(data[i]);
+                            } else {
+                                disponible.add(data[i]);
                             }
                         }
 
                     });
 
-                    // Agrego los elementos al kendoListBox
-                    dataSource_cbx_asignado.fetch(function () {
-                        var data = this.data();
-                        var asig = $("#tienda_seleccionado").data("kendoListBox");
 
-                        for (var i = 0; i < data.length; i++) {
-                            if (data[i].DESCRIPCION) {
-                                asig.add(data[i]);
-                            }
-                        }
 
-                    });
 
 
                 }
@@ -746,12 +719,35 @@ $(function () {
         }
     }).data("kendoComboBox");
 
+    // Setea true/false de las Asignaciones
+    function setTiendaModificado(e, flag) {
+        var removedItems = e.dataItems;
+        for (var i = 0; i < removedItems.length; i++) {
+            var item = dataSource_cbxDisponibleAsignado.get(removedItems[i].CODIGO);
+            item.ESTADO = flag;
+            item.dirty = !item.dirty;
+        }
+    }
+
+    // Seteo del BTN Guardar
+    $("#guarda_cambios_tienda").kendoButton({
+        click: function (e) {
+            dataSource_cbxDisponibleAsignado.sync();
+        }
+    });
 
 
 
 
 
-
+    function setTiendaAgregado(e, flag) {
+        var removedItems = e.dataItems;
+        for (var i = 0; i < removedItems.length; i++) {
+            var item = dataSource_cbx_disponible.get(removedItems[i].CODIGO);
+            item.ESTADO = flag;
+            item.dirty = !item.dirty;
+        }
+    }
 
 
 

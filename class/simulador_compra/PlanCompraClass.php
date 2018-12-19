@@ -3710,6 +3710,7 @@ class PlanCompraClass extends \parametros
                 , array(
                     "CODIGO" => $va1[0]
                 , "DESCRIPCION" => $va1[1]
+                , "ESTADO" => false
                 )
             );
         }
@@ -3737,8 +3738,10 @@ class PlanCompraClass extends \parametros
         foreach ($data as $va1) {
             array_push($array1
                 , array(
-                    "CODIGO" => $va1[0]
+                  "CODIGO" => $va1[0]
                 , "DESCRIPCION" => $va1[1]
+                , "ESTADO" => true
+
                 )
             );
         }
@@ -3746,7 +3749,66 @@ class PlanCompraClass extends \parametros
 
 
     }
+    // Llenar ListBox de TiendaObtieneDisponibleAsignado
+    public static function TiendaObtieneDisponibleAsignado($temporada, $depto, $marca, $tienda)
+    {
 
+        $sql = "SELECT  S.SUC_SUCURSAL AS CODIGO,
+                             convert(REPLACE(REPLACE(REPLACE(INITCAP(TRIM(S.SUC_NOMBRE)),CHR(9),''),CHR(10),''),CHR(13),''),'utf8','us7ascii') AS DESCRIPCION,
+                             0 ESTADO
+                FROM GST_MAESUCURS S
+                WHERE SUC_SUCURSAL NOT IN (SELECT DISTINCT P.COD_TDA AS COD_SUC
+                                           FROM PLC_SEGMENTOS_TDA P
+                                           WHERE P.COD_TEMPORADA = 11
+                                           AND P.DEP_DEPTO = 'D125'
+                                           AND P.COD_MARCA = 3180)
+                                           
+                UNION ALL 
+                
+                SELECT DISTINCT
+                                P.COD_TDA AS CODIGO,
+                                INITCAP( TRIM( BOSACC_FUN_OBT_NOM_SUC( P.COD_TDA ) ) ) AS DESCRIPCION,
+                                1 ESTADO
+                                 FROM   PLC_SEGMENTOS_TDA P
+                                 WHERE  P.COD_TEMPORADA = 11
+                                 AND    P.DEP_DEPTO     = 'D125'
+                                 AND    P.COD_MARCA = 3180
+                                 AND    DECODE( 2, 0, 0,P.COD_SEG ) = 2
+                ORDER BY 2";
+        $data = \database::getInstancia()->getFilas($sql);
+
+        // Transformo a array asociativo
+        $array1 = [];
+        foreach ($data as $va1) {
+
+            if($va1[2]==0){
+                $estado = false;
+            }else{
+                $estado = true;
+            }
+
+
+            array_push($array1
+                , array(
+                    "CODIGO" => $va1[0]
+                , "DESCRIPCION" => $va1[1]
+                , "ESTADO" => $estado
+
+                )
+            );
+        }
+        return $array1;
+
+
+    }
+    // Actualiza Asignados
+    public static function TiendaActualizaAsignado($temporada, $depto, $login, $id_color3, $estado_insert, $proforma, $estado_update, $comentario){
+
+
+
+
+
+    }
     // ######################## FIN Trabajo POPUP Tienda ########################
 
 
