@@ -997,74 +997,78 @@ $(function () {
 
             var popupNotification = $("#popupNotification").kendoNotification().data("kendoNotification");
 
+            // Verificar Permisos
+            if(localStorage.getItem("T0021")){
+
+                kendo.confirm("¿Guardo los Cambios?").then(function () {
+
+                    // Sincronizar DataSource
+                    dataSource_cbxDisponibleAsignado.sync();
+
+                    // Aviso que todos salió correctamente (Probar en DataSource)
+                    popupNotification.getNotifications().parent().remove();
+                    popupNotification.show(" Los cambios fueron realizados.", "success");
 
 
-            kendo.confirm("¿Guardo los Cambios?").then(function () {
+                    // ############## Revisar si hay más marcas ##############
+                    dataSource_cbx_marca.fetch(function () {
+                        var data = this.data();
 
-                // Sincronizar DataSource
-                dataSource_cbxDisponibleAsignado.sync();
+                        // Existe más de una marca
+                        if(data.length>1){
+                            kendo.confirm("¿Agrego a tus otras Marcas, la misma configuración de tiendas para el mismo Tipo Tienda?").then(function () {
 
-                // Aviso que todos salió correctamente (Probar en DataSource)
-                popupNotification.getNotifications().parent().remove();
-                popupNotification.show(" Los cambios fueron realizados.", "success");
+                                // Llamado Ajax
+                                $.ajax({
+                                    url: "TelerikPlanCompra/TiendaActualizaAsignadoOtrasMarcas",
+                                    data: {
+                                        MARCA:kendo.parseInt(cbx_marca_valor),
+                                        TIPO_TIENDA:kendo.parseInt(cbx_tipotienda_valor)
+                                    },
+                                    dataType: "json",
+                                    success: function (data) {
 
+                                        if(data=="OK"){
 
-                // ############## Revisar si hay más marcas ##############
-                dataSource_cbx_marca.fetch(function () {
-                    var data = this.data();
+                                            // Recargo la Grilla Trasera
+                                            var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
+                                            var sheet = spreadsheet.activeSheet();
+                                            sheet.dataSource.read();
 
-                    // Existe más de una marca
-                    if(data.length>1){
-                        kendo.confirm("¿Agrego a tus otras Marcas, la misma configuración de tiendas para el mismo Tipo Tienda?").then(function () {
+                                            popupNotification.getNotifications().parent().remove();
+                                            popupNotification.show(" Todo OK, repliqué para tus otras marcas la misma configuración.", "succes");
 
-                            // Llamado Ajax
-                            $.ajax({
-                                url: "TelerikPlanCompra/TiendaActualizaAsignadoOtrasMarcas",
-                                data: {
-                                    MARCA:kendo.parseInt(cbx_marca_valor),
-                                    TIPO_TIENDA:kendo.parseInt(cbx_tipotienda_valor)
-                                },
-                                dataType: "json",
-                                success: function (data) {
+                                        }else{
+                                            popupNotification.getNotifications().parent().remove();
+                                            popupNotification.show(" Ups, no pude realizar la asignación a tus otras Marcas.", "error");
+                                        }
 
-                                    if(data=="OK"){
-
-                                        // Recargo la Grilla Trasera
-                                        var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
-                                        var sheet = spreadsheet.activeSheet();
-                                        sheet.dataSource.read();
-
-                                        popupNotification.getNotifications().parent().remove();
-                                        popupNotification.show(" Todo OK, repliqué para tus otras marcas la misma configuración.", "succes");
-
-                                    }else{
-                                        popupNotification.getNotifications().parent().remove();
-                                        popupNotification.show(" Ups, no pude realizar la asignación a tus otras Marcas.", "error");
                                     }
+                                });
 
-                                }
+
+                            }, function () {
+                                popupNotification.getNotifications().parent().remove();
+                                popupNotification.show(" Ok, no realicé otros cambios.", "info");
                             });
+                        }
+
+                    });
 
 
-                        }, function () {
-                            popupNotification.getNotifications().parent().remove();
-                            popupNotification.show(" Ok, no realicé otros cambios.", "info");
-                        });
-                    }
 
+
+
+                }, function () {
+                    popupNotification.getNotifications().parent().remove();
+                    popupNotification.show(" No se han realizado Cambios.", "info");
                 });
 
-
-
-
-
-            }, function () {
+            }else{
                 popupNotification.getNotifications().parent().remove();
-                popupNotification.show(" No se han realizado Cambios.", "info");
-            });
-
-
-
+                popupNotification.show(" No tiene permisos para realizar esta acción.", "error");
+            // Fin Verificar Permisos
+            }
 
             // Preguntar si aplica para todas las tiendas
             /*var conf_todas_tiendas = confirm("¿Guardo los Cambios?");
@@ -1105,64 +1109,77 @@ $(function () {
     $("#btn_replica_temporada_tienda").kendoButton({
         click: function (e) {
 
-            kendo.confirm("¿Replico la Información del Depto Seleccionado?").then(function () {
+            var popupNotification = $("#popupNotification").kendoNotification().data("kendoNotification");
 
-                var tem_selecc_duplicar = $("#CBXTemporadaReplica").val();
+            // Verificar Permisos
+            if(localStorage.getItem("T0022")){
 
-                if(cbx_marca_valor && tem_selecc_duplicar){
-                    // Llamado Ajax
-                    $.ajax({
-                        url: "TelerikPlanCompra/TiendaDuplicarTemporada",
-                        data: {
-                            MARCA:kendo.parseInt(cbx_marca_valor),
-                            TEMP_SELECCIONADA:kendo.parseInt(tem_selecc_duplicar)
-                        },
-                        dataType: "json",
-                        success: function (data) {
+                kendo.confirm("¿Replico la Información del Depto Seleccionado?").then(function () {
 
-                            if(data=="OK"){
+                    var tem_selecc_duplicar = $("#CBXTemporadaReplica").val();
 
-                                // Recargo la Grilla Trasera
-                                var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
-                                var sheet = spreadsheet.activeSheet();
-                                sheet.dataSource.read();
+                    if(cbx_marca_valor && tem_selecc_duplicar){
+                        // Llamado Ajax
+                        $.ajax({
+                            url: "TelerikPlanCompra/TiendaDuplicarTemporada",
+                            data: {
+                                MARCA:kendo.parseInt(cbx_marca_valor),
+                                TEMP_SELECCIONADA:kendo.parseInt(tem_selecc_duplicar)
+                            },
+                            dataType: "json",
+                            success: function (data) {
 
-                                // Oculto los elementos por si se abre por segunda vez
-                                $("#poptienda_tipotienda").hide();
-                                $("#poptienda_asignacion").hide();
-                                $("#poptienda_btns").hide();
-                                $("#btn_replica_temporada_tienda").hide();
+                                if(data=="OK"){
 
-                                // Dejo en Blanco los CBX
-                                $("#CBXMarca").data("kendoComboBox").value("");
-                                $("#CBXTipoTienda").data("kendoComboBox").value("");
-                                $("#CBXTemporadaReplica").data("kendoComboBox").value("");
-                                // Limpiar los ListBox
-                                var listBox1Tienda = $("#tienda_disponible").data("kendoListBox");
-                                listBox1Tienda.remove(listBox1Tienda.items());
-                                var listBox2Tienda = $("#tienda_seleccionado").data("kendoListBox");
-                                listBox2Tienda.remove(listBox2Tienda.items());
+                                    // Recargo la Grilla Trasera
+                                    var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
+                                    var sheet = spreadsheet.activeSheet();
+                                    sheet.dataSource.read();
 
-                                popupNotification.getNotifications().parent().remove();
-                                popupNotification.show(" Todo OK, he duplicado la temporada.", "succes");
+                                    // Oculto los elementos por si se abre por segunda vez
+                                    $("#poptienda_tipotienda").hide();
+                                    $("#poptienda_asignacion").hide();
+                                    $("#poptienda_btns").hide();
+                                    $("#btn_replica_temporada_tienda").hide();
 
-                            }else{
-                                popupNotification.getNotifications().parent().remove();
-                                popupNotification.show(" Ups, no pude duplicar la temporada.", "error");
+                                    // Dejo en Blanco los CBX
+                                    $("#CBXMarca").data("kendoComboBox").value("");
+                                    $("#CBXTipoTienda").data("kendoComboBox").value("");
+                                    $("#CBXTemporadaReplica").data("kendoComboBox").value("");
+                                    // Limpiar los ListBox
+                                    var listBox1Tienda = $("#tienda_disponible").data("kendoListBox");
+                                    listBox1Tienda.remove(listBox1Tienda.items());
+                                    var listBox2Tienda = $("#tienda_seleccionado").data("kendoListBox");
+                                    listBox2Tienda.remove(listBox2Tienda.items());
+
+                                    popupNotification.getNotifications().parent().remove();
+                                    popupNotification.show(" Todo OK, he duplicado la temporada.", "succes");
+
+                                }else{
+                                    popupNotification.getNotifications().parent().remove();
+                                    popupNotification.show(" Ups, no pude duplicar la temporada.", "error");
+                                }
+
                             }
-
-                        }
-                    });
-                }else{
-                    console.log("Marca: "+cbx_marca_valor+" Temp. Selecc: "+tem_selecc_duplicar);
-                }
+                        });
+                    }else{
+                        console.log("Marca: "+cbx_marca_valor+" Temp. Selecc: "+tem_selecc_duplicar);
+                    }
 
 
 
-            }, function () {
+                }, function () {
+                    popupNotification.getNotifications().parent().remove();
+                    popupNotification.show(" No se han realizado Cambios.", "info");
+                });
+
+            }else{
                 popupNotification.getNotifications().parent().remove();
-                popupNotification.show(" No se han realizado Cambios.", "info");
-            });
+                popupNotification.show(" No tiene permisos para realizar esta acción.", "error");
+            // Fin Verificar Permisos
+            }
+
+
 
         }
     });
