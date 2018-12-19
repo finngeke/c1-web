@@ -296,7 +296,196 @@ $(function () {
 
 
 
-        var respuesta = confirm("¿Quiere realizar los cambios?");
+        kendo.confirm("¿Realizo los Cambios?").then(function () {
+
+            // Ocultar el BTN
+            $("#btn_genera_cambio_estado").hide();
+            $("#resumenErrorCorreccionPILI").hide();
+
+
+            var url_cambio_estado = 'TelerikPlanCompra/ModificaEstadoDinamico';
+            var url_cambio_estado_coreccion = 'TelerikPlanCompra/ModificaEstadoDinamicoCorreccion';
+
+            // Seteo Variables
+            var ID_COLOR3 = "";
+            var PROFORMA = "";
+            var OC = "";
+            var ESTADOC1 = "";
+            var DESCRIPCION = "";
+            var COLOR = "";
+
+            // Obterer las celdas seleccionadas
+            var spreadsheet_id_color3 = $("#spreadsheet").data("kendoSpreadsheet");
+            var sheet = spreadsheet_id_color3.activeSheet();
+            var range = sheet.selection();
+
+            // Traigo el Valor del CBX
+            var cbxCambioEstadoSeleccionado = $("#NuevoEstadoPopUp").val();
+            // Traigo el Valor del Comentario
+            var comentarioEstadoSeleccionado = $("#comentSolicitaCorreccionPI").val();
+
+            // Var Arreglo Errores
+            var arregloErrores = [];
+
+            range.forEachCell(function (row, column, value) {
+
+                var fila_id = row + 1;
+                var range_color3 = sheet.range("A" + fila_id);
+                ID_COLOR3 = range_color3.values();
+                var range_proforma = sheet.range("CG" + fila_id);
+                PROFORMA = range_proforma.values();
+                var range_oc = sheet.range("CK" + fila_id);
+                OC = range_oc.values();
+                var range_estadoc1 = sheet.range("CS" + fila_id);
+                ESTADOC1 = range_estadoc1.values();
+                var range_descripcion = sheet.range("J" + fila_id);
+                DESCRIPCION = range_descripcion.values();
+                var range_color = sheet.range("AB" + fila_id);
+                COLOR = range_color.values();
+
+                // Crear Modificación
+                if (cbxCambioEstadoSeleccionado == 0) {
+
+                    // estado_c1 != 24 && Proforma
+                    if ((ESTADOC1 != 24) && (PROFORMA.length > 0)) {
+
+                        $.ajax({
+                            //type: "POST",
+                            url: url_cambio_estado,
+                            data: {
+                                ID_COLOR3: kendo.parseInt(ID_COLOR3),
+                                ESTADO_INSERT: kendo.parseInt(0),
+                                PROFORMA: String(PROFORMA),
+                                ESTADO_UPDATE: kendo.parseInt(3)
+                            },
+                            // contentType: "application/json",
+                            dataType: "json"
+                        });
+
+
+                    } else {
+
+                        // Descripción - Color
+                        // Agregar al arreglo de errores
+                        arregloErrores.push({
+                            "DESCRIPCION": String(DESCRIPCION),
+                            "COLOR": String(COLOR),
+                            "MOTIVO": "Estado Eliminado o Sin Proforma"
+                        });
+
+                    }
+
+
+                    // Solicitud Corrección PI
+                } else if (cbxCambioEstadoSeleccionado == 1) {
+
+                    // estado_c1 == 18 (se pasa de 18 a 22)
+                    if (ESTADOC1 == 22) {
+
+                        $.ajax({
+                            //type: "POST",
+                            url: url_cambio_estado_coreccion,
+                            data: {
+                                ID_COLOR3: kendo.parseInt(ID_COLOR3),
+                                ESTADO_INSERT: kendo.parseInt(23),
+                                PROFORMA: String(PROFORMA),
+                                ESTADO_UPDATE: kendo.parseInt(4),
+                                COMENTARIO: String(comentarioEstadoSeleccionado)
+                            },
+                            // contentType: "application/json",
+                            dataType: "json"
+                        });
+
+                    } else {
+
+                        // Descripción - Color
+                        // Agregar al arreglo de errores
+                        arregloErrores.push({
+                            "DESCRIPCION": String(DESCRIPCION),
+                            "COLOR": String(COLOR),
+                            "MOTIVO": "Estado distinto a: Pendiente Generacion OC"
+                        });
+
+                    }
+
+
+                    // Eliminar Opción
+                } else if (cbxCambioEstadoSeleccionado == 2) {
+
+                    // estado_c1 != 21 && Proforma
+                    if ((ESTADOC1 != 21) && (PROFORMA.length > 0)) {
+
+                        $.ajax({
+                            //type: "POST",
+                            url: url_cambio_estado,
+                            data: {
+                                ID_COLOR3: kendo.parseInt(ID_COLOR3),
+                                ESTADO_INSERT: kendo.parseInt(24),
+                                PROFORMA: String(PROFORMA),
+                                ESTADO_UPDATE: kendo.parseInt(4)
+                            },
+                            // contentType: "application/json",
+                            dataType: "json"
+                        });
+
+                    } else {
+
+                        // Descripción - Color
+                        // Agregar al arreglo de errores
+                        arregloErrores.push({
+                            "DESCRIPCION": String(DESCRIPCION),
+                            "COLOR": String(COLOR),
+                            "MOTIVO": "Estado Aprobado o Sin Proforma"
+                        });
+
+                    }
+
+                }
+
+
+            });
+
+
+            // Desplegar Grilla con Info
+            //console.log(arregloErrores);
+            if (arregloErrores.length > 0) {
+
+                $("#resumenErrorCorreccionPILI").css("display", "");
+
+                var gridtest = $("#gridErrorCambioEstado").data("kendoGrid");
+                var sel = gridtest.select();
+                var sel_idx = sel.index();
+                var item = gridtest.dataItem(sel);              // Get the item
+                var idx = gridtest.dataSource.indexOf(item);    // Get the index in the DataSource (not in current page of the grid)
+                arregloErrores.forEach(function (err, index) {
+                    gridtest.dataSource.insert(idx + 1, {
+                        DESCRIPCION: err.DESCRIPCION,
+                        COLOR: err.COLOR,
+                        MOTIVO: err.MOTIVO
+                    });
+                });
+            } else {
+                $("#resumenErrorCorreccionPILI").css("display", "none");
+            }
+
+            // Al Finalizar los cambios de estado
+            popupNotification.getNotifications().parent().remove();
+            popupNotification.show(" Favor de Revisar los Estados.", "info");
+
+            // Recargo el DATASOURCE
+            var spreadsheet_reload = $("#spreadsheet").data("kendoSpreadsheet");
+            var sheet_reload = spreadsheet_reload.activeSheet();
+            sheet_reload.dataSource.read();
+
+
+        }, function () {
+            popupNotification.getNotifications().parent().remove();
+            popupNotification.show(" No se han realizado Cambios de Estado.", "info");
+        });
+
+
+
+        /*var respuesta = confirm("¿Quiere realizar los cambios?");
 
         if (respuesta == true) {
 
@@ -484,7 +673,7 @@ $(function () {
         } else {
             popupNotification.getNotifications().parent().remove();
             popupNotification.show(" No se han realizado Cambios de Estado.", "info");
-        }
+        }*/
 
 
 
@@ -743,8 +932,70 @@ $(function () {
 
             var popupNotification = $("#popupNotification").kendoNotification().data("kendoNotification");
 
+
+
+            kendo.confirm("¿Guardo los Cambios?").then(function () {
+
+                // Sincronizar DataSource
+                dataSource_cbxDisponibleAsignado.sync();
+
+                // Aviso que todos salió correctamente (Probar en DataSource)
+                popupNotification.getNotifications().parent().remove();
+                popupNotification.show(" Los cambios fueron realizados.", "success");
+
+
+                // ############## Revisar si hay más marcas ##############
+                dataSource_cbx_marca.fetch(function () {
+                    var data = this.data();
+
+                    // Existe más de una marca
+                    if(data.length>1){
+                        kendo.confirm("¿Agrego a tus otras Marcas, la misma configuración de tiendas para el mismo Tipo Tienda?").then(function () {
+
+                            // Llamado Ajax
+                            $.ajax({
+                                url: "TelerikPlanCompra/TiendaActualizaAsignadoOtrasMarcas",
+                                data: {
+                                    MARCA:kendo.parseInt(cbx_marca_valor),
+                                    TIPO_TIENDA:kendo.parseInt(cbx_tipotienda_valor)
+                                },
+                                dataType: "json",
+                                success: function (data) {
+
+                                    if(data=="OK"){
+                                        popupNotification.getNotifications().parent().remove();
+                                        popupNotification.show(" Todo OK, repliqué para tus otras marcas la misma configuración.", "succes");
+                                    }else{
+                                        popupNotification.getNotifications().parent().remove();
+                                        popupNotification.show(" Ups, no pude realizar la asignación a tus otras Marcas.", "error");
+                                    }
+
+                                }
+                            });
+
+
+                        }, function () {
+                            popupNotification.getNotifications().parent().remove();
+                            popupNotification.show(" Ok, no realicé otros cambios.", "info");
+                        });
+                    }
+
+                });
+
+
+
+
+
+            }, function () {
+                popupNotification.getNotifications().parent().remove();
+                popupNotification.show(" No se han realizado Cambios.", "info");
+            });
+
+
+
+
             // Preguntar si aplica para todas las tiendas
-            var conf_todas_tiendas = confirm("¿Guardo los Cambios?");
+            /*var conf_todas_tiendas = confirm("¿Guardo los Cambios?");
 
             // Si aplica para todas las tiendas
             if (conf_todas_tiendas == true) {
@@ -760,7 +1011,7 @@ $(function () {
             } else {
                 popupNotification.getNotifications().parent().remove();
                 popupNotification.show(" No se han realizado Cambios.", "info");
-            }
+            }*/
 
 
 

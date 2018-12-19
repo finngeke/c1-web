@@ -3759,9 +3759,9 @@ class PlanCompraClass extends \parametros
                 FROM GST_MAESUCURS S
                 WHERE SUC_SUCURSAL NOT IN (SELECT DISTINCT P.COD_TDA AS COD_SUC
                                            FROM PLC_SEGMENTOS_TDA P
-                                           WHERE P.COD_TEMPORADA = 11
-                                           AND P.DEP_DEPTO = 'D125'
-                                           AND P.COD_MARCA = 3180)
+                                           WHERE P.COD_TEMPORADA = $temporada
+                                           AND P.DEP_DEPTO = '" . $depto . "'
+                                           AND P.COD_MARCA = $marca)
                                            
                 UNION ALL 
                 
@@ -3770,10 +3770,10 @@ class PlanCompraClass extends \parametros
                                 INITCAP( TRIM( BOSACC_FUN_OBT_NOM_SUC( P.COD_TDA ) ) ) AS DESCRIPCION,
                                 1 ESTADO
                                  FROM   PLC_SEGMENTOS_TDA P
-                                 WHERE  P.COD_TEMPORADA = 11
-                                 AND    P.DEP_DEPTO     = 'D125'
-                                 AND    P.COD_MARCA = 3180
-                                 AND    DECODE( 2, 0, 0,P.COD_SEG ) = 2
+                                 WHERE  P.COD_TEMPORADA = $temporada
+                                 AND    P.DEP_DEPTO     = '" . $depto . "'
+                                 AND    P.COD_MARCA = $marca
+                                 AND    DECODE( $tienda, 0, 0,P.COD_SEG ) = $tienda
                 ORDER BY 2";
         $data = \database::getInstancia()->getFilas($sql);
 
@@ -3863,6 +3863,60 @@ class PlanCompraClass extends \parametros
             }
 
         }
+
+
+    }
+    // Actualiza Asignados Otras Marcas
+    public static function TiendaActualizaAsignadoOtrasMarcas($temporada, $depto, $login, $marca, $tipo_tenda){
+
+        // 1.- Listar Todas las marcas restantes
+        $sql_marca = "SELECT DISTINCT COD_MARCA, NOM_MARCA
+                FROM PLC_DEPTO_MARCA
+                WHERE COD_DEPT = '" . $depto . "'
+                AND COD_MARCA <> $marca";
+        $data_marca = \database::getInstancia()->getFilas($sql_marca);
+
+        $status = 0;
+
+        foreach ($data_marca as $va1) {
+
+            // Quito los Registros Existentes de Esta Marca/Tipo Tienda
+            $sql_quitar = "DELETE FROM PLC_SEGMENTOS_TDA
+                           WHERE COD_TEMPORADA = $temporada
+                           AND DEP_DEPTO = '" . $depto . "'
+                           AND COD_SEG = $tipo_tenda
+                           AND COD_MARCA = $va1[0]";
+            $data_quitar = \database::getInstancia()->getConsulta($sql_quitar);
+
+            if(!$data_quitar){
+                $status = $status + 1;
+            }
+
+            $sql_agregar = "INSERT INTO PLC_SEGMENTOS_TDA (COD_TEMPORADA,DEP_DEPTO,NIV_JER1,COD_JER1,COD_SEG,COD_TDA,COD_MARCA)
+                            SELECT COD_TEMPORADA, DEP_DEPTO, 0 NIV_JER1, 0 COD_JER1,COD_SEG,COD_TDA,$va1[0] COD_MARCA FROM PLC_SEGMENTOS_TDA
+                            WHERE COD_TEMPORADA = $temporada
+                            AND DEP_DEPTO = '" . $depto . "'
+                            AND COD_SEG = $tipo_tenda
+                            AND COD_MARCA = $marca";
+            $agrega = \database::getInstancia()->getConsulta($sql_agregar);
+
+
+            if(!$agrega){
+                $status = $status + 1;
+            }
+
+        }
+
+
+
+        if($status==0){
+            return "OK";
+        }else{
+            return "ERROR";
+        }
+
+
+
 
 
     }
