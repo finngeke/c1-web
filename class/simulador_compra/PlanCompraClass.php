@@ -3802,10 +3802,67 @@ class PlanCompraClass extends \parametros
 
     }
     // Actualiza Asignados
-    public static function TiendaActualizaAsignado($temporada, $depto, $login, $id_color3, $estado_insert, $proforma, $estado_update, $comentario){
+    public static function TiendaActualizaAsignado($temporada, $depto, $login, $codigo, $descripcion, $estado, $marca, $tipo_tenda){
 
+    // El estado me dice si hay que quitar o agregar el registro
 
+        // Elimino
+        if($estado == false){
 
+            $sql_quitar = "DELETE FROM PLC_SEGMENTOS_TDA
+                            WHERE cod_temporada = $temporada
+                            AND dep_depto = '" . $depto . "'
+                            AND cod_seg = $tipo_tenda
+                            AND cod_marca = $marca
+                            AND cod_tda = $codigo
+                            ";
+
+            // Guardamos registros
+            if (!file_exists('../archivos/log_querys/' . $login)) {
+                mkdir('../archivos/log_querys/' . $login, 0775, true);
+            }
+            $stamp = date("Y-m-d_H-i-s");
+            $rand = rand(1, 999);
+            $content = $sql_quitar;
+            $fp = fopen("../archivos/log_querys/" . $login . "/MANTENEDORTIENDA-QUITAR--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+            fwrite($fp, $content);
+            fclose($fp);
+
+            $quitar = \database::getInstancia()->getConsulta($sql_quitar);
+
+            if($quitar){
+                return "OK";
+            }else{
+                return "ERROR";
+            }
+
+        // Agregar Registro
+        }else{
+
+            $sql_agregar = "INSERT INTO PLC_SEGMENTOS_TDA(COD_TEMPORADA,DEP_DEPTO,NIV_JER1,COD_JER1,COD_SEG,COD_TDA,COD_MARCA)
+                                VALUES($temporada,'" . $depto . "',0,0,$tipo_tenda,$codigo,$marca)
+                                ";
+
+            // Guardamos registros del agregar
+            if (!file_exists('../archivos/log_querys/' . $login)) {
+                mkdir('../archivos/log_querys/' . $login, 0775, true);
+            }
+            $stamp = date("Y-m-d_H-i-s");
+            $rand = rand(1, 999);
+            $content = $sql_agregar;
+            $fp = fopen("../archivos/log_querys/" . $login . "/MANTENEDORTIENDA-AGREGAR--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+            fwrite($fp, $content);
+            fclose($fp);
+
+            $agrega = \database::getInstancia()->getConsulta($sql_agregar);
+
+            if($agrega){
+                return "OK";
+            }else{
+                return "ERROR";
+            }
+
+        }
 
 
     }

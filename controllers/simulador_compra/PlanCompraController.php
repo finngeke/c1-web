@@ -472,7 +472,7 @@ if($ESTADO_C1!=24){
         $array_data = $_GET;
         die();
 
-        echo \simulador_compra\PlanCompraClass::TiendaActualizaAsignado($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $array_data["ID_COLOR3"], $array_data["ESTADO_INSERT"], $array_data["PROFORMA"], $array_data["ESTADO_UPDATE"], $array_data["COMENTARIO"]);
+        echo \simulador_compra\PlanCompraClass::TiendaActualizaAsignado($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $array_data["CODIGO"], $array_data["DESCRIPCION"], $array_data["ESTADO"], $array_data["MARCA"], $array_data["TIPO_TIENDA"]);
 
     }
     // ######################## FIN Trabajo POPUP Tiendas ########################

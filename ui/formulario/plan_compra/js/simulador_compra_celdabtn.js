@@ -654,9 +654,15 @@ $(function () {
                     /*if(dataItem.DESCRIPCION == "I"){
                         $("#tienda_disponible").attr("disabled","disabled");
                         $("#tienda_seleccionado").attr("disabled","disabled");
+
+                        // Ocultar LI de Botonera
+
                     }else{
                         $("#tienda_disponible").attr("disabled",false);
                         $("#tienda_seleccionado").attr("disabled",false);
+
+                        // Desplegar LI de Botonera
+
                     }*/
 
                     // Valor del CBX poptienda_asignacion
@@ -676,7 +682,11 @@ $(function () {
                             },
                             update: {
                                 url: "TelerikPlanCompra/TiendaActualizaAsignado",
-                                dataType: "json"
+                                dataType: "json",
+                                data: {
+                                    MARCA:kendo.parseInt(cbx_marca_valor),
+                                    TIPO_TIENDA:kendo.parseInt(cbx_tipotienda_valor)
+                                }
                             }
                         },
                         schema: {
@@ -707,10 +717,6 @@ $(function () {
 
                     });
 
-
-
-
-
                 }
             }else{
                 $("#poptienda_asignacion").hide();
@@ -732,7 +738,39 @@ $(function () {
     // Seteo del BTN Guardar
     $("#guarda_cambios_tienda").kendoButton({
         click: function (e) {
-            dataSource_cbxDisponibleAsignado.sync();
+
+            var popupNotification = $("#popupNotification").kendoNotification().data("kendoNotification");
+
+            // Preguntar si aplica para todas las tiendas
+            var conf_todas_tiendas = confirm("¿Guardo los Cambios?");
+
+            // Si aplica para todas las tiendas
+            if (conf_todas_tiendas == true) {
+
+                // Sincronizar DataSource
+                dataSource_cbxDisponibleAsignado.sync();
+
+                // Aviso que todos salió correctamente (Probar en DataSource)
+                // popupNotification.getNotifications().parent().remove();
+                // popupNotification.show(" Los cambios fueron almacenados.", "success");
+
+            // Si no aplica para una tienda
+            } else {
+                popupNotification.getNotifications().parent().remove();
+                popupNotification.show(" No se han realizado Cambios.", "info");
+            }
+
+
+
+        }
+    });
+
+    // Seteo del BTN Replicar
+    $("#replica_temporada_tienda").kendoButton({
+        click: function (e) {
+
+
+
         }
     });
 
