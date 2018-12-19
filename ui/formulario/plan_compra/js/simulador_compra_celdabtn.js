@@ -1098,9 +1098,19 @@ $(function () {
     $("#replica_temporada_tienda").kendoButton({
         click: function (e) {
 
-            // Levantamos el popup de Replicar Tienda
-            var POPUPReplicarTienda = $("#POPUP_replicar_tienda");
-            POPUPReplicarTienda.data("kendoWindow").open();
+            var popupNotification = $("#popupNotification").kendoNotification().data("kendoNotification");
+
+            // Verificar Permisos
+            if(localStorage.getItem("T0022")){
+                // Levantamos el popup de Replicar Tienda
+                var POPUPReplicarTienda = $("#POPUP_replicar_tienda");
+                POPUPReplicarTienda.data("kendoWindow").open();
+            }else{
+                popupNotification.getNotifications().parent().remove();
+                popupNotification.show(" No tiene permisos para realizar esta acción.", "error");
+            // Fin Verificar Permisos
+            }
+
 
         }
     });
