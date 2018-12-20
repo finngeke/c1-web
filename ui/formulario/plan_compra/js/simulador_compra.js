@@ -803,10 +803,10 @@ $(function () {
         sheets: [{
             name: "PlanDeCompra",
             dataSource: dataSource,
-            /*filter: {
-                ref: "A1:CR1",
+            filter: {
+                ref: "A1:CR400",
                 columns:[]
-            },*/
+            },
             columns: [
                 {width: 40},    // id
                 {width: 100},   // G. Compra

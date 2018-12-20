@@ -2015,8 +2015,8 @@ $(function () {
                     visible: false,
                     actions: [
                         //"Pin",
-                        "Minimize",
-                        "Maximize",
+                        /*"Minimize",
+                        "Maximize",*/
                         "Close"
                     ]/*,
                             close: onClose*/
