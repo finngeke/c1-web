@@ -1727,6 +1727,19 @@ $(function () {
         // Verificar Permisos
         if(localStorage.getItem("T0017")){
 
+            // Oculto los elementos por si se abre por segunda vez
+            $("#popformato_asignacion").hide();
+            $("#popformato_btns").hide();
+            $("#btn_crea_nuevo_formato").hide();
+
+            // Dejo en Blanco los CBX
+            $("#CBXFormato").data("kendoComboBox").value("");
+            // Limpiar los ListBox
+            var listBox1Formato = $("#formato_disponible").data("kendoListBox");
+            listBox1Formato.remove(listBox1Formato.items());
+            var listBox2Formato = $("#formato_seleccionado").data("kendoListBox");
+            listBox2Formato.remove(listBox2Formato.items());
+
             // Levantamos el popup
             var POPUPFormato = $("#POPUP_formato");
             POPUPFormato.data("kendoWindow").open();
