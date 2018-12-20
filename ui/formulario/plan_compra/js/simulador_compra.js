@@ -1723,7 +1723,7 @@ $(function () {
 
             // Dejo en Blanco los CBX
             $("#CBXFormato").data("kendoComboBox").value("");
-            
+
             // Dejo en Blanco el TCT
             $("#TXTnuevoFormato").data("kendoComboBox").value("");
 
@@ -1792,6 +1792,9 @@ $(function () {
     //pop ajuste de compra
     function Pop_ajuste_compra(){
 
+        // Actualiza Concurrencia
+        ActualizaConcurrencia();
+
         // alert($("#comentSolicitaCorreccionPI").val());
         var spreadsheet_id_color3 = $("#spreadsheet").data("kendoSpreadsheet");
         var sheet = spreadsheet_id_color3.activeSheet();
@@ -1855,6 +1858,9 @@ $(function () {
 
     //pop ajuste de cajas
     function Pop_ajuste_cajas(){
+
+        // Actualiza Concurrencia
+        ActualizaConcurrencia();
 
     var spreadsheet_id_color3 = $("#spreadsheet").data("kendoSpreadsheet");
     var sheet = spreadsheet_id_color3.activeSheet();
@@ -1965,6 +1971,10 @@ $(function () {
 
     //pop historical
     function Pop_Historial(){
+
+        // Actualiza Concurrencia
+        ActualizaConcurrencia();
+
         // alert($("#comentSolicitaCorreccionPI").val());
         var spreadsheet_id_color3 = $("#spreadsheet").data("kendoSpreadsheet");
         var sheet = spreadsheet_id_color3.activeSheet();
@@ -2013,8 +2023,11 @@ $(function () {
     //pop Presupuesto Total
     function Pop_Presupuestos(){
 
-        var myWindow = $("#POPUP_presupuestos_total");
-        myWindow.data("kendoWindow").open();
+        // Actualiza Concurrencia
+        ActualizaConcurrencia();
+
+        var popupPreTotal = $("#POPUP_presupuestos_total");
+        popupPreTotal.data("kendoWindow").open();
 
         var dataSource_presu = new kendo.data.DataSource({
             transport: {
@@ -2034,12 +2047,20 @@ $(function () {
 
     //pop importar assorment
     function Pop_Importar(){
+
+        // Actualiza Concurrencia
+        ActualizaConcurrencia();
+
         var popupDe = $("#POPUP_Importar_");
         popupDe.data("kendoWindow").open();
     }
 
     //pop Presupuestos edit
     function Pop_editPresupuestos(){
+
+        // Actualiza Concurrencia
+        ActualizaConcurrencia();
+        
         //COSTO
         var costo = $("#Costo").val();
         var retail = $("#Retail").val();
