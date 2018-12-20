@@ -52,13 +52,17 @@
 									<td style="text-align: right; vertical-align: middle;">{{@invoice[4]}}</td>
 									<td style="text-align: right; vertical-align: middle;">{{@invoice[6]}}</td>
 									<td style="text-align: center; vertical-align: middle;">
-										<check if="{{ @invoice[7]==0 }}">
-											<true>
-												<a class="btn btn-primary" href="approve_invoice?cod_proveedor={{@cod_proveedor}}&nro_factura={{@invoice[0]}}"><i class="fa fa-check-square-o"></i></a>
-											</true>
+										<check if="{{ @invoice[7] == -1 }}">
 											<false>
-												<!--<span class="text-info">Invoice already approved</span>-->
-												<span class="text-success"><i class="fa fa-check" aria-hidden="true"></i></span>
+												<check if="{{ @invoice[7] == 0 }}">
+													<true>
+														<a class="btn btn-primary" href="approve_invoice?cod_proveedor={{@cod_proveedor}}&nro_factura={{@invoice[0]}}"><i class="fa fa-check-square-o"></i></a>
+													</true>
+													<false>
+														<!--<span class="text-info">Invoice already approved</span>-->
+														<span class="text-success"><i class="fa fa-check" aria-hidden="true"></i></span>
+													</false>
+												</check>
 											</false>
 										</check>
 									</td>
