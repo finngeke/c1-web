@@ -4137,9 +4137,9 @@ class PlanCompraClass extends \parametros
         $data = \database::getInstancia()->getConsulta($sql);
 
         if($data){
-            return "OK";
+            return utf8_encode("OK");
         }else{
-            return "ERROR";
+            return utf8_encode("ERROR");
         }
 
 

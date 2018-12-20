@@ -1236,6 +1236,8 @@ $(function () {
         close: onClose*/
     }).data("kendoWindow").center();
 
+    $("#TXTnuevoFormato").kendoMaskedTextBox();
+
     // Definimos la estructura del ListBox
     $("#formato_disponible").kendoListBox({
         autoBind: true,
@@ -1443,15 +1445,15 @@ $(function () {
 
                 kendo.confirm("¿Crear nuevo formato?").then(function () {
 
-                    var nuevo_formato = $("TXTnuevoFormato").val();
+                    var nuevo_formato = $("#TXTnuevoFormato").data("kendoMaskedTextBox");
+                    var value_nuevo_formato = nuevo_formato.value();
 
-
-                    if(nuevo_formato){
+                    if(value_nuevo_formato){
                         // Llamado Ajax
                         $.ajax({
                             url: "TelerikPlanCompra/FormatoCrearNuevo",
                             data: {
-                                FORMATO:String(nuevo_formato)
+                                FORMATO:String(value_nuevo_formato)
                             },
                             dataType: "json",
                             success: function (data) {
@@ -1462,6 +1464,10 @@ $(function () {
                                     var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
                                     var sheet = spreadsheet.activeSheet();
                                     sheet.dataSource.read();
+
+                                    // Recargar el CBX de Formato
+                                    // dataSource_cbx_formato.read();
+                                    $("#CBXFormato").data("kendoComboBox").dataSource.read();
 
                                     // Oculto POPUP de Nuevo Formato
                                     $("#POPUP_nuevo_formato").hide();
@@ -1488,9 +1494,15 @@ $(function () {
                                     popupNotification.show(" Ups, no pude creal el nuevo formato.", "error");
                                 }
 
+                            },
+                            error: function (request, status, error) {
+                                alert(request.responseText);
                             }
                         });
                     }else{
+                        popupNotification.getNotifications().parent().remove();
+                        popupNotification.show(" Debes ingresar el nombre del Nuevo Formato.", "error");
+                        // Fin Verificar Permisos
                         console.log("Formato: "+nuevo_formato);
                     }
 

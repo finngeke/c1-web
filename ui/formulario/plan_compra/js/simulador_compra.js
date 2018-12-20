@@ -1725,7 +1725,7 @@ $(function () {
             // Oculto los elementos por si se abre por segunda vez
             $("#popformato_asignacion").hide();
             $("#popformato_btns").hide();
-            $("#btn_crea_nuevo_formato").hide();
+            //$("#btn_crea_nuevo_formato").hide();
 
             // Dejo en Blanco los CBX
             $("#CBXFormato").data("kendoComboBox").value("");

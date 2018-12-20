@@ -526,7 +526,7 @@ if($ESTADO_C1!=24){
     public function FormatoCrearNuevo($f3) {
 
         $array_data = $_GET;
-        echo \simulador_compra\PlanCompraClass::FormatoCrearNuevo($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $array_data["FORMATO"]);
+        echo \simulador_compra\PlanCompraClass::FormatoCrearNuevo($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), trim($array_data["FORMATO"]));
 
     }
     // ######################## FIN Trabajo POPUP Formatos ########################
