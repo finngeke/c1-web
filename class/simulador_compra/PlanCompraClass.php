@@ -281,7 +281,7 @@ class PlanCompraClass extends \parametros
                         $estilo_pmm = $va1["ESTILO_PMM"];
                         $estado_match = $va1["ESTADO_MATCH"];
                         array_push($dt2021, array($proforma, $va1["PO_NUMBER"], $estadoOc, $f_embarque, $f_eta, $f_recepcion, $dias_atrasado,$ESTADO,$nom_estado,$estilo_pmm,$estado_match));}
-                
+
                 }
             }
 
@@ -3696,8 +3696,274 @@ class PlanCompraClass extends \parametros
 
 
     }
+    // Llenar ListBox de Disponible
+    public static function TiendaObtieneDisponible($temporada, $depto, $marca, $tienda)
+    {
+
+        $sql = "begin PLC_PKG_PRUEBA.PRC_LISTAR_TDA($temporada,'" . $depto . "',$marca, :data); end;";
+        $data = \database::getInstancia()->getConsultaSP($sql, 1);
+
+        // Transformo a array asociativo
+        $array1 = [];
+        foreach ($data as $va1) {
+            array_push($array1
+                , array(
+                    "CODIGO" => $va1[0]
+                , "DESCRIPCION" => $va1[1]
+                , "ESTADO" => false
+                )
+            );
+        }
+        return $array1;
+
+    }
+    // Llenar ListBox de Asignado
+    public static function TiendaObtieneAsignado($temporada, $depto, $marca, $tienda)
+    {
+
+        $sql = "SELECT DISTINCT
+                P.COD_TDA AS COD_SUC,
+                INITCAP( TRIM( BOSACC_FUN_OBT_NOM_SUC( P.COD_TDA ) ) ) AS DES_SUC
+                 FROM   PLC_SEGMENTOS_TDA P
+                 WHERE  P.COD_TEMPORADA = $temporada
+                 AND    P.DEP_DEPTO     = '" . $depto . "'
+                 AND    P.COD_MARCA = $marca
+                 AND    DECODE( $tienda, 0, 0,P.COD_SEG ) = $tienda
+                 ORDER BY 2
+                ";
+        $data = \database::getInstancia()->getFilas($sql);
+
+        // Transformo a array asociativo
+        $array1 = [];
+        foreach ($data as $va1) {
+            array_push($array1
+                , array(
+                  "CODIGO" => $va1[0]
+                , "DESCRIPCION" => $va1[1]
+                , "ESTADO" => true
+
+                )
+            );
+        }
+        return $array1;
 
 
+    }
+    // Llenar ListBox de TiendaObtieneDisponibleAsignado
+    public static function TiendaObtieneDisponibleAsignado($temporada, $depto, $marca, $tienda)
+    {
+
+        $sql = "SELECT  S.SUC_SUCURSAL AS CODIGO,
+                             convert(REPLACE(REPLACE(REPLACE(INITCAP(TRIM(S.SUC_NOMBRE)),CHR(9),''),CHR(10),''),CHR(13),''),'utf8','us7ascii') AS DESCRIPCION,
+                             0 ESTADO
+                FROM GST_MAESUCURS S
+                WHERE SUC_SUCURSAL NOT IN (SELECT DISTINCT P.COD_TDA AS COD_SUC
+                                           FROM PLC_SEGMENTOS_TDA P
+                                           WHERE P.COD_TEMPORADA = $temporada
+                                           AND P.DEP_DEPTO = '" . $depto . "'
+                                           AND P.COD_MARCA = $marca)
+                                           
+                UNION ALL 
+                
+                SELECT DISTINCT
+                                P.COD_TDA AS CODIGO,
+                                INITCAP( TRIM( BOSACC_FUN_OBT_NOM_SUC( P.COD_TDA ) ) ) AS DESCRIPCION,
+                                1 ESTADO
+                                 FROM   PLC_SEGMENTOS_TDA P
+                                 WHERE  P.COD_TEMPORADA = $temporada
+                                 AND    P.DEP_DEPTO     = '" . $depto . "'
+                                 AND    P.COD_MARCA = $marca
+                                 AND    DECODE( $tienda, 0, 0,P.COD_SEG ) = $tienda
+                ORDER BY 2";
+        $data = \database::getInstancia()->getFilas($sql);
+
+        // Transformo a array asociativo
+        $array1 = [];
+        foreach ($data as $va1) {
+
+            if($va1[2]==0){
+                $estado = false;
+            }else{
+                $estado = true;
+            }
+
+
+            array_push($array1
+                , array(
+                    "CODIGO" => $va1[0]
+                , "DESCRIPCION" => $va1[1]
+                , "ESTADO" => $estado
+
+                )
+            );
+        }
+        return $array1;
+
+
+    }
+    // Actualiza Asignados
+    public static function TiendaActualizaAsignado($temporada, $depto, $login, $codigo, $descripcion, $estado, $marca, $tipo_tenda){
+
+    // El estado me dice si hay que quitar o agregar el registro
+
+        // Elimino
+        if($estado == "false"){
+
+            $sql_quitar = "DELETE FROM PLC_SEGMENTOS_TDA
+                            WHERE cod_temporada = $temporada
+                            AND dep_depto = '" . $depto . "'
+                            AND cod_seg = $tipo_tenda
+                            AND cod_marca = $marca
+                            AND cod_tda = $codigo
+                            ";
+
+            // Guardamos registros
+            if (!file_exists('../archivos/log_querys/' . $login)) {
+                mkdir('../archivos/log_querys/' . $login, 0775, true);
+            }
+            $stamp = date("Y-m-d_H-i-s");
+            $rand = rand(1, 999);
+            $content = $sql_quitar;
+            $fp = fopen("../archivos/log_querys/" . $login . "/MANTENEDORTIENDA-QUITAR--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+            fwrite($fp, $content);
+            fclose($fp);
+
+            $quitar = \database::getInstancia()->getConsulta($sql_quitar);
+
+            if($quitar){
+                return "OK";
+            }else{
+                return "ERROR";
+            }
+
+        // Agregar Registro
+        }else{
+
+            $sql_agregar = "INSERT INTO PLC_SEGMENTOS_TDA(COD_TEMPORADA,DEP_DEPTO,NIV_JER1,COD_JER1,COD_SEG,COD_TDA,COD_MARCA)
+                                VALUES($temporada,'" . $depto . "',0,0,$tipo_tenda,$codigo,$marca)
+                                ";
+
+            // Guardamos registros del agregar
+            if (!file_exists('../archivos/log_querys/' . $login)) {
+                mkdir('../archivos/log_querys/' . $login, 0775, true);
+            }
+            $stamp = date("Y-m-d_H-i-s");
+            $rand = rand(1, 999);
+            $content = $sql_agregar;
+            $fp = fopen("../archivos/log_querys/" . $login . "/MANTENEDORTIENDA-AGREGAR--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+            fwrite($fp, $content);
+            fclose($fp);
+
+            $agrega = \database::getInstancia()->getConsulta($sql_agregar);
+
+            if($agrega){
+                return "OK";
+            }else{
+                return "ERROR";
+            }
+
+        }
+
+
+    }
+    // Actualiza Asignados Otras Marcas
+    public static function TiendaActualizaAsignadoOtrasMarcas($temporada, $depto, $login, $marca, $tipo_tenda){
+
+
+        $status = 0;
+
+        // 1.- Listar Todas las marcas restantes
+        $sql_marca = "SELECT DISTINCT COD_MARCA, NOM_MARCA
+                FROM PLC_DEPTO_MARCA
+                WHERE COD_DEPT = '" . $depto . "'
+                AND COD_MARCA <> $marca";
+        $data_marca = \database::getInstancia()->getFilas($sql_marca);
+
+
+        // Recorro las marcas restantes y le asigno las mismas tiendas de mi selección actual
+        foreach ($data_marca as $va1) {
+
+            // Quito los Registros Existentes de Esta Marca/Tipo Tienda
+            $sql_quitar = "DELETE FROM PLC_SEGMENTOS_TDA
+                           WHERE COD_TEMPORADA = $temporada
+                           AND DEP_DEPTO = '" . $depto . "'
+                           AND COD_SEG = $tipo_tenda
+                           AND COD_MARCA = $va1[0]";
+            $data_quitar = \database::getInstancia()->getConsulta($sql_quitar);
+
+            if(!$data_quitar){ $status = $status + 1; }
+
+            $sql_agregar = "INSERT INTO PLC_SEGMENTOS_TDA (COD_TEMPORADA,DEP_DEPTO,NIV_JER1,COD_JER1,COD_SEG,COD_TDA,COD_MARCA)
+                            SELECT COD_TEMPORADA, DEP_DEPTO, 0 NIV_JER1, 0 COD_JER1,COD_SEG,COD_TDA,$va1[0] COD_MARCA 
+                            FROM PLC_SEGMENTOS_TDA
+                            WHERE COD_TEMPORADA = $temporada
+                            AND DEP_DEPTO = '" . $depto . "'
+                            AND COD_SEG = $tipo_tenda
+                            AND COD_MARCA = $marca";
+            $agrega = \database::getInstancia()->getConsulta($sql_agregar);
+
+            if(!$agrega){ $status = $status + 1; }
+
+        }
+
+
+
+        if($status==0){
+            return "OK";
+        }else{
+            return "ERROR";
+        }
+
+
+
+
+
+    }
+    // Llenar el CBX de las Temporadas a duplicar del popup
+    public static function ListarTemporadasDuplicar($temporada, $depto,$login)
+    {
+        //  PLC_PKG_MIGRACION.PRC_TEMP_CONFIGTIENDAS
+        $sql = "begin PLC_PKG_MIGRACION.PRC_TEMP_CONFIGTIENDAS($temporada, :data); end;";
+        $data = \database::getInstancia()->getConsultaSP($sql, 1);
+
+        // Transformo a array asociativo
+        $array1 = [];
+        foreach ($data as $va1) {
+            array_push($array1
+                , array(
+                    "CODIGO" => $va1[0]
+                , "DESCRIPCION" => $va1[1]
+                )
+            );
+        }
+        return $array1;
+    }
+    // Duplicar Temporada
+    public static function TiendaDuplicarTemporada($temporada, $depto, $login, $temp_selecc, $marca)
+    {
+
+        $sql_duplicar = "begin PLC_PKG_MIGRACION.PRC_DELFULL_CONFIGTIENDAS_WEB($temporada,$temp_selecc,'" . $depto . "',$marca, :error, :data); end;";
+
+        // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+        if (!file_exists('../archivos/log_querys/' . $login)) {
+            mkdir('../archivos/log_querys/' . $login, 0775, true);
+        }
+        $stamp = date("Y-m-d_H-i-s");
+        $rand = rand(1, 999);
+        $content = $sql_duplicar;
+        $fp = fopen("../archivos/log_querys/" . $login . "/MANTENEDORTIENDA-DUPLICARTEMPORADA--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+        fwrite($fp, $content);
+        fclose($fp);
+        $data_duplicar = \database::getInstancia()->getConsultaSP($sql_duplicar, 2);
+
+        if ($data_duplicar) {
+            return "OK";
+        } else {
+            return "ERROR";
+        }
+
+
+    }
     // ######################## FIN Trabajo POPUP Tienda ########################
 
 

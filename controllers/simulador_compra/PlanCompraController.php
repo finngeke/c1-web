@@ -449,6 +449,57 @@ if($ESTADO_C1!=24){
     {
         echo json_encode(\simulador_compra\PlanCompraClass::ListarTipoTienda($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO')));
     }
+    // Llenar ListBox de Disponible
+    public function TiendaObtieneDisponible($f3) {
+
+        $array_data = $_GET;
+        echo json_encode(\simulador_compra\PlanCompraClass::TiendaObtieneDisponible($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'),$array_data["MARCA"],$array_data["TIENDA"]));
+    }
+    // Llenar ListBox de Asignado
+    public function TiendaObtieneAsignado($f3) {
+
+        $array_data = $_GET;
+        echo json_encode(\simulador_compra\PlanCompraClass::TiendaObtieneAsignado($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'),$array_data["MARCA"],$array_data["TIENDA"]));
+    }
+    // Llenar ListBox de TiendaObtieneDisponibleAsignado
+    public function TiendaObtieneDisponibleAsignado($f3) {
+        $array_data = $_GET;
+        echo json_encode(\simulador_compra\PlanCompraClass::TiendaObtieneDisponibleAsignado($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'),$array_data["MARCA"],$array_data["TIENDA"]));
+    }
+    // Actualiza Asignados
+    public function TiendaActualizaAsignado($f3) {
+
+        $array_data = $_GET;
+
+        echo \simulador_compra\PlanCompraClass::TiendaActualizaAsignado($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $array_data["CODIGO"], $array_data["DESCRIPCION"], $array_data["ESTADO"], $array_data["MARCA"], $array_data["TIPO_TIENDA"]);
+
+    }
+    // Actualiza Otras Marcas
+    public function TiendaActualizaAsignadoOtrasMarcas($f3) {
+
+        $array_data = $_GET;
+
+        echo \simulador_compra\PlanCompraClass::TiendaActualizaAsignadoOtrasMarcas($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $array_data["MARCA"], $array_data["TIPO_TIENDA"]);
+
+    }
+    // Llenar el CBX de las Temporadas a duplicar del popup
+    public function ListarTemporadasDuplicar($f3)
+    {
+        echo json_encode(\simulador_compra\PlanCompraClass::ListarTemporadasDuplicar($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login')));
+    }
+    // Duplicar Temporada
+    public function TiendaDuplicarTemporada($f3) {
+
+        // TEMPORADA:    Temporada que selecciona en popup de replicar.
+        // DEPARTAMENTO: Departamento en el que me encuentro.
+        // DEPTO:        Depto desde el popup de departamento.
+        // MARCA:        Marca del CBX de marca.
+
+        $array_data = $_GET;
+
+        echo \simulador_compra\PlanCompraClass::TiendaDuplicarTemporada($f3->get('SESSION.COD_TEMPORADA'),$f3->get('SESSION.COD_DEPTO'),$f3->get('SESSION.login'),$array_data["TEMP_SELECCIONADA"],$array_data["MARCA"]);
+
+    }
     // ######################## FIN Trabajo POPUP Tiendas ########################
 
 

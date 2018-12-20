@@ -12,6 +12,7 @@
     <script src="{{@TELERIK}}web/telerik/js/jszip.min.js"></script>
     <script src="{{@TELERIK}}web/telerik/js/kendo.all.min.js"></script>
     <script src="{{@TELERIK}}web/telerik/content/shared/js/console.js"></script>
+    <script src="{{@TELERIK}}web/telerik/js/cultures/kendo.culture.es-ES.min.js"></script>
 
 </head>
 <body>

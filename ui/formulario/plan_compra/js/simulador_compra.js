@@ -1655,6 +1655,8 @@ $(function () {
         });
     // Fin del menú contextual
 
+
+    // POPUP Detalle Error
     function POPUPDetalleError(){
 
         // Actualiza Concurrencia
@@ -1676,6 +1678,7 @@ $(function () {
 
     }
 
+    // POPUP Tienda
     function POPUPTienda(){
 
         // Actualiza Concurrencia
@@ -1684,71 +1687,25 @@ $(function () {
         // Verificar Permisos
         if(localStorage.getItem("T0016")){
 
-alert("Dentro del Listar Tiendas 2");
+            // Oculto los elementos por si se abre por segunda vez
+            $("#poptienda_tipotienda").hide();
+            $("#poptienda_asignacion").hide();
+            $("#poptienda_btns").hide();
+            $("#btn_replica_temporada_tienda").hide();
+
+            // Dejo en Blanco los CBX
+            $("#CBXMarca").data("kendoComboBox").value("");
+            $("#CBXTipoTienda").data("kendoComboBox").value("");
+            $("#CBXTemporadaReplica").data("kendoComboBox").value("");
+            // Limpiar los ListBox
+            var listBox1Tienda = $("#tienda_disponible").data("kendoListBox");
+            listBox1Tienda.remove(listBox1Tienda.items());
+            var listBox2Tienda = $("#tienda_seleccionado").data("kendoListBox");
+            listBox2Tienda.remove(listBox2Tienda.items());
 
             // Levantamos el popup
             var POPUPTienda = $("#POPUP_tienda");
             POPUPTienda.data("kendoWindow").open();
-
-
-
-
-
-            /*dataSourceTiendaDisponible = new kendo.data.DataSource({
-                serverFiltering: false,
-                transport: {
-                    read: {
-                        url: crudServiceBaseUrl + "/Products",
-                        dataType: "jsonp"
-                    },
-                    update: {
-                        url: crudServiceBaseUrl + "/Products/Update",
-                        dataType: "jsonp"
-                    },
-                    parameterMap: function (options, operation) {
-                        if (operation !== "read" && options.models) {
-                            return { models: kendo.stringify(options.models) };
-                        }
-                    }
-                },
-                requestStart: function () {
-                    // kendo.ui.progress($(".demo-section"), true);
-                },
-                requestEnd: function () {
-                    // kendo.ui.progress($(".demo-section"), false);
-                },
-                batch: false,
-                schema: {
-                    model: {
-                        id: "ProductID",
-                        fields: {
-                            ProductID: { editable: false, nullable: true },
-                            Discontinued: { type: "boolean" },
-                        }
-                    }
-                }
-            });*/
-
-
-            /*dataSourceTiendaDisponible.fetch(function () {
-                var data = this.data();
-                var tienda_disponible = $("#tienda_disponible").data("kendoListBox");
-                var tienda_seleccionado = $("#tienda_seleccionado").data("kendoListBox");
-
-                for (var i = 0; i < data.length; i++) {
-                    if (data[i].Discontinued) {
-                        tienda_disponible.add(data[i]);
-                    }
-                    else {
-                        tienda_seleccionado.add(data[i]);
-                    }
-                }
-            });*/
-
-
-
-
-
 
 
         }else{
@@ -1761,6 +1718,7 @@ alert("Dentro del Listar Tiendas 2");
 
     }
 
+    // POPUP Formato
     function POPUPFormato(){
 
         // Actualiza Concurrencia
@@ -1768,6 +1726,19 @@ alert("Dentro del Listar Tiendas 2");
 
         // Verificar Permisos
         if(localStorage.getItem("T0017")){
+
+            // Oculto los elementos por si se abre por segunda vez
+            $("#popformato_asignacion").hide();
+            $("#popformato_btns").hide();
+            $("#btn_crea_nuevo_formato").hide();
+
+            // Dejo en Blanco los CBX
+            $("#CBXFormato").data("kendoComboBox").value("");
+            // Limpiar los ListBox
+            var listBox1Formato = $("#formato_disponible").data("kendoListBox");
+            listBox1Formato.remove(listBox1Formato.items());
+            var listBox2Formato = $("#formato_seleccionado").data("kendoListBox");
+            listBox2Formato.remove(listBox2Formato.items());
 
             // Levantamos el popup
             var POPUPFormato = $("#POPUP_formato");
@@ -1818,6 +1789,11 @@ alert("Dentro del Listar Tiendas 2");
         setInterval(VerificaConexionUsuario, 80000); // 1':20'' Pregunta por Concurrencia
         VerificaConexionUsuario();
     });
+
+
+
+
+
 
 
     //pop ajuste de compra
