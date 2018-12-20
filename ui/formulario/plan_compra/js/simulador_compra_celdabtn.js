@@ -961,7 +961,7 @@ $(function () {
 
     // Seteo CBX Temporada a Replicar
     var cbx_temp_replicar = $("#CBXTemporadaReplica").kendoComboBox({
-        autoBind: true,
+        autoBind: false,
         dataSource:dataSource_cbx_duplicatemp,
         placeholder: "Seleccione Temporada...",
         dataTextField: "DESCRIPCION",
