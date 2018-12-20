@@ -517,9 +517,16 @@ if($ESTADO_C1!=24){
     }
     // Actualiza Asignados
     public function FormatoActualizaAsignado($f3) {
-die();
+
         $array_data = $_GET;
         echo \simulador_compra\PlanCompraClass::FormatoActualizaAsignado($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $array_data["FORMATO"], $array_data["CODIGO"], $array_data["DESCRIPCION"], $array_data["ESTADO"]);
+
+    }
+    // Crear Nuevo Formato
+    public function FormatoCrearNuevo($f3) {
+
+        $array_data = $_GET;
+        echo \simulador_compra\PlanCompraClass::FormatoCrearNuevo($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $array_data["FORMATO"]);
 
     }
     // ######################## FIN Trabajo POPUP Formatos ########################

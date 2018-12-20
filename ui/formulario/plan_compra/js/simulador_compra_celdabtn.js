@@ -1443,13 +1443,15 @@ $(function () {
 
                 kendo.confirm("¿Crear nuevo formato?").then(function () {
 
-                    if(cbx_marca_valor && tem_selecc_duplicar){
+                    var nuevo_formato = $("TXTnuevoFormato").val();
+
+
+                    if(nuevo_formato){
                         // Llamado Ajax
                         $.ajax({
-                            url: "TelerikPlanCompra/TiendaDuplicarTemporada",
+                            url: "TelerikPlanCompra/FormatoCrearNuevo",
                             data: {
-                                MARCA:kendo.parseInt(cbx_marca_valor),
-                                TEMP_SELECCIONADA:kendo.parseInt(tem_selecc_duplicar)
+                                FORMATO:String(nuevo_formato)
                             },
                             dataType: "json",
                             success: function (data) {
@@ -1461,34 +1463,35 @@ $(function () {
                                     var sheet = spreadsheet.activeSheet();
                                     sheet.dataSource.read();
 
-                                    // Oculto los elementos por si se abre por segunda vez
-                                    $("#poptienda_tipotienda").hide();
-                                    $("#poptienda_asignacion").hide();
-                                    $("#poptienda_btns").hide();
-                                    $("#btn_replica_temporada_tienda").hide();
+                                    // Oculto POPUP de Nuevo Formato
+                                    $("#POPUP_nuevo_formato").hide();
+                                    // Oculto el ListBox y la Botonera
+                                    $("#popformato_asignacion").hide();
+                                    $("#popformato_btns").hide();
 
-                                    // Dejo en Blanco los CBX
-                                    $("#CBXMarca").data("kendoComboBox").value("");
-                                    $("#CBXTipoTienda").data("kendoComboBox").value("");
-                                    $("#CBXTemporadaReplica").data("kendoComboBox").value("");
+                                    // Dejo en Blanco el CBX
+                                    $("#CBXFormato").data("kendoComboBox").value("");
+                                    // Dejo en Blanco el TCT
+                                    $("#TXTnuevoFormato").data("kendoComboBox").value("");
+
                                     // Limpiar los ListBox
-                                    var listBox1Tienda = $("#tienda_disponible").data("kendoListBox");
-                                    listBox1Tienda.remove(listBox1Tienda.items());
-                                    var listBox2Tienda = $("#tienda_seleccionado").data("kendoListBox");
-                                    listBox2Tienda.remove(listBox2Tienda.items());
+                                    var listBox1Formato = $("#formato_disponible").data("kendoListBox");
+                                    listBox1Formato.remove(listBox1Formato.items());
+                                    var listBox2Formato = $("#formato_seleccionado").data("kendoListBox");
+                                    listBox2Formato.remove(listBox2Formato.items());
 
                                     popupNotification.getNotifications().parent().remove();
-                                    popupNotification.show(" Todo OK, he duplicado la temporada.", "succes");
+                                    popupNotification.show(" Todo OK, Nuevo Formato ya Creado.", "succes");
 
                                 }else{
                                     popupNotification.getNotifications().parent().remove();
-                                    popupNotification.show(" Ups, no pude duplicar la temporada.", "error");
+                                    popupNotification.show(" Ups, no pude creal el nuevo formato.", "error");
                                 }
 
                             }
                         });
                     }else{
-                        console.log("Marca: "+cbx_marca_valor+" Temp. Selecc: "+tem_selecc_duplicar);
+                        console.log("Formato: "+nuevo_formato);
                     }
 
 

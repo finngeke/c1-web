@@ -4111,6 +4111,39 @@ class PlanCompraClass extends \parametros
 
 
     }
+    // Crear Nuevo Formato
+    public static function FormatoCrearNuevo($temporada, $depto, $login, $formato){
+
+        $sql = "INSERT INTO PLC_Formato (COD_TEMPORADA,DEP_DEPTO,NIV_JER1,COD_JER1,COD_SEG,DES_SEG) 
+                VALUES( "
+            . $temporada . ","
+            . "'" . $depto . "',0,0,"
+            . " (SELECT (NVL( MAX( TO_NUMBER( COD_SEG ) ), 0 ) + 1 ) AS INCREMENTAL FROM"
+            . " PLC_Formato WHERE  COD_TEMPORADA = "
+            . $temporada . " AND DEP_DEPTO = '" . $depto . "')," .
+            "'" . $formato . "')";
+
+        // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+        if (!file_exists('../archivos/log_querys/'.$login)) {
+            mkdir('../archivos/log_querys/'.$login, 0775, true);
+        }
+        $stamp = date("Y-m-d_H-i-s");
+        $rand = rand(1, 999);
+        $content = $sql;
+        $fp = fopen("../archivos/log_querys/".$login."/MANTENEDORFORMATO-NUEVOFORMATO--".$login."-".$stamp." R".$rand.".txt","wb");
+        fwrite($fp,$content);
+        fclose($fp);
+
+        $data = \database::getInstancia()->getConsulta($sql);
+
+        if($data){
+            return "OK";
+        }else{
+            return "ERROR";
+        }
+
+
+    }
     // ######################## FIN Trabajo POPUP Formato ########################
 
 
