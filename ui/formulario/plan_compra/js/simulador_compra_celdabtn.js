@@ -1036,7 +1036,7 @@ $(function () {
                                             sheet.dataSource.read();
 
                                             popupNotification.getNotifications().parent().remove();
-                                            popupNotification.show(" Todo OK, repliqué para tus otras marcas la misma configuración.", "succes");
+                                            popupNotification.show(" Todo OK, repliqué para tus otras marcas la misma configuración.", "success");
 
                                         }else{
                                             popupNotification.getNotifications().parent().remove();
@@ -1168,7 +1168,7 @@ $(function () {
                                     listBox2Tienda.remove(listBox2Tienda.items());
 
                                     popupNotification.getNotifications().parent().remove();
-                                    popupNotification.show(" Todo OK, he duplicado la temporada.", "succes");
+                                    popupNotification.show(" Todo OK, he duplicado la temporada.", "success");
 
                                 }else{
                                     popupNotification.getNotifications().parent().remove();
@@ -1203,10 +1203,6 @@ $(function () {
 
 
 
-
-
-
-
     // ############################ FORMATOS ############################
 
     var dataSource_cbxFormatoDisponibleAsignado = "";
@@ -1236,6 +1232,7 @@ $(function () {
         close: onClose*/
     }).data("kendoWindow").center();
 
+    // Le doy formato de enmascarado al TextBox
     $("#TXTnuevoFormato").kendoMaskedTextBox();
 
     // Definimos la estructura del ListBox
@@ -1455,7 +1452,7 @@ $(function () {
                             data: {
                                 FORMATO:String(value_nuevo_formato)
                             },
-                            dataType: "json",
+                            /*dataType: "json",*/
                             success: function (data) {
 
                                 if(data=="OK"){
@@ -1466,19 +1463,17 @@ $(function () {
                                     sheet.dataSource.read();
 
                                     // Recargar el CBX de Formato
-                                    // dataSource_cbx_formato.read();
                                     $("#CBXFormato").data("kendoComboBox").dataSource.read();
 
                                     // Oculto POPUP de Nuevo Formato
                                     $("#POPUP_nuevo_formato").hide();
+
                                     // Oculto el ListBox y la Botonera
                                     $("#popformato_asignacion").hide();
                                     $("#popformato_btns").hide();
 
                                     // Dejo en Blanco el CBX
                                     $("#CBXFormato").data("kendoComboBox").value("");
-                                    // Dejo en Blanco el TCT
-                                    //$("#TXTnuevoFormato").value("");
 
                                     // Limpiar los ListBox
                                     var listBox1Formato = $("#formato_disponible").data("kendoListBox");
@@ -1487,7 +1482,7 @@ $(function () {
                                     listBox2Formato.remove(listBox2Formato.items());
 
                                     popupNotification.getNotifications().parent().remove();
-                                    popupNotification.show(" Todo OK, Nuevo Formato ya Creado.", "succes");
+                                    popupNotification.show(" Todo OK, Nuevo Formato ya Creado.", "success");
 
                                 }else{
                                     popupNotification.getNotifications().parent().remove();
@@ -1496,7 +1491,7 @@ $(function () {
 
                             },
                             error: function (request, status, error) {
-                                alert(request.responseText);
+                                console.log("Restupesta: "+request.responseText+" Status: "+status+" Error: "+error);
                             }
                         });
                     }else{
@@ -1523,6 +1518,10 @@ $(function () {
 
         }
     });
+
+
+
+
 
 
 

@@ -2039,8 +2039,7 @@ $(function () {
             transport: {
                 read: {
                     url: "TelerikPlanCompra/Listar_Pop_Presupuestos",
-                    dataType: "json",
-                    data: {}
+                    dataType: "json"
                 }
             }
         });
