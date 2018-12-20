@@ -514,6 +514,7 @@ $(function () {
                         var data_conteo_total = sheet_conteo_total.toJSON();
                         var total_registros_listados = data_conteo_total.rows.length;
 
+
                         // Ocultar Columnas
                         var oculta_columna_spread = spreadsheet_conteo_total.activeSheet();
                         oculta_columna_spread.hideColumn(96);
@@ -592,6 +593,7 @@ $(function () {
 
 
                     }, {recalc: true});
+
 
                 }
             }, 0);
@@ -801,6 +803,10 @@ $(function () {
         sheets: [{
             name: "PlanDeCompra",
             dataSource: dataSource,
+            /*filter: {
+                ref: "A1:CR1",
+                columns:[]
+            },*/
             columns: [
                 {width: 40},    // id
                 {width: 100},   // G. Compra
@@ -1725,7 +1731,7 @@ $(function () {
             $("#CBXFormato").data("kendoComboBox").value("");
 
             // Dejo en Blanco el TCT
-            $("#TXTnuevoFormato").data("kendoComboBox").value("");
+            //$("#TXTnuevoFormato").value("");
 
             // Limpiar los ListBox
             var listBox1Formato = $("#formato_disponible").data("kendoListBox");
@@ -2060,7 +2066,7 @@ $(function () {
 
         // Actualiza Concurrencia
         ActualizaConcurrencia();
-        
+
         //COSTO
         var costo = $("#Costo").val();
         var retail = $("#Retail").val();

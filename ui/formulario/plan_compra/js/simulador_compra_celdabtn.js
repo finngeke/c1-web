@@ -1472,7 +1472,7 @@ $(function () {
                                     // Dejo en Blanco el CBX
                                     $("#CBXFormato").data("kendoComboBox").value("");
                                     // Dejo en Blanco el TCT
-                                    $("#TXTnuevoFormato").data("kendoComboBox").value("");
+                                    //$("#TXTnuevoFormato").value("");
 
                                     // Limpiar los ListBox
                                     var listBox1Formato = $("#formato_disponible").data("kendoListBox");
