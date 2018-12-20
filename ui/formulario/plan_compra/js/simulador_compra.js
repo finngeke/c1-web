@@ -734,7 +734,7 @@ $(function () {
         rows: 400,
         //toolbar: true,
         toolbar: {
-            home: [ "open" ,
+            home: [ //"open" ,
                 "exportAs",
                 "freeze",
                 "filter",

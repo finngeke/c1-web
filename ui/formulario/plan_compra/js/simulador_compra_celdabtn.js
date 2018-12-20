@@ -1215,8 +1215,7 @@ $(function () {
     // Le da la estructura a la ventana POPUP
     var ventana_formato = $("#POPUP_formato");
     ventana_formato.kendoWindow({
-        width: "550px",
-        height: "360px",
+        width: "710px",
         title: "Formatos",
         //content: "../ui/formulario/plan_compra/telerik/POPUPFormato.php",
         visible: false/*,
@@ -1225,8 +1224,8 @@ $(function () {
 
     var ventana_nuevo_formato = $("#POPUP_nuevo_formato");
     ventana_nuevo_formato.kendoWindow({
-        width: "300px",
-        title: "Nuevo FOrmato",
+        width: "350px",
+        title: "Nuevo Formato",
         visible: false,
         actions: [
             //"Pin",

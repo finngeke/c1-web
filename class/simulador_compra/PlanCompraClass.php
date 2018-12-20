@@ -281,6 +281,7 @@ class PlanCompraClass extends \parametros
                         $estilo_pmm = $va1["ESTILO_PMM"];
                         $estado_match = $va1["ESTADO_MATCH"];
                         array_push($dt2021, array($proforma, $va1["PO_NUMBER"], $estadoOc, $f_embarque, $f_eta, $f_recepcion, $dias_atrasado,$ESTADO,$nom_estado,$estilo_pmm,$estado_match));}
+
                 }
             }
 
@@ -3790,7 +3791,7 @@ class PlanCompraClass extends \parametros
             array_push($array1
                 , array(
                     "CODIGO" => $va1[0]
-                , "DESCRIPCION" => $va1[1]
+                , "DESCRIPCION" => utf8_encode($va1[1])
                 , "ESTADO" => $estado
 
                 )
@@ -4031,17 +4032,82 @@ class PlanCompraClass extends \parametros
                 $estado = true;
             }
 
-
             array_push($array1
                 , array(
                     "CODIGO" => $va1[0]
-                , "DESCRIPCION" => $va1[1]
+                , "DESCRIPCION" => utf8_encode($va1[1])
                 , "ESTADO" => $estado
 
                 )
             );
         }
         return $array1;
+
+
+
+    }
+    // Actualiza Asignados
+    public static function FormatoActualizaAsignado($temporada, $depto, $login, $formato,$codigo,$descripcion,$estado){
+
+        // $codigo      = Corresponde a la Tienda Número
+        // $descripcion = Corresponde a la Tienda Texto
+        // $estado      = El estado me dice si hay que quitar o agregar el registro
+        // $formato     = El valor del CBX de formato
+
+        // Elimino
+        if($estado == "false"){
+
+            $sql_quitar = "DELETE FROM plc_formatos_tda
+                            WHERE COD_TEMPORADA = $temporada
+                            AND DEP_DEPTO = '" . $depto . "'
+                            AND COD_TDA = $codigo
+                            AND COD_SEG = $formato";
+
+            // Guardamos registros
+            if (!file_exists('../archivos/log_querys/' . $login)) {
+                mkdir('../archivos/log_querys/' . $login, 0775, true);
+            }
+            $stamp = date("Y-m-d_H-i-s");
+            $rand = rand(1, 999);
+            $content = $sql_quitar;
+            $fp = fopen("../archivos/log_querys/" . $login . "/MANTENEDORFORMATO-QUITAR--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+            fwrite($fp, $content);
+            fclose($fp);
+
+            $quitar = \database::getInstancia()->getConsulta($sql_quitar);
+
+            if($quitar){
+                return "OK";
+            }else{
+                return "ERROR";
+            }
+
+            // Agregar Registro
+        }else{
+
+            $sql_agregar = "INSERT INTO plc_formatos_tda (COD_TEMPORADA,DEP_DEPTO,NIV_JER1,COD_JER1,COD_SEG,COD_TDA)
+                            VALUES($temporada,'" . $depto . "',0,0,$formato,$codigo)";
+
+            // Guardamos registros del agregar
+            if (!file_exists('../archivos/log_querys/' . $login)) {
+                mkdir('../archivos/log_querys/' . $login, 0775, true);
+            }
+            $stamp = date("Y-m-d_H-i-s");
+            $rand = rand(1, 999);
+            $content = $sql_agregar;
+            $fp = fopen("../archivos/log_querys/" . $login . "/MANTENEDORFORMATO-AGREGAR--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+            fwrite($fp, $content);
+            fclose($fp);
+
+            $agrega = \database::getInstancia()->getConsulta($sql_agregar);
+
+            if($agrega){
+                return "OK";
+            }else{
+                return "ERROR";
+            }
+
+        }
 
 
     }

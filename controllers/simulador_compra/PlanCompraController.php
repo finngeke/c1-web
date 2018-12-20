@@ -515,6 +515,13 @@ if($ESTADO_C1!=24){
         $array_data = $_GET;
         echo json_encode(\simulador_compra\PlanCompraClass::FormatoObtieneDisponibleAsignado($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'),$array_data["FORMATO"]));
     }
+    // Actualiza Asignados
+    public function FormatoActualizaAsignado($f3) {
+die();
+        $array_data = $_GET;
+        echo \simulador_compra\PlanCompraClass::FormatoActualizaAsignado($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $array_data["FORMATO"], $array_data["CODIGO"], $array_data["DESCRIPCION"], $array_data["ESTADO"]);
+
+    }
     // ######################## FIN Trabajo POPUP Formatos ########################
 
 
