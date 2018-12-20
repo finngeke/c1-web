@@ -281,7 +281,6 @@ class PlanCompraClass extends \parametros
                         $estilo_pmm = $va1["ESTILO_PMM"];
                         $estado_match = $va1["ESTADO_MATCH"];
                         array_push($dt2021, array($proforma, $va1["PO_NUMBER"], $estadoOc, $f_embarque, $f_eta, $f_recepcion, $dias_atrasado,$ESTADO,$nom_estado,$estilo_pmm,$estado_match));}
-
                 }
             }
 
@@ -4592,7 +4591,9 @@ class PlanCompraClass extends \parametros
 
     public static function obtienePptosemb($temporada, $depto) {
 
-        $sql = "SELECT B.VENT_DESCRI,sum(A.PORCENTAJE) AS PORCENTAJE FROM  PLC_PPTO_EMB A"
+        $sql = "SELECT B.VENT_DESCRI
+                      ,sum(A.PORCENTAJE) AS PORCENTAJE 
+                FROM  PLC_PPTO_EMB A"
             . " INNER JOIN PLC_VENTANA B ON A.COD_VENTANA=B.COD_VENTANA"
             . " WHERE A.COD_TEMPORADA =" . $temporada . " AND A.DEP_DEPTO='" . $depto . "' "
             . " GROUP BY A.COD_VENTANA,B.VENT_DESCRI ORDER BY B.VENT_DESCRI ASC";
@@ -4617,7 +4618,191 @@ class PlanCompraClass extends \parametros
         return $data;
     }
 
+    //POR PRESUPUESTOS EDIT
+    public static function InsertPptoCosto($temporada,$depto,$presupuesto,$login)
+    {
 
+        $sql = "INSERT INTO PLC_PPTO_COSTO( COD_TEMPORADA,
+                                   DEP_DEPTO,
+                                   NIV_JER1,
+                                   COD_JER1,
+                                   NIV_JER2,
+                                   COD_JER2,
+                                   PRESUPUESTO,
+                                   USR_CRE,
+                                   FEC_CRE )
+                           VALUES( $temporada,
+                                   '" . $depto . "',
+                                   0,
+                                   0,
+                                   0,
+                                   0,
+                                   $presupuesto,
+                                   '" . $login . "',
+                                   SYSDATE )
+                                   ";
+
+        // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+        if (!file_exists('../archivos/log_querys/'.$login)) {
+            mkdir('../archivos/log_querys/'.$login, 0775, true);
+        }
+        $stamp = date("Y-m-d_H-i-s");
+        $rand = rand(1, 999);
+        $content = $sql;
+        $fp = fopen("../archivos/log_querys/".$login."/PPTOCOSTO-AGREGA--".$login."-".$stamp." R".$rand.".txt","wb");
+        fwrite($fp,$content);
+        fclose($fp);
+
+        $data = \database::getInstancia()->getConsulta($sql);
+        return $data;
+
+    }
+    public static function EliminarPptoCosto($temporada, $depto, $login)
+    {
+
+        $sql = "DELETE FROM PLC_PPTO_COSTO 
+                WHERE cod_temporada = $temporada 
+                AND dep_depto = '" . $depto . "'
+                ";
+        // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+        if (!file_exists('../archivos/log_querys/'.$login)) {
+            mkdir('../archivos/log_querys/'.$login, 0775, true);
+        }
+        $stamp = date("Y-m-d_H-i-s");
+        $rand = rand(1, 999);
+        $content = $sql;
+        $fp = fopen("../archivos/log_querys/".$login."/PPTOCOSTO-QUITAR--".$login."-".$stamp." R".$rand.".txt","wb");
+        fwrite($fp,$content);
+        fclose($fp);
+        $data = \database::getInstancia()->getConsulta($sql);
+        return $data;
+    }
+    public static function InsertPptoRetail($temporada,$depto,$presupuesto, $login)
+    {
+
+        $sql = "INSERT INTO PLC_PPTO_RETAIL( COD_TEMPORADA,
+                                   DEP_DEPTO,
+                                   NIV_JER1,
+                                   COD_JER1,
+                                   NIV_JER2,
+                                   COD_JER2,
+                                   MATI,
+                                   USR_CRE,
+                                   FEC_CRE )
+                           VALUES( $temporada,
+                                   '" . $depto . "',
+                                   0,
+                                   0,
+                                   0,
+                                   0,
+                                   $presupuesto,
+                                   '" . $login . "',
+                                   SYSDATE )";
+
+        // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+        if (!file_exists('../archivos/log_querys/'.$login)) {
+            mkdir('../archivos/log_querys/'.$login, 0775, true);
+        }
+        $stamp = date("Y-m-d_H-i-s");
+        $rand = rand(1, 999);
+        $content = $sql;
+        $fp = fopen("../archivos/log_querys/".$login."/PPTORETAIL-AGREGA--".$login."-".$stamp." R".$rand.".txt","wb");
+        fwrite($fp,$content);
+        fclose($fp);
+
+        $data = \database::getInstancia()->getConsulta($sql);
+        return $data;
+
+    }
+    public static function EliminarPptoRetail($temporada, $depto, $login)
+    {
+        $sql = "DELETE FROM PLC_PPTO_RETAIL P
+                WHERE P.COD_TEMPORADA = $temporada          
+                AND P.DEP_DEPTO = '".$depto."'
+                ";
+
+        // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+        if (!file_exists('../archivos/log_querys/'.$login)) {
+            mkdir('../archivos/log_querys/'.$login, 0775, true);
+        }
+        $stamp = date("Y-m-d_H-i-s");
+        $rand = rand(1, 999);
+        $content = $sql;
+        $fp = fopen("../archivos/log_querys/".$login."/PPTORETAIL-QUITAR--".$login."-".$stamp." R".$rand.".txt","wb");
+        fwrite($fp,$content);
+        fclose($fp);
+
+        $data = \database::getInstancia()->getConsulta($sql);
+        return $data;
+    }
+    public static function InsertVentEmb($temporada, $depto, $ventana, $porcentaje, $login)
+    {
+        $cod_ventana= 0;
+        $sql = "SELECT COD_VENTANA
+                FROM PLC_VENTANA
+                WHERE VENT_DESCRI = '".strtoupper($ventana)."'";
+        $data = \database::getInstancia()->getFila($sql);
+        if (count($data) > 1){
+            $cod_ventana = $data['COD_VENTANA'];
+        }
+
+        $sql = "INSERT INTO PLC_PPTO_EMB ( COD_TEMPORADA,
+                                  DEP_DEPTO,
+                                  NIV_JERARQUIA,
+                                  COD_JERARQUIA,
+                                  COD_VENTANA,
+                                  PORCENTAJE,
+                                  USR_CRE,
+                                  FEC_CRE )
+               VALUES($temporada,
+                    '".$depto."',
+                    0,
+                    0,
+                    ".$cod_ventana.",
+                    ".$porcentaje.",
+                    '".$login."',
+                    SYSDATE)
+                    ";
+
+        // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+        if (!file_exists('../archivos/log_querys/'.$login)) {
+            mkdir('../archivos/log_querys/'.$login, 0775, true);
+        }
+        $stamp = date("Y-m-d_H-i-s");
+        $rand = rand(1, 999);
+        $content = $sql;
+        $fp = fopen("../archivos/log_querys/".$login."/VENTANALLEGADA-AGREGA--".$login."-".$stamp." R".$rand.".txt","wb");
+        fwrite($fp,$content);
+        fclose($fp);
+
+        $data = \database::getInstancia()->getConsulta($sql);
+        return $data;
+
+    }
+    public static function EliminarVentEmb($temporada, $depto, $login)
+    {
+        $sql = "DELETE FROM PLC_PPTO_EMB 
+                WHERE cod_temporada = $temporada 
+                AND dep_depto = '" . $depto . "'
+                ";
+
+        // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+        if (!file_exists('../archivos/log_querys/'.$login)) {
+            mkdir('../archivos/log_querys/'.$login, 0775, true);
+        }
+        $stamp = date("Y-m-d_H-i-s");
+        $rand = rand(1, 999);
+        $content = $sql;
+        $fp = fopen("../archivos/log_querys/".$login."/VENTANALLEGADA-QUITAR--".$login."-".$stamp." R".$rand.".txt","wb");
+        fwrite($fp,$content);
+        fclose($fp);
+
+        $data = \database::getInstancia()->getConsulta($sql);
+
+
+        return $data;
+        //return 0;
+    }
 
 
 

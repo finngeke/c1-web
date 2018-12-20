@@ -554,7 +554,7 @@ if($ESTADO_C1!=24){
 
     }
 
-    //Carga Popup presupuestos total
+// ######################## POP PRESUPUESTOS Total PLAN########################
     public function Listar_Pop_Presupuestos($f3){
 
         //Presupuestos Costo-Retail-Embarque
@@ -730,9 +730,74 @@ if($ESTADO_C1!=24){
         echo json_encode($dtpresupuestos);
     }
 
+// ######################## POP PRESUPUESTOS Edit########################
+    public function ListarPopEditPresupuestos($f3){
+        $tipo= $f3->get('GET.tipo');
 
+        if($tipo== 1){
+         echo json_encode(\simulador_compra\PlanCompraClass::obtienePptoCosto($f3->get('SESSION.COD_TEMPORADA')
+                                                                            , $f3->get('SESSION.COD_DEPTO')));
+        }elseif ($tipo== 2){
+         echo json_encode(\simulador_compra\PlanCompraClass::obtienePptoRetail($f3->get('SESSION.COD_TEMPORADA')
+                                                                             , $f3->get('SESSION.COD_DEPTO')));
+        }else{
+          echo json_encode(\simulador_compra\PlanCompraClass::obtienePptosemb($f3->get('SESSION.COD_TEMPORADA')
+                                                                            , $f3->get('SESSION.COD_DEPTO')));
+        }
 
+    }
 
+    public function InsertPptoCosto($f3) {
+
+        \simulador_compra\PlanCompraClass::EliminarPptoCosto($f3->get('SESSION.COD_TEMPORADA')
+                                                            ,$f3->get('SESSION.COD_DEPTO')
+                                                            ,$f3->get('SESSION.login'));
+
+        echo \simulador_compra\PlanCompraClass::InsertPptoCosto( $f3->get('SESSION.COD_TEMPORADA')
+                                                                ,$f3->get('SESSION.COD_DEPTO')
+                                                                ,$f3->get('GET.PRESUPUESTO')
+                                                                ,$f3->get('SESSION.login'));
+    }
+
+    public function InsertPptoRetail($f3) {
+        \simulador_compra\PlanCompraClass::EliminarPptoRetail($f3->get('SESSION.COD_TEMPORADA')
+            ,$f3->get('SESSION.COD_DEPTO')
+            ,$f3->get('SESSION.login'));
+
+        echo \simulador_compra\PlanCompraClass::InsertPptoRetail( $f3->get('SESSION.COD_TEMPORADA')
+                                                                    ,$f3->get('SESSION.COD_DEPTO')
+                                                                    ,$f3->get('GET.PRESUPUESTO')
+                                                                    ,$f3->get('SESSION.login'));
+    }
+
+    public function InsertVentEmb($f3) {
+
+        echo \simulador_compra\PlanCompraClass::InsertVentEmb($f3->get('SESSION.COD_TEMPORADA')
+            ,$f3->get('SESSION.COD_DEPTO')
+            ,$f3->get('GET.VENTANA')
+            ,$f3->get('GET.PORCENTAJE')
+            ,$f3->get('SESSION.login'));
+    }
+
+    public function DeleteVentEm($f3){
+       echo \simulador_compra\PlanCompraClass::EliminarVentEmb($f3->get('SESSION.COD_TEMPORADA')
+                ,$f3->get('SESSION.COD_DEPTO')
+                ,$f3->get('SESSION.login'));
+    }
+
+    public function Sumaporcent($f3){
+        $dt = explode("-", (substr ($f3->get('GET._Porcent'), 0, -1)));
+        $total = 0;
+        foreach ($dt as $val){
+            $total = $total + ($val*100);
+        }
+        if ($total == 100){
+            echo 1;
+        }else{
+            echo 0;
+        }
+
+    }
 
 
 // Termina Clase

@@ -245,16 +245,82 @@
     </div>
 
 
+    <!-- POPUP presupuesto costo-retail-emb-->
+    <div id="POPUP_Presupuestos">
+        <ul id="editpresupuestos">
+            <li>  <h4 id="Update" style="display: none"></h4>
+                <label> Costo:
+                    <input id="Costo"  type="number" title="currency" value="0" min="0" style="width: 100%;" />
+                </label>
+            </li>
+            <li>
+                <label> Retail:
+                    <input id="Retail" type="number" title="currency" value="0" min="0" style="width: 100%;" />
+                </label>
+            </li>
+            <div>
+            <li>
+                <label> Vent Emb:</label>
+                <div class="k-block"> <ul id="panels">
+                    <label>&nbsp;A:&nbsp;<input id="PorVentA" value="0.00" title="A" style="width: 50%; text-align: center" class="Emb"/></label>
+                    <label>&nbsp;B:&nbsp;<input id="PorVentB" value="0.00" title="B" style="width: 50%; text-align: center" class="Emb"/></label>
+                    <label>&nbsp;C:&nbsp;<input id="PorVentC" value="0.00" title="C" style="width: 50%; text-align: center" class="Emb"/></label>
+                    <label>&nbsp;D:&nbsp;<input id="PorVentD" value="0.00" title="D" style="width: 50%; text-align: center" class="Emb"/></label>
+                    <label>&nbsp;E:&nbsp;<input id="PorVentE" value="0.00" title="E" style="width: 50%; text-align: center" class="Emb"/></label>
+                    <label>&nbsp;F:&nbsp;<input id="PorVentF" value="0.00" title="F" style="width: 50%; text-align: center" class="Emb"/></label>
+                    <label>&nbsp;G:&nbsp;<input id="PorVentG" value="0.00" title="G" style="width: 50%; text-align: center" class="Emb"/></label>
+                    <label>&nbsp;H:&nbsp;<input id="PorVentH" value="0.00" title="H" style="width: 50%; text-align: center" class="Emb"/></label>
+                    <label>&nbsp;&nbsp;I:&nbsp;<input id="PorVentI" value="0.00" title="I" style="width: 50%; text-align: center" class="Emb"/></label>
+                </ul>
+                </div>
+            </div>
+        </ul>
+        <li style="align-content: center">
+            <button id="btnGuardar" class="k-primary" disabled="disabled">Guardar</button><label id="loading2" style="display: none">Guardando..</label>
+        </li>
+        <style>
+            #panels
+            {
+                margin-left: 15px;
+                text-align: center;
+            }
 
+            #panels li
+            {
+                width: 100px;
+                margin-right: 5px;
+                margin-bottom: 5px;
+                list-style: none;
+                float: left;
+            }
+            .k-primary {
+                min-width: 70px;
+                min-height: 28px;
+            }
+            #editpresupuestos {
+                margin: 0 0 -1.5em;
+                padding: 30px;
+            }
 
+            #editpresupuestos li {
+                list-style: none;
+                padding-bottom: 1.5em;
+            }
 
+            #editpresupuestos label {
+                display: block;
+                padding-bottom: .6em;
+                font-weight: bold;
+                text-transform: uppercase;
+                font-size: 12px;
+            }
 
+            #editpresupuestos label .k-numerictextbox {
+                font-size: 12px;
+            }
+        </style>
 
-
-
-
-
-
+    </div>
     <!-- POPUP Cierre de Session -->
     <div id="POPUP_cierra_session">
         <div id="StopCountDown" style="font-size: 40px; text-align: center;">
