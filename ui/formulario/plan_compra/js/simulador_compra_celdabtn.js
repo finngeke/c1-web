@@ -1175,6 +1175,9 @@ $(function () {
                                     popupNotification.show(" Ups, no pude duplicar la temporada.", "error");
                                 }
 
+                            },
+                            error: function (request, status, error) {
+                                console.log("Restupesta: "+request.responseText+" Status: "+status+" Error: "+error);
                             }
                         });
                     }else{
@@ -1466,7 +1469,8 @@ $(function () {
                                     $("#CBXFormato").data("kendoComboBox").dataSource.read();
 
                                     // Oculto POPUP de Nuevo Formato
-                                    $("#POPUP_nuevo_formato").hide();
+                                    var POPUPnuevoFormatoClose = $("#POPUP_nuevo_formato");
+                                    POPUPnuevoFormatoClose.data("kendoWindow").close();
 
                                     // Oculto el ListBox y la Botonera
                                     $("#popformato_asignacion").hide();
