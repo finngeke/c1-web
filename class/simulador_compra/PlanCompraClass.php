@@ -3968,8 +3968,85 @@ class PlanCompraClass extends \parametros
 
 
 
+    // ######################## INICIO Trabajo POPUP Formato ########################
+    // Listar Formato
+    public static function MantenedorListarFormato($temporada, $depto)
+    {
+
+        $sql = "SELECT COD_SEG,DES_SEG 
+                FROM PLC_FORMATO 
+                WHERE COD_TEMPORADA = $temporada 
+                AND DEP_DEPTO = '" . $depto . "' 
+                ORDER BY COD_SEG";
+
+        $data = \database::getInstancia()->getFilas($sql);
+
+        // Transformo a array asociativo
+        $array1 = [];
+        foreach ($data as $va1) {
+            array_push($array1
+                , array(
+                    "CODIGO" => $va1[0]
+                , "DESCRIPCION" => $va1[1]
+                )
+            );
+        }
+        return $array1;
 
 
+    }
+    // Llenar ListBox de TiendaObtieneDisponibleAsignado
+    public static function FormatoObtieneDisponibleAsignado($temporada, $depto, $formato)
+    {
+
+        $sql = "SELECT  S.SUC_SUCURSAL AS CODIGO,
+                        INITCAP(TRIM(S.SUC_NOMBRE)) AS DESCRIPCION,
+                        0 ESTADO
+                 FROM GST_MAESUCURS S
+                 WHERE SUC_SUCURSAL NOT IN (SELECT DISTINCT P.COD_TDA AS COD_SUC
+                                              FROM   PLC_FORMATOS_TDA P
+                                              WHERE  P.COD_TEMPORADA = $temporada
+                                              AND    P.DEP_DEPTO     = '" . $depto . "'
+                                              AND    DECODE( " . $formato . ", 0, 0,P.COD_SEG ) = " . $formato . "
+                                              )
+                UNION ALL
+                SELECT DISTINCT
+                                P.COD_TDA                                              AS CODIGO,
+                                INITCAP( TRIM( BOSACC_FUN_OBT_NOM_SUC( P.COD_TDA ) ) ) AS DESCRIPCION,
+                                1 ESTADO
+                         FROM   PLC_FORMATOS_TDA P
+                         WHERE  P.COD_TEMPORADA = $temporada
+                         AND    P.DEP_DEPTO     = '" . $depto . "'
+                         AND    DECODE( " . $formato . ", 0, 0,P.COD_SEG ) = " . $formato . "
+                         ORDER BY 2";
+
+        $data = \database::getInstancia()->getFilas($sql);
+
+        // Transformo a array asociativo
+        $array1 = [];
+        foreach ($data as $va1) {
+
+            if($va1[2]==0){
+                $estado = false;
+            }else{
+                $estado = true;
+            }
+
+
+            array_push($array1
+                , array(
+                    "CODIGO" => $va1[0]
+                , "DESCRIPCION" => $va1[1]
+                , "ESTADO" => $estado
+
+                )
+            );
+        }
+        return $array1;
+
+
+    }
+    // ######################## FIN Trabajo POPUP Formato ########################
 
 
 

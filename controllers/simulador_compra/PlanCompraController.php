@@ -505,6 +505,16 @@ if($ESTADO_C1!=24){
 
 
     // ######################## INICIO Trabajo POPUP Formatos ########################
+    // Listar Formato
+    public function MantenedorListarFormato($f3)
+    {
+        echo json_encode(\simulador_compra\PlanCompraClass::MantenedorListarFormato($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO')));
+    }
+    // Llenar ListBox de FormatoObtieneDisponibleAsignado
+    public function FormatoObtieneDisponibleAsignado($f3) {
+        $array_data = $_GET;
+        echo json_encode(\simulador_compra\PlanCompraClass::FormatoObtieneDisponibleAsignado($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'),$array_data["FORMATO"]));
+    }
     // ######################## FIN Trabajo POPUP Formatos ########################
 
 

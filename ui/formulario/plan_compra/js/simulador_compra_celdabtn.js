@@ -1215,7 +1215,7 @@ $(function () {
     // Le da la estructura a la ventana POPUP
     var ventana_formato = $("#POPUP_formato");
     ventana_formato.kendoWindow({
-        width: "500px",
+        width: "550px",
         height: "360px",
         title: "Formatos",
         //content: "../ui/formulario/plan_compra/telerik/POPUPFormato.php",
@@ -1269,7 +1269,7 @@ $(function () {
     var dataSource_cbx_formato = new kendo.data.DataSource({
         transport: {
             read: {
-                url: "TelerikPlanCompra/ListarMarca",
+                url: "TelerikPlanCompra/MantenedorListarFormato",
                 dataType: "json"
             }
         }
@@ -1306,17 +1306,17 @@ $(function () {
                     dataSource_cbxFormatoDisponibleAsignado = new kendo.data.DataSource({
                         transport: {
                             read: {
-                                url: "TelerikPlanCompra/TiendaObtieneDisponibleAsignado",
+                                url: "TelerikPlanCompra/FormatoObtieneDisponibleAsignado",
                                 data: {
-                                    MARCA: kendo.parseInt(cbx_marca_valor)
+                                    FORMATO: kendo.parseInt(cbx_formato_valor)
                                 },
                                 dataType: "json"
                             },
                             update: {
-                                url: "TelerikPlanCompra/TiendaActualizaAsignado",
+                                url: "TelerikPlanCompra/FormatoActualizaAsignado",
                                 dataType: "json",
                                 data: {
-                                    MARCA:kendo.parseInt(cbx_marca_valor)
+                                    FORMATO:kendo.parseInt(cbx_formato_valor)
                                 }
                             }
                         },
