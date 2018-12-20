@@ -784,27 +784,16 @@ $(function () {
             insert: false,
             data: [
                 { type: "button",
-                    text: "Presupuestos",
+                    text: "Plan Presupuestos",
                     showText: "both",
                     imageUrl: "../web/telerik/content/web/16x16/Grid.png",
                     click: Pop_Presupuestos
                 }, { type: "button",
-                    text: "Ppto Costo",
+                    text: "Presupuestos",
                     showText: "both",
-                    imageUrl: "../web/telerik/content/web/16x16/Grid.png",
-                    click: Pop_ajuste_cajas
-                }, { type: "button",
-                    text: "Ppto Retail",
-                    showText: "both",
-                    imageUrl: "../web/telerik/content/web/16x16/Grid.png",
-                    click: Pop_ajuste_cajas
-                }, { type: "button",
-                    text: "Ppto Emb",
-                    showText: "both",
-                    imageUrl: "../web/telerik/content/web/16x16/Grid.png",
-                    click: Pop_ajuste_cajas
+                    icon: "k-icon k-i-currency",
+                    click: Pop_editPresupuestos
                     }
-
             ]
 
         },
@@ -2039,18 +2028,68 @@ $(function () {
 
     }
 
-
+    //pop importar assorment
     function Pop_Importar(){
-
         var popupDe = $("#POPUP_Importar_");
         popupDe.data("kendoWindow").open();
     }
 
+    //pop Presupuestos edit
+    function Pop_editPresupuestos(){
+        //COSTO
+        var costo = $("#Costo").val();
+        var retail = $("#Retail").val();
+        var VentA =  $("#PorVentA").val();
+        if (costo == 0){
+            $.ajax({
+                url: "TelerikPlanCompra/ListarPopEditPresupuestos",
+                dataType: "json",
+                type: 'GET',
+                data: {tipo:1},
+                success: function (data) {
+                    $("#Costo").kendoNumericTextBox({
+                        culture: "es-CL",
+                        format: "c0",
+                        value: data
+                    });
+                }
+            });
+        }
+        if(retail == 0){
+            $.ajax({
+                url: "TelerikPlanCompra/ListarPopEditPresupuestos",
+                dataType: "json",
+                type: 'GET',
+                data: {tipo:2},
+                success: function (data) {
+                    $("#Retail").kendoNumericTextBox({
+                        culture: "es-CL",
+                        format: "c0",
+                        value: data
+                    });
+                }
+            });
+         }
 
-
-
-
-
+        if (VentA == 0.00){
+            $.ajax({
+                url: "TelerikPlanCompra/ListarPopEditPresupuestos",
+                dataType: "json",
+                type: 'GET',
+                data: {tipo:3},
+                success: function (data) {
+                    $.each(data, function (i, o) {
+                        $("#PorVent"+o["VENT_DESCRI"]).kendoNumericTextBox({
+                            format: "p0",
+                            value: o["PORCENTAJE"]
+                        });
+                    });
+                }
+            });
+        }
+        var editPresupuestos = $("#POPUP_Presupuestos");
+        editPresupuestos.data("kendoWindow").open();
+    }
 
 
 // Fin del document ready

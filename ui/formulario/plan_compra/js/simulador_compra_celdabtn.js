@@ -1600,7 +1600,7 @@ $(function () {
         ]
     });
 
-    //Upload del archivo
+    // ############################ Importar Assortment ############################
     $("#txt_archivo").kendoUpload({
         async: {
             saveUrl: "guardar/archivoAssorment",
@@ -1990,6 +1990,168 @@ $(function () {
 
 
 
+// ############################ Presupuestos Edit ############################
+    var ventana_editpresupuestos = $("#POPUP_Presupuestos");
+    ventana_editpresupuestos.kendoWindow({
+                    width: "300px",
+                    title: "Presupuestos",
+                    visible: false,
+                    actions: [
+                        //"Pin",
+                        "Minimize",
+                        "Maximize",
+                        "Close"
+                    ]/*,
+                            close: onClose*/
+    }).data("kendoWindow").center();
+//onchange costo
+    $("#Costo").change (function () {
+        var valor = $("#Update").text();
+        valor = valor + "1,"
+        $("#btnGuardar").prop("disabled", false);
+        $('#Update').html(valor);
+    });
+//onchange retail
+    $("#Retail").change (function () {
+        var valor = $("#Update").text();
+        valor = valor + "2,"
+        $("#btnGuardar").prop("disabled", false);
+        $('#Update').html(valor);
+    });
+//onchange emb
+    $(".Emb").change (function () {
+        var valor = $("#Update").text();
+        valor = valor.substring(0, valor.length - 1);
+        var dt = valor.split(','); var _existe = false;
+        dt.forEach(function (value) {
+            if (value == 3){
+                _existe = true;
+            }
+        });
+       if (_existe == false){
+           $("#btnGuardar").prop("disabled", false);
+           valor = valor + "3,"
+           $('#Update').html(valor);
+       }
+    });
+
+// BTN Actualiza Grilla
+    $('#btnGuardar').on('click', function () {
+        var valor = $("#Update").text();
+        $("#btnGuardar").prop("disabled", true);
+        var popupNotification = $("#popupNotification").kendoNotification().data("kendoNotification");
+        var costo = $("#Costo").val();
+        var retail = $("#Retail").val();
+        $('#Update').html("");
+        if (valor != "") {
+            var valor = valor.substring(0, valor.length - 1);
+            var dt = valor.split(',');
+            var _error = true;
+            dt.forEach(function (value) {
+                if (_error == true){
+                    if (value == 1){
+                        if (costo == 0){
+                            popupNotification.show(kendo.toString("El presupuesto de costo no debe estar en 0."), "error");
+                            $("#btnGuardar").prop("disabled", false);
+                            _error = false;
+                        }else{
+                            //ADD COSTO
+                            $.ajax({ url: "TelerikPlanCompra/InsertPptoCosto"
+                                ,type: 'GET'
+                                ,data: {PRESUPUESTO:costo}
+                                ,dataType: "json"
+                                ,success: function(data) {
+                                    if (data ==1){
+                                        popupNotification.show(kendo.toString(" Guardado Correctamente Costo."), "success");
+                                    }else{
+                                        popupNotification.show(kendo.toString(" Error en el guardado costo."), "error");
+                                        $("#btnGuardar").prop("disabled", false);
+                                        _error = false;
+                                    }
+                                }
+                            });
+                        }
+                    }
+                    else if(value == 2){
+                        if (retail == 0){
+                            popupNotification.show(kendo.toString("El presupuesto de retail no debe estar en 0."), "error");
+                            $("#btnGuardar").prop("disabled", false);
+                            _error = false;
+                        }else{
+                            //ADD RETAIL
+                            $.ajax({ url: "TelerikPlanCompra/InsertPptoRetail"
+                                ,type: 'GET'
+                                ,data: {PRESUPUESTO:retail}
+                                ,dataType: "json"
+                                ,success: function(data) {
+                                    if (data ==1){
+                                        popupNotification.show(kendo.toString(" Guardado Correctamente Retail."), "success");
+                                        //popupNotification.show(kendo.toString(" Guardado Correctamente."), "success");
+                                    }else{
+                                        popupNotification.show(kendo.toString(" Error en el guardado Retail."), "error");
+                                        $("#btnGuardar").prop("disabled", false);
+                                        _error = false;
+                                    }
+                                }
+                            });
+                        }
+                    }
+                    else if(value == 3){
+                        //Valicacion Ventanas embarque
+                        var Ventanas = ["A","B","C","D","E","F","G","H","I"];
+                        var Porcent = "";
+                        Ventanas.forEach(function (value) {
+                            Porcent += $("#PorVent"+value).val() + "-";
+                        });
+                        $.ajax({ url: "TelerikPlanCompra/Sumaporcent"
+                            ,type: 'GET'
+                            ,data: {_Porcent:Porcent}
+                            ,dataType: "json"
+                            ,success: function(data) {
+                                if (data == 0){
+                                    popupNotification.show(kendo.toString("Los porcentajes de embarques deben sumar 100%."), "error");
+                                    _error = false;
+                                }else{
+                                    $.ajax({ url: "TelerikPlanCompra/DeleteVentEm"
+                                        ,type: 'GET'
+                                        ,dataType: "json"
+                                        ,success: function(data) {
+                                            if (data == 1){
+                                                var _insert = 0;
+                                                Ventanas.forEach(function (value) {
+                                                    $.ajax({ url: "TelerikPlanCompra/InsertVentEmb"
+                                                        ,type: 'GET'
+                                                        ,data: {VENTANA:value,PORCENTAJE:$("#PorVent"+value).val()}
+                                                        ,dataType: "json"
+                                                        ,success: function(data) {
+                                                            if (data == 1){
+                                                                _insert = parseInt(_insert) + parseInt(data);
+                                                            }else{
+                                                                popupNotification.show(kendo.toString(" Error en el guardado Ppto Emb Vent:".value), "error")
+                                                                $("#btnGuardar").prop("disabled", false);
+                                                                _error = false;
+                                                            }
+                                                            if (_insert == 9){
+                                                                popupNotification.show(kendo.toString(" Guardado Correctamente Ppto Emb."), "success");
+                                                            }
+                                                        }
+                                                    });
+                                                });
+                                            }else {
+                                                popupNotification.show(kendo.toString(" Error delete Ppto Emb"));
+                                                $("#btnGuardar").prop("disabled", false);
+                                                _error = false;
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+        }
+    });
 
 
 
