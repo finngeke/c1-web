@@ -170,7 +170,7 @@
 			return \database::getInstancia()->getConsultaSP($sql, 1);
 		}
 		
-		public static function setFacturaAprobada($cod_proveedor, $nro_factura){
+		public static function setFacturaAprobada($cod_proveedor, $nro_factura) {
 			$sql = "UPDATE PLC_CARGA_FACTURAS_HDR SET
 						APROBADA = 1
 						, FECHA_APROBACION = SYSDATE
@@ -243,25 +243,29 @@
 			$sql = "BEGIN PLC_PKG_PROVEEDOR.PRC_PACKING_LIST_LPN($cod_proveedor, '$nro_factura'); END;";
 			return \database::getInstancia()->getConsulta($sql);
 		}
-
-
-		public static function get_cod_nom_Prov_Peru($cod_provPeru){
-            $nombre = "";
-		    $sql = "SELECT nom_proveedor 
+		
+		public static function get_cod_nom_Prov_Peru($cod_provPeru) {
+			$nombre = "";
+			$sql = "SELECT nom_proveedor
                     FROM PLC_PROVEEDORES_PERU  
                     where cod_proveedor =  $cod_provPeru";
-
-
-            $data= \database::getInstancia()->getFila($sql);
-            if (count($data)<>0){
-                $nombre =$data[0];
-            }
-            return $nombre;
-        }
-
-public static function guardarPL($pl_id, $clob) {
+			
+			
+			$data = \database::getInstancia()->getFila($sql);
+			if (count($data) <> 0) {
+				$nombre = $data[0];
+			}
+			return $nombre;
+		}
+		
+		public static function guardarPL($pl_id, $clob) {
 			$sql = "BEGIN PLC_PKG_PROVEEDOR.PRC_INSERTAR_PL('$pl_id', :clob,:code,:message); END;";
 			return \database::getInstancia()->getConsultaClob($sql, $clob);
+		}
+		
+		public static function erroresPL($pl_id) {
+			$sql = "SELECT DESC_ERROR FROM PLC_PACKING_LIST_PRV_log WHERE (PL_ID = '$pl_id') ORDER BY NRO_FILA, NRO_ERROR";
+			return \database::getInstancia()->getFilas($sql);
 		}
 // Fin de la clase
 	}
