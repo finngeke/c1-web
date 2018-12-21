@@ -14,7 +14,7 @@
     <script src="{{@TELERIK}}web/telerik/content/shared/js/console.js"></script>
     <script src="{{@TELERIK}}web/telerik/js/cultures/kendo.culture.es-CL.min.js"></script>
 </head>
-<body>
+<body style="overflow-y:hidden;overflow-x:hidden;">
 
 <!-- Llamada al plan de compra -->
 <include href="{{ @contenido }}"/>
