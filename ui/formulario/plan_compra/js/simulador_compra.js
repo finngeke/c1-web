@@ -1683,7 +1683,9 @@ $(function () {
                 POPUPDetalleError.data("kendoWindow").open();
 
                 // Seteo TextArea en Blanco
-                $("#TXTdetalleError").val("");
+                // Le entrego el valor al TextArea
+                var editorErrorBlanco = $("#TXTdetalleError").data("kendoEditor");
+                editorErrorBlanco.value('');
 
                 // Realizo la Búsqueda
                 $.ajax({
@@ -1693,14 +1695,14 @@ $(function () {
                         ID_COLOR3: kendo.parseInt(ID_COLOR3)
                     },
                     //type: "POST",
-                    //dataType: "json",
+                    dataType: "json",
                     success: function (data) {
-                        //alert(data["ERROR_PI"]);
-console.log(data);
+
                         if(data){
 
                             // Le entrego el valor al TextArea
-                            $("#TXTdetalleError").val(data.ERROR_PI);
+                            var editorError = $("#TXTdetalleError").data("kendoEditor");
+                            editorError.value(data);
 
                         }else{
                             popupNotification.getNotifications().parent().remove();
