@@ -406,6 +406,9 @@ var cont_total_registros = 10;
                     var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
                     var sheet = spreadsheet.activeSheet();
 
+                    // Congela la Primera Fila
+                    sheet.frozenRows(1);
+
                     // Modifica las Cabeceras
                     sheet.batch(function () {
 
