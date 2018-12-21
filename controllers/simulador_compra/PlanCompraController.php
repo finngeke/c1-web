@@ -535,8 +535,7 @@ if($ESTADO_C1!=24){
 
     // ######################## DETALLE ERROR PI ########################
     public function BuscaComentarioPI($f3) {
-var_dump($_GET);
-die();
+
         $array_data = $_GET;
         echo json_encode(\simulador_compra\PlanCompraClass::BuscaComentarioPI($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $array_data["PI"], $array_data["ID_COLOR3"]));
     }
