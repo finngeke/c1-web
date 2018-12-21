@@ -735,6 +735,11 @@ var cont_total_registros = 10;
 
     // Asigna la estructura visual de la Grilla tipo Excel
     $("#spreadsheet").kendoSpreadsheet({
+        render: function(e){
+            // do custom height calculations to determine desired height
+            var height = window.innerHeight;
+            e.sender.element.innerHeight(height);
+        },
         columns: 106, //106 Siempre visible
         rows: localStorage.getItem("TOTALREGPLAN"),
         // rows: 1500,

@@ -70,7 +70,7 @@
 
             $f3->set('contenido', 'formulario/plan_compra/simulador_compra.html');
             echo Template::instance()->render('layout_plan_compra.php');
-            
+
 		}
 		
 		public function selecciona_depto($f3) {
