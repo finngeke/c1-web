@@ -229,12 +229,12 @@
 				
 				$detalle[] = array(
 					"idFila" => $row[0],
-					"departamento" => $row[1],
+					"departamento" => utf8_encode($row[1]),
 					"codEstilo" => $row[2],
-					"estilo" => $row[3],
-					"color" => $row[4],
-					"ventana" => $row[5],
-					"evento" => $row[6],
+					"estilo" => utf8_encode($row[3]),
+					"color" => utf8_encode($row[4]),
+					"ventana" => utf8_encode($row[5]),
+					"evento" => utf8_encode($row[6]),
 					"curvaReparto" => $row[7],
 					"curvasCaja" => $row[8],
 					"cajasEmbarcadas" => $cajasT,
