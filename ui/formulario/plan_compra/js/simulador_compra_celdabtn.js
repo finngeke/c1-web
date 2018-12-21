@@ -884,15 +884,14 @@ $(function () {
                     // Bloqueo el ListBox si el campo seleccionado es internet
                     if(dataItem.DESCRIPCION == "I"){
 
-                        $("#tienda_disponible").attr("disabled","disabled");
-                        $("#tienda_seleccionado").attr("disabled","disabled");
+                        $('.k-listbox-toolbar').hide();
 
                         // Ocultar LI de Botonera
                         $("#poptienda_btns").hide();
 
                     }else{
-                        $("#tienda_disponible").attr("disabled",false);
-                        $("#tienda_seleccionado").attr("disabled",false);
+
+                        $('.k-listbox-toolbar').show();
 
                         // Desplegar LI de Botonera
                         $("#poptienda_btns").show();

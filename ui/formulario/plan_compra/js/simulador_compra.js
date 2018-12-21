@@ -256,6 +256,7 @@ $(function () {
     function onSubmit(e) {
 
         // alert(e.data.updated.length);
+        // console.log(e.data.updated.length);
 
         var arregloGuardado = [];
         var i = 0;
@@ -310,7 +311,6 @@ $(function () {
 
 
         //console.log(arregloGuardado);
-
         // console.log(e.data.updated[0]["ALIAS_PROV"]);
 
         $.ajax({
@@ -733,7 +733,7 @@ $(function () {
     // Asigna la estructura visual de la Grilla tipo Excel
     $("#spreadsheet").kendoSpreadsheet({
         columns: 106, //106 Siempre visible
-        rows: 400,
+        rows: 600,
         //toolbar: true,
         toolbar: {
             home: [ //"open" ,
@@ -803,10 +803,10 @@ $(function () {
         sheets: [{
             name: "PlanDeCompra",
             dataSource: dataSource,
-            filter: {
-                ref: "A1:CR400",
+            /*filter: {
+                ref: "A1:CR600",
                 columns:[]
-            },
+            },*/
             columns: [
                 {width: 40},    // id
                 {width: 100},   // G. Compra
