@@ -49,7 +49,7 @@ $(function () {
 
 
     // ####################### FUNCIONES ASOCIADAS AL DESPLIEGUE DE DATA #######################
-
+var cont_total_registros = 10;
     // Defrine URL Base, para Llamar a los JSON
     var crudServiceBaseUrl = "TelerikPlanCompra/";
 
@@ -733,7 +733,8 @@ $(function () {
     // Asigna la estructura visual de la Grilla tipo Excel
     $("#spreadsheet").kendoSpreadsheet({
         columns: 106, //106 Siempre visible
-        rows: 600,
+        rows: localStorage.getItem("TOTALREGPLAN"),
+        // rows: 1500,
         //toolbar: true,
         toolbar: {
             home: [ //"open" ,
@@ -803,10 +804,11 @@ $(function () {
         sheets: [{
             name: "PlanDeCompra",
             dataSource: dataSource,
-            /*filter: {
-                ref: "A1:CR600",
+            filter: {
+                ref: "A1:CR"+localStorage.getItem("TOTALREGPLAN"),
+                //ref: "A1:CR1500",
                 columns:[]
-            },*/
+            },
             columns: [
                 {width: 40},    // id
                 {width: 100},   // G. Compra
