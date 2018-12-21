@@ -256,6 +256,7 @@ $(function () {
     function onSubmit(e) {
 
         // alert(e.data.updated.length);
+        // console.log(e.data.updated.length);
 
         var arregloGuardado = [];
         var i = 0;
@@ -310,7 +311,6 @@ $(function () {
 
 
         //console.log(arregloGuardado);
-
         // console.log(e.data.updated[0]["ALIAS_PROV"]);
 
         $.ajax({
@@ -733,7 +733,7 @@ $(function () {
     // Asigna la estructura visual de la Grilla tipo Excel
     $("#spreadsheet").kendoSpreadsheet({
         columns: 106, //106 Siempre visible
-        rows: 400,
+        rows: 600,
         //toolbar: true,
         toolbar: {
             home: [ //"open" ,
@@ -804,7 +804,7 @@ $(function () {
             name: "PlanDeCompra",
             dataSource: dataSource,
             /*filter: {
-                ref: "A1:CR1",
+                ref: "A1:CR600",
                 columns:[]
             },*/
             columns: [
@@ -1660,9 +1660,62 @@ $(function () {
         // Verificar Permisos
         if(localStorage.getItem("T0013")){
 
-            // Levantamos el popup
-            var POPUPDetalleError = $("#POPUP_detalle_error");
-            POPUPDetalleError.data("kendoWindow").open();
+            var spreadsheet_id_color3 = $("#spreadsheet").data("kendoSpreadsheet");
+            var sheet = spreadsheet_id_color3.activeSheet();
+            var range = sheet.selection();
+            var ID_COLOR3 = "";
+            var PROFORMA = "";
+            range.forEachCell(function (row, column, value) {
+                var fila_id = row+1;
+                var range_color3 = sheet.range("A"+fila_id);
+                ID_COLOR3 = range_color3.values();
+                var range_proforma = sheet.range("CG"+fila_id);
+                PROFORMA = range_proforma.values();
+            });
+
+
+            if( (ID_COLOR3=="ID") || (ID_COLOR3=="") || (ID_COLOR3==null) || (ID_COLOR3.length==0) || (PROFORMA==null) || (PROFORMA=="") || (PROFORMA.length==0) ){
+                popupNotification.show(" Detalle Error no disponible para este registro.", "error");
+            }else{
+
+                // Levantamos el popup
+                var POPUPDetalleError = $("#POPUP_detalle_error");
+                POPUPDetalleError.data("kendoWindow").open();
+
+                // Seteo TextArea en Blanco
+                $("#TXTdetalleError").val("");
+
+                // Realizo la Búsqueda
+                $.ajax({
+                    url: "TelerikPlanCompra/BuscaComentarioPI",
+                    data: {
+                        PI: String(PROFORMA),
+                        ID_COLOR3: kendo.parseInt(ID_COLOR3)
+                    },
+                    //type: "POST",
+                    //dataType: "json",
+                    success: function (data) {
+                        //alert(data["ERROR_PI"]);
+console.log(data);
+                        if(data){
+
+                            // Le entrego el valor al TextArea
+                            $("#TXTdetalleError").val(data.ERROR_PI);
+
+                        }else{
+                            popupNotification.getNotifications().parent().remove();
+                            popupNotification.show(" Este registro no tiene comentarios.", "error");
+                        }
+
+                    },
+                    error: function (request, status, error) {
+                        console.log("Restupesta: "+request.responseText+" Status: "+status+" Error: "+error);
+                    }
+                });
+
+            }
+
+
 
         }else{
             popupNotification.getNotifications().parent().remove();
@@ -1725,7 +1778,7 @@ $(function () {
             // Oculto los elementos por si se abre por segunda vez
             $("#popformato_asignacion").hide();
             $("#popformato_btns").hide();
-            $("#btn_crea_nuevo_formato").hide();
+            //$("#btn_crea_nuevo_formato").hide();
 
             // Dejo en Blanco los CBX
             $("#CBXFormato").data("kendoComboBox").value("");
@@ -1981,7 +2034,6 @@ $(function () {
         // Actualiza Concurrencia
         ActualizaConcurrencia();
 
-        // alert($("#comentSolicitaCorreccionPI").val());
         var spreadsheet_id_color3 = $("#spreadsheet").data("kendoSpreadsheet");
         var sheet = spreadsheet_id_color3.activeSheet();
         var range = sheet.selection();
@@ -2039,8 +2091,7 @@ $(function () {
             transport: {
                 read: {
                     url: "TelerikPlanCompra/Listar_Pop_Presupuestos",
-                    dataType: "json",
-                    data: {}
+                    dataType: "json"
                 }
             }
         });

@@ -710,12 +710,18 @@ $(function () {
         visible: false,
         actions: [
             //"Pin",
-            "Minimize",
-            "Maximize",
+            /*"Minimize",
+            "Maximize",*/
             "Close"
         ]/*,
                 close: onClose*/
     }).data("kendoWindow").center();
+
+    // Estructura Campo TextArea
+    $("#TXTdetalleError").kendoEditor({
+        tools: []
+    });
+
 
 
 
@@ -884,15 +890,14 @@ $(function () {
                     // Bloqueo el ListBox si el campo seleccionado es internet
                     if(dataItem.DESCRIPCION == "I"){
 
-                        $("#tienda_disponible").attr("disabled","disabled");
-                        $("#tienda_seleccionado").attr("disabled","disabled");
+                        $('.k-listbox-toolbar').hide();
 
                         // Ocultar LI de Botonera
                         $("#poptienda_btns").hide();
 
                     }else{
-                        $("#tienda_disponible").attr("disabled",false);
-                        $("#tienda_seleccionado").attr("disabled",false);
+
+                        $('.k-listbox-toolbar').show();
 
                         // Desplegar LI de Botonera
                         $("#poptienda_btns").show();
@@ -1036,7 +1041,7 @@ $(function () {
                                             sheet.dataSource.read();
 
                                             popupNotification.getNotifications().parent().remove();
-                                            popupNotification.show(" Todo OK, repliqué para tus otras marcas la misma configuración.", "succes");
+                                            popupNotification.show(" Todo OK, repliqué para tus otras marcas la misma configuración.", "success");
 
                                         }else{
                                             popupNotification.getNotifications().parent().remove();
@@ -1168,13 +1173,16 @@ $(function () {
                                     listBox2Tienda.remove(listBox2Tienda.items());
 
                                     popupNotification.getNotifications().parent().remove();
-                                    popupNotification.show(" Todo OK, he duplicado la temporada.", "succes");
+                                    popupNotification.show(" Todo OK, he duplicado la temporada.", "success");
 
                                 }else{
                                     popupNotification.getNotifications().parent().remove();
                                     popupNotification.show(" Ups, no pude duplicar la temporada.", "error");
                                 }
 
+                            },
+                            error: function (request, status, error) {
+                                console.log("Restupesta: "+request.responseText+" Status: "+status+" Error: "+error);
                             }
                         });
                     }else{
@@ -1198,10 +1206,6 @@ $(function () {
 
         }
     });
-
-
-
-
 
 
 
@@ -1235,6 +1239,9 @@ $(function () {
         ]/*,
         close: onClose*/
     }).data("kendoWindow").center();
+
+    // Le doy formato de enmascarado al TextBox
+    $("#TXTnuevoFormato").kendoMaskedTextBox();
 
     // Definimos la estructura del ListBox
     $("#formato_disponible").kendoListBox({
@@ -1443,17 +1450,17 @@ $(function () {
 
                 kendo.confirm("¿Crear nuevo formato?").then(function () {
 
-                    var nuevo_formato = $("TXTnuevoFormato").val();
+                    var nuevo_formato = $("#TXTnuevoFormato").data("kendoMaskedTextBox");
+                    var value_nuevo_formato = nuevo_formato.value();
 
-
-                    if(nuevo_formato){
+                    if(value_nuevo_formato){
                         // Llamado Ajax
                         $.ajax({
                             url: "TelerikPlanCompra/FormatoCrearNuevo",
                             data: {
-                                FORMATO:String(nuevo_formato)
+                                FORMATO:String(value_nuevo_formato)
                             },
-                            dataType: "json",
+                            /*dataType: "json",*/
                             success: function (data) {
 
                                 if(data=="OK"){
@@ -1463,16 +1470,19 @@ $(function () {
                                     var sheet = spreadsheet.activeSheet();
                                     sheet.dataSource.read();
 
+                                    // Recargar el CBX de Formato
+                                    $("#CBXFormato").data("kendoComboBox").dataSource.read();
+
                                     // Oculto POPUP de Nuevo Formato
-                                    $("#POPUP_nuevo_formato").hide();
+                                    var POPUPnuevoFormatoClose = $("#POPUP_nuevo_formato");
+                                    POPUPnuevoFormatoClose.data("kendoWindow").close();
+
                                     // Oculto el ListBox y la Botonera
                                     $("#popformato_asignacion").hide();
                                     $("#popformato_btns").hide();
 
                                     // Dejo en Blanco el CBX
                                     $("#CBXFormato").data("kendoComboBox").value("");
-                                    // Dejo en Blanco el TCT
-                                    //$("#TXTnuevoFormato").value("");
 
                                     // Limpiar los ListBox
                                     var listBox1Formato = $("#formato_disponible").data("kendoListBox");
@@ -1481,16 +1491,22 @@ $(function () {
                                     listBox2Formato.remove(listBox2Formato.items());
 
                                     popupNotification.getNotifications().parent().remove();
-                                    popupNotification.show(" Todo OK, Nuevo Formato ya Creado.", "succes");
+                                    popupNotification.show(" Todo OK, Nuevo Formato ya Creado.", "success");
 
                                 }else{
                                     popupNotification.getNotifications().parent().remove();
-                                    popupNotification.show(" Ups, no pude creal el nuevo formato.", "error");
+                                    popupNotification.show(" Ups, no pude crear el nuevo formato.", "error");
                                 }
 
+                            },
+                            error: function (request, status, error) {
+                                console.log("Restupesta: "+request.responseText+" Status: "+status+" Error: "+error);
                             }
                         });
                     }else{
+                        popupNotification.getNotifications().parent().remove();
+                        popupNotification.show(" Debes ingresar el nombre del Nuevo Formato.", "error");
+                        // Fin Verificar Permisos
                         console.log("Formato: "+nuevo_formato);
                     }
 
@@ -1511,6 +1527,10 @@ $(function () {
 
         }
     });
+
+
+
+
 
 
 
@@ -2000,8 +2020,8 @@ $(function () {
                     visible: false,
                     actions: [
                         //"Pin",
-                        "Minimize",
-                        "Maximize",
+                        /*"Minimize",
+                        "Maximize",*/
                         "Close"
                     ]/*,
                             close: onClose*/
@@ -2154,6 +2174,12 @@ $(function () {
             });
         }
     });
+
+
+
+
+
+
 
 
 

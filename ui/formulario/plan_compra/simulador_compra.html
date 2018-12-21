@@ -4,8 +4,8 @@
     <div id="toolbar_plan_compra" class="demo-section k-content wide"></div>
 
 
-    <button class="k-button" id="guardar_cambios_pc">Guardar Cambios</button>
-    <button class="k-button" id="cancelar_cambios_pc">Cancelar Cambios</button>
+    <!--<button class="k-button" id="guardar_cambios_pc">Guardar Cambios</button>
+    <button class="k-button" id="cancelar_cambios_pc">Cancelar Cambios</button>-->
 
 
     <!-- Despliega la Grilla / Plan de Compra -->
@@ -35,6 +35,12 @@
 
     <!-- POPUP Detalle Error -->
     <div id="POPUP_detalle_error">
+        <ul id="fieldlist_detalle_error">
+            <li>
+                <label for="TXTdetalleError">Detalle Error:</label>
+                <textarea id="TXTdetalleError" rows="10" cols="30" style="height:220px" aria-label="TXTdetalleError"></textarea>
+            </li>
+        </ul>
     </div>
 
 
@@ -107,12 +113,15 @@
         </div>-->
     </div>
 
+
     <!-- POPUP REPLICAR TIENDA -->
     <div id="POPUP_replicar_tienda">
         <ul id="fieldlist_replicar_tienda">
             <li>
                 <label for="CBXTemporadaReplica">Temporada a Replicar:</label>
                 <div id="CBXTemporadaReplica" style="width: 100%;"></div>
+            </li>
+            <li>
                 <button id="btn_replica_temporada_tienda" class="k-button">Replicar</button>
             </li>
         </ul>
@@ -127,7 +136,7 @@
             <li>
                 <label for="CBXFormato">FORMATO:</label>
                 <div id="CBXFormato" style="width: 100%;"></div>
-                <button id="nuevo_formato" class="k-success-colored">Crear Nuevo</button>
+                <button id="nuevo_formato" class="k-button">Crear Nuevo</button>
             </li>
             <li>&nbsp;</li>
             <li>&nbsp;</li>
@@ -137,7 +146,7 @@
             </li>
             <li>&nbsp;</li>
             <li id="popformato_btns" style="display: none">
-                <button id="guarda_cambios_formato" class="k-success-colored">Guardar Cambios</button>
+                <button id="guarda_cambios_formato" class="k-button">Guardar Cambios</button>
             </li>
         </ul>
 
@@ -145,16 +154,24 @@
     </div>-->
     </div>
 
+
     <!-- POPUP NUEVO FORMATO -->
     <div id="POPUP_nuevo_formato">
         <ul id="fieldlist_nuevo_formato">
             <li>
-                <label for="TXTnuevoFormato" class="required">Temporada a Replicar:</label>
-                <input id="TXTnuevoFormato" class="k-textbox" required validationMessage="Ingrese {0}" style="width: 100%;"/>
-                <button id="btn_crea_nuevo_formato" class="k-button">Crear</button>
+                <label for="TXTnuevoFormato">Temporada a Replicar:</label>
+                <input id="TXTnuevoFormato" style="width: 100%;"/>
+                <button id="btn_crea_nuevo_formato" class="k-button">Crear Nuevo Formato</button>
             </li>
         </ul>
     </div>
+
+
+
+
+
+
+
 
 
 
@@ -327,6 +344,10 @@
             <div id="contador_cierra_session" style="font-size: 40px; text-align: center;"></div>
         </div>
     </div>
+
+
+
+
 
     <!-- TAG de los mensajes de alert, dejar siempre al final -->
     <span id="popupNotification"></span>

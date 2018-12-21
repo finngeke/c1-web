@@ -526,11 +526,20 @@ if($ESTADO_C1!=24){
     public function FormatoCrearNuevo($f3) {
 
         $array_data = $_GET;
-        echo \simulador_compra\PlanCompraClass::FormatoCrearNuevo($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $array_data["FORMATO"]);
+        echo \simulador_compra\PlanCompraClass::FormatoCrearNuevo($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), trim($array_data["FORMATO"]));
 
     }
     // ######################## FIN Trabajo POPUP Formatos ########################
 
+
+
+    // ######################## DETALLE ERROR PI ########################
+    public function BuscaComentarioPI($f3) {
+
+        $array_data = $_GET;
+        echo json_encode(\simulador_compra\PlanCompraClass::BuscaComentarioPI($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $array_data["PI"], $array_data["ID_COLOR3"]));
+    }
+    // ######################## FIN Trabajo POPUP Formatos ########################
 
 
 

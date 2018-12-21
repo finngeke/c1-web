@@ -159,40 +159,24 @@
 			$_SESSION['Archivos'] = "";
 			ControlProveedor::obtener_estructura_directorios($_SESSION['RutaArchivoPeru']);
 			$dtarchivos = explode("$", (substr($_SESSION['Archivos'], 0, -1)));
-			$dtlogproveedor = [];
+            $dtprovoc = [];
 			foreach ($dtarchivos as $val) {
 				$stringarchiv = explode("_", $val);
-				$key = 0;
-				$_exist = false;
-				$oc = "";
-				//busca el proveedor peru vs chile
-				foreach ($stringarchiv as $c) {
-					$key++;
-					if ($key == 2) {
 						$_exist2 = false;
-						foreach ($dtlogproveedor as $var) {
-							if ($var == $c) {
-								$_exist2 = true;
+                foreach ($dtprovoc as $var) {
+                    if ($var[0] == $stringarchiv[1] and $var[1] ==$stringarchiv[3]) {
+                        $_exist2 = true; break;
 							}
 						}
-						if ($_exist2 == false) {
-							$nom_Proveedorperu = \proveedor\proveedor::get_cod_nom_Prov_Peru($c);
+                if ($_exist2==false){
+                    $nom_Proveedorperu = \proveedor\proveedor::get_cod_nom_Prov_Peru($stringarchiv[1]);
 							if ($nom_Proveedorperu <> "" and $nom_Proveedorperu == $nom_proveedorChile) {
-								array_push($dtlogproveedor, $c);
-								$_exist = true;
+                        array_push($dtprovoc,array($stringarchiv[1],$stringarchiv[3]));
+                        array_push($data, array("", $stringarchiv[3], 0, "", 0, 0, $val, "Peru"));
 							}
-						}
-					} elseif ($key == 4 and $_exist == true) {
-						$oc = $c;
-						break;
-					}
-				}
-				
-				if ($_exist == true) {
-					array_push($data, array("", $oc, 0, "", 0, 0, $val, "Peru"));
+
 				}
 			}
-			
 			
 			$f3->set('nombre_form', 'PO\'s and Packing Instructions');
 			$f3->set('lista_oc', $data);

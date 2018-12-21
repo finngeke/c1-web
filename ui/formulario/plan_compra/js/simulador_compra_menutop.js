@@ -46,14 +46,22 @@ $(document).ready(function() {
     // BTN GuardarCambiosBTN
     function GuardarCambiosBTN(e) {
 
-        $( "#guardar_cambios_pc" ).click();
+        // $( "#guardar_cambios_pc" ).click();
+
+        var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
+        var sheet = spreadsheet.activeSheet();
+        sheet.dataSource.sync();
 
     }
 
     // BTN CancelarCambiosBTN
     function CancelarCambiosBTN(e) {
 
-        $( "#cancelar_cambios_pc" ).click();
+        //$( "#cancelar_cambios_pc" ).click();
+
+        var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
+        var sheet = spreadsheet.activeSheet();
+        sheet.dataSource.cancelChanges();
 
     }
 
