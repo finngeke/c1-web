@@ -4147,7 +4147,22 @@ class PlanCompraClass extends \parametros
     // ######################## FIN Trabajo POPUP Formato ########################
 
 
+    // ######################## DETALLE ERROR PI ########################
+    public static function BuscaComentarioPI($temporada, $depto, $login, $pi, $id_color3)
+    {
 
+        $sql = "SELECT ERROR_PI
+                FROM PLC_PLAN_COMPRA_COLOR_3
+                WHERE cod_temporada = $temporada
+                AND dep_depto = '" . $depto . "'
+                AND proforma = '" . $pi . "'
+                AND ID_COLOR3 = $id_color3
+                ";
+        $data = \database::getInstancia()->getFilas($sql);
+        return utf8_encode(trim($data));
+
+    }
+    // ######################## FIN Trabajo POPUP Formatos ########################
 
 
 

@@ -1660,9 +1660,61 @@ $(function () {
         // Verificar Permisos
         if(localStorage.getItem("T0013")){
 
-            // Levantamos el popup
-            var POPUPDetalleError = $("#POPUP_detalle_error");
-            POPUPDetalleError.data("kendoWindow").open();
+            var spreadsheet_id_color3 = $("#spreadsheet").data("kendoSpreadsheet");
+            var sheet = spreadsheet_id_color3.activeSheet();
+            var range = sheet.selection();
+            var ID_COLOR3 = "";
+            var PROFORMA = "";
+            range.forEachCell(function (row, column, value) {
+                var fila_id = row+1;
+                var range_color3 = sheet.range("A"+fila_id);
+                ID_COLOR3 = range_color3.values();
+                var range_proforma = sheet.range("CG"+fila_id);
+                PROFORMA = range_proforma.values();
+            });
+
+
+            if( (ID_COLOR3=="ID") || (ID_COLOR3=="") || (ID_COLOR3==null) || (ID_COLOR3.length==0) || (PROFORMA==null) || (PROFORMA=="") || (PROFORMA.length==0) ){
+                popupNotification.show(" Detalle Error no disponible para este registro.", "error");
+            }else{
+
+                // Levantamos el popup
+                var POPUPDetalleError = $("#POPUP_detalle_error");
+                POPUPDetalleError.data("kendoWindow").open();
+
+                // Seteo TextArea en Blanco
+                $("#TXTdetalleError").val("");
+
+                // Realizo la Búsqueda
+                $.ajax({
+                    url: "TelerikPlanCompra/BuscaComentarioPI",
+                    data: {
+                        PI: String(PROFORMA),
+                        ID_COLOR3: kendo.parseInt(ID_COLOR3)
+                    },
+                    //type: "POST",
+                    /*dataType: "json",*/
+                    success: function (data) {
+
+                        if(data){
+
+                            // Le entrego el valor al TextArea
+                            $("#TXTdetalleError").val(data);
+
+                        }else{
+                            popupNotification.getNotifications().parent().remove();
+                            popupNotification.show(" Este registro no tiene comentarios.", "error");
+                        }
+
+                    },
+                    error: function (request, status, error) {
+                        console.log("Restupesta: "+request.responseText+" Status: "+status+" Error: "+error);
+                    }
+                });
+
+            }
+
+
 
         }else{
             popupNotification.getNotifications().parent().remove();
@@ -1981,7 +2033,6 @@ $(function () {
         // Actualiza Concurrencia
         ActualizaConcurrencia();
 
-        // alert($("#comentSolicitaCorreccionPI").val());
         var spreadsheet_id_color3 = $("#spreadsheet").data("kendoSpreadsheet");
         var sheet = spreadsheet_id_color3.activeSheet();
         var range = sheet.selection();

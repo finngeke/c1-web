@@ -717,6 +717,12 @@ $(function () {
                 close: onClose*/
     }).data("kendoWindow").center();
 
+    // Estructura Campo TextArea
+    $("#TXTdetalleError").kendoEditor({
+        tools: []
+    });
+
+
 
 
     // ############################ TIENDAS ############################
@@ -1489,7 +1495,7 @@ $(function () {
 
                                 }else{
                                     popupNotification.getNotifications().parent().remove();
-                                    popupNotification.show(" Ups, no pude creal el nuevo formato.", "error");
+                                    popupNotification.show(" Ups, no pude crear el nuevo formato.", "error");
                                 }
 
                             },
