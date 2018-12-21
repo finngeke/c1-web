@@ -18,7 +18,6 @@ $(function () {
                 //arregloPermisosUsuarios.push( {ID_TELERIK: obj.ID_TELERIK} );
             });
 
-
         },
         error: function (xhr, httpStatusMessage, customErrorMessage) {
             console.log("Detalle Error: ".xhr.responseText+" / "+httpStatusMessage+" / "+customErrorMessage);

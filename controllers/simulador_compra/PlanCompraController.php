@@ -22,6 +22,14 @@ class PlanCompraController extends \Control
 
     }
 
+    // Devuelve la Cantidad de Registros
+    public function CantidadRegistrosPlanCompra($f3)
+    {
+
+        echo json_encode(\simulador_compra\PlanCompraClass::ListarPlanCompra($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $f3->get('CURLOPT_PORT'), $f3->get('CURLOPT_URL')));
+
+    }
+
 
     // Actualiza Plan de Compra
     public function ProcesaDataPlanCompra($f3)

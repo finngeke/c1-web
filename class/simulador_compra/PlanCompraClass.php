@@ -429,6 +429,19 @@ class PlanCompraClass extends \parametros
 
     }
 
+    // Devuelve la Cantidad de Registros
+    public static function CantidadRegistrosPlanCompra($temporada, $depto, $login,$CURLOPT_PORT,$CURLOPT_URL)
+    {
+
+        $sql = "SELECT COUNT(*)
+                FROM PLC_PLAN_COMPRA_COLOR_3
+                WHERE COD_TEMPORADA = $temporada AND DEP_DEPTO = '" . $depto . "'";
+
+        $data = \database::getInstancia()->getFilas($sql);
+        return $data;
+
+    }
+
     //extraer datos orden de compra poc OC o PI
     public static function TraerDatosOC2($pi,$oc,$puerto,$url){
         $curl = curl_init();
@@ -3512,20 +3525,26 @@ class PlanCompraClass extends \parametros
         // Si es administrador, le agrego todas las acciones
         if( $cod_tipusr == 99 ) {
 
-            $sql = "SELECT id_telerik, nombre_accion 
+            $sql = "SELECT 'TOTALREGPLAN' ID_TELERIK, TO_CHAR(COUNT(*)) NOMBRE_ACCION
+                    FROM PLC_PLAN_COMPRA_COLOR_3
+                    WHERE COD_TEMPORADA = $temporada AND DEP_DEPTO = '" . $depto . "'
+                    UNION ALL
+                    SELECT id_telerik ID_TELERIK, nombre_accion NOMBRE_ACCION 
                     FROM plc_modulo_accion";
-
         } else {
 
-            $sql = "SELECT t1.id_telerik, t2.nombre_accion 
-                FROM plc_permiso_modulo_accion t1
-                INNER JOIN plc_modulo_accion t2 ON t2.id_telerik=t1.id_telerik
-                INNER JOIN plc_usuario t3 ON t3.cod_tipusr=t1.id_tip_usr
-                WHERE t3.cod_usr = '" . $login . "'
-                AND t1.estado_accion=1";
+            $sql = "SELECT 'TOTALREGPLAN' ID_TELERIK, TO_CHAR(COUNT(*)) NOMBRE_ACCION
+                    FROM PLC_PLAN_COMPRA_COLOR_3
+                    WHERE COD_TEMPORADA = $temporada AND DEP_DEPTO = '" . $depto . "'
+                    UNION ALL
+                    SELECT t1.id_telerik ID_TELERIK, t2.nombre_accion NOMBRE_ACCION 
+                    FROM plc_permiso_modulo_accion t1
+                    INNER JOIN plc_modulo_accion t2 ON t2.id_telerik=t1.id_telerik
+                    INNER JOIN plc_usuario t3 ON t3.cod_tipusr=t1.id_tip_usr
+                    WHERE t3.cod_usr = '" . $login . "'
+                    AND t1.estado_accion=1";
 
         }
-
         $data = \database::getInstancia()->getFilas($sql);
         return $data;
 
@@ -4164,13 +4183,15 @@ class PlanCompraClass extends \parametros
         // Transformo a array asociativo
         $array1 = [];
         foreach ($data as $va1) {
-            array_push($array1
+
+            return utf8_encode($va1[0]);
+            /*array_push($array1
                 , array(
                     "ERROR_PI" => $va1[0]
                 )
-            );
+            );*/
         }
-        return $array1;
+        //return $array1;
 
     }
     // ######################## FIN Trabajo POPUP Formatos ########################

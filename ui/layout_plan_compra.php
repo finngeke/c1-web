@@ -19,17 +19,18 @@
 <!-- Llamada al plan de compra -->
 <include href="{{ @contenido }}"/>
 
-
+<!-- 0 En Cargar (Orden Obligatorio) -->
+<script src="{{@TELERIK}}ui/formulario/plan_compra/js/simulador_compra_permisos.js?v=A30"></script>
 <!-- 1 En Cargar (Orden Obligatorio) -->
-<script src="{{@TELERIK}}ui/formulario/plan_compra/js/simulador_compra_lectura.js?v=A29"></script>
+<script src="{{@TELERIK}}ui/formulario/plan_compra/js/simulador_compra_lectura.js?v=A30"></script>
 <!-- 2 En Cargar (Orden Obligatorio) -->
-<script src="{{@TELERIK}}ui/formulario/plan_compra/js/simulador_compra.js?v=A29"></script>
+<script src="{{@TELERIK}}ui/formulario/plan_compra/js/simulador_compra.js?v=A30"></script>
 <!-- 3 En Cargar (Orden Obligatorio) -->
-<script src="{{@TELERIK}}ui/formulario/plan_compra/js/simulador_compra_menutop.js?v=A29"></script>
+<script src="{{@TELERIK}}ui/formulario/plan_compra/js/simulador_compra_menutop.js?v=A30"></script>
 <!-- 4 En Cargar (Orden Obligatorio) -->
-<script src="{{@TELERIK}}ui/formulario/plan_compra/js/simulador_compra_celdabtn.js?v=A29"></script>
+<script src="{{@TELERIK}}ui/formulario/plan_compra/js/simulador_compra_celdabtn.js?v=A30"></script>
 <!-- 5 En Cargar (Orden Obligatorio) -->
-<script src="{{@TELERIK}}ui/formulario/plan_compra/js/simulador_compra_funciones.js?v=A29"></script>
+<script src="{{@TELERIK}}ui/formulario/plan_compra/js/simulador_compra_funciones.js?v=A30"></script>
 
 </body>
 </html>

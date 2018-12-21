@@ -49,7 +49,7 @@ $(function () {
 
 
     // ####################### FUNCIONES ASOCIADAS AL DESPLIEGUE DE DATA #######################
-
+var cont_total_registros = 10;
     // Defrine URL Base, para Llamar a los JSON
     var crudServiceBaseUrl = "TelerikPlanCompra/";
 
@@ -406,6 +406,9 @@ $(function () {
                     var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
                     var sheet = spreadsheet.activeSheet();
 
+                    // Congela la Primera Fila
+                    sheet.frozenRows(1);
+
                     // Modifica las Cabeceras
                     sheet.batch(function () {
 
@@ -733,7 +736,8 @@ $(function () {
     // Asigna la estructura visual de la Grilla tipo Excel
     $("#spreadsheet").kendoSpreadsheet({
         columns: 106, //106 Siempre visible
-        rows: 600,
+        rows: localStorage.getItem("TOTALREGPLAN"),
+        // rows: 1500,
         //toolbar: true,
         toolbar: {
             home: [ //"open" ,
@@ -803,10 +807,11 @@ $(function () {
         sheets: [{
             name: "PlanDeCompra",
             dataSource: dataSource,
-            /*filter: {
-                ref: "A1:CR600",
+            filter: {
+                ref: "A1:CR"+localStorage.getItem("TOTALREGPLAN"),
+                //ref: "A1:CR1500",
                 columns:[]
-            },*/
+            },
             columns: [
                 {width: 40},    // id
                 {width: 100},   // G. Compra
@@ -1683,7 +1688,9 @@ $(function () {
                 POPUPDetalleError.data("kendoWindow").open();
 
                 // Seteo TextArea en Blanco
-                $("#TXTdetalleError").val("");
+                // Le entrego el valor al TextArea
+                var editorErrorBlanco = $("#TXTdetalleError").data("kendoEditor");
+                editorErrorBlanco.value('');
 
                 // Realizo la Búsqueda
                 $.ajax({
@@ -1693,14 +1700,14 @@ $(function () {
                         ID_COLOR3: kendo.parseInt(ID_COLOR3)
                     },
                     //type: "POST",
-                    //dataType: "json",
+                    dataType: "json",
                     success: function (data) {
-                        //alert(data["ERROR_PI"]);
-console.log(data);
+
                         if(data){
 
                             // Le entrego el valor al TextArea
-                            $("#TXTdetalleError").val(data.ERROR_PI);
+                            var editorError = $("#TXTdetalleError").data("kendoEditor");
+                            editorError.value(data);
 
                         }else{
                             popupNotification.getNotifications().parent().remove();
