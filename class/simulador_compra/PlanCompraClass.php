@@ -4159,7 +4159,18 @@ class PlanCompraClass extends \parametros
                 AND ID_COLOR3 = $id_color3
                 ";
         $data = \database::getInstancia()->getFilas($sql);
-        return utf8_encode(trim($data));
+
+
+        // Transformo a array asociativo
+        $array1 = [];
+        foreach ($data as $va1) {
+            array_push($array1
+                , array(
+                    "ERROR_PI" => $va1[0]
+                )
+            );
+        }
+        return $array1;
 
     }
     // ######################## FIN Trabajo POPUP Formatos ########################

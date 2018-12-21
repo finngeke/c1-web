@@ -1693,13 +1693,14 @@ $(function () {
                         ID_COLOR3: kendo.parseInt(ID_COLOR3)
                     },
                     //type: "POST",
-                    /*dataType: "json",*/
+                    //dataType: "json",
                     success: function (data) {
-
+                        //alert(data["ERROR_PI"]);
+console.log(data);
                         if(data){
 
                             // Le entrego el valor al TextArea
-                            $("#TXTdetalleError").val(data);
+                            $("#TXTdetalleError").val(data.ERROR_PI);
 
                         }else{
                             popupNotification.getNotifications().parent().remove();
