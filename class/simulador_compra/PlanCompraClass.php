@@ -4952,5 +4952,375 @@ class PlanCompraClass extends \parametros
 
 
 
+    public static function ListarDeptosTemp($temporada)
+    {
+        $ArrayAsociativo =[];
+        $sql = "begin PLC_PKG_DESARROLLO.PRC_LISTDEPTXTEMP(" . $temporada . ", :data); end;";
+        $data = \database::getInstancia()->getConsultaSP($sql, 1);
+
+        foreach ($data as $va1) {
+            array_push($ArrayAsociativo
+                       , array("COD_DEPARTAMENTO" => $va1[0]
+                              ,"DEPARTAMENTO" => $va1[1])
+            );
+        }
+
+        return $ArrayAsociativo;
+    }
+    Public static Function ListarDeptosTempAssortment($temporada){
+        $ArrayAsociativo=[];
+        $sql = "SELECT DISTINCT  A.DEP_DEPTO          COD_DEPARTAMENTO
+                                ,F.DEPARTMENT         DEPARTAMENTO
+               FROM PLC_HISTORIAL_ASSORTMENT A
+               LEFT JOIN(SELECT DEP_DESCRIPCION DEPARTMENT
+                                    ,DEP_DEPTO
+                               FROM GST_MAEDEPTOS
+                        )F ON  F.DEP_DEPTO = A.DEP_DEPTO
+               WHERE A.COD_TEMPORADA = ".$temporada." order by  A.DEP_DEPTO asc";
+        $data = \database::getInstancia()->getFilas($sql);
+
+        foreach ($data as $va1) {
+            array_push($ArrayAsociativo
+                , array("COD_DEPARTAMENTO" => $va1[0]
+                ,"DEPARTAMENTO" => $va1[1])
+            );
+        }
+
+        return $ArrayAsociativo;
+    }
+    Public static Function ListExportAssortment($tempo,$depto){
+        $sql = "select DEP_DEPTO,DPTO,MARCA,CODIGO_MARCA,NOMBRE_COMPRADOR,NOMBRE_DISENADOR,SEASON,LINEA,COD_LINEA,SUBLINEA,COD_SUBLINEA
+                       ,CODIGO_CORPORATIVO,NOMBRE_ESTILO,ESTILO_CORTO,DESCRIPCION_ESTILO,DESCRIP_INTERNET,NUM_EMB AS COD_OPCION,COLOR,COD_COLOR
+                       ,COMPOSICION,TIPO_DE_TELA,FORRO,NOM_CALIDAD,COLECCION,NOM_ESTILOVIDA,NOM_OCACIONUSO
+                       ,EVENTO,EVENTO_INSTORE, GRUPO_DE_COMPRA,VENTANA,TIPO_EXHIBICION,TIPO_PRODUCTO, DEBUT_O_REORDER
+                       ,TEMPORADA,PRECIO,OFERTA,DOSX,OPEX, RANKING_DE_VENTA, CICLO_DE_VIDA, PIRAMIDE_MIX, RATIO_COMPRA, FACTOR_AMPLIFICACION
+                       ,RATIO_COMPRA_FINAL, CLUSTER_, FORMATO, COMPRA_UNIDADES_ASSORTMENT, COMPRA_UNIDADES_FINAL,VAR_PORCE
+                       ,TARGET_USD, FOB_USD, RFID_USD,COSTO_INSP, VIA, PAIS, PROVEEDOR, COMENTARIOS_POST_NEGOCIACION, FECHA_EMBARQUE_ACORDADA
+                       ,FACTOR, COSTO_TOTAL, RETAIL_TOTAL_SIN_IVA, MUP_COMPRA, EXHIBICION, TALLA1, TALLA2
+                       ,TALLA3, TALLA4, TALLA5, TALLA6, TALLA7, TALLA8, TALLA9,INNER , CURVA1, CURVA2, CURVA3, CURVA4, CURVA5, CURVA6, CURVA7, CURVA8
+                       ,CURVA9, VALIDADOR_MASTERPACK_INNER, TIPO_DE_EMPAQUE, N_CURVAS_POR_CAJA_CURVADAS, UNO_POR, DOS_POR, TRES_POR
+                       ,CUATRO_POR, CINCO_POR, SEIS_POR, SIETE_POR, OCHO_POR, NUEVE_POR, TIENDASA, TIENDASB, TIENDASC, TIENDASI
+                       ,CLUSTERA, CLUSTERB, CLUSTERC, CLUSTERI, SIZE_1, SIZE_2, SIZE_3, SIZE_4, SIZE_5
+                       ,SIZE_6, SIZE_7, SIZE_8, SIZE_9,UNIDADES
+                  from plc_historial_assortment 
+                  WHERE COD_TEMPORADA = ".$tempo."
+                  and dep_depto IN (".$depto.")
+                  ORDER BY DEP_DEPTO,CODIGO_MARCA asc";
+
+        $data = \database::getInstancia()->getFilas($sql);
+        return $data;
+    }
+    public static function ListColumnasArchivos($tipo){
+        //1.- Assortment
+        //2.- BMT
+        //3.- columnas nuevas assortment
+
+        $sql = "select COLUMNAS".
+            " from plc_columnas_archivos".
+            " WHERE COD_TIPOARCHIVO =".$tipo."";
+
+        $data = \database::getInstancia()->getFilas($sql);
+
+        return $data;
+
+    }
+    Public static Function Exportc1($tempo,$depto){
+        $array1 = [];
+        $sql = "begin PLC_PKG_DESARROLLO.PRC_EXPORTAR_C1_CONSOLIDAD(" . $tempo . ",'" . $depto . ",', :data); end;";
+        $data = \database::getInstancia()->getConsultaSP($sql, 1);
+        foreach ($data as $va1){
+            array_push($array1,
+                array("Temporada"=> utf8_encode($va1[0])
+                ,"Cod Depto"=> utf8_encode($va1[1])
+                ,"Nom Depto"=> utf8_encode($va1[2])
+                ,"Grupo Compra"=> utf8_encode($va1[3])
+                ,"Temp"=> utf8_encode($va1[4])
+                ,"Linea"=> utf8_encode($va1[5])
+                ,"Sublinea"=> utf8_encode($va1[6])
+                ,"Marca"=> utf8_encode($va1[7])
+                ,"Nom Estilo"=> utf8_encode($va1[8])
+                ,"Nombre Corto"=> utf8_encode($va1[9])
+                ,"Cod Corp"=> utf8_encode($va1[10])
+                ,"Descripción"=> utf8_encode($va1[11])
+                ,"Desc Internet"=> utf8_encode($va1[12])
+                ,"Nombre Comprador"=> utf8_encode($va1[13])
+                ,"Nombre Disenador"=> utf8_encode($va1[14])
+                ,"Composición"=> utf8_encode($va1[15])
+                ,"Tipo de Tela"=> utf8_encode($va1[16])
+                ,"Forro"=> utf8_encode($va1[17])
+                ,"Colección"=> utf8_encode($va1[18])
+                ,"Evento"=> utf8_encode($va1[19])
+                ,"Evento In-Store"=> utf8_encode($va1[94])
+                ,"Estilo de Vida"=> utf8_encode($va1[20])
+                ,"Calidad"=> utf8_encode($va1[21])
+                ,"Ocasión de Uso"=> utf8_encode($va1[22])
+                ,"Pirámide Mix"=> utf8_encode($va1[23])
+                ,"Ventana"=> utf8_encode($va1[24])
+                ,"Rank Vta"=> utf8_encode($va1[25])
+                ,"Life Cycle"=> utf8_encode($va1[26])
+                ,"Color"=> utf8_encode($va1[27])
+                ,"Tipo Producto"=> utf8_encode($va1[28])
+                ,"Tipo Exhibición"=> utf8_encode($va1[29])
+                ,"Tallas"=> utf8_encode($va1[30])
+                ,"Tipo Empaque"=> utf8_encode($va1[31])
+                ,"% Compra Ini"=> utf8_encode($va1[32])
+                ,"% Compra Ajustada"=> utf8_encode($va1[33])
+                ,"Curvas de Reparto"=> utf8_encode($va1[34])
+                ,"Curva Min"=> utf8_encode($va1[35])
+                ,"Unid Ini"=> utf8_encode($va1[36])
+                ,"Unid Ajust"=> utf8_encode($va1[37])
+                ,"Unid Final"=> utf8_encode($va1[38])
+                ,"Mtr Pack"=> utf8_encode($va1[39])
+                ,"N° Cajas"=> utf8_encode($va1[40])
+                ,"Clúster"=> utf8_encode($va1[41])
+                ,"Formato"=> utf8_encode($va1[42])
+                ,"Tdas"=> utf8_encode($va1[43])
+                ,"A"=> utf8_encode($va1[44])
+                ,"B"=> utf8_encode($va1[45])
+                ,"C"=> utf8_encode($va1[46])
+                ,"I"=> utf8_encode($va1[47])
+                ,"Primera Carga"=> utf8_encode($va1[48])
+                ,"%Tiendas"=> utf8_encode($va1[49])
+                ,"Proced"=>utf8_encode( $va1[50])
+                ,"Vía"=> utf8_encode($va1[51])
+                ,"País"=> utf8_encode($va1[52])
+                ,"Viaje"=> utf8_encode($va1[53])
+                ,"Mkup Blanco"=> utf8_encode($va1[54])
+                ,"Precio Blanco"=> utf8_encode($va1[55])
+                ,"GM Blanco"=>utf8_encode($va1[56])
+                ,"Oferta"=>utf8_encode($va1[57])
+                ,"2X"=>utf8_encode($va1[95])
+                ,"Opex"=>utf8_encode($va1[96])
+                ,"Moneda"=> utf8_encode($va1[58])
+                ,"Target"=> utf8_encode($va1[59])
+                ,"FOB"=> utf8_encode($va1[60])
+                ,"Insp"=> utf8_encode($va1[61])
+                ,"RFID"=> utf8_encode($va1[62])
+                ,"Royalty(%)"=> utf8_encode($va1[63])
+                ,"Costo Unitario Final US$"=> utf8_encode($va1[64])
+                ,"Costo Unitario Final Pesos"=> utf8_encode($va1[65])
+                ,"Total Target US$"=> utf8_encode($va1[66])
+                ,"Total Fob US$"=> utf8_encode($va1[67])
+                ,"Costo Total Pesos"=> utf8_encode($va1[68])
+                ,"Total Retail Pesos(Sin IVA)"=> utf8_encode($va1[69])
+                ,"Debut/Reorder"=> utf8_encode($va1[70])
+                ,"Sem Ini"=> utf8_encode($va1[71])
+                ,"Sem Fin"=> utf8_encode($va1[72])
+                ,"Semanas Ciclo de Vida"=> utf8_encode($va1[73])
+                ,"Agot Obj"=> utf8_encode($va1[74])
+                ,"Semanas Liquidación"=> utf8_encode($va1[75])
+                ,"Proveedor"=> utf8_encode($va1[76])
+                ,"Razon Social"=> utf8_encode($va1[77])
+                ,"Trader"=> utf8_encode($va1[78])
+                ,"Comentarios Post Negociacion"=> utf8_encode($va1[79])
+                ,"Cod Sku Proveedor"=> utf8_encode($va1[80])
+                ,"Cod. Padre"=> utf8_encode($va1[81])
+                ,"Proforma"=> utf8_encode($va1[82])
+                ,"Archivo"=> utf8_encode($va1[83])
+                ,"Estilo PMM"=> utf8_encode($va1[84])
+                ,"Estado Match"=> utf8_encode($va1[85])
+                ,"N° OC"=> utf8_encode($va1[86])
+                ,"Estado OC"=> utf8_encode($va1[87])
+                ,"Fecha Embarque Acordada"=> utf8_encode($va1[88])
+                ,"Fecha Embarque"=> utf8_encode($va1[89])
+                ,"Fecha ETA"=> utf8_encode($va1[90])
+                ,"Fecha Recepción CD"=> utf8_encode($va1[91])
+                ,"Días Atraso CD"=> utf8_encode($va1[92])
+                ,"Estado Opción"=> utf8_encode($va1[93])
+                )
+            );
+        }
+
+        return $array1;
+    }
+    Public static Function Export_c1_presupuestos($tempo,$depto_cadena){
+
+        $array1 = [];
+        $sql = "begin PLC_PKG_MIGRACION.PRC_EXPORTAR_C1_PPTO(" . $tempo . ",'" . $depto_cadena . "', :data); end;";
+        $data = \database::getInstancia()->getConsultaSP($sql, 1);
+        $depto_m = explode(',',$depto_cadena);
+
+        $total_costo_ppto =0 ;
+        $total_consumo_ppto =0 ;
+        $total_saldo_ppto = 0 ;
+
+        $total_costo_retail =0 ;
+        $total_consumo_retail =0 ;
+        $total_saldo_retail = 0 ;
+        $total_costo_embarque =0 ;
+        $total_consumo_embarque =0 ;
+        $total_saldo_embarque = 0 ;
+
+        $embarque_consumo = 0 ;
+        $embarque_saldo = 0 ;
+
+        foreach ($data as $va1) {
+            $total_costo_ppto += $va1[2];
+            $total_consumo_ppto += $va1[3];
+
+            $total_saldo_ppto += $va1[4];
+
+            $total_costo_retail += $va1[6];
+            $total_consumo_retail += $va1[7];
+            $total_saldo_retail += $va1[8];
+
+            $total_costo_embarque += $va1[10];}
+
+        foreach ($data as $va1) {
+            if ($va1[2] == ''){
+                $va1[2] = 0;
+            }
+            if ($va1[3] == '' ){
+                $va1[3] = 0;
+            }
+            if ($va1[6] == '' ){
+                $va1[6] = 0;
+            }
+            if ($va1[7] == '' ){
+                $va1[7] = 0;
+            }
+            if ($va1[10] == '' ){
+                $va1[10] = 0;
+            }
+
+
+            array_push($array1,
+                array("DEP_DEPTO"=> $va1[0]
+                ,"VENT_DESCRI"=> $va1[1]
+                ,"COS_PPTO"=> $va1[2]
+                ,"COS_CON"=> $va1[3]
+                ,"COS_SAL"=> $va1[4]
+                ,"COS_TOL"=> $va1[5]
+                ,"RET_PPTO"=> $va1[6]
+                ,"RET_CON"=> $va1[7]
+                ,"RET_SAL"=> $va1[8]
+                ,"RET_TOL"=> $va1[9]
+                ,"EMB_PPTO"=> $va1[10]
+                ,"EMB_CON"=> $embarque_consumo
+                ,"EMB_SAL" => $embarque_saldo *100
+
+                ,"TOL_COS_PPTO"=> $total_costo_ppto
+                ,"TOL_CON_PPTO"=> $total_consumo_ppto
+                ,"TOL_SAL_PPTO"=> $total_saldo_ppto
+
+                ,"TOL_COS_RET"=> $total_costo_retail
+                ,"TOL_CON_RET"=> $total_consumo_retail
+                ,"TOL_SAL_RET"=> $total_saldo_retail
+
+                ,"TOL_COS_EMB"=> $total_costo_embarque *100
+                ,"TOL_CON_EMB"=> $total_consumo_embarque *100
+                ,"TOL_SAL_EMB"=> $total_saldo_embarque *100
+                )
+            );
+        }
+        return $array1;
+    }
+    public static function ListarEstadosPlan($temporada)
+    {
+        $ArrayAsociativo=[];
+        $sql = "begin PLC_PKG_DESARROLLO.PRC_LISTAR_ESTADOS(" . $temporada . ", :data); end;";
+        $data = \database::getInstancia()->getConsultaSP($sql, 1);
+
+        foreach ($data as $va1) {
+            array_push($ArrayAsociativo
+                , array("CODIGO" => $va1[0]
+                        ,"NOM_ESTADO" => $va1[1])
+            );
+        }
+        return $ArrayAsociativo;
+    }
+    Public static Function ListExportEstados($tempo,$depto_cadena,$estado)
+    {
+        $array1 = [];
+        $sql = "begin PLC_PKG_DESARROLLO.PRC_EXPORTAR_C1_COMEX(" . $tempo . ",'" . $depto_cadena . "','".$estado.",', :data); end;";
+        $data = \database::getInstancia()->getConsultaSP($sql, 1);
+
+        foreach ($data as $va1){
+            array_push($array1,
+                array("DEPARTAMENTO"=> $va1[0]
+                ,"COD DEPTO"=> $va1[1]
+                ,"LINEA"=> $va1[2]
+                ,"SUBLINEA"=> $va1[3]
+                ,"MARCA"=> $va1[4]
+                ,"ESTILO"=> $va1[5]
+                ,"VENTANA"=> $va1[6]
+                ,"COLOR"=> $va1[7]
+                ,"PROFORMA"=> $va1[8]
+                ,"ORDEN COMPRA"=> $va1[9]
+                ,"ESTADO OPCION"=> $va1[10]
+                ,"FECHA ULTIMO ESTADO"=> $va1[11]
+                ,"HORA"=> $va1[12]
+
+                )
+            );
+        }
+        return $array1;
+    }
+
+    Public static Function ListExportEstados18($tempo,$depto_cadena,$estado)
+    {
+        $array1 = [];
+        $sql = "begin PLC_PKG_MIGRACION.PRC_EXPORTAR_C1_COMEX(" . $tempo . ",'" . $depto_cadena . "','".$estado.",', :data); end;";
+        $data = \database::getInstancia()->getConsultaSP($sql, 1);
+
+        foreach ($data as $va1){
+            array_push($array1,
+                array("TEMPORADA"=> $va1[0]
+                ,"DEPARTAMENTO"=> $va1[1]
+                ,"COD DEP"=> $va1[2]
+                ,"ESTADO OPCION"=> $va1[3]
+                ,"PI"=> $va1[4]
+                ,"FECHA ÚLTIMO ESTADO"=> $va1[5]
+                ,"HORA"=> $va1[6]
+                ,"COMPRADOR"=> $va1[7]
+                )
+            );
+        }
+        return $array1;
+    }
+
+    Public static Function ListExportEstados19($tempo,$depto_cadena,$estado)
+    {
+        $array1 = [];
+        $sql = "begin PLC_PKG_MIGRACION.PRC_EXPORTAR_C1_SIN_MATCH(" . $tempo . ",'" . $depto_cadena . "','".$estado.",', :data); end;";
+        $data = \database::getInstancia()->getConsultaSP($sql, 1);
+
+        foreach ($data as $va1){
+            array_push($array1,
+                array("DEPARTAMENTO"=> $va1[0]
+                ,"DEP_DEPTO"=> $va1[1]
+                ,"ESTADO OPCION"=> $va1[2]
+                ,"FECHA ÚLTIMO ESTADO"=> $va1[3]
+                ,"PI"=> $va1[4]
+                ,"UNIDADES"=> $va1[5]
+                ,"COSTOS"=> $va1[6]
+                )
+            );
+        }
+        return $array1;
+    }
+
+    Public static Function ListExportEstados23($tempo,$depto_cadena,$estado)
+    {
+        $array1 = [];
+        $sql = "begin PLC_PKG_MIGRACION.PRC_EXPORTAR_COMEXERROR(" . $tempo . ",'" . $depto_cadena . "','".$estado.",', :data); end;";
+        $data = \database::getInstancia()->getConsultaSP($sql, 1);
+
+        foreach ($data as $va1){
+            array_push($array1,
+                array("TEMPORADA"=> $va1[0]
+                ,"DEPARTAMENTO"=> $va1[1]
+                ,"COD DEP"=> $va1[2]
+                ,"ESTADO OPCION"=> $va1[3]
+                ,"PI"=> $va1[4]
+                ,"FECHA ÚLTIMO ESTADO"=> $va1[5]
+                ,"HORA"=> $va1[6]
+                ,"COMPRADOR"=> $va1[7]
+                ,"OBSERVACION"=> $va1[8]
+                )
+            );
+        }
+        return $array1;
+    }
 // Fin de la Clase
 }

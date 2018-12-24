@@ -830,6 +830,102 @@ if($ESTADO_C1!=24){
 
     }
 
+// ######################## POP EXPORTAR ########################
+    public function ListarDeptosTemp($f3)
+    {
+        echo json_encode(\simulador_compra\PlanCompraClass::ListarDeptosTemp($f3->get('SESSION.COD_TEMPORADA')));
+    }
+
+    public function ListarDeptosTempAssortment($f3)
+    {
+        echo json_encode(\simulador_compra\PlanCompraClass::ListarDeptosTempAssortment($f3->get('SESSION.COD_TEMPORADA')));
+    }
+
+    public function ListarEstadosPlan($f3) {
+        echo json_encode(\simulador_compra\PlanCompraClass::ListarEstadosPlan($f3->get('SESSION.COD_TEMPORADA')));
+    }
+
+
+    public function ExportarArchivos($f3){
+
+        require_once '../PHPExcel/PHPExcel.php';
+        $typeExport = $_POST['CBXtipoExport'];
+        $deptos = trim($_POST['SeleccionDepto']);
+        $estados = trim($_POST['Seleccionestados']);
+
+        /* 1:Assortment
+           2:C1
+           3:Opcion por estado
+           4:Formato Assortment
+         */
+
+        if ($typeExport == 1){
+
+            $dt = explode(',',$deptos);
+            $deptosQuery = "";
+            foreach ($dt as $val){
+                $deptosQuery = $deptosQuery."'".trim($val)."',";
+            }
+            $deptosQuery = substr($deptosQuery, 0, -1);
+            include '../ui/reporte/excel_asorment.php';
+
+        }
+        elseif($typeExport == 2){
+            $deptos = str_replace(" ","", $deptos);
+            include '../ui/reporte/cabeceraexcel.php';
+
+          /*
+            $file ="C1_Consolidada_".$f3->get('SESSION.COD_TEMPORADA').".xls"; // Decode URL-encoded string
+            $filepath = "../archivos/c1_consolidada/" . $file;
+
+            // Process download
+            if(file_exists($filepath)) {
+                header('Content-Description: File Transfer');
+                header('Content-Type: application/octet-stream');
+                header('Content-Disposition: attachment; filename="'.$file.'"');
+                header('Expires: 0');
+                header('Cache-Control: must-revalidate');
+                header('Pragma: public');
+                header('Content-Length: ' . filesize($filepath));
+
+                flush(); // Flush system output buffer
+                readfile($filepath);
+                exit;
+            }*/
+
+        }
+        elseif($typeExport == 3){
+            $dt = explode(',',$deptos);
+            $deptosQuery = "";
+            foreach ($dt as $val){
+                $deptosQuery = $deptosQuery.trim($val).",";
+            }
+            $estados = str_replace(" ","", $estados);
+            include '../ui/reporte/excel_opcion.php';
+
+        }
+        elseif($typeExport == 4){
+            $file ="Formato_Assortment.xls"; // Decode URL-encoded string
+            $filepath = "../archivos/formatos/Formato Assorment.xlsx";
+
+            // Process download
+            if(file_exists($filepath)) {
+                header('Content-Description: File Transfer');
+                header('Content-Type: application/octet-stream');
+                header('Content-Disposition: attachment; filename="' . $file . '"');
+                header('Expires: 0');
+                header('Cache-Control: must-revalidate');
+                header('Pragma: public');
+                header('Content-Length: ' . filesize($filepath));
+
+                flush(); // Flush system output buffer
+                readfile($filepath);
+                exit;
+            }
+        }
+    }
+
+
 
 // Termina Clase
 }

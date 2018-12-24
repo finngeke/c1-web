@@ -1572,7 +1572,8 @@ $(function () {
 
 
 
-    // ############################ Importar Achivos ############################
+// ############################ Importar Achivos ############################
+
     // Ventana Pop
     var ventana_loading= $("#Pop_loading_Archivo");
     ventana_loading.kendoWindow({
@@ -1953,8 +1954,8 @@ $(function () {
     });
 
 
+// ############################ presupuesto total ############################
 
-    // ############################ presupuesto total ############################
     // pop grilla presupuesto total.
     var ventana_presupuestos = $("#POPUP_presupuestos_total");
     ventana_presupuestos.kendoWindow({
@@ -2011,7 +2012,6 @@ $(function () {
     });
 
 
-
 // ############################ Presupuestos Edit ############################
     var ventana_editpresupuestos = $("#POPUP_Presupuestos");
     ventana_editpresupuestos.kendoWindow({
@@ -2020,8 +2020,8 @@ $(function () {
                     visible: false,
                     actions: [
                         //"Pin",
-                        /*"Minimize",
-                        "Maximize",*/
+                        "Minimize",
+                        "Maximize",
                         "Close"
                     ]/*,
                             close: onClose*/
@@ -2056,12 +2056,12 @@ $(function () {
            $('#Update').html(valor);
        }
     });
-
 // BTN Actualiza Grilla
     $('#btnGuardar').on('click', function () {
+        var popupNotification = $("#popupNotification").kendoNotification().data("kendoNotification");
+        if(localStorage.getItem("T0019")) {
         var valor = $("#Update").text();
         $("#btnGuardar").prop("disabled", true);
-        var popupNotification = $("#popupNotification").kendoNotification().data("kendoNotification");
         var costo = $("#Costo").val();
         var retail = $("#Retail").val();
         $('#Update').html("");
@@ -2173,15 +2173,193 @@ $(function () {
                 }
             });
         }
+        }else{
+            popupNotification.getNotifications().parent().remove();
+            popupNotification.show(" No tiene permisos para realizar esta acción.", "error");
+        }
+
     });
 
 
+// ############################ Export Excel############################
+    var ventana_export = $("#POPUP_Exportar");
+    ventana_export.kendoWindow({
+        width: "400px",
+        title: "Exportar",
+        visible: false,
+        actions: [
+            //"Pin",
+            "Minimize",
+            "Maximize",
+            "Close"
+        ]
+    }).data("kendoWindow").center();
+    //Combobox Tipo Export
+    $("#CBXtipoExport").change (function () {
+        var tipo = $("#CBXtipoExport").val();
+        if (tipo == 1){
+            $('#btnExportar').prop('disabled',true)
+            $("#lblEstados").hide();
+            $("#lblDepartmento").show();
+            $("#gridDepto").kendoGrid({
+                dataSource: {
+                    transport: {
+                        read:  {
+                            url: "TelerikPlanCompra/ListarDeptosTempAssortment",
+                            dataType: "json"
+                        }
+                    },
+                    schema: {
+                        model: {
+                            id: "COD_DEPARTAMENTO"
+                        }
+                    }
+                },
+                scrollable: true,
+                height: 200,
+                sortable: true,
+                change: onChangedepart,
+                columns: [
+                    { selectable: true, width: "30px" },
+                    { field:"COD_DEPARTAMENTO", title: "Codigo",width: "60px" },
+                    { field:"DEPARTAMENTO"    , title:"Nombre"}]
+            });
+        }
+        else if (tipo == 2){
+            $('#btnExportar').prop('disabled',true)
+            $("#lblEstados").hide();
+            $("#lblDepartmento").show();
+            $("#gridDepto").kendoGrid({
+                dataSource: {
+                    transport: {
+                        read:  {
+                            url: "TelerikPlanCompra/ListarDeptosTemp",
+                            dataType: "json"
+                        }
+                    },
+                    schema: {
+                        model: {
+                            id: "COD_DEPARTAMENTO"
+                        }
+                    }
+                },
+                scrollable: true,
+                height: 200,
+                sortable: true,
+                change: onChangedepart,
+                columns: [
+                    { selectable: true, width: "30px" },
+                    { field:"COD_DEPARTAMENTO", title: "Codigo",width: "60px" },
+                    { field:"DEPARTAMENTO"    , title:"Nombre"}]
+            });
+        }
+        else if (tipo == 3){
+            $('#btnExportar').prop('disabled',true)
+            $("#lblEstados").show();
+            $("#lblDepartmento").show();
+            $("#gridEstados").kendoGrid({
+                dataSource: {
+                    transport: {
+                        read:  {
+                            url: "TelerikPlanCompra/ListarEstadosPlan",
+                            dataType: "json"
+                        }
+                    },
+                    schema: {
+                        model: {
+                            id: "CODIGO"
+                        }
+                    }
+                },
+                scrollable: true,
+                height: 150,
+                sortable: true,
+                change: onChangeEstados,
+                columns: [
+                    { selectable: true, width: "30px" },
+                    { field:"NOM_ESTADO", title:"Nombre"}],
+                dataBound: function(e) {
+                    var items = this._data;
+                    var tableRows = $(this.table).find("tr");
+                    tableRows.each(function(index) {
+                        var row = $(this);
+                        var Item = items[index];
+                        if (Item.CODIGO == 18) {
+                            row.addClass("EstadoCompraConfirmadaPI");
+                        }else if(Item.CODIGO == 19){
+                            row.addClass("EstadoPendienteAprobacionsinMatch");
+                        }else if (Item.CODIGO == 20||Item.CODIGO == 21){
+                            row.addClass("EstadoAprobado");
+                        }else if (Item.CODIGO == 23||Item.CODIGO == 24){
+                            row.addClass("EstadoEliminado");
+                        }else{
+                            row.addClass("columnas");
+                        }
+                    });
+                }
+            });
 
+            $("#gridDepto").kendoGrid({
+                dataSource: {
+                    transport: {
+                        read:  {
+                            url: "TelerikPlanCompra/ListarDeptosTemp",
+                            dataType: "json"
+                        }
+                    },
+                    schema: {
+                        model: {
+                            id: "COD_DEPARTAMENTO"
+                        }
+                    }
+                },
+                scrollable: true,
+                height: 150,
+                sortable: true,
+                change: onChangedepart,
+                columns: [
+                    { selectable: true, width: "30px" },
+                    { field:"COD_DEPARTAMENTO", title: "Codigo",width: "60px" },
+                    { field:"DEPARTAMENTO"    , title:"Nombre"}]
+            });
 
+        }
+        else if (tipo == 4){
+            $('#btnExportar').prop('disabled',false)
+            $("#lblEstados").hide();
+            $("#lblDepartmento").hide();
+        }
+    });
+    //onchange List Departamento check box
+    function onChangedepart(arg) {
 
+        $('#SeleccionDepto').val(this.selectedKeyNames().join(", "));
+        var tipo = $("#CBXtipoExport").val();
+        if (tipo == 3){
+            if ($('#Seleccionestados').val() != "" && $('#SeleccionDepto').val() != ""){
+                $('#btnExportar').prop('disabled',false);
+            }else{
+                $('#btnExportar').prop('disabled',true);
+            }
+        }else{
+        if ($('#SeleccionDepto').val() == ""){
+            $('#btnExportar').prop('disabled',true);
+        }else{
+            $('#btnExportar').prop('disabled',false);
+        }
+        }
+    }
+    //onchange List Estados check box
+    function onChangeEstados(arg) {
+        $('#btnExportar').prop('disabled',false);
+        $('#Seleccionestados').val(this.selectedKeyNames().join(", "));
 
-
-
+        if ($('#Seleccionestados').val() != "" && $('#SeleccionDepto').val() != ""){
+            $('#btnExportar').prop('disabled',false);
+        }else{
+            $('#btnExportar').prop('disabled',true);
+        }
+    }
 
 // Fin de la función
 });

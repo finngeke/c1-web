@@ -13,14 +13,14 @@ $borders = array(
 );
 $hoy = date("Y-m-d H:i:s");
 
-$estado_cadena_sin = substr($estado_cadena,0,-1);
-$array_estado = explode("," ,$estado_cadena_sin);
+$array_estado = explode("," ,$estados);
 $cont_estados = count($array_estado);
 
 
 for ($i=0 ; $i < $cont_estados ;$i++) {
+    /*ingresado*/
    if ($array_estado[$i] == 0) {
-     $arreglo_estado_0 = simulador_compra\plan_compra::Exportcomex_c1_comex($Tempo, $depto_cadena,$array_estado[$i]);
+     $arreglo_estado_0 = simulador_compra\PlanCompraClass::ListExportEstados($Tempo, $deptosQuery,$array_estado[$i]);
      $count_0 = count($arreglo_estado_0);
      $objPHPExcel->setActiveSheetIndex($i)
        ->setCellValue('A6','DEPARTAMENTO')
@@ -43,7 +43,7 @@ for ($i=0 ; $i < $cont_estados ;$i++) {
        }
 
     $objPHPExcel->setActiveSheetIndex($i)
-    ->setCellValue('A1', 'Departamentos :  '.$depto_cadena)
+    ->setCellValue('A1', 'Departamentos :  '.$deptos)
     ->setCellValue('A2', 'Fecha :  '.$hoy);
     $objPHPExcel->getActiveSheet()->freezePaneByColumnAndRow(0,7);
     $objPHPExcel->getActiveSheet()->getStyle('A5:M5')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('DCDCDC');
@@ -53,44 +53,44 @@ for ($i=0 ; $i < $cont_estados ;$i++) {
     $objPHPExcel->getActiveSheet()->fromArray($arreglo_estado_0, null, 'A7');
     $objPHPExcel->getActiveSheet()->setTitle('Ingresados');
     }
-    /*ingresado*/
+    /*Compra Confirmada con PI*/
     if ($array_estado[$i] == 18) {
-        $arreglo_estado_18 = simulador_compra\plan_compra::Exportcomex_c1_comex($Tempo, $depto_cadena,$array_estado[$i]);
-        $count_18 = count($arreglo_estado_18);
+        $arreglo_estado_22 = simulador_compra\PlanCompraClass::ListExportEstados18($Tempo, $deptosQuery,$array_estado[$i]);
+        $count_22 = count ($arreglo_estado_22);
         $objPHPExcel->createSheet();
         $objPHPExcel->setActiveSheetIndex($i)
-            ->mergeCells('A5:M5')
-        ->setCellValue('A6','DEPARTAMENTO')
-            ->setCellValue('B6','COD DEPTO')
-            ->setCellValue('C6','LINEA')
-            ->setCellValue('D6','SUBLINEA')
-            ->setCellValue('E6','MARCA')
-            ->setCellValue('F6','ESTILO')
-            ->setCellValue('G6','VENTANA')
-            ->setCellValue('H6','COLOR')
-            ->setCellValue('I6','PROFORMA')
-            ->setCellValue('J6','ORDEN COMPRA')
-            ->setCellValue('K6','ESTADO OPCION')
-            ->setCellValue('L6','FECHA ULTIMO ESTADO')
-            ->setCellValue('M6','HORA');
-        foreach(range('A','M') as $columnID) {
+            ->setCellValue('A6','TEMPORADA')
+            ->mergeCells('A5:H5')
+            ->setCellValue('B6','DEPARTAMENTO')
+            ->setCellValue('C6','COD DEP')
+            ->setCellValue('D6','ESTADO OPCION')
+            ->setCellValue('E6','PI')
+            ->setCellValue('F6','FECHA 贚TIMO ESTADO')
+            ->setCellValue('G6','HORA')
+            ->setCellValue('H6','COMPRADOR');
+
+        foreach(range('A','H') as $columnID) {
             $objPHPExcel->getActiveSheet()->getColumnDimension($columnID)
                 ->setAutoSize(true);
         }
+        $objPHPExcel->getActiveSheet()->getStyle('A5:H5')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('DCDCDC');
+        $objPHPExcel->getActiveSheet()->getStyle('A6:H6')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('909090');
+        $objPHPExcel->getActiveSheet()->getStyle('A5:H5')->applyFromArray($borders);
+        $objPHPExcel->getActiveSheet()->getStyle('A6:H6')->applyFromArray($borders);
+        $objPHPExcel->getActiveSheet()->fromArray($arreglo_estado_22, null, 'A7');
+        for ($w = 0; $w <= $count_22-1; $w++) {
+            $objPHPExcel->setActiveSheetIndex($i)
+                ->setCellValue('E'.($w+7), '=Hyperlink("https://compra.ripley.com/archivos/pi/PI_'.$Tempo.'_'.$arreglo_estado_22[$w]["COD DEP"].'_'.$arreglo_estado_22[$w]["PI"].'.xlsx","'.$arreglo_estado_22[$w]["PI"].'")');
+        }
         $objPHPExcel->setActiveSheetIndex($i)
-            ->setCellValue('A1', 'Departamentos :  '.$depto_cadena)
+            ->setCellValue('A1', 'Departamentos :  '.$deptos)
         ->setCellValue('A2', 'Fecha :  '.$hoy);
         $objPHPExcel->getActiveSheet()->freezePaneByColumnAndRow(0,7);
-        $objPHPExcel->getActiveSheet()->getStyle('A5:M5')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('DCDCDC');
-        $objPHPExcel->getActiveSheet()->getStyle('A6:M6')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('909090');
-        $objPHPExcel->getActiveSheet()->getStyle('A5:M5')->applyFromArray($borders);
-        $objPHPExcel->getActiveSheet()->getStyle('A6:M6')->applyFromArray($borders);
-        $objPHPExcel->getActiveSheet()->fromArray($arreglo_estado_18, null, 'A7');
         $objPHPExcel->getActiveSheet()->setTitle('Compra Confirmada con PI');
     }
-    /*Compra Confirmada con PI*/
+    /*P. de Aprobaci髇 sin Match*/
     if ($array_estado[$i] == 19) {
-        $arreglo_estado_19 = simulador_compra\plan_compra::Exportcomex_c1_comex_sin_match($Tempo, $depto_cadena,$array_estado[$i]);
+        $arreglo_estado_19 = simulador_compra\PlanCompraClass::ListExportEstados19($Tempo, $deptosQuery,$array_estado[$i]);
         $count_19 = count ($arreglo_estado_19);
         $objPHPExcel->createSheet();
         $objPHPExcel->setActiveSheetIndex($i)
@@ -98,7 +98,7 @@ for ($i=0 ; $i < $cont_estados ;$i++) {
             ->setCellValue('A6','DEPARTAMENTO')
             ->setCellValue('B6','DEP_DEPTO')
             ->setCellValue('C6','ESTADO OPCION')
-            ->setCellValue('D6','FECHA 脷LTIMO ESTADO')
+            ->setCellValue('D6','FECHA 贚TIMO ESTADO')
             ->setCellValue('E6','PI')
             ->setCellValue('F6','UNIDADES')
             ->setCellValue('G6','COSTOS');
@@ -108,7 +108,7 @@ for ($i=0 ; $i < $cont_estados ;$i++) {
                 ->setAutoSize(true);
         }
         $objPHPExcel->setActiveSheetIndex($i)
-            ->setCellValue('A1', 'Departamentos :  '.$depto_cadena)
+            ->setCellValue('A1', 'Departamentos :  '.$deptos)
             ->setCellValue('A2', 'Fecha :  '.$hoy);
         $objPHPExcel->getActiveSheet()->freezePaneByColumnAndRow(0,7);
         $objPHPExcel->getActiveSheet()->getStyle('A5:G5')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('DCDCDC');
@@ -116,11 +116,11 @@ for ($i=0 ; $i < $cont_estados ;$i++) {
         $objPHPExcel->getActiveSheet()->getStyle('A5:G5')->applyFromArray($borders);
         $objPHPExcel->getActiveSheet()->getStyle('A6:G6')->applyFromArray($borders);
         $objPHPExcel->getActiveSheet()->fromArray($arreglo_estado_19, null, 'A7');
-        $objPHPExcel->getActiveSheet()->setTitle('P. de Aprobaci贸n sin Match');
+        $objPHPExcel->getActiveSheet()->setTitle('P. de Aprobaci髇 sin Match');
     }
-    /*P. de Aprobaci贸n sin Match*/
+    /*Pendiente Aprobaci髇*/
       if ($array_estado[$i] == 20) {
-         $arreglo_estado_20 = simulador_compra\plan_compra::Exportcomex_c1_comex($Tempo, $depto_cadena,$array_estado[$i]);
+         $arreglo_estado_20 = simulador_compra\PlanCompraClass::ListExportEstados($Tempo, $deptosQuery,$array_estado[$i]);
         $count_20 = count($arreglo_estado_20);
          $objPHPExcel->createSheet();
          $objPHPExcel->setActiveSheetIndex($i)
@@ -143,7 +143,7 @@ for ($i=0 ; $i < $cont_estados ;$i++) {
                   ->setAutoSize(true);
           }
           $objPHPExcel->setActiveSheetIndex($i)
-              ->setCellValue('A1', 'Departamentos :  '.$depto_cadena)
+              ->setCellValue('A1', 'Departamentos :  '.$deptos)
               ->setCellValue('A2', 'Fecha :  '.$hoy);
           $objPHPExcel->getActiveSheet()->freezePaneByColumnAndRow(0,7);
           $objPHPExcel->getActiveSheet()->getStyle('A5:M5')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('DCDCDC');
@@ -151,11 +151,11 @@ for ($i=0 ; $i < $cont_estados ;$i++) {
           $objPHPExcel->getActiveSheet()->getStyle('A5:M5')->applyFromArray($borders);
           $objPHPExcel->getActiveSheet()->getStyle('A6:M6')->applyFromArray($borders);
           $objPHPExcel->getActiveSheet()->fromArray($arreglo_estado_20, null, 'A7');
-         $objPHPExcel->getActiveSheet()->setTitle('Pendiente Aprobaci贸n');
+         $objPHPExcel->getActiveSheet()->setTitle('Pendiente Aprobaci髇');
      }
-    /*Pendiente Aprobaci贸n*/
+    /*Aprobado*/
       if ($array_estado[$i] == 21) {
-          $arreglo_estado_21 = simulador_compra\plan_compra::Exportcomex_c1_comex($Tempo, $depto_cadena,$array_estado[$i]);
+          $arreglo_estado_21 = simulador_compra\PlanCompraClass::ListExportEstados($Tempo, $deptosQuery,$array_estado[$i]);
           $objPHPExcel->createSheet();
           $objPHPExcel->setActiveSheetIndex($i)
               ->mergeCells('A5:M5')
@@ -177,7 +177,7 @@ for ($i=0 ; $i < $cont_estados ;$i++) {
                   ->setAutoSize(true);
           }
           $objPHPExcel->getActiveSheet()
-              ->setCellValue('A1', 'Departamentos :  '.$depto_cadena)
+              ->setCellValue('A1', 'Departamentos :  '.$deptos)
           ->setCellValue('A2', 'Fecha :  '.$hoy);
           $objPHPExcel->getActiveSheet()->freezePaneByColumnAndRow(0,7);
           $objPHPExcel->getActiveSheet()->getStyle('A5:M5')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('DCDCDC');
@@ -187,44 +187,9 @@ for ($i=0 ; $i < $cont_estados ;$i++) {
           $objPHPExcel->getActiveSheet()->fromArray($arreglo_estado_21, null, 'A7');
           $objPHPExcel->getActiveSheet()->setTitle('Aprobado');
       }
-    /*Aprobado*/
-    if ($array_estado[$i] == 22) {
-         $arreglo_estado_22 = simulador_compra\plan_compra::Exportcomex_c1_comex_migracion($Tempo, $depto_cadena,$array_estado[$i]);
-         $count_22 = count ($arreglo_estado_22);
-         $objPHPExcel->createSheet();
-         $objPHPExcel->setActiveSheetIndex($i)
-        ->setCellValue('A6','TEMPORADA')
-             ->mergeCells('A5:H5')
-            ->setCellValue('B6','DEPARTAMENTO')
-            ->setCellValue('C6','COD DEP')
-            ->setCellValue('D6','ESTADO OPCION')
-            ->setCellValue('E6','PI')
-            ->setCellValue('F6','FECHA 脷LTIMO ESTADO')
-            ->setCellValue('G6','HORA')
-            ->setCellValue('H6','COMPRADOR');
-
-        foreach(range('A','H') as $columnID) {
-            $objPHPExcel->getActiveSheet()->getColumnDimension($columnID)
-                ->setAutoSize(true);
-        }
-        $objPHPExcel->getActiveSheet()->getStyle('A5:H5')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('DCDCDC');
-        $objPHPExcel->getActiveSheet()->getStyle('A6:H6')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('909090');
-        $objPHPExcel->getActiveSheet()->getStyle('A5:H5')->applyFromArray($borders);
-        $objPHPExcel->getActiveSheet()->getStyle('A6:H6')->applyFromArray($borders);
-        $objPHPExcel->getActiveSheet()->fromArray($arreglo_estado_22, null, 'A7');
-        for ($w = 0; $w <= $count_22-1; $w++) {
-            $objPHPExcel->setActiveSheetIndex($i)
-                ->setCellValue('E'.($w+7), '=Hyperlink("https://compra.ripley.com/archivos/pi/PI_'.$Tempo.'_'.$arreglo_estado_22[$w]["COD DEP"].'_'.$arreglo_estado_22[$w]["PI"].'.xlsx","'.$arreglo_estado_22[$w]["PI"].'")');
-        }
-        $objPHPExcel->setActiveSheetIndex($i)
-            ->setCellValue('A1', 'Departamentos :  '.$depto_cadena)
-            ->setCellValue('A2', 'Fecha :  '.$hoy);
-        $objPHPExcel->getActiveSheet()->freezePaneByColumnAndRow(0,7);
-        $objPHPExcel->getActiveSheet()->setTitle('Pendiente Generacion OC');
-     }
-    /*Pendiente Generacion OC*/
+    /*P. de Correcci髇 PI*/
     if ($array_estado[$i] == 23) {
-          $arreglo_estado_23 = simulador_compra\plan_compra::Exportcomex_c1_comex_error($Tempo, $depto_cadena,$array_estado[$i]);
+          $arreglo_estado_23 = simulador_compra\PlanCompraClass::ListExportEstados23($Tempo, $deptosQuery,$array_estado[$i]);
           $count_23 = count ($arreglo_estado_23);
           $objPHPExcel->createSheet();
           $objPHPExcel->setActiveSheetIndex($i)
@@ -234,7 +199,7 @@ for ($i=0 ; $i < $cont_estados ;$i++) {
             ->setCellValue('C6','COD DEP')
             ->setCellValue('D6','ESTADO OPCION')
             ->setCellValue('E6','PI')
-            ->setCellValue('F6','FECHA 脷LTIMO ESTADO')
+            ->setCellValue('F6','FECHA 贚TIMO ESTADO')
             ->setCellValue('G6','HORA')
             ->setCellValue('H6','COMPRADOR')
             ->setCellValue('I6','OBSERVACION');
@@ -255,20 +220,20 @@ for ($i=0 ; $i < $cont_estados ;$i++) {
             ->setCellValue('C' .($vt+7),  $arreglo_estado_23[$vt]["COD DEP"])
             ->setCellValue('D' .($vt+7),  "Pendiente de Correcion PI")
             ->setCellValue('E' .($vt+7),  $arreglo_estado_23[$vt]["PI"])
-            ->setCellValue('F' .($vt+7),  $arreglo_estado_23[$vt]["FECHA 脷LTIMO ESTADO"])
+            ->setCellValue('F' .($vt+7),  $arreglo_estado_23[$vt]["FECHA 贚TIMO ESTADO"])
             ->setCellValue('G' .($vt+7), $arreglo_estado_23[$vt]["HORA"])
             ->setCellValue('H' .($vt+7),  $arreglo_estado_23[$vt]["COMPRADOR"])
             ->setCellValue('I' .($vt+7),  $arreglo_estado_23[$vt]["OBSERVACION"]);
         }
         $objPHPExcel->setActiveSheetIndex($i)
-            ->setCellValue('A1', 'Departamentos :  '.$depto_cadena)
+            ->setCellValue('A1', 'Departamentos :  '.$deptos)
             ->setCellValue('A2', 'Fecha :  '.$hoy);
         $objPHPExcel->getActiveSheet()->freezePaneByColumnAndRow(0,7);
         $objPHPExcel->getActiveSheet()->setTitle('Pendiente de Correccion PI');
       }
-    /*P. de Correcci贸n PI*/
+    /*Eliminado*/
     if ($array_estado[$i] == 24) {
-        $arreglo_estado_24 = simulador_compra\plan_compra::Exportcomex_c1_comex($Tempo, $depto_cadena,$array_estado[$i]);
+        $arreglo_estado_24 = simulador_compra\PlanCompraClass::ListExportEstados($Tempo, $deptosQuery,$array_estado[$i]);
         $objPHPExcel->createSheet();
         $objPHPExcel->setActiveSheetIndex($i)
             ->mergeCells('A5:M5')
@@ -290,7 +255,7 @@ for ($i=0 ; $i < $cont_estados ;$i++) {
                 ->setAutoSize(true);
         }
         $objPHPExcel->setActiveSheetIndex($i)
-            ->setCellValue('A1', 'Departamentos :  '.$depto_cadena)
+            ->setCellValue('A1', 'Departamentos :  '.$deptos)
             ->setCellValue('A2', 'Fecha :  '.$hoy);
         $objPHPExcel->getActiveSheet()->freezePaneByColumnAndRow(0,7);
         $objPHPExcel->getActiveSheet()->getStyle('A5:M5')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('DCDCDC');
@@ -300,7 +265,6 @@ for ($i=0 ; $i < $cont_estados ;$i++) {
         $objPHPExcel->getActiveSheet()->fromArray($arreglo_estado_24, null, 'A7');
         $objPHPExcel->getActiveSheet()->setTitle('Eliminado');
     }
-    /*Eliminado*/
 
 }
 

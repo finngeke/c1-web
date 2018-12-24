@@ -257,8 +257,6 @@
             }
         </style>
 
-
-
     </div>
 
 
@@ -335,19 +333,80 @@
             #editpresupuestos label .k-numerictextbox {
                 font-size: 12px;
             }
+
+
+
         </style>
 
     </div>
+
+    <!-- POPUP Exportar-->
+    <div id="POPUP_Exportar">
+        <form method="POST" enctype="multipart/form-data" class="form_export_bmt" action="exporta_excelTelerik">
+        <ul id="Export">
+            <li> <input type="text"  id="SeleccionDepto" name="SeleccionDepto" class="FORM-CONTROL" style="display: none">
+                 <input type="text"  id="Seleccionestados" name="Seleccionestados" class="FORM-CONTROL" style="display: none">
+                <label>Tipo de Archivo:
+                <input id="CBXtipoExport" class="FORM-CONTROL" name="CBXtipoExport" placeholder="Seleccione..." style="width: 100%;" />
+                </label>
+            </li>
+            <li>
+                <label id="lblDepartmento" style="display: none">Departamentos:
+                    <div class="FORM-CONTROL" id="gridDepto"></div>
+                </label>
+            </li>
+            <li>
+                <label id="lblEstados" style="display: none">Estados:
+                    <div class="FORM-CONTROL" id="gridEstados"></div>
+                </label>
+            </li>
+            <li style="margin-right:50px">
+                <input type="submit" class="k-primary" id="btnExportar" value="Exportar" disabled="disabled">
+            </li>
+        </ul>
+        <style>
+            #Export li {
+                list-style: none;
+                padding-bottom: 1.5em;
+            }
+
+            #Export label {
+                display: block;
+                padding-bottom: .5em;
+                font-weight: bold;
+                font-size: 12px;
+            }
+            .EstadoCompraConfirmadaPI {
+                background-color: #ee7600;
+                color: #f5f5f5;
+            }
+            .EstadoPendienteAprobacionsinMatch{
+                background-color: #008000;
+                color: #ffffff;
+            }
+            .EstadoAprobado{
+                background-color: #add8e6;
+                color: #00008b;
+            }
+            .EstadoEliminado{
+                background-color: #cd5c5c;
+                color: #ffffff;
+            }
+            .columnas{
+                background-color: #ffffe0;
+                color: red;
+            }
+        </style>
+        </form>
+    </div>
+
+
     <!-- POPUP Cierre de Session -->
     <div id="POPUP_cierra_session">
         <div id="StopCountDown" style="font-size: 40px; text-align: center;">
             <div id="contador_cierra_session" style="font-size: 40px; text-align: center;"></div>
         </div>
     </div>
-
-
-
-
 
     <!-- TAG de los mensajes de alert, dejar siempre al final -->
     <span id="popupNotification"></span>

@@ -745,8 +745,17 @@ var cont_total_registros = 10;
         // rows: 1500,
         //toolbar: true,
         toolbar: {
-            home: [ //"open" ,
-                "exportAs",
+            home: [ "open" ,
+                { type: "button",
+                    text: "Importar",
+                    icon: "k-icon k-i-upload",
+                    click: Pop_Importar
+                },
+                { type: "button",
+                    text: "Exportar",
+                    icon: "k-icon k-i-download",
+                    click: Pop_Exportar
+                },
                 "freeze",
                 "filter",
                 { type: "button",
@@ -766,12 +775,6 @@ var cont_total_registros = 10;
                     showText: "both",
                     icon: "k-icon k-i-clock",
                     click: Pop_Historial
-                },
-                { type: "button",
-                    text: "Importar",
-                    //showText: "both",
-                    imageUrl: "../web/telerik/content/web/24x24/Upload.png",
-                    click: Pop_Importar
                 },
                 { type: "button",
                     text: "Detalle Error",
@@ -1862,10 +1865,7 @@ var cont_total_registros = 10;
 
     //pop ajuste de compra
     function Pop_ajuste_compra(){
-
-        // Actualiza Concurrencia
         ActualizaConcurrencia();
-
         // alert($("#comentSolicitaCorreccionPI").val());
         var spreadsheet_id_color3 = $("#spreadsheet").data("kendoSpreadsheet");
         var sheet = spreadsheet_id_color3.activeSheet();
@@ -1929,10 +1929,7 @@ var cont_total_registros = 10;
 
     //pop ajuste de cajas
     function Pop_ajuste_cajas(){
-
-        // Actualiza Concurrencia
         ActualizaConcurrencia();
-
     var spreadsheet_id_color3 = $("#spreadsheet").data("kendoSpreadsheet");
     var sheet = spreadsheet_id_color3.activeSheet();
     var range = sheet.selection();
@@ -2042,10 +2039,8 @@ var cont_total_registros = 10;
 
     //pop historical
     function Pop_Historial(){
-
-        // Actualiza Concurrencia
         ActualizaConcurrencia();
-
+        // alert($("#comentSolicitaCorreccionPI").val());
         var spreadsheet_id_color3 = $("#spreadsheet").data("kendoSpreadsheet");
         var sheet = spreadsheet_id_color3.activeSheet();
         var range = sheet.selection();
@@ -2116,20 +2111,21 @@ var cont_total_registros = 10;
 
     //pop importar assorment
     function Pop_Importar(){
-
         // Actualiza Concurrencia
         ActualizaConcurrencia();
-
+        // Verificar Permisos
+        if(localStorage.getItem("T0025")) {
         var popupDe = $("#POPUP_Importar_");
         popupDe.data("kendoWindow").open();
+        }else{
+            popupNotification.getNotifications().parent().remove();
+            popupNotification.show(" No tiene permisos para realizar esta acción.", "error");
+        }
     }
 
     //pop Presupuestos edit
     function Pop_editPresupuestos(){
-
-        // Actualiza Concurrencia
         ActualizaConcurrencia();
-
         //COSTO
         var costo = $("#Costo").val();
         var retail = $("#Retail").val();
@@ -2185,6 +2181,26 @@ var cont_total_registros = 10;
         editPresupuestos.data("kendoWindow").open();
     }
 
+    //pop exportar
+    function Pop_Exportar(){
+        ActualizaConcurrencia();
+        $("#CBXtipoExport").kendoComboBox({
+            dataTextField: "text",
+            dataValueField: "value",
+            dataSource: [
+                { text: "Assortment", value: "1" },
+                { text: "C1", value: "2" },
+                { text: "Opciones por Estados", value: "3" },
+                { text: "Formato Assortment", value: "4" }
+            ],
+            filter: "contains",
+            suggest: false
+        });
+
+        var pop_export = $("#POPUP_Exportar");
+        pop_export.data("kendoWindow").open();
+
+    }
 
 // Fin del document ready
 });
