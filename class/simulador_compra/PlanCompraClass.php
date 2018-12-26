@@ -35,7 +35,7 @@ class PlanCompraClass extends \parametros
                 C.COLECCION,                  -- 16 Colección
                 C.EVENTO,                     -- 17 Evento
                 NOM_ESTILOVIDA COD_ESTILO_VIDA,  -- 18 estilo vida
-                CALIDAD,                         -- 19 Calidad
+                NOM_CALIDAD CALIDAD,             -- 19 Calidad
                 C.NOM_OCACIONUSO COD_OCASION_USO,-- 20 ocacion uso
                 C.NOM_PIRAMIDEMIX COD_PIRAMIX,   -- 21 piramide mix
                 C.NOM_VENTANA,                   -- 22 ventana

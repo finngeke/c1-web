@@ -696,7 +696,61 @@ class valida_archivo_bmt extends \parametros {
                         $filarow = $filarow . strval($i + 1) . ",";
                     }
                 }
-            }}//
+            }
+        }//
+        if ($val == TRUE) {
+            /*Validacion estilo de vida*/$tipoVal = 28;
+            $dt = plan_compra::list_estiloVida();
+            for($i = 3;$i <= $limite; $i++){
+                if($rows[$i][$nom_columnas['Estilo de Vida']] <> NULL and $rows[$i][$nom_columnas['Estilo de Vida']] <> ''){
+                    $_exs = false;
+                    foreach ($dt as $var2){
+                        if ($var2['DESCRIPCION'] == strtoupper($rows[$i][$nom_columnas['Estilo de Vida']])){
+                            $_exs = true; break;
+                        }
+                    }
+                    if($_exs == false){
+                        $val = FALSE;
+                        $filarow = $filarow . strval($i + 1) . ",";
+                    }
+                }
+            }
+
+        }
+        if ($val == TRUE) {/*Validacion ocacion de uso*/$tipoVal = 29;
+            $dt = plan_compra::list_ocacionuso();
+            for($i = 3;$i <= $limite; $i++){
+                if($rows[$i][$nom_columnas['Ocasion de uso']] <> NULL and $rows[$i][$nom_columnas['Ocasion de uso']] <> ''){
+                    $_exs = false;
+                    foreach ($dt as $var){
+                        if ($var['DESCRIPCION'] == strtoupper($rows[$i][$nom_columnas['Ocasion de uso']])){
+                            $_exs = true; break;
+                        }
+                    }
+                    if($_exs == false){
+                        $val = FALSE;
+                        $filarow = $filarow . strval($i + 1) . ",";
+                    }
+                }
+            }
+        }
+        if ($val == TRUE) {/*Validacion calidad*/$tipoVal = 30;
+            $dt = plan_compra::list_calidad();
+            for($i = 3;$i <= $limite; $i++){
+                if($rows[$i][$nom_columnas['Calidad']] <> NULL and $rows[$i][$nom_columnas['Calidad']] <> ''){
+                    $_exs = false;
+                    foreach ($dt as $var){
+                        if ($var['DESCRIPCION'] == strtoupper($rows[$i][$nom_columnas['Calidad']])){
+                            $_exs = true; break;
+                        }
+                    }
+                    if($_exs == false){
+                        $val = FALSE;
+                        $filarow = $filarow . strval($i + 1) . ",";
+                    }
+                }
+            }
+        }
         if ($val == FALSE ) {
             if ($tipoVal == 1){
                 $array = array('Tipo' => $val,
@@ -789,18 +843,37 @@ class valida_archivo_bmt extends \parametros {
             elseif ($tipoVal == 23){
                 $array = array('Tipo' => $val,
                     'Error'=> "(".substr($filarow, 0, - 1).") ->El ClusterI no debe ser nulo o no debe esta en 0.");
-            }elseif ($tipoVal == 24){
+            }
+            elseif ($tipoVal == 24){
                 $array = array('Tipo' => $val,
                     'Error'=> "(".substr($filarow, 0, - 1).") ->Los Reorder's tiene un tipo de empaque Curvados.");
-            }elseif ($tipoVal == 25){
+            }
+            elseif ($tipoVal == 25){
                 $array = array('Tipo' => $val,
                     'Error'=> "(".substr($filarow, 0, - 1).") ->El campo [Debut o Reorder] esta vacío o no se encuentra bd C1.");
-            }elseif ($tipoVal == 26){
+            }
+            elseif ($tipoVal == 26){
                 $array = array('Tipo' => $val,
                     'Error'=> "(".substr($filarow, 0, - 1).") ->El campo [Fecha de Embarque Acordada] el formato es incorrecto.Ej (dd-mm-yyyy)");
-            }elseif ($tipoVal == 27){
+            }
+            elseif ($tipoVal == 27){
                 $array = array('Tipo' => $val,
                     'Error'=> "(".substr($filarow, 0, - 1).") ->Evento(s) no encuentrado(s) BD C1. Ej: MADRE,PADRE,NINO,NAVIDAD.");
+            }
+            elseif ($tipoVal == 28){
+                $array = array('Tipo' => $val,
+                    'Error'=> "(".substr($filarow, 0, - 1).") ->Estilo de Vida no encuentran BD C1. Ej: TRADICIONAL,NEO TRADICIONAL
+                                                                            ,NEO CASUAL,BOHEMIAN ROMANTIC,GLAMOUR,MAINSTREAM,TRENDY,ROMANTICO,CLUBER,ECO VINTAGE
+                                                                            ,URBEN,SURF.");
+            }
+            elseif ($tipoVal == 29){
+                $array = array('Tipo' => $val,
+                    'Error'=> "(".substr($filarow, 0, - 1).") ->Ocacion de uso no encuentran BD C1. Ej: 7/7 DRESS UP,7/7 DRESS DOWN,NIGHT
+                                                                            ,CITY,WEEKEND.");
+            }
+            elseif ($tipoVal == 30){
+                $array = array('Tipo' => $val,
+                    'Error'=> "(".substr($filarow, 0, - 1).") ->Calidad no encuentran BD C1. Ej: GOOD,BETTER,BEST.");
             }
         }else{
             $array = array('Tipo' => $val,
@@ -869,8 +942,12 @@ class valida_archivo_bmt extends \parametros {
         return  $array;
 
     }
-    public static function eliminardatosrows($rows,$limite,$nom_columnas){
+
+    public static function eliminardatosrows2($rows,$limite,$nom_columnas){
         $val_delete = "";
+
+
+
         for($i = 0;$i <= $limite; $i++){
             if($i < 2) {
                 $val_delete = $val_delete . $i . ",";
@@ -882,6 +959,34 @@ class valida_archivo_bmt extends \parametros {
                 $rows[$i][$nom_columnas['Cod Dpto']] ==  null) {
                 $val_delete = $val_delete .$i.",";
             }
+            }
+        }
+        if ($val_delete <> ""){
+            $val_delete = substr($val_delete, 0, - 1);
+            $val_delete = explode(",", $val_delete);
+            foreach ($val_delete as $var ){
+                unset($rows[$var]);
+            }
+        }
+
+        $rows = array_values($rows);// reordena los array
+
+        return $rows;
+    }
+
+    public static function eliminardatosrows($rows,$limite){
+        $val_delete = "";
+        for($i = 0;$i <= $limite; $i++){
+            if($i < 2) {
+                $val_delete = $val_delete . $i . ",";
+            }else{
+            if ($rows[$i]['Cod Linea'] == null or
+                $rows[$i]['Cod Sublinea']==  null or
+                $rows[$i]['Nombre Estilo'] ==  null or
+                $rows[$i]['Cod Color']==  null or
+                $rows[$i]['Cod Dpto']==  null) {
+                    $val_delete = $val_delete .$i.",";
+                }
             }
         }
 
@@ -1191,99 +1296,28 @@ class valida_archivo_bmt extends \parametros {
     }
 
 
-    public static function Limpieza_data_Assortment($rows,$nom_columnas){
-
-        $arrayinsert=[];
-        array_push($arrayinsert,$rows[0]);
-        $key = 0;
-        foreach ($rows as $val){$key ++;
-            if($key>1){
-                $debut = strtoupper($val[$nom_columnas["Debut o Reorder"]]);
-                array_push($arrayinsert
-                  , array($val[$nom_columnas["s"]]
-                        , $val[$nom_columnas["Cod Dpto"]]
-                        , $val[$nom_columnas["Dpto"]]
-                        , $val[$nom_columnas["Marca"]]
-                        , $val[$nom_columnas["Codigo Marca"]]
-                        , $val[$nom_columnas["Nombre Comprador"]]
-                        , $val[$nom_columnas["Nombre Disenador"]]
-                        , $val[$nom_columnas["Season"]]
-                        , $val[$nom_columnas["Linea"]]
-                        , $val[$nom_columnas["Cod Linea"]]
-                        , $val[$nom_columnas["Sublinea"]]
-                        , $val[$nom_columnas["Cod Sublinea"]]
-                        , $val[$nom_columnas["Codigo corporativo"]]
-                        , $val[$nom_columnas["Nombre Estilo"]]
-                        , $val[$nom_columnas["Estilo Corto"]]
-                        , $val[$nom_columnas["Descripcion Estilo"]]
-                        , $val[$nom_columnas["Cod Opcion"]]
-                        , $val[$nom_columnas["Color"]]
-                        , $val[$nom_columnas["Cod Color"]]
-                        , $val[$nom_columnas["Composicion"]]
-                        , $val[$nom_columnas["Tipo de Tela"]]
-                        , $val[$nom_columnas["Forro"]]
-                        , $val[$nom_columnas["Evento"]]
-                        , $val[$nom_columnas["Grupo de compra"]]
-                        , $val[$nom_columnas["Ventana"]]
-                        , $val[$nom_columnas["Tipo exhibicion"]]
-                        , $val[$nom_columnas["Tipo Producto"]]
-                        , $debut
-                        , $val[$nom_columnas["Temporada"]]
-                        , $val[$nom_columnas["Precio"]]
-                        , $val[$nom_columnas["Oferta"]]
-                        , $val[$nom_columnas["Ranking de venta"]]
-                        , $val[$nom_columnas["Ciclo de Vida"]]
-                        , $val[$nom_columnas["Piramide Mix"]]
-                        , $val[$nom_columnas["Ratio compra"]]
-                        , $val[$nom_columnas["Factor amplificacion"]]
-                        , $val[$nom_columnas["Ratio compra final"]]
-                        , valida_archivo_bmt::Valida_DEBUT_REORDER($val[$nom_columnas["Cluster"]],$debut,"CLUSTER")
-                        , valida_archivo_bmt::Valida_DEBUT_REORDER($val[$nom_columnas["Formato"]],$debut,"FORMATO")
-                        , $val[$nom_columnas["Compra Unidades Assortment"]]
-                        , $val[$nom_columnas["Compra Unidades final"]]
-                        , $val[$nom_columnas["Var%"]]
-                        , ($val[$nom_columnas["Target USD"]] <> null ? ($val[$nom_columnas["Target USD"]]) : 0)
-                        , ($val[$nom_columnas["FOB USD"]] <> null ? ($val[$nom_columnas["FOB USD"]]) : 0)
-                        , ($val[$nom_columnas["RFID USD"]] <> null ? ($val[$nom_columnas["RFID USD"]]) : 0)
-                        , $val[$nom_columnas["Via"]]
-                        , $val[$nom_columnas["Pais"]]
-                        , $val[$nom_columnas["Proveedor"]]
-                        , $val[$nom_columnas["Comentarios Post Negociacion"]]
-                        , $val[$nom_columnas["Fecha de Embarque Acordada"]]
-                        , $val[$nom_columnas["Factor"]]
-                        , $val[$nom_columnas["Costo Total"]]
-                        , $val[$nom_columnas["Retail Total sin iva"]]
-                        , $val[$nom_columnas["MUP Compra"]]
-                        , $val[$nom_columnas["Exhibicion"]]
-                        , $val[$nom_columnas["Talla1"]], $val[$nom_columnas["Talla2"]], $val[$nom_columnas["Talla3"]]
-                        , $val[$nom_columnas["Talla4"]], $val[$nom_columnas["Talla5"]], $val[$nom_columnas["Talla6"]]
-                        , $val[$nom_columnas["Talla7"]], $val[$nom_columnas["Talla8"]], $val[$nom_columnas["Talla9"]]
-                        , $val[$nom_columnas["Inner"]]
-                        , $val[$nom_columnas["Curva1"]], $val[$nom_columnas["Curva2"]], $val[$nom_columnas["Curva3"]]
-                        , $val[$nom_columnas["Curva4"]], $val[$nom_columnas["Curva5"]], $val[$nom_columnas["Curva6"]]
-                        , $val[$nom_columnas["Curva7"]], $val[$nom_columnas["Curva8"]], $val[$nom_columnas["Curva9"]]
-                        , $val[$nom_columnas["Validador Masterpack/Inner"]]
-                        , $val[$nom_columnas["Tipo de empaque"]]
-                        , $val[$nom_columnas["N curvas por caja curvadas"]]
-                        , $val[$nom_columnas["1_%"]], $val[$nom_columnas["2_%"]], $val[$nom_columnas["3_%"]]
-                        , $val[$nom_columnas["4_%"]], $val[$nom_columnas["5_%"]], $val[$nom_columnas["6_%"]]
-                        , $val[$nom_columnas["7_%"]], $val[$nom_columnas["8_%"]], $val[$nom_columnas["9_%"]]
-                        , $val[$nom_columnas["TiendasA"]]
-                        , $val[$nom_columnas["TiendasB"]]
-                        , $val[$nom_columnas["TiendasC"]]
-                        , $val[$nom_columnas["TiendasI"]]
-                        , valida_archivo_bmt::ValidaCurvasxtdasDebut($val[$nom_columnas["ClusterA"]],$debut)
-                        , valida_archivo_bmt::ValidaCurvasxtdasDebut($val[$nom_columnas["ClusterB"]],$debut)
-                        , valida_archivo_bmt::ValidaCurvasxtdasDebut($val[$nom_columnas["ClusterC"]],$debut)
-                        , valida_archivo_bmt::ValidaCurvasxtdasDebut($val[$nom_columnas["ClusterI"]],$debut)
-                        , $val[$nom_columnas["Size%1"]], $val[$nom_columnas["Size%2"]], $val[$nom_columnas["Size%3"]]
-                        , $val[$nom_columnas["Size%4"]], $val[$nom_columnas["Size%5"]], $val[$nom_columnas["Size%6"]]
-                        , $val[$nom_columnas["Size%7"]], $val[$nom_columnas["Size%8"]], $val[$nom_columnas["Size%9"]]
-                        , $val[$nom_columnas["UNIDADES"]]
-                    ));
+    public static function Limpieza_data_Assortment($rows,$limite){
+        $dt1 = plan_compra::list_ocacionuso();
+        $dt2 = plan_compra::list_estiloVida();
+        $dt3 = plan_compra::list_calidad();
+        for($i = 0;$i <= $limite; $i++){
+            if($i<>0) {
+                $debut = strtoupper($rows[$i]["Debut o Reorder"]);
+                $rows[$i]["Cluster"] = valida_archivo_bmt::Valida_DEBUT_REORDER($rows[$i]["Cluster"], $debut, "CLUSTER");
+                $rows[$i]["Formato"] = valida_archivo_bmt::Valida_DEBUT_REORDER($rows[$i]["Formato"], $debut, "FORMATO");
+                $rows[$i]["Target USD"] = ($rows[$i]["Target USD"] <> null ? ($rows[$i]["Target USD"]) : 0);
+                $rows[$i]["FOB USD"] = ($rows[$i]["FOB USD"] <> null ? ($rows[$i]["FOB USD"]) : 0);
+                $rows[$i]["RFID USD"] = ($rows[$i]["RFID USD"] <> null ? ($rows[$i]["RFID USD"]) : 0);
+                $rows[$i]["ClusterA"] = valida_archivo_bmt::ValidaCurvasxtdasDebut($rows[$i]["ClusterA"], $debut);
+                $rows[$i]["ClusterB"] = valida_archivo_bmt::ValidaCurvasxtdasDebut($rows[$i]["ClusterB"], $debut);
+                $rows[$i]["ClusterC"] = valida_archivo_bmt::ValidaCurvasxtdasDebut($rows[$i]["ClusterC"], $debut);
+                $rows[$i]["ClusterI"] = valida_archivo_bmt::ValidaCurvasxtdasDebut($rows[$i]["ClusterI"], $debut);
+                $rows[$i]["cod_estilo_vida"] = plan_compra::get_codEstilovida($rows[$i]["Estilo de Vida"],$dt2);
+                $rows[$i]["cod_ocacion_uso"] = plan_compra::get_codocacionuso($rows[$i]["Ocasion de uso"],$dt1);
+                $rows[$i]["cod_calidad"] = plan_compra::get_calidad($rows[$i]["Calidad"],$dt3);
             }
         }
-        return $arrayinsert;
+        return $rows;
     }
 
 

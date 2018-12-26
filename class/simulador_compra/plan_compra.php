@@ -2829,7 +2829,15 @@ class plan_compra extends \parametros {
                 /*V_FECHA_EMBARQUE_ACORDADA*/   ",TO_DATE('" . $rows['Fecha de Embarque Acordada'] . "','dd-mm-yyyy')".
                 /*V_UNIDADES*/                  ",'" . $rows['UNIDADES'] . "'".
                 /*V_VENTANA*/                   ",'" . $rows['Ventana'] . "'".
-
+                /*V_DESCRIP_INTERNET*/          ",'" . $rows['Descripcion Internet'] . "'".
+                /*V_NOM_CALIDAD*/               ",'" . $rows['Calidad'] . "'".
+                /*V_COLECCION*/                 ",'" . $rows['Coleccion'] . "'".
+                /*V_NOM_ESTILOVIDA*/            ",'" . $rows['Estilo de Vida'] . "'".
+                /*V_NOM_OCACIONUSO*/            ",'" . $rows['Ocasion de uso'] . "'".
+                /*V_EVENTO_INSTORE*/            ",'" . $rows['Evento In Store'] . "'".
+                /*V_DOSX*/                      ",'" . $rows['2x'] . "'".
+                /*V_OPEX*/                      ",'" . $rows['Opex'] . "'".
+                /*V_COSTO_INSP*/                ","  . ($rows['INSP USD']  <> null ? ($rows['INSP USD']) : 0) . "".
                 ", :error, :data); end;");
 
         $data = \database::getInstancia()->getConsultaSP($sql, 2);
@@ -2904,7 +2912,7 @@ class plan_compra extends \parametros {
                     /*V_PRECIO_BLANCO*/         ","  . $rows['Precio'] . "" .
                 /*V_PRECIO_BLANCOH*/        ",0" .
                     /*V_COSTO_FOB*/             ","  . $rows['FOB USD'] ."".
-                /*V_COSTO_INSP*/            ",0" .
+                /*V_COSTO_INSP*/            ","  . $rows['INSP USD'] ."".
                 /*V_COSTO_HANGER*/          ",0" .
                 /*V_COSTO_STICKER*/         ",0" .
                 /*V_DUMPING_POR*/           ",0" .
@@ -2953,11 +2961,11 @@ class plan_compra extends \parametros {
                 /*V_DIST*/                  ",0" .
                     /*V_COMPOSICION*/           ",'" . $rows['Composicion'] ."'" .
                     /*V_TEMP*/                  ","  . $rows['cod_temp'] . "" .
-                /*V_COLECCION*/             ",0" .
-                /*V_COD_ESTILO_VIDA*/       ",0" .
+                /*V_COLECCION*/             ",'" . utf8_encode($rows['Coleccion']) . "'" .
+                /*V_COD_ESTILO_VIDA*/       ","  . $rows['cod_estilo_vida'] . "" .
                     /*V_DESCMODELO*/            ",'" . utf8_encode($rows['Descripcion Estilo']) . "'" .
-                /*V_CALIDAD*/               ",0" .
-                /*V_COD_OCASION_USO*/       ",0" .
+                /*V_CALIDAD*/               ","  . $rows['cod_calidad'] . "" .
+                /*V_COD_OCASION_USO*/       ","  . $rows['cod_ocacion_uso'] . "" .
                     /*V_ALIAS_PROV*/            ",'" . $rows['Proveedor'] ."'" .
                 /*V_COD_PROVEEDOR*/         ",0" .
                 /*V_COD_TRADER*/            ",0" .
@@ -2974,9 +2982,9 @@ class plan_compra extends \parametros {
                     /*V_NOM_LINEA*/             ",'" . utf8_encode($rows['nom_linea']) . "'" .
                     /*V_NOM_SUBLINEA*/          ",'" . utf8_encode($rows['nom_sublinea']) . "'" .
                     /*V_NOM_MARCA*/             ",'" . utf8_encode($rows['nom_marca']) . "'" .
-                /*V_NOM_ESTILOVIDA*/        ",''".
-                /*V_NOM_CALIDAD*/           ",''".
-                /*V_NOM_OCACIONUSO*/        ",''".
+                /*V_NOM_ESTILOVIDA*/        ",'" . utf8_encode($rows['Estilo de Vida']) . "'" .
+                /*V_NOM_CALIDAD*/           ",'" . utf8_encode($rows['Calidad']) . "'" .
+                /*V_NOM_OCACIONUSO*/        ",'" . utf8_encode($rows['Ocasion de uso']) . "'" .
                     /*V_NOM_PIRAMIDEMIX*/       ",'" . $rows['Piramide Mix'] . "'" .
                     /*V_NOM_VENTANA*/           ",'" . $rows['Ventana'] . "'" .
                     /*V_NOM_LIFECYCLE*/         ",'" . $rows['Ciclo de Vida'] . "'" .
@@ -3053,7 +3061,7 @@ class plan_compra extends \parametros {
                     /*V_TIPO_EMPAQUE*/          ",'" . trim(strtoupper($rows['Tipo de empaque'])) . "'" .
                 /*V_CURVA_COMPRA*/          ",0" .
                     /*V_I*/                     ","  . $rows['ClusterI']. "" .
-                /*V_INTERNET_DESCRIPTION*/  ",''".
+                /*V_INTERNET_DESCRIPTION*/  ",'" . $rows['Descripcion Internet'] . "'" .
                     /*V_COSTO_RFID*/            ","  . ($rows['RFID USD']<> null ? ($rows['RFID USD']) : 0). "" .
                 /*V_ERROR_PI*/              ",''".
                     /*V_SHORT_NAME*/            ",'" . $rows['Estilo Corto'] . "'".
@@ -3064,7 +3072,10 @@ class plan_compra extends \parametros {
                     /*V_FORRO*/                 ",'" . $rows['Forro'] . "'".
                     /*V_OFERTA*/                ",'" . $rows['Oferta'] . "'".
                     /*V_COME_POST_NEGOCIACION*/ ",'" . $rows['Comentarios Post Negociacion'] . "'".
-                    /*V_F_EMBARQUE_ACORDADA*/   ",TO_DATE('" . $rows['Fecha de Embarque Acordada'] . "','dd-mm-yyyy'), :error, :data); end;");
+                /*V_F_EMBARQUE_ACORDADA*/   ",TO_DATE('" . $rows['Fecha de Embarque Acordada'] . "','dd-mm-yyyy')".
+                /*V_EVENTO_INSTORE*/      ",'" . $rows['Evento In Store'] . "'".
+                /*V_DOSX*/                ",'" . $rows['2x'] . "'".
+                /*V_OPEX*/                ",'" . $rows['Opex'] . "', :error, :data); end;");
 
 
         $data = \database::getInstancia()->getConsultaSP($sql, 2);
@@ -3248,12 +3259,14 @@ class plan_compra extends \parametros {
         $logAjustes= [];
         $dtcolores = plan_compra::list_colores();
         $key = 0;
+
         for($i = 0;$i <= $limite; $i++){
             if ($i <> 0) {
                 if ($i == 1) {//Borrar filas, maximo id_color3
                     plan_compra::DeleteRowsPlan($cod_tempo, $depto, $rows[$i]['Codigo Marca'], $rows[$i]['Grupo de compra']);
                     $key = plan_compra::get_maxidplan($cod_tempo, $depto) + 1;
                 }
+
                 $dtmarcas = plan_compra::list_Marcas($depto);
                 $cod_vent = plan_compra::get_codName($rows[$i]['Ventana'], plan_compra::list_ventanas($cod_tempo));
                 $cod_pais = plan_compra::get_codName($rows[$i]['Pais'], plan_compra::list_pais());
@@ -3270,16 +3283,15 @@ class plan_compra extends \parametros {
 
                 /*COSTOS*/
                 $rfid = number_format($rows[$i]['RFID USD'], 2, '.', ',');
-                $COS_UNI_US = plan_compra::get_COS_UNI_US($rows[$i]['Target USD'], $rfid, $rows[$i]['FOB USD']);
+                $COS_UNI_US = plan_compra::get_COS_UNI_US($rows[$i]['Target USD'], $rfid, $rows[$i]['FOB USD'],$rows[$i]['INSP USD']);
                 $COS_UNI_PESOS = plan_compra::getC_uni_final($COS_UNI_US, $rows[$i]['Ventana'], $cod_tempo, $depto, $cod_pais, $cod_via);
-                $Cos_Total_Target_us = ($rows[$i]['Target USD'] + $rows[$i]['RFID USD']) * $dtAjustada[3];
-                $Cos_Total_Fob_us = plan_compra::get_cos_final_fob_us($rows[$i]['Target USD'], $rows[$i]['RFID USD'], $rows[$i]['FOB USD'], $dtAjustada[3]);
+                $Cos_Total_Target_us = ($rows[$i]['Target USD'] + $rows[$i]['RFID USD']+$rows[$i]['INSP USD']) * $dtAjustada[3];
+                $Cos_Total_Fob_us = plan_compra::get_cos_final_fob_us($rows[$i]['Target USD'], $rows[$i]['RFID USD'], $rows[$i]['FOB USD'], $dtAjustada[3],$rows[$i]['INSP USD']);
                 $Cos_Finl_Pesos = plan_compra::getC_uni_finalbmt($Cos_Total_Fob_us, $rows[$i]['Ventana'], $cod_tempo, $depto, $cod_pais, $cod_via);
                 $Cos_Total_Fob_usIns = 0;
                 if ($rows[$i]['FOB USD'] <> 0) {
                     $Cos_Total_Fob_usIns = $Cos_Total_Fob_us;
                 }
-
                 $rows[$i]["Color"] = plan_compra::get_nomcolor2($dtcolores, $rows[$i]["Cod Color"]);
                 $rows[$i]["RFID USD"] = $rfid;
                 $rows[$i]["ClusterA"] = $dtclustercurva[0];
@@ -3361,8 +3373,6 @@ class plan_compra extends \parametros {
             }
         }
 
-
-
         $key4 = 0;$logInsert = "";$count = count($logAjustes);
         foreach ($logAjustes as $val4){$key4++;
             if($count == $key4){
@@ -3376,23 +3386,23 @@ class plan_compra extends \parametros {
     }
 
 
-    public static function get_COS_UNI_US($target,$rfid,$fob) {
+    public static function get_COS_UNI_US($target,$rfid,$fob,$insp) {
         $val = 0;
         if($fob == 0){
-            $val = $target + $rfid;
+            $val = $target + $rfid + $insp;
         }else{
-            $val = $fob + $rfid;
+            $val = $fob + $rfid + $insp;
         }
         return $val;
     }
 
-    public static function get_cos_final_fob_us($target,$rfid,$fob,$unidades){
+    public static function get_cos_final_fob_us($target,$rfid,$fob,$unidades,$insp){
         $val = 0;
         if ($fob == 0){
-            $val = ($target+$rfid)*$unidades;
+            $val = ($target+$rfid+$insp)*$unidades;
 
         }else{
-            $val = ($fob+$rfid)*$unidades;
+            $val = ($fob+$rfid+$insp)*$unidades;
         }
         return $val;
     }
@@ -3407,6 +3417,11 @@ class plan_compra extends \parametros {
     }
     public static function list_ocacionuso(){
         $sql = "SELECT CODIGO,DESCRIPCION FROM PLC_OCASIONDEUSO";
+        $data = \database::getInstancia()->getFilas($sql);
+        return $data;
+    }
+    public static function list_calidad(){
+        $sql = "SELECT CODIGO,DESCRIPCION FROM PLC_DECO_CALIDAD";
         $data = \database::getInstancia()->getFilas($sql);
         return $data;
     }
@@ -3759,6 +3774,16 @@ class plan_compra extends \parametros {
         return $cod;
     }
     public static function get_codocacionuso($nom,$dt){
+        $cod =0;
+        foreach ($dt as $val){
+            if (strtoupper($nom) == strtoupper($val['DESCRIPCION'])){
+                $cod = $val['CODIGO'];
+                break;
+            }
+        }
+        return $cod;
+    }
+    public static function get_calidad($nom,$dt){
         $cod =0;
         foreach ($dt as $val){
             if (strtoupper($nom) == strtoupper($val['DESCRIPCION'])){
