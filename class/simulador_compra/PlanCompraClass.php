@@ -3525,7 +3525,7 @@ class PlanCompraClass extends \parametros
         // Si es administrador, le agrego todas las acciones
         if( $cod_tipusr == 99 ) {
 
-            $sql = "SELECT 'TOTALREGPLAN' ID_TELERIK, TO_CHAR(COUNT(*)) NOMBRE_ACCION
+            $sql = "SELECT 'TOTALREGPLAN' ID_TELERIK, TO_CHAR(COUNT(*)+1) NOMBRE_ACCION
                     FROM PLC_PLAN_COMPRA_COLOR_3
                     WHERE COD_TEMPORADA = $temporada AND DEP_DEPTO = '" . $depto . "'
                     UNION ALL
@@ -3533,7 +3533,7 @@ class PlanCompraClass extends \parametros
                     FROM plc_modulo_accion";
         } else {
 
-            $sql = "SELECT 'TOTALREGPLAN' ID_TELERIK, TO_CHAR(COUNT(*)) NOMBRE_ACCION
+            $sql = "SELECT 'TOTALREGPLAN' ID_TELERIK, TO_CHAR(COUNT(*)+1) NOMBRE_ACCION
                     FROM PLC_PLAN_COMPRA_COLOR_3
                     WHERE COD_TEMPORADA = $temporada AND DEP_DEPTO = '" . $depto . "'
                     UNION ALL
