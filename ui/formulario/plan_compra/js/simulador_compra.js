@@ -6,7 +6,7 @@ $(function () {
         // sessionStorage.clear();
 
     }else{
-    
+
         sessionStorage.setItem("RECARGAGRILLA", "OK");
 
         /*setTimeout(

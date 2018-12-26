@@ -10,6 +10,8 @@ $(function () {
 
             // Limpiar el Local Storage
             localStorage.clear();
+            // Limpiar el Session Storage
+            sessionStorage.removeItem('RECARGAGRILLA');
 
             //var arregloPermisosUsuarios = [];
             var PermisosUsuario = JSON.parse(result);
