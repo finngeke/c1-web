@@ -719,7 +719,7 @@ public function ImportarAssormentInsHistorial2($f3){
         plan_compra::InsertHistoricadelAssorment($cod_tempo,$depto,$codMarca,$grupo_compra);
     }
 
-    $_ERROR = plan_compra::InsertHistoricaAssortment2($rows,$cod_tempo,$depto,$codMarca);
+    $_ERROR = plan_compra::InsertHistoricaAssortment2($rows,$Columnas,$cod_tempo,$depto,$codMarca);
 
    $_val = "";
     if ($_ERROR["Tipo"] == false ){
@@ -848,7 +848,6 @@ public function InsertarAssormentC12($f3){
     echo $_val;
     }
 
-//Importar Assortment
 Public function ImportarAssormentExtraccionDatos($f3){
 
         #region {*************Extrer Excel*************}
@@ -876,7 +875,7 @@ Public function ImportarAssormentExtraccionDatos($f3){
                 $count = 0;
                 foreach ($cellIterator as $cell) {
                     $count += 1;
-                    if ($count > 113){
+                    if ($count > 104){
                         break;
                     }
                     if ($column <= 1 ){
@@ -911,7 +910,7 @@ public function ImportarAssormentValidaciones($f3){
     $_array = array("Error" => "","msjError" => "");
     $temporada = \temporada\temporada::getTemporadaCompra($f3->get('SESSION.COD_TEMPORADA'))->NOM_TEMPORADA_CORTO;
 
-    if ($tipo == 1){
+    if ($tipo){
         //Validacion de Columnas.
         $_ERROR2 = valida_archivo_bmt::Val_CamposObligatorio($rows[2],1);
 
@@ -1017,7 +1016,6 @@ public function ImportarAssormentValidaciones($f3){
         $_SESSION['dtAssorment']=$rows;
     }
     else{
-
         $limite = (count($rows)-1);
         $nom_columnas = array_flip($rows[2]);
         //validacion del codigo opcion
@@ -1108,103 +1106,94 @@ public function ImportarAssormentdelrows(){
                     "Nombre Estilo"=>$val[13],
                     "Estilo Corto"=>$val[14],
                     "Descripcion Estilo"=>$val[15],
-                    "Descripcion Internet"=>$val[16],
-                    "Cod Opcion"=>$val[17],
-                    "Color"=>$val[18],
-                    "Cod Color"=>$val[19],
-                    "Composicion"=>$val[20],
-                    "Tipo de Tela"=>$val[21],
-                    "Forro"=>$val[22],
-                    "Calidad"=>$val[23],
-                    "Coleccion"=>$val[24],
-                    "Estilo de Vida"=>$val[25],
-                    "Ocasion de uso"=>$val[26],
-                    "Evento"=>$val[27],
-                    "Evento In Store"=>$val[28],
-                    "Grupo de compra"=>$val[29],
-                    "Ventana"=>$val[30],
-                    "Tipo exhibicion"=>$val[31],
-                    "Tipo Producto"=>$val[32],
-                    "Debut o Reorder"=>$val[33],
-                    "Temporada"=>$val[34],
-                    "Precio"=>$val[35],
-                    "Oferta"=>$val[36],
-                    "2x"=>$val[37],
-                    "Opex"=>$val[38],
-                    "Ranking de venta"=>$val[39],
-                    "Ciclo de Vida"=>$val[40],
-                    "Piramide Mix"=>$val[41],
-                    "Ratio compra"=>$val[42],
-                    "Factor amplificacion"=>$val[43],
-                    "Ratio compra final"=>$val[44],
-                    "Cluster"=>$val[45],
-                    "Formato"=>$val[46],
-                    "Compra Unidades Assortment"=>$val[47],
-                    "Compra Unidades final"=>$val[48],
-                    "Var%"=>$val[49],
-                    "Target USD"=>$val[50],
-                    "FOB USD"=>$val[51],
-                    "RFID USD"=>$val[52],
-                    "INSP USD"=>$val[53],
-                    "Via"=>$val[54],
-                    "Pais"=>$val[55],
-                    "Proveedor"=>$val[56],
-                    "Comentarios Post Negociacion"=>$val[57],
-                    "Fecha de Embarque Acordada"=>$val[58],
-                    "Factor"=>$val[59],
-                    "Costo Total"=>$val[60],
-                    "Retail Total sin iva"=>$val[61],
-                    "MUP Compra"=>$val[62],
-                    "Exhibicion"=>$val[63],
-                    "Talla1"=>$val[64],
-                    "Talla2"=>$val[65],
-                    "Talla3"=>$val[66],
-                    "Talla4"=>$val[67],
-                    "Talla5"=>$val[68],
-                    "Talla6"=>$val[69],
-                    "Talla7"=>$val[70],
-                    "Talla8"=>$val[71],
-                    "Talla9"=>$val[72],
-                    "Inner"=>$val[73],
-                    "Curva1"=>$val[74],
-                    "Curva2"=>$val[75],
-                    "Curva3"=>$val[76],
-                    "Curva4"=>$val[77],
-                    "Curva5"=>$val[78],
-                    "Curva6"=>$val[79],
-                    "Curva7"=>$val[80],
-                    "Curva8"=>$val[81],
-                    "Curva9"=>$val[82],
-                    "Validador Masterpack/Inner"=>$val[83],
-                    "Tipo de empaque"=>$val[84],
-                    "N curvas por caja curvadas"=>$val[85],
-                    "1_%"=>$val[86],
-                    "2_%"=>$val[87],
-                    "3_%"=>$val[88],
-                    "4_%"=>$val[89],
-                    "5_%"=>$val[90],
-                    "6_%"=>$val[91],
-                    "7_%"=>$val[92],
-                    "8_%"=>$val[93],
-                    "9_%"=>$val[94],
-                    "TiendasA"=>$val[95],
-                    "TiendasB"=>$val[96],
-                    "TiendasC"=>$val[97],
-                    "TiendasI"=>$val[98],
-                    "ClusterA"=>$val[99],
-                    "ClusterB"=>$val[100],
-                    "ClusterC"=>$val[101],
-                    "ClusterI"=>$val[102],
-                    "Size%1"=>$val[103],
-                    "Size%2"=>$val[104],
-                    "Size%3"=>$val[105],
-                    "Size%4"=>$val[106],
-                    "Size%5"=>$val[107],
-                    "Size%6"=>$val[108],
-                    "Size%7"=>$val[109],
-                    "Size%8"=>$val[110],
-                    "Size%9"=>$val[111],
-                    "UNIDADES"=>$val[112],
+                    "Cod Opcion"=>$val[16],
+                    "Color"=>$val[17],
+                    "Cod Color"=>$val[18],
+                    "Composicion"=>$val[19],
+                    "Tipo de Tela"=>$val[20],
+                    "Forro"=>$val[21],
+                    "Evento"=>$val[22],
+                    "Grupo de compra"=>$val[23],
+                    "Ventana"=>$val[24],
+                    "Tipo exhibicion"=>$val[25],
+                    "Tipo Producto"=>$val[26],
+                    "Debut o Reorder"=>$val[27],
+                    "Temporada"=>$val[28],
+                    "Precio"=>$val[29],
+                    "Oferta"=>$val[30],
+                    "Ranking de venta"=>$val[31],
+                    "Ciclo de Vida"=>$val[32],
+                    "Piramide Mix"=>$val[33],
+                    "Ratio compra"=>$val[34],
+                    "Factor amplificacion"=>$val[35],
+                    "Ratio compra final"=>$val[36],
+                    "Cluster"=>$val[37],
+                    "Formato"=>$val[38],
+                    "Compra Unidades Assortment"=>$val[39],
+                    "Compra Unidades final"=>$val[40],
+                    "Var%"=>$val[41],
+                    "Target USD"=>$val[42],
+                    "FOB USD"=>$val[43],
+                    "RFID USD"=>$val[44],
+                    "Via"=>$val[45],
+                    "Pais"=>$val[46],
+                    "Proveedor"=>$val[47],
+                    "Comentarios Post Negociacion"=>$val[48],
+                    "Fecha de Embarque Acordada"=>$val[49],
+                    "Factor"=>$val[50],
+                    "Costo Total"=>$val[51],
+                    "Retail Total sin iva"=>$val[52],
+                    "MUP Compra"=>$val[53],
+                    "Exhibicion"=>$val[54],
+                    "Talla1"=>$val[55],
+                    "Talla2"=>$val[56],
+                    "Talla3"=>$val[57],
+                    "Talla4"=>$val[58],
+                    "Talla5"=>$val[59],
+                    "Talla6"=>$val[60],
+                    "Talla7"=>$val[61],
+                    "Talla8"=>$val[62],
+                    "Talla9"=>$val[63],
+                    "Inner"=>$val[64],
+                    "Curva1"=>$val[65],
+                    "Curva2"=>$val[66],
+                    "Curva3"=>$val[67],
+                    "Curva4"=>$val[68],
+                    "Curva5"=>$val[69],
+                    "Curva6"=>$val[70],
+                    "Curva7"=>$val[71],
+                    "Curva8"=>$val[72],
+                    "Curva9"=>$val[73],
+                    "Validador Masterpack/Inner"=>$val[74],
+                    "Tipo de empaque"=>$val[75],
+                    "N curvas por caja curvadas"=>$val[76],
+                    "1_%"=>$val[77],
+                    "2_%"=>$val[78],
+                    "3_%"=>$val[79],
+                    "4_%"=>$val[80],
+                    "5_%"=>$val[81],
+                    "6_%"=>$val[82],
+                    "7_%"=>$val[83],
+                    "8_%"=>$val[84],
+                    "9_%"=>$val[85],
+                    "TiendasA"=>$val[86],
+                    "TiendasB"=>$val[87],
+                    "TiendasC"=>$val[88],
+                    "TiendasI"=>$val[89],
+                    "ClusterA"=>$val[90],
+                    "ClusterB"=>$val[91],
+                    "ClusterC"=>$val[92],
+                    "ClusterI"=>$val[93],
+                    "Size%1"=>$val[94],
+                    "Size%2"=>$val[95],
+                    "Size%3"=>$val[96],
+                    "Size%4"=>$val[97],
+                    "Size%5"=>$val[98],
+                    "Size%6"=>$val[99],
+                    "Size%7"=>$val[100],
+                    "Size%8"=>$val[101],
+                    "Size%9"=>$val[102],
+                    "UNIDADES"=>$val[103],
                     "cod_piramidemix"=>"",
                     "und_finales"=>"",
                     "Sem_ini"=>"",
@@ -1258,9 +1247,6 @@ public function ImportarAssormentdelrows(){
                     "id_color3"=>"",
                     "n_tdas"=>"",
                     "cos_total_fob_us"=>"",
-                    "cod_estilo_vida"=>"",
-                    "cod_ocacion_uso"=>"",
-                    "cod_calidad"=>""
                 ));
         }
 
@@ -1286,6 +1272,7 @@ public function ImportarAssormentInsHistorial($f3){
                                                           ,$rows['Codigo Marca']);
         echo json_encode($_ERROR);
     }
+
 public function ImpAssormAbrirDataVent(){
         $_array = array("Error" => "","msjError" => "");
         $rows = $_SESSION['dtAssorment'];
@@ -1313,6 +1300,7 @@ public function ImpAssormCalculos($f3){
         
         echo json_encode($rows);
     }
+
 public function InsertarAssormentC1($f3){
 
     //insertado en el plan
@@ -1323,7 +1311,7 @@ public function InsertarAssormentC1($f3){
 
         echo json_encode($_ERROR);
 }
-//FIN IMPORTAR ASSORTMENT
+
 
 public function Mensaje_Guardado($f3){
         $f3->set('SESSION.exito', 'Insertado Correctamente');
