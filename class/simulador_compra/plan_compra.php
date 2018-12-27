@@ -978,7 +978,8 @@ class plan_compra extends \parametros {
             ." WHERE  COD_TEMPORADA = ".$temporada.""
             ." AND    DEP_DEPTO     = '".$depto."'"
             ." UNION SELECT 5 COD_SEG,'A+B+I' FROM DUAL"
-            ." UNION SELECT 6 COD_SEG,'A+B+C+I' FROM DUAL";
+            ." UNION SELECT 6 COD_SEG,'A+B+C+I' FROM DUAL 
+               UNION SELECT 7 COD_SEG,'I' FROM DUAL";
         $data = \database::getInstancia()->getFilas($sql);
         return $data;
     }
