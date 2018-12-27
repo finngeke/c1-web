@@ -1016,7 +1016,7 @@ $(function () {
 
 
                     // ############## Revisar si hay más marcas ##############
-                    dataSource_cbx_marca.fetch(function () {
+                    /*dataSource_cbx_marca.fetch(function () {
                         var data = this.data();
 
                         // Existe más de una marca
@@ -1063,7 +1063,7 @@ $(function () {
                             sheet.dataSource.read();
                         }
 
-                    });
+                    });*/
 
 
 

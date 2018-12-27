@@ -635,7 +635,7 @@ $(function () {
                 fields: {
                     ID_COLOR3: {type: "number"},
                     GRUPO_COMPRA: {type: "string"},
-                    COD_TEMP: {type: "number"},
+                    COD_TEMP: {type: "string"},
                     LINEA: {type: "string"},
                     SUBLINEA: {type: "string"},
                     MARCA: {type: "string"},

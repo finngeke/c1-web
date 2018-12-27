@@ -12,7 +12,7 @@ class PlanCompraClass extends \parametros
 {
 
     // Lista el Plan de Compra, según temporada seleccionada
-    public static function ListarPlanCompra($temporada, $depto, $login,$CURLOPT_PORT,$CURLOPT_URL)
+    public static function ListarPlanCompra($temporada, $depto, $login,$CURLOPT_PORT,$CURLOPT_URL,$nom_temp_corto)
     {
 
         $sql = "SELECT
@@ -300,11 +300,19 @@ class PlanCompraClass extends \parametros
                 $agot_obj_corregido = $va1[73];
             }
 
+            // Nombre de la Temporada en Grilla
+            if($va1[2]==3){
+                $var_mom_temp = "Ttemp";
+            }else{
+                $var_mom_temp = substr($nom_temp_corto,0,2); //$va1[2];
+            }
+
+
             array_push($array1
                 , array(
                     "ID_COLOR3" => $va1[0]
                 , "GRUPO_COMPRA" => $va1[1]
-                , "COD_TEMP" => $va1[2]
+                , "COD_TEMP" => $var_mom_temp //$va1[2]
                 , "LINEA" => $va1[3]
                 , "SUBLINEA" => $va1[4]
                 , "MARCA" => $va1[5]

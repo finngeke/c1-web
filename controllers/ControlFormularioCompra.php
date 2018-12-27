@@ -64,6 +64,7 @@
 
 			$f3->set('NOM_TEMPORADA', $temporada->NOM_TEMPORADA);
 			$f3->set('NOM_TEMPORADA_CORTO', $temporada->NOM_TEMPORADA_CORTO);
+			$f3->set('SESSION.NOM_TEMPORADA_CORTO', $temporada->NOM_TEMPORADA_CORTO);
 			$f3->set('COD_TEMPORADA', $f3->get('SESSION.COD_TEMPORADA'));
 			$f3->set('COD_EST_TEMP', $temporada->COD_EST_TEMP);
 			$f3->set('USR_CRE', $temporada->USR_CRE);
