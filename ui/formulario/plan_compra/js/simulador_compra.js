@@ -1,23 +1,5 @@
 $(function () {
 
-    if(sessionStorage.getItem('RECARGAGRILLA')) {
-
-        sessionStorage.removeItem('RECARGAGRILLA');
-        // sessionStorage.clear();
-
-    }else{
-
-        sessionStorage.setItem("RECARGAGRILLA", "OK");
-
-        /*setTimeout(
-            function()
-            {*/
-                location.reload(true);
-            //}, 1000);
-
-        return false;
-    }
-
     // Actualiza Fecha de Concurrencia (Solo se agrega en este JS, ya que desde fuera no se puede llamar)
     function ActualizaConcurrencia() {
 
@@ -622,11 +604,6 @@ var cont_total_registros = 10;
         },
         transport: {
             read: onRead,
-            /*read: {
-                url: crudServiceBaseUrl + "ListarPlanCompra",
-                dataType: "json",
-                cache: false
-            },*/
             submit: onSubmit
         },
         batch: true,
@@ -758,7 +735,6 @@ var cont_total_registros = 10;
 
     // Asigna la estructura visual de la Grilla tipo Excel
     $("#spreadsheet").kendoSpreadsheet({
-        autoBind:false,
         /*render: function(e){
             // do custom height calculations to determine desired height
             var height = window.innerHeight;
@@ -839,11 +815,11 @@ var cont_total_registros = 10;
         sheets: [{
             name: "PlanDeCompra",
             dataSource: dataSource,
-            /*filter: {
+            filter: {
                 ref: "A1:CR"+localStorage.getItem("TOTALREGPLAN"),
                 //ref: "A1:CR1500",
                 columns:[]
-            },*/
+            },
             columns: [
                 {width: 40},    // id
                 {width: 100},   // G. Compra
@@ -979,6 +955,8 @@ var cont_total_registros = 10;
             ev.preventDefault();
         }
     }, true);
+
+
 
 
     // ################## OTRAS FUNCIONES ASOCIADAS A LA ESTRUCTURA DE LAGRILLA ####################
