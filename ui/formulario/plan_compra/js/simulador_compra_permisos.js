@@ -10,6 +10,8 @@ $(function () {
 
             // Limpiar el Local Storage
             localStorage.clear();
+            // Limpiar el Session Storage
+            sessionStorage.removeItem('RECARGAGRILLA');
 
             //var arregloPermisosUsuarios = [];
             var PermisosUsuario = JSON.parse(result);
@@ -20,6 +22,10 @@ $(function () {
 
         },
         error: function (xhr, httpStatusMessage, customErrorMessage) {
+
+            // Limpiar el Local Storage
+            localStorage.clear();
+
             console.log("Detalle Error: ".xhr.responseText+" / "+httpStatusMessage+" / "+customErrorMessage);
         }
     });
