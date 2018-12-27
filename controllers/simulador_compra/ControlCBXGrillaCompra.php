@@ -109,7 +109,7 @@
                                     ;
                                     array_push($dt2021, array($proforma, $val["PO_NUMBER"], $estadoOc, $f_embarque, $f_eta, $f_recepcion, $dias_atrasado,$ESTADO,$nom_estado,$estilo_pmm,$estado_match));
                                 }
-                                elseif ($val["ESTADO_C1"] == 20 and $dt[0]["COD_ESTADO"] == 4 and $dt[0]["COD_ESTADO"] == 5 and $dt[0]["COD_ESTADO"] == 6 ){
+                                elseif ($val["ESTADO_C1"] == 20 and ($dt[0]["COD_ESTADO"] == 4 or $dt[0]["COD_ESTADO"] == 5 or $dt[0]["COD_ESTADO"] == 6 )){
                                     $estadoOc = $dt[0]["NOM_ESTADO"];
                                     $orden_compra =  utf8_encode($val["PO_NUMBER"]);
                                     $f_embarque = utf8_encode($val["FECHA_EMBARQUE"]);
