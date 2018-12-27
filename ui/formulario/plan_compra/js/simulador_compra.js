@@ -1,5 +1,19 @@
 $(function () {
 
+
+
+    /*if(sessionStorage.getItem('RECARGAGRILLA')) {
+
+        sessionStorage.removeItem('RECARGAGRILLA');
+        // sessionStorage.clear();
+
+    }else{
+
+        sessionStorage.setItem("RECARGAGRILLA", "OK");
+        location.reload(true);
+        return false;
+    }*/
+
     // Actualiza Fecha de Concurrencia (Solo se agrega en este JS, ya que desde fuera no se puede llamar)
     function ActualizaConcurrencia() {
 
@@ -49,7 +63,7 @@ $(function () {
 
 
     // ####################### FUNCIONES ASOCIADAS AL DESPLIEGUE DE DATA #######################
-var cont_total_registros = 10;
+
     // Defrine URL Base, para Llamar a los JSON
     var crudServiceBaseUrl = "TelerikPlanCompra/";
 
@@ -604,6 +618,11 @@ var cont_total_registros = 10;
         },
         transport: {
             read: onRead,
+            /*read: {
+                url: crudServiceBaseUrl + "ListarPlanCompra",
+                dataType: "json",
+                cache: false
+            },*/
             submit: onSubmit
         },
         batch: true,
@@ -735,6 +754,7 @@ var cont_total_registros = 10;
 
     // Asigna la estructura visual de la Grilla tipo Excel
     $("#spreadsheet").kendoSpreadsheet({
+        // autoBind:false,
         /*render: function(e){
             // do custom height calculations to determine desired height
             var height = window.innerHeight;
