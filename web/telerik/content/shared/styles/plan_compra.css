@@ -695,3 +695,8 @@ ul.keyboard-legend li a {
 /*.errormatch-row.k-alt {
     background-color: #F7937E;
 }*/
+
+.OpcionEliminada {
+    font-weight: bold;
+    color: #f00;
+}

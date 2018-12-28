@@ -414,6 +414,7 @@ $(function () {
                 });
             }
 
+            // Seteo el Nombre de las Cabeceras, Fijo la primera columna
             setTimeout(function (e) {
                 if (shouldPopulateHeader) {
                     shouldPopulateHeader = false;
@@ -615,13 +616,19 @@ $(function () {
                 }
             }, 0);
 
+
+
         },
         transport: {
             read: onRead,
             /*read: {
                 url: crudServiceBaseUrl + "ListarPlanCompra",
                 dataType: "json",
-                cache: false
+                cache: false,
+                complete: function(e) {
+                    $("#spreadsheet").data("kendoSpreadsheet").dataSource.read();
+                    alert("Hola");
+                }
             },*/
             submit: onSubmit
         },
@@ -754,12 +761,6 @@ $(function () {
 
     // Asigna la estructura visual de la Grilla tipo Excel
     $("#spreadsheet").kendoSpreadsheet({
-        // autoBind:false,
-        /*render: function(e){
-            // do custom height calculations to determine desired height
-            var height = window.innerHeight;
-            e.sender.element.innerHeight(height);
-        },*/
         columns: 106, //106 Siempre visible
         rows: localStorage.getItem("TOTALREGPLAN"),
         // rows: 1500,
@@ -829,7 +830,6 @@ $(function () {
                     click: Pop_editPresupuestos
                     }
             ]
-
         },
         sheetsbar: false,
         sheets: [{
@@ -841,8 +841,8 @@ $(function () {
                 columns:[]
             },
             columns: [
-                {width: 40},    // id
-                {width: 100},   // G. Compra
+                {width: 60},    // id
+                {width: 110},   // G. Compra
                 {width: 100},   // Temp
                 {width: 150},   // Línea
                 {width: 150},   // Sub Línea
@@ -852,8 +852,8 @@ $(function () {
                 {width: 130},   // Cod. Corp
                 {width: 250},   // Descripción
                 {width: 250},   // Descripción Internet
-                {width: 130},   // Nombre Comprador
-                {width: 130},   // Nombre Diseñador
+                {width: 140},   // Nombre Comprador
+                {width: 140},   // Nombre Diseñador
                 {width: 200},   // Composición
                 {width: 130},   // Tipo Tela
                 {width: 130},   // Forro
@@ -864,7 +864,7 @@ $(function () {
                 {width: 130},   // Calidad
                 {width: 200},   // Ocación de Uso
                 {width: 150},   // Pirámide Mix
-                {width: 80},    // Ventana
+                {width: 90},    // Ventana
                 {width: 200},   // Rank Vta
                 {width: 150},   // Life Cycle
                 {width: 130},   // Num. Emb
@@ -876,7 +876,7 @@ $(function () {
                 {width: 300},   // % Compra Inicial
                 {width: 300},   // % Compra Ajustada
                 {width: 150},   // Curvas de Reparto
-                {width: 100},   // Curvas Min
+                {width: 110},   // Curvas Min
                 {width: 100},   // Unid Ini
                 {width: 100},   // Unid Ajust
                 {width: 100},   // Unid Final
@@ -889,14 +889,14 @@ $(function () {
                 {width: 90},   // B
                 {width: 90},   // C
                 {width: 90},   // I
-                {width: 100},   // Primera Carga
+                {width: 120},   // Primera Carga
                 {width: 100},   // % Tiendas
                 {width: 100},   // Proced
                 {width: 100},   // Vía
                 {width: 200},   // País
                 {width: 100},   // Viaje
                 {width: 90},    // Mkup
-                {width: 90},    // Precio Blanco
+                {width: 110},   // Precio Blanco
                 {width: 90},    // GM
                 {width: 90},    // Oferta
                 {width: 90},    // Moneda
@@ -906,44 +906,144 @@ $(function () {
                 {width: 90},    // FOB
                 {width: 90},    // Insp
                 {width: 90},    // RFID
-                {width: 90},    // Royalty
-                {width: 150},   // Costo Unitario Final USD
-                {width: 160},   // Costo Unitario Final Pesos
-                {width: 110},   // Total Target USD
-                {width: 100},   // Total FOB USD
-                {width: 100},   // Costo Total
-                {width: 100},   // Total Retail
-                {width: 90},    // Debut/Reorder
+                {width: 110},    // Royalty
+                {width: 170},   // Costo Unitario Final USD
+                {width: 170},   // Costo Unitario Final Pesos
+                {width: 120},   // Total Target USD
+                {width: 120},   // Total FOB USD
+                {width: 120},   // Costo Total
+                {width: 120},   // Total Retail
+                {width: 120},    // Debut/Reorder
                 {width: 90},    // Sem Ini
                 {width: 90},    // Sem Fin
                 {width: 130},   // Sem Ciclo Vida
                 {width: 90},    // Agot Obj
-                {width: 120},   // Semanas Liquidación
+                {width: 130},   // Semanas Liquidación
                 {width: 250},   // Proveedor
-                {width: 100},   // Razón Social
+                {width: 110},   // Razón Social
                 {width: 100},   // Trader
-                {width: 150},   // After Meeting Remark
-                {width: 100},   // Cod. SKU Proveedor
-                {width: 100},   // Cod. Padre
+                {width: 160},   // After Meeting Remark
+                {width: 110},   // Cod. SKU Proveedor
+                {width: 110},   // Cod. Padre
                 {width: 150},   // Proforma
                 {width: 90},    // Archivo
                 {width: 230},   // Estilo PMM
-                {width: 90},    // Estado Match
+                {width: 110},    // Estado Match
                 {width: 90},    // N OC
-                {width: 90},    // Estado OC
-                {width: 100},   // Fecha Acordada
-                {width: 100},   // Fecha Embarque
-                {width: 100},   // Fecha ETA
-                {width: 100},   // Fecha Recep CD
-                {width: 100},   // Dias Atraso
-                {width: 210}    // Estado Opcion
+                {width: 110},    // Estado OC
+                {width: 110},   // Fecha Acordada
+                {width: 110},   // Fecha Embarque
+                {width: 110},   // Fecha ETA
+                {width: 110},   // Fecha Recep CD
+                {width: 110},   // Dias Atraso
+                {width: 220}    // Estado Opcion
 
+            ],
+            rows: [
+                {
+                    //height: 25,
+                    cells: [//index: 0,
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, //, background: "rgb(167,214,255)", textAlign: "center"
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // G. Compra
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Temp
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Línea
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // SubLínea
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Marca
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Estilo
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Estilo Corto
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Cod. Corp
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Descripción
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Descripción Internet
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Nombre Comprador
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Nombre Diseñador
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Composición
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Tipo Tela
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Forro
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Colección
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Evento
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Evento In-Store
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Estilo de Vida
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Calidad
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Ocación de Uso
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Pirámide Mix
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Ventana
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Rank Vta
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Life Cycle
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Cod. Opción
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Color
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Tipo Producto
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Tipo Exhibición
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Tallas
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Tipo Empaque
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // % Compra Inicial
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // % Compra Ajustada
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Curvas de Reparto
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Curvas Min
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Unid Ini
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Unid Ajust
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Unid Final
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Mtr Pack
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // N° Cajas
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Cluster
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Formato
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Tdas
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // A
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // B
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // C
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // I
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Primera Carga
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // % Tiendas
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Proced
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Vía
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // País
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Viaje
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Mkup
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Precio Blanco
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // GM
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Oferta
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // 2X
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Opex
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Moneda
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Target
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // FOB
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Insp
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // RFID
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Royalty(%)
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Costo Unitario Final US$
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Costo Unitario Final Pesos
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Total Target US$
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Total Fob US$
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Costo Total
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Total Retail
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Debut/Reorder
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Sem Ini
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Sem Fin
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Semanas Ciclo de Vida
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Agot Obj
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Semanas Liquidación
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Proveedor
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Razón Social
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Trader
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // After Meeting Remark
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Cod. SKU Proveedor
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Cod. Padre
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Proforma
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Archivo
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Estilo PMM
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Estado Match
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // N° OC
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Estado OC
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Fecha Acordada
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Fecha Embarque
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Fecha ETA
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Fecha Recepción CD
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Días Atraso CD
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}  // Estado Opción
+                    ]
+                }
             ]
-
-
         }]
     });
-
 
 
     // Cambiar Nombre a TABS de la Botonera SPREADSHEET
@@ -977,7 +1077,8 @@ $(function () {
     }, true);
 
 
-
+    // $('#spreadsheet').data('kendoSpreadsheet').dataSource.read();
+    // $('#spreadsheet').data('kendoSpreadsheet').refresh();
 
     // ################## OTRAS FUNCIONES ASOCIADAS A LA ESTRUCTURA DE LAGRILLA ####################
     // #############################################################################################
