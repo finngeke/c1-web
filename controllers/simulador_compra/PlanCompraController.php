@@ -428,6 +428,11 @@ if($ESTADO_C1!=24){
 
 
     // ######################## INICIO Permisos de Usuario ########################
+    // Listar Registros de Usuario
+    public function ListarRegistrosGrilla($f3)
+    {
+        echo json_encode(\simulador_compra\PlanCompraClass::ListarRegistrosGrilla($f3->get('SESSION.COD_TEMPORADA'), $f3->get('GET.DEPTO'), $f3->get('SESSION.login')));
+    }
     // Listar Permisos de Usuario
     public function ListarPermisosUsuario($f3)
     {
