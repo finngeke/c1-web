@@ -3,6 +3,8 @@ $(document).ready(function() {
     // BTN Volver a C1
     function volver_atras_c1(e) {
 
+        localStorage.clear();
+
         $("#spreadsheet").data("kendoSpreadsheet").destroy();
         $("#spreadsheet").empty();
         $("#spreadsheet").remove();
@@ -24,6 +26,8 @@ $(document).ready(function() {
 
     // BTN salir C1
     function salir_c1(e) {
+
+        localStorage.clear();
 
         $("#spreadsheet").data("kendoSpreadsheet").destroy();
         $("#spreadsheet").empty();

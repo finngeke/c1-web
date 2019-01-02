@@ -39,6 +39,31 @@ function redireccDeptoPopUp(event) {
     var separa_barra = id.split("_");
     var depto = separa_barra[3];
 
+    var dataString_dataDepto = "DEPTO=" + depto;
+    $.ajax({
+        url: "TelerikPlanCompra/ListarRegistrosGrilla",
+        data: dataString_dataDepto,
+        //type: "POST",
+        //dataType: "json",
+        success: function (result) {
+
+            localStorage.clear();
+
+            var ConteoRegQuery = JSON.parse(result);
+            $.each( ConteoRegQuery, function(i, obj) {
+                localStorage.setItem("TOTALREGPLAN", obj.TOTALREGPLAN);
+            });
+
+        },
+        error: function (xhr, httpStatusMessage, customErrorMessage) {
+            // Limpiar el Local Storage
+            localStorage.clear();
+        }
+    });
+
+
+
+
     // Restriccion de usuarios lecturas... para los popup de configuracion de tiendas, formatos y presupuestos
     var url_busca_cod_tip_usr     = 'permiso_usuario/busca_cod_tip_usr';
     var flag_cod_tip_usr        = 0;

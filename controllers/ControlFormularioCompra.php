@@ -59,7 +59,8 @@
 			$f3->set('nombre_form', 'SIMULADOR DE COMPRA');
 			$f3->set('depto_form', $f3->get('SESSION.COD_TEMPORADA') . ' - ' . $f3->get('GET.depto'));
 			$f3->set('SESSION.COD_DEPTO', $f3->get('GET.depto'));
-			
+			$f3->set('COD_DEPTO_ACTUAL', $f3->get('GET.depto'));
+
 			$temporada = temporada\temporada::getTemporadaCompra($f3->get('SESSION.COD_TEMPORADA'));
 
 			$f3->set('NOM_TEMPORADA', $temporada->NOM_TEMPORADA);

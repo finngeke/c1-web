@@ -16,12 +16,6 @@
     <script src="{{@TELERIK}}web/telerik/js/kendo.all.min.js"></script>
     <script src="{{@TELERIK}}web/telerik/content/shared/js/console.js"></script>
     <script src="{{@TELERIK}}web/telerik/js/cultures/kendo.culture.es-CL.min.js"></script>
-    <script>
-        if (!localStorage.getItem("RECARGA")) {
-            localStorage.setItem('RECARGA', 'true');
-            location.reload();
-        }
-    </script>
 </head>
 <body>
 

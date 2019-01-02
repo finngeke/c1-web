@@ -9,7 +9,7 @@ $(function () {
         success: function (result) {
 
             // Limpiar el Local Storage
-            localStorage.clear();
+            // localStorage.clear();
             // Limpiar el Session Storage
             // sessionStorage.removeItem('RECARGAGRILLA');
 
@@ -22,11 +22,9 @@ $(function () {
 
         },
         error: function (xhr, httpStatusMessage, customErrorMessage) {
-
             // Limpiar el Local Storage
-            localStorage.clear();
-
-            console.log("Detalle Error: ".xhr.responseText+" / "+httpStatusMessage+" / "+customErrorMessage);
+            //localStorage.clear();
+            //console.log("Detalle Error: ".xhr.responseText+" / "+httpStatusMessage+" / "+customErrorMessage);
         }
     });
 
