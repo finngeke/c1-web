@@ -3553,7 +3553,6 @@ class PlanCompraClass extends \parametros
                     AND t1.estado_accion=1";
 
         }
-
         $data = \database::getInstancia()->getFilas($sql);
         return $data;
 
@@ -4267,104 +4266,105 @@ class PlanCompraClass extends \parametros
         foreach ($data as $va1) {
             if ($countt == 1){
                 array_push($array1, array("_" => $va1[0]
-                                                , "t_".$t1 => $va1[1]
+                                                , "t_".str_replace("/","_",$t1) => $va1[1]
                                                 , "Total" => $va1[2]
                     )
                 );
             }
             elseif ($countt == 2){
                 array_push($array1, array("_" => $va1[0]
-                                                , "t_".$t1 => $va1[1]
-                                                , "t_".$t2 => $va1[2]
+                                                , "t_".str_replace("/","_",$t1)=> $va1[1]
+                                                , "t_".str_replace("/","_",$t2)=> $va1[2]
                                                 , "Total" => $va1[3]
                                                 )
                 );
             }
             elseif ($countt == 3){
                 array_push($array1, array("_" => $va1[0]
-                                                , "t_".$t1 => $va1[1]
-                                                , "t_".$t2 => $va1[2]
-                                                , "t_".$t3 => $va1[3]
+                                                , "t_".str_replace("/","_",$t1) => $va1[1]
+                                                , "t_".str_replace("/","_",$t2) => $va1[2]
+                                                , "t_".str_replace("/","_",$t3) => $va1[3]
                                                 , "Total" => $va1[4]
                     )
                 );
             }
             elseif ($countt == 4){
                 array_push($array1, array("_" => $va1[0]
-                                                , "t_".$t1 => $va1[1]
-                                                , "t_".$t2 => $va1[2]
-                                                , "t_".$t3 => $va1[3]
-                                                , "t_".$t4 => $va1[4]
+                                                , "t_".str_replace("/","_",$t1) => $va1[1]
+                                                , "t_".str_replace("/","_",$t2) => $va1[2]
+                                                , "t_".str_replace("/","_",$t3) => $va1[3]
+                                                , "t_".str_replace("/","_",$t4) => $va1[4]
                                                 , "Total" => $va1[5]
                     )
                 );
             }
             elseif ($countt == 5){
                 array_push($array1, array("_" => $va1[0]
-                                                , "t_".$t1 => $va1[1]
-                                                , "t_".$t2 => $va1[2]
-                                                , "t_".$t3 => $va1[3]
-                                                , "t_".$t4 => $va1[4]
-                                                , "t_".$t5 => $va1[5]
+                                                , "t_".str_replace("/","_",$t1) => $va1[1]
+                                                , "t_".str_replace("/","_",$t2) => $va1[2]
+                                                , "t_".str_replace("/","_",$t3) => $va1[3]
+                                                , "t_".str_replace("/","_",$t4) => $va1[4]
+                                                , "t_".str_replace("/","_",$t5) => $va1[5]
                                                 , "Total" => $va1[6]
                     )
                 );
             }
             elseif ($countt == 6){
                 array_push($array1, array("_" => $va1[0]
-                                                , $t1 => $va1[1]
-                                                , $t2 => $va1[2]
-                                                , $t3 => $va1[3]
-                                                , $t4 => $va1[4]
-                                                , $t5 => $va1[5]
-                                                , $t6 => $va1[6]
+                                                , "t_".str_replace("/","_",$t1) => $va1[1]
+                                                , "t_".str_replace("/","_",$t2) => $va1[2]
+                                                , "t_".str_replace("/","_",$t3) => $va1[3]
+                                                , "t_".str_replace("/","_",$t4) => $va1[4]
+                                                , "t_".str_replace("/","_",$t5) => $va1[5]
+                                                , "t_".str_replace("/","_",$t6) => $va1[6]
                                                 , "Total" => $va1[7]
                                                 )
                 );
             }
             elseif ($countt == 7){
                 array_push($array1, array("_" => $va1[0]
-                                                , $t1 => $va1[1]
-                                                , $t2 => $va1[2]
-                                                , $t3 => $va1[3]
-                                                , $t4 => $va1[4]
-                                                , $t5 => $va1[5]
-                                                , $t6 => $va1[6]
-                                                , $t7 => $va1[7]
+                                                , "t_".str_replace("/","_",$t1) => $va1[1]
+                                                , "t_".str_replace("/","_",$t2) => $va1[2]
+                                                , "t_".str_replace("/","_",$t3) => $va1[3]
+                                                , "t_".str_replace("/","_",$t4) => $va1[4]
+                                                , "t_".str_replace("/","_",$t5) => $va1[5]
+                                                , "t_".str_replace("/","_",$t6) => $va1[6]
+                                                , "t_".str_replace("/","_",$t7) => $va1[7]
                                                 , "Total" => $va1[8]
                     )
                 );
             }
             elseif ($countt == 8){
                 array_push($array1, array("_" => $va1[0]
-                                                , $t1 => $va1[1]
-                                                , $t2 => $va1[2]
-                                                , $t3 => $va1[3]
-                                                , $t4 => $va1[4]
-                                                , $t5 => $va1[5]
-                                                , $t6 => $va1[6]
-                                                , $t7 => $va1[7]
-                                                , $t8 => $va1[8]
+                                                , "t_".str_replace("/","_",$t1) => $va1[1]
+                                                , "t_".str_replace("/","_",$t2) => $va1[2]
+                                                , "t_".str_replace("/","_",$t3) => $va1[3]
+                                                , "t_".str_replace("/","_",$t4) => $va1[4]
+                                                , "t_".str_replace("/","_",$t5) => $va1[5]
+                                                , "t_".str_replace("/","_",$t6) => $va1[6]
+                                                , "t_".str_replace("/","_",$t7) => $va1[7]
+                                                , "t_".str_replace("/","_",$t8) => $va1[8]
                                                 , "Total" => $va1[9]
                     )
                 );
             }
             elseif ($countt == 9){
                 array_push($array1, array("_" => $va1[0]
-                                                , $t1 => $va1[1]
-                                                , $t2 => $va1[2]
-                                                , $t3 => $va1[3]
-                                                , $t4 => $va1[4]
-                                                , $t5 => $va1[5]
-                                                , $t6 => $va1[6]
-                                                , $t7 => $va1[7]
-                                                , $t8 => $va1[8]
-                                                , $t9 => $va1[9]
+                                                , "t_".str_replace("/","_",$t1) => $va1[1]
+                                                , "t_".str_replace("/","_",$t2) => $va1[2]
+                                                , "t_".str_replace("/","_",$t3) => $va1[3]
+                                                , "t_".str_replace("/","_",$t4) => $va1[4]
+                                                , "t_".str_replace("/","_",$t5) => $va1[5]
+                                                , "t_".str_replace("/","_",$t6) => $va1[6]
+                                                , "t_".str_replace("/","_",$t7) => $va1[7]
+                                                , "t_".str_replace("/","_",$t8) => $va1[8]
+                                                , "t_".str_replace("/","_",$t9) => $va1[9]
                                                 , "Total" => $va1[10]
                     )
                 );
             }
         }
+
             return $array1;
     }
 
@@ -4452,99 +4452,100 @@ class PlanCompraClass extends \parametros
         foreach ($data as $va1) {
             if ($countt == 1){
                 array_push($array1, array($tipo_empaque => $va1[0]
-                    , "t_".$t1 => $va1[1]
+                    , "t_".str_replace("/","_",$t1) => $va1[1]
                     , "Total" => $va1[2]
                     )
                 );
             }
+
             elseif ($countt == 2){
                 array_push($array1, array($tipo_empaque => $va1[0]
-                    , "t_".$t1 => $va1[1]
-                    , "t_".$t2 => $va1[2]
+                    , "t_".str_replace("/","_",$t1) => $va1[1]
+                    , "t_".str_replace("/","_",$t2) => $va1[2]
                     , "Total" => $va1[3]
                     )
                 );
             }
             elseif ($countt == 3){
                 array_push($array1, array("_" => $va1[0]
-                    , "t_".$t1 => $va1[1]
-                    , "t_".$t2 => $va1[2]
-                    , "t_".$t3 => $va1[3]
+                    , "t_".str_replace("/","_",$t1) => $va1[1]
+                    , "t_".str_replace("/","_",$t2) => $va1[2]
+                    , "t_".str_replace("/","_",$t3) => $va1[3]
                     , "Total" => $va1[4]
                     )
                 );
             }
             elseif ($countt == 4){
                 array_push($array1, array($tipo_empaque => $va1[0]
-                    , "t_".$t1 => $va1[1]
-                    , "t_".$t2 => $va1[2]
-                    , "t_".$t3 => $va1[3]
-                    , "t_".$t4 => $va1[4]
+                    , "t_".str_replace("/","_",$t1) => $va1[1]
+                    , "t_".str_replace("/","_",$t2) => $va1[2]
+                    , "t_".str_replace("/","_",$t3) => $va1[3]
+                    , "t_".str_replace("/","_",$t4) => $va1[4]
                     , "Total" => $va1[5]
                     )
                 );
             }
             elseif ($countt == 5){
                 array_push($array1, array($tipo_empaque => $va1[0]
-                    , "t_".$t1 => $va1[1]
-                    , "t_".$t2 => $va1[2]
-                    , "t_".$t3 => $va1[3]
-                    , "t_".$t4 => $va1[4]
-                    , "t_".$t5 => $va1[5]
+                    , "t_".str_replace("/","_",$t1) => $va1[1]
+                    , "t_".str_replace("/","_",$t2) => $va1[2]
+                    , "t_".str_replace("/","_",$t3) => $va1[3]
+                    , "t_".str_replace("/","_",$t4) => $va1[4]
+                    , "t_".str_replace("/","_",$t5) => $va1[5]
                     , "Total" => $va1[6]
                     )
                 );
             }
             elseif ($countt == 6){
                 array_push($array1, array($tipo_empaque => $va1[0]
-                    , $t1 => $va1[1]
-                    , $t2 => $va1[2]
-                    , $t3 => $va1[3]
-                    , $t4 => $va1[4]
-                    , $t5 => $va1[5]
-                    , $t6 => $va1[6]
+                    , "t_".str_replace("/","_",$t1) => $va1[1]
+                    , "t_".str_replace("/","_",$t2) => $va1[2]
+                    , "t_".str_replace("/","_",$t3) => $va1[3]
+                    , "t_".str_replace("/","_",$t4) => $va1[4]
+                    , "t_".str_replace("/","_",$t5) => $va1[5]
+                    , "t_".str_replace("/","_",$t6) => $va1[6]
                     , "Total" => $va1[7]
                     )
                 );
             }
             elseif ($countt == 7){
                 array_push($array1, array($tipo_empaque => $va1[0]
-                    , $t1 => $va1[1]
-                    , $t2 => $va1[2]
-                    , $t3 => $va1[3]
-                    , $t4 => $va1[4]
-                    , $t5 => $va1[5]
-                    , $t6 => $va1[6]
-                    , $t7 => $va1[7]
+                    , "t_".str_replace("/","_",$t1) => $va1[1]
+                    , "t_".str_replace("/","_",$t2) => $va1[2]
+                    , "t_".str_replace("/","_",$t3) => $va1[3]
+                    , "t_".str_replace("/","_",$t4)=> $va1[4]
+                    , "t_".str_replace("/","_",$t5) => $va1[5]
+                    , "t_".str_replace("/","_",$t6) => $va1[6]
+                    , "t_".str_replace("/","_",$t7) => $va1[7]
                     , "Total" => $va1[8]
                     )
                 );
             }
             elseif ($countt == 8){
                 array_push($array1, array($tipo_empaque => $va1[0]
-                    , $t1 => $va1[1]
-                    , $t2 => $va1[2]
-                    , $t3 => $va1[3]
-                    , $t4 => $va1[4]
-                    , $t5 => $va1[5]
-                    , $t6 => $va1[6]
-                    , $t7 => $va1[7]
-                    , $t8 => $va1[8]
+                    , "t_".str_replace("/","_",$t1) => $va1[1]
+                    , "t_".str_replace("/","_",$t2) => $va1[2]
+                    , "t_".str_replace("/","_",$t3) => $va1[3]
+                    , "t_".str_replace("/","_",$t4) => $va1[4]
+                    , "t_".str_replace("/","_",$t5) => $va1[5]
+                    , "t_".str_replace("/","_",$t6) => $va1[6]
+                    , "t_".str_replace("/","_",$t7) => $va1[7]
+                    , "t_".str_replace("/","_",$t8) => $va1[8]
                     , "Total" => $va1[9]
                     )
                 );
             }
             elseif ($countt == 9){
                 array_push($array1, array($tipo_empaque => $va1[0]
-                    , $t1 => $va1[1]
-                    , $t2 => $va1[2]
-                    , $t3 => $va1[3]
-                    , $t4 => $va1[4]
-                    , $t5 => $va1[5]
-                    , $t6 => $va1[6]
-                    , $t7 => $va1[7]
-                    , $t8 => $va1[8]
-                    , $t9 => $va1[9]
+                    , "t_".str_replace("/","_",$t1) => $va1[1]
+                    , "t_".str_replace("/","_",$t2) => $va1[2]
+                    , "t_".str_replace("/","_",$t3) => $va1[3]
+                    , "t_".str_replace("/","_",$t4) => $va1[4]
+                    , "t_".str_replace("/","_",$t5) => $va1[5]
+                    , "t_".str_replace("/","_",$t6) => $va1[6]
+                    , "t_".str_replace("/","_",$t7) => $va1[7]
+                    , "t_".str_replace("/","_",$t8) => $va1[8]
+                    , "t_".str_replace("/","_",$t9) => $va1[9]
                     , "Total" => $va1[10]
                     )
                 );
@@ -4605,99 +4606,99 @@ class PlanCompraClass extends \parametros
         foreach ($data as $va1) {
             if ($countt == 1){
                 array_push($array1, array($tipo_empaque => $va1[0]
-                    , "t_".$t1 => $va1[1]
+                    , "t_".str_replace("/","_",$t1) => $va1[1]
                     , "Total" => $va1[2]
                     )
                 );
             }
             elseif ($countt == 2){
                 array_push($array1, array($tipo_empaque => $va1[0]
-                    , "t_".$t1 => $va1[1]
-                    , "t_".$t2 => $va1[2]
+                    , "t_".str_replace("/","_",$t1) => $va1[1]
+                    , "t_".str_replace("/","_",$t2) => $va1[2]
                     , "Total" => $va1[3]
                     )
                 );
             }
             elseif ($countt == 3){
                 array_push($array1, array($tipo_empaque => $va1[0]
-                    , "t_".$t1 => $va1[1]
-                    , "t_".$t2 => $va1[2]
-                    , "t_".$t3 => $va1[3]
+                    , "t_".str_replace("/","_",$t1) => $va1[1]
+                    , "t_".str_replace("/","_",$t2) => $va1[2]
+                    , "t_".str_replace("/","_",$t3)=> $va1[3]
                     , "Total" => $va1[4]
                     )
                 );
             }
             elseif ($countt == 4){
                 array_push($array1, array($tipo_empaque => $va1[0]
-                    , "t_".$t1 => $va1[1]
-                    , "t_".$t2 => $va1[2]
-                    , "t_".$t3 => $va1[3]
-                    , "t_".$t4 => $va1[4]
+                    , "t_".str_replace("/","_",$t1) => $va1[1]
+                    , "t_".str_replace("/","_",$t2) => $va1[2]
+                    , "t_".str_replace("/","_",$t3) => $va1[3]
+                    , "t_".str_replace("/","_",$t4) => $va1[4]
                     , "Total" => $va1[5]
                     )
                 );
             }
             elseif ($countt == 5){
                 array_push($array1, array($tipo_empaque => $va1[0]
-                    , "t_".$t1 => $va1[1]
-                    , "t_".$t2 => $va1[2]
-                    , "t_".$t3 => $va1[3]
-                    , "t_".$t4 => $va1[4]
-                    , "t_".$t5 => $va1[5]
+                    , "t_".str_replace("/","_",$t1) => $va1[1]
+                    , "t_".str_replace("/","_",$t2) => $va1[2]
+                    , "t_".str_replace("/","_",$t3) => $va1[3]
+                    , "t_".str_replace("/","_",$t4) => $va1[4]
+                    , "t_".str_replace("/","_",$t5) => $va1[5]
                     , "Total" => $va1[6]
                     )
                 );
             }
             elseif ($countt == 6){
                 array_push($array1, array($tipo_empaque => $va1[0]
-                    , $t1 => $va1[1]
-                    , $t2 => $va1[2]
-                    , $t3 => $va1[3]
-                    , $t4 => $va1[4]
-                    , $t5 => $va1[5]
-                    , $t6 => $va1[6]
+                    , "t_".str_replace("/","_",$t1) => $va1[1]
+                    , "t_".str_replace("/","_",$t2) => $va1[2]
+                    , "t_".str_replace("/","_",$t3) => $va1[3]
+                    , "t_".str_replace("/","_",$t4) => $va1[4]
+                    , "t_".str_replace("/","_",$t5) => $va1[5]
+                    , "t_".str_replace("/","_",$t6) => $va1[6]
                     , "Total" => $va1[7]
                     )
                 );
             }
             elseif ($countt == 7){
                 array_push($array1, array($tipo_empaque => $va1[0]
-                    , $t1 => $va1[1]
-                    , $t2 => $va1[2]
-                    , $t3 => $va1[3]
-                    , $t4 => $va1[4]
-                    , $t5 => $va1[5]
-                    , $t6 => $va1[6]
-                    , $t7 => $va1[7]
+                    , "t_".str_replace("/","_",$t1) => $va1[1]
+                    , "t_".str_replace("/","_",$t2) => $va1[2]
+                    , "t_".str_replace("/","_",$t3) => $va1[3]
+                    , "t_".str_replace("/","_",$t4) => $va1[4]
+                    , "t_".str_replace("/","_",$t5) => $va1[5]
+                    , "t_".str_replace("/","_",$t6) => $va1[6]
+                    , "t_".str_replace("/","_",$t7) => $va1[7]
                     , "Total" => $va1[8]
                     )
                 );
             }
             elseif ($countt == 8){
                 array_push($array1, array($tipo_empaque => $va1[0]
-                    , $t1 => $va1[1]
-                    , $t2 => $va1[2]
-                    , $t3 => $va1[3]
-                    , $t4 => $va1[4]
-                    , $t5 => $va1[5]
-                    , $t6 => $va1[6]
-                    , $t7 => $va1[7]
-                    , $t8 => $va1[8]
+                    , "t_".str_replace("/","_",$t1) => $va1[1]
+                    , "t_".str_replace("/","_",$t2) => $va1[2]
+                    , "t_".str_replace("/","_",$t3) => $va1[3]
+                    , "t_".str_replace("/","_",$t4) => $va1[4]
+                    , "t_".str_replace("/","_",$t5) => $va1[5]
+                    , "t_".str_replace("/","_",$t6) => $va1[6]
+                    , "t_".str_replace("/","_",$t7) => $va1[7]
+                    , "t_".str_replace("/","_",$t8) => $va1[8]
                     , "Total" => $va1[9]
                     )
                 );
             }
             elseif ($countt == 9){
                 array_push($array1, array($tipo_empaque => $va1[0]
-                    , $t1 => $va1[1]
-                    , $t2 => $va1[2]
-                    , $t3 => $va1[3]
-                    , $t4 => $va1[4]
-                    , $t5 => $va1[5]
-                    , $t6 => $va1[6]
-                    , $t7 => $va1[7]
-                    , $t8 => $va1[8]
-                    , $t9 => $va1[9]
+                    , "t_".str_replace("/","_",$t1) => $va1[1]
+                    , "t_".str_replace("/","_",$t2) => $va1[2]
+                    , "t_".str_replace("/","_",$t3) => $va1[3]
+                    , "t_".str_replace("/","_",$t4) => $va1[4]
+                    , "t_".str_replace("/","_",$t5) => $va1[5]
+                    , "t_".str_replace("/","_",$t6) => $va1[6]
+                    , "t_".str_replace("/","_",$t7) => $va1[7]
+                    , "t_".str_replace("/","_",$t8) => $va1[8]
+                    , "t_".str_replace("/","_",$t9) => $va1[9]
                     , "Total" => $va1[10]
                     )
                 );

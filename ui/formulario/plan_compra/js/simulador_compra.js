@@ -2022,17 +2022,16 @@ $(function () {
                         url: "TelerikPlanCompra/Listar_Pop_Ajuste_Compra",
                         dataType: "json",
                         //type: 'POST',
-                        data:{ID_COLOR3: kendo.parseInt(ID_COLOR3),_Tallas:String(TALLAS)},
-                    },
+                        data:{ID_COLOR3: kendo.parseInt(ID_COLOR3),_Tallas:String(TALLAS)}
+                    }
                 }
             });
-
             // Asignar la cabecera
             var dtt = (String(TALLAS)).split(",");
             var columnsConfig = [];
             columnsConfig.push({ field: "_", title: "" ,width:"100px",attributes: {style: "background-color: rgb(255,255,224); font-size: 12px; color: red"}});
             dtt.forEach(function(entry) {
-                var tal=entry.trim();
+                var tal=(entry.trim()).replace("/","_");
                 columnsConfig.push({ field: ("t_" + tal), title: (tal) ,width:"40px"});
             });
             columnsConfig.push({ field: "Total", title: "Total" ,width:"50px",attributes: {style: "background-color: rgb(255,255,224); font-size: 12px; color: red"}});
@@ -2090,8 +2089,8 @@ $(function () {
                         , _Tallas: String(TALLAS)
                         , _TipoEmpaque: String(TIPO_EMPAQUE)
                         , _DebutReorder: String(DEBUTREORDER)
-                    },
-                },
+                    }
+                }
             }
         });
 
@@ -2102,7 +2101,7 @@ $(function () {
             ,attributes: {style: "background-color: rgb(255,255,224); font-size: 12px; color: red"}});
         //style: "text-align: center;
         dtt2.forEach(function(entry) {
-            var tal=entry.trim();
+              var tal=(entry.trim()).replace("/","_");
             columnsConfig2.push({ field: ("t_" + tal), title: (tal),width:"40px",attributes: {style:"font-size: 12px"}});
         });
         columnsConfig2.push({ field: "Total", title: "Total",width:"50px"
@@ -2112,7 +2111,8 @@ $(function () {
         });
         dataSource_ajustes_cajas.read();
 
-        // Asignar el DataSet al Grid
+
+          // Asignar el DataSet al Grid*/
         var spreadsheet_ajustes_compra = $("#grid_ajuste_cajas").data("kendoGrid");
         spreadsheet_ajustes_compra.setDataSource(dataSource_ajustes_cajas);
 
@@ -2129,9 +2129,8 @@ $(function () {
                             , _Tallas: String(TALLAS)
                             , _TipoEmpaque: String(TIPO_EMPAQUE)
                             , _DebutReorder: String(DEBUTREORDER)
-                        },
-
-                    },
+                        }
+                    }
                 }
             });
 
@@ -2141,7 +2140,7 @@ $(function () {
             columnsConfig3.push({ field: String(TIPO_EMPAQUE), title: "SOLIDO",width:"100px",attributes: {style: "background-color: rgb(255,255,224); font-size: 12px;; color: red"}
             });
             dtt3.forEach(function(entry) {
-                var tal=entry.trim();
+                var tal=(entry.trim()).replace("/","_");
                 columnsConfig3.push({ field: ("t_" + tal), title: (tal) ,width:"40px",attributes: {style: "font-size: 12px"}});
             });
             columnsConfig3.push({ field: "Total", title: "Total" ,width:"50px",attributes: {style: "background-color: rgb(255,255,224); font-size: 12px; color: red"}});
