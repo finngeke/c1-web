@@ -3530,10 +3530,10 @@ class PlanCompraClass extends \parametros
     public static function ListarRegistrosGrilla($temporada, $depto, $login)
     {
 
-        $sql_limpia_depto = "DELETE FROM PLC_CONCURRENCIA HR 
+        /*$sql_limpia_depto = "DELETE FROM PLC_CONCURRENCIA HR
                        WHERE EXISTS  (SELECT * FROM PLC_USUARIO US WHERE US.COD_TIPUSR <>99) 
                        AND (TO_NUMBER(TO_CHAR(SYSDATE,'HH24')-TO_CHAR(HR.FECHA,'HH24') )*60)+ TO_NUMBER(TO_CHAR(SYSDATE,'MI')-TO_CHAR(HR.FECHA,'MI'))>=30";
-        $data_limpia = \database::getInstancia()->getConsulta($sql_limpia_depto);
+        $data_limpia = \database::getInstancia()->getConsulta($sql_limpia_depto);*/
 
 
         $sql = "SELECT 'TOTALREGPLAN' ID_TELERIK, TO_CHAR(COUNT(*)+1) NOMBRE_ACCION
