@@ -15,8 +15,14 @@ $(function () {
             // Existe ya alguien en el departamento (No es Administrador)
             if( TipoPermisos.length > 0 ){
 
+                // Rescato el total de registros de la grilla
+                var TempTotRegGrilla = localStorage.getItem("TOTALREGPLAN");
+
                 // Limpiar el Local Storage
                 localStorage.clear();
+
+                // Agrego la Cantidad de Registros de la Grilla (Nuevamente)
+                localStorage.setItem("TOTALREGPLAN", TempTotRegGrilla);
 
                 $.each( TipoPermisos, function(i, obj) {
                     // Avisar Modo Lectura
