@@ -880,7 +880,7 @@ $(function () {
                 {width: 200},   // País
                 {width: 100},   // Viaje
                 {width: 90},    // Mkup
-                {width: 110},   // Precio Blanco
+                {width: 120},   // Precio Blanco
                 {width: 90},    // GM
                 {width: 90},    // Oferta
                 {width: 90},    // Moneda
