@@ -3527,7 +3527,7 @@ class PlanCompraClass extends \parametros
 
     // ######################## INICIO Permisos de Usuario ########################
     // Listar Permiso de Usuario
-    public static function ListarPermisosUsuario($temporada, $depto, $login,$cod_tipusr)
+    public static function ListarPermisosUsuario($temporada, $depto, $login, $cod_tipusr)
     {
 
         // Si es administrador, le agrego todas las acciones
@@ -3553,6 +3553,7 @@ class PlanCompraClass extends \parametros
                     AND t1.estado_accion=1";
 
         }
+
         $data = \database::getInstancia()->getFilas($sql);
         return $data;
 

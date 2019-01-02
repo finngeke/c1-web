@@ -42,5 +42,5 @@
 </html>
 <!-- Llamados a los JS -->
 <!-- TRAE LOS PERMISOS DE USUARIOS -->
-<script src="{{@TELERIK}}ui/formulario/plan_compra/js/simulador_compra_permisos.js?v=A25"></script>
+<!--<script src="{{@TELERIK}}ui/formulario/plan_compra/js/simulador_compra_permisos.js?v=A25"></script>-->
 <script src="{{@JQUERY}}ui/formulario/plan_compra/js/CargaAssormentLayout.js"></script>

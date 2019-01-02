@@ -3,6 +3,10 @@ $(document).ready(function() {
     // BTN Volver a C1
     function volver_atras_c1(e) {
 
+        $("#spreadsheet").data("kendoSpreadsheet").destroy();
+        $("#spreadsheet").empty();
+        $("#spreadsheet").remove();
+
         //kendoConsole.log(e.target.text() + " 'Se presionó el BTN."+ e.id);
 
         /*var url_eliminar_concurrencia = 'permiso_usuario/eliminar_concurrencia';
@@ -20,6 +24,10 @@ $(document).ready(function() {
 
     // BTN salir C1
     function salir_c1(e) {
+
+        $("#spreadsheet").data("kendoSpreadsheet").destroy();
+        $("#spreadsheet").empty();
+        $("#spreadsheet").remove();
 
         /*var url_eliminar_concurrencia = 'permiso_usuario/eliminar_concurrencia';
         var span_temp_eli_conc = $('#span_temporada').text();
