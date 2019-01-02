@@ -81,8 +81,8 @@ $(function () {
                         dlg.close();
                     }
                 });
-                var el = $("<div data-visible='true' data-role='window' data-modal='true' data-resizable='true' data-title='Seleccione País '>" +
-                    "  <div data-role='dropdownlist' data-bind='value: value, source: paises' data-text-field='NOMBRE_PAIS' data-value-field='NOMBRE_PAIS'></div>" +
+                var el = $("<div data-visible='true' data-role='window' data-modal='true' data-resizable='true' data-title='Seleccione País ' style='width: 300px;'>" +
+                    "  <div data-role='dropdownlist' data-bind='value: value, source: paises' data-text-field='NOMBRE_PAIS' data-value-field='NOMBRE_PAIS' style='width: 100%;'></div>" +
                     "  <div style='margin-top: 1em; text-align: right'>" +
                     "    <button style='width: 5em' class='k-button' data-bind='click: ok'>OK</button>" +
                     "    <button style='width: 5em' class='k-button' data-bind='click: cancel'>Cancel</button>" +
@@ -147,8 +147,8 @@ $(function () {
                     }
                 });
 
-                var elFormato = $("<div data-visible='true' data-role='window' data-modal='true' data-resizable='true' data-title='Seleccione Formato '>" +
-                    "  <div data-role='dropdownlist' data-bind='value: value, source: formatos' data-text-field='NOMBRE_FORMATO' data-value-field='NOMBRE_FORMATO'></div>" +
+                var elFormato = $("<div data-visible='true' data-role='window' data-modal='true' data-resizable='true' data-title='Seleccione Formato ' style='width: 300px;'>" +
+                    "  <div data-role='dropdownlist' data-bind='value: value, source: formatos' data-text-field='NOMBRE_FORMATO' data-value-field='NOMBRE_FORMATO' style='width: 100%;'></div>" +
                     "  <div style='margin-top: 1em; text-align: right'>" +
                     "    <button style='width: 5em' class='k-button' data-bind='click: ok'>OK</button>" +
                     "    <button style='width: 5em' class='k-button' data-bind='click: cancel'>Cancelar</button>" +
@@ -214,8 +214,8 @@ $(function () {
                     }
                 });
 
-                var elProveedor = $("<div data-visible='true' data-role='window' data-modal='true' data-resizable='true' data-title='Seleccione Proveedor '>" +
-                    "  <div data-role='dropdownlist' data-bind='value: value, source: proveedores' data-text-field='NOMBRE_PROVEEDOR' data-value-field='NOMBRE_PROVEEDOR'></div>" +
+                var elProveedor = $("<div data-visible='true' data-role='window' data-modal='true' data-resizable='true' data-title='Seleccione Proveedor ' style='width: 300px;'>" +
+                    "  <div data-role='dropdownlist' data-bind='value: value, source: proveedores' data-text-field='NOMBRE_PROVEEDOR' data-value-field='NOMBRE_PROVEEDOR' style='width: 100%;'></div>" +
                     "  <div style='margin-top: 1em; text-align: right'>" +
                     "    <button style='width: 5em' class='k-button' data-bind='click: ok'>OK</button>" +
                     "    <button style='width: 5em' class='k-button' data-bind='click: cancel'>Cancelar</button>" +
