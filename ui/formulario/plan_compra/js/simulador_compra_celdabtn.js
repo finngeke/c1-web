@@ -1720,10 +1720,14 @@ $(function () {
                                                                                             $(".chunkStatus").text(2);
                                                                                             $('#Loaded').html("Insertanto Historial.");
                                                                                             $(".Rows1").text(0+ "/"+count);
+                                                                                            var depto = "";
 
+                                                                                            //var depto = o ;
         //***********************************Insertar historial
                                                                                             $.each(data, function (i, o) {$key++;
+
                                                                                                 if ($key != 1){$key2 ++;
+                                                                                                    depto = o["Cod Dpto"];
                                                                                                     $.ajax({ url: "importar_archivo_3/ImportarAssormentInsHistorial"
                                                                                                         ,type: 'POST'
                                                                                                         ,data: {_rows:o,_delete:$key2}
@@ -1808,9 +1812,26 @@ $(function () {
                                                                                                                                                                                         $(".Rows1").text(_Int2+ "/"+count2);
                                                                                                                                                                                         _final = 1;
                                                                                                                                                                                         popupNotification.show(kendo.toString("Insertado Correctamente"), "success");
-                                                                                                                                                                                        var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
-                                                                                                                                                                                        var sheet = spreadsheet.activeSheet();
-                                                                                                                                                                                        sheet.dataSource.read();
+                                                                                                                                                                                        var dataString_dataDepto = "DEPTO=" + depto;
+                                                                                                                                                                                        $.ajax({
+                                                                                                                                                                                            url: "TelerikPlanCompra/ListarRegistrosGrilla",
+                                                                                                                                                                                            data: dataString_dataDepto,
+
+                                                                                                                                                                                            success: function (result) {
+                                                                                                                                                                                                localStorage.clear();
+                                                                                                                                                                                                var ConteoRegQuery = JSON.parse(result);
+                                                                                                                                                                                                $.each( ConteoRegQuery, function(i, obj) {
+                                                                                                                                                                                                    console.log(obj.TOTALREGPLAN);
+                                                                                                                                                                                                    localStorage.setItem("TOTALREGPLAN", obj.TOTALREGPLAN);
+                                                                                                                                                                                                    location.reload(true);
+                                                                                                                                                                                                });
+                                                
+                                                                                                                                                                                            },
+                                                                                                                                                                                            error: function (xhr, httpStatusMessage, customErrorMessage) {
+                                                                                                                                                                                                // Limpiar el Local Storage
+                                                                                                                                                                                                localStorage.clear();
+                                                                                                                                                                                            }
+                                                                                                                                                                                        });
 
                                                                                                                                                                                     }else{
                                                                                                                                                                                         clearInterval(interval);
