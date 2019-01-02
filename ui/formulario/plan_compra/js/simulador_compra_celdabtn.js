@@ -1815,14 +1815,14 @@ $(function () {
                                                                                                                                                                                     }else{
                                                                                                                                                                                         clearInterval(interval);
                                                                                                                                                                                     }
-                                                                                                                                                                                }, 30);
+                                                                                                                                                                                });
                                                                                                                                                                             }
                                                                                                                                                                         }
                                                                                                                                                                     });
                                                                                                                                                                 }
                                                                                                                                                             });
                                                                                                                                                         }
-                                                                                                                                                    }, 30);
+                                                                                                                                                    });
 
                                                                                                                                                 }
                                                                                                                                             });
