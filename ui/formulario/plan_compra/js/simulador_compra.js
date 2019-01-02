@@ -836,8 +836,8 @@ $(function () {
                 {width: 130},   // Cod. Corp
                 {width: 250},   // Descripción
                 {width: 250},   // Descripción Internet
-                {width: 140},   // Nombre Comprador
-                {width: 140},   // Nombre Diseñador
+                {width: 150},   // Nombre Comprador
+                {width: 150},   // Nombre Diseñador
                 {width: 200},   // Composición
                 {width: 130},   // Tipo Tela
                 {width: 130},   // Forro
@@ -853,7 +853,7 @@ $(function () {
                 {width: 150},   // Life Cycle
                 {width: 130},   // Num. Emb
                 {width: 100},   // Color
-                {width: 120},   // Tipo Producto
+                {width: 130},   // Tipo Producto
                 {width: 150},   // Tipo Exhibición
                 {width: 140},   // Tallas
                 {width: 130},   // Tipo Empaque
@@ -891,37 +891,36 @@ $(function () {
                 {width: 90},    // Insp
                 {width: 90},    // RFID
                 {width: 110},    // Royalty
-                {width: 170},   // Costo Unitario Final USD
-                {width: 170},   // Costo Unitario Final Pesos
-                {width: 120},   // Total Target USD
-                {width: 120},   // Total FOB USD
-                {width: 120},   // Costo Total
-                {width: 120},   // Total Retail
-                {width: 120},    // Debut/Reorder
+                {width: 180},   // Costo Unitario Final USD
+                {width: 180},   // Costo Unitario Final Pesos
+                {width: 130},   // Total Target USD
+                {width: 130},   // Total FOB USD
+                {width: 130},   // Costo Total
+                {width: 130},   // Total Retail
+                {width: 130},    // Debut/Reorder
                 {width: 90},    // Sem Ini
                 {width: 90},    // Sem Fin
                 {width: 130},   // Sem Ciclo Vida
-                {width: 90},    // Agot Obj
+                {width: 100},    // Agot Obj
                 {width: 130},   // Semanas Liquidación
                 {width: 250},   // Proveedor
-                {width: 110},   // Razón Social
+                {width: 120},   // Razón Social
                 {width: 100},   // Trader
-                {width: 160},   // After Meeting Remark
-                {width: 110},   // Cod. SKU Proveedor
+                {width: 170},   // After Meeting Remark
+                {width: 130},   // Cod. SKU Proveedor
                 {width: 110},   // Cod. Padre
                 {width: 150},   // Proforma
                 {width: 90},    // Archivo
                 {width: 230},   // Estilo PMM
                 {width: 110},    // Estado Match
                 {width: 90},    // N OC
-                {width: 110},    // Estado OC
-                {width: 110},   // Fecha Acordada
-                {width: 110},   // Fecha Embarque
+                {width: 120},    // Estado OC
+                {width: 120},   // Fecha Acordada
+                {width: 120},   // Fecha Embarque
                 {width: 110},   // Fecha ETA
                 {width: 110},   // Fecha Recep CD
                 {width: 110},   // Dias Atraso
                 {width: 220}    // Estado Opcion
-
             ],
             rows: [
                 {
