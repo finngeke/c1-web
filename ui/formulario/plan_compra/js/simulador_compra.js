@@ -1,19 +1,5 @@
 $(function () {
 
-
-
-    /*if(sessionStorage.getItem('RECARGAGRILLA')) {
-
-        sessionStorage.removeItem('RECARGAGRILLA');
-        // sessionStorage.clear();
-
-    }else{
-
-        sessionStorage.setItem("RECARGAGRILLA", "OK");
-        location.reload(true);
-        return false;
-    }*/
-
     // Actualiza Fecha de Concurrencia (Solo se agrega en este JS, ya que desde fuera no se puede llamar)
     function ActualizaConcurrencia() {
 
@@ -390,9 +376,9 @@ $(function () {
 
     // Cargar info en el DataSource
     var dataSource = new kendo.data.DataSource({
-
+        /*requestStart:function(e){
+        },*/
         requestEnd: function (e) {
-
             // Una vez que se carga la función de poder editar, asigno la columnaal editor
             if (e.type === 'read') {
                 setTimeout(function() {
@@ -616,8 +602,6 @@ $(function () {
                 }
             }, 0);
 
-
-
         },
         transport: {
             read: onRead,
@@ -763,7 +747,7 @@ $(function () {
     $("#spreadsheet").kendoSpreadsheet({
         columns: 106, //106 Siempre visible
         rows: localStorage.getItem("TOTALREGPLAN"),
-        // rows: 1500,
+        //rows: 800,
         //toolbar: true,
         toolbar: {
             home: [ "open" ,
@@ -837,7 +821,7 @@ $(function () {
             dataSource: dataSource,
             filter: {
                 ref: "A1:CR"+localStorage.getItem("TOTALREGPLAN"),
-                //ref: "A1:CR1500",
+                //ref: "A1:CR800",
                 columns:[]
             },
             columns: [
@@ -1044,7 +1028,6 @@ $(function () {
             ]
         }]
     });
-
 
     // Cambiar Nombre a TABS de la Botonera SPREADSHEET
     var textoTAB = $('#spreadsheet').data('kendoSpreadsheet');

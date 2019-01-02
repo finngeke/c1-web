@@ -3526,8 +3526,32 @@ class PlanCompraClass extends \parametros
 
 
     // ######################## INICIO Permisos de Usuario ########################
-    // Listar Permiso de Usuario
-    public static function ListarPermisosUsuario($temporada, $depto, $login, $cod_tipusr)
+    // Listar Total Registros Grilla
+    public static function ListarRegistrosGrilla($temporada, $depto, $login)
+    {
+
+            $sql = "SELECT 'TOTALREGPLAN' ID_TELERIK, TO_CHAR(COUNT(*)+1) NOMBRE_ACCION
+                    FROM PLC_PLAN_COMPRA_COLOR_3
+                    WHERE COD_TEMPORADA = $temporada AND DEP_DEPTO = '" . $depto . "'";
+
+        $data = \database::getInstancia()->getFilas($sql);
+        //return $data;
+
+        // Transformo a array asociativo
+        $array1 = [];
+        foreach ($data as $va1) {
+            array_push($array1
+                , array(
+                   "TOTALREGPLAN" => $va1[1]
+                )
+            );
+        }
+        return $array1;
+
+    }
+
+    // Listar Permiso de Usuario Original
+    public static function ListarPermisosUsuarioOriginal($temporada, $depto, $login, $cod_tipusr)
     {
 
         // Si es administrador, le agrego todas las acciones
@@ -3553,6 +3577,45 @@ class PlanCompraClass extends \parametros
                     AND t1.estado_accion=1";
 
         }
+
+        $data = \database::getInstancia()->getFilas($sql);
+        return $data;
+
+        // Transformo a array asociativo
+        /*$array1 = [];
+        foreach ($data as $va1) {
+            array_push($array1
+                , array(
+                   "ID_ACCION" => $va1[0]
+                //, "NOMBRE_ACCION" => $va1[1]
+                )
+            );
+        }
+        return $array1;*/
+
+
+    }
+
+    // Listar Permiso de Usuario
+    public static function ListarPermisosUsuario($temporada, $depto, $login, $cod_tipusr)
+    {
+
+        // Si es administrador, le agrego todas las acciones
+        if( $cod_tipusr == 99 ) {
+
+            $sql = "SELECT id_telerik ID_TELERIK, nombre_accion NOMBRE_ACCION 
+                    FROM plc_modulo_accion";
+        } else {
+
+            $sql = "SELECT t1.id_telerik ID_TELERIK, t2.nombre_accion NOMBRE_ACCION 
+                    FROM plc_permiso_modulo_accion t1
+                    INNER JOIN plc_modulo_accion t2 ON t2.id_telerik=t1.id_telerik
+                    INNER JOIN plc_usuario t3 ON t3.cod_tipusr=t1.id_tip_usr
+                    WHERE t3.cod_usr = '" . $login . "'
+                    AND t1.estado_accion=1";
+
+        }
+
         $data = \database::getInstancia()->getFilas($sql);
         return $data;
 
