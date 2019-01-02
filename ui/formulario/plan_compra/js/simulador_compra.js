@@ -926,7 +926,7 @@ $(function () {
                 {
                     //height: 25,
                     cells: [//index: 0,
-                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, //, background: "rgb(167,214,255)", textAlign: "center"
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, //, background: "rgb(205,255,133)", textAlign: "center"
                         {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // G. Compra
                         {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Temp
                         {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Línea
@@ -957,18 +957,18 @@ $(function () {
                         {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Tipo Producto
                         {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Tipo Exhibición
                         {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Tallas
-                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Tipo Empaque
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true, background: "rgb(205,255,133)"}, // Tipo Empaque
                         {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // % Compra Inicial
                         {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // % Compra Ajustada
                         {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Curvas de Reparto
                         {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Curvas Min
-                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Unid Ini
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true, background: "rgb(205,255,133)"}, // Unid Ini
                         {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Unid Ajust
                         {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Unid Final
                         {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Mtr Pack
                         {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // N° Cajas
                         {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Cluster
-                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Formato
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true, background: "rgb(205,255,133)"}, // Formato
                         {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Tdas
                         {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // A
                         {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // B
@@ -977,20 +977,20 @@ $(function () {
                         {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Primera Carga
                         {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // % Tiendas
                         {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Proced
-                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Vía
-                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // País
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true, background: "rgb(205,255,133)"}, // Vía
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true, background: "rgb(205,255,133)"}, // País
                         {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Viaje
                         {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Mkup
-                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Precio Blanco
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true, background: "rgb(205,255,133)"}, // Precio Blanco
                         {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // GM
                         {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Oferta
                         {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // 2X
                         {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Opex
                         {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Moneda
-                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Target
-                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // FOB
-                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Insp
-                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // RFID
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true, background: "rgb(205,255,133)"}, // Target
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true, background: "rgb(205,255,133)"}, // FOB
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true, background: "rgb(205,255,133)"}, // Insp
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true, background: "rgb(205,255,133)"}, // RFID
                         {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Royalty(%)
                         {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Costo Unitario Final US$
                         {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Costo Unitario Final Pesos
@@ -1004,7 +1004,7 @@ $(function () {
                         {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Semanas Ciclo de Vida
                         {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Agot Obj
                         {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Semanas Liquidación
-                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Proveedor
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true, background: "rgb(205,255,133)"}, // Proveedor
                         {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Razón Social
                         {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Trader
                         {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // After Meeting Remark
