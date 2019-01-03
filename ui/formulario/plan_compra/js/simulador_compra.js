@@ -1293,7 +1293,7 @@ $(function () {
                     if(localStorage.getItem("T0004")){
 
                         // Que llegue la proforma y el estado sea Pendiente de Aprobación sin Match
-                        if( (PROFORMA.length==0) || (PROFORMA==null) || (PROFORMA=="") || (ESTADOC1!=19) ){
+                        if( (PROFORMA.length==0) || (PROFORMA==null) || (PROFORMA=="") || (ESTADOC1!=19) || (OC=="") || (OC.length==0=="") || (OC==null) ){
 
                             popupNotification.getNotifications().parent().remove();
                             popupNotification.show(" Seleccione un registro con Proforma,Pendiente de Aprobacion sin Match y OC no Linkeada.", "error");
