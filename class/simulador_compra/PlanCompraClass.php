@@ -1012,10 +1012,115 @@ class PlanCompraClass extends \parametros
     // Procesar el JSON que llega (Devolvemos 0 (Cero) cuando la ejecución sea correcta)
     // public static function ProcesaDataPlanCompra($TEMPORADA, $DEPTO, $LOGIN, $ID_COLOR3, $GRUPO_COMPRA, $COD_TEMP, $LINEA, $SUBLINEA, $MARCA, $ESTILO, $SHORT_NAME, $ID_CORPORATIVO, $DESCMODELO, $DESCRIP_INTERNET, $NOMBRE_COMPRADOR, $NOMBRE_DISENADOR, $COMPOSICION, $TIPO_TELA, $FORRO, $COLECCION, $EVENTO, $COD_ESTILO_VIDA, $CALIDAD, $COD_OCASION_USO, $COD_PIRAMIX, $NOM_VENTANA, $COD_RANKVTA, $LIFE_CYCLE, $NUM_EMB, $COD_COLOR, $TIPO_PRODUCTO, $TIPO_EXHIBICION, $DESTALLA, $TIPO_EMPAQUE, $PORTALLA_1_INI, $PORTALLA_1, $CURVATALLA, $CURVAMIN, $UNID_OPCION_INICIO, $UNID_OPCION_AJUSTADA, $CAN, $MTR_PACK, $CANT_INNER, $SEG_ASIG, $FORMATO, $TDAS, $A, $B, $C, $I, $UND_ASIG_INI, $ROT, $NOM_PRECEDENCIA, $NOM_VIA, $NOM_PAIS, $VIAJE, $MKUP, $PRECIO_BLANCO, $OFERTA, $GM, $COD_TIP_MON, $COSTO_TARGET, $COSTO_FOB, $COSTO_INSP, $COSTO_RFID, $ROYALTY_POR, $COSTO_UNIT, $COSTO_UNITS, $CST_TOTLTARGET, $COSTO_TOT, $COSTO_TOTS, $RETAIL, $DEBUT_REODER, $SEM_INI, $SEM_FIN, $CICLO, $AGOT_OBJ, $SEMLIQ, $ALIAS_PROV, $COD_PROVEEDOR, $COD_TRADER, $AFTER_MEETING_REMARKS, $CODSKUPROVEEDOR, $SKU, $PROFORMA, $ARCHIVO, $ESTILO_PMM, $ESTADO_MATCH, $PO_NUMBER, $ESTADO_OC, $FECHA_ACORDADA, $FECHA_EMBARQUE, $FECHA_ETA, $FECHA_RECEPCION, $DIAS_ATRASO, $CODESTADO, $ESTADO_C1, $VENTANA_LLEGADA, $PROFORMA_BASE, $TIPO_EMPAQUE_BASE, $UNI_INICIALES_BASE, $PRECIO_BLANCO_BASE, $COSTO_TARGET_BASE, $COSTO_FOB_BASE, $COSTO_INSP_BASE, $COSTO_RFID_BASE, $COD_MARCA, $N_CURVASXCAJAS, $COD_JER2, $COD_SUBLIN, $ARCHIVO_BASE)
     // public static function ProcesaDataPlanCompra($TEMPORADA, $DEPTO, $LOGIN, $ID_COLOR3, $NOM_VENTANA,$DESTALLA, $TIPO_EMPAQUE, $PORTALLA_1_INI, $CURVATALLA, $UNID_OPCION_INICIO, $CAN, $SEG_ASIG, $FORMATO, $A, $B, $C, $I, $NOM_VIA, $NOM_PAIS, $PRECIO_BLANCO, $COSTO_TARGET, $COSTO_FOB, $COSTO_INSP, $COSTO_RFID, $DEBUT_REODER, $TIPO_EMPAQUE_BASE, $UNI_INICIALES_BASE, $PRECIO_BLANCO_BASE, $COSTO_TARGET_BASE, $COSTO_FOB_BASE, $COSTO_INSP_BASE, $COSTO_RFID_BASE, $COD_MARCA, $N_CURVASXCAJAS, $COD_JER2, $COD_SUBLIN)
-    public static function ProcesaDataPlanCompra($TEMPORADA, $DEPTO, $LOGIN, $ID_COLOR3,$ESTADO_C1, $PROFORMA, $ARCHIVO,$PROFORMA_BASE,$ARCHIVO_BASE,$ALIAS_PROV, $NOM_VENTANA,$DESTALLA, $TIPO_EMPAQUE, $PORTALLA_1_INI, $CURVATALLA, $UNID_OPCION_INICIO, $CAN, $SEG_ASIG, $FORMATO, $A, $B, $C, $I, $NOM_VIA, $NOM_PAIS, $PRECIO_BLANCO, $COSTO_TARGET, $COSTO_FOB, $COSTO_INSP, $COSTO_RFID, $DEBUT_REODER, $TIPO_EMPAQUE_BASE, $UNI_INICIALES_BASE, $PRECIO_BLANCO_BASE, $COSTO_TARGET_BASE, $COSTO_FOB_BASE, $COSTO_INSP_BASE, $COSTO_RFID_BASE, $COD_MARCA, $N_CURVASXCAJAS, $COD_JER2, $COD_SUBLIN,$FORMATO_BASE)
+    public static function ProcesaDataPlanCompra($TEMPORADA, $DEPTO, $LOGIN, $ID_COLOR3,$ESTADO_C1, $PROFORMA, $ARCHIVO,$PROFORMA_BASE,$ARCHIVO_BASE,$ALIAS_PROV, $NOM_VENTANA,$DESTALLA, $TIPO_EMPAQUE, $PORTALLA_1_INI, $CURVATALLA, $UNID_OPCION_INICIO, $CAN, $SEG_ASIG, $FORMATO, $A, $B, $C, $I, $NOM_VIA, $NOM_PAIS, $PRECIO_BLANCO, $COSTO_TARGET, $COSTO_FOB, $COSTO_INSP, $COSTO_RFID, $DEBUT_REODER, $TIPO_EMPAQUE_BASE, $UNI_INICIALES_BASE, $PRECIO_BLANCO_BASE, $COSTO_TARGET_BASE, $COSTO_FOB_BASE, $COSTO_INSP_BASE, $COSTO_RFID_BASE, $COD_MARCA, $N_CURVASXCAJAS, $COD_JER2, $COD_SUBLIN,$FORMATO_BASE,$FECHA_ACORDADA)
     {
 
-        // ############################################# GUARDADO PROFORMA ###########################################
+        // ############################################# 1 VALIDACION CURVADO #############################################
+        // Validar Tipo Empaque (DEBUT=Curvado)
+        if (($TIPO_EMPAQUE == null) || ($TIPO_EMPAQUE == "") || ($TIPO_EMPAQUE == "null")) {
+            return " ID: " . $ID_COLOR3 . " - Se ha enviado un empaque vacio.";
+            die();
+        }
+
+            if($TIPO_EMPAQUE == "CURVADO"){
+
+                // Validar Unidades Iniciales
+                if (($UNID_OPCION_INICIO == null) || ($UNID_OPCION_INICIO == "") || ($UNID_OPCION_INICIO == "null") || (!$UNID_OPCION_INICIO)) {
+                    return " ID: " . $ID_COLOR3 . " - Se ha enviado Unidad Iniciales vacia.";
+                    die();
+                }
+
+                // Validar Formato
+                if (($FORMATO == null) || ($FORMATO == "") || ($FORMATO == "null")) {
+                    return " ID: " . $ID_COLOR3 . " - Se ha enviado un formato vacio.";
+                    die();
+                }
+
+                // Validar Ventana
+                if (($NOM_VENTANA == null) || ($NOM_VENTANA == "") || ($NOM_VENTANA == "null")) {
+                    return " ID: " . $ID_COLOR3 . " - Se ha enviado un registro sin ventana.";
+                    die();
+                }
+
+                // Validar que llega la Vía
+                $array_vias = array("MARITIMO", "AEREA", "TERRESTRE");
+                if (!in_array(strtoupper($NOM_VIA), $array_vias)) {
+                    return " ID: " . $ID_COLOR3 . " - El valor enviado en la columna Via, no corresponde.";
+                    die();
+                }
+
+                // Validar que lleguen los datos asociados al curvado
+                if (!isset($TIPO_EMPAQUE) || !isset($PORTALLA_1_INI) || !isset($DESTALLA) || !isset($CURVATALLA) || ($UNID_OPCION_INICIO <= 0) || ($SEG_ASIG == null) || ($SEG_ASIG == '')) {
+                    return " ID: " . $ID_COLOR3 . " - No pueden estar en blanco los Campos: Tipo Empaque, Porcent Ini,Tallas,Curvas,Und Iniciales.";
+                    die();
+                }
+            }
+        // ########################################### FIN VALIDACION CURVADO ###########################################
+
+
+        // ################################# 2 VALIDACION FOB - PROV - FECHA ACORDADA #############################################
+        // Validar Costo FOB
+        if (($COSTO_FOB != 0) && ($COSTO_FOB != null) && ($COSTO_FOB != "") && ($COSTO_FOB != "null")) {
+
+            // Validar Proveedor
+            if (($ALIAS_PROV == null) || ($ALIAS_PROV == "") || ($ALIAS_PROV == "null") || (is_numeric($ALIAS_PROV))) {
+                return " ID: " . $ID_COLOR3 . " - Se ha enviado campo Proveedor Vacio.";
+                die();
+            }
+
+            // Validar Fecha Acordada
+            if (($FECHA_ACORDADA == null) || ($FECHA_ACORDADA == "") || ($FECHA_ACORDADA == "null")) {
+                return " ID: " . $ID_COLOR3 . " - Se ha enviado campo Fecha Acordada Vacio.";
+                die();
+            }
+
+        }
+        // Validar Proveedor
+        if (($ALIAS_PROV != null) && ($ALIAS_PROV != "") && ($ALIAS_PROV != "null") ) {
+
+            // Validar Costo FOB
+            if (($COSTO_FOB == null) || ($COSTO_FOB == "") || ($COSTO_FOB == "null")) {
+                return " ID: " . $ID_COLOR3 . " - Se ha enviado campo FOB Vacio.";
+                die();
+            }
+
+            // Validar Fecha Acordada
+            if (($FECHA_ACORDADA == null) || ($FECHA_ACORDADA == "") || ($FECHA_ACORDADA == "null")) {
+                return " ID: " . $ID_COLOR3 . " - Se ha enviado campo Fecha Acordada Vacio.";
+                die();
+            }
+
+        }
+        // Validar Fecha Acordada
+        if (($FECHA_ACORDADA != null) && ($FECHA_ACORDADA != "") && ($FECHA_ACORDADA != "null")) {
+
+            // Validar Proveedor
+            if (($ALIAS_PROV == null) || ($ALIAS_PROV == "") || ($ALIAS_PROV == "null") ) {
+                return " ID: " . $ID_COLOR3 . " - Se ha enviado campo Proveedor Vacio.";
+                die();
+            }
+
+            // Validar Costo FOB
+            if (($COSTO_FOB == null) || ($COSTO_FOB == "") || ($COSTO_FOB == "null")) {
+                return " ID: " . $ID_COLOR3 . " - Se ha enviado campo FOB Vacio.";
+                die();
+            }
+
+        }
+        // ################################# FIN VALIDACION FOB - PROV - FECHA ACORDADA #############################################
+
+
+        // ###################################### 3 GUARDADO CAMPOS DE TEXTO SIMPLE ####################################
+        // ######################### (Campos de Texto que no requieren validación, update directo) #####################
+        $query_campos_libres = PlanCompraClass::ActualizaPlanCompraCamposLibre($TEMPORADA, $DEPTO, $LOGIN, $ID_COLOR3,$ALIAS_PROV);
+        if($query_campos_libres != "OK"){
+            return " ID: " . $ID_COLOR3 . " - No se pudo Actualizar Campo de Libre Edicion.";
+            die();
+        }
+        // ###################################### FIN GUARDADO CAMPOS DE TEXTO SIMPLE ####################################
+
+
+        // ############################################# 4 GUARDADO PROFORMA ###########################################
         // ############################ (Independiente de Curvado y Otras Actualizaciones) #############################
         // 1.- Si la proforma base no es igual a la que nos llega, hay que aplicar la función de guardado de proforma.
         if ((($PROFORMA_BASE != $PROFORMA) && (is_null($PROFORMA_BASE))) || ($ARCHIVO_BASE != $ARCHIVO)) {
@@ -1046,65 +1151,6 @@ class PlanCompraClass extends \parametros
         // ########################################## FIN GUARDADO PROFORMA ############################################
 
 
-        // ###################################### 2 GUARDADO CAMPOS DE TEXTO SIMPLE ####################################
-        // ######################### (Campos de Texto que no requieren validación, update directo) #####################
-
-        // Validar Tipo Empaque
-        if (($ALIAS_PROV == null) || ($ALIAS_PROV == "") || ($ALIAS_PROV == "null") || (is_numeric($ALIAS_PROV))) {
-            return " ID: " . $ID_COLOR3 . " - Se ha enviado campo Proveedor Vacio.";
-            die();
-        }
-
-
-        $query_campos_libres = PlanCompraClass::ActualizaPlanCompraCamposLibre($TEMPORADA, $DEPTO, $LOGIN, $ID_COLOR3,$ALIAS_PROV);
-        if($query_campos_libres != "OK"){
-            return " ID: " . $ID_COLOR3 . " - No se pudo Actualizar Campo de Libre Edicion.";
-            die();
-        }/*else{
-            //return json_encode("OK");
-            return 0;
-        }*/
-
-
-        // ############################################# VALIDACIONES #############################################
-
-        // Validar Tipo Empaque
-        if (($TIPO_EMPAQUE == null) || ($TIPO_EMPAQUE == "") || ($TIPO_EMPAQUE == "null")) {
-            return " ID: " . $ID_COLOR3 . " - Se ha enviado un empaque vacio.";
-            die();
-        }
-
-        // Validar Unidades Iniciales
-        if (($UNID_OPCION_INICIO == null) || ($UNID_OPCION_INICIO == "") || ($UNID_OPCION_INICIO == "null") || (!$UNID_OPCION_INICIO)) {
-            return " ID: " . $ID_COLOR3 . " - Se ha enviado Unidad Iniciales vacia.";
-            die();
-        }
-
-        // Validar Formato
-        if (($FORMATO == null) || ($FORMATO == "") || ($FORMATO == "null")) {
-            return " ID: " . $ID_COLOR3 . " - Se ha enviado un formato vacio.";
-            die();
-        }
-
-        // Validar Ventana
-        if (($NOM_VENTANA == null) || ($NOM_VENTANA == "") || ($NOM_VENTANA == "null")) {
-            return " ID: " . $ID_COLOR3 . " - Se ha enviado un registro sin ventana.";
-            die();
-        }
-
-        // Validar que llega la Vía
-        $array_vias = array("MARITIMO", "AEREA", "TERRESTRE");
-        if (!in_array(strtoupper($NOM_VIA), $array_vias)) {
-            return " ID: " . $ID_COLOR3 . " - El valor enviado en la columna Via, no corresponde.";
-            die();
-        }
-
-        // Validar que lleguen los datos asociados al curvado
-        if (!isset($TIPO_EMPAQUE) || !isset($PORTALLA_1_INI) || !isset($DESTALLA) || !isset($CURVATALLA) || ($UNID_OPCION_INICIO <= 0) || ($SEG_ASIG == null) || ($SEG_ASIG == '')) {
-            return " ID: " . $ID_COLOR3 . " - No pueden estar en blanco los Campos: Tipo Empaque, Porcent Ini,Tallas,Curvas,Und Iniciales.";
-            die();
-        }
-        // ########################################### FIN VALIDACIONES ###########################################
 
 
         // ############################################# SETEO DE VARIABLES #############################################
