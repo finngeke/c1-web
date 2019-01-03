@@ -58,7 +58,10 @@ $(document).ready(function() {
     // BTN GuardarCambiosBTN
     function GuardarCambiosBTN(e) {
 
-        // $( "#guardar_cambios_pc" ).click();
+        $("#tb_guardar_cambios").addClass("k-state-disabled");
+        $("#tb_cancelar_cambios").addClass("k-state-disabled");
+        // $("#tb_guardar_cambios").removeClass("k-state-disabled");
+        // $("#tb_cancelar_cambios").removeClass("k-state-disabled");
 
         var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
         var sheet = spreadsheet.activeSheet();
@@ -68,8 +71,6 @@ $(document).ready(function() {
 
     // BTN CancelarCambiosBTN
     function CancelarCambiosBTN(e) {
-
-        //$( "#cancelar_cambios_pc" ).click();
 
         var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
         var sheet = spreadsheet.activeSheet();
@@ -92,12 +93,14 @@ $(document).ready(function() {
             {
                 type: "button",
                 text: "Guardar Cambios",
+                id: "tb_guardar_cambios",
                 overflow: "never",
                 click: GuardarCambiosBTN
             },
             {
                 type: "button",
                 text: "Cancelar Cambios",
+                id: "tb_cancelar_cambios",
                 overflow: "never",
                 click: CancelarCambiosBTN
             },

@@ -1015,7 +1015,7 @@ class PlanCompraClass extends \parametros
     public static function ProcesaDataPlanCompra($TEMPORADA, $DEPTO, $LOGIN, $ID_COLOR3,$ESTADO_C1, $PROFORMA, $ARCHIVO,$PROFORMA_BASE,$ARCHIVO_BASE,$ALIAS_PROV, $NOM_VENTANA,$DESTALLA, $TIPO_EMPAQUE, $PORTALLA_1_INI, $CURVATALLA, $UNID_OPCION_INICIO, $CAN, $SEG_ASIG, $FORMATO, $A, $B, $C, $I, $NOM_VIA, $NOM_PAIS, $PRECIO_BLANCO, $COSTO_TARGET, $COSTO_FOB, $COSTO_INSP, $COSTO_RFID, $DEBUT_REODER, $TIPO_EMPAQUE_BASE, $UNI_INICIALES_BASE, $PRECIO_BLANCO_BASE, $COSTO_TARGET_BASE, $COSTO_FOB_BASE, $COSTO_INSP_BASE, $COSTO_RFID_BASE, $COD_MARCA, $N_CURVASXCAJAS, $COD_JER2, $COD_SUBLIN,$FORMATO_BASE)
     {
 
-        // ############################################# 2 GUARDADO PROFORMA ###########################################
+        // ############################################# GUARDADO PROFORMA ###########################################
         // ############################ (Independiente de Curvado y Otras Actualizaciones) #############################
         // 1.- Si la proforma base no es igual a la que nos llega, hay que aplicar la función de guardado de proforma.
         if ((($PROFORMA_BASE != $PROFORMA) && (is_null($PROFORMA_BASE))) || ($ARCHIVO_BASE != $ARCHIVO)) {

@@ -344,10 +344,15 @@ $(function () {
                     popupNotification.show(result, "error");
                 }
 
-
+                $("#tb_guardar_cambios").removeClass("k-state-disabled");
+                $("#tb_cancelar_cambios").removeClass("k-state-disabled");
 
             },
             error: function (xhr, httpStatusMessage, customErrorMessage) {
+
+                $("#tb_guardar_cambios").removeClass("k-state-disabled");
+                $("#tb_cancelar_cambios").removeClass("k-state-disabled");
+
                 console.log(xhr.responseText+" / "+httpStatusMessage+" / "+customErrorMessage);
             }
         });
