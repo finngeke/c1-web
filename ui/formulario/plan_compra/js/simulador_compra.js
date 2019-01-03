@@ -1010,7 +1010,7 @@ $(function () {
                         {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // After Meeting Remark
                         {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Cod. SKU Proveedor
                         {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Cod. Padre
-                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Proforma
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true, background: "rgb(205,255,133)"}, // Proforma
                         {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Archivo
                         {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Estilo PMM
                         {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Estado Match
