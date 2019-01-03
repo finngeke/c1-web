@@ -837,7 +837,7 @@ class PlanCompraClass extends \parametros
                 // 2.- Actualiza plc_plan_compra_color3 estado=18 y proforma = $proforma
                 $sql_plan_compra_color_3 = "UPDATE plc_plan_compra_color_3
                 SET proforma = '" . $proforma . "',
-                estado = 22
+                estado = 19
                 WHERE cod_temporada = $temporada
                 AND dep_depto = '" . $depto . "'
                 AND id_color3 = $id_insertar
@@ -3530,10 +3530,10 @@ class PlanCompraClass extends \parametros
     public static function ListarRegistrosGrilla($temporada, $depto, $login)
     {
 
-        /*$sql_limpia_depto = "DELETE FROM PLC_CONCURRENCIA HR
+        $sql_limpia_depto = "DELETE FROM PLC_CONCURRENCIA HR
                        WHERE EXISTS  (SELECT * FROM PLC_USUARIO US WHERE US.COD_TIPUSR <>99) 
                        AND (TO_NUMBER(TO_CHAR(SYSDATE,'HH24')-TO_CHAR(HR.FECHA,'HH24') )*60)+ TO_NUMBER(TO_CHAR(SYSDATE,'MI')-TO_CHAR(HR.FECHA,'MI'))>=30";
-        $data_limpia = \database::getInstancia()->getConsulta($sql_limpia_depto);*/
+        $data_limpia = \database::getInstancia()->getConsulta($sql_limpia_depto);
 
 
         $sql = "SELECT 'TOTALREGPLAN' ID_TELERIK, TO_CHAR(COUNT(*)+1) NOMBRE_ACCION
@@ -3675,31 +3675,62 @@ class PlanCompraClass extends \parametros
     public static function BuscaUsuarioDesconectado($temporada, $depto, $login,$cod_tipusr)
     {
 
-        $sql = "SELECT 1 
-                    FROM PLC_CONCURRENCIA 
-                    WHERE COD_TEMPORADA = $temporada
-                    AND DEP_DEPTO = '".$depto."' 
-                    AND COD_USR = '".$cod_tipusr."'
-                    AND IS_OFFLINE = 1
-                    ";
+        // Verifico si el usuario está dentro de los que tienen mas de 30 Min sin conexión
+        $sql_desconectado = "SELECT 1 FROM PLC_CONCURRENCIA HR
+                             WHERE EXISTS  (SELECT * FROM PLC_USUARIO US WHERE US.COD_TIPUSR <>99) 
+                             AND (TO_NUMBER(TO_CHAR(SYSDATE,'HH24')-TO_CHAR(HR.FECHA,'HH24') )*60)+ TO_NUMBER(TO_CHAR(SYSDATE,'MI')-TO_CHAR(HR.FECHA,'MI')) >= 30
+                             AND HR.COD_USR = '".$login."'";
+        $existe_desconectado = (int) \database::getInstancia()->getFila($sql_desconectado);
 
-        $existe = (int) \database::getInstancia()->getFila($sql);
+        // Si está en la lista, actualizo IS_OFFLINE = 1 y ejecuto la query original
+        if ($existe_desconectado == 1){
 
-        if ($existe == 1){
+            $sql_update_offline = "UPDATE PLC_CONCURRENCIA 
+                                   SET IS_OFFLINE = 1
+                                   WHERE COD_USR = '".$login."'";
+            $data_update_offline = \database::getInstancia()->getConsulta($sql_update_offline);
 
-            // Quitar su registro (Si el usuario recarga, va ingresar en modo lectura)
-            $sql_quitar = "DELETE FROM PLC_CONCURRENCIA
+
+            if($data_update_offline){
+
+                $sql = "SELECT 1 
+                FROM PLC_CONCURRENCIA 
+                WHERE COD_TEMPORADA = $temporada
+                AND DEP_DEPTO = '".$depto."' 
+                AND COD_USR = '".$cod_tipusr."'
+                AND IS_OFFLINE = 1";
+
+                $existe = (int) \database::getInstancia()->getFila($sql);
+
+                if ($existe == 1){
+
+                    // Quitar su registro (Si el usuario recarga, va ingresar en modo lectura)
+                    $sql_quitar = "DELETE FROM PLC_CONCURRENCIA
                             WHERE COD_TEMPORADA = $temporada
                             AND DEP_DEPTO = '".$depto."'
                             AND COD_USR = '".$cod_tipusr."' 
                             ";
-            $data_quitar = \database::getInstancia()->getConsulta($sql_quitar);
+                    $data_quitar = \database::getInstancia()->getConsulta($sql_quitar);
 
-            return 1;
+                    return 1;
+
+                }else{
+                    return 0;
+                }
+
+            }
 
         }else{
             return 0;
         }
+        // si no está en la lista retorno 0
+
+
+
+
+
+
+
 
 
 
