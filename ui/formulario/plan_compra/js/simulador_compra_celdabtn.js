@@ -103,13 +103,14 @@ $(function () {
 
     }
 
-
+    // var nom_temp_depto_match =  $("#span_data_temp_depto").text();
+    // var res_temp_depto_match = nom_temp_depto_match.split(" - ");
     // Le da la estructura a la ventana POPUP
     var ventana_match = $("#POPUP_match");
     ventana_match.kendoWindow({
         width: "750px",
         height: "350px",
-        title: "Match",
+        title: "Match",//+res_temp_depto_match[1]
         visible: false,
         actions: [
             //"Pin",
