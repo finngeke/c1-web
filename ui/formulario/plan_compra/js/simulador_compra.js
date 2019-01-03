@@ -1212,7 +1212,7 @@ $(function () {
 
                         }else{
                             popupNotification.getNotifications().parent().remove();
-                            popupNotification.show(" En estado Ingresado,No puede descargar el archivo.", "error");
+                            popupNotification.show(" No puedes descargar en estado Ingresado.", "info");
                         }
 
                     }else{
@@ -1251,7 +1251,7 @@ $(function () {
 
                         if( (PROFORMA.length==0) || (PROFORMA==null) || (PROFORMA=="") || (ARCHIVO=="Cargado..") || (ESTADOC1==24)){
                             popupNotification.getNotifications().parent().remove();
-                            popupNotification.show(" Seleccione un registro con proforma y archivo sin cargar.", "error");
+                            popupNotification.show(" Seleccione un registro con proforma y archivo sin cargar.", "info");
                         }else {
 
                             // Le asigno el nombre de la Proforma al campo de texto
@@ -1296,7 +1296,7 @@ $(function () {
                         if( (PROFORMA.length==0) || (PROFORMA==null) || (PROFORMA=="") || (ESTADOC1!=19) || (OC=="") || (OC.length==0) || (OC==null) ){
 
                             popupNotification.getNotifications().parent().remove();
-                            popupNotification.show(" Seleccione un registro con Proforma,Pendiente de Aprobacion sin Match y OC no Linkeada.", "error");
+                            popupNotification.show(" Seleccione un registro con Proforma, OC no Linkeada y Pendiente de Aprobacion sin Match.", "info");
 
                         }else {
 
@@ -1770,7 +1770,7 @@ $(function () {
 
                     if( (ID_COLOR3=="ID") || (ID_COLOR3=="") || (ID_COLOR3==null) || (ID_COLOR3.length==0) || (PROFORMA.length==0) || (PROFORMA==null) || (PROFORMA=="") || (ESTADOC1==24) ){
                         popupNotification.getNotifications().parent().remove();
-                        popupNotification.show(" Cambio Estado no disponible para este registro.", "error");
+                        popupNotification.show(" Cambio Estado no disponible para este registro.", "info");
                     }else{
 
                         // Levantar el POPUP
