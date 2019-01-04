@@ -1249,6 +1249,7 @@ $(function () {
                     // Verificar Permisos
                     if(localStorage.getItem("T0003")){
 
+
                         if( (PROFORMA.length==0) || (PROFORMA==null) || (PROFORMA=="") || (ARCHIVO=="Cargado..") || (ESTADOC1==24)){
                             popupNotification.getNotifications().parent().remove();
                             popupNotification.show(" Seleccione un registro con proforma y archivo sin cargar.", "info");
@@ -1707,24 +1708,20 @@ $(function () {
                                                 dataType: "json",
                                                 success: function (result) {
 
+                                                    // Se Registró MATCH y Variaciones
                                                     if(result=="OK"){
-
-                                                        // Avisamos que el Match se encuentra OK
-                                                        //popupNotification.getNotifications().parent().remove();
-                                                        popupNotification.show(" Variaciones OK, Hemos Finalizado.", "success");
-
-                                                        // Se Registró MATCH y Variaciones
 
                                                         // Recargo el DATASOURCE
                                                         var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
                                                         var sheet = spreadsheet.activeSheet();
                                                         sheet.dataSource.read();
 
+                                                        // Avisamos que el Match se encuentra OK
+                                                        //popupNotification.getNotifications().parent().remove();
+                                                        popupNotification.show(" Variaciones OK, Hemos Finalizado.", "success");
+
                                                         // Cierro el POPUP de MATCH
                                                         popupMatch.data("kendoWindow").close();
-
-                                                        // Recargar
-                                                        //location.reload();
 
 
                                                     }else{
