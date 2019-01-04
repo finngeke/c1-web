@@ -3207,7 +3207,7 @@ class PlanCompraClass extends \parametros
     // Fin del ActualizaPlanMATCH
     }
 
-    // Generar Match (En estado 19)
+    // Match - Generar Match (En estado 19)
     public static function GenerarMatch($temporada, $depto, $login, $oc, $proforma)
     {
 
@@ -3383,7 +3383,7 @@ class PlanCompraClass extends \parametros
 
     }
 
-    // Generar Match Variacion
+    // Match - Generar Match Variacion
     public static function GenerarMatchVariaciones($temporada, $depto, $login, $oc, $proforma)
     {
 
@@ -3441,14 +3441,56 @@ class PlanCompraClass extends \parametros
 
     }
 
-    // Revertir Match
+    // Match - Revertir Match
     public static function RevertirMatch($temporada, $depto, $login, $oc, $proforma)
     {
 
+    }
+
+    // Match - Agregar OC a Tabla plc_ordenes_compra_pmm
+    public static function AgregaOcTablaOCPMM($temporada, $depto, $login, $oc, $proforma)
+    {
+
+        $sql_busca_estado_oc = "SELECT
+                                            CASE 
+                                            WHEN ESTADO_OC = 'Modo Ingreso' THEN 1 
+                                            WHEN ESTADO_OC = 'Pendiente Autorizacion' THEN 2
+                                            WHEN ESTADO_OC = 'Autorizada' THEN 3
+                                            WHEN ESTADO_OC = 'On Order' THEN 4
+                                            WHEN ESTADO_OC = 'Recepcion Parcial' THEN 5
+                                            WHEN ESTADO_OC = 'Recepcion Completa' THEN 6
+                                            WHEN ESTADO_OC = 'Cancelada' THEN 7 END ESTADO_OC 
+                                        FROM B
+                                        WHERE ORDEN_DE_COMPRA = $oc
+                                        GROUP BY ESTADO_OC";
+        $data_estado = (int) \database::getInstancia()->getFila($sql_busca_estado_oc);
 
 
+        // Verificar si la OC existe en plc_ordenes_compra_pmm
+        $sql_existe_oc = "SELECT 1 FROM plc_ordenes_compra_pmm
+                                     WHERE po_number = $oc";
+        $existe_oc = (int) \database::getInstancia()->getFila($sql_existe_oc);
+
+        // Si existe lo actualizo
+        if ($existe_oc == 1){
+
+            $sql_update_oc = "UPDATE plc_ordenes_compra_pmm 
+                                      SET COD_ESTADO = $data_estado
+                                      WHERE po_number = $oc";
+            $data_update_oc = \database::getInstancia()->getConsulta($sql_update_oc);
+
+
+        }else{
+            $sql_update_oc = "INSERT INTO plc_ordenes_compra_pmm (PO_NUMBER,COD_PROVEEDOR,COD_ESTADO,PO_DATE,PO_UNITS_QTY,PO_UNITS_COST) 
+                                      VALUES ($oc,0,$data_estado,'00/00/0000',0,0)";
+            $data_update_oc = \database::getInstancia()->getConsulta($sql_update_oc);
+        }
+
+
+        // No existe lo agrego
 
     }
+
 
 
     // ######################## INICIO Trabajo con flujo de aprobación ########################

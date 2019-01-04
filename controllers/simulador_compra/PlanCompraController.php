@@ -408,6 +408,17 @@ if($ESTADO_C1!=24){
     }
 
 
+    // Match - Revertir Match
+    public function RevertirMatch($f3) {
+
+    }
+
+    // Match - Agregar OC a Tabla plc_ordenes_compra_pmm
+    public function AgregaOcTablaOCPMM($f3) {
+        echo \simulador_compra\PlanCompraClass::AgregaOcTablaOCPMM( $f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $f3->get('GET.OC'), $f3->get('GET.PROFORMA') );
+    }
+
+
 
     // ######################## INICIO Trabajo con flujo de aprobación ########################
     public function ModificaEstadoDinamico($f3) {
