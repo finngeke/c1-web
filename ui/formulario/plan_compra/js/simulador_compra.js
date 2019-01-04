@@ -1712,7 +1712,7 @@ $(function () {
                                                     if(result=="OK"){
 
                                                         // Recargo el DATASOURCE
-                                                        var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
+                                                        /*var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
                                                         var sheet = spreadsheet.activeSheet();
                                                         sheet.dataSource.read();
 
@@ -1721,7 +1721,48 @@ $(function () {
                                                         popupNotification.show(" Variaciones OK, Hemos Finalizado.", "success");
 
                                                         // Cierro el POPUP de MATCH
-                                                        popupMatch.data("kendoWindow").close();
+                                                        popupMatch.data("kendoWindow").close();*/
+
+
+                                                        // Inserta o Actualiza Tabla plc_ordenes_compra_pmm (NUEVO, PARCHE LALO)
+                                                        $.ajax({
+                                                            //type: "POST",
+                                                            url: "TelerikPlanCompra/AgregaOcTablaOCPMM",
+                                                            data: {OC:kendo.parseInt(OC),PROFORMA:String(PROFORMA)},
+                                                            dataType: "json",
+                                                            success: function (result) {
+
+                                                                // Se Insertó Registro en plc_ordenes_compra_pmm
+                                                                if(result=="OK"){
+
+                                                                    // Recargo el DATASOURCE
+                                                                    var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
+                                                                    var sheet = spreadsheet.activeSheet();
+                                                                    sheet.dataSource.read();
+
+                                                                    // Avisamos que el Match se encuentra OK
+                                                                    //popupNotification.getNotifications().parent().remove();
+                                                                    popupNotification.show(" Variaciones OK, Hemos Finalizado.", "success");
+
+                                                                    // Cierro el POPUP de MATCH
+                                                                    popupMatch.data("kendoWindow").close();
+
+
+                                                                }else{
+                                                                    //popupNotification.getNotifications().parent().remove();
+                                                                    popupNotification.show(" No se insertó registro en plc_ordenes_compra_pmm.", "error");
+                                                                }
+
+                                                            },
+                                                            error: function (xhr, httpStatusMessage, customErrorMessage) {
+                                                                popupNotification.getNotifications().parent().remove();
+                                                                popupNotification.show(" No se insertó registro en plc_ordenes_compra_pmm. "+result, "error");
+                                                            }
+                                                        });
+
+
+
+
 
 
                                                     }else{

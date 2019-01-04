@@ -415,7 +415,8 @@ if($ESTADO_C1!=24){
 
     // Match - Agregar OC a Tabla plc_ordenes_compra_pmm
     public function AgregaOcTablaOCPMM($f3) {
-        echo \simulador_compra\PlanCompraClass::AgregaOcTablaOCPMM( $f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $f3->get('GET.OC'), $f3->get('GET.PROFORMA') );
+        $array_data = $_GET;
+        echo \simulador_compra\PlanCompraClass::AgregaOcTablaOCPMM( $f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $array_data["OC"], $array_data["PROFORMA"] );
     }
 
 

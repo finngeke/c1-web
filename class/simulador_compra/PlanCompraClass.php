@@ -3466,28 +3466,76 @@ class PlanCompraClass extends \parametros
         $data_estado = (int) \database::getInstancia()->getFila($sql_busca_estado_oc);
 
 
-        // Verificar si la OC existe en plc_ordenes_compra_pmm
-        $sql_existe_oc = "SELECT 1 FROM plc_ordenes_compra_pmm
-                                     WHERE po_number = $oc";
-        $existe_oc = (int) \database::getInstancia()->getFila($sql_existe_oc);
+        // Verifico que tenga el estado de la OC
+        if($data_estado){
 
-        // Si existe lo actualizo
-        if ($existe_oc == 1){
+            // Verificar si la OC existe en plc_ordenes_compra_pmm
+            $sql_existe_oc = "SELECT 1 FROM plc_ordenes_compra_pmm
+                              WHERE po_number = $oc";
+            $existe_oc = (int) \database::getInstancia()->getFila($sql_existe_oc);
 
-            $sql_update_oc = "UPDATE plc_ordenes_compra_pmm 
-                                      SET COD_ESTADO = $data_estado
-                                      WHERE po_number = $oc";
-            $data_update_oc = \database::getInstancia()->getConsulta($sql_update_oc);
+            // Si existe lo actualizo
+            if ($existe_oc == 1){
 
+                $sql_update_oc = "UPDATE plc_ordenes_compra_pmm 
+                                  SET COD_ESTADO = $data_estado
+                                  WHERE po_number = $oc";
 
-        }else{
-            $sql_update_oc = "INSERT INTO plc_ordenes_compra_pmm (PO_NUMBER,COD_PROVEEDOR,COD_ESTADO,PO_DATE,PO_UNITS_QTY,PO_UNITS_COST) 
+                // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+                if (!file_exists('../archivos/log_querys/' . $login)) {
+                    mkdir('../archivos/log_querys/' . $login, 0775, true);
+                }
+                $stamp = date("Y-m-d_H-i-s");
+                $rand = rand(1, 999);
+                $content = $sql;
+                $fp = fopen("../archivos/log_querys/" . $login . "/PARCHEMATCH-ACTUALIZAOCPMM--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+                fwrite($fp, $content);
+                fclose($fp);
+
+                $data_update_oc = \database::getInstancia()->getConsulta($sql_update_oc);
+
+                if($data_update_oc){
+                    return "OK";
+                }else{
+                    return "ERROR";
+                }
+
+            // No existe lo agrego
+            }else{
+
+                $sql_insert_oc = "INSERT INTO plc_ordenes_compra_pmm (PO_NUMBER,COD_PROVEEDOR,COD_ESTADO,PO_DATE,PO_UNITS_QTY,PO_UNITS_COST) 
                                       VALUES ($oc,0,$data_estado,'00/00/0000',0,0)";
-            $data_update_oc = \database::getInstancia()->getConsulta($sql_update_oc);
+
+                // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+                if (!file_exists('../archivos/log_querys/' . $login)) {
+                    mkdir('../archivos/log_querys/' . $login, 0775, true);
+                }
+                $stamp = date("Y-m-d_H-i-s");
+                $rand = rand(1, 999);
+                $content = $sql;
+                $fp = fopen("../archivos/log_querys/" . $login . "/PARCHEMATCH-INSERTAOCPMM--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+                fwrite($fp, $content);
+                fclose($fp);
+
+                $data_insert_oc = \database::getInstancia()->getConsulta($sql_insert_oc);
+
+                if($data_insert_oc){
+                    return "OK";
+                }else{
+                    return "ERROR";
+                }
+
+            }
+
+
+
+
+
         }
 
 
-        // No existe lo agrego
+
+
 
     }
 
