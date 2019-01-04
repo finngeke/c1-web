@@ -93,13 +93,12 @@ $(function () {
     // ############################ MATCH ############################
 
     function cerrarPopUpMATCH(){
+        
+        $("#grid_match_pmm").empty();
+        $("#grid_match_plan").empty();
 
-        //location.reload();
-
-        // Recargo el DATASOURCE
-        var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
-        var sheet = spreadsheet.activeSheet();
-        sheet.dataSource.read();
+        $("#grid_match_pmm").data("kendoGrid").destroy();
+        $("#grid_match_plan").data("kendoGrid").destroy();
 
     }
 
@@ -117,8 +116,8 @@ $(function () {
             "Minimize",
             "Maximize",
             "Close"
-        ]/*,
-        close: cerrarPopUpMATCH*/
+        ],
+        close: cerrarPopUpMATCH
     }).data("kendoWindow").center();
 
 
