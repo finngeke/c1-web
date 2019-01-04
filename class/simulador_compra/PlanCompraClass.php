@@ -3463,8 +3463,7 @@ class PlanCompraClass extends \parametros
                                         FROM B
                                         WHERE ORDEN_DE_COMPRA = $oc
                                         GROUP BY ESTADO_OC";
-        $data_estado = (int) \database::getInstancia()->getFila($sql_busca_estado_oc);
-
+        $data_estado = \database::getInstancia()->getFila($sql_busca_estado_oc);
 
         // Verifico que tenga el estado de la OC
         if($data_estado){
@@ -3478,7 +3477,7 @@ class PlanCompraClass extends \parametros
             if ($existe_oc == 1){
 
                 $sql_update_oc = "UPDATE plc_ordenes_compra_pmm 
-                                  SET COD_ESTADO = $data_estado
+                                  SET COD_ESTADO = $data_estado[0]
                                   WHERE po_number = $oc";
 
                 // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
@@ -3487,7 +3486,7 @@ class PlanCompraClass extends \parametros
                 }
                 $stamp = date("Y-m-d_H-i-s");
                 $rand = rand(1, 999);
-                $content = $sql;
+                $content = $sql_update_oc;
                 $fp = fopen("../archivos/log_querys/" . $login . "/PARCHEMATCH-ACTUALIZAOCPMM--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
                 fwrite($fp, $content);
                 fclose($fp);
@@ -3504,7 +3503,7 @@ class PlanCompraClass extends \parametros
             }else{
 
                 $sql_insert_oc = "INSERT INTO plc_ordenes_compra_pmm (PO_NUMBER,COD_PROVEEDOR,COD_ESTADO,PO_DATE,PO_UNITS_QTY,PO_UNITS_COST) 
-                                      VALUES ($oc,0,$data_estado,'00/00/0000',0,0)";
+                                      VALUES ($oc,0,$data_estado[0],SYSDATE,0,0)";
 
                 // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
                 if (!file_exists('../archivos/log_querys/' . $login)) {
@@ -3512,7 +3511,7 @@ class PlanCompraClass extends \parametros
                 }
                 $stamp = date("Y-m-d_H-i-s");
                 $rand = rand(1, 999);
-                $content = $sql;
+                $content = $sql_insert_oc;
                 $fp = fopen("../archivos/log_querys/" . $login . "/PARCHEMATCH-INSERTAOCPMM--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
                 fwrite($fp, $content);
                 fclose($fp);
