@@ -168,4 +168,8 @@ $f3->route('GET /asociar_contenedor', 'ControlComex->asociar_contenedor');
 $f3->route('POST /guardar_contenedor', 'ControlComex->guardar_contenedor');
 $f3->route('GET /enviar_comex', 'ControlComex->enviar_comex');
 
+
+/* LOG TRANSACCIONES*/
+$f3->route('GET /GuardarLogTransaccion/@tipo [ajax]', 'log_transaccion\GuardaLogTransaccion->@tipo');
+
 $f3->run();

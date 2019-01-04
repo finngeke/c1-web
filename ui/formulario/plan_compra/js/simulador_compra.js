@@ -1550,6 +1550,13 @@ $(function () {
 
                                     var flag_errores_match = 0;
 
+                                    var arregloErroresMatch = [];
+
+
+                                    itemsPLAN.forEach(function(el){
+                                        $("[data-uid='"+el.uid+"']").css("background", "#FF2D00");
+                                    })
+
                                     // Comparar los registros de las grillas
                                     itemsPLAN.forEach(function(el){
 
@@ -1569,6 +1576,8 @@ $(function () {
 
                                         var compara_estilo = el.ESTILO;
 
+
+
                                         loop1:
                                             itemsPMM.forEach(function(el2){
 
@@ -1578,20 +1587,41 @@ $(function () {
                                                 console.log(compara_color+" / "+el2.COD_COLOR);
                                                 console.log(compara_estilo+" / "+el2.NOMBRE_ESTILO);
 
-
                                                 loop2:
-                                                    if( (compara_linea != el2.NRO_LINEA) || (compara_sublinea != el2.NRO_SUB_LINEA) || (compara_color != el2.COD_COLOR) || (compara_estilo != el2.NOMBRE_ESTILO)  ){
+                                                    /*if( (compara_linea != el2.NRO_LINEA) || (compara_sublinea != el2.NRO_SUB_LINEA) || (compara_color != el2.COD_COLOR) || (compara_estilo != el2.NOMBRE_ESTILO)  ){
 
                                                         $("[data-uid='"+el.uid+"']").css("background", "#FF2D00");
                                                         flag_errores_match++;
 
                                                     }else{
 
+                                                        // Agrega Registro al array
+                                                        arregloErroresMatch.push({
+                                                            "LINEA": compara_linea,
+                                                            "SUBLINEA": compara_sublinea,
+                                                            "COLOR": compara_color,
+                                                            "ESTILO": compara_estilo
+                                                        });
+
                                                         $("[data-uid='"+el.uid+"']").css("background", "");
                                                         break loop2;
 
-                                                    }
+                                                    }*/
 
+                                                    if( (compara_linea == el2.NRO_LINEA) && (compara_sublinea == el2.NRO_SUB_LINEA) && (compara_color == el2.COD_COLOR) && (compara_estilo == el2.NOMBRE_ESTILO)  ){
+
+                                                        // Agrega Registro al array
+                                                        arregloErroresMatch.push({
+                                                            "LINEA": compara_linea,
+                                                            "SUBLINEA": compara_sublinea,
+                                                            "COLOR": compara_color,
+                                                            "ESTILO": compara_estilo
+                                                        });
+
+                                                        $("[data-uid='"+el.uid+"']").css("background", "");
+                                                        flag_errores_match++;
+
+                                                    }
 
 
 
@@ -1599,8 +1629,14 @@ $(function () {
 
                                     })
 
+                                    //console.log(arregloErroresMatch);
+
                                     // Si hay Errores, oculto el BTN de Match
-                                    if(flag_errores_match>0){
+                                    var dataPlanConteo = dataSource_match_plan.data();
+                                    //dataPlanConteo.length
+
+                                    //if(flag_errores_match>0){
+                                    if(dataPlanConteo.length != arregloErroresMatch.length){
                                         $(".k-grid-guardamatch").hide();
                                     }else{
                                         $(".k-grid-guardamatch").show();
