@@ -1744,6 +1744,10 @@ $(function () {
                                                                     //popupNotification.getNotifications().parent().remove();
                                                                     popupNotification.show(" Variaciones OK, Hemos Finalizado.", "success");
 
+                                                                    // Vaciar GRID de Match
+                                                                    $("#grid_match_pmm").empty();
+                                                                    $("#grid_match_plan").empty();
+
                                                                     // Cierro el POPUP de MATCH
                                                                     popupMatch.data("kendoWindow").close();
 
