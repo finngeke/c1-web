@@ -3353,7 +3353,7 @@ class PlanCompraClass extends \parametros
                                 // Fin del FOREACH2
                             }
 
-                            return json_encode("OK");
+                            //return json_encode("OK");
 
                         }else{
                             return json_encode("Problemas en PRC_LIS_COLOR3_IDCOLOR3.");
@@ -3374,6 +3374,7 @@ class PlanCompraClass extends \parametros
             // Fin FOREACH
             }
 
+            return json_encode("OK");
 
         }else{
             return json_encode("No hemos podido encontrar la información asociada a la Proforma.");
