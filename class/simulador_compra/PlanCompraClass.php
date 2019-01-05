@@ -3427,13 +3427,19 @@ class PlanCompraClass extends \parametros
             if ($data) {
                 return json_encode("OK");
             } else {
-                return json_encode("Problemas en PRC_AGREGAR_NUEVA_VARIACION.");
+
+                $query_revertir_match = PlanCompraClass::RevertirMatch($temporada, $depto, $login, $proforma);
+
+                return json_encode(" ROLLBACK MATCH... Problema en Variacion. ");
                 die();
             }
 
 
         } else{
-            return json_encode("Problemas en PRC_AGREGAR_OC_VARIACION2.");
+
+            $query_revertir_match = PlanCompraClass::RevertirMatch($temporada, $depto, $login, $proforma);
+
+            return json_encode(" ROLLBACK MATCH... Problema en Variacion2. ");
             die();
         }
 
@@ -3447,23 +3453,22 @@ class PlanCompraClass extends \parametros
     {
 
         $sql_update = "begin PLC_PKG_UTILS.PRC_SOLOC($temporada,'" . $depto . "','" . $proforma . "',3, :error, :data); end;";
-
-        // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
-        if (!file_exists('../archivos/log_querys/' . $login)) {
-            mkdir('../archivos/log_querys/' . $login, 0775, true);
-        }
-        $stamp = date("Y-m-d_H-i-s");
-        $rand = rand(1, 999);
-        $content = $sql_update;
-        $fp = fopen("../archivos/log_querys/" . $login . "/FLUJO-FLUJOHISTORIALUPDATE--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
-        fwrite($fp, $content);
-        fclose($fp);
-
         $data_update = \database::getInstancia()->getConsultaSP($sql_update, 2);
 
         if ($data_update) {
-            return json_encode("OK");
-            die();
+
+            $sql_variacion = "DELETE FROM PLC_OC_VARIACION
+                              WHERE PI = '" . $proforma . "'";
+            $data_variacion = \database::getInstancia()->getConsulta($sql_variacion);
+
+            if($data_variacion){
+                return json_encode("OK");
+                die();
+            }else{
+                return json_encode("ERROR");
+                die();
+            }
+
         } else {
             return json_encode("ERROR");
             die();
