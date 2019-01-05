@@ -410,6 +410,8 @@ if($ESTADO_C1!=24){
 
     // Match - Revertir Match
     public function RevertirMatch($f3) {
+        $array_data = $_GET;
+        echo \simulador_compra\PlanCompraClass::GenerarMatchVariaciones($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $array_data["PROFORMA"]);
 
     }
 
