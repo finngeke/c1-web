@@ -438,6 +438,9 @@ if($ESTADO_C1!=24){
         echo \simulador_compra\PlanCompraClass::ModificaEstadoDinamicoCorreccion($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $array_data["ID_COLOR3"], $array_data["ESTADO_INSERT"], $array_data["PROFORMA"], $array_data["ESTADO_UPDATE"], $array_data["COMENTARIO"]);
 
     }
+    public function EliminaVariaciones($f3) {
+        echo \simulador_compra\PlanCompraClass::EliminaVariaciones($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $f3->get('GET.PROFORMA'));
+    }
     // ######################## FIN Trabajo con flujo de aprobación ########################
 
 

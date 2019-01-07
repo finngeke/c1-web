@@ -3692,6 +3692,23 @@ class PlanCompraClass extends \parametros
 
     // Fin de ModificaEstadoDinamicoCorreccion
     }
+    // Eliminar Variaciones
+    public static function EliminaVariaciones($temporada, $depto, $login, $proforma)
+    {
+        $sql_variacion = "DELETE FROM PLC_OC_VARIACION
+                          WHERE PI = '" . $proforma . "'";
+        $data_variacion = \database::getInstancia()->getConsulta($sql_variacion);
+
+        if($data_variacion){
+            return json_encode("OK");
+            die();
+        }else{
+            return json_encode("ERROR");
+            die();
+        }
+
+        // Fin de la clase
+    }
     // ######################## FIN Trabajo con flujo de aprobación ########################
 
 
