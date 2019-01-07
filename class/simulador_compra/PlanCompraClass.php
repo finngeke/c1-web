@@ -3430,8 +3430,9 @@ class PlanCompraClass extends \parametros
 
                 $query_revertir_match = PlanCompraClass::RevertirMatch($temporada, $depto, $login, $proforma);
 
-                return json_encode(" ROLLBACK MATCH... Problema en Variacion. ");
+                return json_encode(" ROLLBACK MATCH... Problema Insertar Variacion. ");
                 die();
+
             }
 
 
