@@ -36,6 +36,10 @@ $(function () {
         upload: AntesCargaArchivoPI,
         complete: function () {
 
+
+            //var sheet = $("#spreadsheet").data("kendoSpreadsheet").activeSheet();
+            //sheet.insertRow(13);
+
             //$(".k-widget.k-upload").find("ul").remove();
 
             // Obtengo el nombre de la PI que estoy cargando
@@ -57,6 +61,8 @@ $(function () {
                 }
             // Fin del Recorrer la Grilla
             });
+
+            //sheet.deleteRow(13);
 
         },
         success: function () {
