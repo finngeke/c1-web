@@ -3457,7 +3457,7 @@ class PlanCompraClass extends \parametros
 
         if ($data_update) {
 
-            $sql_variacion = "DELETE FROM PLC_OC_VARIACION
+            /*$sql_variacion = "DELETE FROM PLC_OC_VARIACION
                               WHERE PI = '" . $proforma . "'";
             $data_variacion = \database::getInstancia()->getConsulta($sql_variacion);
 
@@ -3467,7 +3467,10 @@ class PlanCompraClass extends \parametros
             }else{
                 return json_encode("ERROR");
                 die();
-            }
+            }*/
+
+            return json_encode("OK");
+            die();
 
         } else {
             return json_encode("ERROR");
