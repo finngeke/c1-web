@@ -193,9 +193,9 @@ $(function () {
 
         // location.reload();
 
-        var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
+        /*var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
         var sheet = spreadsheet.activeSheet();
-        sheet.dataSource.read();
+        sheet.dataSource.read();*/
 
     }
 
@@ -499,14 +499,15 @@ $(function () {
                 $("#resumenErrorCorreccionPILI").css("display", "none");
             }
 
-            // Al Finalizar los cambios de estado
-            popupNotification.getNotifications().parent().remove();
-            popupNotification.show(" Favor de Revisar los Estados.", "info");
 
             // Recargo el DATASOURCE
             var spreadsheet_reload = $("#spreadsheet").data("kendoSpreadsheet");
             var sheet_reload = spreadsheet_reload.activeSheet();
             sheet_reload.dataSource.read();
+
+            // Al Finalizar los cambios de estado
+            popupNotification.getNotifications().parent().remove();
+            popupNotification.show(" Favor de Revisar los Estados.", "info");
 
 
         }, function () {
