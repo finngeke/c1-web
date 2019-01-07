@@ -777,12 +777,23 @@ class PlanCompraClass extends \parametros
         return $data;
     }
 
+    function quitar_tildes($cadena) {
+        $no_permitidas= array ("á","é","í","ó","ú","Á","É","Í","Ó","Ú","ñ","À","Ã","Ì","Ò","Ù","Ã™","Ã ","Ã¨","Ã¬","Ã²","Ã¹","ç","Ç","Ã¢","ê","Ã®","Ã´","Ã»","Ã‚","ÃŠ","ÃŽ","Ã”","Ã›","ü","Ã¶","Ã–","Ã¯","Ã¤","«","Ò","Ã","Ã„","Ã‹","Ñ");
+        $permitidas= array ("a","e","i","o","u","A","E","I","O","U","n","N","A","E","I","O","U","a","e","i","o","u","c","C","a","e","i","o","u","A","E","I","O","U","u","o","O","i","a","e","U","I","A","E","N");
+        $texto = str_replace($no_permitidas, $permitidas ,$cadena);
+        return $texto;
+    }
+
     //##################################################### FIN LISTAR PLANCOMPRA ##########################################################
 
 
     // Guarda datos asociado a la Proforma y Archivo
     public static function GuardaProforma($temporada, $depto, $login, $proforma, $id_insertar, $archivo)
     {
+
+        /*$no_permitidas= array ("á","é","í","ó","ú","Á","É","Í","Ó","Ú","ñ","À","Ã","Ì","Ò","Ù","Ã™","Ã ","Ã¨","Ã¬","Ã²","Ã¹","ç","Ç","Ã¢","ê","Ã®","Ã´","Ã»","Ã‚","ÃŠ","ÃŽ","Ã”","Ã›","ü","Ã¶","Ã–","Ã¯","Ã¤","«","Ò","Ã","Ã„","Ã‹","Ñ");
+        $permitidas= array ("a","e","i","o","u","A","E","I","O","U","n","N","A","E","I","O","U","a","e","i","o","u","c","C","a","e","i","o","u","A","E","I","O","U","u","o","O","i","a","e","U","I","A","E","N");
+        $proforma = str_replace($no_permitidas, $permitidas ,$proforma);*/
 
         if ($archivo == 1) {
 
@@ -811,8 +822,7 @@ class PlanCompraClass extends \parametros
                       LEFT JOIN PLC_PLAN_COMPRA_OC O ON C.COD_TEMPORADA = O.COD_TEMPORADA
                       AND C.DEP_DEPTO = O.DEP_DEPTO AND C.ID_COLOR3 = O.ID_COLOR3
                 WHERE C.COD_TEMPORADA = $temporada AND C.DEP_DEPTO =  '" . $depto . "'
-                AND C.ID_COLOR3 = $id_insertar
-                ";
+                AND C.ID_COLOR3 = $id_insertar";
 
             // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
             if (!file_exists('../archivos/log_querys/' . $login)) {
@@ -1293,15 +1303,14 @@ class PlanCompraClass extends \parametros
         }
 
 
-
         //validaciones
        if ($DEBUT_REODER == "DEBUT"){
-           if ( ($TIPO_EMPAQUE == '') || ($TIPO_EMPAQUE == null) || ($PORTALLA_1_INI == '') || ($PORTALLA_1_INI == null) || ($DESTALLA == '') || ($DESTALLA == null) || ($CURVATALLA == '') || ($CURVATALLA == null) || ($UNID_OPCION_INICIO > 0) || ($SEG_ASIG == null) || ($SEG_ASIG == '') ){
+           if ( ($TIPO_EMPAQUE == '') || ($TIPO_EMPAQUE == null) || ($PORTALLA_1_INI == '') || ($PORTALLA_1_INI == null) || ($DESTALLA == '') || ($DESTALLA == null) || ($CURVATALLA == '') || ($CURVATALLA == null) || ($UNID_OPCION_INICIO == 0) || ($SEG_ASIG == null) || ($SEG_ASIG == '') ){
                return " ID: " . $ID_COLOR3 . " - DEBUT Error validacion curvado. ";
                die();
            }
        }else{
-           if ( ($TIPO_EMPAQUE == '') || ($TIPO_EMPAQUE == null) || ($PORTALLA_1_INI == '') || ($PORTALLA_1_INI == null) || ($DESTALLA == '') || ($DESTALLA == null) || ($CURVATALLA == '') || ($CURVATALLA == null) || ($UNID_OPCION_INICIO > 0) ){
+           if ( ($TIPO_EMPAQUE == '') || ($TIPO_EMPAQUE == null) || ($PORTALLA_1_INI == '') || ($PORTALLA_1_INI == null) || ($DESTALLA == '') || ($DESTALLA == null) || ($CURVATALLA == '') || ($CURVATALLA == null) || ($UNID_OPCION_INICIO == 0) ){
                return " ID: " . $ID_COLOR3 . " - REORDER Error validacion Ajuste MasterPack. ";
                die();
            }
