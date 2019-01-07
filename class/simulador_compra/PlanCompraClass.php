@@ -3600,8 +3600,7 @@ class PlanCompraClass extends \parametros
                         LEFT JOIN PLC_PLAN_COMPRA_OC O ON C.COD_TEMPORADA = O.COD_TEMPORADA
                         AND C.DEP_DEPTO = O.DEP_DEPTO AND C.ID_COLOR3 = O.ID_COLOR3
                   WHERE C.COD_TEMPORADA = $temporada AND C.DEP_DEPTO =  '" . $depto . "'
-                  AND C.ID_COLOR3 = $id_color3
-                ";
+                  AND C.ID_COLOR3 = $id_color3";
 
         // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
         if (!file_exists('../archivos/log_querys/' . $login)) {
@@ -3636,14 +3635,30 @@ class PlanCompraClass extends \parametros
             $data_update = \database::getInstancia()->getConsultaSP($sql_update, 2);
 
             if ($data_update) {
-                return json_encode("OK");
-                die();
+
+                if($estado_update==3){
+
+                    $query_elimina_variacion = PlanCompraClass::EliminaVariaciones($temporada, $depto, $login, $proforma);
+
+                    if($query_elimina_variacion){
+                        return json_encode("OK");
+                        die();
+                    } else {
+                        return json_encode("ERROR");
+                        die();
+                    }
+
+                }else{
+                    return json_encode("OK");
+                    die();
+                }
+
             } else {
                 return json_encode("ERROR");
                 die();
             }
 
-            // Si la consulta no se puede realizar
+        // Si la consulta no se puede realizar
         } else {
             return json_encode("ERROR");
             die();
@@ -3695,6 +3710,7 @@ class PlanCompraClass extends \parametros
     // Eliminar Variaciones
     public static function EliminaVariaciones($temporada, $depto, $login, $proforma)
     {
+
         $sql_variacion = "DELETE FROM PLC_OC_VARIACION
                           WHERE PI = '" . $proforma . "'";
         $data_variacion = \database::getInstancia()->getConsulta($sql_variacion);
@@ -3707,7 +3723,7 @@ class PlanCompraClass extends \parametros
             die();
         }
 
-        // Fin de la clase
+    // Fin de la clase
     }
     // ######################## FIN Trabajo con flujo de aprobación ########################
 
