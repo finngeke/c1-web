@@ -1079,8 +1079,8 @@ class PlanCompraClass extends \parametros
         if (($ALIAS_PROV != null) && ($ALIAS_PROV != "") && ($ALIAS_PROV != "null") ) {
 
             // Validar Costo FOB
-            if (($COSTO_FOB == null) || ($COSTO_FOB == "") || ($COSTO_FOB == "null")) {
-                return " ID: " . $ID_COLOR3 . " - Se ha enviado campo FOB Vacio.";
+            if (($COSTO_FOB == 0) || ($COSTO_FOB == null) || ($COSTO_FOB == "") || ($COSTO_FOB == "null")) {
+                return " ID: " . $ID_COLOR3 . " - Se ha enviado campo FOB Vacio o Cero.";
                 die();
             }
 
