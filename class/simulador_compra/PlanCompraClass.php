@@ -3755,7 +3755,7 @@ class PlanCompraClass extends \parametros
         foreach ($data as $va1) {
             array_push($array1
                 , array(
-                   "TOTALREGPLAN" => $va1[1]
+                   "TOTALREGPLAN" => $va1[1]+2
                 )
             );
         }

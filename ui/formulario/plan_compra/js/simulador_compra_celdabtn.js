@@ -46,6 +46,7 @@ $(function () {
             var sheet_carga_pi = spreadsheet_carga_pi.activeSheet();
             var data_conteo_total = sheet_carga_pi.toJSON();
             var total_registros_listados = data_conteo_total.rows.length;
+                total_registros_listados = parseInt(total_registros_listados,10) + 2;
 
             var range_carga_pi = sheet_carga_pi.range("CH1:CH"+total_registros_listados);
 
