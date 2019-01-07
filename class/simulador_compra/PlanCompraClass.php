@@ -1031,7 +1031,7 @@ class PlanCompraClass extends \parametros
                 }
 
                 // Validar Formato
-                if (($FORMATO == null) || ($FORMATO == "") || ($FORMATO == "null")) {
+                if (($FORMATO == null) || ($FORMATO == "") || ($FORMATO == "null") || (strlen($FORMATO)==0)) {
                     return " ID: " . $ID_COLOR3 . " - Se ha enviado un formato vacio.";
                     die();
                 }
@@ -1232,20 +1232,6 @@ class PlanCompraClass extends \parametros
          // ########################################## FIN SETEO DE VARIABLES ############################################
 
 
-
-
-
-
-        // CURVADO Si hay Cambio en: Tipo Empaque($TIPO_EMPAQUE), Uni Iniciales($UNID_OPCION_INICIO) o Formato($FORMATO)
-        /*if( ($TIPO_EMPAQUE!=$TIPO_EMPAQUE_BASE) || ($UNID_OPCION_INICIO!=$UNI_INICIALES_BASE) || ($FORMATO!=$FORMATO_BASE) ){
-
-        }*/
-
-
-
-
-
-
         // ############################### CÁLCULO CON LAS VARIABLES DEFINIDAS PREVIAMENTE ##############################
         $total_fob_usd = 0;
         $total_target_usd = 0;
@@ -1324,6 +1310,20 @@ class PlanCompraClass extends \parametros
         $CURVA_PRIMERA_CARGA = $query_curva[4]; //  primera carga
         $CURVA_TDAS = $query_curva[5]; //  tiendas
         $CURVA_UNIDAJUSTXTALLA = $query_curva[6]; //  unidadesajustXtalla
+
+        /*
+        echo "<pre>";
+        echo "CURVA_UNID_AJUST: ".$CURVA_UNID_AJUST;
+        echo "CURVA_POR_AJUSTE: ".$CURVA_POR_AJUSTE;
+        echo "CURVA_N_CAJAS: ".$CURVA_N_CAJAS;
+        echo "CURVA_UNID_FINAL: ".$CURVA_UNID_FINAL;
+        echo "CURVA_PRIMERA_CARGA: ".$CURVA_PRIMERA_CARGA;
+        echo "CURVA_TDAS: ".$CURVA_TDAS;
+        echo "CURVA_UNIDAJUSTXTALLA: ".$CURVA_UNIDAJUSTXTALLA;
+        echo "</pre>";
+        */
+
+
         // Valido que lleguen todos los datos de la QUERY
         if (empty($CURVA_UNID_AJUST) || empty($CURVA_POR_AJUSTE) || empty($CURVA_N_CAJAS) || empty($CURVA_UNID_FINAL) || empty($CURVA_PRIMERA_CARGA) || empty($CURVA_TDAS) || empty($CURVA_UNIDAJUSTXTALLA)) {
             return " ID: " . $ID_COLOR3 . " - No se pudo obtener los datos del curvado, revise la data ingresada.";
