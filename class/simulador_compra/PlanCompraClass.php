@@ -1294,6 +1294,20 @@ class PlanCompraClass extends \parametros
 
 
 
+        //validaciones
+       if ($DEBUT_REODER == "DEBUT"){
+           if ( ($TIPO_EMPAQUE == '') || ($TIPO_EMPAQUE == null) || ($PORTALLA_1_INI == '') || ($PORTALLA_1_INI == null) || ($DESTALLA == '') || ($DESTALLA == null) || ($CURVATALLA == '') || ($CURVATALLA == null) || ($UNID_OPCION_INICIO > 0) || ($SEG_ASIG == null) || ($SEG_ASIG == '') ){
+               return " ID: " . $ID_COLOR3 . " - DEBUT Error validacion curvado. ";
+               die();
+           }
+       }else{
+           if ( ($TIPO_EMPAQUE == '') || ($TIPO_EMPAQUE == null) || ($PORTALLA_1_INI == '') || ($PORTALLA_1_INI == null) || ($DESTALLA == '') || ($DESTALLA == null) || ($CURVATALLA == '') || ($CURVATALLA == null) || ($UNID_OPCION_INICIO > 0) ){
+               return " ID: " . $ID_COLOR3 . " - REORDER Error validacion Ajuste MasterPack. ";
+               die();
+           }
+       }
+
+
         // 1.- Realizar cálculos del curvado... siempre y cuando los datos que llegan sean distinto de los datos base
 
         // Hay que ir a buscar el Curvado
@@ -1311,24 +1325,12 @@ class PlanCompraClass extends \parametros
         $CURVA_TDAS = $query_curva[5]; //  tiendas
         $CURVA_UNIDAJUSTXTALLA = $query_curva[6]; //  unidadesajustXtalla
 
-        /*
-        echo "<pre>";
-        echo "CURVA_UNID_AJUST: ".$CURVA_UNID_AJUST;
-        echo "CURVA_POR_AJUSTE: ".$CURVA_POR_AJUSTE;
-        echo "CURVA_N_CAJAS: ".$CURVA_N_CAJAS;
-        echo "CURVA_UNID_FINAL: ".$CURVA_UNID_FINAL;
-        echo "CURVA_PRIMERA_CARGA: ".$CURVA_PRIMERA_CARGA;
-        echo "CURVA_TDAS: ".$CURVA_TDAS;
-        echo "CURVA_UNIDAJUSTXTALLA: ".$CURVA_UNIDAJUSTXTALLA;
-        echo "</pre>";
-        */
-
 
         // Valido que lleguen todos los datos de la QUERY
-        if (empty($CURVA_UNID_AJUST) || empty($CURVA_POR_AJUSTE) || empty($CURVA_N_CAJAS) || empty($CURVA_UNID_FINAL) || empty($CURVA_PRIMERA_CARGA) || empty($CURVA_TDAS) || empty($CURVA_UNIDAJUSTXTALLA)) {
+        /*if (empty($CURVA_UNID_AJUST) || empty($CURVA_POR_AJUSTE) || empty($CURVA_N_CAJAS) || empty($CURVA_UNID_FINAL) || empty($CURVA_PRIMERA_CARGA) || empty($CURVA_TDAS) || empty($CURVA_UNIDAJUSTXTALLA)) {
             return " ID: " . $ID_COLOR3 . " - No se pudo obtener los datos del curvado, revise la data ingresada.";
             die();
-        }
+        }*/
 
 
         // Variables que se van enviar al UPDATE
