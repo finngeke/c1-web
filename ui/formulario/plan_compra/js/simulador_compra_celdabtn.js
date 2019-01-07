@@ -14,7 +14,8 @@ $(function () {
 
         // Este es el nombre que se le da al Archivo de la PI (Le quitamos caracteres especiales)
         var nom_pi_popup = $("#NombrePI").val();
-        var corrige_nombre_archivo_pi = nom_pi_popup.replace(/[^a-z0-9\-\_]/gi, '-');
+        //var corrige_nombre_archivo_pi = nom_pi_popup.replace(/[^a-z0-9\-\_]/gi, '-');
+        var corrige_nombre_archivo_pi = nom_pi_popup;
 
         e.data = {
             NombreArchivoProforma: corrige_nombre_archivo_pi //$("#NombrePI").val()
