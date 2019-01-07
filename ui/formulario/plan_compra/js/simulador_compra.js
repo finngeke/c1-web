@@ -1205,6 +1205,7 @@ $(function () {
 
                             // PROFORMA = Archivo Original
 
+                            //PROFORMA_ARCHIVO = String(PROFORMA).replace(/[^a-z0-9\-\_]/gi, '-');
                             PROFORMA_ARCHIVO = String(PROFORMA).replace(/[^a-z0-9\-\_]/gi, '-');
 
                             var valFileDownloadPath = '../archivos/pi/PI_' + TemporadaArchivoPI + '_' + DeptoArchivoPI + '_' + PROFORMA_ARCHIVO + '.xlsx';

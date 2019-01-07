@@ -9,13 +9,36 @@ $(function () {
 
     // ############################ CARGA ARCHIVO PI ############################
 
+    var normalize = (function() {
+        var from = "ÃÀÁÄÂÈÉËÊÌÍÏÎÒÓÖÔÙÚÜÛãàáäâèéëêìíïîòóöôùúüûÑñÇçñÑ",
+            to   = "AAAAAEEEEIIIIOOOOUUUUaaaaaeeeeiiiioooouuuunnccnN",
+            mapping = {};
+
+        for(var i = 0, j = from.length; i < j; i++ )
+            mapping[ from.charAt( i ) ] = to.charAt( i );
+
+        return function( str ) {
+            var ret = [];
+            for( var i = 0, j = str.length; i < j; i++ ) {
+                var c = str.charAt( i );
+                if( mapping.hasOwnProperty( str.charAt( i ) ) )
+                    ret.push( mapping[ c ] );
+                else
+                    ret.push( c );
+            }
+            return ret.join( '' );
+        }
+
+    })();
+
     // Asigno el nombre que debe tener el archivo a subir
     function AntesCargaArchivoPI(e) {
 
         // Este es el nombre que se le da al Archivo de la PI (Le quitamos caracteres especiales)
         var nom_pi_popup = $("#NombrePI").val();
         //var corrige_nombre_archivo_pi = nom_pi_popup.replace(/[^a-z0-9\-\_]/gi, '-');
-        var corrige_nombre_archivo_pi = nom_pi_popup;
+        var corrige_nombre_archivo_pi = normalize(nom_pi_popup);
+            corrige_nombre_archivo_pi = corrige_nombre_archivo_pi.replace(/[^a-z0-9\-\_]/gi, '-');
 
         e.data = {
             NombreArchivoProforma: corrige_nombre_archivo_pi //$("#NombrePI").val()
