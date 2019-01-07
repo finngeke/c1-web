@@ -275,6 +275,11 @@ if($ESTADO_C1!=24){
         // Llega el nombre de la PI por POST
         $json = $_POST;
         $archivo_proforma = $json["NombreArchivoProforma"];
+
+        $no_permitidas= array ("á","é","í","ó","ú","Á","É","Í","Ó","Ú","ñ","À","Ã","Ì","Ò","Ù","Ã™","Ã ","Ã¨","Ã¬","Ã²","Ã¹","ç","Ç","Ã¢","ê","Ã®","Ã´","Ã»","Ã‚","ÃŠ","ÃŽ","Ã”","Ã›","ü","Ã¶","Ã–","Ã¯","Ã¤","«","Ò","Ã","Ã„","Ã‹","Ñ");
+        $permitidas= array ("a","e","i","o","u","A","E","I","O","U","n","N","A","E","I","O","U","a","e","i","o","u","c","C","a","e","i","o","u","A","E","I","O","U","u","o","O","i","a","e","U","I","A","E","N");
+        $archivo_proforma = str_replace($no_permitidas, $permitidas ,$archivo_proforma);
+
         $nombre_archivo = "PI_" . $f3->get('SESSION.COD_TEMPORADA') . "_" . $f3->get('SESSION.COD_DEPTO') . "_" . $archivo_proforma . ".xlsx";
 
         // Ruta
