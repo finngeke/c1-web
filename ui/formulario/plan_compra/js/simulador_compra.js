@@ -509,7 +509,7 @@ $(function () {
                         sheet.range("CJ1").value("Estado Match");
                         sheet.range("CK1").value("N° OC");
                         sheet.range("CL1").value("Estado OC");
-                        sheet.range("CM1").value("Fecha Acordada");
+                        sheet.range("CM1").value("Fecha Emb. Acordada");
                         sheet.range("CN1").value("Fecha Embarque");
                         sheet.range("CO1").value("Fecha ETA");
                         sheet.range("CP1").value("Fecha Recepción CD");
@@ -920,7 +920,7 @@ $(function () {
                 {width: 110},    // Estado Match
                 {width: 90},    // N OC
                 {width: 120},    // Estado OC
-                {width: 120},   // Fecha Acordada
+                {width: 140},   // Fecha Acordada
                 {width: 120},   // Fecha Embarque
                 {width: 110},   // Fecha ETA
                 {width: 110},   // Fecha Recep CD
