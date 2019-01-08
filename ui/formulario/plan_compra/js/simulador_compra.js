@@ -304,7 +304,8 @@ $(function () {
                 "N_CURVASXCAJAS": kendo.parseInt(e.data.updated[i]["N_CURVASXCAJAS"]),
                 "COD_JER2": String(e.data.updated[i]["COD_JER2"]),
                 "COD_SUBLIN": String(e.data.updated[i]["COD_SUBLIN"]),
-                "FORMATO_BASE": String(e.data.updated[i]["FORMATO_BASE"])
+                "FORMATO_BASE": String(e.data.updated[i]["FORMATO_BASE"]),
+                "FECHA_ACORDADA": String(e.data.updated[i]["FECHA_ACORDADA"])
             });
 
         }
