@@ -3691,7 +3691,8 @@ class PlanCompraClass extends \parametros
         // Si se ejecuta la consulta
         if ($data_insert) {
 
-            $sql_update = "begin PLC_PKG_UTILS.PRC_SOLOC($temporada,'" . $depto . "','" . $proforma . "',$estado_update, :error, :data); end;";
+            $sql_update = "begin PLC_PKG_UTILS.PRC_SOLOC($temporada,'" . $depto . "','" . $proforma . "',$estado_update, $id_color3, :error, :data); end;";
+
 
             // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
             if (!file_exists('../archivos/log_querys/' . $login)) {

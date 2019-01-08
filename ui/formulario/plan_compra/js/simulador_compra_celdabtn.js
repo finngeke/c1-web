@@ -444,8 +444,20 @@ $(function () {
                 } else if (cbxCambioEstadoSeleccionado == 2) {
 
                     // estado_c1 != 21 && Proforma
-                    if ((ESTADOC1 != 21) && (PROFORMA.length > 0)) {
-
+                    if (ESTADOC1 == 0) {
+                        $.ajax({
+                            //type: "POST",
+                            url: url_cambio_estado,
+                            data: {
+                                ID_COLOR3: kendo.parseInt(ID_COLOR3),
+                                ESTADO_INSERT: kendo.parseInt(24),
+                                PROFORMA: String(PROFORMA),
+                                ESTADO_UPDATE: kendo.parseInt(0)
+                            },
+                            // contentType: "application/json",
+                            dataType: "json"
+                        });
+                    }else if ((ESTADOC1 != 21) && (PROFORMA.length > 0)){
                         $.ajax({
                             //type: "POST",
                             url: url_cambio_estado,
@@ -458,9 +470,7 @@ $(function () {
                             // contentType: "application/json",
                             dataType: "json"
                         });
-
-                    } else {
-
+                    }else{
                         // Descripción - Color
                         // Agregar al arreglo de errores
                         arregloErrores.push({
