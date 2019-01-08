@@ -82,6 +82,7 @@ class PlanCompraController extends \Control
             $COD_JER2 = $columna["COD_JER2"];
             $COD_SUBLIN = $columna["COD_SUBLIN"];
             $FECHA_ACORDADA = $columna["FECHA_ACORDADA"];
+            $EVENTO = trim(strtoupper($columna["EVENTO"]));
 
 
             /*$TIPO_EMPAQUE_BASE = trim(strtoupper($columna["TIPO_EMPAQUE_BASE"]));
@@ -172,7 +173,7 @@ if($ESTADO_C1!=24){
                 $NOM_VENTANA,$DESTALLA, $TIPO_EMPAQUE, $PORTALLA_1_INI, $CURVATALLA, $UNID_OPCION_INICIO,
                 $CAN, $SEG_ASIG, $FORMATO, $A, $B, $C, $I, $NOM_VIA, $NOM_PAIS, $PRECIO_BLANCO, $COSTO_TARGET,
                 $COSTO_FOB, $COSTO_INSP, $COSTO_RFID, $DEBUT_REODER,  $COD_MARCA,
-                $N_CURVASXCAJAS, $COD_JER2, $COD_SUBLIN,$FECHA_ACORDADA));
+                $N_CURVASXCAJAS, $COD_JER2, $COD_SUBLIN,$FECHA_ACORDADA,$EVENTO));
 }
 
 // $TIPO_EMPAQUE_BASE, $UNI_INICIALES_BASE,$PRECIO_BLANCO_BASE, $COSTO_TARGET_BASE, $COSTO_FOB_BASE, $COSTO_INSP_BASE, $COSTO_RFID_BASE, $FORMATO_BASE

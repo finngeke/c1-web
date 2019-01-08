@@ -1021,7 +1021,7 @@ class PlanCompraClass extends \parametros
 
     // Procesar el JSON que llega (Devolvemos 0 (Cero) cuando la ejecución sea correcta)
     //public static function ProcesaDataPlanCompra($TEMPORADA, $DEPTO, $LOGIN, $ID_COLOR3,$ESTADO_C1, $PROFORMA, $ARCHIVO,$PROFORMA_BASE,$ARCHIVO_BASE,$ALIAS_PROV, $NOM_VENTANA,$DESTALLA, $TIPO_EMPAQUE, $PORTALLA_1_INI, $CURVATALLA, $UNID_OPCION_INICIO, $CAN, $SEG_ASIG, $FORMATO, $A, $B, $C, $I, $NOM_VIA, $NOM_PAIS, $PRECIO_BLANCO, $COSTO_TARGET, $COSTO_FOB, $COSTO_INSP, $COSTO_RFID, $DEBUT_REODER, $TIPO_EMPAQUE_BASE, $UNI_INICIALES_BASE, $PRECIO_BLANCO_BASE, $COSTO_TARGET_BASE, $COSTO_FOB_BASE, $COSTO_INSP_BASE, $COSTO_RFID_BASE, $COD_MARCA, $N_CURVASXCAJAS, $COD_JER2, $COD_SUBLIN,$FORMATO_BASE,$FECHA_ACORDADA)
-    public static function ProcesaDataPlanCompra($TEMPORADA, $DEPTO, $LOGIN, $ID_COLOR3,$ESTADO_C1, $PROFORMA, $ARCHIVO,$PROFORMA_BASE,$ARCHIVO_BASE,$ALIAS_PROV, $NOM_VENTANA,$DESTALLA, $TIPO_EMPAQUE, $PORTALLA_1_INI, $CURVATALLA, $UNID_OPCION_INICIO, $CAN, $SEG_ASIG, $FORMATO, $A, $B, $C, $I, $NOM_VIA, $NOM_PAIS, $PRECIO_BLANCO, $COSTO_TARGET, $COSTO_FOB, $COSTO_INSP, $COSTO_RFID, $DEBUT_REODER, $COD_MARCA, $N_CURVASXCAJAS, $COD_JER2, $COD_SUBLIN,$FECHA_ACORDADA)
+    public static function ProcesaDataPlanCompra($TEMPORADA, $DEPTO, $LOGIN, $ID_COLOR3,$ESTADO_C1, $PROFORMA, $ARCHIVO,$PROFORMA_BASE,$ARCHIVO_BASE,$ALIAS_PROV, $NOM_VENTANA,$DESTALLA, $TIPO_EMPAQUE, $PORTALLA_1_INI, $CURVATALLA, $UNID_OPCION_INICIO, $CAN, $SEG_ASIG, $FORMATO, $A, $B, $C, $I, $NOM_VIA, $NOM_PAIS, $PRECIO_BLANCO, $COSTO_TARGET, $COSTO_FOB, $COSTO_INSP, $COSTO_RFID, $DEBUT_REODER, $COD_MARCA, $N_CURVASXCAJAS, $COD_JER2, $COD_SUBLIN,$FECHA_ACORDADA,$EVENTO)
     {
 
         // ############################################# 1 VALIDACION CURVADO #############################################
@@ -1121,7 +1121,7 @@ class PlanCompraClass extends \parametros
 
         // ###################################### 3 GUARDADO CAMPOS DE TEXTO SIMPLE ####################################
         // ######################### (Campos de Texto que no requieren validación, update directo) #####################
-        $query_campos_libres = PlanCompraClass::ActualizaPlanCompraCamposLibre($TEMPORADA, $DEPTO, $LOGIN, $ID_COLOR3,$ALIAS_PROV,$FECHA_ACORDADA);
+        $query_campos_libres = PlanCompraClass::ActualizaPlanCompraCamposLibre($TEMPORADA, $DEPTO, $LOGIN, $ID_COLOR3,$ALIAS_PROV,$FECHA_ACORDADA,$EVENTO);
         if($query_campos_libres != "OK"){
             return " ID: " . $ID_COLOR3 . " - No se pudo Actualizar Campo de Libre Edicion.";
             die();
@@ -2419,12 +2419,18 @@ class PlanCompraClass extends \parametros
 
 
     // Al Actualizar la grilla, los campos que no requieren ser calculados... se actualizan antes del match
-    public static function ActualizaPlanCompraCamposLibre($temporada, $depto, $login, $ID_COLOR3, $ALIAS_PROV,$FECHA_ACORDADA)
+    public static function ActualizaPlanCompraCamposLibre($temporada, $depto, $login, $ID_COLOR3, $ALIAS_PROV,$FECHA_ACORDADA,$EVENTO)
     {
+
+        if( ($FECHA_ACORDADA == null) || ($FECHA_ACORDADA == "null") || ($FECHA_ACORDADA == "") ){
+            $FECHA_ACORDADA = '';
+        }
+
 
         $sql = "UPDATE PLC_PLAN_COMPRA_COLOR_3 
                   SET ALIAS_PROV = '" . $ALIAS_PROV . "',
-                      FECHA_EMBARQUE_ACORDADA = '" . $FECHA_ACORDADA . "'
+                      FECHA_EMBARQUE_ACORDADA = '" . $FECHA_ACORDADA . "',
+                      EVENTO = '" . $EVENTO . "'
                 WHERE COD_TEMPORADA = $temporada
                     AND DEP_DEPTO = '" . $depto . "'
                     AND ID_COLOR3 = $ID_COLOR3";
@@ -2435,7 +2441,7 @@ class PlanCompraClass extends \parametros
         }
 
         $stamp = date("Y-m-d_H-i-s");
-        $rand = rand(1, 999);
+        $rand = rand(1, 9999);
         $content = $sql;
         $fp = fopen("../archivos/log_querys/" . $login . "/PLANCOMPRA-ActualizaPlanCompraCamposLibre--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
         fwrite($fp, $content);

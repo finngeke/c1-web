@@ -298,7 +298,8 @@ $(function () {
                 "N_CURVASXCAJAS": kendo.parseInt(e.data.updated[i]["N_CURVASXCAJAS"]),
                 "COD_JER2": String(e.data.updated[i]["COD_JER2"]),
                 "COD_SUBLIN": String(e.data.updated[i]["COD_SUBLIN"]),
-                "FECHA_ACORDADA": String(e.data.updated[i]["FECHA_ACORDADA"])
+                "FECHA_ACORDADA": String(e.data.updated[i]["FECHA_ACORDADA"]),
+                "EVENTO": String(e.data.updated[i]["EVENTO"])
 
 
                 /*
@@ -609,6 +610,17 @@ $(function () {
                             allowNulls: false,
                             type: "reject",
                             messageTemplate: "La ventana ingresada, no se encuentra dentro de las permitidas. (Recuerde ingresarla en Mayúsculas.)"
+                        });
+
+                        var range_evento = spreadsheet.activeSheet().range("R2:R"+total_registros_listados);
+                        range_evento.validation({
+                            dataType: "list",
+                            showButton: true,
+                            comparerType: "list",
+                            from: '"MADRE,PADRE,NINO,NAVIDAD"',
+                            allowNulls: false,
+                            type: "reject",
+                            messageTemplate: "El Evento no se encuentra dentro de los permitidos. (Recuerde ingresarlo en Mayúsculas.)"
                         });
 
 
