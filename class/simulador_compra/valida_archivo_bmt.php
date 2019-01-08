@@ -684,10 +684,11 @@ class valida_archivo_bmt extends \parametros {
             /*Validacion evento*/ $tipoVal = 27;
             for($i = 3;$i <= $limite; $i++){
                 if($rows[$i][$nom_columnas['Evento']] <> NULL and $rows[$i][$nom_columnas['Evento']] <> ''){
-                    $eventos = "MADRE,PADRE,NINO,NAVIDAD"; $dtevento = explode(",", $eventos);
+                    //$eventos = "MADRE,PADRE,NINO,NVIDAD\"; $dtevento = explode(\",\", $eventos)A;
+                    $dtevento = plan_compra::List_Eventos();
                     $_exs = false;
                     foreach ($dtevento as $valor){
-                        if ($valor == strtoupper($rows[$i][$nom_columnas['Evento']])){
+                        if ($valor['NOM_EVENTO'] == strtoupper($rows[$i][$nom_columnas['Evento']])){
                             $_exs = true; break;
                         }
                     }
@@ -858,7 +859,7 @@ class valida_archivo_bmt extends \parametros {
             }
             elseif ($tipoVal == 27){
                 $array = array('Tipo' => $val,
-                    'Error'=> "(".substr($filarow, 0, - 1).") ->Evento(s) no encuentrado(s) BD C1. Ej: MADRE,PADRE,NINO,NAVIDAD.");
+                    'Error'=> "(".substr($filarow, 0, - 1).") ->Evento(s) no encuentrado(s) BD C1.");
             }
             elseif ($tipoVal == 28){
                 $array = array('Tipo' => $val,

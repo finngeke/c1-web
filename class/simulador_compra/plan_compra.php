@@ -3407,6 +3407,12 @@ class plan_compra extends \parametros {
         }
         return $val;
     }
+    public static function List_Eventos(){
+        $sql ="select cod_evento,nom_evento from plc_eventos";
+        $data = \database::getInstancia()->getFilas($sql);
+        return $data;
+    }
+
 #endregion
 
 
