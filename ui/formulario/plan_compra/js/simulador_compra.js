@@ -52,6 +52,7 @@ $(function () {
 
     // Defrine URL Base, para Llamar a los JSON
     var crudServiceBaseUrl = "TelerikPlanCompra/";
+    var crudServiceBaseUrlPOST = "TelerikPlanCompraPOST/";
 
     // Seteo el DropdownList de País, si no ha sido cargado antes
     kendo.spreadsheet.registerEditor("dropdownlistPais", function(){
@@ -314,12 +315,14 @@ $(function () {
         //console.log(arregloGuardado);
         // console.log(e.data.updated[0]["ALIAS_PROV"]);
 
+        //$.post( crudServiceBaseUrlPOST + "ProcesaDataPlanCompra", {models: kendo.stringify(arregloGuardado)} );
+
         $.ajax({
+            //type: "POST",
             url: crudServiceBaseUrl + "ProcesaDataPlanCompra",
             //data: {models: kendo.stringify(e.data)},
             data: {models: kendo.stringify(arregloGuardado)},
             contentType: "application/json",
-            //type: "POST",
             //dataType: "json",
             success: function (result) {
                 //kendo.log(result);
