@@ -1217,7 +1217,7 @@ class PlanCompraClass extends \parametros
          $query_numero_pais = PlanCompraClass::BuscaNumeroPais(strtoupper($NOM_PAIS));
          $NOM_PAIS_NUMERO = $query_numero_pais[0];
          if (empty($NOM_PAIS_NUMERO)) {
-             return " ID: " . $ID_COLOR3 . " - No pudimos encontrar el nombre de pais ingresado, verifique que el texto ingresado existe.";
+             return " ID: " . $ID_COLOR3 . " - No pudimos encontrar el nombre de pais ingresado.";
              die();
          }
 
@@ -2669,6 +2669,32 @@ class PlanCompraClass extends \parametros
                 , array(
                     "ID" => $va1[0]
                 , "NOMBRE_PROVEEDOR" => $va1[1]
+                )
+            );
+        }
+
+        return $array1;
+
+
+
+    }
+
+    // Busca Proveedor Grilla Editar
+    public static function ListarEventos($temporada, $depto)
+    {
+
+        $sql = "SELECT COD_EVENTO,NOM_EVENTO FROM PLC_EVENTOS";
+
+        $data = \database::getInstancia()->getFilas($sql);
+        // return $data;
+
+        // Transformo a array asociativo
+        $array1 = [];
+        foreach ($data as $va1) {
+            array_push($array1
+                , array(
+                    "ID" => $va1[0]
+                , "NOMBRE_EVENTO" => $va1[1]
                 )
             );
         }

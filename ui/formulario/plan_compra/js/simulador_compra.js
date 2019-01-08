@@ -253,6 +253,73 @@ $(function () {
 
     });
 
+    // Seteo el DropdownList de Evento, si no ha sido cargado antes
+    kendo.spreadsheet.registerEditor("dropdownlistEvento", function(){
+        var context, dlg, model;
+
+        function create() {
+            if (!dlg) {
+                model = kendo.observable({
+                    value: "#000000",
+                    ok: function() {
+                        //debugger;
+                        // This is the result when OK is clicked. Invoke the
+                        // callback with the value.
+                        context.callback(model.value);
+                        // console.log(model);
+                        dlg.close();
+                    },
+                    eventos: new kendo.data.DataSource({
+                        transport: {
+                            read: {
+                                url: crudServiceBaseUrl+"ListarEventos",
+                                dataType: "json"
+                            }
+                        }
+                    }),
+                    cancel: function() {
+                        dlg.close();
+                    }
+                });
+
+                var elEvento = $("<div data-visible='true' data-role='window' data-modal='true' data-resizable='true' data-title='Seleccione Evento ' style='width: 200px;'>" +
+                    "  <div data-role='dropdownlist' data-bind='value: value, source: eventos' data-text-field='NOMBRE_EVENTO' data-value-field='NOMBRE_EVENTO' style='width: 100%;'></div>" +
+                    "  <div style='margin-top: 1em; text-align: right'>" +
+                    "    <button style='width: 5em' class='k-button' data-bind='click: ok'>OK</button>" +
+                    "    <button style='width: 5em' class='k-button' data-bind='click: cancel'>Cancelar</button>" +
+                    "  </div>" +
+                    "</div>");
+                kendo.bind(elEvento, model);
+
+
+                // Cache the dialog.
+                dlg = elEvento.getKendoWindow();
+            }
+        }
+
+        function open() {
+            create();
+            dlg.open();
+            dlg.center();
+
+            // Si la celda ya tiene un valor, al momento de abrir el editor se carga la que contiene la celca
+            var value = context.range.value();
+            if (value != null) {
+                model.set("value", value);
+            }
+
+        }
+
+        return {
+            edit: function(options) {
+                context = options;
+                open();
+            },
+            icon: "k-icon k-i-arrow-60-down"
+        };
+
+    });
+
     // Función que envia la Data al PHP
     function onSubmit(e) {
 

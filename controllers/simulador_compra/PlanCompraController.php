@@ -313,6 +313,13 @@ if($ESTADO_C1!=24){
     }
 
 
+    // Listar Eventos Grilla Editar
+    public function ListarEventos($f3)
+    {
+        echo json_encode(\simulador_compra\PlanCompraClass::ListarEventos($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO')));
+    }
+
+
     // Listar Ventana Grilla Editar
     public function ListarVentana($f3)
     {
