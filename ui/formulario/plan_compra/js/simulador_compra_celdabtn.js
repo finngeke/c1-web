@@ -1239,7 +1239,12 @@ $(function () {
         }
     });
 
-
+    $("#CBXTipoTienda").change(function () {
+        if($('#tienda_seleccionado > option').length>0){
+            // Sincronizar DataSource
+            dataSource_cbxDisponibleAsignado.sync();
+        }
+    });
 
 
 
