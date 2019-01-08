@@ -1120,6 +1120,15 @@ class PlanCompraClass extends \parametros
 
 
         // ###################################### 3 GUARDADO CAMPOS DE TEXTO SIMPLE ####################################
+
+        // Validar Evento
+        $query_evento = PlanCompraClass::BuscaEvento($TEMPORADA, $DEPTO, $EVENTO);
+        if (empty($query_evento[0])) {
+            return " ID: " . $ID_COLOR3 . " - Evento ingresado no Existe.";
+            die();
+        }
+
+
         // ######################### (Campos de Texto que no requieren validación, update directo) #####################
         $query_campos_libres = PlanCompraClass::ActualizaPlanCompraCamposLibre($TEMPORADA, $DEPTO, $LOGIN, $ID_COLOR3,$ALIAS_PROV,$FECHA_ACORDADA,$EVENTO);
         if($query_campos_libres != "OK"){
@@ -2551,6 +2560,22 @@ class PlanCompraClass extends \parametros
 
     }
 
+    // Buscar Evento
+    public static function BuscaEvento($cod_temporada, $depto, $evento)
+    {
+
+        $sql = "SELECT COD_EVENTO
+                FROM PLC_EVENTOS
+                WHERE NOM_EVENTO ='" . $evento . "'";
+
+        $data = \database::getInstancia()->getFilas($sql);
+
+        foreach ($data as $va1) {
+            return $va1[0];
+        }
+
+
+    }
 
     // Listar Historial
     public static function ListarHistorial($temporada, $depto, $id_color3)
