@@ -58,7 +58,7 @@ class PlanCompraController extends \Control
             $ALIAS_PROV = trim($columna["ALIAS_PROV"]);
             $NOM_VENTANA = trim(strtoupper($columna["NOM_VENTANA"])); // Pasamos a mayúscula la ventana que llega
             $DESTALLA = trim($columna["DESTALLA"]);
-            $TIPO_EMPAQUE = $columna["TIPO_EMPAQUE"];
+            $TIPO_EMPAQUE = trim(strtoupper($columna["TIPO_EMPAQUE"]));
             $PORTALLA_1_INI = trim($columna["PORTALLA_1_INI"]);
             $CURVATALLA = trim($columna["CURVATALLA"]);
             $UNID_OPCION_INICIO = $columna["UNID_OPCION_INICIO"];
@@ -77,20 +77,21 @@ class PlanCompraController extends \Control
             $COSTO_INSP = $columna["COSTO_INSP"];
             $COSTO_RFID = $columna["COSTO_RFID"];
             $DEBUT_REODER = trim(strtoupper($columna["DEBUT_REODER"]));
-            $TIPO_EMPAQUE_BASE = trim(strtoupper($columna["TIPO_EMPAQUE_BASE"]));
+            $COD_MARCA = $columna["COD_MARCA"];
+            $N_CURVASXCAJAS = $columna["N_CURVASXCAJAS"];
+            $COD_JER2 = $columna["COD_JER2"];
+            $COD_SUBLIN = $columna["COD_SUBLIN"];
+            $FECHA_ACORDADA = $columna["FECHA_ACORDADA"];
+
+
+            /*$TIPO_EMPAQUE_BASE = trim(strtoupper($columna["TIPO_EMPAQUE_BASE"]));
             $UNI_INICIALES_BASE = $columna["UNI_INICIALES_BASE"];
             $PRECIO_BLANCO_BASE = $columna["PRECIO_BLANCO_BASE"];
             $COSTO_TARGET_BASE = $columna["COSTO_TARGET_BASE"];
             $COSTO_FOB_BASE = $columna["COSTO_FOB_BASE"];
             $COSTO_INSP_BASE = $columna["COSTO_INSP_BASE"];
             $COSTO_RFID_BASE = $columna["COSTO_RFID_BASE"];
-            $COD_MARCA = $columna["COD_MARCA"];
-            $N_CURVASXCAJAS = $columna["N_CURVASXCAJAS"];
-            $COD_JER2 = $columna["COD_JER2"];
-            $COD_SUBLIN = $columna["COD_SUBLIN"];
-            $FORMATO_BASE = $columna["FORMATO_BASE"];
-            $FECHA_ACORDADA = $columna["FECHA_ACORDADA"];
-
+            $FORMATO_BASE = $columna["FORMATO_BASE"];*/
 
             // OTRAS VARIABLES
             /*$GRUPO_COMPRA = $columna["GRUPO_COMPRA"];
@@ -170,27 +171,11 @@ if($ESTADO_C1!=24){
                 $ID_COLOR3,$ESTADO_C1, $PROFORMA, $ARCHIVO,$PROFORMA_BASE,$ARCHIVO_BASE,$ALIAS_PROV,
                 $NOM_VENTANA,$DESTALLA, $TIPO_EMPAQUE, $PORTALLA_1_INI, $CURVATALLA, $UNID_OPCION_INICIO,
                 $CAN, $SEG_ASIG, $FORMATO, $A, $B, $C, $I, $NOM_VIA, $NOM_PAIS, $PRECIO_BLANCO, $COSTO_TARGET,
-                $COSTO_FOB, $COSTO_INSP, $COSTO_RFID, $DEBUT_REODER, $TIPO_EMPAQUE_BASE, $UNI_INICIALES_BASE,
-                $PRECIO_BLANCO_BASE, $COSTO_TARGET_BASE, $COSTO_FOB_BASE, $COSTO_INSP_BASE, $COSTO_RFID_BASE, $COD_MARCA,
-                $N_CURVASXCAJAS, $COD_JER2, $COD_SUBLIN, $FORMATO_BASE,$FECHA_ACORDADA
-            ));
+                $COSTO_FOB, $COSTO_INSP, $COSTO_RFID, $DEBUT_REODER,  $COD_MARCA,
+                $N_CURVASXCAJAS, $COD_JER2, $COD_SUBLIN,$FECHA_ACORDADA));
 }
 
-            /*
-            echo json_encode(\simulador_compra\PlanCompraClass::ProcesaDataPlanCompra(
-                $f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'),
-                $ID_COLOR3, $GRUPO_COMPRA, $COD_TEMP, $LINEA, $SUBLINEA, $MARCA, $ESTILO, $SHORT_NAME, $ID_CORPORATIVO, $DESCMODELO, $DESCRIP_INTERNET,
-                $NOMBRE_COMPRADOR, $NOMBRE_DISENADOR, $COMPOSICION, $TIPO_TELA, $FORRO, $COLECCION, $EVENTO, $COD_ESTILO_VIDA, $CALIDAD, $COD_OCASION_USO,
-                $COD_PIRAMIX, $NOM_VENTANA, $COD_RANKVTA, $LIFE_CYCLE, $NUM_EMB, $COD_COLOR, $TIPO_PRODUCTO, $TIPO_EXHIBICION, $DESTALLA, $TIPO_EMPAQUE,
-                $PORTALLA_1_INI, $PORTALLA_1, $CURVATALLA, $CURVAMIN, $UNID_OPCION_INICIO, $UNID_OPCION_AJUSTADA, $CAN, $MTR_PACK, $CANT_INNER, $SEG_ASIG,
-                $FORMATO, $TDAS, $A, $B, $C, $I, $UND_ASIG_INI, $ROT, $NOM_PRECEDENCIA, $NOM_VIA, $NOM_PAIS, $VIAJE, $MKUP, $PRECIO_BLANCO, $OFERTA, $GM,
-                $COD_TIP_MON, $COSTO_TARGET, $COSTO_FOB, $COSTO_INSP, $COSTO_RFID, $ROYALTY_POR, $COSTO_UNIT, $COSTO_UNITS, $CST_TOTLTARGET, $COSTO_TOT, $COSTO_TOTS,
-                $RETAIL, $DEBUT_REODER, $SEM_INI, $SEM_FIN, $CICLO, $AGOT_OBJ, $SEMLIQ, $ALIAS_PROV, $COD_PROVEEDOR, $COD_TRADER, $AFTER_MEETING_REMARKS, $CODSKUPROVEEDOR,
-                $SKU, $PROFORMA, $ARCHIVO, $ESTILO_PMM, $ESTADO_MATCH, $PO_NUMBER, $ESTADO_OC, $FECHA_ACORDADA, $FECHA_EMBARQUE, $FECHA_ETA, $FECHA_RECEPCION, $DIAS_ATRASO,
-                $CODESTADO, $ESTADO_C1, $VENTANA_LLEGADA, $TIPO_EMPAQUE_BASE, $UNI_INICIALES_BASE, $PRECIO_BLANCO_BASE, $COSTO_TARGET_BASE, $COSTO_FOB_BASE,
-                $COSTO_INSP_BASE, $COSTO_RFID_BASE, $COD_MARCA, $N_CURVASXCAJAS, $COD_JER2, $COD_SUBLIN));
-
-            */
+// $TIPO_EMPAQUE_BASE, $UNI_INICIALES_BASE,$PRECIO_BLANCO_BASE, $COSTO_TARGET_BASE, $COSTO_FOB_BASE, $COSTO_INSP_BASE, $COSTO_RFID_BASE, $FORMATO_BASE
 
 
         // Fin del each que recorre el JSON

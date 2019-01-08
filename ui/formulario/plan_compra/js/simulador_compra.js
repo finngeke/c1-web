@@ -294,6 +294,14 @@ $(function () {
                 "COSTO_INSP": kendo.parseInt(e.data.updated[i]["COSTO_INSP"]),
                 "COSTO_RFID": kendo.parseInt(e.data.updated[i]["COSTO_RFID"]), // Decimal
                 "DEBUT_REODER": String(e.data.updated[i]["DEBUT_REODER"]),
+                "COD_MARCA": String(e.data.updated[i]["COD_MARCA"]),
+                "N_CURVASXCAJAS": kendo.parseInt(e.data.updated[i]["N_CURVASXCAJAS"]),
+                "COD_JER2": String(e.data.updated[i]["COD_JER2"]),
+                "COD_SUBLIN": String(e.data.updated[i]["COD_SUBLIN"]),
+                "FECHA_ACORDADA": String(e.data.updated[i]["FECHA_ACORDADA"])
+
+
+                /*
                 "TIPO_EMPAQUE_BASE": String(e.data.updated[i]["TIPO_EMPAQUE_BASE"]),
                 "UNI_INICIALES_BASE": kendo.parseInt(e.data.updated[i]["UNI_INICIALES_BASE"]),
                 "PRECIO_BLANCO_BASE": kendo.parseInt(e.data.updated[i]["PRECIO_BLANCO_BASE"]),
@@ -301,12 +309,10 @@ $(function () {
                 "COSTO_FOB_BASE": kendo.parseInt(e.data.updated[i]["COSTO_FOB_BASE"]),
                 "COSTO_INSP_BASE": kendo.parseInt(e.data.updated[i]["COSTO_INSP_BASE"]),
                 "COSTO_RFID_BASE": kendo.parseInt(e.data.updated[i]["COSTO_RFID_BASE"]), // Decimal
-                "COD_MARCA": String(e.data.updated[i]["COD_MARCA"]),
-                "N_CURVASXCAJAS": kendo.parseInt(e.data.updated[i]["N_CURVASXCAJAS"]),
-                "COD_JER2": String(e.data.updated[i]["COD_JER2"]),
-                "COD_SUBLIN": String(e.data.updated[i]["COD_SUBLIN"]),
                 "FORMATO_BASE": String(e.data.updated[i]["FORMATO_BASE"]),
-                "FECHA_ACORDADA": String(e.data.updated[i]["FECHA_ACORDADA"])
+                 */
+
+
             });
 
         }
