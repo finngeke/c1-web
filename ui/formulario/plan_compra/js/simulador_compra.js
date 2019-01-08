@@ -550,7 +550,8 @@ $(function () {
                         var bloqueo_columnas_semanas = spreadsheet_conteo_total.activeSheet().range("BV1:BX"+total_registros_listados);
                         var bloqueo_columna_razonsocial = spreadsheet_conteo_total.activeSheet().range("CB1:CB"+total_registros_listados);
                         var bloqueo_columna_codpadre = spreadsheet_conteo_total.activeSheet().range("CF1:CF"+total_registros_listados);
-                        var bloqueo_columnas_oc = spreadsheet_conteo_total.activeSheet().range("CH1:DB"+total_registros_listados);
+                        var bloqueo_columnas_oc = spreadsheet_conteo_total.activeSheet().range("CH1:CL"+total_registros_listados);
+                        var bloqueo_columnas_fecha = spreadsheet_conteo_total.activeSheet().range("CN1:DB"+total_registros_listados);
                         bloqueo_columna_id.enable(false);
                         bloqueo_columna_comprajustada.enable(false);
                         bloqueo_columna_uniajustada.enable(false);
@@ -564,6 +565,7 @@ $(function () {
                         bloqueo_columna_razonsocial.enable(false);
                         bloqueo_columna_codpadre.enable(false);
                         bloqueo_columnas_oc.enable(false);
+                        bloqueo_columnas_fecha.enable(false);
 
 
                         var range_via = spreadsheet.activeSheet().range("AZ2:AZ"+total_registros_listados);
@@ -905,7 +907,7 @@ $(function () {
                 {width: 130},    // Debut/Reorder
                 {width: 90},    // Sem Ini
                 {width: 90},    // Sem Fin
-                {width: 130},   // Sem Ciclo Vida
+                {width: 150},   // Sem Ciclo Vida
                 {width: 100},    // Agot Obj
                 {width: 130},   // Semanas Liquidación
                 {width: 250},   // Proveedor
@@ -917,14 +919,14 @@ $(function () {
                 {width: 150},   // Proforma
                 {width: 90},    // Archivo
                 {width: 230},   // Estilo PMM
-                {width: 110},    // Estado Match
+                {width: 120},    // Estado Match
                 {width: 90},    // N OC
                 {width: 120},    // Estado OC
-                {width: 140},   // Fecha Acordada
-                {width: 120},   // Fecha Embarque
-                {width: 110},   // Fecha ETA
-                {width: 110},   // Fecha Recep CD
-                {width: 110},   // Dias Atraso
+                {width: 160},   // Fecha Acordada
+                {width: 140},   // Fecha Embarque
+                {width: 140},   // Fecha ETA
+                {width: 140},   // Fecha Recep CD
+                {width: 140},   // Dias Atraso CD
                 {width: 220}    // Estado Opcion
             ],
             rows: [
@@ -948,7 +950,7 @@ $(function () {
                         {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Tipo Tela
                         {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Forro
                         {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Colección
-                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Evento
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true, background: "rgb(205,255,133)"}, // Evento
                         {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Evento In-Store
                         {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Estilo de Vida
                         {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Calidad
@@ -1021,7 +1023,7 @@ $(function () {
                         {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Estado Match
                         {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // N° OC
                         {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Estado OC
-                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Fecha Acordada
+                        {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true, background: "rgb(205,255,133)"}, // Fecha Acordada
                         {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Fecha Embarque
                         {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Fecha ETA
                         {textAlign: "center", color: "rgb(0,0,0)", enable: false, bold:true}, // Fecha Recepción CD
