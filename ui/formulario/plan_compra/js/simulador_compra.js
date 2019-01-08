@@ -480,6 +480,10 @@ $(function () {
                     var columnCA = sheet.range('CA2:CA' + (e.response.length + 1));
                     columnCA.editor('dropdownlistProveedor');
 
+                    // Asigno el CBX de Evento
+                    var columnR = sheet.range('R2:R' + (e.response.length + 1));
+                    columnR.editor('dropdownlistEvento');
+
                 });
             }
 
@@ -678,19 +682,6 @@ $(function () {
                             type: "reject",
                             messageTemplate: "La ventana ingresada, no se encuentra dentro de las permitidas. (Recuerde ingresarla en Mayúsculas.)"
                         });
-
-                        var range_evento = spreadsheet.activeSheet().range("R2:R"+total_registros_listados);
-                        range_evento.validation({
-                            dataType: "list",
-                            showButton: true,
-                            comparerType: "list",
-                            from: '"MADRE,PADRE,NINO,NAVIDAD"',
-                            allowNulls: false,
-                            type: "reject",
-                            messageTemplate: "El Evento no se encuentra dentro de los permitidos. (Recuerde ingresarlo en Mayúsculas.)"
-                        });
-
-
 
                     }, {recalc: true});
 
