@@ -1042,7 +1042,7 @@ public function ImportarAssormentValidaciones($f3){
 
         //validacion Campos
         if ($_error == true) {
-            $_ERROR2 = valida_archivo_bmt::Val_Campos($rows, $limite, $nom_columnas,$f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'),$f3,$temporada);
+            $_ERROR2 = valida_archivo_bmt::Val_Campos($rows, $limite, $nom_columnas,$f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'),$f3);
             if ($_ERROR2["Tipo"] == false) {
                 $_array["Error"] = true;
                 $_array["msjError"]= "Fila(s):".$_ERROR2["Error"];
