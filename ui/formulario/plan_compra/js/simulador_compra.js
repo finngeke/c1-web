@@ -332,6 +332,8 @@ $(function () {
         // Recorro por la cantidad de registros para asociar al arreglo
         for (i; i < e.data.updated.length; i++) {
 
+            // Enviar Registros que existan previamente, no nuevos
+            if(e.data.updated[i]["ESTADO_C1"]){
             arregloGuardado.push({
                 "ID_COLOR3": kendo.parseInt(e.data.updated[i]["ID_COLOR3"]),
                 "ESTADO_C1": kendo.parseInt(e.data.updated[i]["ESTADO_C1"]),
@@ -367,21 +369,8 @@ $(function () {
                 "COD_SUBLIN": String(e.data.updated[i]["COD_SUBLIN"]),
                 "FECHA_ACORDADA": String(e.data.updated[i]["FECHA_ACORDADA"]),
                 "EVENTO": String(e.data.updated[i]["EVENTO"])
-
-
-                /*
-                "TIPO_EMPAQUE_BASE": String(e.data.updated[i]["TIPO_EMPAQUE_BASE"]),
-                "UNI_INICIALES_BASE": kendo.parseInt(e.data.updated[i]["UNI_INICIALES_BASE"]),
-                "PRECIO_BLANCO_BASE": kendo.parseInt(e.data.updated[i]["PRECIO_BLANCO_BASE"]),
-                "COSTO_TARGET_BASE": kendo.parseInt(e.data.updated[i]["COSTO_TARGET_BASE"]), // Decimal
-                "COSTO_FOB_BASE": kendo.parseInt(e.data.updated[i]["COSTO_FOB_BASE"]),
-                "COSTO_INSP_BASE": kendo.parseInt(e.data.updated[i]["COSTO_INSP_BASE"]),
-                "COSTO_RFID_BASE": kendo.parseInt(e.data.updated[i]["COSTO_RFID_BASE"]), // Decimal
-                "FORMATO_BASE": String(e.data.updated[i]["FORMATO_BASE"]),
-                 */
-
-
             });
+            }
 
         }
 
@@ -452,7 +441,6 @@ $(function () {
             }
         });
     }
-
 
     // Variable siempre a true, para cambiar las cabeceras
     var shouldPopulateHeader = true;
@@ -618,6 +606,9 @@ $(function () {
                         oculta_columna_spread.hideColumn(103);
                         oculta_columna_spread.hideColumn(104);
                         oculta_columna_spread.hideColumn(105);
+
+                        var formato_fecha = spreadsheet_conteo_total.activeSheet().range('CM2:CM'+total_registros_listados);
+                            formato_fecha.format('dd/mm/YYYY');
 
                         // Bloquear columnas
                         var bloqueo_columna_id = spreadsheet_conteo_total.activeSheet().range("A1:A"+total_registros_listados);
