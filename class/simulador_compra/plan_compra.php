@@ -1907,7 +1907,7 @@ class plan_compra extends \parametros {
                 AND DEP_DEPTO = '".$depto."'
                 AND GRUPO_COMPRA = '".$grupo."'
                 AND COD_MARCA = ".$marca."
-                AND ESTADO <> 0  ";
+                AND ESTADO not in (0,24)";
 
         $data = \database::getInstancia()->getFilas($sql);
         return $data;

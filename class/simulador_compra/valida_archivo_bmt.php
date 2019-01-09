@@ -256,12 +256,13 @@ class valida_archivo_bmt extends \parametros {
         }
         return  $array;
     }
-    public static function Val_Campos($rows,$limite,$nom_columnas,$cod_tempo,$depto,$f3){
+    public static function Val_Campos($rows,$limite,$nom_columnas,$cod_tempo,$depto,$f3,$nom_temporada){
         $filarow = "";
         $val = TRUE;
-
-        /*Validacion temporda del season 1*/ $tipoVal = 1;
-        $dttipoTemporda = array("CL - INVIERNO","CL - OTOÑO","CL - PRIMAVERA","CL - VERANO","CL - TODA TEMPORADA");
+        $tipotemp = substr($nom_temporada,0,2);
+        $msj = "";
+        /*Validacion temporda del season 1*/
+       /* $dttipoTemporda = array("CL - INVIERNO","CL - OTOÑO","CL - PRIMAVERA","CL - VERANO","CL - TODA TEMPORADA");
         for($i = 3;$i <= $limite; $i++){
             $val2 = false;
                 foreach ($dttipoTemporda as $var)  {
@@ -270,6 +271,28 @@ class valida_archivo_bmt extends \parametros {
                     }
                 }
                 if ($val2 == false){
+                    $val = FALSE;
+                    $filarow = $filarow . strval($i + 1) . ",";
+            }
+        }*/
+
+        $dtTemp =[];$tipoVal = 1;/*Validacion temporada pv O OI*/
+        if ($tipotemp == "OI"){
+            $dtTemp = array("CL - INVIERNO","CL - OTOÑO","CL - TODA TEMPORADA");
+            $msj ="CL - INVIERNO, CL - OTOÑO o CL - TODA TEMPORADA";
+        }else{
+            $dtTemp = array("CL - PRIMAVERA","CL - VERANO","CL - TODA TEMPORADA");
+            $msj ="CL - INVIERNO, CL - OTOÑO o CL - TODA TEMPORADA";
+        }
+
+        for ($i = 3;$i <= $limite; $i++) {
+            $val2 = false;
+            foreach ($dtTemp as $var)  {
+               if ($var == strtoupper($rows[$i][$nom_columnas['Temporada']])) {
+                   $val2 = true; break;
+               }
+            }
+            if ($val2 == false){
                     $val = FALSE;
                     $filarow = $filarow . strval($i + 1) . ",";
             }
@@ -755,7 +778,7 @@ class valida_archivo_bmt extends \parametros {
         if ($val == FALSE ) {
             if ($tipoVal == 1){
                 $array = array('Tipo' => $val,
-                    'Error'=> "(".substr($filarow, 0, - 1).") -> Temporada no se encuentra BD. Ej: CL - INVIERNO,CL - OTOÑO,CL - PRIMAVERA,CL - VERANO,CL - TODA TEMPORADA");
+                    'Error'=> "(".substr($filarow, 0, - 1).") -> La temporada del producto '".$tipotemp."' tiene que ser = ". $msj.".");
             }
             elseif ($tipoVal == 2){
                 $array = array('Tipo' => $val,
