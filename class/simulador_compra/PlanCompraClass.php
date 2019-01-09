@@ -103,10 +103,10 @@ class PlanCompraClass extends \parametros
                 O.ESTADO_MATCH,                  -- 84 Estado Match
                 O.PO_NUMBER,                     -- 85 N OC
                 O.ESTADO_OC,                     -- 86 Estado OC
-                C.FECHA_EMBARQUE_ACORDADA,       -- 87
-                O.FECHA_EMBARQUE,                -- 88 Fecha Embarque
-                O.FECHA_ETA,                     -- 89 Fecha ETA
-                O.FECHA_RECEPCION,               -- 90 Fecha Recepciòn
+                TO_CHAR(C.FECHA_EMBARQUE_ACORDADA, 'DD/MM/YYYY') FECHA_EMBARQUE_ACORDADA, -- 87 Fecha Embarque Acordada
+                TO_CHAR(O.FECHA_EMBARQUE, 'DD/MM/YYYY') FECHA_EMBARQUE,                   -- 88 Fecha Embarque
+                TO_CHAR(O.FECHA_ETA, 'DD/MM/YYYY') FECHA_ETA,                             -- 89 Fecha ETA
+                TO_CHAR(O.FECHA_RECEPCION, 'DD/MM/YYYY') FECHA_RECEPCION,                 -- 90 Fecha Recepciòn
                 O.DIAS_ATRASO,                   -- 91 Dias Atraso
                 convert((SELECT nom_est_c1 FROM plc_estado_c1 WHERE cod_est_c1= C.ESTADO),'utf8','us7ascii')CODESTADO,  -- 92 Estado Opcion
                 C.ESTADO ESTADO_C1,                       -- 93 Estado C1
