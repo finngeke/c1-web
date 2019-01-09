@@ -2629,7 +2629,7 @@ class PlanCompraClass extends \parametros
 
     }
 
-
+    // ######################## TRABAJO CON MATCH ############################
     // Listar País
     public static function ListarPais($cod_temporada, $depto)
     {
@@ -2658,8 +2658,6 @@ class PlanCompraClass extends \parametros
 
 
     }
-
-
     // Busca Formatos Grilla Editar
     public static function ListarFormato($temporada, $depto)
     {
@@ -2693,7 +2691,6 @@ class PlanCompraClass extends \parametros
 
 
     }
-
     // Busca Proveedor Grilla Editar
     public static function ListarProveedor($temporada, $depto)
     {
@@ -2719,8 +2716,7 @@ class PlanCompraClass extends \parametros
 
 
     }
-
-    // Busca Proveedor Grilla Editar
+    // Busca Evento Grilla Editar
     public static function ListarEventos($temporada, $depto)
     {
 
@@ -2745,8 +2741,6 @@ class PlanCompraClass extends \parametros
 
 
     }
-
-
     // Busca Ventana Grilla Editar
     public static function ListarVentana($temporada, $depto)
     {
@@ -2757,8 +2751,6 @@ class PlanCompraClass extends \parametros
         return $data;
 
     }
-
-
     // Consultar OC Linkeada
     public static function ConsultaOCLinkeada($temporada, $depto, $login, $oc){
 
@@ -2774,8 +2766,6 @@ class PlanCompraClass extends \parametros
         return $data;
 
     }
-
-
     // Quitar OC Eliminada
     public static function QuitarOCCancelada($login,$pi,$oc)
     {
@@ -2809,8 +2799,6 @@ class PlanCompraClass extends \parametros
         }
 
     }
-
-
     // Trabajando en MATCH llenar tabla PMM
     public static function MatchLlenarGridPMM($temporada, $depto, $login, $oc, $pi,$puerto,$url)
     {
@@ -2918,8 +2906,6 @@ class PlanCompraClass extends \parametros
 
 
     }
-
-
     // Trabajando en MATCH llenar tabla PLAN
     public static function MatchLlenarGridPlan($temporada, $depto, $login, $oc, $pi, $puerto, $url)
     {
@@ -2969,8 +2955,6 @@ class PlanCompraClass extends \parametros
 
 
     }
-
-
     // Llenar Tabla llenar_tabla_historial (POPUP de la Grilla)
     public static function BrokerTraerDatosOC($pi, $puerto, $url)
     {
@@ -3067,8 +3051,6 @@ class PlanCompraClass extends \parametros
 
 
     }
-
-
     // Agrega registros que llegan del WS a la Tabla B
     public static function AgregaRegistrosTablaB($temporada, $depto, $login, $oc, $pi, $nombreEstilo, $numeroEstilo,$estado, $nombreVariacion, $numeroVariacion, $color,
                                                  $codColor, $nombreLinea, $numeroLinea, $nombreSubLinea, $numeroSubLinea, $temporada2, $cicloVida, $estadoOC, $fechaEmbarque,
@@ -3146,7 +3128,6 @@ class PlanCompraClass extends \parametros
 
 
     }
-
     // Listar CBX Línea en Match
     public static function ListarLineaCBXMatch($temporada, $depto)
     {
@@ -3178,7 +3159,6 @@ class PlanCompraClass extends \parametros
         return $array1;
 
     }
-
     // Listar CBX SubLinea en Match
     public static function ListarSubLineaCBXMatch($temporada, $depto, $linea)
     {
@@ -3215,7 +3195,6 @@ class PlanCompraClass extends \parametros
         return $array1;
 
     }
-
     // Listar CBX Color en Match
      public static function ListarColorCBXMatch($temporada, $depto)
     {
@@ -3243,7 +3222,6 @@ class PlanCompraClass extends \parametros
         return $array1;
 
     }
-
     // Actualizar Plan de Compra
     public static function ActualizaPlanMATCH($temporada, $depto, $login, $id_color, $linea, $sublinea, $estilo, $color)
     {
@@ -3290,7 +3268,6 @@ class PlanCompraClass extends \parametros
 
     // Fin del ActualizaPlanMATCH
     }
-
     // Match - Generar Match (En estado 19)
     public static function GenerarMatch($temporada, $depto, $login, $oc, $proforma)
     {
@@ -3467,7 +3444,6 @@ class PlanCompraClass extends \parametros
 
 
     }
-
     // Match - Generar Match Variacion
     public static function GenerarMatchVariaciones($temporada, $depto, $login, $oc, $proforma)
     {
@@ -3532,7 +3508,6 @@ class PlanCompraClass extends \parametros
 
 
     }
-
     // Match - Revertir Match
     public static function RevertirMatch($temporada, $depto, $login, $proforma)
     {
@@ -3563,7 +3538,6 @@ class PlanCompraClass extends \parametros
         }
 
     }
-
     // Match - Agregar OC a Tabla plc_ordenes_compra_pmm
     public static function AgregaOcTablaOCPMM($temporada, $depto, $login, $oc, $proforma)
     {
@@ -3654,7 +3628,7 @@ class PlanCompraClass extends \parametros
 
 
     }
-
+    // ######################## FIN TRABAJO CON MATCH ############################
 
 
     // ######################## INICIO Trabajo con flujo de aprobación ########################
@@ -3847,7 +3821,6 @@ class PlanCompraClass extends \parametros
         return $array1;
 
     }
-
     // Listar Permiso de Usuario Original
     public static function ListarPermisosUsuarioOriginal($temporada, $depto, $login, $cod_tipusr)
     {
@@ -3893,7 +3866,6 @@ class PlanCompraClass extends \parametros
 
 
     }
-
     // Listar Permiso de Usuario
     public static function ListarPermisosUsuario($temporada, $depto, $login, $cod_tipusr)
     {
@@ -4597,9 +4569,20 @@ class PlanCompraClass extends \parametros
     // ######################## FIN Trabajo POPUP Formatos ########################
 
 
+    // ######################## VERIFICA TIENDAS EN PLAN DE COMPRA ########################
+    // Busca Tiendas Configuradas
+    public static function VerificaTiendaPlanCompra($temporada, $depto)
+    {
 
+        $sql = "SELECT COUNT (*) FROM PLC_SEGMENTOS_TDA
+                WHERE COD_TEMPORADA = $temporada
+                AND DEP_DEPTO = '" . $depto . "'
+                AND COD_SEG <> 4";
+        $data = \database::getInstancia()->getFilas($sql);
+        return $data;
 
-
+    }
+    // ######################## FIN VERIFICA TIENDAS EN PLAN DE COMPRA ########################
 
 
 
