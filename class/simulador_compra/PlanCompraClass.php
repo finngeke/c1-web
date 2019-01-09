@@ -1069,7 +1069,7 @@ class PlanCompraClass extends \parametros
 
         // ################################# 2 VALIDACION FOB - PROV - FECHA ACORDADA #############################################
         // Trabajo con la Fecha Acordada
-        if( ($FECHA_ACORDADA!=null) ){
+        if( ($FECHA_ACORDADA!=null) && ($FECHA_ACORDADA!="null") ){
 
             // Trabajo con la fecha
             $var_fecha_acor = explode("/",$FECHA_ACORDADA);
@@ -1083,6 +1083,7 @@ class PlanCompraClass extends \parametros
         }else{
             $FECHA_ACORDADA = '';
         }
+
         // Validar Costo FOB
         if (($COSTO_FOB != 0) && ($COSTO_FOB != null) && ($COSTO_FOB != "") && ($COSTO_FOB != "null")) {
 

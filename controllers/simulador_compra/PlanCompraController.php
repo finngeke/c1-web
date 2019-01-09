@@ -82,7 +82,7 @@ class PlanCompraController extends \Control
             $COD_JER2 = $columna["COD_JER2"];
             $COD_SUBLIN = $columna["COD_SUBLIN"];
 
-            if( $columna["FECHA_ACORDADA"]!=null ){
+            if( ($columna["FECHA_ACORDADA"]!=null) && ($columna["FECHA_ACORDADA"]!="null") ){
                 $FECHA_ACORDADA = str_replace("-","/",trim($columna["FECHA_ACORDADA"]));
             }else{
                 $FECHA_ACORDADA = '';
