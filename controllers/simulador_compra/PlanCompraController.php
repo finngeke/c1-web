@@ -81,7 +81,7 @@ class PlanCompraController extends \Control
             $N_CURVASXCAJAS = $columna["N_CURVASXCAJAS"];
             $COD_JER2 = $columna["COD_JER2"];
             $COD_SUBLIN = $columna["COD_SUBLIN"];
-            $FECHA_ACORDADA = $columna["FECHA_ACORDADA"];
+            $FECHA_ACORDADA = str_replace("-","/",trim($columna["FECHA_ACORDADA"]));
             $EVENTO = trim(strtoupper($columna["EVENTO"]));
 
 
