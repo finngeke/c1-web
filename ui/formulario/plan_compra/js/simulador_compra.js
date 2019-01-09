@@ -472,6 +472,20 @@ $(function () {
                     var columnR = sheet.range('R2:R' + (e.response.length + 1));
                     columnR.editor('dropdownlistEvento');
 
+                    // Rows red estado Eliminado
+                    var spreadsheet1 = $("#spreadsheet").data("kendoSpreadsheet");
+                    var sheet_2 = spreadsheet1.sheetByIndex(0);
+                    var data_total = sheet_2.toJSON();
+                    var count = data_total.rows.length;
+                    var range_estados = sheet_2.range("CR2:CR"+count);
+
+                    range_estados.forEachCell(function (row, column, value) {
+                       if(sheet_2.range("CR"+row).value() == "Eliminado"){
+                           sheet_2.range("A"+row+":CR"+row).background("#cd5c5c");
+                           sheet_2.range("A"+row+":CR"+row).color("#ffffff");
+                        }
+                        // Fin del Recorrer la Grilla
+                    });
                 });
             }
 
