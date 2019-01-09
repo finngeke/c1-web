@@ -1069,7 +1069,7 @@ class PlanCompraClass extends \parametros
 
         // ################################# 2 VALIDACION FOB - PROV - FECHA ACORDADA #############################################
         // Trabajo con la Fecha Acordada
-        if(isset($FECHA_ACORDADA)){
+        if( ($FECHA_ACORDADA!=null) ){
 
             // Trabajo con la fecha
             $var_fecha_acor = explode("/",$FECHA_ACORDADA);
