@@ -1068,6 +1068,20 @@ class PlanCompraClass extends \parametros
 
 
         // ################################# 2 VALIDACION FOB - PROV - FECHA ACORDADA #############################################
+        // Trabajo con la Fecha Acordada
+        if(isset($FECHA_ACORDADA)){
+
+            // Trabajo con la fecha
+            $var_fecha_acor = explode("/",$FECHA_ACORDADA);
+
+            // Mes / Día / Año
+            if( checkdate($var_fecha_acor[1], $var_fecha_acor[0], $var_fecha_acor[2]) == false ){
+                return " ID: " . $ID_COLOR3 . " - Formato Incorrecto de Fecha Emb. Acordada.";
+                die();
+            }
+
+
+        }
         // Validar Costo FOB
         if (($COSTO_FOB != 0) && ($COSTO_FOB != null) && ($COSTO_FOB != "") && ($COSTO_FOB != "null")) {
 
@@ -1127,24 +1141,6 @@ class PlanCompraClass extends \parametros
             return " ID: " . $ID_COLOR3 . " - Evento ingresado no Existe.";
             die();
         }
-
-        // Trabajo con la Fecha Acordada
-        if(isset($FECHA_ACORDADA)){
-
-            // Trabajo con la fecha
-            $var_fecha_acor = explode("/",$FECHA_ACORDADA);
-
-            // Mes / Día / Año
-            if( checkdate($var_fecha_acor[1], $var_fecha_acor[0], $var_fecha_acor[2]) == false ){
-                return " ID: " . $ID_COLOR3 . " - Formato Incorrecto de Fecha Emb. Acordada.";
-                die();
-            }
-
-
-        }
-
-
-
 
 
         // ######################### (Campos de Texto que no requieren validación, update directo) #####################
