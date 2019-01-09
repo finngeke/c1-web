@@ -1092,10 +1092,10 @@ class PlanCompraClass extends \parametros
             }
 
             // Validar Fecha Acordada
-            if (($FECHA_ACORDADA == null) || ($FECHA_ACORDADA == "") || ($FECHA_ACORDADA == "null")) {
+            /*if (($FECHA_ACORDADA == null) || ($FECHA_ACORDADA == "") || ($FECHA_ACORDADA == "null")) {
                 return " ID: " . $ID_COLOR3 . " - Se ha enviado campo Fecha Acordada Vacio.";
                 die();
-            }
+            }*/
 
         }
         // Validar Proveedor
@@ -1108,14 +1108,14 @@ class PlanCompraClass extends \parametros
             }
 
             // Validar Fecha Acordada
-            if (($FECHA_ACORDADA == null) || ($FECHA_ACORDADA == "") || ($FECHA_ACORDADA == "null")) {
+            /*if (($FECHA_ACORDADA == null) || ($FECHA_ACORDADA == "") || ($FECHA_ACORDADA == "null")) {
                 return " ID: " . $ID_COLOR3 . " - Se ha enviado campo Fecha Acordada Vacio.";
                 die();
-            }
+            }*/
 
         }
         // Validar Fecha Acordada
-        if (($FECHA_ACORDADA != null) && ($FECHA_ACORDADA != "") && ($FECHA_ACORDADA != "null")) {
+        /*if (($FECHA_ACORDADA != null) && ($FECHA_ACORDADA != "") && ($FECHA_ACORDADA != "null")) {
 
             // Validar Proveedor
             if (($ALIAS_PROV == null) || ($ALIAS_PROV == "") || ($ALIAS_PROV == "null") ) {
@@ -1129,7 +1129,7 @@ class PlanCompraClass extends \parametros
                 die();
             }
 
-        }
+        }*/
         // ################################# FIN VALIDACION FOB - PROV - FECHA ACORDADA #############################################
 
 
