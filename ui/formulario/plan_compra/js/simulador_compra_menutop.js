@@ -58,23 +58,49 @@ $(document).ready(function() {
     // BTN GuardarCambiosBTN
     function GuardarCambiosBTN(e) {
 
-        $("#tb_guardar_cambios").addClass("k-state-disabled");
-        $("#tb_cancelar_cambios").addClass("k-state-disabled");
-        // $("#tb_guardar_cambios").removeClass("k-state-disabled");
-        // $("#tb_cancelar_cambios").removeClass("k-state-disabled");
+        var popupNotificationBTN = $("#popupNotification").kendoNotification().data("kendoNotification");
 
-        var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
-        var sheet = spreadsheet.activeSheet();
-        sheet.dataSource.sync();
+        // Verificar Permisos ()
+        if(localStorage.getItem("T0001")){
+
+            $("#tb_guardar_cambios").addClass("k-state-disabled");
+            $("#tb_cancelar_cambios").addClass("k-state-disabled");
+            // $("#tb_guardar_cambios").removeClass("k-state-disabled");
+            // $("#tb_cancelar_cambios").removeClass("k-state-disabled");
+
+            var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
+            var sheet = spreadsheet.activeSheet();
+            sheet.dataSource.sync();
+
+        }else{
+            popupNotificationBTN.getNotifications().parent().remove();
+            popupNotificationBTN.show(" No tiene permisos para realizar esta acción.", "error");
+            // Fin Verificar Permisos
+        }
+
+
 
     }
 
     // BTN CancelarCambiosBTN
     function CancelarCambiosBTN(e) {
 
-        var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
-        var sheet = spreadsheet.activeSheet();
-        sheet.dataSource.cancelChanges();
+        var popupNotificationBTN = $("#popupNotification").kendoNotification().data("kendoNotification");
+
+        // Verificar Permisos ()
+        if(localStorage.getItem("T0001")){
+
+            var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
+            var sheet = spreadsheet.activeSheet();
+            sheet.dataSource.cancelChanges();
+
+        }else{
+            popupNotificationBTN.getNotifications().parent().remove();
+            popupNotificationBTN.show(" No tiene permisos para realizar esta acción.", "error");
+            // Fin Verificar Permisos
+        }
+
+
 
     }
 
