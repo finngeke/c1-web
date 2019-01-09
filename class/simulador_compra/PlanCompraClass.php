@@ -2452,7 +2452,7 @@ class PlanCompraClass extends \parametros
 
         $sql = "UPDATE PLC_PLAN_COMPRA_COLOR_3 
                   SET ALIAS_PROV = '" . $ALIAS_PROV . "',
-                      FECHA_EMBARQUE_ACORDADA = '" . $FECHA_ACORDADA . "',
+                      FECHA_EMBARQUE_ACORDADA = to_date('" . $FECHA_ACORDADA . "', 'DD/MM/YYYY'),
                       EVENTO = '" . $EVENTO . "'
                 WHERE COD_TEMPORADA = $temporada
                     AND DEP_DEPTO = '" . $depto . "'
