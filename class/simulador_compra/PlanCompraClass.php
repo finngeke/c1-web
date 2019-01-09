@@ -4574,7 +4574,7 @@ class PlanCompraClass extends \parametros
     public static function VerificaTiendaPlanCompra($temporada, $depto)
     {
 
-        $sql = "SELECT COUNT (*) FROM PLC_SEGMENTOS_TDA
+        $sql = "SELECT * FROM PLC_SEGMENTOS_TDA
                 WHERE COD_TEMPORADA = $temporada
                 AND DEP_DEPTO = '" . $depto . "'
                 AND COD_SEG <> 4";

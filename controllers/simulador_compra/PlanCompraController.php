@@ -552,7 +552,7 @@ if($ESTADO_C1!=24){
 
     // ######################## VERIFICA TIENDAS EN PLAN DE COMPRA ########################
     public function VerificaTiendaPlanCompra($f3) {
-        echo json_encode(\simulador_compra\PlanCompraClass::VerificaTiendaPlanCompra($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO')));
+        echo json_encode(\simulador_compra\PlanCompraClass::VerificaTiendaPlanCompra($f3->get('SESSION.COD_TEMPORADA'), $f3->get('GET.DEPTO')));
     }
     // ######################## FIN VERIFICA TIENDAS EN PLAN DE COMPRA ########################
 
