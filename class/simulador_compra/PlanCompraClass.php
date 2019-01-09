@@ -1131,28 +1131,15 @@ class PlanCompraClass extends \parametros
         // Trabajo con la Fecha Acordada
         if(isset($FECHA_ACORDADA)){
 
-            // Validar Fecha Acordada
-            if(strlen($FECHA_ACORDADA)!=10){
+            // Trabajo con la fecha
+            $var_fecha_acor = explode("/",$FECHA_ACORDADA);
+
+            // Mes / Día / Año
+            if( checkdate($var_fecha_acor[1], $var_fecha_acor[0], $var_fecha_acor[2]) == false ){
                 return " ID: " . $ID_COLOR3 . " - Formato Incorrecto de Fecha Emb. Acordada.";
                 die();
             }
 
-            // Trabajo con la fecha
-            $var_fecha_acor = explode("/",$FECHA_ACORDADA);
-
-            // Validar Día
-            if( ($var_fecha_acor[0]<1) || ($var_fecha_acor[0]>31) ){
-                return " ID: " . $ID_COLOR3 . " - Dia Fuera e Rango en Fecha Emb. Acordada.";
-                die();
-            // Validar Mes
-            }elseif( ($var_fecha_acor[1]>12) || (strlen($var_fecha_acor[1])<2) || (!is_numeric($var_fecha_acor[1])) ){
-                return " ID: " . $ID_COLOR3 . " - Mes Fuera e Rango en Fecha Emb. Acordada.";
-                die();
-            }elseif( (strlen($var_fecha_acor[2])!=4) || (!is_numeric($var_fecha_acor[2])) ){
-                return " ID: " . $ID_COLOR3 . " - Año Fuera e Rango en Fecha Emb. Acordada.";
-                die();
-            }
-            
 
         }
 
