@@ -63,14 +63,19 @@ $(document).ready(function() {
         // Verificar Permisos ()
         if(localStorage.getItem("T0001")){
 
-            $("#tb_guardar_cambios").addClass("k-state-disabled");
-            $("#tb_cancelar_cambios").addClass("k-state-disabled");
-            // $("#tb_guardar_cambios").removeClass("k-state-disabled");
-            // $("#tb_cancelar_cambios").removeClass("k-state-disabled");
+            if( (localStorage.getItem("M-TIENDA")==0) || (localStorage.getItem("P-COSTO")==0) || (localStorage.getItem("P-RETAIL")==0) || (localStorage.getItem("P-EMBARQUE")!=9)){
+                popupNotificationBTN.getNotifications().parent().remove();
+                popupNotificationBTN.show(" Necesita Configurar Tiendas y/o Presupuestos.", "error");
+            }else{
+                $("#tb_guardar_cambios").addClass("k-state-disabled");
+                $("#tb_cancelar_cambios").addClass("k-state-disabled");
+                // $("#tb_guardar_cambios").removeClass("k-state-disabled");
+                // $("#tb_cancelar_cambios").removeClass("k-state-disabled");
 
-            var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
-            var sheet = spreadsheet.activeSheet();
-            sheet.dataSource.sync();
+                var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
+                var sheet = spreadsheet.activeSheet();
+                sheet.dataSource.sync();
+            }
 
         }else{
             popupNotificationBTN.getNotifications().parent().remove();
@@ -90,9 +95,14 @@ $(document).ready(function() {
         // Verificar Permisos ()
         if(localStorage.getItem("T0001")){
 
-            var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
-            var sheet = spreadsheet.activeSheet();
-            sheet.dataSource.cancelChanges();
+            if( (localStorage.getItem("M-TIENDA")==0) || (localStorage.getItem("P-COSTO")==0) || (localStorage.getItem("P-RETAIL")==0) || (localStorage.getItem("P-EMBARQUE")!=9)){
+                popupNotificationBTN.getNotifications().parent().remove();
+                popupNotificationBTN.show(" Necesita Configurar Tiendas y/o Presupuestos.", "error");
+            }else{
+                var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
+                var sheet = spreadsheet.activeSheet();
+                sheet.dataSource.cancelChanges();
+            }
 
         }else{
             popupNotificationBTN.getNotifications().parent().remove();

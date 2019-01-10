@@ -2419,8 +2419,16 @@ $(function () {
         ActualizaConcurrencia();
         // Verificar Permisos
         if(localStorage.getItem("T0025")) {
-        var popupDe = $("#POPUP_Importar_");
-        popupDe.data("kendoWindow").open();
+
+            if( (localStorage.getItem("M-TIENDA")==0) || (localStorage.getItem("P-COSTO")==0) || (localStorage.getItem("P-RETAIL")==0) || (localStorage.getItem("P-EMBARQUE")!=9)){
+                var popupNotificationValida = $("#popupNotification").kendoNotification().data("kendoNotification");
+                popupNotificationValida.getNotifications().parent().remove();
+                popupNotificationValida.show(" Necesita Configurar Tiendas y/o Presupuestos.", "error");
+            }else{
+                var popupDe = $("#POPUP_Importar_");
+                popupDe.data("kendoWindow").open();
+            }
+
         }else{
             popupNotification.getNotifications().parent().remove();
             popupNotification.show(" No tiene permisos para realizar esta acción.", "error");
