@@ -2930,11 +2930,9 @@ class cbx_grilla_compra extends \parametros
     public static function busca_existe_marca($temporada, $depto, $login)
     {
 
-        $sql = "SELECT count(*) TOTAL
-                    FROM PLC_DEPTO_MARCA 
-                    WHERE LTRIM(RTRIM(COD_DEPT)) = LTRIM(RTRIM('" . $depto . "'))
-                ";
-
+        $sql = "SELECT *
+                FROM PLC_DEPTO_MARCA 
+                WHERE LTRIM(RTRIM(COD_DEPT)) = LTRIM(RTRIM('" . $depto . "'))";
         $data = \database::getInstancia()->getFilas($sql);
         return $data;
 
