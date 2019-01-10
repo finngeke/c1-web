@@ -715,12 +715,20 @@
 							"NW_PER_CTN" => (trim(strtoupper($worksheet->getCell("AJ7")->getCalculatedValue())) == "N.W PER CTN (KGS)") ? $worksheet->getCell("AJ$row")->getCalculatedValue() : $worksheet->getCell("CD$row")->getCalculatedValue(),
 							"SUB_NEW" => (trim(strtoupper($worksheet->getCell("AK7")->getCalculatedValue())) == "SUB N.W. (KGS)") ? $worksheet->getCell("AK$row")->getCalculatedValue() : $worksheet->getCell("CE$row")->getCalculatedValue(),
 							"MEASUREMENT_PER_CTN" => (trim(strtoupper($worksheet->getCell("AL7")->getCalculatedValue())) == "MEASUREMENT PER CTN (CBM)") ? $worksheet->getCell("AL$row")->getCalculatedValue() : $worksheet->getCell("CF$row")->getCalculatedValue(),
-							"SUB_VOLUME" => (trim(strtoupper($worksheet->getCell("AM7")->getCalculatedValue())) == "SUB VOLUME (CBM)") ? $worksheet->getCell("AM$row")->getCalculatedValue() : $worksheet->getCell("CG$row")->getCalculatedValue()
+							"SUB_VOLUME" => (trim(strtoupper($worksheet->getCell("AM7")->getCalculatedValue())) == "SUB VOLUME (CBM)") ? $worksheet->getCell("AM$row")->getCalculatedValue() : $worksheet->getCell("CG$row")->getCalculatedValue(),
+							
+							"FORMATO"=>(trim(strtoupper($worksheet->getCell("AF8")->getCalculatedValue())) == "SKU SIZE 1") ? 1 : 0
 						);
 					}
 					$xml = new SimpleXMLElement("<filas />");
 					\LibraryHelper::array_to_xml($filas, $xml, "fila");
 					$clob = $xml->asXML();
+					// Para guardar el XML (debug)
+					//header("Content-type: text/xml");
+					//header("Content-Disposition: attachment; filename=\"$pl_id.xml\"");
+					//echo $clob;
+					//exit();
+					// Fin para guardar el XML (debug)
 					$data = \proveedor\proveedor::guardarPL($pl_id, $clob);
 					
 					if ($data["code"] != 0) {
