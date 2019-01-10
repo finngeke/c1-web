@@ -66,8 +66,7 @@ class tipo_ventana_llegada
                     ".$ventana.",
                     '".$porcentaje."',
                     '".$user."',
-                    SYSDATE)
-                    ";
+                    SYSDATE)";
 
 
         // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)

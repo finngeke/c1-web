@@ -17,8 +17,6 @@ class LogTransaccionClass extends \parametros
         $data = \database::getInstancia()->getConsulta($sql);
         return $data;
 
-
-
     }
 
 
