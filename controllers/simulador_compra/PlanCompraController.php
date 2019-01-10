@@ -423,10 +423,29 @@ if($ESTADO_C1!=24){
 
 
     // ######################## INICIO Permisos de Usuario ########################
-    // Listar Registros de Usuario
+    // Listar Permisos, Presupuestos, Tiendas Registradas
     public function ListarPermisosValidaPresupuestos($f3)
     {
-        echo json_encode(\simulador_compra\PlanCompraClass::ListarPermisosValidaPresupuestos($f3->get('SESSION.COD_TEMPORADA'), $f3->get('GET.DEPTO'), $f3->get('SESSION.login')));
+
+        if($f3->get('GET.DEPTO')){
+            $depto = $f3->get('GET.DEPTO');
+        }else{
+            $depto = $f3->get('SESSION.COD_DEPTO');
+        }
+
+        echo json_encode(\simulador_compra\PlanCompraClass::ListarPermisosValidaPresupuestos($f3->get('SESSION.COD_TEMPORADA'), $depto, $f3->get('SESSION.login')));
+    }
+    // Validar Tiendas Registradas
+    public function ValidarTiendasPresupuestos($f3)
+    {
+
+        if($f3->get('GET.DEPTO')){
+            $depto = $f3->get('GET.DEPTO');
+        }else{
+            $depto = $f3->get('SESSION.COD_DEPTO');
+        }
+
+        echo json_encode(\simulador_compra\PlanCompraClass::ValidarTiendasPresupuestos($f3->get('SESSION.COD_TEMPORADA'), $depto, $f3->get('SESSION.login')));
     }
     // Listar Permisos de Usuario
     public function ListarPermisosUsuario($f3)

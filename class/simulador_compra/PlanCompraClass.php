@@ -3794,7 +3794,7 @@ class PlanCompraClass extends \parametros
 
 
     // ######################## INICIO Permisos de Usuario ########################
-    // Listar Total Registros Grilla
+    // Listar Permisos, Presupuestos, Tiendas Registradas
     public static function ListarPermisosValidaPresupuestos($temporada, $depto, $login)
     {
 
@@ -3860,6 +3860,43 @@ class PlanCompraClass extends \parametros
 
 
 
+
+    }
+    // Listar Permisos, Presupuestos, Tiendas Registradas
+    public static function ValidarTiendasPresupuestos($temporada, $depto, $login)
+    {
+
+        $array1 = [];
+
+        // Registros de los presupuestos
+        $sql_presupuestos = "SELECT 'P-RETAIL' NOMBRE, COUNT(MATI) VALOR FROM PLC_PPTO_RETAIL
+                            WHERE cod_temporada = $temporada
+                            AND dep_depto = '" . $depto . "'
+                                UNION ALL
+                            SELECT 'P-EMBARQUE' NOMBRE, COUNT(*)VALOR FROM PLC_PPTO_EMB
+                            WHERE cod_temporada = $temporada
+                            AND dep_depto = '" . $depto . "'
+                                UNION ALL
+                            SELECT 'P-COSTO' NOMBRE, COUNT(presupuesto) VALOR FROM PLC_PPTO_COSTO
+                            WHERE cod_temporada = $temporada
+                            AND dep_depto = '" . $depto . "'
+                                UNION ALL
+                            SELECT 'M-TIENDA' NOMBRE, COUNT(*) VALOR FROM PLC_SEGMENTOS_TDA
+                            WHERE COD_TEMPORADA = $temporada
+                            AND DEP_DEPTO = '" . $depto . "'
+                            AND COD_SEG <> 4";
+        $data_presupuestos = \database::getInstancia()->getFilas($sql_presupuestos);
+
+        foreach ($data_presupuestos as $va1) {
+            array_push($array1
+                , array(
+                    "NOMBRE" => $va1[0],
+                    "VALOR" => $va1[1]
+                )
+            );
+        }
+
+        return $array1;
 
     }
     // Listar Permiso de Usuario Original

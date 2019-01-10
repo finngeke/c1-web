@@ -1056,6 +1056,38 @@ $(function () {
                     popupNotification.getNotifications().parent().remove();
                     popupNotification.show(" Los cambios fueron realizados.", "success");
 
+                    // Si aún no me llegan tiendas
+                    if(localStorage.getItem("M-TIENDA")==0){
+
+                        var dataString_dataDepto = "DEPTO=" + depto;
+                        $.ajax({
+                            url: "TelerikPlanCompra/ValidarTiendasPresupuestos",
+                            data: dataString_dataDepto,
+                            //type: "POST",
+                            //dataType: "json",
+                            success: function (result) {
+
+                                var ConteoRegQuery = JSON.parse(result);
+                                $.each( ConteoRegQuery, function(i, obj) {
+                                    localStorage.setItem(obj.NOMBRE, obj.VALOR);
+                                });
+
+                            },
+                            error: function (xhr, httpStatusMessage, customErrorMessage) {
+                                // Limpiar el Local Storage
+                                localStorage.clear();
+
+                                $("#spreadsheet").data("kendoSpreadsheet").destroy();
+                                $("#spreadsheet").empty();
+                                $("#spreadsheet").remove();
+
+                                window.location.href = "salir";
+
+                            }
+                        })
+
+                    }
+
 
                     // ############## Revisar si hay más marcas ##############
                     /*dataSource_cbx_marca.fetch(function () {
