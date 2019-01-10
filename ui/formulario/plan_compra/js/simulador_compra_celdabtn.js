@@ -1063,14 +1063,14 @@ $(function () {
                         $.ajax({
                             url: "TelerikPlanCompra/ValidarTiendasPresupuestos",
                             data: dataString_dataDepto,
-                            //type: "POST",
-                            //dataType: "json",
                             success: function (result) {
 
                                 var ConteoRegQuery = JSON.parse(result);
                                 $.each( ConteoRegQuery, function(i, obj) {
                                     localStorage.setItem(obj.NOMBRE, obj.VALOR);
                                 });
+
+                                location.reload(true);
 
                             },
                             error: function (xhr, httpStatusMessage, customErrorMessage) {
@@ -1225,29 +1225,64 @@ $(function () {
 
                                 if(data=="OK"){
 
-                                    // Recargo la Grilla Trasera
-                                    var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
-                                    var sheet = spreadsheet.activeSheet();
-                                    sheet.dataSource.read();
+                                    // Si aún no me llegan tiendas
+                                    if(localStorage.getItem("M-TIENDA")>0){
 
-                                    // Oculto los elementos por si se abre por segunda vez
-                                    $("#poptienda_tipotienda").hide();
-                                    $("#poptienda_asignacion").hide();
-                                    $("#poptienda_btns").hide();
-                                    $("#btn_replica_temporada_tienda").hide();
+                                        
+                                        // Recargo la Grilla Trasera
+                                        var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
+                                        var sheet = spreadsheet.activeSheet();
+                                        sheet.dataSource.read();
 
-                                    // Dejo en Blanco los CBX
-                                    $("#CBXMarca").data("kendoComboBox").value("");
-                                    $("#CBXTipoTienda").data("kendoComboBox").value("");
-                                    $("#CBXTemporadaReplica").data("kendoComboBox").value("");
-                                    // Limpiar los ListBox
-                                    var listBox1Tienda = $("#tienda_disponible").data("kendoListBox");
-                                    listBox1Tienda.remove(listBox1Tienda.items());
-                                    var listBox2Tienda = $("#tienda_seleccionado").data("kendoListBox");
-                                    listBox2Tienda.remove(listBox2Tienda.items());
+                                        // Oculto los elementos por si se abre por segunda vez
+                                        $("#poptienda_tipotienda").hide();
+                                        $("#poptienda_asignacion").hide();
+                                        $("#poptienda_btns").hide();
+                                        $("#btn_replica_temporada_tienda").hide();
 
-                                    popupNotification.getNotifications().parent().remove();
-                                    popupNotification.show(" Todo OK, he duplicado la temporada.", "success");
+                                        // Dejo en Blanco los CBX
+                                        $("#CBXMarca").data("kendoComboBox").value("");
+                                        $("#CBXTipoTienda").data("kendoComboBox").value("");
+                                        $("#CBXTemporadaReplica").data("kendoComboBox").value("");
+                                        // Limpiar los ListBox
+                                        var listBox1Tienda = $("#tienda_disponible").data("kendoListBox");
+                                        listBox1Tienda.remove(listBox1Tienda.items());
+                                        var listBox2Tienda = $("#tienda_seleccionado").data("kendoListBox");
+                                        listBox2Tienda.remove(listBox2Tienda.items());
+
+                                        popupNotification.getNotifications().parent().remove();
+                                        popupNotification.show(" Todo OK, he duplicado la temporada.", "success");
+
+
+                                    }else{
+                                        var dataString_dataDepto = "DEPTO=" + depto;
+                                        $.ajax({
+                                            url: "TelerikPlanCompra/ValidarTiendasPresupuestos",
+                                            data: dataString_dataDepto,
+                                            success: function (result) {
+
+                                                var ConteoRegQuery = JSON.parse(result);
+                                                $.each( ConteoRegQuery, function(i, obj) {
+                                                    localStorage.setItem(obj.NOMBRE, obj.VALOR);
+                                                });
+
+                                                location.reload(true);
+
+                                            },
+                                            error: function (xhr, httpStatusMessage, customErrorMessage) {
+                                                // Limpiar el Local Storage
+                                                localStorage.clear();
+
+                                                $("#spreadsheet").data("kendoSpreadsheet").destroy();
+                                                $("#spreadsheet").empty();
+                                                $("#spreadsheet").remove();
+
+                                                window.location.href = "salir";
+
+                                            }
+                                        })
+                                    }
+
 
                                 }else{
                                     popupNotification.getNotifications().parent().remove();
