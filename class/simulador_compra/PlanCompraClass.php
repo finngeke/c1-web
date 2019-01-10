@@ -3795,34 +3795,74 @@ class PlanCompraClass extends \parametros
 
     // ######################## INICIO Permisos de Usuario ########################
     // Listar Total Registros Grilla
-    public static function ListarRegistrosGrilla($temporada, $depto, $login)
+    public static function ListarPermisosValidaPresupuestos($temporada, $depto, $login)
     {
 
+        // Limpiar las Concurrencias
         $sql_limpia_depto = "DELETE FROM PLC_CONCURRENCIA HR
-                       WHERE EXISTS  (SELECT * FROM PLC_USUARIO US WHERE US.COD_TIPUSR <>99) 
-                       AND (TO_NUMBER(TO_CHAR(SYSDATE,'HH24')-TO_CHAR(HR.FECHA,'HH24') )*60)+ TO_NUMBER(TO_CHAR(SYSDATE,'MI')-TO_CHAR(HR.FECHA,'MI'))>=30";
+                             WHERE EXISTS  (SELECT * FROM PLC_USUARIO US WHERE US.COD_TIPUSR <>99) 
+                             AND (TO_NUMBER(TO_CHAR(SYSDATE,'HH24')-TO_CHAR(HR.FECHA,'HH24') )*60)+ TO_NUMBER(TO_CHAR(SYSDATE,'MI')-TO_CHAR(HR.FECHA,'MI'))>=30";
         $data_limpia = \database::getInstancia()->getConsulta($sql_limpia_depto);
 
 
-        $sql = "SELECT 'TOTALREGPLAN' ID_TELERIK, TO_CHAR(COUNT(*)+1) NOMBRE_ACCION
-                    FROM PLC_PLAN_COMPRA_COLOR_3
-                    WHERE COD_TEMPORADA = $temporada AND DEP_DEPTO = '" . $depto . "'";
-
+        // Cantidad de Registros del Depto
+        $sql = "SELECT 'TOTALREGPLAN' NOMBRE, TO_CHAR(COUNT(*)+1) VALOR
+                FROM PLC_PLAN_COMPRA_COLOR_3
+                WHERE COD_TEMPORADA = $temporada AND DEP_DEPTO = '" . $depto . "'";
         $data = \database::getInstancia()->getFilas($sql);
-        //return $data;
 
         // Transformo a array asociativo
         $array1 = [];
         foreach ($data as $va1) {
             array_push($array1
                 , array(
-                   "TOTALREGPLAN" => $va1[1]+2
+                    "NOMBRE" => $va1[0],
+                    "VALOR" => $va1[1]+2
                 )
             );
         }
-        return $array1;
+
+        if($data){
+
+            // Registros de los presupuestos
+            $sql_presupuestos = "SELECT 'P-RETAIL' NOMBRE, COUNT(MATI) VALOR FROM PLC_PPTO_RETAIL
+                            WHERE cod_temporada = $temporada
+                            AND dep_depto = '" . $depto . "'
+                                UNION ALL
+                            SELECT 'P-EMBARQUE' NOMBRE, COUNT(*)VALOR FROM PLC_PPTO_EMB
+                            WHERE cod_temporada = $temporada
+                            AND dep_depto = '" . $depto . "'
+                                UNION ALL
+                            SELECT 'P-COSTO' NOMBRE, COUNT(presupuesto) VALOR FROM PLC_PPTO_COSTO
+                            WHERE cod_temporada = $temporada
+                            AND dep_depto = '" . $depto . "'
+                                UNION ALL
+                            SELECT 'M-TIENDA' NOMBRE, COUNT(*) VALOR FROM PLC_SEGMENTOS_TDA
+                            WHERE COD_TEMPORADA = $temporada
+                            AND DEP_DEPTO = '" . $depto . "'
+                            AND COD_SEG <> 4";
+            $data_presupuestos = \database::getInstancia()->getFilas($sql_presupuestos);
+
+            foreach ($data_presupuestos as $va1) {
+                array_push($array1
+                    , array(
+                        "NOMBRE" => $va1[0],
+                        "VALOR" => $va1[1]
+                    )
+                );
+            }
+
+            return $array1;
+
+        }
+
+
+
+
+
 
     }
+
     // Listar Permiso de Usuario Original
     public static function ListarPermisosUsuarioOriginal($temporada, $depto, $login, $cod_tipusr)
     {
@@ -4575,40 +4615,53 @@ class PlanCompraClass extends \parametros
     // Busca Tiendas Configuradas
     public static function VerificaTiendaPlanCompra($temporada, $depto, $login)
     {
-
         // Listo las marcas del Depto
-        $sql_marcas_depto = "SELECT DISTINCT(COD_MARCA) FROM PLC_DEPTO_MARCA
+        $sql_marcas_depto = "SELECT DISTINCT(COD_MARCA) 
+                             FROM PLC_DEPTO_MARCA
                              WHERE COD_DEPT = '" . $depto . "'";
         $data_marcas_depto = \database::getInstancia()->getFilas($sql_marcas_depto);
 
         foreach ($data_marcas_depto as $va1) {
 
+            $COD_MARCA = $va1["COD_MARCA"];
+
             // Bsuca si la Marca que llega de la query anterior tiene asignada internet
-            $sql_verifica_internet = "SELECT 1  
-                                        FROM PLC_SEGMENTOS_TDA
-                                        WHERE cod_temporada = $temporada
-                                        AND dep_depto = '" . $depto . "'
-                                        AND COD_MARCA = $va1[0] 
-                                        AND COD_TDA = 10039";
+            $sql_verifica_internet = "SELECT 1
+                                      FROM PLC_SEGMENTOS_TDA
+                                      WHERE cod_temporada = $temporada
+                                      AND dep_depto = '" . $depto . "'
+                                      AND COD_MARCA = $COD_MARCA 
+                                      AND COD_TDA = 10039";
             $data_verifica_internet = (int) \database::getInstancia()->getFilas($sql_verifica_internet);
 
             // Si no existe internet para esa marca, la inserto
             if ($data_verifica_internet != 1){
 
                 $sql_inserta_marca = "INSERT INTO PLC_SEGMENTOS_TDA(COD_TEMPORADA,DEP_DEPTO,NIV_JER1,COD_JER1,COD_SEG,COD_TDA,COD_MARCA)
-                VALUES($temporada,'".$depto."',0,0,4,10039,$va1[0])";
+                VALUES($temporada,'".$depto."',0,0,4,10039,$COD_MARCA)";
                 $data_inserta_marca = \database::getInstancia()->getConsulta($sql_inserta_marca);
 
+
+                // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+                if (!file_exists('../archivos/log_querys/' . $login)) {
+                    mkdir('../archivos/log_querys/' . $login, 0775, true);
+                }
+                $stamp = date("Y-m-d_H-i-s");
+                $rand = rand(1, 999);
+                $content = $sql_inserta_marca;
+                $fp = fopen("../archivos/log_querys/" . $login . "/INSERT-INTERNET--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+                fwrite($fp, $content);
+                fclose($fp);
 
                 if($data_inserta_marca){$mensaje = "OK";}else{$mensaje = "ERROR";}
                 // Acción: Crear / Eliminar / Actualizar
                 LogTransaccionClass::GuardaLogTransaccion($login, $temporada, $depto, 'Mantenedor Tienda', 'Crear', $sql_inserta_marca, $mensaje );
 
-
             }
 
 
         }
+
 
         $sql = "SELECT * FROM PLC_SEGMENTOS_TDA
                 WHERE COD_TEMPORADA = $temporada
