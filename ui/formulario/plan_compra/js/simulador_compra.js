@@ -2168,11 +2168,6 @@ $(function () {
     });
 
 
-
-
-
-
-
     //pop ajuste de compra
     function Pop_ajuste_compra(){
         ActualizaConcurrencia();
