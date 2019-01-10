@@ -1228,7 +1228,7 @@ $(function () {
                                     // Si aún no me llegan tiendas
                                     if(localStorage.getItem("M-TIENDA")>0){
 
-                                        
+
                                         // Recargo la Grilla Trasera
                                         var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
                                         var sheet = spreadsheet.activeSheet();
@@ -1320,6 +1320,13 @@ $(function () {
         if($('#tienda_seleccionado > option').length>0){
             // Sincronizar DataSource
             dataSource_cbxDisponibleAsignado.sync();
+
+            if(localStorage.getItem("M-TIENDA")==0){
+                var popupNotificationBTN = $("#popupNotification").kendoNotification().data("kendoNotification");
+                popupNotificationBTN.getNotifications().parent().remove();
+                popupNotificationBTN.show(" Configuración de Mantenedor Inicial, Recuerda Presionar Guardar.", "info");
+            }
+
         }
     });
 
