@@ -1861,17 +1861,19 @@ $(function () {
                                                                                                                                                                                         popupNotification.show(kendo.toString("Insertado Correctamente"), "success");
                                                                                                                                                                                         var dataString_dataDepto = "DEPTO=" + depto;
                                                                                                                                                                                         $.ajax({
-                                                                                                                                                                                            url: "TelerikPlanCompra/ListarRegistrosGrilla",
+                                                                                                                                                                                            url: "TelerikPlanCompra/ListarPermisosValidaPresupuestos",
                                                                                                                                                                                             data: dataString_dataDepto,
 
                                                                                                                                                                                             success: function (result) {
                                                                                                                                                                                                 localStorage.clear();
                                                                                                                                                                                                 var ConteoRegQuery = JSON.parse(result);
                                                                                                                                                                                                 $.each( ConteoRegQuery, function(i, obj) {
-                                                                                                                                                                                                    console.log(obj.TOTALREGPLAN);
-                                                                                                                                                                                                    localStorage.setItem("TOTALREGPLAN", obj.TOTALREGPLAN);
-                                                                                                                                                                                                    location.reload(true);
+                                                                                                                                                                                                    //console.log(obj.TOTALREGPLAN);
+                                                                                                                                                                                                    //localStorage.setItem("TOTALREGPLAN", obj.TOTALREGPLAN);
+                                                                                                                                                                                                    localStorage.setItem(obj.NOMBRE, obj.VALOR);
                                                                                                                                                                                                 });
+
+                                                                                                                                                                                                location.reload(true);
                                                 
                                                                                                                                                                                             },
                                                                                                                                                                                             error: function (xhr, httpStatusMessage, customErrorMessage) {
