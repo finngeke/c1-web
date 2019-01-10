@@ -4610,13 +4610,6 @@ class PlanCompraClass extends \parametros
 
         }
 
-
-
-
-
-
-
-
         $sql = "SELECT * FROM PLC_SEGMENTOS_TDA
                 WHERE COD_TEMPORADA = $temporada
                 AND DEP_DEPTO = '" . $depto . "'

@@ -99,6 +99,7 @@ $f3->route('GET /ajax_simulador_cbx/@tipo [ajax]', 'simulador_compra\ControlCBXG
 $f3->route('GET /TelerikPlanCompra/@tipo [ajax]', 'simulador_compra\PlanCompraController->@tipo');
 $f3->route('POST /TelerikPlanCompraPOST/@tipo [ajax]', 'simulador_compra\PlanCompraController->@tipo');
 $f3->route('POST /ajax_simulador_cbx2/@tipo [ajax]', 'simulador_compra\ControlCBXGrillaCompra->@tipo');
+$f3->route('GET /VerificaTiendaPlanCompra/@tipo [ajax]', 'simulador_compra\PlanCompraController->@tipo');
 
 /*Importar archivo*/
 $f3->route('POST /guardar/archivoAssorment', 'simulador_compra\ControlCrea->SubirAssorment');
