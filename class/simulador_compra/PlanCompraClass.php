@@ -8,6 +8,8 @@
 
 namespace simulador_compra;
 
+use log_transaccion\LogTransaccionClass;
+
 class PlanCompraClass extends \parametros
 {
 
@@ -4571,8 +4573,49 @@ class PlanCompraClass extends \parametros
 
     // ######################## VERIFICA TIENDAS EN PLAN DE COMPRA ########################
     // Busca Tiendas Configuradas
-    public static function VerificaTiendaPlanCompra($temporada, $depto)
+    public static function VerificaTiendaPlanCompra($temporada, $depto, $login)
     {
+
+        // Listo las marcas del Depto
+        $sql_marcas_depto = "SELECT DISTINCT(COD_MARCA) FROM PLC_DEPTO_MARCA
+                             WHERE COD_DEPT = '" . $depto . "'";
+        $data_marcas_depto = \database::getInstancia()->getFilas($sql_marcas_depto);
+
+        foreach ($data_marcas_depto as $va1) {
+
+            // Bsuca si la Marca que llega de la query anterior tiene asignada internet
+            $sql_verifica_internet = "SELECT 1  
+                                        FROM PLC_SEGMENTOS_TDA
+                                        WHERE cod_temporada = $temporada
+                                        AND dep_depto = '" . $depto . "'
+                                        AND COD_MARCA = $va1[0] 
+                                        AND COD_TDA = 10039";
+            $data_verifica_internet = (int) \database::getInstancia()->getFilas($sql_verifica_internet);
+
+            // Si no existe internet para esa marca, la inserto
+            if ($data_verifica_internet != 1){
+
+                $sql_inserta_marca = "INSERT INTO PLC_SEGMENTOS_TDA(COD_TEMPORADA,DEP_DEPTO,NIV_JER1,COD_JER1,COD_SEG,COD_TDA,COD_MARCA)
+                VALUES($temporada,'".$depto."',0,0,4,10039,$va1[0])";
+                $data_inserta_marca = \database::getInstancia()->getConsulta($sql_inserta_marca);
+
+
+                if($data_inserta_marca){$mensaje = "OK";}else{$mensaje = "ERROR";}
+                // Acción: Crear / Eliminar / Actualizar
+                LogTransaccionClass::GuardaLogTransaccion($login, $temporada, $depto, 'Mantenedor Tienda', 'Crear', $sql_inserta_marca, $mensaje );
+
+
+            }
+
+
+        }
+
+
+
+
+
+
+
 
         $sql = "SELECT * FROM PLC_SEGMENTOS_TDA
                 WHERE COD_TEMPORADA = $temporada

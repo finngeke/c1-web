@@ -9,7 +9,7 @@ class LogTransaccionController extends \Control
     public function GuardaLogTransaccion($f3) {
 
         $array_data = $_GET;
-        echo \simulador_compra\LogTransaccionClass::GuardaLogTransaccion($f3->get('SESSION.login'),$f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('GET.MODULO'), $f3->get('GET.ACCION'), $f3->get('GET.QUERY'), $f3->get('GET.MENSAJE'));
+        echo \log_transaccion\LogTransaccionClass::GuardaLogTransaccion($f3->get('SESSION.login'),$f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('GET.MODULO'), $f3->get('GET.ACCION'), $f3->get('GET.QUERY'), $f3->get('GET.MENSAJE'));
 
     }
 

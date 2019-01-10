@@ -69,6 +69,7 @@ class tipo_ventana_llegada
                     SYSDATE)
                     ";
 
+
         // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
         if (!file_exists('../archivos/log_querys/'.$login)) {
             mkdir('../archivos/log_querys/'.$login, 0775, true);
