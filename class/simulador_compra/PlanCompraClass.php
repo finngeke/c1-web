@@ -3862,7 +3862,6 @@ class PlanCompraClass extends \parametros
 
 
     }
-
     // Listar Permiso de Usuario Original
     public static function ListarPermisosUsuarioOriginal($temporada, $depto, $login, $cod_tipusr)
     {
