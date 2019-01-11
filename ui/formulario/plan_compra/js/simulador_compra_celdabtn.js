@@ -1317,7 +1317,8 @@ $(function () {
     });
 
     $("#CBXTipoTienda").change(function () {
-        if($('#tienda_seleccionado > option').length>0){
+        
+        if( ($('#tienda_seleccionado > option').length>0) && ($("#CBXTipoTienda").val()!=4) ){
             // Sincronizar DataSource
             dataSource_cbxDisponibleAsignado.sync();
 
