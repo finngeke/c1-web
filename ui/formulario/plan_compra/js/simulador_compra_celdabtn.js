@@ -411,7 +411,7 @@ $(function () {
                 } else if (cbxCambioEstadoSeleccionado == 1) {
 
                     // estado_c1 == 18 (se pasa de 18 a 22)
-                    if (ESTADOC1 == 22) {
+                    if (ESTADOC1 == 18) {
 
                         $.ajax({
                             //type: "POST",
@@ -434,7 +434,7 @@ $(function () {
                         arregloErrores.push({
                             "DESCRIPCION": String(DESCRIPCION),
                             "COLOR": String(COLOR),
-                            "MOTIVO": "Estado distinto a: Pendiente Generacion OC"
+                            "MOTIVO": "Estado distinto a: Compra Confirmada con PI"
                         });
 
                     }
@@ -1317,7 +1317,7 @@ $(function () {
     });
 
     $("#CBXTipoTienda").change(function () {
-        
+
         if( ($('#tienda_seleccionado > option').length>0) && ($("#CBXTipoTienda").val()!=4) ){
             // Sincronizar DataSource
             dataSource_cbxDisponibleAsignado.sync();

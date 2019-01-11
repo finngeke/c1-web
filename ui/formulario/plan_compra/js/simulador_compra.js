@@ -626,7 +626,7 @@ $(function () {
                         oculta_columna_spread.hideColumn(105);
 
                         /*var formato_fecha = spreadsheet_conteo_total.activeSheet().range('CM2:CM'+total_registros_listados);
-                            formato_fecha.format('dd/mm/YYYY');*/
+                        formato_fecha.format('dd/mm/YYYY');*/
 
                         // Bloquear columnas
                         var bloqueo_columna_id = spreadsheet_conteo_total.activeSheet().range("A1:A"+total_registros_listados);
