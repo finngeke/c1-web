@@ -794,7 +794,7 @@ class plan_compra extends \parametros {
                 . " from plc_plan_compra_color_3"
                 . " where cod_temporada = " . $cod_tempo . ""
                 . " and dep_depto = '" . $depto . "' and cod_marca = " . $marca . ""
-                . " and estado = 0 and grupo_compra = '" . $gcompra . "'";
+                . " and estado IN (0,24) and grupo_compra = '" . $gcompra . "'";
 
             $data = \database::getInstancia()->getFilas($sql);
 
