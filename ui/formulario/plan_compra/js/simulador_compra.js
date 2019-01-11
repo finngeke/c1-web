@@ -331,7 +331,6 @@ $(function () {
 
         // Recorro por la cantidad de registros para asociar al arreglo
         for (i; i < e.data.updated.length; i++) {
-
             // Enviar Registros que existan previamente, no nuevos
             if(e.data.updated[i]["ESTADO_C1"]){
             arregloGuardado.push({
@@ -419,6 +418,11 @@ $(function () {
 
                 $("#tb_guardar_cambios").removeClass("k-state-disabled");
                 $("#tb_cancelar_cambios").removeClass("k-state-disabled");
+
+
+                // Mensaje de Error
+                popupNotification.getNotifications().parent().remove();
+                popupNotification.show(" Error en el Guardado.", "error");
 
                 console.log(xhr.responseText+" / "+httpStatusMessage+" / "+customErrorMessage);
             }
@@ -621,8 +625,8 @@ $(function () {
                         oculta_columna_spread.hideColumn(104);
                         oculta_columna_spread.hideColumn(105);
 
-                        var formato_fecha = spreadsheet_conteo_total.activeSheet().range('CM2:CM'+total_registros_listados);
-                            formato_fecha.format('dd/mm/YYYY');
+                        /*var formato_fecha = spreadsheet_conteo_total.activeSheet().range('CM2:CM'+total_registros_listados);
+                            formato_fecha.format('dd/mm/YYYY');*/
 
                         // Bloquear columnas
                         var bloqueo_columna_id = spreadsheet_conteo_total.activeSheet().range("A1:A"+total_registros_listados);
