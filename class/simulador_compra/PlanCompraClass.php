@@ -3804,6 +3804,8 @@ class PlanCompraClass extends \parametros
                              AND (TO_NUMBER(TO_CHAR(SYSDATE,'HH24')-TO_CHAR(HR.FECHA,'HH24') )*60)+ TO_NUMBER(TO_CHAR(SYSDATE,'MI')-TO_CHAR(HR.FECHA,'MI'))>=30";
         $data_limpia = \database::getInstancia()->getConsulta($sql_limpia_depto);
 
+        // Verifica Tienda Internet
+        PlanCompraClass::VerificaTiendaInternet($temporada, $depto, $login);
 
         // Cantidad de Registros del Depto
         $sql = "SELECT 'TOTALREGPLAN' NOMBRE, TO_CHAR(COUNT(*)+1) VALOR
@@ -4705,6 +4707,58 @@ class PlanCompraClass extends \parametros
                 AND COD_SEG <> 4";
         $data = \database::getInstancia()->getFilas($sql);
         return $data;
+
+    }
+    // Verifica Tiendas Internet
+    public static function VerificaTiendaInternet($temporada, $depto, $login)
+    {
+
+        // Listo las marcas del Depto
+        $sql_marcas_depto = "SELECT DISTINCT(COD_MARCA) 
+                             FROM PLC_DEPTO_MARCA
+                             WHERE COD_DEPT = '" . $depto . "'";
+        $data_marcas_depto = \database::getInstancia()->getFilas($sql_marcas_depto);
+
+        foreach ($data_marcas_depto as $va1) {
+
+            $COD_MARCA = $va1["COD_MARCA"];
+
+            // Bsuca si la Marca que llega de la query anterior tiene asignada internet
+            $sql_verifica_internet = "SELECT 1
+                                      FROM PLC_SEGMENTOS_TDA
+                                      WHERE cod_temporada = $temporada
+                                      AND dep_depto = '" . $depto . "'
+                                      AND COD_MARCA = $COD_MARCA 
+                                      AND COD_TDA = 10039";
+            $data_verifica_internet = (int) \database::getInstancia()->getFilas($sql_verifica_internet);
+
+            // Si no existe internet para esa marca, la inserto
+            if ($data_verifica_internet != 1){
+
+                $sql_inserta_marca = "INSERT INTO PLC_SEGMENTOS_TDA(COD_TEMPORADA,DEP_DEPTO,NIV_JER1,COD_JER1,COD_SEG,COD_TDA,COD_MARCA)
+                VALUES($temporada,'".$depto."',0,0,4,10039,$COD_MARCA)";
+                $data_inserta_marca = \database::getInstancia()->getConsulta($sql_inserta_marca);
+
+                // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+                if (!file_exists('../archivos/log_querys/' . $login)) {
+                    mkdir('../archivos/log_querys/' . $login, 0775, true);
+                }
+                $stamp = date("Y-m-d_H-i-s");
+                $rand = rand(1, 999);
+                $content = $sql_inserta_marca;
+                $fp = fopen("../archivos/log_querys/" . $login . "/INSERT-INTERNET--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+                fwrite($fp, $content);
+                fclose($fp);
+
+                if($data_inserta_marca == true){$mensaje = "OK";}else{$mensaje = "ERROR";}
+                // Acción: Crear / Eliminar / Actualizar
+                LogTransaccionClass::GuardaLogTransaccion($login, $temporada, $depto, 'Mantenedor Tienda', 'Crear', $sql_inserta_marca, $mensaje );
+
+            }
+
+
+        }
+
 
     }
     // ######################## FIN VERIFICA TIENDAS EN PLAN DE COMPRA ########################

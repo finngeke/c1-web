@@ -83,12 +83,12 @@ function redireccDeptoPopUp(event) {
 
 
     // Por cada vez que presiona el btn, validar los 3 presupuestos más tiendas
-    var url_busca_existe_marca        = 'ajax_simulador_cbx/busca_existe_marca';
-    var url_busca_session                   = 'permiso_usuario/busca_session';
-    var url_busca_cod_tip_usr               = 'permiso_usuario/busca_cod_tip_usr';
-    var url_busca_usuario_tabla_session      = 'permiso_usuario/busca_usuario_tabla_session';
-    var url_guardar_concurrencia            = 'permiso_usuario/guardar_concurrencia';
-    var url_eliminar_concurrencia           = 'permiso_usuario/eliminar_concurrencia';
+    var url_busca_existe_marca = 'ajax_simulador_cbx/busca_existe_marca';
+    var url_busca_session = 'permiso_usuario/busca_session';
+    var url_busca_cod_tip_usr = 'permiso_usuario/busca_cod_tip_usr';
+    var url_busca_usuario_tabla_session = 'permiso_usuario/busca_usuario_tabla_session';
+    var url_guardar_concurrencia = 'permiso_usuario/guardar_concurrencia';
+    var url_eliminar_concurrencia = 'permiso_usuario/eliminar_concurrencia';
 
     var flag_busca_existe_marca = 0;
     var flag_busca_existe_pto_tienda = 0;

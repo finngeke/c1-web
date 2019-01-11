@@ -11,9 +11,10 @@ class LogTransaccionClass extends \parametros
 
         if(!$mensaje){$mensaje = "NI";}
 
+        $query = str_replace("'","#",str_replace("'","#",$query));
+
         $sql = "INSERT INTO C1_LOG_TRANSACCIONES (USUARIO,COD_TEMPORADA,DEPARTAMENTO,MODULO,ACCION,QUERY,MENSAJE,FECHA)
                 VALUES ('".$login."',$temporada,'".$depto."','".$modulo."','".$accion."','".$query."','".$mensaje."',SYSDATE)";
-
         $data = \database::getInstancia()->getConsulta($sql);
         return $data;
 
