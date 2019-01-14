@@ -72,9 +72,48 @@ $(document).ready(function() {
                 // $("#tb_guardar_cambios").removeClass("k-state-disabled");
                 // $("#tb_cancelar_cambios").removeClass("k-state-disabled");
 
+
+                var spreadsheet_validar = $("#spreadsheet").data("kendoSpreadsheet");
+                var sheet_validar = spreadsheet_validar.sheetByIndex(0);
+                var data_validar = sheet_validar.toJSON();
+                var count_validar = data_validar.rows.length;
+                count_validar = count_validar+1;
+                /*var range_estados = sheet_validar.range("BK2:BM"+count_validar);
+                range_estados.forEachCell(function (row, column, value) {
+                    //console.log("Row: "+row+" Column: "+column+" Value: "+value);
+                    //console.log(value.value);
+                    var cel = sheet_validar.range("BJ"+row+":BM"+count_validar).value();
+                    var res = cel.toString().replace(",", ".");
+                    sheet_validar.range("BJ"+row+":BM"+count_validar).value(res);
+                });*/
+
+                var range_estados = sheet_validar.range("BJ2:BJ"+count_validar);
+                range_estados.forEachCell(function (row, column, value) {
+
+                    var cel = sheet_validar.range("BJ"+row).value();
+                    var res = cel.toString().replace(",", ".");
+                    sheet_validar.range("BJ"+row).value(res);
+
+                    var celBK = sheet_validar.range("BK"+row).value();
+                    var resBK = celBK.toString().replace(",", ".");
+                    sheet_validar.range("BK"+row).value(resBK);
+
+                    var celBL = sheet_validar.range("BL"+row).value();
+                    var resBL = celBL.toString().replace(",", ".");
+                    sheet_validar.range("BL"+row).value(resBL);
+
+                    var celBM = sheet_validar.range("BM"+row).value();
+                    var resBM = celBM.toString().replace(",", ".");
+                    sheet_validar.range("BM"+row).value(resBM);
+
+
+                });
+
+
                 var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
                 var sheet = spreadsheet.activeSheet();
                 sheet.dataSource.sync();
+
             }
 
         }else{
