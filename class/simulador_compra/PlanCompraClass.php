@@ -290,9 +290,9 @@ class PlanCompraClass extends \parametros
 
             // Agrega el Cero (0) al comienzo de la "," que aparecia
             if(substr($va1[61],0,1)==","){
-                $rfid_corregido = str_replace(",","0,",$va1[61]);
+                $rfid_corregido = str_replace(",","0.",$va1[61]);
             }else{
-                $rfid_corregido = $va1[61];
+                $rfid_corregido = str_replace(",",".",$va1[61]);
             }
 
             // Agrega el Cero (0) al comienzo de la "," que aparecia
@@ -373,9 +373,9 @@ class PlanCompraClass extends \parametros
                 , "DOSX" => trim($va1[111])
                 , "OPEX" => trim($va1[112])
                 , "COD_TIP_MON" => utf8_encode($va1[57])
-                , "COSTO_TARGET" => $va1[58]
-                , "COSTO_FOB" => $va1[59]
-                , "COSTO_INSP" => $va1[60]
+                , "COSTO_TARGET" => str_replace(",",".",$va1[58])
+                , "COSTO_FOB" => str_replace(",",".",$va1[59])
+                , "COSTO_INSP" => str_replace(",",".",$va1[60])
                 , "COSTO_RFID" => $rfid_corregido //$va1[61]
                 , "ROYALTY_POR" => $va1[62]
                 , "COSTO_UNIT" => $va1[63]
@@ -414,9 +414,9 @@ class PlanCompraClass extends \parametros
                 , "TIPO_EMPAQUE_BASE" => utf8_encode($va1[96])
                 , "UNI_INICIALES_BASE" => $va1[97]
                 , "PRECIO_BLANCO_BASE" => $va1[98]
-                , "COSTO_TARGET_BASE" => $va1[99]
-                , "COSTO_FOB_BASE" => $va1[100]
-                , "COSTO_INSP_BASE" => $va1[101]
+                , "COSTO_TARGET_BASE" => str_replace(",",".",$va1[99])
+                , "COSTO_FOB_BASE" => str_replace(",",".",$va1[100])
+                , "COSTO_INSP_BASE" => str_replace(",",".",$va1[101])
                 , "COSTO_RFID_BASE" => $rfid_corregido //$va1[102]
                 , "COD_MARCA" => $va1[103]
                 , "N_CURVASXCAJAS" => $va1[104]
