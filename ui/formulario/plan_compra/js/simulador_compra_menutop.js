@@ -116,7 +116,9 @@ $(document).ready(function() {
 
     var barra_base_titulo = $("#span_data_temp_depto").text();
     var string_base_titulo = barra_base_titulo.split(" - ");
-    var menu_tilulo = string_base_titulo[1];
+    var menu_tilulo_raw = string_base_titulo[1];
+        menu_tilulo_raw = menu_tilulo_raw.split("-");
+    var menu_tilulo = menu_tilulo_raw[0]+" - "+menu_tilulo_raw[1];
 
     // Barra de menú superior del plan de compra
     $("#toolbar_plan_compra").kendoToolBar({
