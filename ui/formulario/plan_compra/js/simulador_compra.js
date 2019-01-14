@@ -476,9 +476,14 @@ $(function () {
                     var columnR = sheet.range('R2:R' + (e.response.length + 1));
                     columnR.editor('dropdownlistEvento');
 
+                    // Contar el total de registros
+                    var spreadsheet1 = $("#spreadsheet").data("kendoSpreadsheet");
+                    var sheet_2 = spreadsheet1.sheetByIndex(0);
+                    var data_total = sheet_2.toJSON();
+                    var count = data_total.rows.length;
 
-                    var columnCM = sheet.range('CM2:CM100');
-
+                    // Asigno CBX Formato Fecha
+                    /*var columnCM = sheet.range('CM2:CM'+count);
                     columnCM.validation({
                         dataType: "date",
                         showButton: true,
@@ -487,19 +492,13 @@ $(function () {
                         to: 'DATEVALUE("1/1/2100")',
                         allowNulls: true,
                         type: "reject",
-                        titleTemplate: "Selected Date validation error",
-                        messageTemplate: "Selected Date should be between year 1900 and 2100."
+                        titleTemplate: "Error del Tipo de Fecha",
+                        messageTemplate: "Ingrese la Fecha en formato: dd-mm-aaaa."
                     });
-
-                    columnCM.format('dd/mm/yyyy');
+                    columnCM.format('dd-mm-yyyy');*/
 
                     // Rows red estado Eliminado
-                    var spreadsheet1 = $("#spreadsheet").data("kendoSpreadsheet");
-                    var sheet_2 = spreadsheet1.sheetByIndex(0);
-                    var data_total = sheet_2.toJSON();
-                    var count = data_total.rows.length;
                     var range_estados = sheet_2.range("CR2:CR"+count);
-
                     range_estados.forEachCell(function (row, column, value) {
                        if(sheet_2.range("CR"+row).value() == "Eliminado"){
                            sheet_2.range("A"+row+":CR"+row).background("#cd5c5c");
@@ -643,7 +642,7 @@ $(function () {
                         oculta_columna_spread.hideColumn(105);
 
                         /*var formato_fecha = spreadsheet_conteo_total.activeSheet().range('CM2:CM'+total_registros_listados);
-                        formato_fecha.format('dd/mm/YYYY');*/
+                        formato_fecha.format('dd-mm-YYYY');*/
 
                         // Bloquear columnas
                         var bloqueo_columna_id = spreadsheet_conteo_total.activeSheet().range("A1:A"+total_registros_listados);
