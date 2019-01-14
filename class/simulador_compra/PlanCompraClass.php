@@ -317,11 +317,11 @@ class PlanCompraClass extends \parametros
             }
 
             // Valida Proforma ($va1[81])
-            if( ($va1[81]==0) ){
+            /*if( ($va1[81]==0) ){
                 $PROFORMA = "";
             }else{
                 $PROFORMA = utf8_encode($va1[81]);
-            }
+            }*/
 
             array_push($array1
                 , array(
@@ -409,7 +409,7 @@ class PlanCompraClass extends \parametros
                 , "AFTER_MEETING_REMARKS" => utf8_encode($va1[78])
                 , "CODSKUPROVEEDOR" => utf8_encode($va1[79])
                 , "SKU" => utf8_encode($va1[80])
-                , "PROFORMA" => $PROFORMA //utf8_encode($va1[81])
+                , "PROFORMA" => utf8_encode($va1[81])
                 , "ARCHIVO" => str_replace("null","",utf8_encode($va1[82]))
                 , "ESTILO_PMM" => utf8_encode($estilo_pmm)
                 , "ESTADO_MATCH" => utf8_encode($estado_match)
@@ -423,7 +423,7 @@ class PlanCompraClass extends \parametros
                 , "CODESTADO" => utf8_encode($nom_estado)
                 , "ESTADO_C1" => $ESTADO
                 , "VENTANA_LLEGADA" => utf8_encode($va1[94])
-                , "PROFORMA_BASE" => $PROFORMA //utf8_encode($va1[95])
+                , "PROFORMA_BASE" => utf8_encode($va1[95])
                 , "TIPO_EMPAQUE_BASE" => utf8_encode($va1[96])
                 , "UNI_INICIALES_BASE" => $va1[97]
                 , "PRECIO_BLANCO_BASE" => $va1[98]
