@@ -143,7 +143,7 @@ $(document).ready(function() {
                 click: CancelarCambiosBTN
             },
             { type: "separator" },
-            { template: "<label id='label_cabecera_menu'></label>"+menu_tilulo },
+            { template: "<label id='label_cabecera_menu' style='font-weight: bold;text-align: right;color:red;'>"+menu_tilulo+"</label>" },
             /*{
                 type: "button",
                 text: "Cambiar Clave",
