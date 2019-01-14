@@ -13,7 +13,7 @@ $(function () {
 
 
     if( (localStorage.getItem("P-COSTO")==0) || (localStorage.getItem("P-RETAIL")==0) || (localStorage.getItem("P-EMBARQUE")!=9) ){
-            var popupPreTotalValidado = $("#POPUP_presupuestos_total");
+            var popupPreTotalValidado = $("#POPUP_Presupuestos");
             popupPreTotalValidado.data("kendoWindow").open();
     }
 
