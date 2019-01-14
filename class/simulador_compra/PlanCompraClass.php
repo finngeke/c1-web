@@ -309,6 +309,13 @@ class PlanCompraClass extends \parametros
                 $var_mom_temp = substr($nom_temp_corto,0,2); //$va1[2];
             }
 
+            // Valida Formato ($va1[41])
+            if( is_null($va1[41]) || ($va1[41]==null) || ($va1[41]=="null") ){
+                $FORMATO = "SIN FORMATO";
+            }else{
+                $FORMATO = utf8_encode($va1[41]);
+            }
+
 
             array_push($array1
                 , array(
@@ -354,7 +361,7 @@ class PlanCompraClass extends \parametros
                 , "MTR_PACK" => $va1[38]
                 , "CANT_INNER" => $va1[39]
                 , "SEG_ASIG" => utf8_encode($va1[40])
-                , "FORMATO" => utf8_encode($va1[41])
+                , "FORMATO" => $FORMATO //utf8_encode($va1[41])
                 , "TDAS" => utf8_encode($va1[42])
                 , "A" => $va1[43]
                 , "B" => $va1[44]
