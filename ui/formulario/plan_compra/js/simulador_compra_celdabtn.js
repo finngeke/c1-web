@@ -1866,7 +1866,7 @@ $(function () {
                                                                                                                         pb.value(pb.value()+1);
                                                                                                                         $(".loadingStatus").text(pb.value() + "%");
                                                                                                                     }else{clearInterval(interval);}
-                                                                                                                }, 30);
+                                                                                                                });
                                                                                                                 $(".Rows1").text(_Int+ "/"+count);
 
                                                                                                                 if (Number(_Int) == count){
