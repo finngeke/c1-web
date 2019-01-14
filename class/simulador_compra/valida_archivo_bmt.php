@@ -775,6 +775,30 @@ class valida_archivo_bmt extends \parametros {
                 }
             }
         }
+        if ($val == TRUE) {/*Validacion combinacion fob&Proveedor debe tener datos*/$tipoVal = 31;
+            for($i = 3;$i <= $limite; $i++){
+                $_v = true;
+                if($rows[$i][$nom_columnas['FOB USD']] != null and $rows[$i][$nom_columnas['FOB USD']] != 0) {
+                    if ($rows[$i][$nom_columnas['Proveedor']] == null or $rows[$i][$nom_columnas['Proveedor']] == 0) {
+                        $_v = false;
+                        $val = FALSE;
+                        $filarow = $filarow . strval($i + 1) . ",";
+                    }
+                }
+
+                if ($_v == true){
+                    if($rows[$i][$nom_columnas['Proveedor']] != null and $rows[$i][$nom_columnas['Proveedor']] != 0){
+                        if ($rows[$i][$nom_columnas['FOB USD']] == null or $rows[$i][$nom_columnas['FOB USD']] == 0) {
+                            $_v = false;
+                            $val = FALSE;
+                            $filarow = $filarow . strval($i + 1) . ",";
+                        }
+                    }
+                }
+            }
+        }// Validacion combinacion fob&Proveedor debe tener datos
+
+
         if ($val == FALSE ) {
             if ($tipoVal == 1){
                 $array = array('Tipo' => $val,
@@ -899,7 +923,12 @@ class valida_archivo_bmt extends \parametros {
                 $array = array('Tipo' => $val,
                     'Error'=> "(".substr($filarow, 0, - 1).") ->Calidad no encuentran BD C1. Ej: GOOD,BETTER,BEST.");
             }
-        }else{
+            elseif ($tipoVal == 31){
+                $array = array('Tipo' => $val,
+                    'Error'=> "(".substr($filarow, 0, - 1).") ->La combinación FOB/PROOVEEDOR deben tener datos.");
+            }
+        }
+        else{
             $array = array('Tipo' => $val,
                 'Error'=> $filarow);
         }
