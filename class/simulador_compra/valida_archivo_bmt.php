@@ -692,9 +692,14 @@ class valida_archivo_bmt extends \parametros {
                 if ($rows[$i][$nom_columnas['Fecha de Embarque Acordada']] <> null or $rows[$i][$nom_columnas['Fecha de Embarque Acordada']]<> "") {
                     $dtfecha = explode('-', $rows[$i][$nom_columnas['Fecha de Embarque Acordada']]);
                     if (count($dtfecha)== 3){
-                        if (checkdate($dtfecha[1], $dtfecha[0], $dtfecha[2]) == false){
+                        if (is_numeric($dtfecha[0]) == false or is_numeric($dtfecha[1]) == false or is_numeric($dtfecha[2]) == false){
                             $val = FALSE;
                             $filarow = $filarow . strval($i + 1) . ",";
+                        }else{
+                            if (checkdate($dtfecha[1], $dtfecha[0], $dtfecha[2]) == false){
+                                $val = FALSE;
+                                $filarow = $filarow . strval($i + 1) . ",";
+                            }
                         }
                     }else{
                         $val = FALSE;
