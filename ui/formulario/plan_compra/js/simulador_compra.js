@@ -357,10 +357,10 @@ $(function () {
                 "NOM_VIA": String(e.data.updated[i]["NOM_VIA"]),
                 "NOM_PAIS": String(e.data.updated[i]["NOM_PAIS"]),
                 "PRECIO_BLANCO": kendo.parseInt(e.data.updated[i]["PRECIO_BLANCO"]),
-                "COSTO_TARGET": kendo.parseInt(e.data.updated[i]["COSTO_TARGET"]), // Decimal
-                "COSTO_FOB": kendo.parseInt(e.data.updated[i]["COSTO_FOB"]),
-                "COSTO_INSP": kendo.parseInt(e.data.updated[i]["COSTO_INSP"]),
-                "COSTO_RFID": kendo.parseInt(e.data.updated[i]["COSTO_RFID"]), // Decimal
+                "COSTO_TARGET": kendo.parseFloat(e.data.updated[i]["COSTO_TARGET"]), // Decimal
+                "COSTO_FOB": kendo.parseFloat(e.data.updated[i]["COSTO_FOB"]),
+                "COSTO_INSP": kendo.parseFloat(e.data.updated[i]["COSTO_INSP"]),
+                "COSTO_RFID": kendo.parseFloat(e.data.updated[i]["COSTO_RFID"]), // Decimal
                 "DEBUT_REODER": String(e.data.updated[i]["DEBUT_REODER"]),
                 "COD_MARCA": String(e.data.updated[i]["COD_MARCA"]),
                 "N_CURVASXCAJAS": kendo.parseInt(e.data.updated[i]["N_CURVASXCAJAS"]),
