@@ -410,7 +410,7 @@ $(function () {
                     // Solicitud Corrección PI
                 } else if (cbxCambioEstadoSeleccionado == 1) {
 
-                    // estado_c1 == 18 (se pasa de 18 a 22)
+                    // estado_c1 == 18
                     if (ESTADOC1 == 18) {
 
                         $.ajax({

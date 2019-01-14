@@ -476,6 +476,23 @@ $(function () {
                     var columnR = sheet.range('R2:R' + (e.response.length + 1));
                     columnR.editor('dropdownlistEvento');
 
+
+                    var columnCM = sheet.range('CM2:CM100');
+
+                    columnCM.validation({
+                        dataType: "date",
+                        showButton: true,
+                        comparerType: "between",
+                        from: 'DATEVALUE("1/1/1900")',
+                        to: 'DATEVALUE("1/1/2100")',
+                        allowNulls: true,
+                        type: "reject",
+                        titleTemplate: "Selected Date validation error",
+                        messageTemplate: "Selected Date should be between year 1900 and 2100."
+                    });
+
+                    columnCM.format('dd/mm/yyyy');
+
                     // Rows red estado Eliminado
                     var spreadsheet1 = $("#spreadsheet").data("kendoSpreadsheet");
                     var sheet_2 = spreadsheet1.sheetByIndex(0);
