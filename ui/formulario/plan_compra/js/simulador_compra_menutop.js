@@ -114,7 +114,9 @@ $(document).ready(function() {
 
     }
 
-
+    var barra_base_titulo = $("#span_data_temp_depto").text();
+    var string_base_titulo = barra_base_titulo.split(" - ");
+    var menu_tilulo = string_base_titulo[1];
 
     // Barra de menú superior del plan de compra
     $("#toolbar_plan_compra").kendoToolBar({
@@ -140,6 +142,8 @@ $(document).ready(function() {
                 overflow: "never",
                 click: CancelarCambiosBTN
             },
+            { type: "separator" },
+            { template: "<label id='label_cabecera_menu'></label>"+menu_tilulo },
             /*{
                 type: "button",
                 text: "Cambiar Clave",
