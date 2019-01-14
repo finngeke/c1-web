@@ -430,7 +430,7 @@ class PlanCompraClass extends \parametros
                 , "COD_JER2" => $va1[105] //cod_linea
                 , "COD_SUBLIN" => $va1[106]
                 , "ARCHIVO_BASE" => $va1[107]
-                , "FORMATO_BASE" => utf8_encode($va1[41])
+                , "FORMATO_BASE" => $FORMATO //utf8_encode($va1[41])
 
 
                 )
