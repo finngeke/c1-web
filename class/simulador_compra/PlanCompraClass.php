@@ -4752,17 +4752,6 @@ class PlanCompraClass extends \parametros
                 VALUES($temporada,'".$depto."',0,0,4,10039,$COD_MARCA)";
                 $data_inserta_marca = \database::getInstancia()->getConsulta($sql_inserta_marca);
 
-                // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
-                if (!file_exists('../archivos/log_querys/' . $login)) {
-                    mkdir('../archivos/log_querys/' . $login, 0775, true);
-                }
-                $stamp = date("Y-m-d_H-i-s");
-                $rand = rand(1, 999);
-                $content = $sql_inserta_marca;
-                $fp = fopen("../archivos/log_querys/" . $login . "/INSERT-INTERNET--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
-                fwrite($fp, $content);
-                fclose($fp);
-
                 if($data_inserta_marca == true){$mensaje = "OK";}else{$mensaje = "ERROR";}
                 // Acción: Crear / Eliminar / Actualizar
                 LogTransaccionClass::GuardaLogTransaccion($login, $temporada, $depto, 'Mantenedor Tienda', 'Crear', $sql_inserta_marca, $mensaje );
