@@ -775,11 +775,11 @@ class valida_archivo_bmt extends \parametros {
                 }
             }
         }
-        if ($val == TRUE) {/*Validacion combinacion fob&Proveedor debe tener datos*/$tipoVal = 31;
+         if ($val == TRUE) {/*Validacion combinacion fob&Proveedor debe tener datos*/$tipoVal = 31;
             for($i = 3;$i <= $limite; $i++){
                 $_v = true;
-                if($rows[$i][$nom_columnas['FOB USD']] != null and $rows[$i][$nom_columnas['FOB USD']] != 0) {
-                    if ($rows[$i][$nom_columnas['Proveedor']] == null or $rows[$i][$nom_columnas['Proveedor']] == 0) {
+                if($rows[$i][$nom_columnas['FOB USD']] <> null and $rows[$i][$nom_columnas['FOB USD']] <> 0) {
+                    if (is_null($rows[$i][$nom_columnas['Proveedor']]) or ($rows[$i][$nom_columnas['Proveedor']] == '0')) {
                         $_v = false;
                         $val = FALSE;
                         $filarow = $filarow . strval($i + 1) . ",";
@@ -787,9 +787,8 @@ class valida_archivo_bmt extends \parametros {
                 }
 
                 if ($_v == true){
-                    if($rows[$i][$nom_columnas['Proveedor']] != null and $rows[$i][$nom_columnas['Proveedor']] != 0){
-                        if ($rows[$i][$nom_columnas['FOB USD']] == null or $rows[$i][$nom_columnas['FOB USD']] == 0) {
-                            $_v = false;
+                    if($rows[$i][$nom_columnas['Proveedor']] <> null and $rows[$i][$nom_columnas['Proveedor']] <> '0'){
+                        if (is_null($rows[$i][$nom_columnas['FOB USD']]) or $rows[$i][$nom_columnas['FOB USD']] == '0') {
                             $val = FALSE;
                             $filarow = $filarow . strval($i + 1) . ",";
                         }
