@@ -297,9 +297,9 @@ class PlanCompraClass extends \parametros
 
             // Agrega el Cero (0) al comienzo de la "," que aparecia
             if(substr($va1[73],0,1)==","){
-                $agot_obj_corregido = str_replace(",","0,",$va1[73]);
+                $agot_obj_corregido = str_replace(",","0.",$va1[73]);
             }else{
-                $agot_obj_corregido = $va1[73];
+                $agot_obj_corregido = str_replace(",",".",$va1[73]);
             }
 
             // Nombre de la Temporada en Grilla
@@ -379,7 +379,7 @@ class PlanCompraClass extends \parametros
                 , "NOM_VIA" => utf8_encode($va1[50])
                 , "NOM_PAIS" => utf8_encode($va1[51])
                 , "VIAJE" => utf8_encode($va1[52])
-                , "MKUP" => utf8_encode($va1[53])
+                , "MKUP" => str_replace(",",".",$va1[53])
                 , "PRECIO_BLANCO" => $va1[54]
                 , "GM" => str_replace(",",".",$va1[55])
                 , "OFERTA" => utf8_encode($va1[56])
