@@ -72,10 +72,10 @@ class PlanCompraController extends \Control
             $NOM_VIA = trim($columna["NOM_VIA"]);
             $NOM_PAIS = trim($columna["NOM_PAIS"]);
             $PRECIO_BLANCO = $columna["PRECIO_BLANCO"];
-            $COSTO_TARGET = str_replace(",",".",round($columna["COSTO_TARGET"],2));
-            $COSTO_FOB = str_replace(",",".",round($columna["COSTO_FOB"],2));
-            $COSTO_INSP = str_replace(",",".",round($columna["COSTO_INSP"],2));
-            $COSTO_RFID = str_replace(",",".",round($columna["COSTO_RFID"],2));
+            $COSTO_TARGET = str_replace(",",".",$columna["COSTO_TARGET"]);
+            $COSTO_FOB = str_replace(",",".",$columna["COSTO_FOB"]);
+            $COSTO_INSP = str_replace(",",".",$columna["COSTO_INSP"]);
+            $COSTO_RFID = str_replace(",",".",$columna["COSTO_RFID"]);
             $DEBUT_REODER = trim(strtoupper($columna["DEBUT_REODER"]));
             $COD_MARCA = $columna["COD_MARCA"];
             $N_CURVASXCAJAS = $columna["N_CURVASXCAJAS"];
