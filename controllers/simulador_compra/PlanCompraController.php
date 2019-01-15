@@ -83,11 +83,15 @@ class PlanCompraController extends \Control
             $COD_SUBLIN = $columna["COD_SUBLIN"];
 
             if( ($columna["FECHA_ACORDADA"]!=null) && ($columna["FECHA_ACORDADA"]!="null") ){
-                $FECHA_ACORDADA = str_replace("-","/",trim($columna["FECHA_ACORDADA"]));
+
+                $fecha = date_create('1900-01-01');
+                date_add($fecha, date_interval_create_from_date_string($columna["FECHA_ACORDADA"].' days'));
+                $FECHA_ACORDADA = date_format($fecha, 'd/m/Y');
+                //$FECHA_ACORDADA = str_replace("-","/",trim($FECHA_ACORDADA));
+
             }else{
                 $FECHA_ACORDADA = '';
             }
-
 
             $EVENTO = trim(strtoupper($columna["EVENTO"]));
 

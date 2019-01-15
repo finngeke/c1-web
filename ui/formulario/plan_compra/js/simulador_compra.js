@@ -366,7 +366,8 @@ $(function () {
                 "N_CURVASXCAJAS": kendo.parseInt(e.data.updated[i]["N_CURVASXCAJAS"]),
                 "COD_JER2": String(e.data.updated[i]["COD_JER2"]),
                 "COD_SUBLIN": String(e.data.updated[i]["COD_SUBLIN"]),
-                "FECHA_ACORDADA": String(e.data.updated[i]["FECHA_ACORDADA"]),
+                //"FECHA_ACORDADA": String(e.data.updated[i]["FECHA_ACORDADA"]),
+                "FECHA_ACORDADA": kendo.toString(e.data.updated[i]["FECHA_ACORDADA"],"dd/MM/YYYY"),
                 "EVENTO": String(e.data.updated[i]["EVENTO"])
             });
             }
@@ -374,7 +375,7 @@ $(function () {
         }
 
 
-        //console.log(arregloGuardado);
+        // console.log(arregloGuardado);
         // console.log(e.data.updated[0]["ALIAS_PROV"]);
 
         //$.post( crudServiceBaseUrlPOST + "ProcesaDataPlanCompra", {models: kendo.stringify(arregloGuardado)} );
@@ -483,7 +484,7 @@ $(function () {
                     var count = data_total.rows.length;
 
                     // Asigno CBX Formato Fecha
-                    /*var columnCM = sheet.range('CM2:CM'+count);
+                    var columnCM = sheet.range('CM2:CM'+count);
                     columnCM.validation({
                         dataType: "date",
                         showButton: true,
@@ -493,9 +494,23 @@ $(function () {
                         allowNulls: true,
                         type: "reject",
                         titleTemplate: "Error del Tipo de Fecha",
-                        messageTemplate: "Ingrese la Fecha en formato: dd-mm-aaaa."
+                        messageTemplate: "Ingrese la Fecha en formato: dd/mm/aaaa."
                     });
-                    columnCM.format('dd-mm-yyyy');*/
+                    columnCM.format('dd/mm/yyyy');
+
+                    var columnCG = sheet.range('BJ2:BM'+count);
+                    columnCG.validation({
+                        from: "0",
+                        to: "999",
+                        comparerType: "between",
+                        dataType: "number",
+                        allowNulls: true,
+                        type: "reject",
+                        titleTemplate: "Error de Formato",
+                        messageTemplate: "  Sólo debes utilizar puntos."
+                    });
+
+
 
                     // Rows red estado Eliminado
                     var range_estados = sheet_2.range("CR2:CR"+count);
@@ -506,6 +521,9 @@ $(function () {
                         }
                         // Fin del Recorrer la Grilla
                     });
+
+
+
                 });
             }
 
