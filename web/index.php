@@ -180,6 +180,7 @@ $f3->route('GET /enviar_comex', 'ControlComex->enviar_comex');
 
 /* LEAD TIME */
 $f3->route('GET /lead_time', 'ControlFormularioCompra->lead_time');
+$f3->route('GET /TelerikLeadTime/@tipo [ajax]', 'lead_time\LeadTimeController->@tipo');
 
 /* LOG TRANSACCIONES*/
 $f3->route('GET /GuardarLogTransaccion/@tipo [ajax]', 'log_transaccion\GuardaLogTransaccion->@tipo');
