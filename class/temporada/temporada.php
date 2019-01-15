@@ -167,5 +167,44 @@
 			
 		}
 
+/*MANTENEDOR FACTOR_IMPORTACION*/
+		public static function List_factor_Importacion($cod_temporada){
+            $array1 = [];
+            // Listar las tempradas par desplegarlas en elinici de bienvenida de las temporadas en el select
+            $sql = "SELECT ID_FACTOR_IMPORT ID_FACTOR
+                           ,COD_VIA 
+                           ,COD_PUERTO_EMB
+                           ,COD_PUERTO_DESTINO
+                           ,COD_INCOTERM
+                           ,COD_DIV
+                           ,DEP_DEPTO
+                           ,COD_MARCA
+                           ,FACTOR
+                    FROM PIA_FACTOR_IMPORT
+                    WHERE COD_TEMPORADA = $cod_temporada
+                    ORDER BY 2,3,4,5,7,8,9";
+
+            $data = \database::getInstancia()->getFilas($sql);
+
+            // Transformo a array asociativo
+            foreach ($data as $va1) {
+                array_push($array1
+                    , array("ID_FACTOR" => $va1[0]
+                        , "VIA" => $va1[1]
+                        , "PUERTO_EMB" => $va1[2]
+                        , "PUERTO_DESTINO" => $va1[3]
+                        , "INCOTERM" => $va1[4]
+                        , "DIVISION" => $va1[5]
+                        , "DEPARTAMENTO" => $va1[6]
+                        , "MARCA" => $va1[7]
+                        , "FACTOR" => $va1[8]
+                    )
+                );
+            }
+
+            return $array1;
+
+        }
+
 // Fin de la clase
 	}

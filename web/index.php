@@ -64,9 +64,15 @@ $f3->route('GET /ajax_factorestimado/@tipo [ajax]', 'factor_est\ControlAjax->@ti
 $f3->route('GET /factor_estimado', 'ControlFormularioCompra->factor_estimado');
 $f3->route('POST /guardar/factorestimado', 'factor_est\ControlCrea->guardarFactor');
 
+/*FACTOR IMPORTACION*/
+$f3->route('GET /Factor_import/@tipo [ajax]', 'temporada\ControlCrea->@tipo');
+
 /* FECHA RECEPCION */
 $f3->route('GET /fecha_recepcion', 'ControlFormularioCompra->fecha_recepcion');
 $f3->route('GET /ajax_temporada_fecha_recepcion/@tipo [ajax]', 'temporada\ControlFechaRecepcion->@tipo');
+
+/*FACTOR IMPORTACION*/
+$f3->route('GET /Factor_Importacion', 'ControlFormularioCompra->Factor_Importacion');
 
 /* PLAN DE COMPRA */
 $f3->route('GET /plan_compra', 'ControlFormularioCompra->inicio');

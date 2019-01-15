@@ -42,6 +42,12 @@ class ControlCrea extends \Control
         $f3->reroute('/temporada_compra');
     }
 
+
+    public function List_factor_Importacion($f3){
+        echo json_encode(temporada::List_factor_Importacion($f3->get('SESSION.COD_TEMPORADA')));
+
+    }
+
     public function beforeRoute($f3)
     {
         if ($f3->exists('SESSION.login') == false) {
