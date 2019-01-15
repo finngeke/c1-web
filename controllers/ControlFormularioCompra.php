@@ -183,6 +183,16 @@
             echo Template::instance()->render('layout_Factor_Importacion.php');
         }
 
+        public function lead_time($f3){
+
+            ControlFormularioMain::cargaMain($f3);
+            $f3->set('nombre_form', 'Lead Time');
+            $f3->set('depto_form', $f3->get('SESSION.COD_TEMPORADA'));
+            $f3->set('contenido', 'formulario/main/lead_time.html');
+            echo Template::instance()->render('layout_lead_time.php');
+
+        }
+
 		public function distribucion_mercaderia($f3) {
 			ControlFormularioMain::cargaMain($f3); //variable de perfilamiento.
 			$detalle = [];
