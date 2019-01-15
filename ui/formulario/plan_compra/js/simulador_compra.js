@@ -519,7 +519,12 @@ $(function () {
                            sheet_2.range("A"+row+":CR"+row).background("#cd5c5c");
                            sheet_2.range("A"+row+":CR"+row).color("#ffffff");
                         }
-                        // Fin del Recorrer la Grilla
+
+                        /*if(sheet_2.range("CS"+row).value() == 21){
+                            spreadsheet1.activeSheet().range("A"+row+":CR"+row).enable(false);
+                        }*/
+
+                    // Fin del Recorrer la Grilla
                     });
 
 
