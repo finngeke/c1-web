@@ -493,8 +493,8 @@ $(function () {
                         to: 'DATEVALUE("1/1/2100")',
                         allowNulls: true,
                         type: "reject",
-                        titleTemplate: "Error del Tipo de Fecha",
-                        messageTemplate: "Ingrese la Fecha en formato: dd/mm/aaaa."
+                        titleTemplate: "Error en formato de la Fecha",
+                        messageTemplate: " Recuerda ingresar la Fecha en formato: dd/mm/aaaa."
                     });
                     columnCM.format('dd/mm/yyyy');
 
