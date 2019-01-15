@@ -72,10 +72,10 @@ class PlanCompraController extends \Control
             $NOM_VIA = trim($columna["NOM_VIA"]);
             $NOM_PAIS = trim($columna["NOM_PAIS"]);
             $PRECIO_BLANCO = $columna["PRECIO_BLANCO"];
-            $COSTO_TARGET = str_replace(",",".",$columna["COSTO_TARGET"]);
-            $COSTO_FOB = str_replace(",",".",$columna["COSTO_FOB"]);
-            $COSTO_INSP = str_replace(",",".",$columna["COSTO_INSP"]);
-            $COSTO_RFID = str_replace(",",".",$columna["COSTO_RFID"]);
+            $COSTO_TARGET = str_replace(",",".",round($columna["COSTO_TARGET"],2));
+            $COSTO_FOB = str_replace(",",".",round($columna["COSTO_FOB"],2));
+            $COSTO_INSP = str_replace(",",".",round($columna["COSTO_INSP"],2));
+            $COSTO_RFID = str_replace(",",".",round($columna["COSTO_RFID"],2));
             $DEBUT_REODER = trim(strtoupper($columna["DEBUT_REODER"]));
             $COD_MARCA = $columna["COD_MARCA"];
             $N_CURVASXCAJAS = $columna["N_CURVASXCAJAS"];
@@ -85,7 +85,8 @@ class PlanCompraController extends \Control
             if( ($columna["FECHA_ACORDADA"]!=null) && ($columna["FECHA_ACORDADA"]!="null") ){
 
                 $fecha = date_create('1900-01-01');
-                date_add($fecha, date_interval_create_from_date_string($columna["FECHA_ACORDADA"].' days'));
+                $total_dias = $columna["FECHA_ACORDADA"] -2;
+                date_add($fecha, date_interval_create_from_date_string($total_dias.' days'));
                 $FECHA_ACORDADA = date_format($fecha, 'd/m/Y');
                 //$FECHA_ACORDADA = str_replace("-","/",trim($FECHA_ACORDADA));
 
