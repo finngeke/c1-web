@@ -177,6 +177,10 @@ $f3->route('POST /guardar_contenedor', 'ControlComex->guardar_contenedor');
 $f3->route('GET /enviar_comex', 'ControlComex->enviar_comex');
 
 
+
+/* LEAD TIME */
+$f3->route('GET /lead_time', 'ControlFormularioCompra->lead_time');
+
 /* LOG TRANSACCIONES*/
 $f3->route('GET /GuardarLogTransaccion/@tipo [ajax]', 'log_transaccion\GuardaLogTransaccion->@tipo');
 
