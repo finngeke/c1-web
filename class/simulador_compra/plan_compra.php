@@ -3412,6 +3412,91 @@ class plan_compra extends \parametros {
         $data = \database::getInstancia()->getFilas($sql);
         return $data;
     }
+    public static function format_fecha($dias) {
+
+
+        $sql = "select TO_CHAR((TO_DATE('01/01/1900', 'DD/MM/YYYY') + ($dias)-2), 'DD/MM/YYYY')fecha 
+                from dual";
+
+        $data =\database::getInstancia()->getFila($sql);
+        return $data[0];
+    }
+    public static function get_codcorporativo_porestilo($temp,$depto,$gcompra,$linea,$sublinea,$estilo){
+
+        $TEMPDEPGRUPO= $temp.$depto.$gcompra;
+        $sql = "select ID_CORPORATIVO COD_CORPORATIVO
+                from (select distinct ID_CORPORATIVO,COD_TEMPORADA||DEP_DEPTO||GRUPO_COMPRA TEMPDEPGRUPO
+                        from plc_plan_compra_color_3
+                        where cod_jer2 = '".$linea."'
+                        and cod_sublin = '".$sublinea."' 
+                        and des_estilo = '".$estilo."' 
+                        and cod_temporada >= 11
+                        and id_corporativo is not null)
+                where TEMPDEPGRUPO <> '".$TEMPDEPGRUPO."'
+                and rownum = 1
+                order by 1 asc";
+
+        return \database::getInstancia()->getFilas($sql);
+    }
+
+    public static function get_codcorporativo_porjerarquia($temp,$depto,$gcompra,$codcorporativo){
+
+        $TEMPDEPGRUPO = $temp.$depto.$gcompra;
+        $sql = "select cod_jer2,cod_sublin,des_estilo
+                from(select distinct cod_temporada||DEP_DEPTO ||GRUPO_COMPRA TEMPDEPGRUPO
+                              ,cod_jer2
+                              ,cod_sublin
+                              ,des_estilo
+                              ,id_corporativo
+                        from plc_plan_compra_color_3
+                        where cod_temporada > 11
+                        and id_corporativo = '".$codcorporativo."'
+                        order by 1,2,3,4,5)
+                where TEMPDEPGRUPO <> '".$TEMPDEPGRUPO."'
+                and rownum = 1
+                order by  1,2,3 asc";
+        return \database::getInstancia()->getFilas($sql);
+    }
+
+    public static function get_codopcion_poropcion($temp,$depto,$gcompra,$linea,$sublinea,$estilo,$color){
+
+        $DEPGRUPO = $depto.$gcompra;
+        $sql = "select NUM_EMB COD_OPCION
+                from (select distinct NUM_EMB,DEP_DEPTO ||GRUPO_COMPRA DEPGRUPO
+                        from plc_plan_compra_color_3
+                        where cod_jer2 = '".$linea."'
+                        and cod_sublin = '".$sublinea."' 
+                        and des_estilo = '".$estilo."' 
+                        and cod_color  = ".$color." 
+                        and cod_temporada = $temp)
+                where DEPGRUPO <> '".$DEPGRUPO."'
+                and rownum = 1
+                order by 1 asc";
+
+        return \database::getInstancia()->getFilas($sql);
+    }
+
+    public static function get_codopcion_porjerarquia($temp,$depto,$gcompra,$num_opcion){
+
+        $TEMPDEPGRUPO = $temp.$depto.$gcompra;
+        $sql = "select cod_jer2,cod_sublin,des_estilo,cod_color 
+                from(  select distinct cod_temporada||DEP_DEPTO ||GRUPO_COMPRA TEMPDEPGRUPO
+                              ,cod_jer2
+                              ,cod_sublin
+                              ,des_estilo
+                              ,cod_color
+                              ,num_emb
+                        from plc_plan_compra_color_3
+                        where cod_temporada > 11
+                        and num_emb = '".$num_opcion."'
+                        order by 1,2,3,4,5,6)
+                where TEMPDEPGRUPO <> '".$TEMPDEPGRUPO."'
+                and rownum = 1
+                order by  1,2,3,4 asc";
+        return \database::getInstancia()->getFilas($sql);
+    }
+
+
 
 #endregion
 

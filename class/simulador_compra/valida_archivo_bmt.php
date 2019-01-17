@@ -261,26 +261,12 @@ class valida_archivo_bmt extends \parametros {
         $val = TRUE;
         $tipotemp = substr($nom_temporada,0,2);
         $msj = "";
-        /*Validacion temporda del season 1*/
-       /* $dttipoTemporda = array("CL - INVIERNO","CL - OTOÑO","CL - PRIMAVERA","CL - VERANO","CL - TODA TEMPORADA");
-        for($i = 3;$i <= $limite; $i++){
-            $val2 = false;
-                foreach ($dttipoTemporda as $var)  {
-                    if ($var == strtoupper($rows[$i][$nom_columnas['Temporada']])) {
-                        $val2 = true; break;
-                    }
-                }
-                if ($val2 == false){
-                    $val = FALSE;
-                    $filarow = $filarow . strval($i + 1) . ",";
-            }
-        }*/
-
         $dtTemp =[];$tipoVal = 1;/*Validacion temporada pv O OI*/
         if ($tipotemp == "OI"){
             $dtTemp = array("CL - INVIERNO","CL - OTOÑO","CL - TODA TEMPORADA");
             $msj ="CL - INVIERNO, CL - OTOÑO o CL - TODA TEMPORADA";
-        }else{
+        }
+        else{
             $dtTemp = array("CL - PRIMAVERA","CL - VERANO","CL - TODA TEMPORADA");
             $msj ="CL - INVIERNO, CL - OTOÑO o CL - TODA TEMPORADA";
         }
@@ -420,7 +406,7 @@ class valida_archivo_bmt extends \parametros {
                         $val = FALSE;
                         $filarow = $filarow . strval($i + 1) . ",";
                     }
-            }}
+            }}//9 Validacion Ventana
         if ($val == TRUE) {
             /*Validacion Precio Blanco null*/ $tipoVal = 18;
             for($i = 3;$i <= $limite; $i++){
@@ -429,7 +415,7 @@ class valida_archivo_bmt extends \parametros {
                     $val = FALSE;
                     $filarow = $filarow . strval($i + 1) . ",";
                 }
-            }}//
+            }}//Validacion Precio Blanco null
         if ($val == TRUE) {
             /*Validacion Precio Blanco*/ $tipoVal = 10;
             for($i = 3;$i <= $limite; $i++){
@@ -444,7 +430,7 @@ class valida_archivo_bmt extends \parametros {
                         $filarow = $filarow . strval($i + 1) . ",";
                     }
                 }
-            }}//
+            }}//Validacion Precio Blanco
         if ($val == TRUE) {
             /*Validacion debut reorder*/ $tipoVal = 25;
             for($i = 3;$i <= $limite; $i++){
@@ -453,7 +439,7 @@ class valida_archivo_bmt extends \parametros {
                     $val = FALSE;
                     $filarow = $filarow . strval($i + 1) . ",";
                 }
-            }}//
+            }}//Validacion debut reorder
         if ($val == TRUE) {
             /*Validacion Tallas y Curvas*/ $tipoVal = 11;
             for($i = 3;$i <= $limite; $i++){
@@ -473,7 +459,7 @@ class valida_archivo_bmt extends \parametros {
                     $val = FALSE;
                     $filarow = $filarow . strval($i + 1) . ",";
                 }
-            }}//
+            }}//Validacion Tallas y Curvas
         if ($val == TRUE) {
             /*Validacion tipo empaque*/ $tipoVal = 12;
             for($i = 3;$i <= $limite; $i++){
@@ -482,7 +468,7 @@ class valida_archivo_bmt extends \parametros {
                         $val = FALSE;
                         $filarow = $filarow . strval($i + 1) . ",";
                     }
-            }}//
+            }}//Validacion tipo empaque
         if ($val == TRUE) {
             /*Validacion tipo empaque no los reordes*/ $tipoVal = 24;
             for($i = 3;$i <= $limite; $i++){
@@ -490,7 +476,7 @@ class valida_archivo_bmt extends \parametros {
                     $val = FALSE;
                     $filarow = $filarow . strval($i + 1) . ",";
                 }
-            }}//
+            }}//Validacion tipo empaque no los reordes
         if ($val == TRUE) {
             /*Validacion porcentaje*/ $tipoVal = 13;
             for($i = 3;$i <= $limite; $i++){
@@ -525,7 +511,7 @@ class valida_archivo_bmt extends \parametros {
                     }
                 }
 
-            }}//
+            }}//Validacion porcentaje
         if ($val == TRUE) {
             /*Validacion de Unidades*/ $tipoVal = 14;
             for($i = 3;$i <= $limite; $i++){
@@ -538,7 +524,7 @@ class valida_archivo_bmt extends \parametros {
                     $filarow = $filarow . strval($i + 1) . ",";
                 }
 
-            }}//
+            }}//Validacion de Unidades
         if ($val == TRUE) {
             /*Validacion short name vacios*/ $tipoVal = 15;
             for($i = 3;$i <= $limite; $i++){
@@ -548,21 +534,7 @@ class valida_archivo_bmt extends \parametros {
                     $val = FALSE;
                     $filarow = $filarow . strval($i + 1) . ",";
                 }
-            }}//
-        if ($val == TRUE) {
-            /*Validacion ID_CORPORTAIVO 10 LEN*/ $tipoVal = 16;
-            for($i = 3;$i <= $limite; $i++){
-                if ($rows[$i][$nom_columnas['Codigo corporativo']] <> null or
-                    $rows[$i][$nom_columnas['Codigo corporativo']] <> "0" or
-                    $rows[$i][$nom_columnas['Codigo corporativo']] <> "") {
-
-                    if(strlen($rows[$i][$nom_columnas['Codigo corporativo']]) > 10 ){
-                        $val = FALSE;
-                        $filarow = $filarow . strval($i + 1) . ",";
-                    }
-                }
-
-            }}//
+            }}//Validacion short name vacios
         if ($val == TRUE) {
             /*Validacion tdas por cluster*/ $tipoVal = 17;
             $array1 = [];
@@ -607,7 +579,7 @@ class valida_archivo_bmt extends \parametros {
                 }
 
             }
-        }//
+        }//Validacion tdas por cluster
         if ($val == TRUE) {
             /*Validacion tdas por formatos*/ $tipoVal = 18;
             $dtclusterformarto = [];
@@ -634,7 +606,7 @@ class valida_archivo_bmt extends \parametros {
                     }
                 }
              }
-        }//
+        }//Validacion tdas por formatos
         if ($val == TRUE) {
             /*validacion del inner en blanco*/ $tipoVal = 19;
             for($i = 3;$i <= $limite; $i++){
@@ -643,7 +615,7 @@ class valida_archivo_bmt extends \parametros {
                     $filarow = $filarow . strval($i + 1) . ",";
                 }
             }
-        }//
+        }//validacion del inner en blanco
         if ($val == TRUE) {
             /*validacion del inner suma por curva */ $tipoVal = 20;
             for($i = 3;$i <= $limite; $i++){
@@ -667,7 +639,7 @@ class valida_archivo_bmt extends \parametros {
 
                 }
             }
-        }//
+        }//validacion del inner suma por curva
         if ($val == TRUE) {
             /*validacion del n° por cajas no puede estar null */$tipoVal = 21;
             for($i = 3;$i <= $limite; $i++){
@@ -676,7 +648,7 @@ class valida_archivo_bmt extends \parametros {
                     $filarow = $filarow . strval($i + 1) . ",";
                 }
             }
-        }//
+        }//validacion del n° por cajas no puede estar null
         if ($val == TRUE) {
             /*validacion del n° por cajas no puede tener en un solido */$tipoVal = 22;
             for($i = 3;$i <= $limite; $i++){
@@ -685,12 +657,13 @@ class valida_archivo_bmt extends \parametros {
                    $filarow = $filarow . strval($i + 1) . ",";
                }
             }
-        }//
+        }//validacion del n° por cajas no puede tener en un solido
         if ($val == TRUE) {
             /*Validacion fecha acordada*/ $tipoVal = 26;
             for($i = 3;$i <= $limite; $i++){
                 if ($rows[$i][$nom_columnas['Fecha de Embarque Acordada']] <> null or $rows[$i][$nom_columnas['Fecha de Embarque Acordada']]<> "") {
-                    $dtfecha = explode('-', $rows[$i][$nom_columnas['Fecha de Embarque Acordada']]);
+                    $fecha = str_replace("-","/",$rows[$i][$nom_columnas['Fecha de Embarque Acordada']]);
+                    $dtfecha = explode('/', $fecha);
                     if (count($dtfecha)== 3){
                         if (is_numeric($dtfecha[0]) == false or is_numeric($dtfecha[1]) == false or is_numeric($dtfecha[2]) == false){
                             $val = FALSE;
@@ -707,7 +680,7 @@ class valida_archivo_bmt extends \parametros {
                     }
                 }
             }
-        }//
+        }//Validacion fecha acordada
         if ($val == TRUE) {
             /*Validacion evento*/ $tipoVal = 27;
             for($i = 3;$i <= $limite; $i++){
@@ -726,7 +699,7 @@ class valida_archivo_bmt extends \parametros {
                     }
                 }
             }
-        }//
+        }//Validacion evento
         if ($val == TRUE) {
             /*Validacion estilo de vida*/$tipoVal = 28;
             $dt = plan_compra::list_estiloVida();
@@ -745,7 +718,7 @@ class valida_archivo_bmt extends \parametros {
                 }
             }
 
-        }
+        }//Validacion estilo de vida*
         if ($val == TRUE) {/*Validacion ocacion de uso*/$tipoVal = 29;
             $dt = plan_compra::list_ocacionuso();
             for($i = 3;$i <= $limite; $i++){
@@ -762,7 +735,7 @@ class valida_archivo_bmt extends \parametros {
                     }
                 }
             }
-        }
+        }//Validacion ocacion de uso
         if ($val == TRUE) {/*Validacion calidad*/$tipoVal = 30;
             $dt = plan_compra::list_calidad();
             for($i = 3;$i <= $limite; $i++){
@@ -779,7 +752,7 @@ class valida_archivo_bmt extends \parametros {
                     }
                 }
             }
-        }
+        }//Validacion calidad
          if ($val == TRUE) {/*Validacion combinacion fob&Proveedor debe tener datos*/$tipoVal = 31;
             for($i = 3;$i <= $limite; $i++){
                 $_v = true;
@@ -800,7 +773,7 @@ class valida_archivo_bmt extends \parametros {
                     }
                 }
             }
-        }// Validacion combinacion fob&Proveedor debe tener datos
+        }//Validacion combinacion fob&Proveedor debe tener datos
 
 
         if ($val == FALSE ) {
@@ -864,10 +837,6 @@ class valida_archivo_bmt extends \parametros {
                 $array = array('Tipo' => $val,
                     'Error'=> "(".substr($filarow, 0, - 1).") ->.El estilo corto no debe estar en blanco.");
             }
-            elseif ($tipoVal == 16){
-                $array = array('Tipo' => $val,
-                    'Error'=> "(".substr($filarow, 0, - 1).") ->.El Código corporativo tiene que ser máximo 10 caracteres.");
-            }
             elseif ($tipoVal == 17){
                 $array = array('Tipo' => $val,
                     'Error'=> "(".substr($filarow, 0, - 1).") ->.No existen tdas configurada por clúster.");
@@ -906,7 +875,7 @@ class valida_archivo_bmt extends \parametros {
             }
             elseif ($tipoVal == 26){
                 $array = array('Tipo' => $val,
-                    'Error'=> "(".substr($filarow, 0, - 1).") ->El campo [Fecha de Embarque Acordada] el formato es incorrecto.Ej (dd-mm-yyyy)");
+                    'Error'=> "(".substr($filarow, 0, - 1).") ->El campo [Fecha de Embarque Acordada] el formato es incorrecto.Ej (dd/mm/yyyy o dd-mm-yyyy)");
             }
             elseif ($tipoVal == 27){
                 $array = array('Tipo' => $val,
@@ -1620,12 +1589,178 @@ class valida_archivo_bmt extends \parametros {
         }
         return $_exist;
     }
-    public static function ValidaCodOpcion($rows,$limite,$nom_columnas,$temporada){
-        $val3 = TRUE; $_mensaje = []; $tipoVal = 0;
-        $_Errorfile = ""; $tipoVal = 1;
+    public static function ValidaCodCorporativo($rows,$limite,$nom_columnas,$temporada,$coddepto,$cod_temporada){
+        $val3 = TRUE;
+        $_Errorfile = "";
+        $tipoVal = 1;
+        $_mensaje = [];
+        $dtexcel= [];
+        $OpcNotExistetemp = [];
+        $OpcNotExistenuevo = [];
+
+        /*Validacion CodCorporativo 10 caracteres*/ $tipoVal = 1;
+        for($i = 3;$i <= $limite; $i++){
+            array_push($dtexcel,array("Grupo de compra"=>$rows[$i][$nom_columnas['Grupo de compra']],
+                                             "Cod Linea"=>$rows[$i][$nom_columnas['Cod Linea']],
+                                             "Cod Sublinea"=>$rows[$i][$nom_columnas['Cod Sublinea']],
+                                             "Nombre Estilo"=>$rows[$i][$nom_columnas['Nombre Estilo']],
+                                             "Codigo corporativo"=>$rows[$i][$nom_columnas['Codigo corporativo']]));
+            if ($rows[$i][$nom_columnas['Codigo corporativo']] <> null or
+                $rows[$i][$nom_columnas['Codigo corporativo']] <> "0" or
+                $rows[$i][$nom_columnas['Codigo corporativo']] <> "") {
+
+                if(strlen($rows[$i][$nom_columnas['Codigo corporativo']]) > 10){
+                   $val = FALSE;
+                   $_Errorfile = $_Errorfile.($i+1) .",";
+                }
+            }
+        }
+        //2.-validacion de CodCorporativo x BD los codigos sean iguales en todas las temporadas.
+        if ($val3 == true){$tipoVal = 2;
+            $msj = "";
+            $dtdistinct =  array_unique($dtexcel, SORT_REGULAR);$dtrepeat =[];
+
+            foreach ($dtdistinct as $mae){
+                $repeat= false;
+                foreach ($dtrepeat as $v){
+                    if (($mae['Cod Linea'].$mae['Cod Sublinea'].$mae['Nombre Estilo'].$mae['Codigo corporativo'])== $v){
+                        $repeat = true; break;
+                    }
+                }
+                if ($repeat == false){
+                    $dtcodpor =  plan_compra::get_codcorporativo_porestilo($cod_temporada
+                        ,$coddepto
+                        ,$mae['Grupo de compra']
+                        ,$mae['Cod Linea']
+                        ,$mae['Cod Sublinea']
+                        ,$mae['Nombre Estilo']);
+
+                    if(count($dtcodpor) > 0){
+                        array_push($dtrepeat,$mae['Cod Linea'].$mae['Cod Sublinea'].$mae['Nombre Estilo'].$mae['Codigo corporativo']);
+                        if($mae['Codigo corporativo'] <> $dtcodpor[0]['COD_CORPORATIVO']){
+                            $val3 = false;
+                            $msj = $msj."|->(".$mae['Cod Linea'].",".$mae['Cod Sublinea'].",".$mae['Nombre Estilo']."(".$mae['Codigo corporativo'].")=".$dtcodpor[0]['COD_CORPORATIVO'].")";
+                        }
+                    }else{
+                        array_push($dtrepeat,$mae['Cod Linea'].$mae['Cod Sublinea'].$mae['Nombre Estilo'].$mae['Codigo corporativo']);
+                        array_push($OpcNotExistetemp,array("Grupo de compra"=>$mae['Grupo de compra'],
+                                                                "Cod Linea"    =>$mae['Cod Linea'],
+                                                                "Cod Sublinea" =>$mae['Cod Sublinea'],
+                                                                "Nombre Estilo"=>$mae['Nombre Estilo'],
+                                                                "Codigo corporativo" =>$mae['Codigo corporativo']));
+                    }
+                }
+            }
+        }
+
+        //3.-validacion de CodCorporativo x BD ya se encuentra ocupada por otra CodCorporativo.
+        if ($val3 == TRUE){$tipoVal = 3;
+            $msj= "";$dtrepeat =[];
+            foreach ($OpcNotExistetemp as $mae){
+                $repeat= false;
+                foreach ($dtrepeat as $v){
+                    if (($mae['Cod Linea'].$mae['Cod Sublinea'].$mae['Nombre Estilo'].$mae['Codigo corporativo'])== $v){
+                        $repeat = true; break;
+                    }
+                }
+                if ($repeat == false) {
+                    $dtcodpor = plan_compra::get_codcorporativo_porjerarquia($cod_temporada
+                        , $coddepto
+                        , $mae['Grupo de compra']
+                        , $mae['Codigo corporativo']);
+
+                    if (count($dtcodpor) > 0) {
+                        array_push($dtrepeat,$mae['Cod Linea'].$mae['Cod Sublinea'].$mae['Nombre Estilo'].$mae['Codigo corporativo']);
+                        if ($mae['Cod Linea'] <> $dtcodpor[0]['COD_JER2'] or
+                            $mae['Cod Sublinea'] <> $dtcodpor[0]['COD_SUBLIN'] or
+                            $mae['Nombre Estilo'] <> $dtcodpor[0]['DES_ESTILO']) {
+                            $val3 = false;
+                            $msj = $msj . $mae['Codigo corporativo'] . ",";
+                        }
+                    } else {
+                        array_push($dtrepeat,$mae['Cod Linea'].$mae['Cod Sublinea'].$mae['Nombre Estilo'].$mae['Codigo corporativo']);
+                        array_push($OpcNotExistenuevo, array("Grupo de compra" => $mae['Grupo de compra'],
+                            "Cod Linea" => $mae['Cod Linea'],
+                            "Cod Sublinea" => $mae['Cod Sublinea'],
+                            "Nombre Estilo" => $mae['Nombre Estilo'],
+                            "Codigo corporativo" => $mae['Codigo corporativo']));
+                    }
+                }
+            }
+        }
+
+        //4.-validacion de CodCorporativo en el excel lo que son nuevos.
+        if ($val3 == TRUE) {$tipoVal = 4;$msj= "";$dt=[];
+            foreach ($OpcNotExistenuevo as $mae){
+                $_existe = 0; $paso = false;
+                foreach ($dt as $vat){
+                    if($mae['Codigo corporativo']== $vat){
+                        $paso = true;
+                    }
+                }
+                if($paso == false){
+                    foreach ($OpcNotExistenuevo as $d){
+                        if($mae['Codigo corporativo']== $d['Codigo corporativo']){
+                            if($mae['Cod Linea']      <> $d['Cod Linea']     or
+                                $mae['Cod Sublinea']  <> $d['Cod Sublinea']  or
+                                $mae['Nombre Estilo'] <> $d['Nombre Estilo']){
+                                $_existe++;
+                            }
+                        }
+                    }
+                    if ($_existe > 0){
+                        array_push($dt,$mae['Codigo corporativo']);
+                        $val3 = false;
+                        $msj = $msj.$mae['Codigo corporativo'].",";
+                    }else{
+                        array_push($dt,$mae['Codigo corporativo']);
+                    }
+                }
+            }
+        }
+
+        if ($val3 == false ) {
+            if ($tipoVal == 1) {
+                $_mensaje = array('Tipo' => $val3,
+                'Error'=> "(".substr($_Errorfile, 0, -1) .") ->.El Código corporativo tiene que ser máximo 10 caracteres.");
+            }
+            elseif ($tipoVal == 2){
+                $_mensaje = array('Tipo' => $val3,
+                    'Error'=> "Los siguientes estilos ya tienen código corporativo:".$msj);
+            }
+            elseif ($tipoVal == 3){
+                $_mensaje = array('Tipo' => $val3,
+                    'Error'=> "Los siguientes códigos corporativos ya se encuentran utilizados por otros estilos:".$msj);
+            }
+            elseif ($tipoVal == 4){
+                $_mensaje = array('Tipo' => $val3,
+                    'Error'=> "Códigos Corporativos duplicados en diferentes estilos:".$msj);
+            }
+        }else{
+            $_mensaje = array('Tipo' => $val3,
+                'Error'=> $_Errorfile);
+        }
+        return  $_mensaje;
+
+    }
+    public static function ValidaCodOpcion($rows,$limite,$nom_columnas,$temporada,$coddepto,$cod_temporada){
+        $val3 = TRUE;
+        $_Errorfile = "";
+        $tipoVal = 1;
+        $_mensaje = [];
+        $dtexcel= [];
+        $OpcNotExistetemp = [];
+        $OpcNotExistenuevo = [];
 
         //1.-validacion de num opcion en blanco
         for($i = 3;$i <= $limite; $i++) {
+            array_push($dtexcel,array("Grupo de compra"=>$rows[$i][$nom_columnas['Grupo de compra']],
+                                        "Cod Linea"=>$rows[$i][$nom_columnas['Cod Linea']],
+                                        "Cod Sublinea"=>$rows[$i][$nom_columnas['Cod Sublinea']],
+                                        "Nombre Estilo"=>$rows[$i][$nom_columnas['Nombre Estilo']],
+                                        "Cod Color"=>$rows[$i][$nom_columnas['Cod Color']],
+                                        "Cod Opcion"=>$rows[$i][$nom_columnas['Cod Opcion']]));
+
             if (is_null($rows[$i][$nom_columnas['Cod Opcion']])== true or
                 $rows[$i][$nom_columnas['Cod Opcion']] == ""  or
                 $rows[$i][$nom_columnas['Cod Opcion']] == " " or
@@ -1647,8 +1782,8 @@ class valida_archivo_bmt extends \parametros {
             }
         }
 
-        //4.-validacion de SUBSTRING FW Y SS
-        if ($val3 == TRUE){$tipoVal = 4;$_Errorfile = "";
+        //3.-validacion de SUBSTRING FW Y SS
+        if ($val3 == TRUE){$tipoVal = 3;$_Errorfile = "";
             $_temp = "";
            if (substr($temporada, 0, 2) == "PV"){
                $_temp = "SS";
@@ -1664,17 +1799,138 @@ class valida_archivo_bmt extends \parametros {
             }
         }
 
+        //4.-validacion de codigo de opcion x BD los codigos sean igual.
+        if ($val3 == true){$tipoVal = 4;
+            $msj = "";
+            $dtdistinct =  array_unique($dtexcel, SORT_REGULAR);$dtrepeat =[];
+            foreach ($dtdistinct as $mae){
+                $repeat= false;
+                foreach ($dtrepeat as $v){
+                    if (($mae['Cod Linea'].$mae['Cod Sublinea'].$mae['Nombre Estilo'].$mae['Cod Color'].$mae['Cod Opcion'])== $v){
+                        $repeat = true; break;
+                    }
+                }
+                if ($repeat == false) {
+                    $dtnumop = plan_compra::get_codopcion_poropcion($cod_temporada
+                        , $coddepto
+                        , $mae['Grupo de compra']
+                        , $mae['Cod Linea']
+                        , $mae['Cod Sublinea']
+                        , $mae['Nombre Estilo']
+                        , $mae['Cod Color']);
+
+                    if (count($dtnumop) > 0) {
+                        array_push($dtrepeat,$mae['Cod Linea'].$mae['Cod Sublinea'].$mae['Nombre Estilo'].$mae['Cod Color'].$mae['Cod Opcion']);
+                        if ($mae['Cod Opcion'] <> $dtnumop[0]['COD_OPCION']) {
+                            $val3 = false;
+                            $msj = $msj . "|->(" . $mae['Cod Linea'] . "," . $mae['Cod Sublinea'] . "," . $mae['Nombre Estilo'] . "," . $mae['Cod Color']."(" .$mae['Cod Opcion']. ")=" . $dtnumop[0]['COD_OPCION'] . ")";
+                        }
+                    } else {
+                        array_push($dtrepeat,$mae['Cod Linea'].$mae['Cod Sublinea'].$mae['Nombre Estilo'].$mae['Cod Color'].$mae['Cod Opcion']);
+                        array_push($OpcNotExistetemp, array("Grupo de compra" => $mae['Grupo de compra'],
+                            "Cod Linea" => $mae['Cod Linea'],
+                            "Cod Sublinea" => $mae['Cod Sublinea'],
+                            "Nombre Estilo" => $mae['Nombre Estilo'],
+                            "Cod Color" => $mae['Cod Color'],
+                            "Cod Opcion" => $mae['Cod Opcion']));
+                    }
+                }
+            }
+        }
+
+        //5.-validacion de codigo de opcion x BD ya se encuentra ocupada por otra opcion.
+        if ($val3 == TRUE){$tipoVal = 5;
+            $msj= "";$dtrepeat =[];
+            foreach ($OpcNotExistetemp as $mae){
+                $repeat= false;
+                foreach ($dtrepeat as $v){
+                    if (($mae['Cod Linea'].$mae['Cod Sublinea'].$mae['Nombre Estilo'].$mae['Cod Color'].$mae['Cod Opcion'])== $v){
+                        $repeat = true; break;
+                    }
+                }
+                if ($repeat == false) {
+                    $dtnumop = plan_compra::get_codopcion_porjerarquia($cod_temporada
+                        , $coddepto
+                        , $mae['Grupo de compra']
+                        , $mae['Cod Opcion']);
+                    if (count($dtnumop) > 0) {
+                        array_push($dtrepeat,$mae['Cod Linea'].$mae['Cod Sublinea'].$mae['Nombre Estilo'].$mae['Cod Color'].$mae['Cod Opcion']);
+                        if ($mae['Cod Linea'] <> $dtnumop[0]['COD_JER2'] or
+                            $mae['Cod Sublinea'] <> $dtnumop[0]['COD_SUBLIN'] or
+                            $mae['Nombre Estilo'] <> $dtnumop[0]['DES_ESTILO'] or
+                            $mae['Cod Color'] <> $dtnumop[0]['COD_COLOR']) {
+                            $val3 = false;
+                            $msj = $msj . $mae['Cod Opcion'] . ",";
+                        }
+                    } else {
+                        array_push($dtrepeat,$mae['Cod Linea'].$mae['Cod Sublinea'].$mae['Nombre Estilo'].$mae['Cod Color'].$mae['Cod Opcion']);
+                        array_push($OpcNotExistenuevo, array("Grupo de compra" => $mae['Grupo de compra'],
+                            "Cod Linea" => $mae['Cod Linea'],
+                            "Cod Sublinea" => $mae['Cod Sublinea'],
+                            "Nombre Estilo" => $mae['Nombre Estilo'],
+                            "Cod Color" => $mae['Cod Color'],
+                            "Cod Opcion" => $mae['Cod Opcion']));
+                    }
+                }
+            }
+        }
+
+        //6.-validacion de codigo de opcion en el excel lo que son nuevos.
+        if ($val3 == TRUE) {$tipoVal = 6;$msj= "";
+            $dt=[];
+            foreach ($OpcNotExistenuevo as $mae){
+                $_existe = 0; $paso = false;
+                foreach ($dt as $vat){
+                    if($mae['Cod Opcion']== $vat){
+                        $paso = true;
+                    }
+                }
+                if($paso == false){
+                    foreach ($OpcNotExistenuevo as $d){
+                        if($mae['Cod Opcion']==$d['Cod Opcion']){
+                            if($mae['Cod Linea']      <> $d['Cod Linea']     or
+                                $mae['Cod Sublinea']  <> $d['Cod Sublinea']  or
+                                $mae['Nombre Estilo'] <> $d['Nombre Estilo'] or
+                                $mae['Cod Color']     <> $d['Cod Color']  ){
+                                $_existe++;
+                            }
+                        }
+                    }
+                    if ($_existe > 0){
+                        array_push($dt,$mae['Cod Opcion']);
+                        $val3 = false;
+                        $msj = $msj.$mae['Cod Opcion'].",";
+                    }else{
+                        array_push($dt,$mae['Cod Opcion']);
+                    }
+                }
+            }
+        }
 
         if ($val3 == false ) {
             if($tipoVal == 1){
                 $_mensaje = array('Tipo' => $val3,
                     'Error'=> "(".substr($_Errorfile, 0, - 1).") -> El Número de opción no puede estar en blanco o en 0.");
-            }elseif ($tipoVal == 2){
+            }
+            elseif ($tipoVal == 2){
                 $_mensaje = array('Tipo' => $val3,
                     'Error'=> "(".substr($_Errorfile, 0, - 1).") -> El Número de opción tiene que ser 12 caracteres. Ej:(SS19INDH0001)");
-            }elseif ($tipoVal == 4){
+            }
+            elseif ($tipoVal == 3){
                 $_mensaje = array('Tipo' => $val3,
                     'Error'=> "(".substr($_Errorfile, 0, - 1).") -> El Número de opción tiene otra temporada la que esta seleccionada EJ. OI = FW | PV = SS.");
+            }
+            elseif ($tipoVal == 4){
+                $_mensaje = array('Tipo' => $val3,
+                    'Error'=> "Las siguientes opciones ya tienen codigo de opcion:".$msj);
+            }
+            elseif ($tipoVal == 5){
+                $_mensaje = array('Tipo' => $val3,
+                    'Error'=> "Los siguientes codigos de opcion ya se encuentra utilizado por otra Opcion:".$msj);
+            }
+            elseif ($tipoVal == 6){
+                $_mensaje = array('Tipo' => $val3,
+                    'Error'=> "Codigos de opcion duplicados en diferentes opciones:".$msj);
             }
         }else{
             $_mensaje = array('Tipo' => $val3,

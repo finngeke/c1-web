@@ -914,13 +914,11 @@ public function ImportarAssormentValidaciones($f3){
     if ($tipo == 1){
         //Validacion de Columnas.
         $_ERROR2 = valida_archivo_bmt::Val_CamposObligatorio($rows[2],1);
-
         if ($_ERROR2 != "" ){
             $_array["Error"] = true;
             $_array["msjError"]= "No existe(n) en el archivo campo(s): ".$_ERROR2. ".";
             $_error = false;
         }
-
 
         //Validacion de Columnas archivo en blanco
         if ($_error == true){
@@ -935,7 +933,6 @@ public function ImportarAssormentValidaciones($f3){
                 array_push($rows[$i],0);
             }
         }
-
 
         //validacion de temporada
         if ($_error == true){
@@ -1014,6 +1011,16 @@ public function ImportarAssormentValidaciones($f3){
             }
         }
 
+        for($i = 3;$i <= $limite; $i++){
+            if ($rows[$i][$nom_columnas['Fecha de Embarque Acordada']] != null and $rows[$i][$nom_columnas['Fecha de Embarque Acordada']] != "" and $rows[$i][$nom_columnas['Fecha de Embarque Acordada']] != "0"){
+               if (is_numeric($rows[$i][$nom_columnas['Fecha de Embarque Acordada']]) == true){
+                   $rows[$i][$nom_columnas['Fecha de Embarque Acordada']] = plan_compra::format_fecha($rows[$i][$nom_columnas['Fecha de Embarque Acordada']]);
+               }else{
+                   $rows[$i][$nom_columnas['Fecha de Embarque Acordada']] = str_replace("-","/",$rows[$i][$nom_columnas['Fecha de Embarque Acordada']]);
+               }
+            }
+        }
+
         $_SESSION['dtAssorment']=$rows;
     }
     else{
@@ -1022,13 +1029,24 @@ public function ImportarAssormentValidaciones($f3){
         $nom_columnas = array_flip($rows[2]);
         //validacion del codigo opcion
         if ($_error == true){
-            $_ERROR2 = valida_archivo_bmt::ValidaCodOpcion($rows,$limite,$nom_columnas,$temporada);
+            $_ERROR2 = valida_archivo_bmt::ValidaCodOpcion($rows,$limite,$nom_columnas,$temporada,$f3->get('SESSION.COD_DEPTO'),$f3->get('SESSION.COD_TEMPORADA'));
             if ($_ERROR2["Tipo"] == false ){
                 $_array["Error"] = true;
                 $_array["msjError"]= "Fila(s):".$_ERROR2["Error"];
                 $_error = false;
             }
         }
+        //validacion del codigo corporativo
+        if ($_error == true){
+            $_ERROR2 = valida_archivo_bmt::ValidaCodCorporativo($rows,$limite,$nom_columnas,$temporada,$f3->get('SESSION.COD_DEPTO'),$f3->get('SESSION.COD_TEMPORADA'));
+            if ($_ERROR2["Tipo"] == false ){
+                $_array["Error"] = true;
+                $_array["msjError"]= "Fila(s):".$_ERROR2["Error"];
+                $_error = false;
+            }
+        }
+
+
 
         //validacion de tipo producto y tipo de exhibicion
         if ($_error == true) {
