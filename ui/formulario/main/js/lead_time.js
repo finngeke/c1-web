@@ -14,10 +14,6 @@ $(function () {
     // BTN salir C1
     function salir_c1(e) {
 
-        $("#grid").data("kendoSpreadsheet").destroy();
-        $("#grid").empty();
-        $("#grid").remove();
-
         window.location.href = "salir";
 
     }
