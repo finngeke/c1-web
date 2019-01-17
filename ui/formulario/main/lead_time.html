@@ -1,0 +1,171 @@
+<span id="span_data_temp_depto" name="span_data_temp_depto" style="display: none;"></span>
+<div id="div_grid_telerik">
+    <style>
+        #fieldlist {
+            margin: 0;
+            padding: 0;
+        }
+
+        #fieldlist li {
+            list-style: none;
+            padding-bottom: .7em;
+            text-align: left;
+        }
+
+        #fieldlist label {
+            display: block;
+            padding-bottom: .3em;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 12px;
+            color: #444;
+        }
+
+        #fieldlist li.status {
+            text-align: center;
+        }
+
+        #fieldlist li .k-widget:not(.k-tooltip),
+        #fieldlist li .k-textbox {
+            margin: 0 5px 5px 0;
+        }
+
+        .confirm {
+            padding-top: 1em;
+        }
+
+        .valid {
+            color: green;
+        }
+
+        .invalid {
+            color: red;
+        }
+
+        #fieldlist li input[type="checkbox"] {
+            margin: 0 5px 0 0;
+        }
+
+        span.k-widget.k-tooltip-validation {
+            display; inline-block;
+            width: 160px;
+            text-align: left;
+            border: 0;
+            padding: 0;
+            margin: 0;
+            background: none;
+            box-shadow: none;
+            color: red;
+        }
+
+        .k-tooltip-validation .k-warning {
+            display: none;
+        }
+    </style>
+    <!-- Despliega el menú del top lead_time.html-->
+    <div id="toolbar_lead_time" class="k-content wide"></div>
+
+    <!-- Despliega la Grilla -->
+    <div id="grid" style="width: 100%;height: 500px;"></div>
+
+
+    <div id="POPUP_leadtime">
+        <form id="LeadTimeForm">
+
+            <div class="container">
+                <div class="row input-group input-group-sm">
+                    <div class="col-sm">
+
+                        <div class="col-md-6 mb-3">
+                            <label for="COD_VIA" class="required">Vía</label>
+                            <select name="COD_VIA" id="COD_VIA" required data-required-msg="Seleccione Vía" class="form-control" style="width: 220px;" ></select>
+                            <span class="k-invalid-msg" data-for="COD_VIA"></span>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="CNTRY_LVL_CHILD" class="required">País Origen</label>
+                            <select name="CNTRY_LVL_CHILD" id="CNTRY_LVL_CHILD" required data-required-msg="Seleccione País" class="form-control" style="width: 220px;" ></select>
+                            <span class="k-invalid-msg" data-for="CNTRY_LVL_CHILD"></span>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="COD_PUERTO_EMB" class="required">Embarque</label>
+                            <select name="COD_PUERTO_EMB" id="COD_PUERTO_EMB" required data-required-msg="Seleccione Embarque" class="form-control" style="width: 220px;" ></select>
+                            <span class="k-invalid-msg" data-for="COD_PUERTO_EMB"></span>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="COD_PUERTO_DESTINO" class="required">Destino</label>
+                            <select name="COD_PUERTO_DESTINO" id="COD_PUERTO_DESTINO" class="form-control" style="width: 220px;" ></select>
+                            <span class="k-invalid-msg" data-for="COD_PUERTO_DESTINO"></span>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="DEP_DEPTO" class="required">Departamento</label>
+                            <select name="DEP_DEPTO" id="DEP_DEPTO" required data-required-msg="Seleccione Departamento" class="form-control" style="width: 220px;" ></select>
+                            <span class="k-invalid-msg" data-for="DEP_DEPTO"></span>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="LIN_LINEA" class="required">Línea</label>
+                            <select name="LIN_LINEA" id="LIN_LINEA" class="form-control" style="width: 220px;" ></select>
+                            <span class="k-invalid-msg" data-for="LIN_LINEA"></span>
+                        </div>
+
+                    </div>
+                    <div class="col-sm">
+
+                        <div class="col-md-6 mb-3">
+                            <label for="D_TRANSITO" class="required">Tránsito</label>
+                            <input type="text" id="D_TRANSITO" name="D_TRANSITO" min="0" value="0" required validationMessage="Ingrese Tránsito" class="form-control" style="width: 220px;" /><span class="k-invalid-msg" data-for="search"></span>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="D_PUERTO_CD" class="required">Puerto CD</label>
+                            <input type="text" id="D_PUERTO_CD" name="D_PUERTO_CD" min="0" value="0" required validationMessage="Ingrese Puerto CD" class="form-control" style="width: 220px;" /><span class="k-invalid-msg" data-for="search"></span>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="D_TIENDAS_CD" class="required">CD Tienda</label>
+                            <input type="text" id="D_TIENDAS_CD" name="D_TIENDAS_CD" min="0" value="0" required validationMessage="Ingrese CD Tienda" class="form-control" style="width: 220px;" /><span class="k-invalid-msg" data-for="search"></span>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="T_DIAS_SUCURS" class="required">Total Días Sucursal</label>
+                            <input type="text" id="T_DIAS_SUCURS" name="T_DIAS_SUCURS" min="0" value="0" required validationMessage="Ingrese Total Días Sucursal" class="form-control" style="width: 220px;" /><span class="k-invalid-msg" data-for="search"></span>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="COD_VENTANA_EMB" class="required">Ventana Embarque</label>
+                            <input type="text" id="COD_VENTANA_EMB" name="COD_VENTANA_EMB" min="0" value="0" required validationMessage="Ingrese Ventana Emabrque" class="form-control" style="width: 220px;" /><span class="k-invalid-msg" data-for="search"></span>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="FIRST_FORWARDER" class="required">1° Forwarder</label>
+                            <input type="text" id="FIRST_FORWARDER" name="FIRST_FORWARDER" min="0" value="0" required validationMessage="Ingrese 1° Forwarder" class="form-control" style="width: 220px;" /><span class="k-invalid-msg" data-for="search"></span>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="LASTEST_FORWARDER" class="required">Last Forwarder</label>
+                            <input type="text" id="LASTEST_FORWARDER" name="LASTEST_FORWARDER" min="0" value="0" required validationMessage="Ingrese Last Forwarder" class="form-control" style="width: 220px;" /><span class="k-invalid-msg" data-for="search"></span>
+                        </div><!--  pattern="\d{10}" -->
+
+                        <div class="col-md-6 mb-3">
+                            <button class="k-button k-primary" type="submit">Crear Lead Time</button>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <span class="status"></span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+    <!-- TAG de los mensajes de alert, dejar siempre al final -->
+    <span id="popupNotification"></span>
+
+</div>
