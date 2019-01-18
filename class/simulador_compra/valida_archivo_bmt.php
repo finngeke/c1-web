@@ -1615,6 +1615,8 @@ class valida_archivo_bmt extends \parametros {
                 }
             }
         }
+
+        /*
         //2.-validacion de CodCorporativo x BD los codigos sean iguales en todas las temporadas.
         if ($val3 == true){$tipoVal = 2;
             $msj = "";
@@ -1688,10 +1690,10 @@ class valida_archivo_bmt extends \parametros {
                 }
             }
         }
-
+*/
         //4.-validacion de CodCorporativo en el excel lo que son nuevos.
         if ($val3 == TRUE) {$tipoVal = 4;$msj= "";$dt=[];
-            foreach ($OpcNotExistenuevo as $mae){
+            foreach ($dtexcel as $mae){
                 $_existe = 0; $paso = false;
                 foreach ($dt as $vat){
                     if($mae['Codigo corporativo']== $vat){
@@ -1699,7 +1701,7 @@ class valida_archivo_bmt extends \parametros {
                     }
                 }
                 if($paso == false){
-                    foreach ($OpcNotExistenuevo as $d){
+                    foreach ($dtexcel as $d){
                         if($mae['Codigo corporativo']== $d['Codigo corporativo']){
                             if($mae['Cod Linea']      <> $d['Cod Linea']     or
                                 $mae['Cod Sublinea']  <> $d['Cod Sublinea']  or
@@ -1799,6 +1801,7 @@ class valida_archivo_bmt extends \parametros {
             }
         }
 
+        /*
         //4.-validacion de codigo de opcion x BD los codigos sean igual.
         if ($val3 == true){$tipoVal = 4;
             $msj = "";
@@ -1874,11 +1877,13 @@ class valida_archivo_bmt extends \parametros {
                 }
             }
         }
+        */
+
 
         //6.-validacion de codigo de opcion en el excel lo que son nuevos.
         if ($val3 == TRUE) {$tipoVal = 6;$msj= "";
             $dt=[];
-            foreach ($OpcNotExistenuevo as $mae){
+            foreach ($dtexcel as $mae){
                 $_existe = 0; $paso = false;
                 foreach ($dt as $vat){
                     if($mae['Cod Opcion']== $vat){
@@ -1886,7 +1891,7 @@ class valida_archivo_bmt extends \parametros {
                     }
                 }
                 if($paso == false){
-                    foreach ($OpcNotExistenuevo as $d){
+                    foreach ($dtexcel as $d){
                         if($mae['Cod Opcion']==$d['Cod Opcion']){
                             if($mae['Cod Linea']      <> $d['Cod Linea']     or
                                 $mae['Cod Sublinea']  <> $d['Cod Sublinea']  or

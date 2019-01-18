@@ -5555,23 +5555,136 @@ class PlanCompraClass extends \parametros
         return $ArrayAsociativo;
     }
     Public static Function ListExportAssortment($tempo,$depto){
-        $sql = "select DEP_DEPTO,DPTO,MARCA,CODIGO_MARCA,NOMBRE_COMPRADOR,NOMBRE_DISENADOR,SEASON,LINEA,COD_LINEA,SUBLINEA,COD_SUBLINEA
-                       ,CODIGO_CORPORATIVO,NOMBRE_ESTILO,ESTILO_CORTO,DESCRIPCION_ESTILO,DESCRIP_INTERNET,NUM_EMB AS COD_OPCION,COLOR,COD_COLOR
-                       ,COMPOSICION,TIPO_DE_TELA,FORRO,NOM_CALIDAD,COLECCION,NOM_ESTILOVIDA,NOM_OCACIONUSO
-                       ,EVENTO,EVENTO_INSTORE, GRUPO_DE_COMPRA,VENTANA,TIPO_EXHIBICION,TIPO_PRODUCTO, DEBUT_O_REORDER
-                       ,TEMPORADA,PRECIO,OFERTA,DOSX,OPEX, RANKING_DE_VENTA, CICLO_DE_VIDA, PIRAMIDE_MIX, RATIO_COMPRA, FACTOR_AMPLIFICACION
-                       ,RATIO_COMPRA_FINAL, CLUSTER_, FORMATO, COMPRA_UNIDADES_ASSORTMENT, COMPRA_UNIDADES_FINAL,VAR_PORCE
-                       ,TARGET_USD, FOB_USD, RFID_USD,COSTO_INSP, VIA, PAIS, PROVEEDOR, COMENTARIOS_POST_NEGOCIACION, FECHA_EMBARQUE_ACORDADA
-                       ,FACTOR, COSTO_TOTAL, RETAIL_TOTAL_SIN_IVA, MUP_COMPRA, EXHIBICION, TALLA1, TALLA2
-                       ,TALLA3, TALLA4, TALLA5, TALLA6, TALLA7, TALLA8, TALLA9,INNER , CURVA1, CURVA2, CURVA3, CURVA4, CURVA5, CURVA6, CURVA7, CURVA8
-                       ,CURVA9, VALIDADOR_MASTERPACK_INNER, TIPO_DE_EMPAQUE, N_CURVAS_POR_CAJA_CURVADAS, UNO_POR, DOS_POR, TRES_POR
-                       ,CUATRO_POR, CINCO_POR, SEIS_POR, SIETE_POR, OCHO_POR, NUEVE_POR, TIENDASA, TIENDASB, TIENDASC, TIENDASI
-                       ,CLUSTERA, CLUSTERB, CLUSTERC, CLUSTERI, SIZE_1, SIZE_2, SIZE_3, SIZE_4, SIZE_5
-                       ,SIZE_6, SIZE_7, SIZE_8, SIZE_9,UNIDADES
-                  from plc_historial_assortment 
-                  WHERE COD_TEMPORADA = ".$tempo."
-                  and dep_depto IN (".$depto.")
-                  ORDER BY DEP_DEPTO,CODIGO_MARCA asc";
+        $sql = "
+            SELECT P.DEP_DEPTO           DEP_DEPTO
+                  ,D.DEP_DESCRIPCION     DPTO
+                  ,P.NOM_MARCA           MARCA
+                  ,P.COD_MARCA           CODIGO_MARCA
+                  ,H.NOMBRE_COMPRADOR    NOMBRE_COMPRADOR      
+                  ,H.NOMBRE_DISENADOR    NOMBRE_DISENADOR      
+                  ,T.NOM_TEMPORADA_CORTO SEASON
+                  ,P.NOM_LINEA           LINEA
+                  ,P.COD_JER2            COD_LINEA
+                  ,P.NOM_SUBLINEA        SUBLINEA
+                  ,P.COD_SUBLIN          COD_SUBLINEA
+                  ,P.ID_CORPORATIVO      CODIGO_CORPORATIVO
+                  ,P.DES_ESTILO          NOMBRE_ESTILO
+                  ,P.SHORT_NAME          ESTILO_CORTO    
+                  ,P.DESCMODELO          DESCRIPCION_ESTILO
+                  ,P.DESCRIP_INTERNET    DESCRIP_INTERNET
+                  ,P.NUM_EMB             COD_OPCION
+                  ,P.NOM_COLOR           COLOR
+                  ,P.COD_COLOR           COD_COLOR
+                  ,P.COMPOSICION         COMPOSICION
+                  ,P.TIPO_DE_TELA        TIPO_DE_TELA
+                  ,P.FORRO               FORRO
+                  ,P.NOM_CALIDAD         NOM_CALIDAD
+                  ,P.COLECCION           COLECCION
+                  ,P.NOM_ESTILOVIDA      NOM_ESTILOVIDA
+                  ,P.NOM_OCACIONUSO      NOM_OCACIONUSO
+                  ,P.EVENTO              EVENTO
+                  ,P.EVENTO_INSTORE      EVENTO_INSTORE
+                  ,P.GRUPO_COMPRA        GRUPO_DE_COMPRA
+                  ,P.NOM_VENTANA         VENTANA
+                  ,P.TIPO_EXHIBICION     TIPO_EXHIBICION
+                  ,P.TIPO_PRODUCTO       TIPO_PRODUCTO
+                  ,P.DEBUT_REODER        DEBUT_O_REORDER
+                  ,H.TEMPORADA           TEMPORADA             
+                  ,P.PRECIO_BLANCO       PRECIO
+                  ,P.OFERTA              OFERTA
+                  ,P.DOSX                DOSX
+                  ,p.OPEX                OPEX
+                  ,P.NOM_RNK             RANKING_DE_VENTA
+                  ,P.NOM_LIFECYCLE       CICLO_DE_VIDA
+                  ,P.NOM_PIRAMIDEMIX     PIRAMIDE_MIX
+                  ,H.RATIO_COMPRA        RATIO_COMPRA          
+                  ,H.FACTOR_AMPLIFICACION FACTOR_AMPLIFICACION  
+                  ,H.RATIO_COMPRA_FINAL  RATIO_COMPRA_FINAL    
+                  ,P.SEG_ASIG            CLUSTER_
+                  ,P.FORMATO             FORMATO
+                  ,H.COMPRA_UNIDADES_ASSORTMENT    COMPRA_UNIDADES_ASSORTMENT    
+                  ,H.COMPRA_UNIDADES_FINAL         COMPRA_UNIDADES_FINAL         
+                  ,H.VAR_PORCE                     VAR_PORCE                     
+                  ,P.COSTO_TARGET        TARGET_USD
+                  ,P.COSTO_FOB           FOB_USD
+                  ,P.COSTO_RFID          RFID_USD
+                  ,P.COSTO_INSP          COSTO_INSP
+                  ,P.NOM_VIA             VIA
+                  ,P.NOM_PAIS            PAIS
+                  ,P.ALIAS_PROV          PROVEEDOR
+                  ,P.COMENTARIOS_POST_NEGOCIACION
+                  ,P.FECHA_EMBARQUE_ACORDADA
+                  ,H.FACTOR               FACTOR                                          
+                  ,H.COSTO_TOTAL          COSTO_TOTAL                   
+                  ,H.RETAIL_TOTAL_SIN_IVA RETAIL_TOTAL_SIN_IVA          
+                  ,H.MUP_COMPRA           MUP_COMPRA                    
+                  ,H.EXHIBICION           EXHIBICION                   
+                  ,P.TALLA1              TALLA1
+                  ,P.TALLA2              TALLA2
+                  ,P.TALLA3              TALLA3
+                  ,P.TALLA4              TALLA4 
+                  ,P.TALLA5              TALLA5
+                  ,P.TALLA6              TALLA6
+                  ,P.TALLA7              TALLA7
+                  ,P.TALLA8              TALLA8
+                  ,P.TALLA9              TALLA9
+                  ,P.CURVAMIN            INNER
+                  ,P.CURV1               CURVA1
+                  ,P.CURV2               CURVA2
+                  ,P.CURV3               CURVA3
+                  ,P.CURV4               CURVA4
+                  ,P.CURV5               CURVA5
+                  ,P.CURV6               CURVA6
+                  ,P.CURV7               CURVA7
+                  ,P.CURV8               CURVA8
+                  ,P.CURV9               CURVA9
+                  ,H.VALIDADOR_MASTERPACK_INNER                     
+                  ,P.TIPO_EMPAQUE        TIPO_DE_EMPAQUE
+                  ,P.N_CURVASXCAJAS      N_CURVAS_POR_CAJA_CURVADAS
+                  ,H.UNO_POR                   
+                  ,H.DOS_POR                    
+                  ,H.TRES_POR                  
+                  ,H.CUATRO_POR                 
+                  ,H.CINCO_POR                  
+                  ,H.SEIS_POR                   
+                  ,H.SIETE_POR                  
+                  ,H.OCHO_POR                   
+                  ,H.NUEVE_POR                  
+                  ,H.TIENDASA                   
+                  ,H.TIENDASB                   
+                  ,H.TIENDASC                   
+                  ,H.TIENDASI                   
+                  ,P.A                   CLUSTERA
+                  ,P.B                   CLUSTERB
+                  ,P.C                   CLUSTERC
+                  ,P.I                   CLUSTERI
+                  ,REGEXP_SUBSTR(PORTALLA_1_INI, '[^\-]+', 1, 1) AS SIZE_1
+                  ,REGEXP_SUBSTR(PORTALLA_1_INI, '[^\-]+', 1, 2) AS SIZE_2
+                  ,REGEXP_SUBSTR(PORTALLA_1_INI, '[^\-]+', 2, 3) AS SIZE_3
+                  ,REGEXP_SUBSTR(PORTALLA_1_INI, '[^\-]+', 3, 4) AS SIZE_4
+                  ,REGEXP_SUBSTR(PORTALLA_1_INI, '[^\-]+', 4, 5) AS SIZE_5
+                  ,REGEXP_SUBSTR(PORTALLA_1_INI, '[^\-]+', 5, 6) AS SIZE_6
+                  ,REGEXP_SUBSTR(PORTALLA_1_INI, '[^\-]+', 6, 7) AS SIZE_7
+                  ,REGEXP_SUBSTR(PORTALLA_1_INI, '[^\-]+', 7, 8) AS SIZE_8
+                  ,REGEXP_SUBSTR(PORTALLA_1_INI, '[^\-]+', 8, 9) AS SIZE_9
+                  ,P.UNID_OPCION_INICIO  UNIDADES 
+            FROM PLC_PLAN_COMPRA_COLOR_3                P 
+            LEFT JOIN (SELECT DISTINCT DEP_DEPTO
+                                      ,DEP_DESCRIPCION 
+                       FROM PLC_JERARQUIA_COMERCIAL)    D ON P.DEP_DEPTO     = D.DEP_DEPTO
+            LEFT JOIN PLC_TEMPORADA                     T ON P.COD_TEMPORADA = T.COD_TEMPORADA
+            LEFT JOIN PLC_HISTORIAL_ASSORTMENT          H ON P.COD_TEMPORADA = H.COD_TEMPORADA
+                                                         AND P.DEP_DEPTO     = H.DEP_DEPTO
+                                                         AND P.GRUPO_COMPRA  = H.GRUPO_DE_COMPRA
+                                                         AND P.COD_MARCA     = H.CODIGO_MARCA
+                                                         AND P.COD_JER2      = H.COD_LINEA
+                                                         AND P.COD_SUBLIN    = H.COD_SUBLINEA
+                                                         AND P.DES_ESTILO    = H.NOMBRE_ESTILO
+                                                         AND P.COD_COLOR     = H.COD_COLOR
+                                                         AND P.NOM_VENTANA   = H.VENTANA          
+            WHERE P.COD_TEMPORADA = ".$tempo."
+            AND P.DEP_DEPTO IN (".$depto.")
+            ORDER BY P.COD_TEMPORADA,P.DEP_DEPTO,P.COD_MARCA ASC";
 
         $data = \database::getInstancia()->getFilas($sql);
         return $data;
