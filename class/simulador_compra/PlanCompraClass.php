@@ -5560,8 +5560,8 @@ class PlanCompraClass extends \parametros
                   ,D.DEP_DESCRIPCION     DPTO
                   ,P.NOM_MARCA           MARCA
                   ,P.COD_MARCA           CODIGO_MARCA
-                  ,H.NOMBRE_COMPRADOR    NOMBRE_COMPRADOR      
-                  ,H.NOMBRE_DISENADOR    NOMBRE_DISENADOR      
+                  ,''                    NOMBRE_COMPRADOR      
+                  ,''                    NOMBRE_DISENADOR      
                   ,T.NOM_TEMPORADA_CORTO SEASON
                   ,P.NOM_LINEA           LINEA
                   ,P.COD_JER2            COD_LINEA
@@ -5589,7 +5589,7 @@ class PlanCompraClass extends \parametros
                   ,P.TIPO_EXHIBICION     TIPO_EXHIBICION
                   ,P.TIPO_PRODUCTO       TIPO_PRODUCTO
                   ,P.DEBUT_REODER        DEBUT_O_REORDER
-                  ,H.TEMPORADA           TEMPORADA             
+                  ,''                    TEMPORADA             
                   ,P.PRECIO_BLANCO       PRECIO
                   ,P.OFERTA              OFERTA
                   ,P.DOSX                DOSX
@@ -5597,14 +5597,14 @@ class PlanCompraClass extends \parametros
                   ,P.NOM_RNK             RANKING_DE_VENTA
                   ,P.NOM_LIFECYCLE       CICLO_DE_VIDA
                   ,P.NOM_PIRAMIDEMIX     PIRAMIDE_MIX
-                  ,H.RATIO_COMPRA        RATIO_COMPRA          
-                  ,H.FACTOR_AMPLIFICACION FACTOR_AMPLIFICACION  
-                  ,H.RATIO_COMPRA_FINAL  RATIO_COMPRA_FINAL    
+                  ,''                    RATIO_COMPRA          
+                  ,''                    FACTOR_AMPLIFICACION  
+                  ,''                    RATIO_COMPRA_FINAL    
                   ,P.SEG_ASIG            CLUSTER_
                   ,P.FORMATO             FORMATO
-                  ,H.COMPRA_UNIDADES_ASSORTMENT    COMPRA_UNIDADES_ASSORTMENT    
-                  ,H.COMPRA_UNIDADES_FINAL         COMPRA_UNIDADES_FINAL         
-                  ,H.VAR_PORCE                     VAR_PORCE                     
+                  ,''                    COMPRA_UNIDADES_ASSORTMENT    
+                  ,''                    COMPRA_UNIDADES_FINAL         
+                  ,''                    VAR_PORCE                     
                   ,P.COSTO_TARGET        TARGET_USD
                   ,P.COSTO_FOB           FOB_USD
                   ,P.COSTO_RFID          RFID_USD
@@ -5614,11 +5614,11 @@ class PlanCompraClass extends \parametros
                   ,P.ALIAS_PROV          PROVEEDOR
                   ,P.COMENTARIOS_POST_NEGOCIACION
                   ,P.FECHA_EMBARQUE_ACORDADA
-                  ,H.FACTOR               FACTOR                                          
-                  ,H.COSTO_TOTAL          COSTO_TOTAL                   
-                  ,H.RETAIL_TOTAL_SIN_IVA RETAIL_TOTAL_SIN_IVA          
-                  ,H.MUP_COMPRA           MUP_COMPRA                    
-                  ,H.EXHIBICION           EXHIBICION                   
+                  ,''                     FACTOR                                          
+                  ,''                     COSTO_TOTAL                   
+                  ,''                     RETAIL_TOTAL_SIN_IVA          
+                  ,''                     MUP_COMPRA                    
+                  ,''                     EXHIBICION                   
                   ,P.TALLA1              TALLA1
                   ,P.TALLA2              TALLA2
                   ,P.TALLA3              TALLA3
@@ -5638,22 +5638,22 @@ class PlanCompraClass extends \parametros
                   ,P.CURV7               CURVA7
                   ,P.CURV8               CURVA8
                   ,P.CURV9               CURVA9
-                  ,H.VALIDADOR_MASTERPACK_INNER                     
+                  ,''                    VALIDADOR_MASTERPACK_INNER                     
                   ,P.TIPO_EMPAQUE        TIPO_DE_EMPAQUE
                   ,P.N_CURVASXCAJAS      N_CURVAS_POR_CAJA_CURVADAS
-                  ,H.UNO_POR                   
-                  ,H.DOS_POR                    
-                  ,H.TRES_POR                  
-                  ,H.CUATRO_POR                 
-                  ,H.CINCO_POR                  
-                  ,H.SEIS_POR                   
-                  ,H.SIETE_POR                  
-                  ,H.OCHO_POR                   
-                  ,H.NUEVE_POR                  
-                  ,H.TIENDASA                   
-                  ,H.TIENDASB                   
-                  ,H.TIENDASC                   
-                  ,H.TIENDASI                   
+                  ,''                    UNO_POR                   
+                  ,''                    DOS_POR                    
+                  ,''                    TRES_POR                  
+                  ,''                    CUATRO_POR                 
+                  ,''                    CINCO_POR                  
+                  ,''                    SEIS_POR                   
+                  ,''                    SIETE_POR                  
+                  ,''                    OCHO_POR                   
+                  ,''                    NUEVE_POR                  
+                  ,''                    TIENDASA                   
+                  ,''                    TIENDASB                   
+                  ,''                    TIENDASC                   
+                  ,''                    TIENDASI                   
                   ,P.A                   CLUSTERA
                   ,P.B                   CLUSTERB
                   ,P.C                   CLUSTERC
@@ -5673,15 +5673,6 @@ class PlanCompraClass extends \parametros
                                       ,DEP_DESCRIPCION 
                        FROM PLC_JERARQUIA_COMERCIAL)    D ON P.DEP_DEPTO     = D.DEP_DEPTO
             LEFT JOIN PLC_TEMPORADA                     T ON P.COD_TEMPORADA = T.COD_TEMPORADA
-            LEFT JOIN PLC_HISTORIAL_ASSORTMENT          H ON P.COD_TEMPORADA = H.COD_TEMPORADA
-                                                         AND P.DEP_DEPTO     = H.DEP_DEPTO
-                                                         AND P.GRUPO_COMPRA  = H.GRUPO_DE_COMPRA
-                                                         AND P.COD_MARCA     = H.CODIGO_MARCA
-                                                         AND P.COD_JER2      = H.COD_LINEA
-                                                         AND P.COD_SUBLIN    = H.COD_SUBLINEA
-                                                         AND P.DES_ESTILO    = H.NOMBRE_ESTILO
-                                                         AND P.COD_COLOR     = H.COD_COLOR
-                                                         AND P.NOM_VENTANA   = H.VENTANA          
             WHERE P.COD_TEMPORADA = ".$tempo."
             AND P.DEP_DEPTO IN (".$depto.")
             ORDER BY P.COD_TEMPORADA,P.DEP_DEPTO,P.COD_MARCA ASC";
