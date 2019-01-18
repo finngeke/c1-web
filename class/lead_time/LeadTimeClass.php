@@ -8,7 +8,7 @@ class LeadTimeClass extends \parametros
 {
 
     // Listar Lead Time
-    public static function ListarLeadTime($temporada, $login)
+    public static function ListarLeadTime($temporada, $login, $pais_filtro_ripley)
     {
 
         $sql = "SELECT DISTINCT(T1.ID_TRANSITO),
@@ -80,7 +80,7 @@ class LeadTimeClass extends \parametros
     }
 
     // Listar Vía
-    public static function ListarVia($temporada, $login)
+    public static function ListarVia($temporada, $login, $pais_filtro_ripley)
     {
 
         $sql = "SELECT COD_VIA, NOM_VIA FROM PLC_VIA ORDER BY NOM_VIA";
@@ -101,7 +101,7 @@ class LeadTimeClass extends \parametros
     }
 
     // Listar País
-    public static function ListarPais($temporada, $login)
+    public static function ListarPais($temporada, $login, $pais_filtro_ripley)
     {
 
         $sql = "SELECT CNTRY_LVL_CHILD,CNTRY_NAME FROM plc_pais ORDER BY CNTRY_NAME";
@@ -122,7 +122,7 @@ class LeadTimeClass extends \parametros
     }
 
     // Listar Embarque
-    public static function ListarEmbarque($temporada, $login, $pais)
+    public static function ListarEmbarque($temporada, $login, $pais_filtro_ripley, $pais)
     {
 
         $sql = "SELECT COD_PUERTO,NOM_PUERTO 
@@ -146,7 +146,7 @@ class LeadTimeClass extends \parametros
     }
 
     // Listar Destino
-    public static function ListarDestino($temporada, $login)
+    public static function ListarDestino($temporada, $login, $pais_filtro_ripley)
     {
 
         $sql = "SELECT COD_PUERTO,NOM_PUERTO 
@@ -171,7 +171,7 @@ class LeadTimeClass extends \parametros
     }
 
     // Listar Depto
-    public static function ListarDepto($temporada, $login)
+    public static function ListarDepto($temporada, $login, $pais_filtro_ripley)
     {
 
         $sql = "SELECT DISTINCT(DEP_DEPTO),DEP_DESCRIPCION 
@@ -194,7 +194,7 @@ class LeadTimeClass extends \parametros
     }
 
     // Listar Línea
-    public static function ListarLinea($temporada, $login, $deptocbx)
+    public static function ListarLinea($temporada, $login, $pais_filtro_ripley, $deptocbx)
     {
 
         $sql = "SELECT DISTINCT(LIN_LINEA),LIN_DESCRIPCION 
@@ -218,7 +218,7 @@ class LeadTimeClass extends \parametros
     }
 
     // Crear Lead Time
-    public static function CrearLeadTime($temporada, $login, $VIA, $PAIS, $EMBARQUE, $DESTINO, $DEPARTAMENTO, $LINEA, $TRANSITO, $PUERTOCD, $CDTIENDA, $TOTAL_DIAS_SUCURSAL, $VENTANA_EMBARQUE, $FIRST_FORWARDER, $LASTEST_FORWARDER)
+    public static function CrearLeadTime($temporada, $login, $pais_filtro_ripley, $VIA, $PAIS, $EMBARQUE, $DESTINO, $DEPARTAMENTO, $LINEA, $TRANSITO, $PUERTOCD, $CDTIENDA, $TOTAL_DIAS_SUCURSAL, $VENTANA_EMBARQUE, $FIRST_FORWARDER, $LASTEST_FORWARDER)
     {
 
         if( ($VIA==null) || ($VIA=="null") || ($VIA=="") || (!$VIA) ){
@@ -251,8 +251,8 @@ class LeadTimeClass extends \parametros
 
             $maxId = $va1[0];
 
-            $sql = "INSERT INTO PIA_DIAS_TRANSITO (ID_TRANSITO, COD_TEMPORADA,COD_VIA,COD_PUERTO_EMB,CNTRY_LVL_CHILD,COD_PUERTO_DESTINO,LIN_LINEA,DEP_DEPTO,D_TRANSITO,D_PUERTO_CD,D_TIENDAS_CD,T_DIAS_SUCURS,COD_VENTANA_EMB,FIRST_FORWARDER,LASTEST_FORWARDER)
-                    VALUES($maxId,$temporada,$VIA,'".$EMBARQUE."',$PAIS,'".$DESTINO."','".$LINEA."','".$DEPARTAMENTO."',$TRANSITO,$PUERTOCD,$CDTIENDA,$TOTAL_DIAS_SUCURSAL,$VENTANA_EMBARQUE,$FIRST_FORWARDER,$LASTEST_FORWARDER)";
+            $sql = "INSERT INTO PIA_DIAS_TRANSITO (ID_TRANSITO, COD_TEMPORADA,COD_VIA,COD_PUERTO_EMB,CNTRY_LVL_CHILD,COD_PUERTO_DESTINO,LIN_LINEA,DEP_DEPTO,D_TRANSITO,D_PUERTO_CD,D_TIENDAS_CD,T_DIAS_SUCURS,COD_VENTANA_EMB,FIRST_FORWARDER,LASTEST_FORWARDER,COD_MOD_PAIS)
+                    VALUES($maxId,$temporada,$VIA,'".$EMBARQUE."',$PAIS,'".$DESTINO."','".$LINEA."','".$DEPARTAMENTO."',$TRANSITO,$PUERTOCD,$CDTIENDA,$TOTAL_DIAS_SUCURSAL,$VENTANA_EMBARQUE,$FIRST_FORWARDER,$LASTEST_FORWARDER,$pais_filtro_ripley)";
                 /*echo $sql;
                 die();*/
             $data_insert = \database::getInstancia()->getConsulta($sql);
@@ -286,7 +286,7 @@ class LeadTimeClass extends \parametros
     }
 
     // Actualiza Lead Time
-    public static function ActualizaLeadTime($temporada, $login,$ID_TRANSITO, $VIA, $PAIS, $EMBARQUE, $DESTINO, $DEPARTAMENTO, $LINEA, $TRANSITO, $PUERTOCD, $CDTIENDA, $TOTAL_DIAS_SUCURSAL, $VENTANA_EMBARQUE, $FIRST_FORWARDER, $LASTEST_FORWARDER)
+    public static function ActualizaLeadTime($temporada, $login, $pais_filtro_ripley,$ID_TRANSITO, $VIA, $PAIS, $EMBARQUE, $DESTINO, $DEPARTAMENTO, $LINEA, $TRANSITO, $PUERTOCD, $CDTIENDA, $TOTAL_DIAS_SUCURSAL, $VENTANA_EMBARQUE, $FIRST_FORWARDER, $LASTEST_FORWARDER)
     {
 
         if( ($VIA==null) || ($VIA=="null") || ($VIA=="") || (!$VIA) ){

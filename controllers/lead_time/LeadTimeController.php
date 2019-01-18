@@ -7,17 +7,17 @@ class LeadTimeController extends \Control
 
     // Listar Lead Time
     public function ListarLeadTime($f3){
-        echo json_encode(LeadTimeClass::ListarLeadTime($f3->get('SESSION.COD_TEMPORADA'),$f3->get('SESSION.login')));
+        echo json_encode(LeadTimeClass::ListarLeadTime($f3->get('SESSION.COD_TEMPORADA'),$f3->get('SESSION.login'),1));
     }
 
     // Listar Vía
     public function ListarVia($f3){
-        echo json_encode(LeadTimeClass::ListarVia($f3->get('SESSION.COD_TEMPORADA'),$f3->get('SESSION.login')));
+        echo json_encode(LeadTimeClass::ListarVia($f3->get('SESSION.COD_TEMPORADA'),$f3->get('SESSION.login'),1));
     }
 
     // Listar País
     public function ListarPais($f3){
-        echo json_encode(LeadTimeClass::ListarPais($f3->get('SESSION.COD_TEMPORADA'),$f3->get('SESSION.login')));
+        echo json_encode(LeadTimeClass::ListarPais($f3->get('SESSION.COD_TEMPORADA'),$f3->get('SESSION.login'),1));
     }
 
     // Listar Embarque
@@ -32,17 +32,17 @@ class LeadTimeController extends \Control
             $pais = trim($f3->get('GET.PAIS'));
         }
 
-        echo json_encode(LeadTimeClass::ListarEmbarque($f3->get('SESSION.COD_TEMPORADA'),$f3->get('SESSION.login'),$pais));
+        echo json_encode(LeadTimeClass::ListarEmbarque($f3->get('SESSION.COD_TEMPORADA'),$f3->get('SESSION.login'),1,$pais));
     }
 
     // Listar Destino
     public function ListarDestino($f3){
-        echo json_encode(LeadTimeClass::ListarDestino($f3->get('SESSION.COD_TEMPORADA'),$f3->get('SESSION.login')));
+        echo json_encode(LeadTimeClass::ListarDestino($f3->get('SESSION.COD_TEMPORADA'),$f3->get('SESSION.login'),1));
     }
 
     // Listar Depto
     public function ListarDepto($f3){
-        echo json_encode(LeadTimeClass::ListarDepto($f3->get('SESSION.COD_TEMPORADA'),$f3->get('SESSION.login')));
+        echo json_encode(LeadTimeClass::ListarDepto($f3->get('SESSION.COD_TEMPORADA'),$f3->get('SESSION.login'),1));
     }
 
     // Listar Línea
@@ -57,7 +57,7 @@ class LeadTimeController extends \Control
             $pais = trim($f3->get('GET.DEPTOCBX'));
         }
 
-        echo json_encode(LeadTimeClass::ListarLinea($f3->get('SESSION.COD_TEMPORADA'),$f3->get('SESSION.login'),$depto));
+        echo json_encode(LeadTimeClass::ListarLinea($f3->get('SESSION.COD_TEMPORADA'),$f3->get('SESSION.login'),1,$depto));
     }
 
     // Crear Lead Time
@@ -90,7 +90,7 @@ class LeadTimeController extends \Control
         $linea = $linea_base[0];
 
         //echo LeadTimeClass::CrearLeadTime($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.login'), $f3->get('GET.VIA'), $f3->get('GET.PAIS'), $f3->get('GET.EMBARQUE'), $f3->get('GET.DESTINO'), $f3->get('GET.DEPARTAMENTO'), $f3->get('GET.LINEA'), $f3->get('GET.TRANSITO'), $f3->get('GET.PUERTOCD'), $f3->get('GET.CDTIENDA'), $f3->get('GET.TOTAL_DIAS_SUCURSAL'), $f3->get('GET.VENTANA_EMBARQUE'), $f3->get('GET.FIRST_FORWARDER'), $f3->get('GET.LASTEST_FORWARDER'));
-        echo LeadTimeClass::CrearLeadTime($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.login'), $via, $pais, $embarque, $destino, $departamento, $linea, $array_data["TRANSITO"], $array_data["PUERTOCD"], $array_data["CDTIENDA"], $array_data["TOTAL_DIAS_SUCURSAL"], $array_data["VENTANA_EMBARQUE"], $array_data["FIRST_FORWARDER"], $array_data["LASTEST_FORWARDER"]);
+        echo LeadTimeClass::CrearLeadTime($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.login'),1, $via, $pais, $embarque, $destino, $departamento, $linea, $array_data["TRANSITO"], $array_data["PUERTOCD"], $array_data["CDTIENDA"], $array_data["TOTAL_DIAS_SUCURSAL"], $array_data["VENTANA_EMBARQUE"], $array_data["FIRST_FORWARDER"], $array_data["LASTEST_FORWARDER"]);
     }
 
     // Actualiza Lead Time
@@ -123,7 +123,7 @@ class LeadTimeController extends \Control
         $linea_base = explode(" - ", $linea_base);
         $linea = $linea_base[0];
 
-        echo LeadTimeClass::ActualizaLeadTime($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.login'), $array_data["ID_TRANSITO"], $via, $pais, $embarque, $destino, $departamento, $linea, $array_data["D_TRANSITO"], $array_data["D_PUERTO_CD"], $array_data["D_TIENDAS_CD"], $array_data["T_DIAS_SUCURS"], $array_data["COD_VENTANA_EMB"], $array_data["FIRST_FORWARDER"], $array_data["LASTEST_FORWARDER"]);
+        echo LeadTimeClass::ActualizaLeadTime($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.login'),1, $array_data["ID_TRANSITO"], $via, $pais, $embarque, $destino, $departamento, $linea, $array_data["D_TRANSITO"], $array_data["D_PUERTO_CD"], $array_data["D_TIENDAS_CD"], $array_data["T_DIAS_SUCURS"], $array_data["COD_VENTANA_EMB"], $array_data["FIRST_FORWARDER"], $array_data["LASTEST_FORWARDER"]);
 
     }
 
