@@ -19,7 +19,7 @@ $(function () {
     }
 
     // Barra de menú superior del plan de compra
-    $("#toolbar_lead_time").kendoToolBar({
+    $("#toolbar").kendoToolBar({
         items: [
             {
                 type: "button",
@@ -38,8 +38,8 @@ $(function () {
         ]
     });
 
-    var ventana_match = $("#POPUP_leadtime");
-    ventana_match.kendoWindow({
+    var ventana_lead_time = $("#POPUP_leadtime");
+    ventana_lead_time.kendoWindow({
         width: "750px",
         height: "550px",
         title: "Lead Time",//+res_temp_depto_match[1]

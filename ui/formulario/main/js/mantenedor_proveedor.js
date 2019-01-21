@@ -38,11 +38,11 @@ $(function () {
         ]
     });
 
-    var ventana_match = $("#POPUP_leadtime");
-    ventana_match.kendoWindow({
+    var ventana_formulario = $("#POPUP_PROVEEDOR");
+    ventana_formulario.kendoWindow({
         width: "750px",
         height: "550px",
-        title: "Lead Time",//+res_temp_depto_match[1]
+        title: "Mantenedor Proveedor",
         visible: false,
         actions: [
             //"Pin",
@@ -53,197 +53,100 @@ $(function () {
         close: cerrarPopUpLeadTime*/
     }).data("kendoWindow").center();
 
+    var respuestas = [{
+        "value": 1,
+        "text": "SI"
+    },{
+        "value": 2,
+        "text": "NO"
+    }];
 
-    // CBX de Vía
-    function ViaDropDownEditor(container, options) {
-        $('<input required name="' + options.field + '"/>')
-            .appendTo(container)
-            .kendoDropDownList({
-                autoBind: false,
-                filter: "contains",
-                dataTextField: "NOM_VIA",
-                dataValueField: "COD_VIA",
-                dataSource: {
-                    transport: {
-                        read:  {
-                            url: "TelerikLeadTime/ListarVia",
-                            dataType: "json"/*
-                                            type: "POST"*/
-                        }
-                    }
-                }
-            });
-    }
 
-    // CBX de País
-    function PaisDropDownEditor(container, options) {
-        $('<input required name="' + options.field + '"/>')
-            .appendTo(container)
-            .kendoDropDownList({
-                autoBind: false,
-                filter: "contains",
-                dataTextField: "CNTRY_NAME",
-                dataValueField: "CNTRY_LVL_CHILD",
-                dataSource: {
-                    transport: {
-                        read:  {
-                            url: "TelerikLeadTime/ListarPais",
-                            dataType: "json"/*
-                                            type: "POST"*/
-                        }
-                    }
-                }
-            });
-    }
-
-    // CBX de Puerto Embarque
-    function EmbarqueDropDownEditor(container, options) {
-        $('<input required name="' + options.field + '"/>')
-            .appendTo(container)
-            .kendoDropDownList({
-                autoBind: false,
-                filter: "contains",
-                dataTextField: "NOM_PUERTO",
-                dataValueField: "COD_PUERTO",
-                dataSource: {
-                    transport: {
-                        read:  {
-                            url: "TelerikLeadTime/ListarEmbarque",
-                            data:{PAIS:String(options.model.CNTRY_LVL_CHILD)},
-                            dataType: "json"/*
-                                            type: "POST"*/
-                        }
-                    }
-                }
-            });
-    }
-
-    // CBX de Puerto Destino
-    function DestinoDropDownEditor(container, options) {
-        $('<input required name="' + options.field + '"/>')
-            .appendTo(container)
-            .kendoDropDownList({
-                autoBind: false,
-                filter: "contains",
-                dataTextField: "NOM_PUERTO",
-                dataValueField: "COD_PUERTO",
-                dataSource: {
-                    transport: {
-                        read:  {
-                            url: "TelerikLeadTime/ListarDestino",
-                            dataType: "json"/*
-                                            type: "POST"*/
-                        }
-                    }
-                }
-            });
-    }
-
-    // CBX de Depto
-    function DeptoDropDownEditor(container, options) {
-        $('<input required name="' + options.field + '"/>')
-            .appendTo(container)
-            .kendoDropDownList({
-                autoBind: false,
-                filter: "contains",
-                dataTextField: "DEP_DESCRIPCION",
-                dataValueField: "DEP_DEPTO",
-                dataSource: {
-                    transport: {
-                        read:  {
-                            url: "TelerikLeadTime/ListarDepto",
-                            dataType: "json"/*
-                                            type: "POST"*/
-                        }
-                    }
-                }//,select: CambiaLineaMatchDropDown
-            });
-    }
-
-    // CBX de Línea
-    function LineaDropDownEditor(container, options) {
-        $('<input required name="' + options.field + '"/>')
-            .appendTo(container)
-            .kendoDropDownList({
-                autoBind: false,
-                filter: "contains",
-                dataTextField: "LIN_DESCRIPCION",
-                dataValueField: "LIN_LINEA",
-                dataSource: {
-                    transport: {
-                        read:  {
-                            url: "TelerikLeadTime/ListarLinea",
-                            //data:{LINEA:kendo.parseInt(OC)},
-                            data:{DEPTOCBX:String(options.model.DEP_DEPTO)},
-                            dataType: "json"
-                        }
-                    }
-                }
-            });
-    }
-
-    // Cuando Termina la Carga del DataSet de Lead Time
-    function TerminaCargaLeadTime(container, options) {
-        dataSource.read();
-    }
 
     // Definimos DataSource
     var dataSource = new kendo.data.DataSource({
         transport: {
             read:  {
-                url: crudServiceBaseUrl + "ListarLeadTime",
+                url: crudServiceBaseUrl + "ListarProveedor",
                 dataType: "json"
             },
             update: {
                 url: crudServiceBaseUrl + "ActualizaLeadTime",
                 dataType: "json"
-            }/*,
-            // Quitar si sólo estamos listando data
-            parameterMap: function(options, operation) {
-                if (operation !== "read" && options.models) {
-                    return {models: kendo.stringify(options.models)};
-                }
-            }*/
+            }
         },
-        //requestEnd: TerminaCargaLeadTime,
+        //requestEnd: TerminaCargaProveedor,
         schema: {
             model: {
-                id: "ID_TRANSITO",
+                id: "COD_PROVEEDOR",
                 fields: {
-                    COD_TEMPORADA: { type: "number" }, // number - string - date
-                    COD_VIA: { type: "string" }, // number - string - date
-                    CNTRY_LVL_CHILD: { type: "string" }, // number - string - date
-                    COD_PUERTO_EMB: { type: "string" }, // number - string - date
-                    COD_PUERTO_DESTINO: { type: "string" }, // number - string - date
-                    LIN_LINEA: { type: "string" }, // number - string - date
-                    DEP_DEPTO: { type: "string" }, // number - string - date
-                    D_TRANSITO: { type: "number" }, // number - string - date
-                    D_PUERTO_CD: { type: "number" }, // number - string - date
-                    D_TIENDAS_CD: { type: "number" }, // number - string - date
-                    T_DIAS_SUCURS: { type: "number" }, // number - string - date
-                    COD_VENTANA_EMB: { type: "number" }, // number - string - date
-                    FIRST_FORWARDER: { type: "number" },    // number - string - date
-                    LASTEST_FORWARDER: { type: "number" }    // number - string - date
+                    COD_PROVEEDOR: { type: "string",editable: false },    // number - string - date
+                    COD_MOD_PAIS: { type: "string",editable: false },    // number - string - date
+                    RUT_PROVEEDOR: { type: "string",editable: false }, // number - string - date
+                    NOM_PROVEEDOR: { type: "string",editable: false }, // number - string - date
+                    PI_AUTOMATICA: { type: "number",field: "PI_AUTOMATICA", defaultValue: 2 },    // number - string - date
+                    COMPRA_CURVA: { type: "number" },    // number - string - date
+                    RFID: { type: "number" }    // number - string - date
+                    /*VEND_TAXID: { type: "string" }, // number - string - date
+                    VEND_NAME_DEALER: { type: "string" }, // number - string - date
+                    VEND_BENEFICIARY: { type: "string" }, // number - string - date
+                    VEND_ADD_BENEFICIARY: { type: "string" }, // number - string - date
+                    VEND_CITY: { type: "string" }, // number - string - date
+                    VEND_COUNTRY: { type: "string" }, // number - string - date
+                    VEND_PHONE: { type: "string" }, // number - string - date
+                    VEND_FAX: { type: "string" }, // number - string - date
+                    CONT_NAME: { type: "string" }, // number - string - date
+                    CONT_ADDRESS: { type: "string" }, // number - string - date
+                    CONT_PHONE: { type: "string" },    // number - string - date
+                    CONT_EMAIL: { type: "string" },    // number - string - date
+
+                    USU_CREA: { type: "string" },    // number - string - date
+                    FECHA_CREA: { type: "string" },    // number - string - date
+                    USU_MODIFICA: { type: "string" },    // number - string - date
+                    FECHA_MODIFICA: { type: "string" }    // number - string - date*/
                 }
             }
         },
         change: function () {
 
-        },requestEnd: function (e) {
+        },
+        requestEnd: function (e) {
 
-            if ( (e.type === 'update') || (e.type === 'create') ) {
+            /*if ( (e.type === 'update') || (e.type === 'create') ) {
                 window.location.href = "lead_time";
-            }
+            }*/
 
         }
     });
+
+    // POPUP del Detalle del Proveedor
+    var wnd = $("#details")
+        .kendoWindow({
+            title: "Detalle Proveedor",
+            modal: true,
+            visible: false,
+            resizable: false,
+            width: 300
+        }).data("kendoWindow");
+
+    // Asignación del Template a Insertar
+    var detailsTemplate = kendo.template($("#template").html());
+
+    // Función de despliegue y asignación de variables de detalle
+    function muestraDetalles(e) {
+        e.preventDefault();
+
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        wnd.content(detailsTemplate(dataItem));
+        wnd.center().open();
+    }
 
     // Definimos KendoGrid
     $("#grid").kendoGrid({
         dataSource: dataSource,
         editable: true,
         toolbar: [
-            { name:"agregaleadtime", text: "Nuevo Lead Time"},
+            { name:"agregaleadtime", text: "Nuevo Proveedor"},
             { name: "save", text: "Actualizar Registros", iconClass: "k-icon k-i-copy" },
             { name: "cancel", text: "Cancelar Modificaciones" }
         ],
@@ -253,115 +156,34 @@ $(function () {
         filterable: true,
         sortable: true, // Se puede ordenar
         columns: [ // Columnas a Listar
-            {field: "ID_TRANSITO", hidden: true},
-            {field: "COD_TEMPORADA", hidden: true},
-            {field: "COD_VIA",title: "Vía Tpte.",width: 120, editor: ViaDropDownEditor,filterable: {
-                    multi: true /*,
-                    dataSource: {
-                        transport: {
-                            read: {
-                                url: crudServiceBaseUrl + "ListarVia",
-                                dataType: "json",
-                                data: {
-                                    field: "COD_VIA"
-                                }
-                            }
-                        }
-                    }*/
-                }},
-            {field: "CNTRY_LVL_CHILD",title: "País",width: 190, editor: PaisDropDownEditor,filterable: {
-                    multi: true /*,
-                    dataSource: {
-                        transport: {
-                            read: {
-                                url: crudServiceBaseUrl + "ListarPais",
-                                dataType: "json",
-                                data: {
-                                    field: "CNTRY_LVL_CHILD"
-                                }
-                            }
-                        }
-                    }*/
-                }},
-            {field: "COD_PUERTO_EMB",title: "Puerto Embarque",width: 200, editor: EmbarqueDropDownEditor,filterable: {
-                    multi: true /*,
-                    dataSource: {
-                        transport: {
-                            read: {
-                                url: crudServiceBaseUrl + "ListarEmbarque",
-                                dataType: "json",
-                                data: {
-                                    field: "COD_PUERTO_EMB"
-                                }
-                            }
-                        }
-                    }*/
-                }},
-            {field: "COD_PUERTO_DESTINO",title: "Puerto Destino",width: 150, editor: DestinoDropDownEditor,filterable: {
-                    multi: true /*,
-                    dataSource: {
-                        transport: {
-                            read: {
-                                url: crudServiceBaseUrl + "ListarDestino",
-                                dataType: "json",
-                                data: {
-                                    field: "NOM_PUERTO"
-                                }
-                            }
-                        }
-                    }*/
-                }},
-            {field: "DEP_DEPTO",title: "Depto",width: 200, editor: DeptoDropDownEditor,filterable: {
-                    multi: true /*,
-                    dataSource: {
-                        transport: {
-                            read: {
-                                url: crudServiceBaseUrl + "ListarDepto",
-                                dataType: "json",
-                                data: {
-                                    field: "DEP_DEPTO"
-                                }
-                            }
-                        }
-                    }*/
-                }},
-            {field: "LIN_LINEA",title: "Línea",width: 200, editor: LineaDropDownEditor,filterable: {
-                    multi: true /*,
-                    dataSource: {
-                        transport: {
-                            read: {
-                                url: crudServiceBaseUrl + "ListarLinea",
-                                dataType: "json",
-                                data: {
-                                    field: "LIN_LINEA"
-                                }
-                            }
-                        }
-                    }*/
-                }},
-            {field: "D_TRANSITO",title: "Tránsito",width: 90,filterable: {
-                    multi: true
-                }},
-            {field: "D_PUERTO_CD",title: "Puerto/CD",width: 120,filterable: {
-                    multi: true
-                }},
-            {field: "D_TIENDAS_CD",title: "CD/Tienda",width: 120,filterable: {
-                    multi: true
-                }},
-            {field: "T_DIAS_SUCURS",title: "Total Días Sucursal",width: 120,filterable: {
-                    multi: true
-                }},
-            {field: "COD_VENTANA_EMB",title: "Ventana Emb",width: 120,filterable: {
-                    multi: true
-                }},
-            {field: "FIRST_FORWARDER",title: "1° Forwarder",width: 120,filterable: {
-                    multi: true
-                }},
-            {field: "LASTEST_FORWARDER",title: "2° Forwarder",width: 120,filterable: {
-                    multi: true
-                }}
+            {field: "COD_PROVEEDOR",title: "ID",width: 30},
+            {field: "COD_MOD_PAIS",title: "País",width: 30,filterable: {multi: true}},
+            {field: "RUT_PROVEEDOR",title: "RUT Proveedor",width: 70,filterable: {multi: true}},
+            {field: "NOM_PROVEEDOR",title: "Nombre",width: 250,filterable: {multi: true}},
+            {field: "PI_AUTOMATICA",title: "PI Automática",width: 50, values: respuestas,filterable: {multi: true}},
+            {field: "COMPRA_CURVA",title: "Compra en Curva",width: 60, values: respuestas,filterable: {multi: true}},
+            {field: "RFID",title: "RFID",width: 50, values: respuestas,filterable: {multi: true}},
+            { command: { text: "Ver", click: muestraDetalles }, title: "Detalle", width: "40px" }
+            /*{field: "VEND_TAXID",title: "TAXID",width: 120,filterable: {multi: true}},
+            {field: "VEND_NAME_DEALER",title: "Name Dealer",width: 120,filterable: {multi: true}},
+            {field: "VEND_BENEFICIARY",title: "Beneficiary",width: 120,filterable: {multi: true}},
+            {field: "VEND_ADD_BENEFICIARY",title: "Address Beneficiary",width: 120,filterable: {multi: true}},
+            {field: "VEND_CITY",title: "City",width: 120,filterable: {multi: true}},
+            {field: "VEND_COUNTRY",title: "Coubtry",width: 120,filterable: {multi: true}},
+            {field: "VEND_PHONE",title: "Phone",width: 120,filterable: {multi: true}},
+            {field: "VEND_FAX",title: "Fax",width: 120,filterable: {multi: true}},
+            {field: "CONT_NAME",title: "Cont. Name",width: 120,filterable: {multi: true}},
+            {field: "CONT_ADDRESS",title: "Cont. Address",width: 120,filterable: {multi: true}},
+            {field: "CONT_PHONE",title: "Cont. Phone",width: 120,filterable: {multi: true}},
+            {field: "CONT_EMAIL",title: "Cont. Email",width: 120,filterable: {multi: true}}
+            */
+
         ]
     });
+
+
+
+
 
     // BTN Crear Registro
     $(".k-grid-agregaleadtime").click(function(e){

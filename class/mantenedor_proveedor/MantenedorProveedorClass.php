@@ -8,69 +8,86 @@ class MantenedorProveedorClass extends \parametros
 {
 
     // Listar Lead Time
-    public static function ListarLeadTime($temporada, $login, $pais_filtro_ripley)
+    public static function ListarProveedor($login, $pais_filtro_ripley)
     {
 
-        $sql = "SELECT DISTINCT(T1.ID_TRANSITO),
-                       T1.COD_TEMPORADA,                  -- 0
-                       T2.NOM_VIA COD_VIA,                -- 1
-                       T3.CNTRY_NAME CNTRY_LVL_CHILD,     -- 2
-                       T4.NOM_PUERTO COD_PUERTO_EMB,      -- 3
-                       T5.NOM_PUERTO COD_PUERTO_DESTINO,  -- 4
-                       T7.LIN_DESCRIPCION LIN_LINEA,      -- 5
-                       T6.DEP_DESCRIPCION DEP_DEPTO,      -- 6
-                       T1.D_TRANSITO,                     -- 7
-                       T1.D_PUERTO_CD,                    -- 8
-                       T1.D_TIENDAS_CD,                   -- 9
-                       T1.T_DIAS_SUCURS,                  -- 10
-                       T1.COD_VENTANA_EMB,                -- 11
-                       T1.FIRST_FORWARDER,                -- 12
-                       T1.LASTEST_FORWARDER,              -- 13
-                       
-                       T2.COD_VIA COD_VIA,                -- 14
-                       T3.CNTRY_LVL_CHILD ID_PAIS,        -- 16
-                       T4.COD_PUERTO ID_EMBARQUE,         -- 17
-                       T5.COD_PUERTO ID_DESTINO,          -- 18
-                       T1.LIN_LINEA ID_LINEA,             -- 18
-                       T1.DEP_DEPTO ID_DEPTO              -- 19
-                FROM PIA_DIAS_TRANSITO T1
-                INNER JOIN PLC_VIA T2 ON T2.COD_VIA=T1.COD_VIA
-                INNER JOIN PLC_PAIS T3 ON T3.CNTRY_LVL_CHILD=T1.CNTRY_LVL_CHILD
-                INNER JOIN PIA_PUERTOS T4 ON T4.COD_PUERTO=T1.COD_PUERTO_EMB
-                LEFT JOIN PIA_PUERTOS T5 ON T5.COD_PUERTO=T1.COD_PUERTO_DESTINO
-                INNER JOIN plc_jerarquia_comercial T6 ON T6.DEP_DEPTO=T1.DEP_DEPTO
-                LEFT JOIN plc_jerarquia_comercial T7 ON T7.LIN_LINEA=T1.LIN_LINEA
-                WHERE T1.COD_TEMPORADA = $temporada";
+        /*
+         --VEND_TAXID,          -- 4
+                       --VEND_NAME_DEALER,    -- 5
+                       --VEND_BENEFICIARY,    -- 6
+                       --VEND_ADD_BENEFICIARY, -- 7
+                       --VEND_CITY,           -- 8
+                       --VEND_COUNTRY,        -- 9
+                       --VEND_PHONE,          -- 10
+                       --VEND_FAX,            -- 11
+                       --CONT_NAME,           -- 12
+                       --CONT_ADDRESS,        -- 13
+                       --CONT_PHONE,          -- 14
+                       --CONT_EMAIL,          -- 15
 
+                       --USU_CREA,            -- 19
+                       --FECHA_CREA,          -- 20
+                       --USU_MODIFICA,        -- 21
+                       --FECHA_MODIFICA,      -- 22
+                       --ESTADO,              -- 23
+                       --TIPO,                -- 24
+                       --NICKNAME,            -- 25
+                       --COMMISSION           -- 26
+        */
+
+
+        $sql = "SELECT 
+                       COD_PROVEEDOR, -- 0
+                       COD_MOD_PAIS,  -- 1
+                       RUT_PROVEEDOR, -- 2
+                       NOM_PROVEEDOR,  -- 3
+                       PI_AUTOMATICA, -- 4
+                       COMPRA_CURVA,  -- 5
+                       RFID  -- 6
+                FROM plc_proveedores_pmm 
+                WHERE COD_MOD_PAIS = $pais_filtro_ripley";
         $data = \database::getInstancia()->getFilas($sql);
 
         // Transformo a array asociativo
         $array1 = [];
         foreach ($data as $va1) {
 
-
-            if($va1[5]){
-                $puerto_destino = $va1[18]." - ".$va1[5];
+            // País
+            if($va1[1]==1){
+                $pais = "CL";
             }else{
-                $puerto_destino = "ND";
+                $pais = "PE";
             }
 
             array_push($array1, array(
-                  "ID_TRANSITO" => $va1[0]
-                , "COD_TEMPORADA" => $va1[1]
-                , "COD_VIA" => $va1[14]." - ".$va1[2]
-                , "CNTRY_LVL_CHILD" => $va1[16]." - ".$va1[3]
-                , "COD_PUERTO_EMB" => $va1[17]." - ".$va1[4]
-                , "COD_PUERTO_DESTINO" => $puerto_destino
-                , "LIN_LINEA" => $va1[19]." - ".$va1[6]
-                , "DEP_DEPTO" => $va1[20]." - ".$va1[7]
-                , "D_TRANSITO" => $va1[8]
-                , "D_PUERTO_CD" => $va1[9]
-                , "D_TIENDAS_CD" => $va1[10]
-                , "T_DIAS_SUCURS" => $va1[11]
-                , "COD_VENTANA_EMB" => $va1[12]
-                , "FIRST_FORWARDER" => $va1[13]
-                , "LASTEST_FORWARDER" => $va1[14]
+
+                "COD_PROVEEDOR" => $va1[0]
+                ,"COD_MOD_PAIS" => $pais
+                , "RUT_PROVEEDOR" => $va1[2]
+                , "NOM_PROVEEDOR" => utf8_encode($va1[3])
+                , "PI_AUTOMATICA" => $va1[4]
+                , "COMPRA_CURVA" => $va1[5]
+                , "RFID" => $va1[6]
+
+                /*, "VEND_TAXID" => $va1[3]
+                , "VEND_NAME_DEALER" => $va1[4]
+                , "VEND_BENEFICIARY" => $va1[5]
+                , "VEND_ADD_BENEFICIARY" => $va1[6]
+                , "VEND_CITY" => $va1[7]
+                , "VEND_COUNTRY" => $va1[8]
+                , "VEND_PHONE" => $va1[9]
+                , "VEND_FAX" => $va1[10]
+                , "CONT_NAME" => $va1[11]
+                , "CONT_ADDRESS" => $va1[12]
+                , "CONT_PHONE" => $va1[13]
+                , "CONT_EMAIL" => $va1[14]
+                , "PI_AUTOMATICA" => $va1[15]
+                , "COMPRA_CURVA" => $va1[16]
+                , "RFID" => $va1[17]
+                , "USU_CREA" => $va1[19]
+                , "FECHA_CREA" => $va1[20]
+                , "USU_MODIFICA" => $va1[21]
+                , "FECHA_MODIFICA" => $va1[22]*/
                 )
             );
         }

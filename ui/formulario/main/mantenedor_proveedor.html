@@ -1,75 +1,50 @@
 <span id="span_data_temp_depto" name="span_data_temp_depto" style="display: none;"></span>
 <div id="div_grid_telerik">
-    <style>
-        #fieldlist {
+
+    <style type="text/css">
+        #details-container
+        {
+            padding: 10px;
+        }
+
+        #details-container h2
+        {
             margin: 0;
-            padding: 0;
         }
 
-        #fieldlist li {
-            list-style: none;
-            padding-bottom: .7em;
-            text-align: left;
+        #details-container em
+        {
+            color: #8c8c8c;
         }
 
-        #fieldlist label {
-            display: block;
-            padding-bottom: .3em;
-            font-weight: bold;
-            text-transform: uppercase;
-            font-size: 12px;
-            color: #444;
-        }
-
-        #fieldlist li.status {
-            text-align: center;
-        }
-
-        #fieldlist li .k-widget:not(.k-tooltip),
-        #fieldlist li .k-textbox {
-            margin: 0 5px 5px 0;
-        }
-
-        .confirm {
-            padding-top: 1em;
-        }
-
-        .valid {
-            color: green;
-        }
-
-        .invalid {
-            color: red;
-        }
-
-        #fieldlist li input[type="checkbox"] {
-            margin: 0 5px 0 0;
-        }
-
-        span.k-widget.k-tooltip-validation {
-            display; inline-block;
-            width: 160px;
-            text-align: left;
-            border: 0;
-            padding: 0;
-            margin: 0;
-            background: none;
-            box-shadow: none;
-            color: red;
-        }
-
-        .k-tooltip-validation .k-warning {
-            display: none;
+        #details-container dt
+        {
+            margin:0;
+            display: inline;
         }
     </style>
-    <!-- Despliega el menú del top lead_time.html-->
+
+    <!-- Despliega el menú del top mantenedor_proveedor.html-->
     <div id="toolbar" class="k-content wide"></div>
 
     <!-- Despliega la Grilla -->
     <div id="grid" style="width: 100%;height: 500px;"></div>
 
 
-    <div id="POPUP_leadtime">
+    <div id="details"></div>
+    <script type="text/x-kendo-template" id="template">
+        <div id="details-container">
+            <h2>#= COD_MOD_PAIS # #= COD_MOD_PAIS #</h2>
+            <em>#= COD_MOD_PAIS #</em>
+            <dl>
+                <dt>City: #= COD_MOD_PAIS #</dt>
+                <dt>Birth Date: #= COD_MOD_PAIS #</dt>
+            </dl>
+        </div>
+    </script>
+
+    <!-- Agregar -->
+    <div id="POPUP_PROVEEDOR">
         <form id="LeadTimeForm">
 
             <div class="container">
@@ -164,6 +139,8 @@
 
         </form>
     </div>
+
+
 
     <!-- TAG de los mensajes de alert, dejar siempre al final -->
     <span id="popupNotification"></span>

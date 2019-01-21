@@ -5,9 +5,9 @@ namespace mantenedor_proveedor;
 class MantenedorProveedorController extends \Control
 {
 
-    // Listar Lead Time
-    public function ListarLeadTime($f3){
-        echo json_encode(LeadTimeClass::ListarLeadTime($f3->get('SESSION.COD_TEMPORADA'),$f3->get('SESSION.login'),1));
+    // Listar Proveedor
+    public function ListarProveedor($f3){
+        echo json_encode(MantenedorProveedorClass::ListarProveedor($f3->get('SESSION.login'),1));
     }
 
     // Listar Vía

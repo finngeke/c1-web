@@ -11,9 +11,7 @@
     <link href="{{@TELERIK}}web/telerik/styles/kendo.rtl.min.css" rel="stylesheet">
     <link href="{{@TELERIK}}web/telerik/styles/kendo.default.min.css" rel="stylesheet">
     <link href="{{@TELERIK}}web/telerik/styles/kendo.default.mobile.min.css" rel="stylesheet">
-
     <link href="{{@BOOTSTRAP}}web/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-
     <script src="{{@TELERIK}}web/telerik/js/jquery.min.js"></script>
     <script src="{{@TELERIK}}web/telerik/js/jszip.min.js"></script>
     <script src="{{@TELERIK}}web/telerik/js/kendo.all.min.js"></script>
