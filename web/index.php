@@ -182,6 +182,12 @@ $f3->route('GET /enviar_comex', 'ControlComex->enviar_comex');
 $f3->route('GET /lead_time', 'ControlFormularioCompra->lead_time');
 $f3->route('GET /TelerikLeadTime/@tipo [ajax]', 'lead_time\LeadTimeController->@tipo');
 
+/* MANTENEDOR PROVEEDOR */
+$f3->route('GET /mantenedor_proveedor', 'ControlFormularioMain->mantenedor_proveedor');
+$f3->route('GET /TelerikMantenedorProveedor/@tipo [ajax]', 'mantenedor_proveedor\MantenedorProveedorController->@tipo');
+
+
+
 /* LOG TRANSACCIONES*/
 $f3->route('GET /GuardarLogTransaccion/@tipo [ajax]', 'log_transaccion\GuardaLogTransaccion->@tipo');
 

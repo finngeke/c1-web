@@ -162,13 +162,9 @@
                     <ul class="sidebar-menu" data-widget="tree">
                         <li class="header">MENU</li>
                         <li id="modulo_usuario_validar_tipo_usuario"><a href="usuarios"><i class="fa fa-user"></i> <span >Usuarios</span></a></li>
+                        <li id="modulo_temporada_compra_validar_tipo_usuario"><a href="mantenedor_proveedor"><i class="fa fa-user"></i><span> Adm. Proveedores</span></a>
                         <li id="modulo_permiso_validar_tipo_usuario"><a href="permisos"><i class="fa fa-files-o"></i><span>Permisos</span></a></li>
-                        <li id="modulo_session_validar_tipo_usuario">
-                            <a href="ver_sesiones">
-                                <i class="fa fa-users"></i> <span>Sesiones Activas</span>
-                                <!--<span class="pull-right-container"><small class="label pull-right bg-green">{{@activas}}</small></span>-->
-                            </a>
-                        </li>
+                        <li id="modulo_session_validar_tipo_usuario"><a href="ver_sesiones"><i class="fa fa-users"></i> <span>Sesiones Activas</span></a></li>
 					<li id="modulo_temporada_compra_validar_tipo_usuario"><a href="temporada_compra"><i class="fa fa-calendar"></i><span> Temporada de Compra</span></a>
 					</li>
 					<li>
