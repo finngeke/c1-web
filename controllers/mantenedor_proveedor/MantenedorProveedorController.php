@@ -11,36 +11,50 @@ class MantenedorProveedorController extends \Control
     }
 
     // Crear Lead Time
-    public function CrearLeadTime($f3) {
+    public function CrearProveedor($f3) {
+
+        var_dump($_REQUEST);
+        die();
+
         $array_data = $_GET;
 
-        $via_base = $array_data["VIA"];
-        $via_base = explode(" - ", $via_base);
-        $via = $via_base[0];
+        $incoterm_base = $array_data["INCOTERM"];
+        $incoterm_base = explode(" - ", $incoterm_base);
+        $incoterm = $incoterm_base[0];
 
-        $pais_base = $array_data["PAIS"];
-        $pais_base = explode(" - ", $pais_base);
-        $pais = $pais_base[0];
+        echo MantenedorProveedorClass::CrearProveedor($f3->get('SESSION.login'),1, $array_data["PI_AUTOMATICA"],
+                                                                                    $array_data["COMPRA_CURVA"],
+                                                                                    $array_data["RFID"],
+                                                                                    $array_data["VEND_TAXID"],
+                                                                                    $array_data["VEND_BENEFICIARY"],
+                                                                                    $array_data["VEND_ADD_BENEFICIARY"],
+                                                                                    $array_data["VEND_CITY"],
+                                                                                    $array_data["VEND_COUNTRY"],
+                                                                                    $array_data["VEND_PHONE"],
+                                                                                    $array_data["VEND_FAX"],
+                                                                                    $array_data["VEND_NAME_DEALER"],
+                                                                                    $array_data["CONT_NAME"],
+                                                                                    $array_data["CONT_ADDRESS"],
+                                                                                    $array_data["CONT_PHONE"],
+                                                                                    $array_data["CONT_EMAIL"],
+                                                                                    $array_data["PAY_BANK_NAME_BENEFICIARY"],
+                                                                                    $array_data["PAY_ADD_BANK_BENEFICIARY"],
+                                                                                    $array_data["PAY_CITY_BENEFICIARY_BANK"],
+                                                                                    $array_data["PAY_COUNTRY_BENEFICIARY"],
+                                                                                    $array_data["PAY_SWIFT_CODE"],
+                                                                                    $array_data["PAY_ABA"],
+                                                                                    $array_data["PAY_IBAN"],
+                                                                                    $array_data["PAY_ACC_NUMBER_BENEFICIARY"],
+                                                                                    $array_data["PAY_CURRENCY_ACCOUNT"],
+                                                                                    $array_data["PAY_SECOND_BENEFICIARY"],
+                                                                                    $array_data["INTER_BANK_NAME"],
+                                                                                    $array_data["INTER_SWIFT"],
+                                                                                    $array_data["INTER_COUNTRY"],
+                                                                                    $array_data["INTER_CITY"],
+                                                                                    $array_data["PUR_CURRENCY"],
+                                                                                    $incoterm,
+                                                                                    $array_data["PUR_PAYMENTO"]);
 
-        $embarque_base = $array_data["EMBARQUE"];
-        $embarque_base = explode(" - ", $embarque_base);
-        $embarque = $embarque_base[0];
-
-        // $array_data["LINEA"]
-        $destino_base = $array_data["DESTINO"];
-        $destino_base = explode(" - ", $destino_base);
-        $destino = $destino_base[0];
-
-        $depto_base = $array_data["DEPARTAMENTO"];
-        $depto_base = explode(" - ", $depto_base);
-        $departamento = $depto_base[0];
-
-        $linea_base = $array_data["LINEA"];
-        $linea_base = explode(" - ", $linea_base);
-        $linea = $linea_base[0];
-
-        //echo LeadTimeClass::CrearLeadTime($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.login'), $f3->get('GET.VIA'), $f3->get('GET.PAIS'), $f3->get('GET.EMBARQUE'), $f3->get('GET.DESTINO'), $f3->get('GET.DEPARTAMENTO'), $f3->get('GET.LINEA'), $f3->get('GET.TRANSITO'), $f3->get('GET.PUERTOCD'), $f3->get('GET.CDTIENDA'), $f3->get('GET.TOTAL_DIAS_SUCURSAL'), $f3->get('GET.VENTANA_EMBARQUE'), $f3->get('GET.FIRST_FORWARDER'), $f3->get('GET.LASTEST_FORWARDER'));
-        echo MantenedorProveedorClass::CrearLeadTime($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.login'),1, $via, $pais, $embarque, $destino, $departamento, $linea, $array_data["TRANSITO"], $array_data["PUERTOCD"], $array_data["CDTIENDA"], $array_data["TOTAL_DIAS_SUCURSAL"], $array_data["VENTANA_EMBARQUE"], $array_data["FIRST_FORWARDER"], $array_data["LASTEST_FORWARDER"]);
     }
 
     // Actualiza Lead Time
@@ -48,36 +62,46 @@ class MantenedorProveedorController extends \Control
 
         $array_data = $_GET;
 
-        $via_base = $array_data["COD_VIA"];
-        $via_base = explode(" - ", $via_base);
-        $via = $via_base[0];
+        $incoterm_base = $array_data["INCOTERM"];
+        $incoterm_base = explode(" - ", $incoterm_base);
+        $incoterm = $incoterm_base[0];
 
-        $pais_base = $array_data["CNTRY_LVL_CHILD"];
-        $pais_base = explode(" - ", $pais_base);
-        $pais = $pais_base[0];
-
-        $embarque_base = $array_data["COD_PUERTO_EMB"];
-        $embarque_base = explode(" - ", $embarque_base);
-        $embarque = $embarque_base[0];
-
-        // $array_data["LINEA"]
-        $destino_base = $array_data["COD_PUERTO_DESTINO"];
-        $destino_base = explode(" - ", $destino_base);
-        $destino = $destino_base[0];
-
-        $depto_base = $array_data["DEP_DEPTO"];
-        $depto_base = explode(" - ", $depto_base);
-        $departamento = $depto_base[0];
-
-        $linea_base = $array_data["LIN_LINEA"];
-        $linea_base = explode(" - ", $linea_base);
-        $linea = $linea_base[0];
-
-        echo MantenedorProveedorClass::ActualizaProveedor($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.login'),1, $array_data["ID_TRANSITO"], $via, $pais, $embarque, $destino, $departamento, $linea, $array_data["D_TRANSITO"], $array_data["D_PUERTO_CD"], $array_data["D_TIENDAS_CD"], $array_data["T_DIAS_SUCURS"], $array_data["COD_VENTANA_EMB"], $array_data["FIRST_FORWARDER"], $array_data["LASTEST_FORWARDER"]);
-
+        echo MantenedorProveedorClass::ActualizaProveedor($f3->get('SESSION.login'),1, $array_data["COD_PROVEEDOR"],
+                                                                                    $array_data["PI_AUTOMATICA"],
+                                                                                    $array_data["COMPRA_CURVA"],
+                                                                                    $array_data["RFID"],
+                                                                                    $array_data["VEND_TAXID"],
+                                                                                    $array_data["VEND_BENEFICIARY"],
+                                                                                    $array_data["VEND_ADD_BENEFICIARY"],
+                                                                                    $array_data["VEND_CITY"],
+                                                                                    $array_data["VEND_COUNTRY"],
+                                                                                    $array_data["VEND_PHONE"],
+                                                                                    $array_data["VEND_FAX"],
+                                                                                    $array_data["VEND_NAME_DEALER"],
+                                                                                    $array_data["CONT_NAME"],
+                                                                                    $array_data["CONT_ADDRESS"],
+                                                                                    $array_data["CONT_PHONE"],
+                                                                                    $array_data["CONT_EMAIL"],
+                                                                                    $array_data["PAY_BANK_NAME_BENEFICIARY"],
+                                                                                    $array_data["PAY_ADD_BANK_BENEFICIARY"],
+                                                                                    $array_data["PAY_CITY_BENEFICIARY_BANK"],
+                                                                                    $array_data["PAY_COUNTRY_BENEFICIARY"],
+                                                                                    $array_data["PAY_SWIFT_CODE"],
+                                                                                    $array_data["PAY_ABA"],
+                                                                                    $array_data["PAY_IBAN"],
+                                                                                    $array_data["PAY_ACC_NUMBER_BENEFICIARY"],
+                                                                                    $array_data["PAY_CURRENCY_ACCOUNT"],
+                                                                                    $array_data["PAY_SECOND_BENEFICIARY"],
+                                                                                    $array_data["INTER_BANK_NAME"],
+                                                                                    $array_data["INTER_SWIFT"],
+                                                                                    $array_data["INTER_COUNTRY"],
+                                                                                    $array_data["INTER_CITY"],
+                                                                                    $array_data["PUR_CURRENCY"],
+                                                                                    $incoterm,
+                                                                                    $array_data["PUR_PAYMENTO"]);
     }
 
-    // Listar Incoterm
+    // Listar Incoterm COD_PROVEEDOR
     public function ListarIncoterm($f3){
         echo json_encode(MantenedorProveedorClass::ListarIncoterm($f3->get('SESSION.login'),1));
     }

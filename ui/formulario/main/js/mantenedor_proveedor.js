@@ -186,7 +186,7 @@ $(function () {
     });
 
 
-    // CBX de Vía
+    // CBX de Incoterm
     var PUR_INCOTEM = $("#PUR_INCOTEM").kendoComboBox({
         autoBind: false,
         //optionLabel: "Seleccione INCOTERM",
@@ -244,10 +244,11 @@ $(function () {
     $("form").submit(function(event) {
         event.preventDefault();
         if (validator.validate()) {
+
             // Seteamos Variables
-            var pi_automatica = $("#PI_AUTOMATICA").value();
-            var compra_curva = $("#COMPRA_CURVA").value();
-            var rfid = $("#RFID").value();
+            var pi_automatica = $("#PI_AUTOMATICA").val();
+            var compra_curva = $("#COMPRA_CURVA").val();
+            var rfid = $("#RFID").val();
             var taxid = $("#VEND_TAXID").val();
             var beneficiary = $("#VEND_BENEFICIARY").val();
             var add_beneficiary = $("#VEND_ADD_BENEFICIARY").val();
@@ -275,25 +276,44 @@ $(function () {
             var inter_country = $("#INTER_COUNTRY").val();
             var inter_city = $("#INTER_CITY").val();
             var pur_currency = $("#PUR_CURRENCY").val();
-            var pur_incoterm = $("#PUR_INCOTEM").value();
+            var pur_incoterm = $("#PUR_INCOTEM").val();
             var pur_payment = $("#PUR_PAYMENTO").val();
 
             $.ajax({
                 //type: "POST",
                 url: crudServiceBaseUrl + "CrearProveedor",
-                    data: { VIA:String(via),
-                            PAIS:String(pais),
-                            EMBARQUE:String(embarque),
-                            DESTINO:String(destino),
-                            DEPARTAMENTO:String(departamento),
-                            LINEA:String(linea),
-                            TRANSITO:kendo.parseInt(transito),
-                            PUERTOCD:kendo.parseInt(puertocd),
-                            CDTIENDA:kendo.parseInt(cdtienda),
-                            TOTAL_DIAS_SUCURSAL:kendo.parseInt(total_dias_sucursal),
-                            VENTANA_EMBARQUE:kendo.parseInt(ventana_embarque),
-                            FIRST_FORWARDER:kendo.parseInt(first_forwarder),
-                            LASTEST_FORWARDER:kendo.parseInt(lastest_forwarder)},
+                    data: { PI_AUTOMATICA:kendo.parseInt(pi_automatica),
+                        COMPRA_CURVA:kendo.parseInt(compra_curva),
+                        RFID:kendo.parseInt(rfid),
+                        VEND_TAXID:String(taxid),
+                        VEND_BENEFICIARY:String(beneficiary),
+                        VEND_ADD_BENEFICIARY:String(add_beneficiary),
+                        VEND_CITY:String(city),
+                        VEND_COUNTRY:String(country),
+                        VEND_PHONE:String(phone),
+                        VEND_FAX:String(fax),
+                        VEND_NAME_DEALER:String(name_dealer),
+                        CONT_NAME:String(cont_name),
+                        CONT_ADDRESS:String(cont_address),
+                        CONT_PHONE:String(cont_phone),
+                        CONT_EMAIL:String(cont_email),
+                        PAY_BANK_NAME_BENEFICIARY:String(pay_bank_name),
+                        PAY_ADD_BANK_BENEFICIARY:String(pay_add_bank_beneficiary),
+                        PAY_CITY_BENEFICIARY_BANK:String(pay_city_beneficiary),
+                        PAY_COUNTRY_BENEFICIARY:String(pay_country_beneficiary),
+                        PAY_SWIFT_CODE:String(pay_swift),
+                        PAY_ABA:String(pay_aba),
+                        PAY_IBAN:String(pay_iban),
+                        PAY_ACC_NUMBER_BENEFICIARY:String(pay_account_beneficiary),
+                        PAY_CURRENCY_ACCOUNT:String(pay_currency_account),
+                        PAY_SECOND_BENEFICIARY:String(pay_second_beneficiary),
+                        INTER_BANK_NAME:String(inter_bank_name),
+                        INTER_SWIFT:String(inter_swift_code),
+                        INTER_COUNTRY:String(inter_country),
+                        INTER_CITY:String(inter_city),
+                        PUR_CURRENCY:String(pur_currency),
+                        PUR_INCOTEM:String(pur_incoterm),
+                        PUR_PAYMENTO:String(pur_payment)},
                 dataType: "json",
                 success: function (result) {
 
@@ -303,32 +323,51 @@ $(function () {
                         dataSource.read();
 
                         // Limpiar todos los campos del Formulario
-                        $("#COD_VIA").data("kendoComboBox").value("");
-                        $("#CNTRY_LVL_CHILD").data("kendoComboBox").value("");
-                        $("#COD_PUERTO_EMB").data("kendoComboBox").value("");
-                        $("#COD_PUERTO_DESTINO").data("kendoComboBox").value("");
-                        $("#DEP_DEPTO").data("kendoComboBox").value("");
-                        $("#LIN_LINEA").data("kendoComboBox").value("");
-                        $("#D_TRANSITO").val("");
-                        $("#D_PUERTO_CD").val("");
-                        $("#D_TIENDAS_CD").val("");
-                        $("#T_DIAS_SUCURS").val("");
-                        $("#COD_VENTANA_EMB").val("");
-                        $("#FIRST_FORWARDER").val("");
-                        $("#LASTEST_FORWARDER").val("");
+                        $("#PI_AUTOMATICA").val("");
+                        $("#COMPRA_CURVA").val("");
+                        $("#RFID").val("");
+                        $("#VEND_TAXID").val("");
+                        $("#VEND_BENEFICIARY").val("");
+                        $("#VEND_ADD_BENEFICIARY").val("");
+                        $("#VEND_CITY").val("");
+                        $("#VEND_COUNTRY").val("");
+                        $("#VEND_PHONE").val("");
+                        $("#VEND_FAX").val("");
+                        $("#VEND_NAME_DEALER").val("");
+                        $("#CONT_NAME").val("");
+                        $("#CONT_ADDRESS").val("");
+                        $("#CONT_PHONE").val("");
+                        $("#CONT_EMAIL").val("");
+                        $("#PAY_BANK_NAME_BENEFICIARY").val("");
+                        $("#PAY_ADD_BANK_BENEFICIARY").val("");
+                        $("#PAY_CITY_BENEFICIARY_BANK").val("");
+                        $("#PAY_COUNTRY_BENEFICIARY").val("");
+                        $("#PAY_SWIFT_CODE").val("");
+                        $("#PAY_ABA").val("");
+                        $("#PAY_IBAN").val("");
+                        $("#PAY_ACC_NUMBER_BENEFICIARY").val("");
+                        $("#PAY_CURRENCY_ACCOUNT").val("");
+                        $("#PAY_SECOND_BENEFICIARY").val("");
+                        $("#INTER_BANK_NAME").val("");
+                        $("#INTER_SWIFT").val("");
+                        $("#INTER_COUNTRY").val("");
+                        $("#INTER_CITY").val("");
+                        $("#PUR_CURRENCY").val("");
+                        $("#PUR_INCOTEM").val("");
+                        $("#PUR_PAYMENTO").val("");
 
                         // Mensaje
                         popupNotification.getNotifications().parent().remove();
-                        popupNotification.show(" Lead Time ingresado correctamente.", "success");
+                        popupNotification.show(" Proveedor ingresado correctamente.", "success");
 
                         // Cerrar PopUp
-                        var popupLeadTime = $("#POPUP_leadtime");
-                        popupLeadTime.data("kendoWindow").close();
+                        var popupProveedor = $("#POPUP_PROVEEDOR");
+                        popupProveedor.data("kendoWindow").close();
 
                     }else{
                         // Mensaje
                         popupNotification.getNotifications().parent().remove();
-                        popupNotification.show(" No se pudo guardar el Lead Time.", "error");
+                        popupNotification.show(" No se pudo guardar el Proveedor.", "error");
                     }
 
 
