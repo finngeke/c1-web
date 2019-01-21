@@ -40,8 +40,8 @@ $(function () {
 
     var ventana_formulario = $("#POPUP_PROVEEDOR");
     ventana_formulario.kendoWindow({
-        width: "750px",
-        height: "550px",
+        width: "900px",
+        height: "600px",
         title: "Mantenedor Proveedor",
         visible: false,
         actions: [
@@ -61,8 +61,6 @@ $(function () {
         "text": "NO"
     }];
 
-
-
     // Definimos DataSource
     var dataSource = new kendo.data.DataSource({
         transport: {
@@ -71,7 +69,7 @@ $(function () {
                 dataType: "json"
             },
             update: {
-                url: crudServiceBaseUrl + "ActualizaLeadTime",
+                url: crudServiceBaseUrl + "ActualizaProveedor",
                 dataType: "json"
             }
         },
@@ -130,14 +128,14 @@ $(function () {
         }).data("kendoWindow");
 
     // Asignación del Template a Insertar
-    var detailsTemplate = kendo.template($("#template").html());
+    var detalleTemplate = kendo.template($("#template").html());
 
     // Función de despliegue y asignación de variables de detalle
     function muestraDetalles(e) {
         e.preventDefault();
 
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        wnd.content(detailsTemplate(dataItem));
+        wnd.content(detalleTemplate(dataItem));
         wnd.center().open();
     }
 
@@ -146,7 +144,7 @@ $(function () {
         dataSource: dataSource,
         editable: true,
         toolbar: [
-            { name:"agregaleadtime", text: "Nuevo Proveedor"},
+            { name:"agregaproveedor", text: "Nuevo Proveedor"},
             { name: "save", text: "Actualizar Registros", iconClass: "k-icon k-i-copy" },
             { name: "cancel", text: "Cancelar Modificaciones" }
         ],
@@ -181,214 +179,108 @@ $(function () {
         ]
     });
 
-
-
-
-
     // BTN Crear Registro
-    $(".k-grid-agregaleadtime").click(function(e){
-        var popupLeadTime = $("#POPUP_leadtime");
-        popupLeadTime.data("kendoWindow").open();
+    $(".k-grid-agregaproveedor").click(function(e){
+        var popupProveedor = $("#POPUP_PROVEEDOR");
+        popupProveedor.data("kendoWindow").open();
     });
 
 
     // CBX de Vía
-    var COD_VIA = $("#COD_VIA").kendoComboBox({
+    var PUR_INCOTEM = $("#PUR_INCOTEM").kendoComboBox({
         autoBind: false,
-        optionLabel: "Seleccione Vía",
-        dataTextField: "NOM_VIA",
-        dataValueField: "COD_VIA",
+        //optionLabel: "Seleccione INCOTERM",
+        dataTextField: "NOM_INCOTEM",
+        dataValueField: "COD_INCOTEM",
         dataSource: {
             transport: {
                 read: {
                     dataType: "json",
-                    url: "TelerikLeadTime/ListarVia"
+                    url: crudServiceBaseUrl + "ListarIncoterm"
                 }
             }
         }
     }).data("kendoComboBox");
 
-    // Seteo DataSet Puerto Embarque
-    var dataSource_puerto_embarque = new kendo.data.DataSource({
-        transport: {
-            read: {
-                dataType: "json",
-                url: "TelerikLeadTime/ListarEmbarque",
-                data: function() {
-                    return { PAIS: $("#CNTRY_LVL_CHILD").data("kendoComboBox").value() };
-                }
-            }
-        }
-    });
 
-    // CBX de País
-    var CNTRY_LVL_CHILD = $("#CNTRY_LVL_CHILD").kendoComboBox({
-        autoBind: false,
-        //cascadeFrom: "COD_VIA",
-        optionLabel: "Seleccione País",
-        dataTextField: "CNTRY_NAME",
-        dataValueField: "CNTRY_LVL_CHILD",
-        dataSource: {
-            transport: {
-                read: {
-                    dataType: "json",
-                    url: "TelerikLeadTime/ListarPais"
-                }
-            }
-        },
-        change: function(e) {
-            var dataItem = e.sender.dataItem();
-
-            if(dataItem){
-                $("#COD_PUERTO_EMB").data("kendoComboBox").value("");
-                dataSource_puerto_embarque.read();
-            }
-
-        }
-    }).data("kendoComboBox");
-
-    // CBX de ListarEmbarque
-    var COD_PUERTO_EMB = $("#COD_PUERTO_EMB").kendoComboBox({
-        autoBind: false,
-        //cascadeFrom: "CNTRY_LVL_CHILD",
-        optionLabel: "Seleccione Embarque",
-        dataTextField: "NOM_PUERTO",
-        dataValueField: "COD_PUERTO",
-        dataSource : dataSource_puerto_embarque
-        /*dataSource: {
-            transport: {
-                read: {
-                    dataType: "json",
-                    url: "TelerikLeadTime/ListarEmbarque",
-                    data: function() {
-                        return { PAIS: $("#CNTRY_LVL_CHILD").val() };
-                    }
-                }
-            }
-        }*/
-    }).data("kendoComboBox");
-
-    // CBX de Destino
-    var COD_PUERTO_DESTINO = $("#COD_PUERTO_DESTINO").kendoComboBox({
-        autoBind: false,
-        optionLabel: "Seleccione Destino",
-        dataTextField: "NOM_PUERTO",
-        dataValueField: "COD_PUERTO",
-        dataSource: {
-            transport: {
-                read: {
-                    dataType: "json",
-                    url: "TelerikLeadTime/ListarDestino"
-                }
-            }
-        }
-    }).data("kendoComboBox");
-
-    // Seteo DataSet Linea
-    var dataSource_linea = new kendo.data.DataSource({
-        transport: {
-            read: {
-                dataType: "json",
-                url: "TelerikLeadTime/ListarLinea",
-                data: function() {
-                    return { DEPTOCBX: $("#DEP_DEPTO").data("kendoComboBox").value() };
-                }
-            }
-        }
-    });
-
-    // CBX de Depto
-    var DEP_DEPTO = $("#DEP_DEPTO").kendoComboBox({
-        autoBind: false,
-        optionLabel: "Seleccione Departamento",
-        dataTextField: "DEP_DESCRIPCION",
-        dataValueField: "DEP_DEPTO",
-        dataSource: {
-            transport: {
-                read: {
-                    dataType: "json",
-                    url: "TelerikLeadTime/ListarDepto"
-                }
-            }
-        },
-        change: function(e) {
-            var dataItem = e.sender.dataItem();
-
-            if(dataItem){
-                $("#LIN_LINEA").data("kendoComboBox").value("");
-                dataSource_linea.read();
-            }
-
-        }
-    }).data("kendoComboBox");
-
-    // CBX de Línea
-    var LIN_LINEA = $("#LIN_LINEA").kendoComboBox({
-        autoBind: false,
-        //cascadeFrom: "CNTRY_LVL_CHILD",
-        optionLabel: "Seleccione Línea",
-        dataTextField: "LIN_DESCRIPCION",
-        dataValueField: "LIN_LINEA",
-        dataSource: dataSource_linea
-        /*dataSource: {
-            transport: {
-                read: {
-                    dataType: "json",
-                    url: "TelerikLeadTime/ListarLinea",
-                    data: function() {
-                        return { DEPTOCBX: $("#DEP_DEPTO").val() };
-                    }
-                }
-            }
-        }*/
-    }).data("kendoComboBox");
-
-    // TXTBX Tránsito
-    $("#D_TRANSITO").kendoNumericTextBox({format: "# Días"});
-
-    // TXTBX Puerto CD
-    $("#D_PUERTO_CD").kendoNumericTextBox({format: "# Días"});
-
-    // TXTBX CD Tienda
-    $("#D_TIENDAS_CD").kendoNumericTextBox({format: "# Días"});
-
-    // TXTBX Total Días Sucursal
-    $("#T_DIAS_SUCURS").kendoNumericTextBox({format: "# Días"});
-
-    // TXTBX Ventana Embarque
-    $("#COD_VENTANA_EMB").kendoNumericTextBox({format: "# Días"});
-
-    // TXTBX 1° Forwarder
-    $("#FIRST_FORWARDER").kendoNumericTextBox({format: "# Días"});
-
-    // TXTBX Last Forwarder
-    $("#LASTEST_FORWARDER").kendoNumericTextBox({format: "# Días"});
+    // xxx
+    /*
+    $("#VEND_TAXID").kendoNumericTextBox({});
+    $("#VEND_BENEFICIARY").kendoNumericTextBox({});
+    $("#VEND_ADD_BENEFICIARY").kendoNumericTextBox({});
+    $("#VEND_CITY").kendoNumericTextBox({});
+    $("#VEND_COUNTRY").kendoNumericTextBox({});
+    $("#VEND_PHONE").kendoNumericTextBox({});
+    $("#VEND_FAX").kendoNumericTextBox({});
+    $("#VEND_NAME_DEALER").kendoNumericTextBox({});
+    $("#CONT_NAME").kendoNumericTextBox({});
+    $("#CONT_ADDRESS").kendoNumericTextBox({});
+    $("#CONT_PHONE").kendoNumericTextBox({});
+    $("#CONT_EMAIL").kendoNumericTextBox({});
+    $("#PAY_BANK_NAME_BENEFICIARY").kendoNumericTextBox({});
+    $("#PAY_ADD_BANK_BENEFICIARY").kendoNumericTextBox({});
+    $("#PAY_CITY_BENEFICIARY_BANK").kendoNumericTextBox({});
+    $("#PAY_COUNTRY_BENEFICIARY").kendoNumericTextBox({});
+    $("#PAY_SWIFT_CODE").kendoNumericTextBox({});
+    $("#PAY_ABA").kendoNumericTextBox({});
+    $("#PAY_IBAN").kendoNumericTextBox({});
+    $("#PAY_ACC_NUMBER_BENEFICIARY").kendoNumericTextBox({});
+    $("#PAY_CURRENCY_ACCOUNT").kendoNumericTextBox({});
+    $("#PAY_SECOND_BENEFICIARY").kendoNumericTextBox({});
+    $("#INTER_BANK_NAME").kendoNumericTextBox({});
+    $("#INTER_SWIFT").kendoNumericTextBox({});
+    $("#INTER_COUNTRY").kendoNumericTextBox({});
+    $("#INTER_CITY").kendoNumericTextBox({});
+    $("#PUR_CURRENCY").kendoNumericTextBox({});
+    $("#PUR_INCOTEM").kendoNumericTextBox({});
+    $("#PUR_PAYMENTO").kendoNumericTextBox({});
+    */
 
 
-    var validator = $("#LeadTimeForm").kendoValidator().data("kendoValidator"),
-        status = $(".status");
+
+
+    var validator = $("#ProveedorForm").kendoValidator().data("kendoValidator"),status = $(".status");
 
     $("form").submit(function(event) {
         event.preventDefault();
         if (validator.validate()) {
             // Seteamos Variables
-            var via = $("#COD_VIA").data("kendoComboBox").value(); //$("#COD_VIA").val();
-            var pais = $("#CNTRY_LVL_CHILD").data("kendoComboBox").value(); //$("#CNTRY_LVL_CHILD").val();
-            var embarque = $("#COD_PUERTO_EMB").data("kendoComboBox").value(); //$("#COD_PUERTO_EMB").val();
-            var destino = $("#COD_PUERTO_DESTINO").data("kendoComboBox").value(); //$("#COD_PUERTO_DESTINO").val();
-            var departamento = $("#DEP_DEPTO").data("kendoComboBox").value(); //$("#DEP_DEPTO").val();
-            var linea = $("#LIN_LINEA").data("kendoComboBox").value(); //$("#LIN_LINEA").val();
-            var transito = $("#D_TRANSITO").val();
-            var puertocd = $("#D_PUERTO_CD").val();
-            var cdtienda = $("#D_TIENDAS_CD").val();
-            var total_dias_sucursal = $("#T_DIAS_SUCURS").val();
-            var ventana_embarque = $("#COD_VENTANA_EMB").val();
-            var first_forwarder = $("#FIRST_FORWARDER").val();
-            var lastest_forwarder = $("#LASTEST_FORWARDER").val();
+            var pi_automatica = $("#PI_AUTOMATICA").value();
+            var compra_curva = $("#COMPRA_CURVA").value();
+            var rfid = $("#RFID").value();
+            var taxid = $("#VEND_TAXID").val();
+            var beneficiary = $("#VEND_BENEFICIARY").val();
+            var add_beneficiary = $("#VEND_ADD_BENEFICIARY").val();
+            var city = $("#VEND_CITY").val();
+            var country = $("#VEND_COUNTRY").val();
+            var phone = $("#VEND_PHONE").val();
+            var fax = $("#VEND_FAX").val();
+            var name_dealer = $("#VEND_NAME_DEALER").val();
+            var cont_name = $("#CONT_NAME").val();
+            var cont_address = $("#CONT_ADDRESS").val();
+            var cont_phone = $("#CONT_PHONE").val();
+            var cont_email = $("#CONT_EMAIL").val();
+            var pay_bank_name = $("#PAY_BANK_NAME_BENEFICIARY").val();
+            var pay_add_bank_beneficiary = $("#PAY_ADD_BANK_BENEFICIARY").val();
+            var pay_city_beneficiary = $("#PAY_CITY_BENEFICIARY_BANK").val();
+            var pay_country_beneficiary = $("#PAY_COUNTRY_BENEFICIARY").val();
+            var pay_swift = $("#PAY_SWIFT_CODE").val();
+            var pay_aba = $("#PAY_ABA").val();
+            var pay_iban = $("#PAY_IBAN").val();
+            var pay_account_beneficiary = $("#PAY_ACC_NUMBER_BENEFICIARY").val();
+            var pay_currency_account = $("#PAY_CURRENCY_ACCOUNT").val();
+            var pay_second_beneficiary = $("#PAY_SECOND_BENEFICIARY").val();
+            var inter_bank_name = $("#INTER_BANK_NAME").val();
+            var inter_swift_code = $("#INTER_SWIFT").val();
+            var inter_country = $("#INTER_COUNTRY").val();
+            var inter_city = $("#INTER_CITY").val();
+            var pur_currency = $("#PUR_CURRENCY").val();
+            var pur_incoterm = $("#PUR_INCOTEM").value();
+            var pur_payment = $("#PUR_PAYMENTO").val();
 
             $.ajax({
                 //type: "POST",
-                url: "TelerikLeadTime/CrearLeadTime",
+                url: crudServiceBaseUrl + "CrearProveedor",
                     data: { VIA:String(via),
                             PAIS:String(pais),
                             EMBARQUE:String(embarque),
@@ -452,6 +344,7 @@ $(function () {
             popupNotification.getNotifications().parent().remove();
             popupNotification.show(" Existe datos no válidos en el formulario.", "info");
         }
+
     });
 
 

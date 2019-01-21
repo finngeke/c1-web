@@ -45,97 +45,199 @@
 
     <!-- Agregar -->
     <div id="POPUP_PROVEEDOR">
-        <form id="LeadTimeForm">
+        <form id="ProveedorForm">
 
-            <div class="container">
-                <div class="row input-group input-group-sm">
-                    <div class="col-sm">
+            <table>
+                <tr><td colspan="4"><b>RIPLEY</b></td></tr>
+                <tr>
+                    <td>PI AUTOMATICA</td>
+                    <td><select name="PI_AUTOMATICA" id="PI_AUTOMATICA" class="form-control form-control-sm" style="width: 220px;" >
+                        <option value="1">SI</option>
+                        <option value="2" SELECTED>NO</option>
+                    </select>
+                        <span class="k-invalid-msg" data-for="PI_AUTOMATICA"></span>
+                    </td>
+                    <td style="padding-left: 10px">COMPRA EN CURVA</td>
+                    <td><select name="COMPRA_CURVA" id="COMPRA_CURVA" class="form-control form-control-sm" style="width: 220px;" >
+                        <option value="1">SI</option>
+                        <option value="2" SELECTED>NO</option>
+                    </select>
+                        <span class="k-invalid-msg" data-for="COMPRA_CURVA"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>RFID</td>
+                    <td><select name="RFID" id="RFID" class="form-control form-control-sm" style="width: 220px;" >
+                        <option value="1">SI</option>
+                        <option value="2" SELECTED>NO</option>
+                    </select>
+                        <span class="k-invalid-msg" data-for="RFID"></span>
+                    </td>
+                    <td style="padding-left: 10px">&nbsp;</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr><td colspan="4">&nbsp;</td></tr>
+                <tr><td colspan="4"><b>VENDOR INFORMATION</b></td></tr>
+                <tr>
+                    <td>TAXI ID</td>
+                    <td><input type="text" id="VEND_TAXID" name="VEND_TAXID" required validationMessage="Ingrese VENDOR INFORMATION" class="form-control form-control-sm" style="width: 220px;" />
+                        <span class="k-invalid-msg" data-for="VEND_TAXID"></span>
+                    </td>
+                    <td style="padding-left: 10px">BENEFICIARY</td>
+                    <td><input type="text" id="VEND_BENEFICIARY" name="VEND_BENEFICIARY" required validationMessage="Ingrese BENEFICIARY" class="form-control form-control-sm" style="width: 220px;" />
+                        <span class="k-invalid-msg" data-for="VEND_BENEFICIARY"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>ADDRESS OF BENEFICIARY</td>
+                    <td><input type="text" id="VEND_ADD_BENEFICIARY" name="VEND_ADD_BENEFICIARY" required validationMessage="Ingrese ADDRESS OF BENEFICIARY" class="form-control form-control-sm" style="width: 220px;" />
+                        <span class="k-invalid-msg" data-for="VEND_ADD_BENEFICIARY"></span>
+                    </td>
+                    <td style="padding-left: 10px">CITY</td>
+                    <td><input type="text" id="VEND_CITY" name="VEND_CITY" required validationMessage="Ingrese CITY" class="form-control form-control-sm" style="width: 220px;" />
+                        <span class="k-invalid-msg" data-for="VEND_CITY"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>COUNTRY</td>
+                    <td><input type="text" id="VEND_COUNTRY" name="VEND_COUNTRY" required validationMessage="Ingrese COUNTRY" class="form-control form-control-sm" style="width: 220px;" />
+                        <span class="k-invalid-msg" data-for="VEND_COUNTRY"></span>
+                    </td>
+                    <td style="padding-left: 10px">PHONE</td>
+                    <td><input type="text" id="VEND_PHONE" name="VEND_PHONE" required validationMessage="Ingrese PHONE" class="form-control form-control-sm" style="width: 220px;" />
+                        <span class="k-invalid-msg" data-for="VEND_PHONE"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>FAX</td>
+                    <td><input type="text" id="VEND_FAX" name="VEND_FAX" required validationMessage="Ingrese FAX" class="form-control form-control-sm" style="width: 220px;" />
+                        <span class="k-invalid-msg" data-for="VEND_FAX"></span>
+                    </td>
+                    <td style="padding-left: 10px">NAME DEALER</td>
+                    <td><input type="text" id="VEND_NAME_DEALER" name="VEND_NAME_DEALER" required validationMessage="Ingrese NAME DEALER" class="form-control form-control-sm" style="width: 220px;" />
+                        <span class="k-invalid-msg" data-for="VEND_NAME_DEALER"></span>
+                    </td>
+                </tr>
+                <tr><td colspan="4">&nbsp;</td></tr>
+                <tr><td colspan="4"><b>CONTACT DETAILS</b></td></tr>
+                <tr>
+                    <td>NAME</td>
+                    <td><input type="text" id="CONT_NAME" name="CONT_NAME" required validationMessage="Ingrese NAME" class="form-control form-control-sm" style="width: 220px;" />
+                        <span class="k-invalid-msg" data-for="CONT_NAME"></span>
+                    </td>
+                    <td style="padding-left: 10px">ADDRESS</td>
+                    <td><input type="text" id="CONT_ADDRESS" name="CONT_ADDRESS" required validationMessage="Ingrese ADDRESS" class="form-control form-control-sm" style="width: 220px;" />
+                        <span class="k-invalid-msg" data-for="CONT_ADDRESS"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>PHONE</td>
+                    <td><input type="text" id="CONT_PHONE" name="CONT_PHONE" required validationMessage="Ingrese PHONE" class="form-control form-control-sm" style="width: 220px;" />
+                        <span class="k-invalid-msg" data-for="CONT_PHONE"></span>
+                    </td>
+                    <td style="padding-left: 10px">E-MAIL</td>
+                    <td><input type="text" id="CONT_EMAIL" name="CONT_EMAIL" required validationMessage="Ingrese E-MAIL" class="form-control form-control-sm" style="width: 220px;" />
+                        <span class="k-invalid-msg" data-for="CONT_EMAIL"></span>
+                    </td>
+                </tr>
+                <tr><td colspan="4">&nbsp;</td></tr>
+                <tr><td colspan="4"><b>PAYMENT BY WIRE TRANSFER - BANK ACCOUNT INFO</b></td></tr>
+                <tr>
+                    <td>BANK NAME OF BENEFICIARY</td>
+                    <td><input type="text" id="PAY_BANK_NAME_BENEFICIARY" name="PAY_BANK_NAME_BENEFICIARY" required validationMessage="Ingrese BANK NAME OF BENEFICIARY" class="form-control form-control-sm" style="width: 220px;" />
+                        <span class="k-invalid-msg" data-for="PAY_BANK_NAME_BENEFICIARY"></span>
+                    </td>
+                    <td style="padding-left: 10px">ADDRESS BANK OF BENEFICIARY</td>
+                    <td><input type="text" id="PAY_ADD_BANK_BENEFICIARY" name="PAY_ADD_BANK_BENEFICIARY" required validationMessage="Ingrese ADDRESS BANK OF BENEFICIARY" class="form-control form-control-sm" style="width: 220px;" />
+                        <span class="k-invalid-msg" data-for="PAY_ADD_BANK_BENEFICIARY"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>CITY OF BENEFICIARY BANK</td>
+                    <td><input type="text" id="PAY_CITY_BENEFICIARY_BANK" name="PAY_CITY_BENEFICIARY_BANK" required validationMessage="Ingrese CITY OF BENEFICIARY BANK" class="form-control form-control-sm" style="width: 220px;" />
+                        <span class="k-invalid-msg" data-for="PAY_CITY_BENEFICIARY_BANK"></span>
+                    </td>
+                    <td style="padding-left: 10px">COUNTRY OF BENEFICIARY BANK</td>
+                    <td><input type="text" id="PAY_COUNTRY_BENEFICIARY" name="PAY_COUNTRY_BENEFICIARY" required validationMessage="Ingrese COUNTRY OF BENEFICIARY BANK" class="form-control form-control-sm" style="width: 220px;" />
+                        <span class="k-invalid-msg" data-for="PAY_COUNTRY_BENEFICIARY"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>SWIFT CODE</td>
+                    <td><input type="text" id="PAY_SWIFT_CODE" name="PAY_SWIFT_CODE" required validationMessage="Ingrese SWIFT CODE" class="form-control form-control-sm" style="width: 220px;" />
+                        <span class="k-invalid-msg" data-for="PAY_SWIFT_CODE"></span>
+                    </td>
+                    <td style="padding-left: 10px">ABA (USA)</td>
+                    <td><input type="text" id="PAY_ABA" name="PAY_ABA" required validationMessage="Ingrese ABA" class="form-control form-control-sm" style="width: 220px;" />
+                        <span class="k-invalid-msg" data-for="PAY_ABA"></span>
+                    </td>
+                </tr>
+                <tr>
+                <td>IBAN (EUROPA)</td>
+                <td><input type="text" id="PAY_IBAN" name="PAY_IBAN" required validationMessage="Ingrese IBAN" class="form-control form-control-sm" style="width: 220px;" />
+                    <span class="k-invalid-msg" data-for="PAY_IBAN"></span>
+                </td>
+                <td style="padding-left: 10px">ACCOUNT NUMBER BENEFICIARY</td>
+                <td><input type="text" id="PAY_ACC_NUMBER_BENEFICIARY" name="PAY_ACC_NUMBER_BENEFICIARY" required validationMessage="Ingrese ACCOUNT NUMBER BENEFICIARY" class="form-control form-control-sm" style="width: 220px;" />
+                    <span class="k-invalid-msg" data-for="PAY_ACC_NUMBER_BENEFICIARY"></span>
+                </td>
+            </tr>
+                <tr>
+                    <td>CURRENCY OF THE ACCOUNT</td>
+                    <td><input type="text" id="PAY_CURRENCY_ACCOUNT" name="PAY_CURRENCY_ACCOUNT" required validationMessage="Ingrese CURRENCY OF THE ACCOUNT" class="form-control form-control-sm" style="width: 220px;" />
+                        <span class="k-invalid-msg" data-for="PAY_CURRENCY_ACCOUNT"></span>
+                    </td>
+                    <td style="padding-left: 10px">SECOND BENEFICIARY </td>
+                    <td><input type="text" id="PAY_SECOND_BENEFICIARY" name="PAY_SECOND_BENEFICIARY" required validationMessage="Ingrese SECOND BENEFICIARY" class="form-control form-control-sm" style="width: 220px;" />
+                        <span class="k-invalid-msg" data-for="PAY_SECOND_BENEFICIARY"></span>
+                    </td>
+                </tr>
+                <tr><td colspan="4">&nbsp;</td></tr>
+                <tr><td colspan="4"><b>INTERMEDIARY BANK</b></td></tr>
+                <tr>
+                    <td>BANK NAME</td>
+                    <td><input type="text" id="INTER_BANK_NAME" name="INTER_BANK_NAME" required validationMessage="Ingrese BANK NAME" class="form-control form-control-sm" style="width: 220px;" />
+                        <span class="k-invalid-msg" data-for="INTER_BANK_NAME"></span>
+                    </td>
+                    <td style="padding-left: 10px">SWIFT CODE</td>
+                    <td><input type="text" id="INTER_SWIFT" name="INTER_SWIFT" required validationMessage="Ingrese SWIFT CODE" class="form-control form-control-sm" style="width: 220px;" />
+                        <span class="k-invalid-msg" data-for="INTER_SWIFT"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>COUNTRY</td>
+                    <td><input type="text" id="INTER_COUNTRY" name="INTER_COUNTRY" required validationMessage="Ingrese COUNTRY" class="form-control form-control-sm" style="width: 220px;" />
+                        <span class="k-invalid-msg" data-for="INTER_COUNTRY"></span>
+                    </td>
+                    <td style="padding-left: 10px">CITY</td>
+                    <td><input type="text" id="INTER_CITY" name="INTER_CITY" required validationMessage="Ingrese CITY" class="form-control form-control-sm" style="width: 220px;" />
+                        <span class="k-invalid-msg" data-for="INTER_CITY"></span>
+                    </td>
+                </tr>
+                <tr><td colspan="4">&nbsp;</td></tr>
+                <tr><td colspan="4"><b>PURCHASE DETAIL</b></td></tr>
+                <tr>
+                    <td>CURRENCY</td>
+                    <td><input type="text" id="PUR_CURRENCY" name="PUR_CURRENCY" required validationMessage="Ingrese CURRENCY" class="form-control form-control-sm" style="width: 220px;" />
+                        <span class="k-invalid-msg" data-for="PUR_CURRENCY"></span>
+                    </td>
+                    <td style="padding-left: 10px">INCOTEM</td>
+                    <td><select name="PUR_INCOTEM" id="PUR_INCOTEM" class="form-control form-control-sm" style="width: 220px;" ></select>
+                        <span class="k-invalid-msg" data-for="PUR_INCOTEM"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>PAYMENT</td>
+                    <td><input type="text" id="PUR_PAYMENTO" name="PUR_PAYMENTO" required validationMessage="Ingrese PAYMENT" class="form-control form-control-sm" style="width: 220px;" />
+                        <span class="k-invalid-msg" data-for="PUR_PAYMENTO"></span>
+                    </td>
+                    <td style="padding-left: 10px">&nbsp;</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr><td colspan="4">&nbsp;</td></tr>
+                <tr><td colspan="4"><button class="k-button k-primary" type="submit">Crear Proveedor</button></td></tr>
+            </table>
 
-                        <div class="col-md-6 mb-3">
-                            <label for="COD_VIA" class="required">Vía</label>
-                            <select name="COD_VIA" id="COD_VIA" required data-required-msg="Seleccione Vía" class="form-control" style="width: 220px;" ></select>
-                            <span class="k-invalid-msg" data-for="COD_VIA"></span>
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label for="CNTRY_LVL_CHILD" class="required">País Origen</label>
-                            <select name="CNTRY_LVL_CHILD" id="CNTRY_LVL_CHILD" required data-required-msg="Seleccione País" class="form-control" style="width: 220px;" ></select>
-                            <span class="k-invalid-msg" data-for="CNTRY_LVL_CHILD"></span>
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label for="COD_PUERTO_EMB" class="required">Embarque</label>
-                            <select name="COD_PUERTO_EMB" id="COD_PUERTO_EMB" required data-required-msg="Seleccione Embarque" class="form-control" style="width: 220px;" ></select>
-                            <span class="k-invalid-msg" data-for="COD_PUERTO_EMB"></span>
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label for="COD_PUERTO_DESTINO" class="required">Destino</label>
-                            <select name="COD_PUERTO_DESTINO" id="COD_PUERTO_DESTINO" class="form-control" style="width: 220px;" ></select>
-                            <span class="k-invalid-msg" data-for="COD_PUERTO_DESTINO"></span>
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label for="DEP_DEPTO" class="required">Departamento</label>
-                            <select name="DEP_DEPTO" id="DEP_DEPTO" required data-required-msg="Seleccione Departamento" class="form-control" style="width: 220px;" ></select>
-                            <span class="k-invalid-msg" data-for="DEP_DEPTO"></span>
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label for="LIN_LINEA" class="required">Línea</label>
-                            <select name="LIN_LINEA" id="LIN_LINEA" class="form-control" style="width: 220px;" ></select>
-                            <span class="k-invalid-msg" data-for="LIN_LINEA"></span>
-                        </div>
-
-                    </div>
-                    <div class="col-sm">
-
-                        <div class="col-md-6 mb-3">
-                            <label for="D_TRANSITO" class="required">Tránsito</label>
-                            <input type="text" id="D_TRANSITO" name="D_TRANSITO" min="0" value="0" required validationMessage="Ingrese Tránsito" class="form-control" style="width: 220px;" /><span class="k-invalid-msg" data-for="search"></span>
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label for="D_PUERTO_CD" class="required">Puerto CD</label>
-                            <input type="text" id="D_PUERTO_CD" name="D_PUERTO_CD" min="0" value="0" required validationMessage="Ingrese Puerto CD" class="form-control" style="width: 220px;" /><span class="k-invalid-msg" data-for="search"></span>
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label for="D_TIENDAS_CD" class="required">CD Tienda</label>
-                            <input type="text" id="D_TIENDAS_CD" name="D_TIENDAS_CD" min="0" value="0" required validationMessage="Ingrese CD Tienda" class="form-control" style="width: 220px;" /><span class="k-invalid-msg" data-for="search"></span>
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label for="T_DIAS_SUCURS" class="required">Total Días Sucursal</label>
-                            <input type="text" id="T_DIAS_SUCURS" name="T_DIAS_SUCURS" min="0" value="0" required validationMessage="Ingrese Total Días Sucursal" class="form-control" style="width: 220px;" /><span class="k-invalid-msg" data-for="search"></span>
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label for="COD_VENTANA_EMB" class="required">Ventana Embarque</label>
-                            <input type="text" id="COD_VENTANA_EMB" name="COD_VENTANA_EMB" min="0" value="0" required validationMessage="Ingrese Ventana Emabrque" class="form-control" style="width: 220px;" /><span class="k-invalid-msg" data-for="search"></span>
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label for="FIRST_FORWARDER" class="required">1° Forwarder</label>
-                            <input type="text" id="FIRST_FORWARDER" name="FIRST_FORWARDER" min="0" value="0" required validationMessage="Ingrese 1° Forwarder" class="form-control" style="width: 220px;" /><span class="k-invalid-msg" data-for="search"></span>
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label for="LASTEST_FORWARDER" class="required">Last Forwarder</label>
-                            <input type="text" id="LASTEST_FORWARDER" name="LASTEST_FORWARDER" min="0" value="0" required validationMessage="Ingrese Last Forwarder" class="form-control" style="width: 220px;" /><span class="k-invalid-msg" data-for="search"></span>
-                        </div><!--  pattern="\d{10}" -->
-
-                        <div class="col-md-6 mb-3">
-                            <button class="k-button k-primary" type="submit">Crear Lead Time</button>
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <span class="status"></span>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
 
         </form>
     </div>

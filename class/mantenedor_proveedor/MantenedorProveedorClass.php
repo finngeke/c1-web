@@ -96,19 +96,148 @@ class MantenedorProveedorClass extends \parametros
 
     }
 
-    // Listar Vía
-    public static function ListarVia($temporada, $login, $pais_filtro_ripley)
+    // Crear Lead Time
+    public static function CrearLeadTime($temporada, $login, $pais_filtro_ripley, $VIA, $PAIS, $EMBARQUE, $DESTINO, $DEPARTAMENTO, $LINEA, $TRANSITO, $PUERTOCD, $CDTIENDA, $TOTAL_DIAS_SUCURSAL, $VENTANA_EMBARQUE, $FIRST_FORWARDER, $LASTEST_FORWARDER)
     {
 
-        $sql = "SELECT COD_VIA, NOM_VIA FROM PLC_VIA ORDER BY NOM_VIA";
+        if( ($VIA==null) || ($VIA=="null") || ($VIA=="") || (!$VIA) ){
+            return json_encode("Ingrese Vía");
+            die();
+        }
+        if( ($PAIS==null) || ($PAIS=="null") || ($PAIS=="") || (!$PAIS) ){
+            return json_encode("Ingrese País");
+            die();
+        }
+        if( ($EMBARQUE==null) || ($EMBARQUE=="null") || ($EMBARQUE=="") || (!$EMBARQUE) ){
+            return json_encode("Ingrese Puerto Embarque");
+            die();
+        }
+        if( ($DEPARTAMENTO==null) || ($DEPARTAMENTO=="null") || ($DEPARTAMENTO=="") || (!$DEPARTAMENTO) ){
+            return json_encode("Ingrese Departamento");
+            die();
+        }
+
+
+        $sql_id = "SELECT   
+                       CASE   
+                          WHEN MAX(ID_TRANSITO) IS NULL THEN 1   
+                          WHEN MAX(ID_TRANSITO) >=0 THEN MAX(ID_TRANSITO) + 1   
+                       END  ID 
+                    FROM PIA_DIAS_TRANSITO";
+        $data_id = \database::getInstancia()->getFilas($sql_id);
+
+        foreach ($data_id as $va1) {
+
+            $maxId = $va1[0];
+
+            $sql = "INSERT INTO PIA_DIAS_TRANSITO (ID_TRANSITO, COD_TEMPORADA,COD_VIA,COD_PUERTO_EMB,CNTRY_LVL_CHILD,COD_PUERTO_DESTINO,LIN_LINEA,DEP_DEPTO,D_TRANSITO,D_PUERTO_CD,D_TIENDAS_CD,T_DIAS_SUCURS,COD_VENTANA_EMB,FIRST_FORWARDER,LASTEST_FORWARDER,COD_MOD_PAIS)
+                    VALUES($maxId,$temporada,$VIA,'".$EMBARQUE."',$PAIS,'".$DESTINO."','".$LINEA."','".$DEPARTAMENTO."',$TRANSITO,$PUERTOCD,$CDTIENDA,$TOTAL_DIAS_SUCURSAL,$VENTANA_EMBARQUE,$FIRST_FORWARDER,$LASTEST_FORWARDER,$pais_filtro_ripley)";
+            /*echo $sql;
+            die();*/
+            $data_insert = \database::getInstancia()->getConsulta($sql);
+
+            // Si se ejecuta la consulta
+            if ($data_insert) {
+                // Acción: Crear / Eliminar / Actualizar
+                LogTransaccionClass::GuardaLogTransaccion($login, $temporada, 'ND', 'Lead Time','Crear', $sql, 'OK' );
+                return json_encode("OK");
+                die();
+                // Si la consulta no se puede realizar
+            } else {
+                // Acción: Crear / Eliminar / Actualizar
+                LogTransaccionClass::GuardaLogTransaccion($login, $temporada, 'ND', 'Lead Time','Crear', $sql, 'ERROR' );
+                return json_encode("ERROR");
+                die();
+            }
+
+        }
+
+
+
+
+
+
+
+
+
+
+        // Fin de la clase
+    }
+
+    // Actualiza Lead Time
+    public static function ActualizaLeadTime($temporada, $login, $pais_filtro_ripley,$ID_TRANSITO, $VIA, $PAIS, $EMBARQUE, $DESTINO, $DEPARTAMENTO, $LINEA, $TRANSITO, $PUERTOCD, $CDTIENDA, $TOTAL_DIAS_SUCURSAL, $VENTANA_EMBARQUE, $FIRST_FORWARDER, $LASTEST_FORWARDER)
+    {
+
+        if( ($VIA==null) || ($VIA=="null") || ($VIA=="") || (!$VIA) ){
+            return json_encode("Ingrese Vía");
+            die();
+        }
+        if( ($PAIS==null) || ($PAIS=="null") || ($PAIS=="") || (!$PAIS) ){
+            return json_encode("Ingrese País");
+            die();
+        }
+        if( ($EMBARQUE==null) || ($EMBARQUE=="null") || ($EMBARQUE=="") || (!$EMBARQUE) ){
+            return json_encode("Ingrese Puerto Embarque");
+            die();
+        }
+        if( ($DEPARTAMENTO==null) || ($DEPARTAMENTO=="null") || ($DEPARTAMENTO=="") || (!$DEPARTAMENTO) ){
+            return json_encode("Ingrese Departamento");
+            die();
+        }
+
+
+        $sql = "UPDATE PIA_DIAS_TRANSITO 
+                    SET COD_VIA = $VIA,
+                        COD_PUERTO_EMB = '".$EMBARQUE."',
+                        CNTRY_LVL_CHILD = $PAIS,
+                        COD_PUERTO_DESTINO = '".$DESTINO."',
+                        LIN_LINEA = '".$LINEA."',
+                        DEP_DEPTO = '".$DEPARTAMENTO."',
+                        D_TRANSITO = $TRANSITO,
+                        D_PUERTO_CD = $PUERTOCD,
+                        D_TIENDAS_CD = $CDTIENDA,
+                        T_DIAS_SUCURS = $TOTAL_DIAS_SUCURSAL,
+                        COD_VENTANA_EMB = $VENTANA_EMBARQUE,
+                        FIRST_FORWARDER = $FIRST_FORWARDER,
+                        LASTEST_FORWARDER= $LASTEST_FORWARDER
+                    WHERE ID_TRANSITO = $ID_TRANSITO";
+        $data_update = \database::getInstancia()->getConsulta($sql);
+
+        // Si se ejecuta la consulta
+        if ($data_update) {
+            // Acción: Crear / Eliminar / Actualizar
+            LogTransaccionClass::GuardaLogTransaccion($login, $temporada, 'ND', 'Lead Time','Actualizar', $sql, 'OK' );
+            return json_encode("ERROR");
+            die();
+            // Si la consulta no se puede realizar
+        } else {
+            // Acción: Crear / Eliminar / Actualizar
+            LogTransaccionClass::GuardaLogTransaccion($login, $temporada, 'ND', 'Lead Time','Actualizar', $sql, 'ERROR' );
+            return json_encode("ERROR");
+            die();
+        }
+
+
+
+
+
+
+        // Fin de la clase
+    }
+
+    // Listar Incoterm
+    public static function ListarIncoterm($login, $pais_filtro_ripley)
+    {
+
+        $sql = "SELECT COD_INCOTERM, NOM_INCOTERM FROM PIA_INCOTERM ORDER BY NOM_INCOTERM";
         $data = \database::getInstancia()->getFilas($sql);
 
         // Transformo a array asociativo
         $array1 = [];
         foreach ($data as $va1) {
             array_push($array1, array(
-                    "COD_VIA" => $va1[0]." - ".$va1[1],
-                    "NOM_VIA" => $va1[0]." - ".$va1[1]
+                    "COD_INCOTERM" => $va1[0]." - ".$va1[1],
+                    "NOM_INCOTERM" => $va1[0]." - ".$va1[1]
                 )
             );
         }
@@ -116,6 +245,9 @@ class MantenedorProveedorClass extends \parametros
         return $array1;
 
     }
+
+
+
 
     // Listar País
     public static function ListarPais($temporada, $login, $pais_filtro_ripley)
@@ -234,134 +366,6 @@ class MantenedorProveedorClass extends \parametros
 
     }
 
-    // Crear Lead Time
-    public static function CrearLeadTime($temporada, $login, $pais_filtro_ripley, $VIA, $PAIS, $EMBARQUE, $DESTINO, $DEPARTAMENTO, $LINEA, $TRANSITO, $PUERTOCD, $CDTIENDA, $TOTAL_DIAS_SUCURSAL, $VENTANA_EMBARQUE, $FIRST_FORWARDER, $LASTEST_FORWARDER)
-    {
-
-        if( ($VIA==null) || ($VIA=="null") || ($VIA=="") || (!$VIA) ){
-            return json_encode("Ingrese Vía");
-            die();
-        }
-        if( ($PAIS==null) || ($PAIS=="null") || ($PAIS=="") || (!$PAIS) ){
-            return json_encode("Ingrese País");
-            die();
-        }
-        if( ($EMBARQUE==null) || ($EMBARQUE=="null") || ($EMBARQUE=="") || (!$EMBARQUE) ){
-            return json_encode("Ingrese Puerto Embarque");
-            die();
-        }
-        if( ($DEPARTAMENTO==null) || ($DEPARTAMENTO=="null") || ($DEPARTAMENTO=="") || (!$DEPARTAMENTO) ){
-            return json_encode("Ingrese Departamento");
-            die();
-        }
-
-
-        $sql_id = "SELECT   
-                       CASE   
-                          WHEN MAX(ID_TRANSITO) IS NULL THEN 1   
-                          WHEN MAX(ID_TRANSITO) >=0 THEN MAX(ID_TRANSITO) + 1   
-                       END  ID 
-                    FROM PIA_DIAS_TRANSITO";
-        $data_id = \database::getInstancia()->getFilas($sql_id);
-
-        foreach ($data_id as $va1) {
-
-            $maxId = $va1[0];
-
-            $sql = "INSERT INTO PIA_DIAS_TRANSITO (ID_TRANSITO, COD_TEMPORADA,COD_VIA,COD_PUERTO_EMB,CNTRY_LVL_CHILD,COD_PUERTO_DESTINO,LIN_LINEA,DEP_DEPTO,D_TRANSITO,D_PUERTO_CD,D_TIENDAS_CD,T_DIAS_SUCURS,COD_VENTANA_EMB,FIRST_FORWARDER,LASTEST_FORWARDER,COD_MOD_PAIS)
-                    VALUES($maxId,$temporada,$VIA,'".$EMBARQUE."',$PAIS,'".$DESTINO."','".$LINEA."','".$DEPARTAMENTO."',$TRANSITO,$PUERTOCD,$CDTIENDA,$TOTAL_DIAS_SUCURSAL,$VENTANA_EMBARQUE,$FIRST_FORWARDER,$LASTEST_FORWARDER,$pais_filtro_ripley)";
-                /*echo $sql;
-                die();*/
-            $data_insert = \database::getInstancia()->getConsulta($sql);
-
-            // Si se ejecuta la consulta
-            if ($data_insert) {
-                // Acción: Crear / Eliminar / Actualizar
-                LogTransaccionClass::GuardaLogTransaccion($login, $temporada, 'ND', 'Lead Time','Crear', $sql, 'OK' );
-                return json_encode("OK");
-                die();
-                // Si la consulta no se puede realizar
-            } else {
-                // Acción: Crear / Eliminar / Actualizar
-                LogTransaccionClass::GuardaLogTransaccion($login, $temporada, 'ND', 'Lead Time','Crear', $sql, 'ERROR' );
-                return json_encode("ERROR");
-                die();
-            }
-
-        }
-
-
-
-
-
-
-
-
-
-
-        // Fin de la clase
-    }
-
-    // Actualiza Lead Time
-    public static function ActualizaLeadTime($temporada, $login, $pais_filtro_ripley,$ID_TRANSITO, $VIA, $PAIS, $EMBARQUE, $DESTINO, $DEPARTAMENTO, $LINEA, $TRANSITO, $PUERTOCD, $CDTIENDA, $TOTAL_DIAS_SUCURSAL, $VENTANA_EMBARQUE, $FIRST_FORWARDER, $LASTEST_FORWARDER)
-    {
-
-        if( ($VIA==null) || ($VIA=="null") || ($VIA=="") || (!$VIA) ){
-            return json_encode("Ingrese Vía");
-            die();
-        }
-        if( ($PAIS==null) || ($PAIS=="null") || ($PAIS=="") || (!$PAIS) ){
-            return json_encode("Ingrese País");
-            die();
-        }
-        if( ($EMBARQUE==null) || ($EMBARQUE=="null") || ($EMBARQUE=="") || (!$EMBARQUE) ){
-            return json_encode("Ingrese Puerto Embarque");
-            die();
-        }
-        if( ($DEPARTAMENTO==null) || ($DEPARTAMENTO=="null") || ($DEPARTAMENTO=="") || (!$DEPARTAMENTO) ){
-            return json_encode("Ingrese Departamento");
-            die();
-        }
-
-
-            $sql = "UPDATE PIA_DIAS_TRANSITO 
-                    SET COD_VIA = $VIA,
-                        COD_PUERTO_EMB = '".$EMBARQUE."',
-                        CNTRY_LVL_CHILD = $PAIS,
-                        COD_PUERTO_DESTINO = '".$DESTINO."',
-                        LIN_LINEA = '".$LINEA."',
-                        DEP_DEPTO = '".$DEPARTAMENTO."',
-                        D_TRANSITO = $TRANSITO,
-                        D_PUERTO_CD = $PUERTOCD,
-                        D_TIENDAS_CD = $CDTIENDA,
-                        T_DIAS_SUCURS = $TOTAL_DIAS_SUCURSAL,
-                        COD_VENTANA_EMB = $VENTANA_EMBARQUE,
-                        FIRST_FORWARDER = $FIRST_FORWARDER,
-                        LASTEST_FORWARDER= $LASTEST_FORWARDER
-                    WHERE ID_TRANSITO = $ID_TRANSITO";
-            $data_update = \database::getInstancia()->getConsulta($sql);
-
-            // Si se ejecuta la consulta
-            if ($data_update) {
-                // Acción: Crear / Eliminar / Actualizar
-                LogTransaccionClass::GuardaLogTransaccion($login, $temporada, 'ND', 'Lead Time','Actualizar', $sql, 'OK' );
-                return json_encode("ERROR");
-                die();
-                // Si la consulta no se puede realizar
-            } else {
-                // Acción: Crear / Eliminar / Actualizar
-                LogTransaccionClass::GuardaLogTransaccion($login, $temporada, 'ND', 'Lead Time','Actualizar', $sql, 'ERROR' );
-                return json_encode("ERROR");
-                die();
-            }
-
-
-
-
-
-
-        // Fin de la clase
-    }
 
 
 
