@@ -151,7 +151,7 @@ $(function () {
         toolbar: [
             { name:"agregaproveedor", text: "Nuevo Proveedor"},
             { name:"editaproveedor", text: "Editar Proveedor"},
-            { name: "save", text: "Actualizar Grilla", iconClass: "k-icon k-i-copy" },
+            { name: "save", text: "Guardar Cambios Grilla", iconClass: "k-icon k-i-copy" },
             { name: "cancel", text: "Cancela Modificaciones sin Guardar" }
         ],
         height: 550, // Altura del Grid
@@ -167,8 +167,8 @@ $(function () {
             {field: "NOM_PROVEEDOR",title: "Nombre",width: 250,filterable: {multi: true}},
             {field: "PI_AUTOMATICA",title: "PI Automática",width: 50, values: respuestas,filterable: {multi: true}},
             {field: "COMPRA_CURVA",title: "Compra en Curva",width: 60, values: respuestas,filterable: {multi: true}},
-            {field: "RFID",title: "RFID",width: 50, values: respuestas,filterable: {multi: true}},
-            { command: { text: "Ver", click: muestraDetalles }, title: "Detalle", width: "40px" }
+            {field: "RFID",title: "RFID",width: 50, values: respuestas,filterable: {multi: true}}/*,
+            { command: { text: "Ver", click: muestraDetalles }, title: "Detalle", width: "40px" }*/
             /*{field: "VEND_TAXID",title: "TAXID",width: 120,filterable: {multi: true}},
             {field: "VEND_NAME_DEALER",title: "Name Dealer",width: 120,filterable: {multi: true}},
             {field: "VEND_BENEFICIARY",title: "Beneficiary",width: 120,filterable: {multi: true}},
