@@ -32,39 +32,8 @@ class MantenedorProveedorController extends \Control
         $incoterm_base = explode(" - ", $incoterm_base);
         $incoterm = $incoterm_base[0];
 
-        echo MantenedorProveedorClass::ActualizaProveedor($f3->get('SESSION.login'),1, $array_data["COD_PROVEEDOR"],
-                                                                                    $array_data["PI_AUTOMATICA"],
-                                                                                    $array_data["COMPRA_CURVA"],
-                                                                                    $array_data["RFID"],
-                                                                                    $array_data["VEND_TAXID"],
-                                                                                    $array_data["VEND_BENEFICIARY"],
-                                                                                    $array_data["VEND_ADD_BENEFICIARY"],
-                                                                                    $array_data["VEND_CITY"],
-                                                                                    $array_data["VEND_COUNTRY"],
-                                                                                    $array_data["VEND_PHONE"],
-                                                                                    $array_data["VEND_FAX"],
-                                                                                    $array_data["VEND_NAME_DEALER"],
-                                                                                    $array_data["CONT_NAME"],
-                                                                                    $array_data["CONT_ADDRESS"],
-                                                                                    $array_data["CONT_PHONE"],
-                                                                                    $array_data["CONT_EMAIL"],
-                                                                                    $array_data["PAY_BANK_NAME_BENEFICIARY"],
-                                                                                    $array_data["PAY_ADD_BANK_BENEFICIARY"],
-                                                                                    $array_data["PAY_CITY_BENEFICIARY_BANK"],
-                                                                                    $array_data["PAY_COUNTRY_BENEFICIARY"],
-                                                                                    $array_data["PAY_SWIFT_CODE"],
-                                                                                    $array_data["PAY_ABA"],
-                                                                                    $array_data["PAY_IBAN"],
-                                                                                    $array_data["PAY_ACC_NUMBER_BENEFICIARY"],
-                                                                                    $array_data["PAY_CURRENCY_ACCOUNT"],
-                                                                                    $array_data["PAY_SECOND_BENEFICIARY"],
-                                                                                    $array_data["INTER_BANK_NAME"],
-                                                                                    $array_data["INTER_SWIFT"],
-                                                                                    $array_data["INTER_COUNTRY"],
-                                                                                    $array_data["INTER_CITY"],
-                                                                                    $array_data["PUR_CURRENCY"],
-                                                                                    $incoterm,
-                                                                                    $array_data["PUR_PAYMENTO"]);
+        echo MantenedorProveedorClass::ActualizaProveedor($f3->get('SESSION.login'),1,$array_data["COD_PROVEEDOR"],$array_data["RUT_PROVEEDOR"],$array_data["NOM_PROVEEDOR"],$array_data["VEND_TAXID"],$array_data["VEND_NAME_DEALER"],$array_data["VEND_BENEFICIARY"],$array_data["VEND_ADD_BENEFICIARY"],$array_data["VEND_CITY"],$array_data["VEND_COUNTRY"],$array_data["VEND_PHONE"],$array_data["VEND_FAX"],$array_data["CONT_NAME"],$array_data["CONT_ADDRESS"],$array_data["CONT_PHONE"],$array_data["CONT_EMAIL"],$array_data["PI_AUTOMATICA"],$array_data["COMPRA_CURVA"],$array_data["RFID"],$array_data["COD_MOD_PAIS"],1,$array_data["PAY_BANK_NAME_BENEFICIARY"],$array_data["PAY_ADD_BANK_BENEFICIARY"],$array_data["PAY_CITY_BENEFICIARY_BANK"],$array_data["PAY_COUNTRY_BENEFICIARY"],$array_data["PAY_SWIFT_CODE"],$array_data["PAY_ABA"],$array_data["PAY_IBAN"],$array_data["PAY_ACC_NUMBER_BENEFICIARY"],$array_data["PAY_CURRENCY_ACCOUNT"],$array_data["PAY_SECOND_BENEFICIARY"],$array_data["INTER_BANK_NAME"],$array_data["INTER_SWIFT"],$array_data["INTER_COUNTRY"],$array_data["INTER_CITY"],$array_data["PUR_CURRENCY"],$incoterm,$array_data["PUR_PAYMENTO"]);
+
     }
 
     // Actualiza Proveedor

@@ -156,58 +156,97 @@ class MantenedorProveedorClass extends \parametros
     // Fin de la clase
     }
 
-    // Actualiza Proveedor
-    public static function ActualizaProveedor($login, $pais_filtro_ripley,$COD_PROVEEDOR,$PI_AUTOMATICA,$COMPRA_CURVA,$RFID,$VEND_TAXID,$VEND_BENEFICIARY,$VEND_ADD_BENEFICIARY,$VEND_CITY,$VEND_COUNTRY,$VEND_PHONE,$VEND_FAX,$VEND_NAME_DEALER,$CONT_NAME,$CONT_ADDRESS,$CONT_PHONE,$CONT_EMAIL,$PAY_BANK_NAME_BENEFICIARY,$PAY_ADD_BANK_BENEFICIARY,$PAY_CITY_BENEFICIARY_BANK,$PAY_COUNTRY_BENEFICIARY,$PAY_SWIFT_CODE,$PAY_ABA,$PAY_IBAN,$PAY_ACC_NUMBER_BENEFICIARY,$PAY_CURRENCY_ACCOUNT,$PAY_SECOND_BENEFICIARY,$INTER_BANK_NAME,$INTER_SWIFT,$INTER_COUNTRY,$INTER_CITY,$PUR_CURRENCY,$incoterm,$PUR_PAYMENTO)
+    // Actualiza Proveedor Form
+    public static function ActualizaProveedor($login, $pais_filtro_ripley, $COD_PROVEEDOR,$RUT_PROVEEDOR,$NOM_PROVEEDOR,$VEND_TAXID,$VEND_NAME_DEALER,$VEND_BENEFICIARY,$VEND_ADD_BENEFICIARY,$VEND_CITY,$VEND_COUNTRY,$VEND_PHONE,$VEND_FAX,$CONT_NAME,$CONT_ADDRESS,$CONT_PHONE,$CONT_EMAIL,$PI_AUTOMATICA,$COMPRA_CURVA,$RFID,$COD_MOD_PAIS,$ESTADO,$PAY_BANK_NAME_BENEFICIARY,$PAY_ADD_BANK_BENEFICIARY,$PAY_CITY_BENEFICIARY_BANK,$PAY_COUNTRY_BENEFICIARY,$PAY_SWIFT_CODE,$PAY_ABA,$PAY_IBAN,$PAY_ACC_NUMBER_BENEFICIARY,$PAY_CURRENCY_ACCOUNT,$PAY_SECOND_BENEFICIARY,$INTER_BANK_NAME,$INTER_SWIFT,$INTER_COUNTRY,$INTER_CITY,$PUR_CURRENCY,$PUR_INCOTEM,$PUR_PAYMENTO)
     {
 
         if( ($COD_PROVEEDOR==null) || ($COD_PROVEEDOR=="null") || ($COD_PROVEEDOR=="") || (!$COD_PROVEEDOR) ){
             return json_encode("Ingrese Código Proveedor");
             die();
         }
-
         if( ($PI_AUTOMATICA==null) || ($PI_AUTOMATICA=="null") || ($PI_AUTOMATICA=="") || (!$PI_AUTOMATICA) ){
             return json_encode("Ingrese PI Automática");
             die();
         }
-
         if( ($COMPRA_CURVA==null) || ($COMPRA_CURVA=="null") || ($COMPRA_CURVA=="") || (!$COMPRA_CURVA) ){
             return json_encode("Ingrese Compra en Curva");
             die();
         }
-
         if( ($RFID==null) || ($RFID=="null") || ($RFID=="") || (!$RFID) ){
             return json_encode("Ingrese RFID");
             die();
         }
 
 
-        $sql = "UPDATE plc_proveedores_pmm 
-                    SET COD_VIA = $VIA,
-                        COD_PUERTO_EMB = '".$EMBARQUE."',
-                        CNTRY_LVL_CHILD = $PAIS,
-                        COD_PUERTO_DESTINO = '".$DESTINO."',
-                        LIN_LINEA = '".$LINEA."',
-                        DEP_DEPTO = '".$DEPARTAMENTO."',
-                        D_TRANSITO = $TRANSITO,
-                        D_PUERTO_CD = $PUERTOCD,
-                        D_TIENDAS_CD = $CDTIENDA,
-                        T_DIAS_SUCURS = $TOTAL_DIAS_SUCURSAL,
-                        COD_VENTANA_EMB = $VENTANA_EMBARQUE,
-                        FIRST_FORWARDER = $FIRST_FORWARDER,
-                        LASTEST_FORWARDER= $LASTEST_FORWARDER
-                    WHERE COD_PROVEEDOR = $COD_PROVEEDOR";
+        $sql = "UPDATE PLC_PROVEEDORES_PMM SET
+                        RUT_PROVEEDOR = $RUT_PROVEEDOR,
+                        NOM_PROVEEDOR = $NOM_PROVEEDOR,
+                        VEND_TAXID = $VEND_TAXID,
+                        VEND_NAME_DEALER = $VEND_NAME_DEALER,
+                        VEND_BENEFICIARY = $VEND_BENEFICIARY,
+                        VEND_ADD_BENEFICIARY = $VEND_ADD_BENEFICIARY,
+                        VEND_CITY = $VEND_CITY,
+                        VEND_COUNTRY = $VEND_COUNTRY,
+                        VEND_PHONE = $VEND_PHONE,
+                        VEND_FAX = $VEND_FAX,
+                        CONT_NAME = $CONT_NAME,
+                        CONT_ADDRESS = $CONT_ADDRESS,
+                        CONT_PHONE = $CONT_PHONE,
+                        CONT_EMAIL = $CONT_EMAIL,
+                        PI_AUTOMATICA = $PI_AUTOMATICA,
+                        COMPRA_CURVA = $COMPRA_CURVA,
+                        RFID = $RFID,
+                        COD_MOD_PAIS = $COD_MOD_PAIS,
+                        USU_MODIFICA = '".$login."',
+                        FECHA_MODIFICA = SYSDATE
+               WHERE COD_PROVEEDOR = $COD_PROVEEDOR";
         $data_update = \database::getInstancia()->getConsulta($sql);
 
         // Si se ejecuta la consulta
         if ($data_update) {
-            // Acción: Crear / Eliminar / Actualizar
-            LogTransaccionClass::GuardaLogTransaccion($login, $temporada, 'ND', 'Lead Time','Actualizar', $sql, 'OK' );
-            return json_encode("OK");
-            die();
-            // Si la consulta no se puede realizar
+//,,,
+            $sql_detalle = "UPDATE PIA_VENDOR_BANK SET
+                                   PAY_BANK_NAME_BENEFICIARY = $PAY_BANK_NAME_BENEFICIARY,
+                                   PAY_ADD_BANK_BENEFICIARY = $PAY_ADD_BANK_BENEFICIARY,
+                                   PAY_CITY_BENEFICIARY_BANK = $PAY_CITY_BENEFICIARY_BANK,
+                                   PAY_COUNTRY_BENEFICIARY = $PAY_COUNTRY_BENEFICIARY,
+                                   PAY_SWIFT_CODE = $PAY_SWIFT_CODE,
+                                   PAY_ABA = $PAY_ABA,
+                                   PAY_IBAN = $PAY_IBAN,
+                                   PAY_ACC_NUMBER_BENEFICIARY = $PAY_ACC_NUMBER_BENEFICIARY,
+                                   PAY_CURRENCY_ACCOUNT = $PAY_CURRENCY_ACCOUNT,
+                                   PAY_SECOND_BENEFICIARY = $PAY_SECOND_BENEFICIARY,
+                                   INTER_BANK_NAME = $INTER_BANK_NAME,
+                                   INTER_SWIFT = $INTER_SWIFT,
+                                   INTER_COUNTRY = $INTER_COUNTRY,
+                                   INTER_CITY = $INTER_CITY,
+                                   PUR_CURRENCY = $PUR_CURRENCY,
+                                   PUR_INCOTEM = $PUR_INCOTEM,
+                                   PUR_PAYMENTO = $PUR_PAYMENTO
+                            WHERE COD_PROVEEDOR =$COD_PROVEEDOR";
+            $data_update_detalle = \database::getInstancia()->getConsulta($sql_detalle);
+
+
+            if($data_update_detalle){
+                // Acción: Crear / Eliminar / Actualizar
+                LogTransaccionClass::GuardaLogTransaccion($login, 0, 'ND', 'Mantenedor Proveedor','Actualizar', $sql, 'OK' );
+                LogTransaccionClass::GuardaLogTransaccion($login, 0, 'ND', 'Mantenedor Proveedor','Actualizar', $sql_detalle, 'OK' );
+                return json_encode("OK");
+                die();
+            }else{
+                // Acción: Crear / Eliminar / Actualizar
+                LogTransaccionClass::GuardaLogTransaccion($login, 0, 'ND', 'Mantenedor Proveedor','Actualizar', $sql, 'ERROR' );
+                LogTransaccionClass::GuardaLogTransaccion($login, 0, 'ND', 'Mantenedor Proveedor','Actualizar', $sql_detalle, 'ERROR' );
+                return json_encode("ERROR");
+                die();
+            }
+
+
+
+        // Si la consulta no se puede realizar
         } else {
             // Acción: Crear / Eliminar / Actualizar
-            LogTransaccionClass::GuardaLogTransaccion($login, $temporada, 'ND', 'Lead Time','Actualizar', $sql, 'ERROR' );
+            LogTransaccionClass::GuardaLogTransaccion($login, 0, 'ND', 'Mantenedor Proveedor','Actualizar', $sql, 'ERROR' );
             return json_encode("ERROR");
             die();
         }

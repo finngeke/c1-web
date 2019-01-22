@@ -189,8 +189,15 @@ $(function () {
 
     // BTN Crear Registro
     $(".k-grid-agregaproveedor").click(function(e){
+
+        // Asigna el Texto de Crear el BTN
+        $("#BTN_FORM").html('Crear Proveedor');
+        $("#TIPO_OPERACION").val("CREAR");
+        $('#COD_PROVEEDOR').prop('readonly', false);
+
         var popupProveedor = $("#POPUP_PROVEEDOR");
         popupProveedor.data("kendoWindow").open();
+
     });
 
     // BTN Edita Registro
@@ -225,8 +232,63 @@ $(function () {
                 dataType: "json",
                 success: function (result) {
 
-                    console.log(result["COD_PROVEEDOR"]);
+                    // 3.- De la data que llega, pueblo los campos
+                    jQuery.each(result, function(index, itemData) {
 
+                        //console.log(itemData.COD_MOD_PAIS);
+
+                        // Seteamos Variables
+                        $("#COD_PROVEEDOR").val(itemData.COD_PROVEEDOR);
+                        $("#RUT_PROVEEDOR").val(itemData.RUT_PROVEEDOR);
+                        $("#NOM_PROVEEDOR").val(itemData.NOM_PROVEEDOR);
+                        $("#PI_AUTOMATICA").val(itemData.PI_AUTOMATICA);
+                        $("#COMPRA_CURVA").val(itemData.COMPRA_CURVA);
+                        $("#RFID").val(itemData.RFID);
+                        $("#COD_MOD_PAIS").val(itemData.COD_MOD_PAIS);
+                        $("#VEND_TAXID").val(itemData.VEND_TAXID);
+                        $("#VEND_BENEFICIARY").val(itemData.VEND_BENEFICIARY);
+                        $("#VEND_ADD_BENEFICIARY").val(itemData.VEND_ADD_BENEFICIARY);
+                        $("#VEND_CITY").val(itemData.VEND_CITY);
+                        $("#VEND_COUNTRY").val(itemData.VEND_COUNTRY);
+                        $("#VEND_PHONE").val(itemData.VEND_PHONE);
+                        $("#VEND_FAX").val(itemData.VEND_FAX);
+                        $("#VEND_NAME_DEALER").val(itemData.VEND_NAME_DEALER);
+                        $("#CONT_NAME").val(itemData.CONT_NAME);
+                        $("#CONT_ADDRESS").val(itemData.CONT_ADDRESS);
+                        $("#CONT_PHONE").val(itemData.CONT_PHONE);
+                        $("#CONT_EMAIL").val(itemData.CONT_EMAIL);
+                        $("#PAY_BANK_NAME_BENEFICIARY").val(itemData.PAY_BANK_NAME_BENEFICIARY);
+                        $("#PAY_ADD_BANK_BENEFICIARY").val(itemData.PAY_ADD_BANK_BENEFICIARY);
+                        $("#PAY_CITY_BENEFICIARY_BANK").val(itemData.PAY_CITY_BENEFICIARY_BANK);
+                        $("#PAY_COUNTRY_BENEFICIARY").val(itemData.PAY_COUNTRY_BENEFICIARY);
+                        $("#PAY_SWIFT_CODE").val(itemData.PAY_SWIFT_CODE);
+                        $("#PAY_ABA").val(itemData.PAY_ABA);
+                        $("#PAY_IBAN").val(itemData.PAY_IBAN);
+                        $("#PAY_ACC_NUMBER_BENEFICIARY").val(itemData.PAY_ACC_NUMBER_BENEFICIARY);
+                        $("#PAY_CURRENCY_ACCOUNT").val(itemData.PAY_CURRENCY_ACCOUNT);
+                        $("#PAY_SECOND_BENEFICIARY").val(itemData.PAY_SECOND_BENEFICIARY);
+                        $("#INTER_BANK_NAME").val(itemData.INTER_BANK_NAME);
+                        $("#INTER_SWIFT").val(itemData.INTER_SWIFT);
+                        $("#INTER_COUNTRY").val(itemData.INTER_COUNTRY);
+                        $("#INTER_CITY").val(itemData.INTER_CITY);
+                        $("#PUR_CURRENCY").val(itemData.PUR_CURRENCY);
+                        //$("#PUR_INCOTEM").val(itemData.PUR_INCOTEM);
+                        $("#PUR_PAYMENTO").val(itemData.PUR_PAYMENTO);
+
+                        var comboxPUR_INCOTEM = $('#PUR_INCOTEM').data("kendoComboBox");
+                        comboxPUR_INCOTEM.value(itemData.PUR_INCOTEM);
+
+
+                    });
+
+                    // 4.- Ocultar BTN de Crear
+                    $("#BTN_FORM").html('Actualizar Proveedor');
+                    $("#TIPO_OPERACION").val("ACTUALIZAR");
+                    $('#COD_PROVEEDOR').prop('readonly', true);
+
+                    // 5.- Levantar POPUP
+                    var popupProveedor = $("#POPUP_PROVEEDOR");
+                    popupProveedor.data("kendoWindow").open();
 
                 },
                 error: function (xhr, httpStatusMessage, customErrorMessage) {
@@ -235,12 +297,10 @@ $(function () {
                 }
             });
 
-            // 3.- De la data que llega, pueblo los campos
 
 
-            // 4.- Levantar POPUP
-            /*var popupProveedor = $("#POPUP_PROVEEDOR");
-            popupProveedor.data("kendoWindow").open();*/
+
+
 
         }
 
@@ -272,6 +332,9 @@ $(function () {
     $("form").submit(function(event) {
         event.preventDefault();
         if (validator.validate()) {
+
+
+            var tipo_operacion = $("#TIPO_OPERACION").val();
 
             // Seteamos Variables
             var cod_proveedor = $("#COD_PROVEEDOR").val();
@@ -311,9 +374,17 @@ $(function () {
             var pur_incoterm = $("#PUR_INCOTEM").val();
             var pur_payment = $("#PUR_PAYMENTO").val();
 
+            var operacion = "";
+
+            if(tipo_operacion=="CREAR"){
+                operacion = "CrearProveedor";
+            }else{
+                operacion = "ActualizaProveedor";
+            }
+
             $.ajax({
                 //type: "POST",
-                url: crudServiceBaseUrl + "CrearProveedor",
+                url: crudServiceBaseUrl + operacion, //"CrearProveedor",
                     data: {
                         COD_PROVEEDOR:String(cod_proveedor),
                         RUT_PROVEEDOR:String(rut_proveedor),
