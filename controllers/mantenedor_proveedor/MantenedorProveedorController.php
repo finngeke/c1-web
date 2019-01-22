@@ -28,7 +28,7 @@ class MantenedorProveedorController extends \Control
 
         $array_data = $_GET;
 
-        $incoterm_base = $array_data["INCOTERM"];
+        $incoterm_base = $array_data["PUR_INCOTEM"];
         $incoterm_base = explode(" - ", $incoterm_base);
         $incoterm = $incoterm_base[0];
 
