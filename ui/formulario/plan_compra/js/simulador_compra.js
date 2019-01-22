@@ -759,8 +759,8 @@ $(function () {
             model: {
                 id: "ID_COLOR3",
                 fields: {
-                    ID_COLOR3: {type: "number"},
-                    GRUPO_COMPRA: {type: "string"},
+                    ID_COLOR3: {type: "number"}, // Viaja a Controlador
+                    /*GRUPO_COMPRA: {type: "string"},
                     COD_TEMP: {type: "string"},
                     LINEA: {type: "string"},
                     SUBLINEA: {type: "string"},
@@ -775,102 +775,102 @@ $(function () {
                     COMPOSICION: {type: "string"},
                     TIPO_TELA: {type: "string"},
                     FORRO: {type: "string"},
-                    COLECCION: {type: "string"},
-                    EVENTO: {type: "string"},
-                    EVENTO_INSTORE: {type: "string"},
+                    COLECCION: {type: "string"},*/
+                    EVENTO: {type: "string"}, // Viaja a Controlador
+                    /*EVENTO_INSTORE: {type: "string"},
                     COD_ESTILO_VIDA: {type: "string"},
                     CALIDAD: {type: "string"},
                     COD_OCASION_USO: {type: "string"},
-                    COD_PIRAMIX: {type: "string"},
-                    NOM_VENTANA: {type: "string"},
-                    COD_RANKVTA: {type: "string"},
+                    COD_PIRAMIX: {type: "string"},*/
+                    NOM_VENTANA: {type: "string"}, // Viaja a Controlador
+                    /*COD_RANKVTA: {type: "string"},
                     LIFE_CYCLE: {type: "string"},
                     NUM_EMB: {type: "string"},
                     COD_COLOR: {type: "string"},
                     TIPO_PRODUCTO: {type: "string"},
-                    TIPO_EXHIBICION: {type: "string"},
-                    DESTALLA: {type: "string"},
-                    TIPO_EMPAQUE: {type: "string"},
-                    PORTALLA_1_INI: {type: "string"},
-                    PORTALLA_1: {type: "string"},
-                    CURVATALLA: {type: "string"},
-                    CURVAMIN: {type: "number"},
-                    UNID_OPCION_INICIO: {type: "number"},
-                    UNID_OPCION_AJUSTADA: {type: "number"},
-                    CAN: {type: "number"},
-                    MTR_PACK: {type: "number"},
-                    CANT_INNER: {type: "number"},
-                    SEG_ASIG: {type: "string"},
-                    FORMATO: {type: "string"},
-                    TDAS: {type: "number"},
-                    A: {type: "number"},
-                    B: {type: "number"},
-                    C: {type: "number"},
-                    I: {type: "number"},
-                    UND_ASIG_INI: {type: "number"},
+                    TIPO_EXHIBICION: {type: "string"},*/
+                    DESTALLA: {type: "string"}, // Viaja a Controlador
+                    TIPO_EMPAQUE: {type: "string"}, // Viaja a Controlador
+                    PORTALLA_1_INI: {type: "string"}, // Viaja a Controlador
+                    //PORTALLA_1: {type: "string"},
+                    CURVATALLA: {type: "string"}, // Viaja a Controlador
+                    //CURVAMIN: {type: "number"},
+                    UNID_OPCION_INICIO: {type: "number"}, // Viaja a Controlador
+                    //UNID_OPCION_AJUSTADA: {type: "number"},
+                    CAN: {type: "number"}, // Viaja a Controlador
+                    //MTR_PACK: {type: "number"},
+                    //CANT_INNER: {type: "number"},
+                    SEG_ASIG: {type: "string"}, // Viaja a Controlador
+                    FORMATO: {type: "string"}, // Viaja a Controlador
+                    //TDAS: {type: "number"},
+                    A: {type: "number"}, // Viaja a Controlador
+                    B: {type: "number"}, // Viaja a Controlador
+                    C: {type: "number"}, // Viaja a Controlador
+                    I: {type: "number"}, // Viaja a Controlador
+                    /*UND_ASIG_INI: {type: "number"},
                     ROT: {type: "number"},
-                    NOM_PRECEDENCIA: {type: "string"},
-                    NOM_VIA: {type: "string"},
-                    NOM_PAIS: {type: "string"},
-                    VIAJE: {type: "string"},
-                    MKUP: {type: "number"},
-                    PRECIO_BLANCO: {type: "number"},
-                    GM: {type: "number"},
+                    NOM_PRECEDENCIA: {type: "string"},*/
+                    NOM_VIA: {type: "string"}, // Viaja a Controlador
+                    NOM_PAIS: {type: "string"}, // Viaja a Controlador
+                    /*VIAJE: {type: "string"},
+                    MKUP: {type: "number"},*/
+                    PRECIO_BLANCO: {type: "number"}, // Viaja a Controlador
+                    /*GM: {type: "number"},
                     OFERTA: {type: "string"},
                     DOSX: {type: "string"},
                     OPEX: {type: "string"},
-                    COD_TIP_MON: {type: "string"},
-                    COSTO_TARGET: {type: "number"},
-                    COSTO_FOB: {type: "number"},
-                    COSTO_INSP: {type: "number"},
-                    COSTO_RFID: {type: "number"},
-                    ROYALTY_POR: {type: "number"},
+                    COD_TIP_MON: {type: "string"},*/
+                    COSTO_TARGET: {type: "number"}, // Viaja a Controlador
+                    COSTO_FOB: {type: "number"}, // Viaja a Controlador
+                    COSTO_INSP: {type: "number"}, // Viaja a Controlador
+                    COSTO_RFID: {type: "number"}, // Viaja a Controlador
+                    /*ROYALTY_POR: {type: "number"},
                     COSTO_UNIT: {type: "number"},
                     COSTO_UNITS: {type: "number"},
                     CST_TOTLTARGET: {type: "percent"},
                     COSTO_TOT: {type: "number"},
                     COSTO_TOTS: {type: "number"},
-                    RETAIL: {type: "number"},
-                    DEBUT_REODER: {type: "string"},
-                    SEM_INI: {type: "string"},
+                    RETAIL: {type: "number"},*/
+                    DEBUT_REODER: {type: "string"}, // Viaja a Controlador
+                    /*SEM_INI: {type: "string"},
                     SEM_FIN: {type: "string"},
                     CICLO: {type: "number"},
                     AGOT_OBJ: {type: "number"},
-                    SEMLIQ: {type: "number"},
-                    ALIAS_PROV: {type: "string"},
-                    COD_PROVEEDOR: {type: "string"},
+                    SEMLIQ: {type: "number"},*/
+                    ALIAS_PROV: {type: "string"}, // Viaja a Controlador
+                    /*COD_PROVEEDOR: {type: "string"},
                     COD_TRADER: {type: "string"},
                     AFTER_MEETING_REMARKS: {type: "string"},
                     CODSKUPROVEEDOR: {type: "string"},
-                    SKU: {type: "string"},
-                    PROFORMA: {type: "string"},
-                    ARCHIVO: {type: "string"},
-                    ESTILO_PMM: {type: "string"},
+                    SKU: {type: "string"},*/
+                    PROFORMA: {type: "string"}, // Viaja a Controlador
+                    ARCHIVO: {type: "string"}, // Viaja a Controlador
+                    /*ESTILO_PMM: {type: "string"},
                     ESTADO_MATCH: {type: "string"},
                     PO_NUMBER: {type: "number"},
-                    ESTADO_OC: {type: "string"},
-                    FECHA_ACORDADA: {type: "string"},
-                    FECHA_EMBARQUE: {type: "string"},
+                    ESTADO_OC: {type: "string"},*/
+                    FECHA_ACORDADA: {type: "string"}, // Viaja a Controlador
+                    /*FECHA_EMBARQUE: {type: "string"},
                     FECHA_ETA: {type: "string"},
                     FECHA_RECEPCION: {type: "string"},
                     DIAS_ATRASO: {type: "number"},
-                    CODESTADO: {type: "string"},
-                    ESTADO_C1: {type: "string"},
-                    VENTANA_LLEGADA: {type: "string"},
-                    PROFORMA_BASE: {type: "string"},
-                    TIPO_EMPAQUE_BASE: {type: "string"},
+                    CODESTADO: {type: "string"},*/
+                    ESTADO_C1: {type: "string"}, // Viaja a Controlador
+                    //VENTANA_LLEGADA: {type: "string"},
+                    PROFORMA_BASE: {type: "string"}, // Viaja a Controlador
+                    /*TIPO_EMPAQUE_BASE: {type: "string"},
                     UNI_INICIALES_BASE: {type: "number"},
                     PRECIO_BLANCO_BASE: {type: "number"},
                     COSTO_TARGET_BASE: {type: "number"},
                     COSTO_FOB_BASE: {type: "number"},
                     COSTO_INSP_BASE: {type: "number"},
-                    COSTO_RFID_BASE: {type: "percent"},
-                    COD_MARCA: {type: "number"},
-                    N_CURVASXCAJAS: {type: "number"},
-                    COD_JER2: {type: "string"},
-                    COD_SUBLIN: {type: "string"},
-                    ARCHIVO_BASE: {type: "string"},
-                    FORMATO_BASE: {type: "string"}
+                    COSTO_RFID_BASE: {type: "percent"},*/
+                    COD_MARCA: {type: "number"}, // Viaja a Controlador
+                    N_CURVASXCAJAS: {type: "number"}, // Viaja a Controlador
+                    COD_JER2: {type: "string"}, // Viaja a Controlador
+                    COD_SUBLIN: {type: "string"}, // Viaja a Controlador
+                    ARCHIVO_BASE: {type: "string"}, // Viaja a Controlador
+                    FORMATO_BASE: {type: "string"} // Viaja a Controlador
 
                 }
             }
