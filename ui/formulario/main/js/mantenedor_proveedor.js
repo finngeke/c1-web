@@ -139,6 +139,11 @@ $(function () {
         wnd.center().open();
     }
 
+    function onChange(arg) {
+        $("#span_proveedor_sepeccionado").text(this.selectedKeyNames().join(", "));
+        // console.log("ID Proveedor Seleccionado: [" + this.selectedKeyNames().join(", ") + "]");
+    }
+
     // Definimos KendoGrid
     $("#grid").kendoGrid({
         dataSource: dataSource,
@@ -178,7 +183,8 @@ $(function () {
             {field: "CONT_EMAIL",title: "Cont. Email",width: 120,filterable: {multi: true}}
             */
 
-        ]
+        ],
+        change: onChange
     });
 
     // BTN Crear Registro
@@ -191,17 +197,55 @@ $(function () {
     $(".k-grid-editaproveedor").click(function(e){
 
         // 1.- Seleccionar solo un elemento
+        var cant_seleccionada_span = $("#span_proveedor_sepeccionado").text();
+        var cant_seleccionada = cant_seleccionada_span.split(",");
+
+        var seleccionados_check = 0;
+        $.each( cant_seleccionada, function( index, value ) {
+            if(value.length>0){
+                seleccionados_check++;
+                //console.log("Valor:"+value.length);
+            }
+        });
+
+        //console.log(seleccionados_check);
+
+        if(seleccionados_check==0){
+            popupNotification.getNotifications().parent().remove();
+            popupNotification.show(" Seleccione Proveedor.", "info");
+        }else if(seleccionados_check>1){
+            popupNotification.getNotifications().parent().remove();
+            popupNotification.show(" No seleccione más de 1 Proveedor.", "info");
+        }else{
+
+            // 2.- Del registro seleccionado, busco su data
+            $.ajax({
+                url: crudServiceBaseUrl + "BuscaProveedor",
+                data: {COD_PROVEEDOR:String(cant_seleccionada[0])},
+                dataType: "json",
+                success: function (result) {
+
+                    console.log(result["COD_PROVEEDOR"]);
 
 
-        // 2.- Del registro seleccionado, busco su data
+                },
+                error: function (xhr, httpStatusMessage, customErrorMessage) {
+                    popupNotification.getNotifications().parent().remove();
+                    popupNotification.show(" Se produjo un error en el guardado.", "error");
+                }
+            });
+
+            // 3.- De la data que llega, pueblo los campos
 
 
-        // 3.- De la data que llega, pueblo los campos
+            // 4.- Levantar POPUP
+            /*var popupProveedor = $("#POPUP_PROVEEDOR");
+            popupProveedor.data("kendoWindow").open();*/
+
+        }
 
 
-        // 4.- Levantar POPUP
-        var popupProveedor = $("#POPUP_PROVEEDOR");
-        popupProveedor.data("kendoWindow").open();
+
 
     });
 

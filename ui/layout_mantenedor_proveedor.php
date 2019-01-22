@@ -6,8 +6,8 @@
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
     <meta charset="utf-8">
-    <!--<link href="{{@TELERIK}}web/telerik/content/shared/styles/plan_compra.css" rel="stylesheet">-->
-    <link href="{{@TELERIK}}web/telerik/styles/PlanCompraRipley/all.css" rel="stylesheet">
+    <link href="{{@TELERIK}}web/telerik/content/shared/styles/plan_compra.css" rel="stylesheet">
+    <!--<link href="{{@TELERIK}}web/telerik/styles/PlanCompraRipley/all.css" rel="stylesheet">-->
     <link href="{{@TELERIK}}web/telerik/styles/kendo.common.min.css" rel="stylesheet">
     <link href="{{@TELERIK}}web/telerik/styles/kendo.rtl.min.css" rel="stylesheet">
     <link href="{{@TELERIK}}web/telerik/styles/kendo.default.min.css" rel="stylesheet">

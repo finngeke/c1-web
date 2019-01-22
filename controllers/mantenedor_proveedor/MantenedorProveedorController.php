@@ -80,7 +80,10 @@ class MantenedorProveedorController extends \Control
         echo json_encode(MantenedorProveedorClass::ListarIncoterm($f3->get('SESSION.login'),1));
     }
 
-
+    // Busca Proveedor
+    public function BuscaProveedor($f3){
+        echo json_encode(MantenedorProveedorClass::BuscaProveedor($f3->get('SESSION.login'),1,$f3->get('GET.COD_PROVEEDOR')));
+    }
 
 
     // Listar País

@@ -297,6 +297,121 @@ class MantenedorProveedorClass extends \parametros
 
     }
 
+    // Busca Proveedor
+    public static function BuscaProveedor($login, $pais_filtro_ripley, $cod_proveedor)
+    {
+
+        $sql = "SELECT 
+                    T1.COD_PROVEEDOR,
+                    T1.RUT_PROVEEDOR,
+                    T1.NOM_PROVEEDOR,
+                    T1.VEND_TAXID,
+                    T1.VEND_NAME_DEALER,
+                    T1.VEND_BENEFICIARY,
+                    T1.VEND_ADD_BENEFICIARY,
+                    T1.VEND_CITY,
+                    T1.VEND_COUNTRY,
+                    T1.VEND_PHONE,
+                    T1.VEND_FAX,
+                    T1.CONT_NAME,
+                    T1.CONT_ADDRESS,
+                    T1.CONT_PHONE,
+                    T1.CONT_EMAIL,
+                    T1.PI_AUTOMATICA,
+                    T1.COMPRA_CURVA,
+                    T1.RFID,
+                    T1.COD_MOD_PAIS,
+                    T1.USU_CREA,
+                    T1.FECHA_CREA,
+                    T1.USU_MODIFICA,
+                    T1.FECHA_MODIFICA,
+                    T1.ESTADO,
+                    T1.TIPO,
+                    T1.NICKNAME,
+                    T1.COMMISSION,
+                    T2.PAY_BANK_NAME_BENEFICIARY,
+                    T2.PAY_ADD_BANK_BENEFICIARY,
+                    T2.PAY_CITY_BENEFICIARY_BANK,
+                    T2.PAY_COUNTRY_BENEFICIARY,
+                    T2.PAY_SWIFT_CODE,
+                    T2.PAY_ABA,
+                    T2.PAY_IBAN,
+                    T2.PAY_ACC_NUMBER_BENEFICIARY,
+                    T2.PAY_CURRENCY_ACCOUNT,
+                    T2.PAY_SECOND_BENEFICIARY,
+                    T2.INTER_BANK_NAME,
+                    T2.INTER_SWIFT,
+                    T2.INTER_COUNTRY,
+                    T2.INTER_CITY,
+                    T2.PUR_CURRENCY,
+                    T2.PUR_INCOTEM,
+                    T2.PUR_PAYMENTO
+                FROM PLC_PROVEEDORES_PMM T1
+                INNER JOIN PIA_VENDOR_BANK T2 ON T2.COD_PROVEEDOR = T1.COD_PROVEEDOR
+                WHERE T1.COD_PROVEEDOR = $cod_proveedor";
+
+        $data = \database::getInstancia()->getFilas($sql);
+
+        // Transformo a array asociativo
+        $array1 = [];
+        foreach ($data as $va1) {
+
+            array_push($array1, array(
+                 "COD_PROVEEDOR" => $va1[0]
+                ,"RUT_PROVEEDOR" => $va1[1]
+                ,"NOM_PROVEEDOR" => $va1[2]
+                ,"VEND_TAXID" => utf8_encode($va1[3])
+                ,"VEND_NAME_DEALER" => $va1[4]
+                ,"VEND_BENEFICIARY" => $va1[5]
+                ,"VEND_ADD_BENEFICIARY" => $va1[6]
+                ,"VEND_CITY" => $va1[7]
+                ,"VEND_COUNTRY" => $va1[8]
+                ,"VEND_PHONE" => $va1[9]
+                ,"VEND_FAX" => $va1[10]
+                ,"CONT_NAME" => $va1[11]
+                ,"CONT_ADDRESS" => $va1[12]
+                ,"CONT_PHONE" => $va1[13]
+                ,"CONT_EMAIL" => $va1[14]
+                ,"PI_AUTOMATICA" => $va1[15]
+                ,"COMPRA_CURVA" => $va1[16]
+                ,"RFID" => $va1[17]
+                ,"COD_MOD_PAIS" => $va1[18]
+                ,"USU_CREA" => $va1[19]
+                ,"FECHA_CREA" => $va1[20]
+                ,"USU_MODIFICA" => $va1[21]
+                ,"FECHA_MODIFICA" => $va1[22]
+                ,"ESTADO" => $va1[23]
+                ,"TIPO" => $va1[24]
+                ,"NICKNAME" => $va1[25]
+                ,"COMMISSION" => $va1[26]
+                ,"PAY_BANK_NAME_BENEFICIARY" => $va1[27]
+                ,"PAY_ADD_BANK_BENEFICIARY" => $va1[28]
+                ,"PAY_CITY_BENEFICIARY_BANK" => $va1[29]
+                ,"PAY_COUNTRY_BENEFICIARY" => $va1[30]
+                ,"PAY_SWIFT_CODE" => $va1[31]
+                ,"PAY_ABA" => $va1[32]
+                ,"PAY_IBAN" => $va1[33]
+                ,"PAY_ACC_NUMBER_BENEFICIARY" => $va1[34]
+                ,"PAY_CURRENCY_ACCOUNT" => $va1[35]
+                ,"PAY_SECOND_BENEFICIARY" => $va1[36]
+                ,"INTER_BANK_NAME" => $va1[37]
+                ,"INTER_SWIFT" => $va1[38]
+                ,"INTER_COUNTRY" => $va1[39]
+                ,"INTER_CITY" => $va1[40]
+                ,"PUR_CURRENCY" => $va1[41]
+                ,"PUR_INCOTEM" => $va1[42]
+                ,"PUR_PAYMENTO" => $va1[43]
+                )
+            );
+        }
+
+        return $array1;
+
+    }
+
+
+
+
 
 
 
