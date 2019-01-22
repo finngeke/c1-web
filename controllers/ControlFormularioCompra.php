@@ -171,19 +171,8 @@
 			$f3->set('contenido', 'formulario/plan_compra/fecha_recepcion.html'); //llamas al formulario html
 			echo Template::instance()->render('layout_simulador.php');
 		}
-
-		public function Factor_Importacion($f3){
-            ControlFormularioMain::cargaMain($f3); //variable de perfilamiento.
-            $f3->set('nombre_form', 'Factor Importación'); //Parametros por cada formulario
-            $f3->set('depto_form', ''); //Parametros por cada formulario
-
-            //$f3->set('Lista_fechasrecep', \temporada\fecha_recepcion::getListafecharecepcion($f3->get('SESSION.COD_TEMPORADA')));
-            //$f3->set('tipo_deptomarca', 'formulario/plan_compra/mantenedor/popup_deptomarca.html');
-            $f3->set('contenido', 'formulario/main/Factor_Importacion.html'); //llamas al formulario html
-            echo Template::instance()->render('layout_Factor_Importacion.php');
-        }
-
-        public function lead_time($f3){
+		
+public function lead_time($f3){
 
             ControlFormularioMain::cargaMain($f3);
             $f3->set('nombre_form', 'Lead Time');

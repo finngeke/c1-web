@@ -328,7 +328,7 @@ class LeadTimeClass extends \parametros
             if ($data_update) {
                 // Acción: Crear / Eliminar / Actualizar
                 LogTransaccionClass::GuardaLogTransaccion($login, $temporada, 'ND', 'Lead Time','Actualizar', $sql, 'OK' );
-                return json_encode("ERROR");
+                return json_encode("OK");
                 die();
                 // Si la consulta no se puede realizar
             } else {

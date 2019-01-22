@@ -34,12 +34,123 @@
     <div id="details"></div>
     <script type="text/x-kendo-template" id="template">
         <div id="details-container">
-            <h2>#= COD_MOD_PAIS # #= COD_MOD_PAIS #</h2>
-            <em>#= COD_MOD_PAIS #</em>
-            <dl>
-                <dt>City: #= COD_MOD_PAIS #</dt>
-                <dt>Birth Date: #= COD_MOD_PAIS #</dt>
-            </dl>
+
+            <table>
+                <tr><td colspan="4"><b>RIPLEY</b></td></tr>
+                <tr>
+                    <td>PI AUTOMATICA</td>
+                    <td>#= PI_AUTOMATICA #</td>
+                    <td style="padding-left: 10px">COMPRA EN CURVA</td>
+                    <td>#= COMPRA_CURVA #</td>
+                </tr>
+                <tr>
+                    <td>RFID</td>
+                    <td>#= RFID #</td>
+                    <td style="padding-left: 10px">&nbsp;</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr><td colspan="4">&nbsp;</td></tr>
+                <tr><td colspan="4"><b>VENDOR INFORMATION</b></td></tr>
+                <tr>
+                    <td>TAXI ID</td>
+                    <td>#= VEND_TAXID #</td>
+                    <td style="padding-left: 10px">BENEFICIARY</td>
+                    <td>#= VEND_BENEFICIARY #</td>
+                </tr>
+                <tr>
+                    <td>ADDRESS OF BENEFICIARY</td>
+                    <td>#= VEND_ADD_BENEFICIARY #</td>
+                    <td style="padding-left: 10px">CITY</td>
+                    <td>#= VEND_CITY #</td>
+                </tr>
+                <tr>
+                    <td>COUNTRY</td>
+                    <td>#= VEND_COUNTRY #</td>
+                    <td style="padding-left: 10px">PHONE</td>
+                    <td>#= VEND_PHONE #</td>
+                </tr>
+                <tr>
+                    <td>FAX</td>
+                    <td>#= VEND_FAX #</td>
+                    <td style="padding-left: 10px">NAME DEALER</td>
+                    <td>#= VEND_NAME_DEALER #</td>
+                </tr>
+                <tr><td colspan="4">&nbsp;</td></tr>
+                <tr><td colspan="4"><b>CONTACT DETAILS</b></td></tr>
+                <tr>
+                    <td>NAME</td>
+                    <td>#= CONT_NAME #</td>
+                    <td style="padding-left: 10px">ADDRESS</td>
+                    <td>#= CONT_ADDRESS #</td>
+                </tr>
+                <tr>
+                    <td>PHONE</td>
+                    <td>#= CONT_PHONE #</td>
+                    <td style="padding-left: 10px">E-MAIL</td>
+                    <td>#= CONT_EMAIL #</td>
+                </tr>
+                <tr><td colspan="4">&nbsp;</td></tr>
+                <tr><td colspan="4"><b>PAYMENT BY WIRE TRANSFER - BANK ACCOUNT INFO</b></td></tr>
+                <tr>
+                    <td>BANK NAME OF BENEFICIARY</td>
+                    <td>#= PAY_BANK_NAME_BENEFICIARY #</td>
+                    <td style="padding-left: 10px">ADDRESS BANK OF BENEFICIARY</td>
+                    <td>#= PAY_ADD_BANK_BENEFICIARY #</td>
+                </tr>
+                <tr>
+                    <td>CITY OF BENEFICIARY BANK</td>
+                    <td>#= PAY_CITY_BENEFICIARY_BANK #</td>
+                    <td style="padding-left: 10px">COUNTRY OF BENEFICIARY BANK</td>
+                    <td>#= PAY_COUNTRY_BENEFICIARY #</td>
+                </tr>
+                <tr>
+                    <td>SWIFT CODE</td>
+                    <td>#= PAY_SWIFT_CODE #</td>
+                    <td style="padding-left: 10px">ABA (USA)</td>
+                    <td>#= PAY_ABA #</td>
+                </tr>
+                <tr>
+                    <td>IBAN (EUROPA)</td>
+                    <td>#= PAY_IBAN #</td>
+                    <td style="padding-left: 10px">ACCOUNT NUMBER BENEFICIARY</td>
+                    <td>#= PAY_ACC_NUMBER_BENEFICIARY #</td>
+                </tr>
+                <tr>
+                    <td>CURRENCY OF THE ACCOUNT</td>
+                    <td>#= PAY_CURRENCY_ACCOUNT #</td>
+                    <td style="padding-left: 10px">SECOND BENEFICIARY </td>
+                    <td>#= PAY_SECOND_BENEFICIARY #</td>
+                </tr>
+                <tr><td colspan="4">&nbsp;</td></tr>
+                <tr><td colspan="4"><b>INTERMEDIARY BANK</b></td></tr>
+                <tr>
+                    <td>BANK NAME</td>
+                    <td>#= INTER_BANK_NAME #</td>
+                    <td style="padding-left: 10px">SWIFT CODE</td>
+                    <td>#= INTER_SWIFT #</td>
+                </tr>
+                <tr>
+                    <td>COUNTRY</td>
+                    <td>#= INTER_SWIFT #</td>
+                    <td style="padding-left: 10px">CITY</td>
+                    <td>#= INTER_CITY #</td>
+                </tr>
+                <tr><td colspan="4">&nbsp;</td></tr>
+                <tr><td colspan="4"><b>PURCHASE DETAIL</b></td></tr>
+                <tr>
+                    <td>CURRENCY</td>
+                    <td>#= PUR_CURRENCY #</td>
+                    <td style="padding-left: 10px">INCOTEM</td>
+                    <td>#= PUR_INCOTEM #</td>
+                </tr>
+                <tr>
+                    <td>PAYMENT</td>
+                    <td>#= PUR_PAYMENTO #</td>
+                    <td style="padding-left: 10px">&nbsp;</td>
+                    <td>&nbsp;</td>
+                </tr>
+            </table>
+
         </div>
     </script>
 

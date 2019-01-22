@@ -69,7 +69,7 @@ $(function () {
                 dataType: "json"
             },
             update: {
-                url: crudServiceBaseUrl + "ActualizaProveedor",
+                url: crudServiceBaseUrl + "ActualizaPortada",
                 dataType: "json"
             }
         },
@@ -124,7 +124,7 @@ $(function () {
             modal: true,
             visible: false,
             resizable: false,
-            width: 300
+            width: 900
         }).data("kendoWindow");
 
     // Asignación del Template a Insertar
@@ -154,6 +154,7 @@ $(function () {
         filterable: true,
         sortable: true, // Se puede ordenar
         columns: [ // Columnas a Listar
+            { selectable: true, width: "13px" },
             {field: "COD_PROVEEDOR",title: "ID",width: 30},
             {field: "COD_MOD_PAIS",title: "País",width: 30,filterable: {multi: true}},
             {field: "RUT_PROVEEDOR",title: "RUT Proveedor",width: 70,filterable: {multi: true}},
@@ -190,8 +191,8 @@ $(function () {
     var PUR_INCOTEM = $("#PUR_INCOTEM").kendoComboBox({
         autoBind: false,
         //optionLabel: "Seleccione INCOTERM",
-        dataTextField: "NOM_INCOTEM",
-        dataValueField: "COD_INCOTEM",
+        dataTextField: "NOM_INCOTERM",
+        dataValueField: "COD_INCOTERM",
         dataSource: {
             transport: {
                 read: {
@@ -202,8 +203,6 @@ $(function () {
         }
     }).data("kendoComboBox");
 
-
-    // xxx
     /*
     $("#VEND_TAXID").kendoNumericTextBox({});
     $("#VEND_BENEFICIARY").kendoNumericTextBox({});

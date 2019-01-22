@@ -10,7 +10,7 @@ class MantenedorProveedorController extends \Control
         echo json_encode(MantenedorProveedorClass::ListarProveedor($f3->get('SESSION.login'),1));
     }
 
-    // Crear Lead Time
+    // Crear Proveedor
     public function CrearProveedor($f3) {
 
         var_dump($_REQUEST);
@@ -57,7 +57,7 @@ class MantenedorProveedorController extends \Control
 
     }
 
-    // Actualiza Lead Time
+    // Actualiza Proveedor
     public function ActualizaProveedor($f3) {
 
         $array_data = $_GET;
@@ -99,6 +99,14 @@ class MantenedorProveedorController extends \Control
                                                                                     $array_data["PUR_CURRENCY"],
                                                                                     $incoterm,
                                                                                     $array_data["PUR_PAYMENTO"]);
+    }
+
+    // Actualiza Proveedor
+    public function ActualizaPortada($f3) {
+
+        $array_data = $_GET;
+
+        echo MantenedorProveedorClass::ActualizaPortada($f3->get('SESSION.login'),1, $array_data["COD_PROVEEDOR"],$array_data["PI_AUTOMATICA"],$array_data["COMPRA_CURVA"],$array_data["RFID"]);
     }
 
     // Listar Incoterm COD_PROVEEDOR

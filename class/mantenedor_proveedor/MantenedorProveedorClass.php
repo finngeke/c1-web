@@ -7,7 +7,7 @@ use log_transaccion\LogTransaccionClass;
 class MantenedorProveedorClass extends \parametros
 {
 
-    // Listar Lead Time
+    // Listar Proveedor
     public static function ListarProveedor($login, $pais_filtro_ripley)
     {
 
@@ -96,7 +96,7 @@ class MantenedorProveedorClass extends \parametros
 
     }
 
-    // Crear Lead Time
+    // Crear Proveedor
     public static function CrearProveedor($login, $pais_filtro_ripley, $PI_AUTOMATICA,$COMPRA_CURVA,$RFID,$VEND_TAXID,$VEND_BENEFICIARY,$VEND_ADD_BENEFICIARY,$VEND_CITY,$VEND_COUNTRY,$VEND_PHONE,$VEND_FAX,$VEND_NAME_DEALER,$CONT_NAME,$CONT_ADDRESS,$CONT_PHONE,$CONT_EMAIL,$PAY_BANK_NAME_BENEFICIARY,$PAY_ADD_BANK_BENEFICIARY,$PAY_CITY_BENEFICIARY_BANK,$PAY_COUNTRY_BENEFICIARY,$PAY_SWIFT_CODE,$PAY_ABA,$PAY_IBAN,$PAY_ACC_NUMBER_BENEFICIARY,$PAY_CURRENCY_ACCOUNT,$PAY_SECOND_BENEFICIARY,$INTER_BANK_NAME,$INTER_SWIFT,$INTER_COUNTRY,$INTER_CITY,$PUR_CURRENCY,$incoterm,$PUR_PAYMENTO)
     {
 
@@ -164,7 +164,7 @@ class MantenedorProveedorClass extends \parametros
         // Fin de la clase
     }
 
-    // Actualiza Lead Time
+    // Actualiza Proveedor
     public static function ActualizaProveedor($login, $pais_filtro_ripley,$COD_PROVEEDOR,$PI_AUTOMATICA,$COMPRA_CURVA,$RFID,$VEND_TAXID,$VEND_BENEFICIARY,$VEND_ADD_BENEFICIARY,$VEND_CITY,$VEND_COUNTRY,$VEND_PHONE,$VEND_FAX,$VEND_NAME_DEALER,$CONT_NAME,$CONT_ADDRESS,$CONT_PHONE,$CONT_EMAIL,$PAY_BANK_NAME_BENEFICIARY,$PAY_ADD_BANK_BENEFICIARY,$PAY_CITY_BENEFICIARY_BANK,$PAY_COUNTRY_BENEFICIARY,$PAY_SWIFT_CODE,$PAY_ABA,$PAY_IBAN,$PAY_ACC_NUMBER_BENEFICIARY,$PAY_CURRENCY_ACCOUNT,$PAY_SECOND_BENEFICIARY,$INTER_BANK_NAME,$INTER_SWIFT,$INTER_COUNTRY,$INTER_CITY,$PUR_CURRENCY,$incoterm,$PUR_PAYMENTO)
     {
 
@@ -172,21 +172,9 @@ class MantenedorProveedorClass extends \parametros
             return json_encode("Ingrese Vía");
             die();
         }
-        if( ($PAIS==null) || ($PAIS=="null") || ($PAIS=="") || (!$PAIS) ){
-            return json_encode("Ingrese País");
-            die();
-        }
-        if( ($EMBARQUE==null) || ($EMBARQUE=="null") || ($EMBARQUE=="") || (!$EMBARQUE) ){
-            return json_encode("Ingrese Puerto Embarque");
-            die();
-        }
-        if( ($DEPARTAMENTO==null) || ($DEPARTAMENTO=="null") || ($DEPARTAMENTO=="") || (!$DEPARTAMENTO) ){
-            return json_encode("Ingrese Departamento");
-            die();
-        }
 
 
-        $sql = "UPDATE PIA_DIAS_TRANSITO 
+        $sql = "UPDATE plc_proveedores_pmm 
                     SET COD_VIA = $VIA,
                         COD_PUERTO_EMB = '".$EMBARQUE."',
                         CNTRY_LVL_CHILD = $PAIS,
@@ -200,7 +188,7 @@ class MantenedorProveedorClass extends \parametros
                         COD_VENTANA_EMB = $VENTANA_EMBARQUE,
                         FIRST_FORWARDER = $FIRST_FORWARDER,
                         LASTEST_FORWARDER= $LASTEST_FORWARDER
-                    WHERE ID_TRANSITO = $ID_TRANSITO";
+                    WHERE COD_PROVEEDOR = $COD_PROVEEDOR";
         $data_update = \database::getInstancia()->getConsulta($sql);
 
         // Si se ejecuta la consulta
@@ -225,6 +213,61 @@ class MantenedorProveedorClass extends \parametros
         // Fin de la clase
     }
 
+    // Actualiza Portada
+    public static function ActualizaPortada($login, $pais_filtro_ripley,$COD_PROVEEDOR,$PI_AUTOMATICA,$COMPRA_CURVA,$RFID)
+    {
+
+        if( ($COD_PROVEEDOR==null) || ($COD_PROVEEDOR=="null") || ($COD_PROVEEDOR=="") || (!$COD_PROVEEDOR) ){
+            return json_encode("Ingrese Código Proveedor");
+            die();
+        }
+
+        if( ($PI_AUTOMATICA==null) || ($PI_AUTOMATICA=="null") || ($PI_AUTOMATICA=="") || (!$PI_AUTOMATICA) ){
+            return json_encode("Ingrese PI Automática");
+            die();
+        }
+
+        if( ($COMPRA_CURVA==null) || ($COMPRA_CURVA=="null") || ($COMPRA_CURVA=="") || (!$COMPRA_CURVA) ){
+            return json_encode("Ingrese Compra en Curva");
+            die();
+        }
+
+        if( ($RFID==null) || ($RFID=="null") || ($RFID=="") || (!$RFID) ){
+            return json_encode("Ingrese RFID");
+            die();
+        }
+
+
+        $sql = "UPDATE plc_proveedores_pmm 
+                SET PI_AUTOMATICA = $PI_AUTOMATICA,
+                COMPRA_CURVA = $COMPRA_CURVA,
+                RFID = $RFID
+                WHERE COD_PROVEEDOR = $COD_PROVEEDOR";
+        $data_update = \database::getInstancia()->getConsulta($sql);
+
+        // Si se ejecuta la consulta
+        if ($data_update) {
+            // Acción: Crear / Eliminar / Actualizar
+            LogTransaccionClass::GuardaLogTransaccion($login, 'ND', 'ND', 'Mantenedor Proveedor','Actualizar', $sql, 'OK' );
+            return json_encode("OK");
+            die();
+            // Si la consulta no se puede realizar
+        } else {
+            // Acción: Crear / Eliminar / Actualizar
+            LogTransaccionClass::GuardaLogTransaccion($login, 'ND', 'ND', 'Mantenedor Proveedor','Actualizar', $sql, 'ERROR' );
+            return json_encode("ERROR");
+            die();
+        }
+
+
+
+
+
+
+        // Fin de la clase
+    }
+
+
     // Listar Incoterm
     public static function ListarIncoterm($login, $pais_filtro_ripley)
     {
@@ -236,8 +279,8 @@ class MantenedorProveedorClass extends \parametros
         $array1 = [];
         foreach ($data as $va1) {
             array_push($array1, array(
-                    "COD_INCOTERM" => $va1[0]." - ".$va1[1],
-                    "NOM_INCOTERM" => $va1[0]." - ".$va1[1]
+                    "COD_INCOTERM" => utf8_encode($va1[0]),
+                    "NOM_INCOTERM" => utf8_encode($va1[1])
                 )
             );
         }
