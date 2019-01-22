@@ -189,8 +189,20 @@ $(function () {
 
     // BTN Edita Registro
     $(".k-grid-editaproveedor").click(function(e){
-        var popupEditaProveedor = $("#POPUP_EDITAPROVEEDOR");
-        popupEditaProveedor.data("kendoWindow").open();
+
+        // 1.- Seleccionar solo un elemento
+
+
+        // 2.- Del registro seleccionado, busco su data
+
+
+        // 3.- De la data que llega, pueblo los campos
+
+
+        // 4.- Levantar POPUP
+        var popupProveedor = $("#POPUP_PROVEEDOR");
+        popupProveedor.data("kendoWindow").open();
+
     });
 
 
