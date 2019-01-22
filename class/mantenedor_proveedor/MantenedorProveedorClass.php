@@ -97,55 +97,52 @@ class MantenedorProveedorClass extends \parametros
     }
 
     // Crear Proveedor
-    public static function CrearProveedor($login, $pais_filtro_ripley, $PI_AUTOMATICA,$COMPRA_CURVA,$RFID,$VEND_TAXID,$VEND_BENEFICIARY,$VEND_ADD_BENEFICIARY,$VEND_CITY,$VEND_COUNTRY,$VEND_PHONE,$VEND_FAX,$VEND_NAME_DEALER,$CONT_NAME,$CONT_ADDRESS,$CONT_PHONE,$CONT_EMAIL,$PAY_BANK_NAME_BENEFICIARY,$PAY_ADD_BANK_BENEFICIARY,$PAY_CITY_BENEFICIARY_BANK,$PAY_COUNTRY_BENEFICIARY,$PAY_SWIFT_CODE,$PAY_ABA,$PAY_IBAN,$PAY_ACC_NUMBER_BENEFICIARY,$PAY_CURRENCY_ACCOUNT,$PAY_SECOND_BENEFICIARY,$INTER_BANK_NAME,$INTER_SWIFT,$INTER_COUNTRY,$INTER_CITY,$PUR_CURRENCY,$incoterm,$PUR_PAYMENTO)
+    public static function CrearProveedor($login, $pais_filtro_ripley, $COD_PROVEEDOR,$RUT_PROVEEDOR,$NOM_PROVEEDOR,$VEND_TAXID,$VEND_NAME_DEALER,$VEND_BENEFICIARY,$VEND_ADD_BENEFICIARY,$VEND_CITY,$VEND_COUNTRY,$VEND_PHONE,$VEND_FAX,$CONT_NAME,$CONT_ADDRESS,$CONT_PHONE,$CONT_EMAIL,$PI_AUTOMATICA,$COMPRA_CURVA,$RFID,$COD_MOD_PAIS,$ESTADO,$PAY_BANK_NAME_BENEFICIARY,$PAY_ADD_BANK_BENEFICIARY,$PAY_CITY_BENEFICIARY_BANK,$PAY_COUNTRY_BENEFICIARY,$PAY_SWIFT_CODE,$PAY_ABA,$PAY_IBAN,$PAY_ACC_NUMBER_BENEFICIARY,$PAY_CURRENCY_ACCOUNT,$PAY_SECOND_BENEFICIARY,$INTER_BANK_NAME,$INTER_SWIFT,$INTER_COUNTRY,$INTER_CITY,$PUR_CURRENCY,$PUR_INCOTEM,$PUR_PAYMENTO)
     {
 
-        if( ($VIA==null) || ($VIA=="null") || ($VIA=="") || (!$VIA) ){
-            return json_encode("Ingrese Vía");
+        // Verificar que el COD_PROVEEDOR no exista
+        $sql_cod_proveedor = "SELECT 1 FROM PLC_PROVEEDORES_PMM
+                              WHERE COD_PROVEEDOR = $COD_PROVEEDOR";
+        $existe_archivo = (int)\database::getInstancia()->getFila($sql_cod_proveedor);
+
+        // Si existe archivo
+        if ($existe_archivo == 1) {
+            return json_encode(" COD_PROVEEDOR EXISTE");
             die();
-        }
-        if( ($PAIS==null) || ($PAIS=="null") || ($PAIS=="") || (!$PAIS) ){
-            return json_encode("Ingrese País");
-            die();
-        }
-        if( ($EMBARQUE==null) || ($EMBARQUE=="null") || ($EMBARQUE=="") || (!$EMBARQUE) ){
-            return json_encode("Ingrese Puerto Embarque");
-            die();
-        }
-        if( ($DEPARTAMENTO==null) || ($DEPARTAMENTO=="null") || ($DEPARTAMENTO=="") || (!$DEPARTAMENTO) ){
-            return json_encode("Ingrese Departamento");
-            die();
-        }
+        }else{
 
+            $sql_insert = "INSERT INTO PLC_PROVEEDORES_PMM (COD_PROVEEDOR,RUT_PROVEEDOR,NOM_PROVEEDOR,VEND_TAXID,VEND_NAME_DEALER,VEND_BENEFICIARY,VEND_ADD_BENEFICIARY,VEND_CITY,VEND_COUNTRY,VEND_PHONE,VEND_FAX,CONT_NAME,CONT_ADDRESS,CONT_PHONE,CONT_EMAIL,PI_AUTOMATICA,COMPRA_CURVA,RFID,COD_MOD_PAIS,USU_CREA,FECHA_CREA,USU_MODIFICA,FECHA_MODIFICA,ESTADO)
+                       VALUES($COD_PROVEEDOR,$RUT_PROVEEDOR,$NOM_PROVEEDOR,$VEND_TAXID,$VEND_NAME_DEALER,$VEND_BENEFICIARY,$VEND_ADD_BENEFICIARY,$VEND_CITY,$VEND_COUNTRY,$VEND_PHONE,$VEND_FAX,$CONT_NAME,$CONT_ADDRESS,$CONT_PHONE,$CONT_EMAIL,$PI_AUTOMATICA,$COMPRA_CURVA,$RFID,$COD_MOD_PAIS,'".$login."',SYSDATE,'".$login."',SYSDATE,$ESTADO)";
+            //echo $sql_insert;
+            //die();
+            $data_insert = \database::getInstancia()->getConsulta($sql_insert);
 
-        $sql_id = "SELECT   
-                       CASE   
-                          WHEN MAX(ID_TRANSITO) IS NULL THEN 1   
-                          WHEN MAX(ID_TRANSITO) >=0 THEN MAX(ID_TRANSITO) + 1   
-                       END  ID 
-                    FROM PIA_DIAS_TRANSITO";
-        $data_id = \database::getInstancia()->getFilas($sql_id);
+            if($data_insert){
 
-        foreach ($data_id as $va1) {
+                $sql_insert_detalle = "INSERT INTO PIA_VENDOR_BANK (COD_PROVEEDOR,PAY_BANK_NAME_BENEFICIARY,PAY_ADD_BANK_BENEFICIARY,PAY_CITY_BENEFICIARY_BANK,PAY_COUNTRY_BENEFICIARY,PAY_SWIFT_CODE,PAY_ABA,PAY_IBAN,PAY_ACC_NUMBER_BENEFICIARY,PAY_CURRENCY_ACCOUNT,PAY_SECOND_BENEFICIARY,INTER_BANK_NAME,INTER_SWIFT,INTER_COUNTRY,INTER_CITY,PUR_CURRENCY,PUR_INCOTEM,PUR_PAYMENTO)
+                                   VALUES($COD_PROVEEDOR,$PAY_BANK_NAME_BENEFICIARY,$PAY_ADD_BANK_BENEFICIARY,$PAY_CITY_BENEFICIARY_BANK,$PAY_COUNTRY_BENEFICIARY,$PAY_SWIFT_CODE,$PAY_ABA,$PAY_IBAN,$PAY_ACC_NUMBER_BENEFICIARY,$PAY_CURRENCY_ACCOUNT,$PAY_SECOND_BENEFICIARY,$INTER_BANK_NAME,$INTER_SWIFT,$INTER_COUNTRY,$INTER_CITY,$PUR_CURRENCY,$PUR_INCOTEM,$PUR_PAYMENTO)";
+                //echo $sql_insert;
+                //die();
+                $data_insert_detalle = \database::getInstancia()->getConsulta($sql_insert_detalle);
 
-            $maxId = $va1[0];
+                // Si se ejecuta la consulta
+                if ($data_insert_detalle) {
+                    // Acción: Crear / Eliminar / Actualizar
+                    LogTransaccionClass::GuardaLogTransaccion($login, 0, 'ND', 'Mantenedor Proveedor','Crear', $sql_insert, 'OK' );
+                    LogTransaccionClass::GuardaLogTransaccion($login, 0, 'ND', 'Mantenedor Proveedor','Crear', $sql_insert_detalle, 'OK' );
+                    return json_encode("OK");
+                    die();
+                    // Si la consulta no se puede realizar
+                } else {
+                    // Acción: Crear / Eliminar / Actualizar
+                    LogTransaccionClass::GuardaLogTransaccion($login, 0, 'ND', 'Mantenedor Proveedor','Crear', $sql_insert, 'ERROR' );
+                    LogTransaccionClass::GuardaLogTransaccion($login, 0, 'ND', 'Mantenedor Proveedor','Crear', $sql_insert_detalle, 'ERROR' );
+                    return json_encode("ERROR");
+                    die();
+                }
 
-            $sql = "INSERT INTO PIA_DIAS_TRANSITO (ID_TRANSITO, COD_TEMPORADA,COD_VIA,COD_PUERTO_EMB,CNTRY_LVL_CHILD,COD_PUERTO_DESTINO,LIN_LINEA,DEP_DEPTO,D_TRANSITO,D_PUERTO_CD,D_TIENDAS_CD,T_DIAS_SUCURS,COD_VENTANA_EMB,FIRST_FORWARDER,LASTEST_FORWARDER,COD_MOD_PAIS)
-                    VALUES($maxId,$temporada,$VIA,'".$EMBARQUE."',$PAIS,'".$DESTINO."','".$LINEA."','".$DEPARTAMENTO."',$TRANSITO,$PUERTOCD,$CDTIENDA,$TOTAL_DIAS_SUCURSAL,$VENTANA_EMBARQUE,$FIRST_FORWARDER,$LASTEST_FORWARDER,$pais_filtro_ripley)";
-            /*echo $sql;
-            die();*/
-            $data_insert = \database::getInstancia()->getConsulta($sql);
-
-            // Si se ejecuta la consulta
-            if ($data_insert) {
-                // Acción: Crear / Eliminar / Actualizar
-                LogTransaccionClass::GuardaLogTransaccion($login, $temporada, 'ND', 'Lead Time','Crear', $sql, 'OK' );
-                return json_encode("OK");
-                die();
-                // Si la consulta no se puede realizar
-            } else {
-                // Acción: Crear / Eliminar / Actualizar
-                LogTransaccionClass::GuardaLogTransaccion($login, $temporada, 'ND', 'Lead Time','Crear', $sql, 'ERROR' );
+            }else{
+                LogTransaccionClass::GuardaLogTransaccion($login, 0, 'ND', 'Mantenedor Proveedor','Crear', $sql_insert, 'ERROR' );
                 return json_encode("ERROR");
                 die();
             }
@@ -156,20 +153,30 @@ class MantenedorProveedorClass extends \parametros
 
 
 
-
-
-
-
-
-        // Fin de la clase
+    // Fin de la clase
     }
 
     // Actualiza Proveedor
     public static function ActualizaProveedor($login, $pais_filtro_ripley,$COD_PROVEEDOR,$PI_AUTOMATICA,$COMPRA_CURVA,$RFID,$VEND_TAXID,$VEND_BENEFICIARY,$VEND_ADD_BENEFICIARY,$VEND_CITY,$VEND_COUNTRY,$VEND_PHONE,$VEND_FAX,$VEND_NAME_DEALER,$CONT_NAME,$CONT_ADDRESS,$CONT_PHONE,$CONT_EMAIL,$PAY_BANK_NAME_BENEFICIARY,$PAY_ADD_BANK_BENEFICIARY,$PAY_CITY_BENEFICIARY_BANK,$PAY_COUNTRY_BENEFICIARY,$PAY_SWIFT_CODE,$PAY_ABA,$PAY_IBAN,$PAY_ACC_NUMBER_BENEFICIARY,$PAY_CURRENCY_ACCOUNT,$PAY_SECOND_BENEFICIARY,$INTER_BANK_NAME,$INTER_SWIFT,$INTER_COUNTRY,$INTER_CITY,$PUR_CURRENCY,$incoterm,$PUR_PAYMENTO)
     {
 
-        if( ($VIA==null) || ($VIA=="null") || ($VIA=="") || (!$VIA) ){
-            return json_encode("Ingrese Vía");
+        if( ($COD_PROVEEDOR==null) || ($COD_PROVEEDOR=="null") || ($COD_PROVEEDOR=="") || (!$COD_PROVEEDOR) ){
+            return json_encode("Ingrese Código Proveedor");
+            die();
+        }
+
+        if( ($PI_AUTOMATICA==null) || ($PI_AUTOMATICA=="null") || ($PI_AUTOMATICA=="") || (!$PI_AUTOMATICA) ){
+            return json_encode("Ingrese PI Automática");
+            die();
+        }
+
+        if( ($COMPRA_CURVA==null) || ($COMPRA_CURVA=="null") || ($COMPRA_CURVA=="") || (!$COMPRA_CURVA) ){
+            return json_encode("Ingrese Compra en Curva");
+            die();
+        }
+
+        if( ($RFID==null) || ($RFID=="null") || ($RFID=="") || (!$RFID) ){
+            return json_encode("Ingrese RFID");
             die();
         }
 
@@ -195,7 +202,7 @@ class MantenedorProveedorClass extends \parametros
         if ($data_update) {
             // Acción: Crear / Eliminar / Actualizar
             LogTransaccionClass::GuardaLogTransaccion($login, $temporada, 'ND', 'Lead Time','Actualizar', $sql, 'OK' );
-            return json_encode("ERROR");
+            return json_encode("OK");
             die();
             // Si la consulta no se puede realizar
         } else {
@@ -241,20 +248,22 @@ class MantenedorProveedorClass extends \parametros
         $sql = "UPDATE plc_proveedores_pmm 
                 SET PI_AUTOMATICA = $PI_AUTOMATICA,
                 COMPRA_CURVA = $COMPRA_CURVA,
-                RFID = $RFID
+                RFID = $RFID,
+                USU_MODIFICA = '".$login."',
+                FECHA_MODIFICA = SYSDATE
                 WHERE COD_PROVEEDOR = $COD_PROVEEDOR";
         $data_update = \database::getInstancia()->getConsulta($sql);
 
         // Si se ejecuta la consulta
         if ($data_update) {
             // Acción: Crear / Eliminar / Actualizar
-            LogTransaccionClass::GuardaLogTransaccion($login, 'ND', 'ND', 'Mantenedor Proveedor','Actualizar', $sql, 'OK' );
+            LogTransaccionClass::GuardaLogTransaccion($login, 0, 'ND', 'Mantenedor Proveedor','Actualizar', $sql, 'OK' );
             return json_encode("OK");
             die();
             // Si la consulta no se puede realizar
         } else {
             // Acción: Crear / Eliminar / Actualizar
-            LogTransaccionClass::GuardaLogTransaccion($login, 'ND', 'ND', 'Mantenedor Proveedor','Actualizar', $sql, 'ERROR' );
+            LogTransaccionClass::GuardaLogTransaccion($login, 0, 'ND', 'Mantenedor Proveedor','Actualizar', $sql, 'ERROR' );
             return json_encode("ERROR");
             die();
         }
@@ -266,7 +275,6 @@ class MantenedorProveedorClass extends \parametros
 
         // Fin de la clase
     }
-
 
     // Listar Incoterm
     public static function ListarIncoterm($login, $pais_filtro_ripley)

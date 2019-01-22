@@ -110,9 +110,9 @@ $(function () {
         },
         requestEnd: function (e) {
 
-            /*if ( (e.type === 'update') || (e.type === 'create') ) {
-                window.location.href = "lead_time";
-            }*/
+            if ( (e.type === 'update') || (e.type === 'create') ) {
+                window.location.href = "mantenedor_proveedor";
+            }
 
         }
     });
@@ -145,8 +145,9 @@ $(function () {
         editable: true,
         toolbar: [
             { name:"agregaproveedor", text: "Nuevo Proveedor"},
-            { name: "save", text: "Actualizar Registros", iconClass: "k-icon k-i-copy" },
-            { name: "cancel", text: "Cancelar Modificaciones" }
+            { name:"editaproveedor", text: "Editar Proveedor"},
+            { name: "save", text: "Actualizar Grilla", iconClass: "k-icon k-i-copy" },
+            { name: "cancel", text: "Cancela Modificaciones sin Guardar" }
         ],
         height: 550, // Altura del Grid
         resizable: true,
@@ -186,10 +187,16 @@ $(function () {
         popupProveedor.data("kendoWindow").open();
     });
 
+    // BTN Edita Registro
+    $(".k-grid-editaproveedor").click(function(e){
+        var popupEditaProveedor = $("#POPUP_EDITAPROVEEDOR");
+        popupEditaProveedor.data("kendoWindow").open();
+    });
+
 
     // CBX de Incoterm
     var PUR_INCOTEM = $("#PUR_INCOTEM").kendoComboBox({
-        autoBind: false,
+        autoBind: true,
         //optionLabel: "Seleccione INCOTERM",
         dataTextField: "NOM_INCOTERM",
         dataValueField: "COD_INCOTERM",
@@ -203,40 +210,6 @@ $(function () {
         }
     }).data("kendoComboBox");
 
-    /*
-    $("#VEND_TAXID").kendoNumericTextBox({});
-    $("#VEND_BENEFICIARY").kendoNumericTextBox({});
-    $("#VEND_ADD_BENEFICIARY").kendoNumericTextBox({});
-    $("#VEND_CITY").kendoNumericTextBox({});
-    $("#VEND_COUNTRY").kendoNumericTextBox({});
-    $("#VEND_PHONE").kendoNumericTextBox({});
-    $("#VEND_FAX").kendoNumericTextBox({});
-    $("#VEND_NAME_DEALER").kendoNumericTextBox({});
-    $("#CONT_NAME").kendoNumericTextBox({});
-    $("#CONT_ADDRESS").kendoNumericTextBox({});
-    $("#CONT_PHONE").kendoNumericTextBox({});
-    $("#CONT_EMAIL").kendoNumericTextBox({});
-    $("#PAY_BANK_NAME_BENEFICIARY").kendoNumericTextBox({});
-    $("#PAY_ADD_BANK_BENEFICIARY").kendoNumericTextBox({});
-    $("#PAY_CITY_BENEFICIARY_BANK").kendoNumericTextBox({});
-    $("#PAY_COUNTRY_BENEFICIARY").kendoNumericTextBox({});
-    $("#PAY_SWIFT_CODE").kendoNumericTextBox({});
-    $("#PAY_ABA").kendoNumericTextBox({});
-    $("#PAY_IBAN").kendoNumericTextBox({});
-    $("#PAY_ACC_NUMBER_BENEFICIARY").kendoNumericTextBox({});
-    $("#PAY_CURRENCY_ACCOUNT").kendoNumericTextBox({});
-    $("#PAY_SECOND_BENEFICIARY").kendoNumericTextBox({});
-    $("#INTER_BANK_NAME").kendoNumericTextBox({});
-    $("#INTER_SWIFT").kendoNumericTextBox({});
-    $("#INTER_COUNTRY").kendoNumericTextBox({});
-    $("#INTER_CITY").kendoNumericTextBox({});
-    $("#PUR_CURRENCY").kendoNumericTextBox({});
-    $("#PUR_INCOTEM").kendoNumericTextBox({});
-    $("#PUR_PAYMENTO").kendoNumericTextBox({});
-    */
-
-
-
 
     var validator = $("#ProveedorForm").kendoValidator().data("kendoValidator"),status = $(".status");
 
@@ -245,9 +218,13 @@ $(function () {
         if (validator.validate()) {
 
             // Seteamos Variables
+            var cod_proveedor = $("#COD_PROVEEDOR").val();
+            var rut_proveedor = $("#RUT_PROVEEDOR").val();
+            var nom_proveedor = $("#NOM_PROVEEDOR").val();
             var pi_automatica = $("#PI_AUTOMATICA").val();
             var compra_curva = $("#COMPRA_CURVA").val();
             var rfid = $("#RFID").val();
+            var cod_mod_pais = $("#COD_MOD_PAIS").val();
             var taxid = $("#VEND_TAXID").val();
             var beneficiary = $("#VEND_BENEFICIARY").val();
             var add_beneficiary = $("#VEND_ADD_BENEFICIARY").val();
@@ -281,8 +258,13 @@ $(function () {
             $.ajax({
                 //type: "POST",
                 url: crudServiceBaseUrl + "CrearProveedor",
-                    data: { PI_AUTOMATICA:kendo.parseInt(pi_automatica),
+                    data: {
+                        COD_PROVEEDOR:String(cod_proveedor),
+                        RUT_PROVEEDOR:String(rut_proveedor),
+                        NOM_PROVEEDOR:String(nom_proveedor),
+                        PI_AUTOMATICA:kendo.parseInt(pi_automatica),
                         COMPRA_CURVA:kendo.parseInt(compra_curva),
+                        COD_MOD_PAIS:kendo.parseInt(cod_mod_pais),
                         RFID:kendo.parseInt(rfid),
                         VEND_TAXID:String(taxid),
                         VEND_BENEFICIARY:String(beneficiary),
@@ -322,9 +304,13 @@ $(function () {
                         dataSource.read();
 
                         // Limpiar todos los campos del Formulario
+                        $("#NOM_PROVEEDOR").val("");
+                        $("#COD_PROVEEDOR").val("");
+                        $("#RUT_PROVEEDOR").val("");
                         $("#PI_AUTOMATICA").val("");
                         $("#COMPRA_CURVA").val("");
                         $("#RFID").val("");
+                        $("#COD_MOD_PAIS").val("");
                         $("#VEND_TAXID").val("");
                         $("#VEND_BENEFICIARY").val("");
                         $("#VEND_ADD_BENEFICIARY").val("");
