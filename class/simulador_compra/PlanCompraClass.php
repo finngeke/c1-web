@@ -136,7 +136,8 @@ class PlanCompraClass extends \parametros
 				AND C.DEP_DEPTO = O.DEP_DEPTO AND C.ID_COLOR3 = O.ID_COLOR3
                 WHERE C.COD_TEMPORADA = $temporada AND C.DEP_DEPTO = '" . $depto . "'
                 ORDER BY C.ID_COLOR3, C.COD_JER2,C.COD_SUBLIN,C.COD_ESTILO,NVL(COD_COLOR,0) ,C.VENTANA_LLEGADA,C.DEBUT_REODER";
-
+echo $sql;
+die();
         $data = \database::getInstancia()->getFilas($sql);
         $dtPIs =[];$dt2021 =[];
 
@@ -1153,11 +1154,11 @@ class PlanCompraClass extends \parametros
         // ###################################### 3 GUARDADO CAMPOS DE TEXTO SIMPLE ####################################
 
         // Validar Evento
-        $query_evento = PlanCompraClass::BuscaEvento($TEMPORADA, $DEPTO, $EVENTO);
+        /*$query_evento = PlanCompraClass::BuscaEvento($TEMPORADA, $DEPTO, $EVENTO);
         if (empty($query_evento[0])) {
             return " ID: " . $ID_COLOR3 . " - Evento ingresado no Existe.";
             die();
-        }
+        }*/
 
 
         // ######################### (Campos de Texto que no requieren validación, update directo) #####################
