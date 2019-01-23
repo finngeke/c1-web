@@ -2621,8 +2621,7 @@ class PlanCompraClass extends \parametros
                 WHERE  A.dpto = '" . $depto . "'
                 AND    A.TEMP = $temporada
                 AND    A.ID_COLOR3 = $id_color3
-                ORDER BY A.FECHA, A.HORA ASC
-     ";
+               ORDER BY TO_DATE(A.FECHA, 'DD/MM/YYYY'), A.HORA ASC";
 
         $data = \database::getInstancia()->getFilas($sql);
         //return $data;
