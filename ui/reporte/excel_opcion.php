@@ -86,7 +86,7 @@ for ($i=0 ; $i < $cont_estados ;$i++) {
             ->setCellValue('A1', 'Departamentos :  '.$deptos)
         ->setCellValue('A2', 'Fecha :  '.$hoy);
         $objPHPExcel->getActiveSheet()->freezePaneByColumnAndRow(0,7);
-        $objPHPExcel->getActiveSheet()->setTitle('Compra Confirmada con PI');
+        $objPHPExcel->getActiveSheet()->setTitle('Pendiente Generacion OC');
     }
     /*P. de Aprobación sin Match*/
     if ($array_estado[$i] == 19) {
