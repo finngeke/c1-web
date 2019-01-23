@@ -386,7 +386,7 @@ class MantenedorProveedorClass extends \parametros
                     T2.PUR_INCOTEM,
                     T2.PUR_PAYMENTO
                 FROM PLC_PROVEEDORES_PMM T1
-                INNER JOIN PIA_VENDOR_BANK T2 ON T2.COD_PROVEEDOR = T1.COD_PROVEEDOR
+                LEFT JOIN PIA_VENDOR_BANK T2 ON T2.COD_PROVEEDOR = T1.COD_PROVEEDOR
                 WHERE T1.COD_PROVEEDOR = $cod_proveedor";
 
         $data = \database::getInstancia()->getFilas($sql);

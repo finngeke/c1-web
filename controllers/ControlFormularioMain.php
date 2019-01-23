@@ -218,7 +218,7 @@ class ControlFormularioMain extends Control {
     public function mantenedor_proveedor($f3){
 
         ControlFormularioMain::cargaMain($f3);
-        $f3->set('nombre_form', 'Lead Time');
+        $f3->set('nombre_form', 'Mantenedor Proveedor');
         $f3->set('depto_form', $f3->get('SESSION.COD_TEMPORADA'));
         $f3->set('contenido', 'formulario/main/mantenedor_proveedor.html');
         echo Template::instance()->render('layout_mantenedor_proveedor.php');

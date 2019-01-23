@@ -1,17 +1,11 @@
 
 html
 {
-  top: 0;
-  left: 0;
   overflow-y:scroll;
   font:70% Arial, Helvetica, sans-serif;
   background: #f5f7f8;
 }
-body
-{
-  margin: 0;
-  padding: 0;
-}
+
 
 .k-button[disabled],
 [disabled] .k-button {
