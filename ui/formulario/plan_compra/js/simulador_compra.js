@@ -525,30 +525,31 @@ $(function () {
                     // Fin del Recorrer la Grilla
                     });
 
+                    var color_celda_lectura = "#050B5F";
                     // AH % Compra Inicial
-                    sheet.range("AH2:AH"+count).color("#050B5F");
+                    sheet.range("AH2:AH"+count).color(color_celda_lectura);
                     // AL - AM  Uidad Ajustada/Unidad Final
-                    sheet.range("AL2:AM"+count).color("#050B5F");
+                    sheet.range("AL2:AM"+count).color(color_celda_lectura);
                     // AR Tdas
-                    sheet.range("AR2:AR"+count).color("#050B5F");
+                    sheet.range("AR2:AR"+count).color(color_celda_lectura);
                     // AX % Tiendas
-                    sheet.range("AX2:AX"+count).color("#050B5F");
+                    sheet.range("AX2:AX"+count).color(color_celda_lectura);
                     // BC Mkup
-                    sheet.range("BC2:BC"+count).color("#050B5F");
+                    sheet.range("BC2:BC"+count).color(color_celda_lectura);
                     // BE GM
-                    sheet.range("BE2:BE"+count).color("#050B5F");
+                    sheet.range("BE2:BE"+count).color(color_celda_lectura);
                     // BO - BT
-                    sheet.range("BO2:BT"+count).color("#050B5F");
+                    sheet.range("BO2:BT"+count).color(color_celda_lectura);
                     // BV - BX
-                    sheet.range("BV2:BX"+count).color("#050B5F");
+                    sheet.range("BV2:BX"+count).color(color_celda_lectura);
                     // CB Razón Social
-                    sheet.range("CB2:CB"+count).color("#050B5F");
+                    sheet.range("CB2:CB"+count).color(color_celda_lectura);
                     // CF Cod Padre
-                    sheet.range("CF2:CF"+count).color("#050B5F");
+                    sheet.range("CF2:CF"+count).color(color_celda_lectura);
                     // CH - CL
-                    sheet.range("CH2:CL"+count).color("#050B5F");
+                    sheet.range("CH2:CL"+count).color(color_celda_lectura);
                     // CN - CR
-                    sheet.range("CN2:CR"+count).color("#050B5F");
+                    sheet.range("CN2:CR"+count).color(color_celda_lectura);
 
 
 
