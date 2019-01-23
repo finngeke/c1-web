@@ -78,6 +78,9 @@ $(function () {
 
             // Recorre la Grilla y con la PROFORMA que me llega asignar el texto "Cargado.." a las filas que coincidan.
             range_carga_pi.forEachCell(function (row, column, value) {
+
+                console.log('PI-CELDA: ' + sheet_carga_pi.range("CG"+row).value() + ' PI-FORM: '+proforma);
+
                 if(sheet_carga_pi.range("CG"+row).value() == proforma){
                     sheet_carga_pi.range("CH"+row).value("Cargado..");
                 }
