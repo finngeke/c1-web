@@ -510,8 +510,6 @@ $(function () {
                         messageTemplate: "  Sólo debes utilizar puntos."
                     });
 
-
-
                     // Rows red estado Eliminado
                     var range_estados = sheet_2.range("CR2:CR"+count);
                     range_estados.forEachCell(function (row, column, value) {
@@ -526,6 +524,31 @@ $(function () {
 
                     // Fin del Recorrer la Grilla
                     });
+
+                    // AH % Compra Inicial
+                    sheet.range("AH2:AH"+count).color("#050B5F");
+                    // AL - AM  Uidad Ajustada/Unidad Final
+                    sheet.range("AL2:AM"+count).color("#050B5F");
+                    // AR Tdas
+                    sheet.range("AR2:AR"+count).color("#050B5F");
+                    // AX % Tiendas
+                    sheet.range("AX2:AX"+count).color("#050B5F");
+                    // BC Mkup
+                    sheet.range("BC2:BC"+count).color("#050B5F");
+                    // BE GM
+                    sheet.range("BE2:BE"+count).color("#050B5F");
+                    // BO - BT
+                    sheet.range("BO2:BT"+count).color("#050B5F");
+                    // BV - BX
+                    sheet.range("BV2:BX"+count).color("#050B5F");
+                    // CB Razón Social
+                    sheet.range("CB2:CB"+count).color("#050B5F");
+                    // CF Cod Padre
+                    sheet.range("CF2:CF"+count).color("#050B5F");
+                    // CH - CL
+                    sheet.range("CH2:CL"+count).color("#050B5F");
+                    // CN - CR
+                    sheet.range("CN2:CR"+count).color("#050B5F");
 
 
 
