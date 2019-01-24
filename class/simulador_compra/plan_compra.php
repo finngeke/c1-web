@@ -2373,6 +2373,8 @@ class plan_compra extends \parametros {
             array_push($insert, $total);
             array_push($dtTabla, $insert);
 
+
+            /*%*/$porcentajeAjust = $dtTabla[5][$N_Columna];
             /*%*/$unid_ajustas = $dtTabla[4][$N_Columna];
 
             /*CURVADO*/ if ($tipo_empaque == "Curvado" or $tipo_empaque == "CURVADO") {
@@ -2435,16 +2437,6 @@ class plan_compra extends \parametros {
                 array_push($insert, $rows['N curvas por caja curvadas']);
                 array_push($dtTablaCurvado, $insert);
 
-                //*-------------porcenjas compra curvada
-                $key2 = 0;
-                foreach ($tallas2 as $vart) {
-                    if ($dtTablaCurvado [2][$key2] <> 0) {
-                        $porcentajeAjust = $porcentajeAjust . (round(($dtTablaCurvado[2][$key2] / $dtTablaCurvado [2][$N_Columna]) * 100, 3)) . "-";
-                    } else {
-                        $porcentajeAjust = $porcentajeAjust . "0-";
-                    }
-                    $key2 += 1;
-                }
 
                 //*****************2.-AJUSTE DE CAJAS SOLIDAS
                 array_push($dtTablasSolidoCurvado, $dtTabla[0]);//CABECERA
@@ -2533,7 +2525,6 @@ class plan_compra extends \parametros {
                 array_push($dtTablasSolidoCurvado, $insert);
 
 
-                /*%*/$porcentajeAjust = substr($porcentajeAjust, 0, strlen($porcentajeAjust) - 1);
                 /*%*/$n_cajasfinales = $dtTablasSolidoCurvado[2][$N_Columna] + $n_CAJAS; //curvado + solido
                 /*%*/$unid_final = $dtTablasSolidoCurvado[3][$N_Columna] + $dtTablaCurvado[2][$N_Columna]; //curvado + solido
                 /*%*/$totalprimerRepato = $dtTablaCurvado[2][$N_Columna];
@@ -2611,12 +2602,6 @@ class plan_compra extends \parametros {
                 array_push($insert, $total);
                 array_push($dtTablasolidoFULL, $insert);
 
-                //*-----------------% pocentaje ajustada por mstpack
-                $key = 0;$porcentajeAjust = "";$unid_final = $dtTablasolidoFULL[5][$N_Columna];
-                foreach ($tallas2 as $var) {
-                    $porcentajeAjust = $porcentajeAjust . round((($dtTablasolidoFULL[5][$key] / $unid_final) * 100), 3) . "-";
-                    $key += 1;
-                }
 
                 //*-----------------% unid ajustada por mstpack
                 $key = 0;
@@ -2628,7 +2613,6 @@ class plan_compra extends \parametros {
                     $clusters3 = $clusters3 . $Var2 . "+";
                 }
 
-                /*%*/$porcentajeAjust = substr($porcentajeAjust, 0, -1);
                 /*%*/$n_cajasfinales = $dtTablasolidoFULL[4][$N_Columna];
                 /*%*/$unid_final = $dtTablasolidoFULL[5][$N_Columna];
                 /*%*/$totalprimerRepato = $dtTablasolidoFULL[2][$N_Columna];
@@ -2711,7 +2695,7 @@ class plan_compra extends \parametros {
 
         $array2 = array(
             /*unid_ajustada*/$unid_ajustas
-            /*porcenajust=mstpack*/, $porcentajeAjust
+            /*porcenajust=ajuste compra*/, $porcentajeAjust
             /*n°cajas*/, $n_cajasfinales
             /*unidfinal*/, $unid_final
             /*primera carga*/, $totalprimerRepato
