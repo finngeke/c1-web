@@ -1,32 +1,164 @@
 <span id="span_data_temp_depto" name="span_data_temp_depto" style="display: none;"></span>
+<div id="div_grid_telerik">
+<style>
+    #fieldlist {
+        margin: 0;
+        padding: 0;
+    }
 
-    <div id="toolbar" class="demo-section k-content wide">
-        Factor de Importacion
+    #fieldlist li {
+        list-style: none;
+        padding-bottom: .7em;
+        text-align: left;
+    }
+
+    #fieldlist label {
+        display: block;
+        padding-bottom: .3em;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 12px;
+        color: #444;
+    }
+
+    #fieldlist li.status {
+        text-align: center;
+    }
+
+    #fieldlist li .k-widget:not(.k-tooltip),
+    #fieldlist li .k-textbox {
+        margin: 0 5px 5px 0;
+    }
+
+    .confirm {
+        padding-top: 1em;
+    }
+
+    .valid {
+        color: green;
+    }
+
+    .invalid {
+        color: red;
+    }
+
+    #fieldlist li input[type="checkbox"] {
+        margin: 0 5px 0 0;
+    }
+
+    span.k-widget.k-tooltip-validation {
+        display; inline-block;
+        width: 160px;
+        text-align: left;
+        border: 0;
+        padding: 0;
+        margin: 0;
+        background: none;
+        box-shadow: none;
+        color: red;
+    }
+
+    .k-tooltip-validation .k-warning {
+        display: none;
+    }
+</style>
+    <!-- Despliega el menú del top lead_time.html-->
+    <div id="toolbar_lead_time" class="k-content wide"></div>
+
+    <!-- Despliega la Grilla -->
+    <div id="grilla_factor_importado" style="width: 100%;height: 500px;"></div>
+
+
+    <div id="POPUP_addfactor">
+        <form id="addfactorForm">
+
+            <div class="container">
+                <div class="row input-group input-group-sm">
+                    <div class="col-sm">
+
+                        <div class="col-md-6 mb-3">
+                            <label for="COD_VIA" class="required">Vía Trans.</label>
+                            <select name="COD_VIA" id="COD_VIA" required data-required-msg="Obligatorio" class="form-control" style="width: 220px;" ></select>
+                            <span class="k-invalid-msg" data-for="COD_VIA"></span>
+
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="COD_PAIS_EMB" class="required">País Embarque</label>
+                            <select name="COD_PAIS_EMB" id="COD_PAIS_EMB" required data-required-msg="Obligatorio" class="form-control" style="width: 220px;" ></select>
+                            <span class="k-invalid-msg" data-for="COD_PAIS_EMB"></span>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="COD_PUERTO_EMB" class="required">Pto Embarque</label>
+                            <select name="COD_PUERTO_EMB" id="COD_PUERTO_EMB" required data-required-msg="Obligatorio" class="form-control" style="width: 220px;" ></select>
+                            <span class="k-invalid-msg" data-for="COD_PUERTO_EMB"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="COD_PAIS_DES" class="required">País Destino</label>
+                            <select name="COD_PAIS_DES" id="COD_PAIS_DES" required data-required-msg="Obligatorio" class="form-control" style="width: 220px;" ></select>
+                            <span class="k-invalid-msg" data-for="COD_PAIS_DES"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="COD_PUERTO_DESTINO" class="required">Pto Destino</label>
+                            <select name="COD_PUERTO_DESTINO" id="COD_PUERTO_DESTINO"  class="form-control" style="width: 220px;" ></select>
+                            <span class="k-invalid-msg" data-for="COD_PUERTO_DESTINO"></span>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="cod_Incoterm" class="required">Incoterm</label>
+                            <select name="COD_INCOTERM" id="COD_INCOTERM" required data-required-msg="Obligatorio" class="form-control" style="width: 220px;" ></select>
+                            <span class="k-invalid-msg" data-for="COD_INCOTERM"></span>
+                        </div>
+
+                    </div>
+                    <div class="col-sm">
+
+                        <div class="col-md-6 mb-3">
+                            <label for="COD_DIVISION" class="required">Division</label>
+                            <select name="COD_DIVISION" id="COD_DIVISION" required data-required-msg="Obligatorio" class="form-control" style="width: 220px;" ></select>
+                            <span class="k-invalid-msg" data-for="COD_DIVISION"></span>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="DEP_DEPTO" class="required">Departamento</label>
+                            <select name="DEP_DEPTO" id="DEP_DEPTO" required data-required-msg="Obligatorio" class="form-control" style="width: 220px;" ></select>
+                            <span class="k-invalid-msg" data-for="DEP_DEPTO"></span>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="COD_MARCA" class="required">Marca</label>
+                            <select name="COD_MARCA" id="COD_MARCA"  class="form-control" style="width: 220px;" ></select>
+                            <span class="k-invalid-msg" data-for="COD_MARCA"></span>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="COD_MONEDA" class="required">Moneda</label>
+                            <select name="COD_MONEDA" id="COD_MONEDA" required data-required-msg="Obligatorio" class="form-control" style="width: 220px;" ></select>
+                            <span class="k-invalid-msg" data-for="COD_MONEDA"></span>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="factor_est" class="required">Factor Estimado</label>
+                            <input type="text" id="factor_est" name="factor_est" min="0" value="0" required validationMessage="Obligatorio" class="form-control" style="width: 220px;" /><span class="k-invalid-msg" data-for="search"></span>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <button class="k-button k-primary" type="submit">Crear Factor</button>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <span class="status"></span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </form>
     </div>
+    <!-- TAG de los mensajes de alert, dejar siempre al final -->
+    <span id="popupNotification"></span>
 
-<div id="Grilla">
-    <ul class="fieldlist">
-    <div id="grilla_factor_importado"></div>
-    </ul>
-    <style>
-        .fieldlist {
-            margin: 0 0 -2em;
-            padding: 0;
-        }
 
-        .fieldlist li {
-            list-style: none;
-            padding-bottom: 2em;
-        }
-
-        .fieldlist label {
-            display: block;
-            padding-bottom: 1em;
-            font-weight: bold;
-            text-transform: uppercase;
-            font-size: 12px;
-            color: #444;
-        }
-
-    </style>
 </div>

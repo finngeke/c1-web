@@ -64,9 +64,6 @@ $f3->route('GET /ajax_factorestimado/@tipo [ajax]', 'factor_est\ControlAjax->@ti
 $f3->route('GET /factor_estimado', 'ControlFormularioCompra->factor_estimado');
 $f3->route('POST /guardar/factorestimado', 'factor_est\ControlCrea->guardarFactor');
 
-/*FACTOR IMPORTACION*/
-$f3->route('GET /Factor_import/@tipo [ajax]', 'temporada\ControlCrea->@tipo');
-
 /* FECHA RECEPCION */
 $f3->route('GET /fecha_recepcion', 'ControlFormularioCompra->fecha_recepcion');
 $f3->route('GET /ajax_temporada_fecha_recepcion/@tipo [ajax]', 'temporada\ControlFechaRecepcion->@tipo');
@@ -176,8 +173,6 @@ $f3->route('GET /asociar_contenedor', 'ControlComex->asociar_contenedor');
 $f3->route('POST /guardar_contenedor', 'ControlComex->guardar_contenedor');
 $f3->route('GET /enviar_comex', 'ControlComex->enviar_comex');
 
-
-
 /* LEAD TIME */
 $f3->route('GET /lead_time', 'ControlFormularioCompra->lead_time');
 $f3->route('GET /TelerikLeadTime/@tipo [ajax]', 'lead_time\LeadTimeController->@tipo');
@@ -186,6 +181,9 @@ $f3->route('GET /TelerikLeadTime/@tipo [ajax]', 'lead_time\LeadTimeController->@
 $f3->route('GET /mantenedor_proveedor', 'ControlFormularioMain->mantenedor_proveedor');
 $f3->route('GET /TelerikMantenedorProveedor/@tipo [ajax]', 'mantenedor_proveedor\MantenedorProveedorController->@tipo');
 
+
+/*FACTOR IMPORTACION*/
+$f3->route('GET /TelerikFactorImportacion/@tipo [ajax]', 'factor_Importacion\FactorImportacionController->@tipo');
 
 
 /* LOG TRANSACCIONES*/
