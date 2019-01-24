@@ -909,7 +909,7 @@ $(function () {
         //rows: 800,
         //toolbar: true,
         toolbar: {
-            home: [ "open" ,
+            home: [
                 { type: "button",
                     text: "Importar",
                     icon: "k-icon k-i-upload",
