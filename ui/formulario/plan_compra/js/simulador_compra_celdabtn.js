@@ -67,12 +67,23 @@ $(function () {
             // Obtengo el nombre de la PI que estoy cargando
             var proforma = $("#NombrePI").val();
 
-            // Calcular Totales en el grilla y rango de datos
+
+            // Buscar la Cantidad de registros que tiene la grilla
+            var total_registros_listados = "";
+
             var spreadsheet_carga_pi = $("#spreadsheet").data("kendoSpreadsheet");
             var sheet_carga_pi = spreadsheet_carga_pi.activeSheet();
-            var data_conteo_total = sheet_carga_pi.toJSON();
-            var total_registros_listados = data_conteo_total.rows.length;
-                total_registros_listados = parseInt(total_registros_listados,10) + 2;
+
+            if(localStorage.getItem("TOTALREGPLAN")){
+                total_registros_listados = localStorage.getItem("TOTALREGPLAN");
+            }else{
+                // Calcular Totales en el grilla y rango de datos
+                var data_conteo_total = sheet_carga_pi.toJSON();
+                    total_registros_listados = data_conteo_total.rows.length;
+                    total_registros_listados = parseInt(total_registros_listados,10) + 2;
+            }
+
+
 
             var range_carga_pi = sheet_carga_pi.range("CH1:CH"+total_registros_listados);
 
