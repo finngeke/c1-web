@@ -1570,8 +1570,9 @@ class PlanCompraClass extends \parametros
             $total = substr($total, 0, -1);
             array_push($insert, $total);
             array_push($dtTabla, $insert);
-            /*%*/
-            $unid_ajustas = $dtTabla[4][$N_Columna];
+
+            /*%*/$porcentajeAjust = $dtTabla[5][$N_Columna];
+            /*%*/$unid_ajustas = $dtTabla[4][$N_Columna];
 
             /*CURVADO*/
             if ($tipo_empaque == "Curvado" or $tipo_empaque == "CURVADO") {
@@ -1656,17 +1657,6 @@ class PlanCompraClass extends \parametros
                 array_push($insert, $N_CURVASXCAJAS);
                 array_push($dtTablaCurvado, $insert);
 
-
-                //*-------------porcenjas compra curvada
-                $key2 = 0;
-                foreach ($tallas2 as $vart) {
-                    if ($dtTablaCurvado [2][$key2] <> 0) {
-                        $porcentajeAjust = $porcentajeAjust . (round(($dtTablaCurvado[2][$key2] / $dtTablaCurvado [2][$N_Columna]) * 100, 3)) . "-";
-                    } else {
-                        $porcentajeAjust = $porcentajeAjust . "0-";
-                    }
-                    $key2 += 1;
-                }
 
                 //*****************2.-AJUSTE DE CAJAS SOLIDAS
                 array_push($dtTablasSolidoCurvado, $dtTabla[0]);//CABECERA
@@ -1771,8 +1761,7 @@ class PlanCompraClass extends \parametros
                 array_push($insert, 0);
                 array_push($dtTablasSolidoCurvado, $insert);
 
-                /*%*/
-                $porcentajeAjust = substr($porcentajeAjust, 0, strlen($porcentajeAjust) - 1);
+
                 /*%*/
                 $n_cajasfinales = $dtTablasSolidoCurvado[2][$N_Columna] + $n_CAJAS; //curvado + solido
                 /*%*/
@@ -1894,8 +1883,6 @@ class PlanCompraClass extends \parametros
                     $clusters3 = $clusters3 . $Var2 . "+";
                 }
 
-                /*%*/
-                $porcentajeAjust = substr($porcentajeAjust, 0, -1);
                 /*%*/
                 $n_cajasfinales = $dtTablasolidoFULL[4][$N_Columna];
                 /*%*/
