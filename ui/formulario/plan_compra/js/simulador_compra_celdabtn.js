@@ -83,8 +83,6 @@ $(function () {
                     total_registros_listados = parseInt(total_registros_listados,10) + 2;
             }
 
-
-
             var range_carga_pi = sheet_carga_pi.range("CH1:CH"+total_registros_listados);
 
             // Recorre la Grilla y con la PROFORMA que me llega asignar el texto "Cargado.." a las filas que coincidan.
