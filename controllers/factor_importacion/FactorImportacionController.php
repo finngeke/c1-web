@@ -87,7 +87,6 @@ class FactorImportacionController  extends \Control
         echo json_encode(FactorImportacionClass::ListartipoMoneda($f3->get('SESSION.login'),1));
     }
 
-
     // Insert Factor Import
     public function InsertFactorImport($f3) {
         $array_data = $_GET;
@@ -156,56 +155,59 @@ class FactorImportacionController  extends \Control
         echo FactorImportacionClass::InsertFactorImport($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.login'),1,$dt);
     }
 
-    public function _existeFactor($f3) {
+    // update Factor Import
+    public function updateFactorImport($f3) {
+
         $array_data = $_GET;
 
-        $via_base = $array_data["VIA"];
+        $via_base = $array_data["COD_VIA"];
         $via_base = explode(" - ", $via_base);
         $via = $via_base[0];
 
-        $PAIS_EMB_base = $array_data["PAIS_EMB"];
+        $PAIS_EMB_base = $array_data["COD_PAIS_EMB"];
         $PAIS_EMB_base = explode(" - ", $PAIS_EMB_base);
         $pais_emb = $PAIS_EMB_base[0];
 
-        $embarque_base = $array_data["PTO_EMBARQUE"];
+        $embarque_base = $array_data["COD_PUERTO_EMB"];
         $embarque_base = explode(" - ", $embarque_base);
         $pto_embarque = $embarque_base[0];
 
-        $PAIS_dest_base = $array_data["PAIS_DEST"];
+        $PAIS_dest_base = $array_data["COD_PAIS_DESTINO"];
         $PAIS_dest_base = explode(" - ", $PAIS_dest_base);
         $pais_dest = $PAIS_dest_base[0];
 
-        $destino_base = $array_data["PTO_DESTINO"];
+        $destino_base = $array_data["COD_PUERTO_DESTINO"];
         $destino_base = explode(" - ", $destino_base);
         $pto_destino = $destino_base[0];
 
-        $incoterm_base = $array_data["INCOTERM"];
+        $incoterm_base = $array_data["COD_INCOTERM"];
         $incoterm_base = explode(" - ", $incoterm_base);
         $incoterm = $incoterm_base[0];
 
-        $division_base = $array_data["DIVISION"];
+        $division_base = $array_data["COD_DIV"];
         $division_base = explode(" - ", $division_base);
         $division = $division_base[0];
 
-        $depto_base = $array_data["DEPARTAMENTO"];
+        $depto_base = $array_data["DEP_DEPTO"];
         $depto_base = explode(" - ", $depto_base);
         $departamento = $depto_base[0];
 
-        $marca_base = $array_data["MARCA"];
+        $marca_base = $array_data["COD_MARCA"];
         $marca_base = explode(" - ", $marca_base);
         $marca = $marca_base[0];
 
-        $moneda_base = $array_data["MONEDA"];
+        $moneda_base = $array_data["COD_TIP_MON"];
         $moneda_base = explode(" - ", $moneda_base);
         $moneda = $moneda_base[0];
 
-        if($pto_destino == ""or $pto_destino == "0" or $pto_destino == null){
+        if($pto_destino == ""or $pto_destino == "0" or $pto_destino == null OR $pto_destino == "ND"){
             $pto_destino = '';
         }
 
-        if ($marca == ""  or $marca == null){
+        if ($marca == ""  or $marca == null or $marca == "ND"){
             $marca = 0;
         }
+
 
         $dt = array("via"=>$via
         ,"pais_emb"=>$pais_emb
@@ -216,8 +218,27 @@ class FactorImportacionController  extends \Control
         ,"division"=>$division
         ,"departamento"=>$departamento
         ,"marca"=>$marca
-        ,"moneda"=>$moneda);
+                    ,"moneda"=>$moneda
+                    ,"factor_est"=>$array_data["FACTOR_ESTIMADO"]
+                    ,"id_factor"=>$array_data["ID_FACTOR"]);
 
-        echo FactorImportacionClass::_existeFactor($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.login'),1,$dt);
+
+        echo FactorImportacionClass::updateFactorImport($f3->get('SESSION.COD_TEMPORADA'),$f3->get('SESSION.login'),$dt);
+
+    }
+
+    //exportar exportar_excel
+    public function exportar_excel($f3) {
+
+        echo json_encode(FactorImportacionClass::exportar_excel($f3->get('SESSION.COD_TEMPORADA')));
+
+    }
+
+
+    public static function DeleteFactorImport($f3){
+
+        $dtid = explode(",",trim($_POST['id_delete']));
+
+        echo FactorImportacionClass::DeleteFactorImport($f3->get('SESSION.COD_TEMPORADA'),$f3->get('SESSION.login'),$dtid);
     }
 }

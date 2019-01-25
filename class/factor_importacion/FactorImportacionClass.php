@@ -254,7 +254,30 @@ class FactorImportacionClass extends \parametros
     public static function InsertFactorImport($temporada, $login, $pais_filtro_ripley,$dt)
     {
 
+        $pto_Destino = "";
+        if ($dt['pto_destino'] == "") {
+            $pto_Destino = " and  COD_PUERTO_DESTINO is null ";
+        } else {
+            $pto_Destino = " and  COD_PUERTO_DESTINO = " . "'" . $dt['pto_destino'] . "' ";
+        }
 
+        $sql = "select count(1) n from PIA_FACTOR_IMPORT
+                where COD_VIA = " . $dt['via'] . "
+                and  COD_PUERTO_EMB = '" . $dt['pto_embarque'] . "'
+                " . $pto_Destino . "
+                and  COD_INCOTERM = " . $dt['incoterm'] . "
+                and  COD_DIV =  '" . $dt['division'] . "'
+                and  DEP_DEPTO = '" . $dt['departamento'] . "'
+                and  COD_MARCA = " . $dt['marca'] . "
+                and  COD_TEMPORADA =  " . $temporada . "
+                and  COD_PAIS_EMB = " . $dt['pais_emb'] . "
+                and  COD_PAIS_DESTINO = " . $dt['pais_dest'] . "
+                and  COD_TIP_MON  = " . $dt['moneda'];
+
+        $data = \database::getInstancia()->getFila($sql);
+
+        // si no existe el datos
+        if ($data[0] == 0) {
         $sql_id = "SELECT CASE WHEN MAX(ID_FACTOR_IMPORT) IS NULL THEN 1   
                                WHEN MAX(ID_FACTOR_IMPORT) >=0 THEN MAX(ID_FACTOR_IMPORT) + 1 END ID
                    FROM PIA_FACTOR_IMPORT";
@@ -262,38 +285,40 @@ class FactorImportacionClass extends \parametros
 
         $sql = "INSERT INTO PIA_FACTOR_IMPORT(ID_FACTOR_IMPORT,COD_VIA,COD_PUERTO_EMB,COD_PUERTO_DESTINO,COD_INCOTERM,COD_DIV,DEP_DEPTO,COD_MARCA,FACTOR_ESTIMADO
                                             ,FACTOR_REAL,COD_TEMPORADA,COD_MOD_PAIS,COD_PAIS_EMB,COD_PAIS_DESTINO,COD_TIP_MON)
-               VALUES( ".$data_id['ID'].",
-                       ".$dt['via'].",
-                       '".$dt['pto_embarque']."',
-                       '".$dt['pto_destino']."',
-                       ".$dt['incoterm'].",
-                       '".$dt['division']."',
-                       '".$dt['departamento']."',
-                       '".$dt['marca']."',
-                       ".$dt['factor_est'].",
+               VALUES( " . $data_id['ID'] . ",
+                       " . $dt['via'] . ",
+                       '" . $dt['pto_embarque'] . "',
+                       '" . $dt['pto_destino'] . "',
+                       " . $dt['incoterm'] . ",
+                       '" . $dt['division'] . "',
+                       '" . $dt['departamento'] . "',
+                       '" . $dt['marca'] . "',
+                       " . $dt['factor_est'] . ",
                        0,
-                       ".$temporada.",
-                       ".$pais_filtro_ripley.",
-                       ".$dt['pais_emb'].",
-                       ".$dt['pais_dest'].",
-                       ".$dt['moneda'].")";
+                       " . $temporada . ",
+                       " . $pais_filtro_ripley . ",
+                       " . $dt['pais_emb'] . ",
+                       " . $dt['pais_dest'] . ",
+                       " . $dt['moneda'] . ")";
 
             $data_insert = \database::getInstancia()->getConsulta($sql);
 
             // Si se ejecuta la consulta
             if ($data_insert) {
                 // Acción: Crear / Eliminar / Actualizar
-                LogTransaccionClass::GuardaLogTransaccion($login, $temporada, 'ND', 'Factor Importacion','Crear', $sql, 'OK' );
+                LogTransaccionClass::GuardaLogTransaccion($login, $temporada, 'ND', 'Factor Importacion', 'Crear', $sql, 'OK');
                 return json_encode("OK");
                 die();
                 // Si la consulta no se puede realizar
             } else {
                 // Acción: Crear / Eliminar / Actualizar
-                LogTransaccionClass::GuardaLogTransaccion($login, $temporada, 'ND', 'Factor Importacion','Crear', $sql, 'ERROR' );
+                LogTransaccionClass::GuardaLogTransaccion($login, $temporada, 'ND', 'Factor Importacion', 'Crear', $sql, 'ERROR');
                 return json_encode("ERROR");
                 die();
             }
-
+        }else{
+            return json_encode("DUPLICADO");
+        }
         }
 
     // valor del cambio por ventana
@@ -310,31 +335,127 @@ class FactorImportacionClass extends \parametros
         return $valor;
     }
 
-    public static function _existeFactor($temporada, $login, $pais_filtro_ripley,$dt){
-        $pto_Destino ="";
-        if ($dt['pto_destino'] == ""){
-            $pto_Destino = " and  COD_PUERTO_DESTINO is null ";
-        }else {
-            $pto_Destino = " and  COD_PUERTO_DESTINO = "."'" . $dt['pto_destino'] . "' " ;
+    //update factor en la grilla
+    public static function updateFactorImport($temporada,$login,$dt){
+
+        $dtvalidacion = array('via','pto_embarque','incoterm','division','departamento','factor_est','pais_emb','moneda');
+        foreach ($dtvalidacion as $val){
+            if( ($dt[$val]==null) || ($dt[$val]=="null") || ($dt[$val]=="") || (!$dt[$val])|| ($dt[$val]=="ND") ){
+                return json_encode("  Ingrese ".$val);
+                die();
+            }
         }
 
-        $sql = "select count(1) n from PIA_FACTOR_IMPORT
-                where COD_VIA = " . $dt['via'] . "
-                and  COD_PUERTO_EMB = '" . $dt['pto_embarque'] . "'
-                ".$pto_Destino."
-                and  COD_INCOTERM = " . $dt['incoterm'] . "
-                and  COD_DIV =  '" . $dt['division'] . "'
-                and  DEP_DEPTO = '" . $dt['departamento'] . "'
-                and  COD_MARCA = " . $dt['marca'] . "
-                and  COD_TEMPORADA =  " . $temporada . "
-                and  COD_PAIS_EMB = " . $dt['pais_emb'] . "
-                and  COD_PAIS_DESTINO = " . $dt['pais_dest'] . "
-                and  COD_TIP_MON  = " . $dt['moneda'];
+        $sql = "update pia_factor_import
+                set COD_VIA             =".$dt['via']." 
+                   , COD_PUERTO_EMB     = '".$dt['pto_embarque']."'
+                   , COD_PUERTO_DESTINO = '".$dt['pto_destino']."'
+                   , COD_INCOTERM = ".$dt['incoterm']."
+                   , COD_DIV = '".$dt['division']."'
+                   , DEP_DEPTO = '".$dt['departamento']."'
+                   , COD_MARCA = ".$dt['marca']."
+                   , FACTOR_ESTIMADO = ".$dt['factor_est']."
+                   , COD_PAIS_EMB = ".$dt['pais_emb']."
+                   , COD_PAIS_DESTINO = ".$dt['pais_dest']."
+                   , COD_TIP_MON =".$dt['moneda']."
+                where cod_temporada = $temporada
+                and id_factor_import = ".$dt['id_factor'];
 
-        $data = \database::getInstancia()->getFila($sql);
+        $data_update = \database::getInstancia()->getConsulta($sql);
 
-        return $data[0];
+        // Si se ejecuta la consulta
+        if ($data_update) {
+            // Acción: Crear / Eliminar / Actualizar
+            LogTransaccionClass::GuardaLogTransaccion($login, $temporada, 'ND', 'Factor Importacion','Actualizar', $sql, 'OK' );
+            return json_encode("OK");
+            die();
+            // Si la consulta no se puede realizar
+        } else {
+            // Acción: Crear / Eliminar / Actualizar
+            LogTransaccionClass::GuardaLogTransaccion($login, $temporada, 'ND', 'Factor Importacion','Actualizar', $sql, 'ERROR' );
+            return json_encode("ERROR");
+            die();
+        }
 
+    }
+
+    //exportar excel
+    public static function exportar_excel($temporada){
+        $array1 = [];
+        $sql = "  SELECT  T2.NOM_VIA                  COD_VIA  
+                       ,T9.CNTRY_NAME               COD_PAIS_EMB            
+                       ,T4.NOM_PUERTO               COD_PUERTO_EMB
+                        ,T10.CNTRY_NAME              COD_PAIS_DESTINO 
+                       ,CASE WHEN T1.COD_PUERTO_DESTINO IS NULL THEN 'ND' 
+                             ELSE T5.NOM_PUERTO END COD_PUERTO_DESTINO
+                       ,T3.NOM_INCOTERM             COD_INCOTERM            
+                       ,T6.DEP_DES_DVS              COD_DIV  
+                       , T7.DEP_DESCRIPCION          DEP_DEPTO  
+                       ,CASE WHEN T1.COD_MARCA = 0 THEN 'ND'
+                             ELSE T8.NOM_MARCA END            COD_MARCA
+                       ,T11.NOM_TIP_MON             COD_TIP_MON
+                       ,T1.FACTOR_ESTIMADO
+                       ,T1.FACTOR_REAL
+                FROM PIA_FACTOR_IMPORT T1
+                LEFT JOIN PLC_VIA T2 ON T2.COD_VIA=T1.COD_VIA
+                LEFT JOIN PIA_PUERTOS T4 ON T4.COD_PUERTO=T1.COD_PUERTO_EMB
+                LEFT JOIN PIA_PUERTOS T5 ON T5.COD_PUERTO=T1.COD_PUERTO_DESTINO
+                LEFT JOIN PIA_INCOTERM T3 ON T3.COD_INCOTERM = T1.COD_INCOTERM
+                LEFT JOIN (SELECT DISTINCT DEP_COC_DVS,DEP_DES_DVS FROM GST_MAEDEPTOS) T6 ON T6.DEP_COC_DVS = T1.COD_DIV
+                LEFT JOIN (SELECT DISTINCT DEP_DEPTO,DEP_DESCRIPCION FROM GST_MAEDEPTOS)T7 ON T7.DEP_DEPTO = T1.DEP_DEPTO
+                LEFT JOIN (SELECT DISTINCT COD_MARCA,NOM_MARCA,COD_DEPT FROM PLC_DEPTO_MARCA)T8 ON T8.COD_MARCA = T1.COD_MARCA AND T8.COD_DEPT = T1.DEP_DEPTO
+                LEFT JOIN PLC_PAIS T9 ON T9.CNTRY_LVL_CHILD = T1.COD_PAIS_EMB 
+                LEFT JOIN PLC_PAIS T10 ON T10.CNTRY_LVL_CHILD = T1.COD_PAIS_DESTINO  
+                LEFT JOIN PLC_TIPO_MONEDA T11 ON T11.COD_TIP_MON = T1.COD_TIP_MON               
+                WHERE COD_TEMPORADA = $temporada
+                ORDER BY 2,3,4,5,7,8,9,10,11";
+        $data = \database::getInstancia()->getFilas($sql);
+
+        // Transformo a array asociativo
+        foreach ($data as $va1) {
+            array_push($array1
+                , array("COD_VIA" => $va1[0]
+                , "COD_PAIS_EMB" => $va1[1]
+                , "COD_PUERTO_EMB" => $va1[2]
+                , "COD_PAIS_DESTINO" => $va1[3]
+                , "COD_PUERTO_DESTINO" => $va1[4]
+                , "COD_INCOTERM" => $va1[5]
+                , "COD_DIV" => $va1[6]
+                , "DEP_DEPTO" => $va1[7]
+                , "COD_MARCA" => $va1[8]
+                , "COD_TIP_MON" => $va1[9]
+                , "FACTOR_ESTIMADO" => $va1[10]
+                , "FACTOR_REAL" => $va1[11]
+                )
+            );
+        }
+        return $array1;
+
+
+    }
+
+    public static function DeleteFactorImport($temporada,$login,$dtid){
+        $_error = json_encode("OK");
+        foreach ($dtid as $val){
+            $sql = "delete PIA_FACTOR_IMPORT
+                    where cod_temporada = $temporada 
+                    and id_factor_import = $val";
+
+            $data_update = \database::getInstancia()->getConsulta($sql);
+
+            // Si se ejecuta la consulta
+            if ($data_update) {
+                // Acción: Crear / Eliminar / Actualizar
+                LogTransaccionClass::GuardaLogTransaccion($login, $temporada, 'ND', 'Factor Importacion','Eliminar', $sql, 'OK' );
+                // Si la consulta no se puede realizar
+            } else {
+                // Acción: Crear / Eliminar / Actualizar
+                LogTransaccionClass::GuardaLogTransaccion($login, $temporada, 'ND', 'Factor Importacion','Eliminar', $sql, 'ERROR' );
+                return json_encode("ERROR");
+                die();
+            }
+        }
+        return $_error;
     }
 
 }

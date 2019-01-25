@@ -68,8 +68,6 @@ $f3->route('POST /guardar/factorestimado', 'factor_est\ControlCrea->guardarFacto
 $f3->route('GET /fecha_recepcion', 'ControlFormularioCompra->fecha_recepcion');
 $f3->route('GET /ajax_temporada_fecha_recepcion/@tipo [ajax]', 'temporada\ControlFechaRecepcion->@tipo');
 
-/*FACTOR IMPORTACION*/
-$f3->route('GET /Factor_Importacion', 'ControlFormularioCompra->Factor_Importacion');
 
 /* PLAN DE COMPRA */
 $f3->route('GET /plan_compra', 'ControlFormularioCompra->inicio');
@@ -184,8 +182,8 @@ $f3->route('GET /TelerikMantenedorProveedor/@tipo [ajax]', 'mantenedor_proveedor
 
 /*FACTOR IMPORTACION*/
 $f3->route('GET /TelerikFactorImportacion/@tipo [ajax]', 'factor_Importacion\FactorImportacionController->@tipo');
-
-
+$f3->route('GET /Factor_Importacion', 'ControlFormularioCompra->Factor_Importacion');
+$f3->route('POST /TelerikFactorImportacion2/@tipo [ajax]', 'factor_Importacion\FactorImportacionController->@tipo');
 /* LOG TRANSACCIONES*/
 $f3->route('GET /GuardarLogTransaccion/@tipo [ajax]', 'log_transaccion\GuardaLogTransaccion->@tipo');
 

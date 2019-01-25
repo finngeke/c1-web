@@ -58,8 +58,9 @@ require_once '../PHPExcel/PHPExcel.php';
                 $depto_cadena = $depto_cadena . $value . ",";
                 $count1++;
             }
+            include '../ui/reporte/cabeceraexcel.php';
 
-            $dt =  \simulador_compra\cbx_grilla_compra::llenar_tabla_depto($Tempo);
+            /*$dt =  \simulador_compra\cbx_grilla_compra::llenar_tabla_depto($Tempo);
             if (count($dt) == $count1){
 
                           $file ="C1_Consolidada_".$Tempo.".xls"; // Decode URL-encoded string
@@ -94,7 +95,7 @@ require_once '../PHPExcel/PHPExcel.php';
                    include '../ui/reporte/cabeceraexcel.php';
                }
 
-            }
+            }*/
 
       } elseif ($tipoArchivo == 4) { //c1 por estado
 

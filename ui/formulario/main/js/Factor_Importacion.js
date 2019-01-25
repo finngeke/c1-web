@@ -1,10 +1,26 @@
 $(function () {
 
+    kendo.ui.progress.messages = {
+        loading: "Processing..."
+    };
+
     // Defrine URL Base, para Llamar a los JSON
     var crudServiceBaseUrl = "TelerikFactorImportacion/";
-
+    var crudServiceBaseUrlpost = "TelerikFactorImportacion2/";
     // Se define POPUP de notificación
     var popupNotification = $("#popupNotification").kendoNotification().data("kendoNotification");
+
+    // BTN Volver a C1
+    function volver_atras_c1(e) {
+        window.location.href = "inicio";
+    }
+
+    // BTN salir C1
+    function salir_c1(e) {
+
+        window.location.href = "salir";
+
+    }
 
     // Barra de menú superior del plan de compra
     $("#toolbar_lead_time").kendoToolBar({
@@ -13,14 +29,14 @@ $(function () {
                 type: "button",
                 text: "Volver",
                 id: "volver_atras_c1",
-                //click: volver_atras_c1
+                click: volver_atras_c1
             },
             { type: "separator" },
             {
                 type: "button",
                 text: "Salir",
                 id: "salir_c1",
-      //          click: salir_c1,
+                click: salir_c1,
                 overflow: "always"
             }
         ]
@@ -204,6 +220,25 @@ $(function () {
                 }
             });
     }
+    // CBX de Pais emb
+    function MonedaDropDownEditor(container, options) {
+        $('<input required name="' + options.field + '"/>')
+            .appendTo(container)
+            .kendoDropDownList({
+                autoBind: false,
+                filter: "contains",
+                dataTextField: "COD_TIP_MON",
+                dataValueField: "NOM_TIP_MON",
+                dataSource: {
+                    transport: {
+                        read:  {
+                            url: crudServiceBaseUrl +"ListartipoMoneda",
+                            dataType: "json"
+                        }
+                    }
+                }
+            });
+    }
 //#endregion
 
 //#region /*----------Listar Grid---------*/
@@ -213,22 +248,16 @@ $(function () {
             read:  {
                 url: crudServiceBaseUrl + "List_factor_Importacion",
                 dataType: "json"
-            }
-            /*update: {
-                url: crudServiceBaseUrl + "ActualizaLeadTime",
+            },
+            update: {
+                url: crudServiceBaseUrl + "updateFactorImport",
                 dataType: "json"
-            }/*,
-            // Quitar si sólo estamos listando data
-            parameterMap: function(options, operation) {
-                if (operation !== "read" && options.models) {
-                    return {models: kendo.stringify(options.models)};
                 }
-            }*/
         },
         //requestEnd: TerminaCargaLeadTime,
         schema: {
             model: {
-                id: "ID_FACTOR_IMPORT",
+                id: "ID_FACTOR",
                 fields: {
                     COD_VIA: { type: "string" }, // number - string - date
                     COD_PAIS_EMB: { type: "string" }, // number - string - date
@@ -241,18 +270,23 @@ $(function () {
                     COD_MARCA: { type: "string" }, // number - string - date
                     COD_TIP_MON: { type: "string" }, // number - string - date
                     FACTOR_ESTIMADO: { type: "number" }, // number - string - date
-                    FACTOR_REAL: { type: "number" } // number - string - date
+                    FACTOR_REAL: { type: "number" ,editable: false} // number - string - date
                 }
             }
         },
         change: function () {
-
         },requestEnd: function (e) {
-
-            if ( (e.type === 'update') || (e.type === 'create') ) {
-                window.location.href = "lead_time";
+            if (e.type === 'update'){
+               if (e.response === 'OK'){
+                    window.location.href = "Factor_Importacion";
+                    popupNotification.getNotifications().parent().remove();
+                    popupNotification.show(" Factor actualizado correctamente.", "success");
+                }else{
+                    dataSource.fetch();
+                    popupNotification.getNotifications().parent().remove();
+                    popupNotification.show(e.response, "info");
+                }
             }
-
         }
     });
 
@@ -261,17 +295,20 @@ $(function () {
         dataSource: dataSource,
         editable: true,
         toolbar: [
-            { name:"Add", text: "Nuevo Factor",iconClass: "k-icon k-i-plus"},
-            { name: "save", text: "Guardar", iconClass: "k-icon k-i-save" },
-            { name: "cancel", text: "Cancelar Modificaciones" }
+            { name:"Agregar", text: "Agregar",iconClass: "k-icon k-i-plus"},
+            { name: "save", text: "Guardar", iconClass: "k-icon k-i-save"},
+            { name: "Eliminar", text: "Eliminar", iconClass: "k-icon k-i-delete"},
+            { name: "cancel", text: "Limpiar",iconClass: "k-icon k-i-strip-all-formating"},
+            { name: "excel", text: "Exportar",iconClass: "k-icon k-i-file-xls"}
         ],
         height: 550, // Altura del Grid
         resizable: true,
-        //selectable: "multiple",
         filterable: true,
         sortable: true, // Se puede ordenar
+        change: onChangeID_FACTOR,
         columns: [ // Columnas a Listar
-            {field: "ID_FACTOR_IMPORT", hidden: true},
+            {selectable: true, width: "50px" },
+            {field: "ID_FACTOR", hidden: true},
             {field: "COD_VIA",title: "Vía Trans.",width: 100 ,attributes: {style:"font-size: 11px"}, editor: ViaDropDownEditor,filterable: {multi: true }},
             {field: "COD_PAIS_EMB",title: "País Emb.",width: 100,attributes: {style:"font-size: 11px"}, editor: PaisEmbDropDownEditor,filterable: {multi: true }},
             {field: "COD_PUERTO_EMB",title: "Pto Emb.",width: 100,attributes: {style:"font-size: 11px"}, editor: PtoEmbDropDownEditor,filterable: {multi: true }},
@@ -281,11 +318,33 @@ $(function () {
             {field: "COD_DIV",title: "Division",width: 100,attributes: {style:"font-size: 11px"}, editor: DivisionDropDownEditor,filterable: {multi: true }},
             {field: "DEP_DEPTO",title: "Departamento",width: 150,attributes: {style:"font-size: 11px"}, editor: DepartamentoDropDownEditor,filterable: {multi: true }},
             {field: "COD_MARCA",title: "Marca",width: 100,attributes: {style:"font-size: 11px"}, editor: MarcaDropDownEditor,filterable: {multi: true }},
-            {field: "COD_TIP_MON",title: "Moneda",width: 95,attributes: {style:"font-size: 11px"}},
-            {field: "FACTOR_ESTIMADO",title: "F.Est.",width: 70,attributes: {style:"font-size: 11px"}},
+            {field: "COD_TIP_MON",title: "Moneda",width: 95,attributes: {style:"font-size: 11px"}, editor: MonedaDropDownEditor,filterable: {multi: true }},
+            {field: "FACTOR_ESTIMADO",title: "F.Est.",width: 70,attributes: {style: "font-size: 11px; color: red"}},
             {field: "FACTOR_REAL",title: "F.Comex",width: 70,attributes: {style:"font-size: 11px"}}
-        ]
+        ],
+        excelExport: function(e) {
+            e.workbook.fileName = "Factor Importacion.xlsx";
+        }
     });
+    $(".k-grid-Eliminar").addClass("k-state-disabled").removeClass("k-grid-add");
+    function onChangeID_FACTOR(arg) {
+        $('#iddelete').val(this.selectedKeyNames().join(", "));
+        if ($('#iddelete').val() != "" && $('#iddelete').val() != ""){
+            $(".k-grid-Eliminar").removeClass("k-state-disabled").addClass("k-grid-add");
+            $(".k-grid-Agregar").addClass("k-state-disabled").removeClass("k-grid-add");
+            $(".k-grid-save-changes").addClass("k-state-disabled").removeClass("k-grid-add");
+            $(".k-grid-cancel-changes").addClass("k-state-disabled").removeClass("k-grid-add");
+        }else{
+            $(".k-grid-Eliminar").addClass("k-state-disabled").removeClass("k-grid-add");
+            $(".k-grid-Agregar").removeClass("k-state-disabled").addClass("k-grid-add");
+            $(".k-grid-save-changes").removeClass("k-state-disabled").addClass("k-grid-add");
+            $(".k-grid-cancel-changes").removeClass("k-state-disabled").addClass("k-grid-add");
+        }
+    }
+
+
+    //var grid = $("#grilla_factor_importado").data("kendoGrid");
+    //grid.saveAsExcel();
 //#endregion
 
 //#region /*----------POPPUP---------*/
@@ -307,11 +366,40 @@ $(function () {
 
 //#region /*----------Botones---------*/
     /*BTN NUEVO FACTOR*/
-    $(".k-grid-Add").click(function(e){
+    $(".k-grid-Agregar").click(function(e){
         var popupaddFactor = $("#POPUP_addfactor");
         popupaddFactor.data("kendoWindow").open();
     });
 
+    /*BTN Eliminar*/
+    $(".k-grid-Eliminar").click(function(e){
+
+        var dt_iddelete =$('#iddelete').val();
+        $.ajax({
+            type: "POST",
+            url:   crudServiceBaseUrlpost + "DeleteFactorImport",
+            data: { id_delete:String(dt_iddelete)},
+            dataType: "json",
+            success: function (result) {
+                if(result=="OK"){
+                    window.location.href = "Factor_Importacion";
+                    popupNotification.getNotifications().parent().remove();
+                    popupNotification.show(" Factor eliminado correctamente.", "success");
+                }else{
+                    popupNotification.getNotifications().parent().remove();
+                    popupNotification.show(" Error Eliminación", "error");
+                }
+            },
+            error: function (xhr, httpStatusMessage, customErrorMessage) {
+                popupNotification.getNotifications().parent().remove();
+                popupNotification.show(" Se produjo un error en el guardado.", "error");
+            }
+        });
+
+    });
+
+    var validator = $("#addfactorForm").kendoValidator().data("kendoValidator"),
+        status = $(".status");
     /*BTN CREAR FACTOR*/
     $("form").submit(function(event) {
         event.preventDefault();
@@ -331,26 +419,6 @@ $(function () {
 
             $.ajax({
                 //type: "POST",
-                url:   crudServiceBaseUrl + "_existeFactor",
-                data: { VIA:String(via),
-                    PAIS_EMB:String(pais_emb),
-                    PTO_EMBARQUE:String(pto_embarque),
-                    PAIS_DEST:String(pais_dest),
-                    PTO_DESTINO:String(pto_destino),
-                    INCOTERM:String(incoterm),
-                    DIVISION:String(division),
-                    DEPARTAMENTO:String(departamento),
-                    MARCA:String(marca),
-                    MONEDA:String(moneda)},
-                dataType: "json",
-                success: function (result) {
-                    if(result>0){
-                        // Mensaje
-                        popupNotification.getNotifications().parent().remove();
-                        popupNotification.show("Ya se encuentra registrado este factor", "info");
-                    }else{
-                        $.ajax({
-                            //type: "POST",
                             url:   crudServiceBaseUrl + "InsertFactorImport",
                             data: { VIA:String(via),
                                 PAIS_EMB:String(pais_emb),
@@ -390,6 +458,9 @@ $(function () {
                                     var popupfactor = $("#POPUP_addfactor");
                                     popupfactor.data("kendoWindow").close();
 
+                                }else if(result=="DUPLICADO"){
+                                    popupNotification.getNotifications().parent().remove();
+                                    popupNotification.show("Ya se encuentra registrado este factor", "info");
                                 }else{
                                     // Mensaje
                                     popupNotification.getNotifications().parent().remove();
@@ -401,12 +472,6 @@ $(function () {
                                 popupNotification.show(" Se produjo un error en el guardado.", "error");
                             }
                         });
-                    }
-                }
-            });
-
-
-
 
         } else {
             // status.text("Oops! There is invalid data in the form.").removeClass("valid").addClass("invalid");
@@ -647,10 +712,6 @@ $(function () {
     //#endregion
 
     $("#factor_est").kendoNumericTextBox({format: "{0:n2}"});
-
-    var validator = $("#addfactorForm").kendoValidator().data("kendoValidator"),
-        status = $(".status");
-
 
 
 
