@@ -378,9 +378,42 @@ $(function () {
         // console.log(arregloGuardado);
         // console.log(e.data.updated[0]["ALIAS_PROV"]);
 
-        //$.post( crudServiceBaseUrlPOST + "ProcesaDataPlanCompra", {models: kendo.stringify(arregloGuardado)} );
+        $.post( crudServiceBaseUrlPOST + "ProcesaDataPlanCompra", {models: kendo.stringify(arregloGuardado)},function( data ) {
 
-        $.ajax({
+            // Recargar PlanCompra
+            var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
+            var sheet = spreadsheet.activeSheet();
+            sheet.dataSource.read();
+
+            // Seteo popup de notoficacion
+            var popupNotification = $("#popupNotification").kendoNotification().data("kendoNotification");
+
+            if(data == 0){
+                // Mensaje de ok
+                popupNotification.getNotifications().parent().remove();
+                popupNotification.show(" Cambios Almacenados Correctamente.", "success");
+            }else{
+                // Mensaje de Error
+                popupNotification.getNotifications().parent().remove();
+                popupNotification.show(result, "error");
+            }
+
+            $("#tb_guardar_cambios").removeClass("k-state-disabled");
+            $("#tb_cancelar_cambios").removeClass("k-state-disabled");
+
+
+         } ).fail(function() {
+
+            $("#tb_guardar_cambios").removeClass("k-state-disabled");
+            $("#tb_cancelar_cambios").removeClass("k-state-disabled");
+
+            // Mensaje de Error
+            popupNotification.getNotifications().parent().remove();
+            popupNotification.show(" Error en el Guardado.", "error");
+
+        });
+
+        /*$.ajax({
             //type: "POST",
             url: crudServiceBaseUrl + "ProcesaDataPlanCompra",
             //data: {models: kendo.stringify(e.data)},
@@ -427,7 +460,7 @@ $(function () {
 
                 console.log(xhr.responseText+" / "+httpStatusMessage+" / "+customErrorMessage);
             }
-        });
+        });*/
 
     }
 
@@ -838,7 +871,7 @@ $(function () {
                     NOM_PAIS: {type: "string"}, // Viaja a Controlador
                     /*VIAJE: {type: "string"},
                     MKUP: {type: "number"},*/
-                    PRECIO_BLANCO: {type: "number"}, // Viaja a Controlador
+                    PRECIO_BLANCO: {type: "string"}, // Viaja a Controlador
                     /*GM: {type: "number"},
                     OFERTA: {type: "string"},
                     DOSX: {type: "string"},
