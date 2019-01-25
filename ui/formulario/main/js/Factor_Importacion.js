@@ -332,10 +332,12 @@ $(function () {
         if ($('#iddelete').val() != "" && $('#iddelete').val() != ""){
             $(".k-grid-Eliminar").removeClass("k-state-disabled").addClass("k-grid-add");
             $(".k-grid-Agregar").addClass("k-state-disabled").removeClass("k-grid-add");
+			$(".k-grid-save-changes").addClass("k-state-disabled").removeClass("k-grid-save");
             $(".k-grid-cancel-changes").addClass("k-state-disabled").removeClass("k-grid-add");
         }else{
             $(".k-grid-Eliminar").addClass("k-state-disabled").removeClass("k-grid-add");
             $(".k-grid-Agregar").removeClass("k-state-disabled").addClass("k-grid-add");
+			$(".k-grid-save-changes").removeClass("k-state-disabled").addClass("k-grid-save");
             $(".k-grid-cancel-changes").removeClass("k-state-disabled").addClass("k-grid-add");
         }
     }
