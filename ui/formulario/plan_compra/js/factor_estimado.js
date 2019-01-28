@@ -4,6 +4,17 @@
  */
 
 $(function () {
+    $('#contenedor_formulario').hide();
+    $('#btn_esconder_Formulario').hide();
+    $('#btn_mostrar_Formulario').show();
+
+
+
+    $('#btn_esconder_Formulario').tooltip({title: "Ocultar", trigger: "hover", placement: "right"});
+    $('#btn_mostrar_Formulario').tooltip({title: "Desplegar", trigger: "hover", placement: "right"});
+
+
+
 
 
     /*ABRE POPUP MODAL PERFIL*/
@@ -74,6 +85,40 @@ $(function () {
 
     });
 
+    $('.actualizar_factor_p').on('click', function () {
+
+        url = 'ajax_factorestimado/ActualizarfactorPromedio';
+        $.get(url, function (data) {
+            var mensaje = data.split("-");
+            notificacionNavegador(mensaje[0], mensaje[1]);
+            location.reload();
+        });
+    });
+
+    // BTN asociado a Esconder el Presupuesto
+    $('#btn_esconder_Formulario').on('click', function () {
+
+        $('#contenedor_formulario').hide();
+        $('#btn_esconder_Formulario').hide();
+        $('#btn_mostrar_Formulario').show();
+
+        //$('.dataTables_scrollBody').attr('style', 'position: relative; overflow: auto; width: 100%; max-height: 60%;');
+
+    });
+
+// BTN asociado a Mostrar el Presupuesto
+    $('#btn_mostrar_Formulario').on('click', function () {
+
+        $('#contenedor_formulario').show();
+        $('#btn_esconder_Formulario').show();
+        $('#btn_mostrar_Formulario').hide();
+
+        //$('.dataTables_scrollBody').attr('style', 'position: relative; overflow: auto; width: 100%; max-height: 140px;');
+
+    });
+
+
+
   //  $('.replica_factor').on('click', function () {
    //     alert("a");
    //     url = 'ajax_factorestimado/elimina_Factor';
@@ -138,7 +183,9 @@ $(function () {
     });
 
 
+
 });
+
 
 
 $(document).ready(function () {

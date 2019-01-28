@@ -27,7 +27,8 @@ class factor_estimado {
                                                              ,V.NOM_VIA
                                                              ,F.COD_TIP_MON     AS COD_MONEDA
                                                              ,M.NOM_TIP_MON     AS NOM_MONEDA
-                                                             ,ROUND( F.FACTOR_DOL, 2 ) AS FACTOR_DOL 
+                                                             ,ROUND( F.FACTOR_DOL, 2 ) AS FACTOR_DOL
+                                                             ,ROUND( F.FACTOR_PROMEDIO, 2 ) AS FACTOR_PROMEDIO 
                                                              ,F.A,F.B,F.C,F.D
                                                              ,F.E,F.F,F.G,F.H,F.I           
                                                       FROM PLC_FACTOR_EST       F 
@@ -35,8 +36,7 @@ class factor_estimado {
                                                       LEFT JOIN PLC_PAIS        P ON F.CNTRY_LVL_CHILD = P.CNTRY_LVL_CHILD
                                                       LEFT JOIN PLC_VIA         V ON F.COD_VIA = V.COD_VIA
                                                       LEFT JOIN PLC_TIPO_MONEDA M ON F.COD_TIP_MON = M.COD_TIP_MON
-                                                      WHERE  F.COD_TEMPORADA = " . $cod_temp
-                . " ORDER BY G.DEP_DESCRIPCION
+                                                      WHERE  F.COD_TEMPORADA = " . $cod_temp. " ORDER BY G.DEP_DESCRIPCION
                                                                ,P.CNTRY_NAME
                                                                ,V.NOM_VIA
                                                                ,M.NOM_TIP_MON
@@ -276,7 +276,27 @@ class factor_estimado {
 
     }
 
+    // Actualizar Factor Promedio
+    public static function ActualizarfactorPromedio($temporada){
 
+
+        $sql = "merge into plc_factor_est t1
+                using (SELECT COD_TEMPORADA,DEP_DEPTO,COD_VIA,COD_PAIS_EMB,COD_TIP_MON
+                        , AVG(FACTOR_ESTIMADO) FACTOR_PROMEDIO
+                        from PIA_FACTOR_IMPORT
+                        WHERE COD_TEMPORADA = $temporada
+                GROUP BY COD_TEMPORADA,DEP_DEPTO,COD_VIA,COD_PAIS_EMB,COD_TIP_MON) t2
+                on (t1.cod_temporada = t2.cod_temporada 
+                     and t1.dep_depto = t2.dep_depto
+                     and t1.COD_VIA = t2.COD_VIA
+                     and t1.CNTRY_LVL_CHILD = t2.COD_PAIS_EMB
+                     and t1.COD_TIP_MON = t2.COD_TIP_MON
+                    )
+                when matched then update set t1.FACTOR_PROMEDIO = t2.FACTOR_PROMEDIO";
+
+        \database::getInstancia()->getConsulta($sql);
+
+    }
 
 
 // Fin de la Clase

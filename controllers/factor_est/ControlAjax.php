@@ -124,4 +124,13 @@ class ControlAjax extends \Control  {
         echo json_encode(\temporada\factor_estimado::conteo_tipo_cambio($f3->get('SESSION.COD_TEMPORADA'),$f3->get('SESSION.COD_DEPTO'),$f3->get('SESSION.login')));
     }
 
+    public function ActualizarfactorPromedio($f3){
+        try {
+        \temporada\factor_estimado::ActualizarfactorPromedio($f3->get('SESSION.COD_TEMPORADA'));
+            echo 'OK-fue actualizado con exito.';
+        }catch (Exception $e){
+            echo 'ERROR-'.$e->getMessage();
+        }
+    }
+
 }

@@ -44,8 +44,11 @@ and open the template in the editor.
         <div class="row">
             <div class="box-body">
                 <button id="btn_grabar_factor_estimado" class="btn btn-app button_form"><i class="fa fa-save"></i>Grabar </button>
+
+
                 <a id="btn_eliminar_factor_estimado" class="btn btn-app disabled eliminar_usuario" data-toggle="modal" data-target="#elimina_factor"><i class="fa fa-trash"></i> Eliminar</a>
                 <a class="btn btn-app replicar_factor" data-toggle="modal" data-target="#replicar_factor"><i class="fa fa-share-square"></i> Replicar</a>
+                <a id="btn_update_factorP" class="btn btn-app actualizar_factor_p"><i class="fa fa-ship"></i>F.Promedio </a>
                 <a class="btn btn-app" href="exporta_factor"><i class="fa fa-cloud-download"></i> Exportar</a>
                 <a class="btn btn-app limpiar_form"><i class="fa fa-repeat"></i> Limpiar</a>
                 <a href="plan_compra?codigo={{@SESSION.COD_TEMPORADA}}" class="btn btn-app"><i class="fa fa-sign-out"></i> Salir</a>
@@ -57,7 +60,7 @@ and open the template in the editor.
              height:500px;">
             <!-- left column -->
             <div class="col-md-12">
-                <div class="box box-primary">
+                <div class="box box-primary" id="contenedor_formulario">
                     <div class="box-header with-border">
                         Formulario
                     </div>
@@ -113,10 +116,18 @@ and open the template in the editor.
                     <hr>
                 </div>
 
+                <div id="btn_flotantes" style="position: absolute;margin-left: 5px;margin-top: 5px;z-index: 1;">
+                    <button id="btn_esconder_Formulario" type="button" class="btn btn-primary btn-xs" alt="Ocultar" title="Ocultar">
+                        <i class="fa fa-angle-up"></i>&nbsp;Formulario</button>
+                    <button id="btn_mostrar_Formulario" type="button" class="btn btn-primary btn-xs" alt="Desplegar" title="Desplegar" style="display: none;">
+                        <i class="fa fa-angle-down"></i>&nbsp;Formulario</button>
+                </div>
+
+
                 <div class="box box-primary">
                     <!-- /.box-header -->
                     <div class="box-body">
-                        <table id="lista_funcionarios" class="table table-bordered table-striped tabla_smaller_especial list_usuarios">
+                        <table id="lista_factores" class="table table-bordered table-striped tabla_smaller_especial list_usuarios">
                             <thead>
                                 <tr>
                                     <th></th>
@@ -124,7 +135,8 @@ and open the template in the editor.
                                     <th class=" text-center">País</th>
                                     <th class=" text-center">Vía</th>
                                     <th class=" text-center">Moneda</th>
-                                    <th class=" text-center">Factor</th> 
+                                    <th class=" text-center">Factor</th>
+                                    <th class=" text-center">Factor Promedio</th>
                                     <th style="text-align:center">A</th>
                                     <th style="text-align:center">B</th>
                                     <th style="text-align:center">C</th>
@@ -139,7 +151,7 @@ and open the template in the editor.
                             <tbody>
                                 <!-- /.box-header                         -->
                             <repeat group="{{ @Lista_FactorEstimado }}" value="{{ @Lista_FactorEstimado }}">
-                                <tr class="filas" data-factorest="{{ utf8_encode(@Lista_FactorEstimado['DEP_DEPTO']) }}${{utf8_encode(@Lista_FactorEstimado['COD_PAIS'])}}${{utf8_encode(@Lista_FactorEstimado['COD_VIA']) }}${{ utf8_encode(@Lista_FactorEstimado['COD_MONEDA']) }}${{ utf8_encode(@Lista_FactorEstimado['FACTOR_DOL']) }}">
+                                <tr class="filas" data-factorest="{{ utf8_encode(@Lista_FactorEstimado['DEP_DEPTO']) }}${{utf8_encode(@Lista_FactorEstimado['COD_PAIS'])}}${{utf8_encode(@Lista_FactorEstimado['COD_VIA']) }}${{ utf8_encode(@Lista_FactorEstimado['COD_MONEDA']) }}${{ utf8_encode(@Lista_FactorEstimado['FACTOR_DOL']) }}${{ utf8_encode(@Lista_FactorEstimado['FACTOR_PROMEDIO']) }}">
 
                                     <th class="comuna_especial text-center" style="width: 5px;"><input type="radio" class="fila" width="10px" height="10px" ></th>
                                     <th class="comuna_especial text-center">{{@Lista_FactorEstimado['DEP_DESCRIPCION']}}</th>
@@ -147,6 +159,7 @@ and open the template in the editor.
                                     <th class="comuna_especial text-center">{{@Lista_FactorEstimado['NOM_VIA']}}</th> 
                                     <th class="comuna_especial text-center">{{@Lista_FactorEstimado['NOM_MONEDA']}}</th> 
                                     <th class="comuna_especial text-center">{{@Lista_FactorEstimado['FACTOR_DOL']}}</th>
+                                    <th class="comuna_especial text-center">{{@Lista_FactorEstimado['FACTOR_PROMEDIO']}}</th>
                                     <th class="text-center" name="va[]">{{@Lista_FactorEstimado['A']}} </th>
                                     <th class="text-center" name="vb[]" >{{@Lista_FactorEstimado['B']}}</th>
                                     <th class="text-center" name="vc[]" >{{@Lista_FactorEstimado['C']}}</th>
@@ -164,6 +177,10 @@ and open the template in the editor.
                     </div>
                     <!-- /.box-body -->
                 </div>
+
+
+
+
 
             </div>
             <!--/.col (left) -->
@@ -268,6 +285,8 @@ and open the template in the editor.
 
     </div>  
 </div>
+
+
 
 
 <!-- btn replicar -->
