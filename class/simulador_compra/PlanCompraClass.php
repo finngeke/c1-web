@@ -290,9 +290,9 @@ class PlanCompraClass extends \parametros
 
             // Agrega el Cero (0) al comienzo de la "," que aparecia
             if(substr($va1[61],0,1)==","){
-                $rfid_corregido = str_replace(",","0.",$va1[61]);
+                $rfid_corregido = str_replace(",","0,",$va1[61]);
             }else{
-                $rfid_corregido = str_replace(",",".",$va1[61]);
+                $rfid_corregido = $va1[61]; //str_replace(",",".",$va1[61]);
             }
 
             // Agrega el Cero (0) al comienzo de la "," que aparecia
@@ -361,11 +361,11 @@ class PlanCompraClass extends \parametros
                 , "PORTALLA_1" => utf8_encode($va1[32])
                 , "CURVATALLA" => utf8_encode($va1[33])
                 , "CURVAMIN" => utf8_encode($va1[34])
-                , "UNID_OPCION_INICIO" => $va1[35]
-                , "UNID_OPCION_AJUSTADA" => $va1[36]
-                , "CAN" => $va1[37]
-                , "MTR_PACK" => $va1[38]
-                , "CANT_INNER" => $va1[39]
+                , "UNID_OPCION_INICIO" => $va1[35] // AK
+                , "UNID_OPCION_AJUSTADA" => number_format($va1[36],0,",",".") //$va1[36] // AL
+                , "CAN" => number_format($va1[37],0,",",".") //$va1[37] // AM
+                , "MTR_PACK" => $va1[38] // AN
+                , "CANT_INNER" => $va1[39] // AO
                 , "SEG_ASIG" => utf8_encode($va1[40])
                 , "FORMATO" => $FORMATO //utf8_encode($va1[41])
                 , "TDAS" => utf8_encode($va1[42])
@@ -374,24 +374,24 @@ class PlanCompraClass extends \parametros
                 , "C" => $va1[45]
                 , "I" => $va1[46]
                 , "UND_ASIG_INI" => number_format($va1[47],0,",",".") //$va1[47]
-                , "ROT" => $va1[48] //str_replace(",",".",$va1[48])
+                , "ROT" => $va1[48]
                 , "NOM_PRECEDENCIA" => utf8_encode($va1[49])
                 , "NOM_VIA" => utf8_encode($va1[50])
                 , "NOM_PAIS" => utf8_encode($va1[51])
                 , "VIAJE" => utf8_encode($va1[52])
-                , "MKUP" => $va1[53] //str_replace(",",".",$va1[53])
-                , "PRECIO_BLANCO" => number_format($va1[54],0,",",".") //$va1[54]
-                , "GM" => $va1[55] //str_replace(",",".",$va1[55])
+                , "MKUP" => $va1[53]
+                , "PRECIO_BLANCO" => $va1[54]
+                , "GM" => $va1[55]
                 , "OFERTA" => number_format($va1[56],0,",",".") //utf8_encode($va1[56])
                 , "DOSX" => number_format($va1[111],0,",",".") //trim($va1[111])
                 , "OPEX" => trim($va1[112])
                 , "COD_TIP_MON" => utf8_encode($va1[57])
-                , "COSTO_TARGET" => str_replace(",",".",$va1[58])
-                , "COSTO_FOB" => str_replace(",",".",$va1[59])
-                , "COSTO_INSP" => str_replace(",",".",$va1[60])
+                , "COSTO_TARGET" => $va1[58]
+                , "COSTO_FOB" => $va1[59]
+                , "COSTO_INSP" => $va1[60]
                 , "COSTO_RFID" => $rfid_corregido //$va1[61]
                 , "ROYALTY_POR" => $va1[62]
-                , "COSTO_UNIT" => $va1[63]//str_replace(",",".",$va1[63])
+                , "COSTO_UNIT" => $va1[63]
                 , "COSTO_UNITS" => number_format($va1[64],0,",",".")  //$va1[64]
                 , "CST_TOTLTARGET" => number_format(str_replace(",",".",$va1[65]),2,",",".") //str_replace(",",".",$va1[65])
                 , "COSTO_TOT" => number_format(str_replace(",",".",$va1[66]),2,",",".") //str_replace(",",".",$va1[66])

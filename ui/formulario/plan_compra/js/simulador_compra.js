@@ -1,5 +1,5 @@
 $(function () {
-
+    kendo.culture("es-CL");
     // Actualiza Fecha de Concurrencia (Solo se agrega en este JS, ya que desde fuera no se puede llamar)
     function ActualizaConcurrencia() {
 
@@ -531,7 +531,7 @@ $(function () {
                     });
                     columnCM.format('dd/mm/yyyy');
 
-                    var columnCG = sheet.range('BJ2:BM'+count);
+                    /*var columnCG = sheet.range('BJ2:BM'+count);
                     columnCG.validation({
                         from: "0",
                         to: "999",
@@ -541,7 +541,7 @@ $(function () {
                         type: "reject",
                         titleTemplate: "Error de Formato",
                         messageTemplate: "  Sólo debes utilizar puntos."
-                    });
+                    });*/
 
                     // Rows red estado Eliminado
                     var range_estados = sheet_2.range("CR2:CR"+count);
@@ -583,6 +583,18 @@ $(function () {
                     sheet.range("CH2:CL"+count).color(color_celda_lectura);
                     // CN - CR
                     sheet.range("CN2:CR"+count).color(color_celda_lectura);
+
+                    // Formato de Números
+                    //sheet.range("AK2:AK40").format("$#,##0.00");
+                    //sheet.range("AK2:AL"+count).format("#,##0");
+                    //sheet.range("BD2:BD"+count).format("#,##0");
+
+                    // Unidades Iniciales
+                    sheet.range("AK2:AK"+count).format("#,##0");
+                    // Precio Blanco
+                    sheet.range("BD2:BD"+count).format("#,##0");
+                    // 4 Columnas -> Target - RFID
+                    sheet.range("BJ2:BM"+count).format("#,##0.00");
 
 
 
@@ -790,7 +802,6 @@ $(function () {
 
                     }, {recalc: true});
 
-
                 }
             }, 0);
 
@@ -871,7 +882,7 @@ $(function () {
                     NOM_PAIS: {type: "string"}, // Viaja a Controlador
                     /*VIAJE: {type: "string"},
                     MKUP: {type: "number"},*/
-                    PRECIO_BLANCO: {type: "string"}, // Viaja a Controlador
+                    PRECIO_BLANCO: {type: "number"}, // Viaja a Controlador
                     /*GM: {type: "number"},
                     OFERTA: {type: "string"},
                     DOSX: {type: "string"},
