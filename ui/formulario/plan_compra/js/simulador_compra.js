@@ -395,7 +395,7 @@ $(function () {
             }else{
                 // Mensaje de Error
                 popupNotification.getNotifications().parent().remove();
-                popupNotification.show(result, "error");
+                popupNotification.show(data, "error");
             }
 
             $("#tb_guardar_cambios").removeClass("k-state-disabled");
