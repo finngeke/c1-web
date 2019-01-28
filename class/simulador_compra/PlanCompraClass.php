@@ -1360,7 +1360,8 @@ class PlanCompraClass extends \parametros
 
         // Hay que ir a buscar el Curvado
         $query_curva = PlanCompraClass::CalculoCurvadoPlanCompra($TIPO_EMPAQUE, $DESTALLA, $CURVATALLA, $UNID_OPCION_INICIO, $SEG_ASIG, $FORMATO, $A, $B, $C, $I, $DEBUT_REODER, $PORTALLA_1_INI, $DEPTO, $TEMPORADA, $COD_MARCA, $N_CURVASXCAJAS, $COD_JER2, $COD_SUBLIN, $ID_COLOR3, 1);
-        // Valido que se pueda realizar la QUERY
+
+       // Valido que se pueda realizar la QUERY
         if (!$query_curva) {
             return " ID: " . $ID_COLOR3 . " - No se pudo buscar curvado.";
             die();
@@ -2016,7 +2017,9 @@ class PlanCompraClass extends \parametros
                 /*ID_COLOR3*/, $id_color3
                 /*Tallas*/, $tallas
                 /*TEMPO*/, $cod_tempo
-                /*DEPTO*/, $depto);
+                /*DEPTO*/, $depto
+                ,1
+            );
 
             $key4 = 0;
             $logInsert = "";
@@ -2035,7 +2038,9 @@ class PlanCompraClass extends \parametros
                     AND ID_COLOR3 = " . $id_color3;
 
             \database::getInstancia()->getConsulta($sql);
+
             plan_compra::InsertAjustes($logInsert);
+
 
         }
 
@@ -2360,7 +2365,7 @@ class PlanCompraClass extends \parametros
     }
 
 
-    public static function SaveAjuste_Compra2($dtTabla, $dtTablaCurvado,$dtTablasSolidoCurvado,$dtTablasolidoFULL,$dtTablaReorder,$DEBUT,$Tipo_empaque,$id_color3,$Tallas,$cod_tempo,$depto){
+    public static function SaveAjuste_Compra2($dtTabla, $dtTablaCurvado,$dtTablasSolidoCurvado,$dtTablasolidoFULL,$dtTablaReorder,$DEBUT,$Tipo_empaque,$id_color3,$Tallas,$cod_tempo,$depto,$modpais){
         $N_Columna = count(explode(",", trim($Tallas)));
         $tallas2 = explode(",", trim($Tallas));
         $key = 0;$columnas = "";
@@ -2374,7 +2379,7 @@ class PlanCompraClass extends \parametros
                     //columnas
                     if ($key ==1){$columnas = "Curva de Compra";}elseif($key ==2){$columnas = "Curva Primer Reparto";}elseif($key ==3){$columnas = "Diferencial";}elseif($key ==4){$columnas = "Total";}elseif($key ==5){$columnas = "Curva de compra Ajustada";}
                     $tallas3 = plan_compra::Division_tallas($tallas2,$val);
-                    $sql = "select   " . $cod_tempo . ",'" . $depto . "','" . $id_color3 . "','" . $Tipo_empaque . "','" . $DEBUT . "','" . $columnas . "','" . $Tallas . "'," . $tallas3[0] . "," . $tallas3[1] . "," . $tallas3[2] . "," . $tallas3[3] . "," . $tallas3[4] . "," . $tallas3[5] . "," . $tallas3[6] . "," . $tallas3[7] . "," . $tallas3[8] . "," . $val[$N_Columna] .",'Ajuste de Compra',SYSDATE  from dual union ";
+                    $sql = "select   " . $cod_tempo . ",'" . $depto . "','" . $id_color3 . "','" . $Tipo_empaque . "','" . $DEBUT . "','" . $columnas . "','" . $Tallas . "'," . $tallas3[0] . "," . $tallas3[1] . "," . $tallas3[2] . "," . $tallas3[3] . "," . $tallas3[4] . "," . $tallas3[5] . "," . $tallas3[6] . "," . $tallas3[7] . "," . $tallas3[8] . "," . $val[$N_Columna] .",'Ajuste de Compra',SYSDATE,$modpais  from dual union ";
                     array_push($_logquery,$sql);
                 }
                 $key +=1;
@@ -2385,7 +2390,7 @@ class PlanCompraClass extends \parametros
                     //columnas
                     if ($key ==1){$columnas = "Compra Total";}elseif($key ==2){$columnas = "1er Reparto";}elseif($key ==3){$columnas = "Curva 1er Reparto";}elseif($key ==4){$columnas = "Master Curvado";}elseif($key ==5){$columnas = "Curvas a repartir";}elseif($key ==6){$columnas = "N de Cajas";}elseif($key ==7){$columnas = "N de curvas x cajas";}
                     $tallas3 = plan_compra::Division_tallas($tallas2,$val);
-                    $sql = "select   " . $cod_tempo . ",'" . $depto . "','" . $id_color3 . "','" . $Tipo_empaque . "','" . $DEBUT . "','" . $columnas . "','" . $Tallas . "'," . $tallas3[0] . "," . $tallas3[1] . "," . $tallas3[2] . "," . $tallas3[3] . "," . $tallas3[4] . "," . $tallas3[5] . "," . $tallas3[6] . "," . $tallas3[7] . "," . $tallas3[8] . "," . $val[$N_Columna] . ",'Ajuste Curvado',SYSDATE  from dual union ";
+                    $sql = "select   " . $cod_tempo . ",'" . $depto . "','" . $id_color3 . "','" . $Tipo_empaque . "','" . $DEBUT . "','" . $columnas . "','" . $Tallas . "'," . $tallas3[0] . "," . $tallas3[1] . "," . $tallas3[2] . "," . $tallas3[3] . "," . $tallas3[4] . "," . $tallas3[5] . "," . $tallas3[6] . "," . $tallas3[7] . "," . $tallas3[8] . "," . $val[$N_Columna] . ",'Ajuste Curvado',SYSDATE,$modpais  from dual union ";
                     array_push($_logquery,$sql);
                 }
                 $key +=1;
@@ -2396,7 +2401,7 @@ class PlanCompraClass extends \parametros
                     //columnas
                     if ($key ==1){$columnas = "Total Solido";}elseif($key ==2){$columnas = "N Cajas";}elseif($key ==3){$columnas = "Total Solido Ajustado";}elseif($key ==4){$columnas = "Master Pack";}elseif($key ==5){$columnas = "Total Unidades Final";}elseif($key ==6){$columnas = "Total N Cajas Final";}elseif($key ==7){$columnas = "Total Porcentajes Ajust Final";}
                     $tallas3 = plan_compra::Division_tallas($tallas2,$val);
-                    $sql = "select   " . $cod_tempo . ",'" . $depto . "','" . $id_color3 . "','" . $Tipo_empaque . "','" . $DEBUT . "','" . $columnas . "','" . $Tallas . "'," . $tallas3[0] . "," . $tallas3[1] . "," . $tallas3[2] . "," . $tallas3[3] . "," . $tallas3[4] . "," . $tallas3[5] . "," . $tallas3[6] . "," . $tallas3[7] . "," . $tallas3[8] . "," . $val[$N_Columna] .",'Solido Curvado',SYSDATE  from dual union ";
+                    $sql = "select   " . $cod_tempo . ",'" . $depto . "','" . $id_color3 . "','" . $Tipo_empaque . "','" . $DEBUT . "','" . $columnas . "','" . $Tallas . "'," . $tallas3[0] . "," . $tallas3[1] . "," . $tallas3[2] . "," . $tallas3[3] . "," . $tallas3[4] . "," . $tallas3[5] . "," . $tallas3[6] . "," . $tallas3[7] . "," . $tallas3[8] . "," . $val[$N_Columna] .",'Solido Curvado',SYSDATE,$modpais  from dual union ";
                     array_push($_logquery,$sql);
                 }
                 $key +=1;
@@ -2411,7 +2416,7 @@ class PlanCompraClass extends \parametros
                     //columnas
                     if ($key ==1){$columnas = "Curva de Compra";}elseif($key ==2){$columnas = "Curva Primer Reparto";}elseif($key ==3){$columnas = "Diferencial";}elseif($key ==4){$columnas = "Total";}elseif($key ==5){$columnas = "Curva de compra Ajustada";}
                     $tallas3 = plan_compra::Division_tallas($tallas2,$val);
-                    $sql = "select   " . $cod_tempo . ",'" . $depto . "','" . $id_color3 . "','" . $Tipo_empaque . "','" . $DEBUT . "','" . $columnas . "','" . $Tallas . "'," . $tallas3[0] . "," . $tallas3[1] . "," . $tallas3[2] . "," . $tallas3[3] . "," . $tallas3[4] . "," . $tallas3[5] . "," . $tallas3[6] . "," . $tallas3[7] . "," . $tallas3[8] . "," . $val[$N_Columna] .",'Ajuste de Compra',SYSDATE  from dual union ";
+                    $sql = "select   " . $cod_tempo . ",'" . $depto . "','" . $id_color3 . "','" . $Tipo_empaque . "','" . $DEBUT . "','" . $columnas . "','" . $Tallas . "'," . $tallas3[0] . "," . $tallas3[1] . "," . $tallas3[2] . "," . $tallas3[3] . "," . $tallas3[4] . "," . $tallas3[5] . "," . $tallas3[6] . "," . $tallas3[7] . "," . $tallas3[8] . "," . $val[$N_Columna] .",'Ajuste de Compra',SYSDATE,$modpais  from dual union ";
                     array_push($_logquery,$sql);
                 }
                 $key +=1;
@@ -2422,7 +2427,7 @@ class PlanCompraClass extends \parametros
                     //columnas
                     if ($key ==1){$columnas = "Unid Ini";}elseif($key ==2){$columnas = "Primer Reparto";}elseif($key ==3){$columnas = "Master Pack";}elseif($key ==4){$columnas = "N Cajas";}elseif($key ==5){$columnas = "Unid Final";}
                     $tallas3 = plan_compra::Division_tallas($tallas2,$val);
-                    $sql = "select   " . $cod_tempo . ",'" . $depto . "','" . $id_color3 . "','" . $Tipo_empaque . "','" . $DEBUT . "','" . $columnas . "','" . $Tallas . "'," . $tallas3[0] . "," . $tallas3[1] . "," . $tallas3[2] . "," . $tallas3[3] . "," . $tallas3[4] . "," . $tallas3[5] . "," . $tallas3[6] . "," . $tallas3[7] . "," . $tallas3[8] . "," . $val[$N_Columna] .",'Ajuste Master Pack',SYSDATE  from dual union ";
+                    $sql = "select   " . $cod_tempo . ",'" . $depto . "','" . $id_color3 . "','" . $Tipo_empaque . "','" . $DEBUT . "','" . $columnas . "','" . $Tallas . "'," . $tallas3[0] . "," . $tallas3[1] . "," . $tallas3[2] . "," . $tallas3[3] . "," . $tallas3[4] . "," . $tallas3[5] . "," . $tallas3[6] . "," . $tallas3[7] . "," . $tallas3[8] . "," . $val[$N_Columna] .",'Ajuste Master Pack',SYSDATE,$modpais  from dual union ";
                     array_push($_logquery,$sql);
                 }
                 $key +=1;
@@ -2435,7 +2440,7 @@ class PlanCompraClass extends \parametros
                     //columnas
                     if ($key ==1){$columnas = "Unid Ini";}elseif($key ==2){$columnas = "N Cajas";}elseif($key ==3){$columnas = "Und Final";}elseif($key ==4){$columnas = "Mst Pack";}
                     $tallas3 = plan_compra::Division_tallas($tallas2,$val);
-                    $sql = "select   " . $cod_tempo . ",'" . $depto . "','" . $id_color3 . "','" . $Tipo_empaque . "','" . $DEBUT . "','" . $columnas . "','" . $Tallas . "'," . $tallas3[0] . "," . $tallas3[1] . "," . $tallas3[2] . "," . $tallas3[3] . "," . $tallas3[4] . "," . $tallas3[5] . "," . $tallas3[6] . "," . $tallas3[7] . "," . $tallas3[8] . "," . $val[$N_Columna] .",'Ajuste Master Pack',SYSDATE  from dual union ";
+                    $sql = "select   " . $cod_tempo . ",'" . $depto . "','" . $id_color3 . "','" . $Tipo_empaque . "','" . $DEBUT . "','" . $columnas . "','" . $Tallas . "'," . $tallas3[0] . "," . $tallas3[1] . "," . $tallas3[2] . "," . $tallas3[3] . "," . $tallas3[4] . "," . $tallas3[5] . "," . $tallas3[6] . "," . $tallas3[7] . "," . $tallas3[8] . "," . $val[$N_Columna] .",'Ajuste Master Pack',SYSDATE,$modpais  from dual union ";
                     array_push($_logquery,$sql);
                 }
                 $key +=1;
