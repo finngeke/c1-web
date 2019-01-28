@@ -3697,7 +3697,7 @@ class PlanCompraClass extends \parametros
             $stamp = date("Y-m-d_H-i-s");
             $rand = rand(1, 999);
             $content = $sql_update;
-            $fp = fopen("../archivos/log_querys/" . $login . "/FLUJO-FLUJOHISTORIALUPDATE--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+            $fp = fopen("../archivos/log_querys/" . $login . "/FLUJO-PLC_PKG_UTILS.PRC_SOLOC--" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
             fwrite($fp, $content);
             fclose($fp);
 
