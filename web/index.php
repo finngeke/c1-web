@@ -179,11 +179,28 @@ $f3->route('GET /TelerikLeadTime/@tipo [ajax]', 'lead_time\LeadTimeController->@
 $f3->route('GET /mantenedor_proveedor', 'ControlFormularioMain->mantenedor_proveedor');
 $f3->route('GET /TelerikMantenedorProveedor/@tipo [ajax]', 'mantenedor_proveedor\MantenedorProveedorController->@tipo');
 
-
 /*FACTOR IMPORTACION*/
 $f3->route('GET /TelerikFactorImportacion/@tipo [ajax]', 'factor_Importacion\FactorImportacionController->@tipo');
 $f3->route('GET /Factor_Importacion', 'ControlFormularioCompra->Factor_Importacion');
 $f3->route('POST /TelerikFactorImportacion2/@tipo [ajax]', 'factor_Importacion\FactorImportacionController->@tipo');
+
+/* PI AUTOMATICA */
+// Diferencia Unidades
+$f3->route('GET /diferencia_unidades', 'ControlFormularioMain->diferencia_unidades');
+$f3->route('GET /TelerikDiferenciaUnidades/@tipo [ajax]', 'diferencia_unidades\DiferenciaUnidadesController->@tipo');
+// Diferencia Fechas
+$f3->route('GET /diferencia_fechas', 'ControlFormularioMain->diferencia_fechas');
+$f3->route('GET /TelerikDiferenciaFechas/@tipo [ajax]', 'diferencia_fechas\DiferenciaFechasController->@tipo');
+// Diferencia Presupuesto
+$f3->route('GET /diferencia_presupuesto', 'ControlFormularioMain->diferencia_presupuesto');
+$f3->route('GET /TelerikDiferenciaPresupuesto/@tipo [ajax]', 'diferencia_presupuesto\DiferenciaPresupuestoController->@tipo');
+// Resumen Estilos
+$f3->route('GET /resumen_estilos', 'ControlProveedor->resumen_estilos');
+$f3->route('GET /TelerikResumenEstilos/@tipo [ajax]', 'resumen_estilos\ResumenEstilosController->@tipo');
+// Encabezado, Detalle, PI
+$f3->route('GET /encabezado_detalle_pi', 'ControlProveedor->encabezado_detalle_pi');
+$f3->route('GET /TelerikEncabezadoDetallePi/@tipo [ajax]', 'encabezado_detalle_pi\EncabezadoDetallePiController->@tipo');
+
 /* LOG TRANSACCIONES*/
 $f3->route('GET /GuardarLogTransaccion/@tipo [ajax]', 'log_transaccion\GuardaLogTransaccion->@tipo');
 
