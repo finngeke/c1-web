@@ -1589,29 +1589,31 @@ class valida_archivo_bmt extends \parametros {
         }
         return $_exist;
     }
-    public static function ValidaCodCorporativo($rows,$limite,$nom_columnas,$temporada,$coddepto,$cod_temporada){
+    public static function ValidaCodCorporativo($rows,$limite,$nom_columnas,$temporada,$coddepto,$cod_temporada)
+    {
         $val3 = TRUE;
         $_Errorfile = "";
         $tipoVal = 1;
         $_mensaje = [];
-        $dtexcel= [];
+        $dtexcel = [];
         $OpcNotExistetemp = [];
         $OpcNotExistenuevo = [];
 
-        /*Validacion CodCorporativo 10 caracteres*/ $tipoVal = 1;
-        for($i = 3;$i <= $limite; $i++){
-            array_push($dtexcel,array("Grupo de compra"=>$rows[$i][$nom_columnas['Grupo de compra']],
-                                             "Cod Linea"=>$rows[$i][$nom_columnas['Cod Linea']],
-                                             "Cod Sublinea"=>$rows[$i][$nom_columnas['Cod Sublinea']],
-                                             "Nombre Estilo"=>$rows[$i][$nom_columnas['Nombre Estilo']],
-                                             "Codigo corporativo"=>$rows[$i][$nom_columnas['Codigo corporativo']]));
+        /*Validacion CodCorporativo 10 caracteres*/
+        $tipoVal = 1;
+        for ($i = 3; $i <= $limite; $i++) {
+            array_push($dtexcel, array("Grupo de compra" => $rows[$i][$nom_columnas['Grupo de compra']],
+                "Cod Linea" => $rows[$i][$nom_columnas['Cod Linea']],
+                "Cod Sublinea" => $rows[$i][$nom_columnas['Cod Sublinea']],
+                "Nombre Estilo" => $rows[$i][$nom_columnas['Nombre Estilo']],
+                "Codigo corporativo" => $rows[$i][$nom_columnas['Codigo corporativo']]));
             if ($rows[$i][$nom_columnas['Codigo corporativo']] <> null or
                 $rows[$i][$nom_columnas['Codigo corporativo']] <> "0" or
                 $rows[$i][$nom_columnas['Codigo corporativo']] <> "") {
 
-                if(strlen($rows[$i][$nom_columnas['Codigo corporativo']]) > 10){
+                if (strlen($rows[$i][$nom_columnas['Codigo corporativo']]) > 10) {
                    $val = FALSE;
-                   $_Errorfile = $_Errorfile.($i+1) .",";
+                    $_Errorfile = $_Errorfile . ($i + 1) . ",";
                 }
             }
         }
@@ -1692,58 +1694,99 @@ class valida_archivo_bmt extends \parametros {
         }
 */
         //4.-validacion de CodCorporativo en el excel lo que son nuevos.
-        if ($val3 == TRUE) {$tipoVal = 4;$msj= "";$dt=[];
-            foreach ($dtexcel as $mae){
-                $_existe = 0; $paso = false;
-                foreach ($dt as $vat){
-                    if($mae['Codigo corporativo']== $vat){
+        if ($val3 == TRUE) {
+            $tipoVal = 4;
+            $msj = "";
+            $dt = [];
+            foreach ($dtexcel as $mae) {
+                $_existe = 0;
+                $paso = false;
+                foreach ($dt as $vat) {
+                    if ($mae['Codigo corporativo'] == $vat) {
                         $paso = true;
                     }
                 }
-                if($paso == false){
-                    foreach ($dtexcel as $d){
-                        if($mae['Codigo corporativo']== $d['Codigo corporativo']){
-                            if($mae['Cod Linea']      <> $d['Cod Linea']     or
+                if ($paso == false) {
+                    foreach ($dtexcel as $d) {
+                        if ($mae['Codigo corporativo'] == $d['Codigo corporativo']) {
+                            if ($mae['Cod Linea'] <> $d['Cod Linea'] or
                                 $mae['Cod Sublinea']  <> $d['Cod Sublinea']  or
-                                $mae['Nombre Estilo'] <> $d['Nombre Estilo']){
+                                $mae['Nombre Estilo'] <> $d['Nombre Estilo']) {
                                 $_existe++;
                             }
                         }
                     }
-                    if ($_existe > 0){
-                        array_push($dt,$mae['Codigo corporativo']);
+                    if ($_existe > 0) {
+                        array_push($dt, $mae['Codigo corporativo']);
                         $val3 = false;
-                        $msj = $msj.$mae['Codigo corporativo'].",";
-                    }else{
-                        array_push($dt,$mae['Codigo corporativo']);
+                        $msj = $msj . $mae['Codigo corporativo'] . ",";
+                    } else {
+                        array_push($dt, $mae['Codigo corporativo']);
+                    }
+                }
+            }
+        }
+        //4.-validacion de mismas opciones con distintas cod_corporativo.
+        if ($val3 == TRUE) {$tipoVal = 5;$msj = "";
+            $dt = [];
+            foreach ($dtexcel as $mae) {$_existe = 0;
+                $paso = false;
+                foreach ($dt as $vat) {
+                    if ($mae['Cod Linea'] == $vat[0] and
+                        $mae['Cod Sublinea'] == $vat[1] and
+                        $mae['Nombre Estilo'] == $vat[2]) {
+                        if ($mae['Codigo corporativo'] <> $vat[3]) {
+                            $msj = $msj . $mae['Codigo corporativo'] . ",";
+                        }
+                        $paso = true;
+                    }
+                }
+                if ($paso == false) {
+                    foreach ($dtexcel as $d) {
+                        if ($mae['Cod Linea'] == $d['Cod Linea'] and
+                            $mae['Cod Sublinea'] == $d['Cod Sublinea'] and
+                            $mae['Nombre Estilo'] == $d['Nombre Estilo']) {
+                            if ($mae['Codigo corporativo'] <> $d['Codigo corporativo']) {
+                                $_existe++;
+                            }
+                        }
+                    }
+                    if ($_existe > 0) {
+                        array_push($dt, array($mae['Cod Linea'], $mae['Cod Sublinea'], $mae['Nombre Estilo'], $mae['Codigo corporativo']));
+                        $val3 = false;
+                        $msj = $msj . $mae['Codigo corporativo'] . ",";
+                    } else {
+                        array_push($dt, array($mae['Cod Linea'], $mae['Cod Sublinea'], $mae['Nombre Estilo'], $mae['Codigo corporativo']));
                     }
                 }
             }
         }
 
-        if ($val3 == false ) {
+        if ($val3 == false) {
             if ($tipoVal == 1) {
                 $_mensaje = array('Tipo' => $val3,
-                'Error'=> "(".substr($_Errorfile, 0, -1) .") ->.El Código corporativo tiene que ser máximo 10 caracteres.");
-            }
-            elseif ($tipoVal == 2){
+                    'Error' => "(" . substr($_Errorfile, 0, -1) . ") ->.El Código corporativo tiene que ser máximo 10 caracteres.");
+            } elseif ($tipoVal == 2) {
                 $_mensaje = array('Tipo' => $val3,
-                    'Error'=> "Los siguientes estilos ya tienen código corporativo:".$msj);
-            }
-            elseif ($tipoVal == 3){
+                    'Error' => "Los siguientes estilos ya tienen código corporativo:" . $msj);
+            } elseif ($tipoVal == 3) {
                 $_mensaje = array('Tipo' => $val3,
-                    'Error'=> "Los siguientes códigos corporativos ya se encuentran utilizados por otros estilos:".$msj);
-            }
-            elseif ($tipoVal == 4){
+                    'Error' => "Los siguientes códigos corporativos ya se encuentran utilizados por otros estilos:" . $msj);
+            } elseif ($tipoVal == 4) {
                 $_mensaje = array('Tipo' => $val3,
-                    'Error'=> "Códigos Corporativos duplicados en diferentes estilos:".$msj);
+                    'Error' => "Códigos Corporativos duplicados en diferentes estilos:" . $msj);
+            } elseif ($tipoVal == 5) {
+                $_mensaje = array('Tipo' => $val3,
+                    'Error' => "Distintos códigos corporativos en el mismo estilo:" . $msj);
+            } else {
+                $_mensaje = array('Tipo' => $val3,
+                    'Error' => $_Errorfile);
             }
         }else{
             $_mensaje = array('Tipo' => $val3,
                 'Error'=> $_Errorfile);
         }
         return  $_mensaje;
-
     }
     public static function ValidaCodOpcion($rows,$limite,$nom_columnas,$temporada,$coddepto,$cod_temporada){
         $val3 = TRUE;
@@ -1880,7 +1923,7 @@ class valida_archivo_bmt extends \parametros {
         */
 
 
-        //6.-validacion de codigo de opcion en el excel lo que son nuevos.
+        //6.-validacion de mismas opciones con distintas codigo opciones
         if ($val3 == TRUE) {$tipoVal = 6;$msj= "";
             $dt=[];
             foreach ($dtexcel as $mae){
@@ -1912,6 +1955,44 @@ class valida_archivo_bmt extends \parametros {
             }
         }
 
+        if ($val3 == TRUE) {$tipoVal = 7;$msj= "";
+            $dt=[];
+            foreach ($dtexcel as $mae){
+                $_existe = 0; $paso = false;
+                foreach ($dt as $vat){
+                    if($mae['Cod Linea']    == $vat[0] and
+                       $mae['Cod Sublinea'] == $vat[1] and
+                       $mae['Nombre Estilo']== $vat[2] and
+                       $mae['Cod Color']    == $vat[3]){
+
+                        if($mae['Cod Opcion'] <> $vat[4]){
+                            $msj = $msj.$mae['Cod Opcion'].",";
+                        }
+                        $paso = true;
+                    }
+                }
+                if($paso == false){
+                    foreach ($dtexcel as $d){
+                        if($mae['Cod Linea']     == $d['Cod Linea']     and
+                           $mae['Cod Sublinea']  == $d['Cod Sublinea']  and
+                           $mae['Nombre Estilo'] == $d['Nombre Estilo'] and
+                           $mae['Cod Color']     == $d['Cod Color']){
+                            if($mae['Cod Opcion'] <> $d['Cod Opcion']){
+                                $_existe++;
+                            }
+                        }
+                    }
+                    if ($_existe > 0){
+                        array_push($dt,array($mae['Cod Linea'],$mae['Cod Sublinea'],$mae['Nombre Estilo'],$mae['Cod Color'],$mae['Cod Opcion']));
+                        $val3 = false;
+                        $msj = $msj.$mae['Cod Opcion'].",";
+                    }else{
+                        array_push($dt,array($mae['Cod Linea'],$mae['Cod Sublinea'],$mae['Nombre Estilo'],$mae['Cod Color'],$mae['Cod Opcion']));
+                    }
+                }
+            }
+        }
+
         if ($val3 == false ) {
             if($tipoVal == 1){
                 $_mensaje = array('Tipo' => $val3,
@@ -1927,15 +2008,18 @@ class valida_archivo_bmt extends \parametros {
             }
             elseif ($tipoVal == 4){
                 $_mensaje = array('Tipo' => $val3,
-                    'Error'=> "Las siguientes opciones ya tienen codigo de opcion:".$msj);
+                    'Error'=> "Las siguientes opciones ya tienen código de opción:".$msj);
             }
             elseif ($tipoVal == 5){
                 $_mensaje = array('Tipo' => $val3,
-                    'Error'=> "Los siguientes codigos de opcion ya se encuentra utilizado por otra Opcion:".$msj);
+                    'Error'=> "Los siguientes códigos de opcion ya se encuentra utilizado por otra Opción:".$msj);
             }
             elseif ($tipoVal == 6){
                 $_mensaje = array('Tipo' => $val3,
-                    'Error'=> "Codigos de opcion duplicados en diferentes opciones:".$msj);
+                    'Error'=> "Códigos de opcion duplicados en diferentes opciones:".$msj);
+            }elseif ($tipoVal == 7){
+                $_mensaje = array('Tipo' => $val3,
+                    'Error'=> "Distintos códigos de opciones en la misma opcion:".$msj);
             }
         }else{
             $_mensaje = array('Tipo' => $val3,
