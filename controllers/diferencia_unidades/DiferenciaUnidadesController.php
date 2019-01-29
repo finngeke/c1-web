@@ -20,6 +20,12 @@ class DiferenciaUnidadesController extends \Control
         echo json_encode(DiferenciaUnidadesClass::ListarVentana($f3->get('SESSION.login'),1));
     }
 
+    // Listar Depto
+    public function ListarDepto($f3){
+        echo json_encode(DiferenciaUnidadesClass::ListarDepto($f3->get('SESSION.login'),1));
+    }
+
+
 
 
 

@@ -22,12 +22,17 @@ class EncabezadoDetallePiController extends \Control
 
     // Listar Temporada
     public function ListarTemporada($f3){
-        echo json_encode(DiferenciaUnidadesClass::ListarTemporada($f3->get('SESSION.login'),1));
+        echo json_encode(EncabezadoDetallePiClass::ListarTemporada($f3->get('SESSION.login'),1));
     }
 
     // Listar Ventana
     public function ListarVentana($f3){
-        echo json_encode(DiferenciaUnidadesClass::ListarVentana($f3->get('SESSION.login'),1));
+        echo json_encode(EncabezadoDetallePiClass::ListarVentana($f3->get('SESSION.login'),1));
+    }
+
+    // Listar Depto
+    public function ListarDepto($f3){
+        echo json_encode(EncabezadoDetallePiClass::ListarDepto($f3->get('SESSION.login'),1));
     }
 
 

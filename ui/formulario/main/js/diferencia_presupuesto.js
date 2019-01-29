@@ -28,9 +28,9 @@ $(function () {
                 click: volver_atras_c1
             },
             { type: "separator" },
-            { template: "<label for='DropDownListTemporada'>Temporada:</label>" },
+            { template: "<label for='DropDownListDepto'>Departamento:</label>" },
             {
-                template: "<input id='DropDownListTemporada' style='width: 200px;' />",
+                template: "<input id='DropDownListDepto' style='width: 200px;' />",
                 overflow: "never"
             },
             { template: "<label for='DropDownListVentana'>Ventana:</label>" },
@@ -118,15 +118,15 @@ $(function () {
     });*/
 
 
-    $("#DropDownListTemporada").kendoDropDownList({
-        optionLabel: "Seleccione Temporada",
-        dataTextField: "NOM_TEMPORADA_CORTO",
-        dataValueField: "COD_TEMPORADA",
+    $("#DropDownListDepto").kendoDropDownList({
+        optionLabel: "Seleccione Departamento",
+        dataTextField: "DEP_DESCRIPCION",
+        dataValueField: "DEP_DEPTO",
         dataSource: {
             transport: {
                 read: {
                     dataType: "json",
-                    url: crudServiceBaseUrl + "ListarTemporada"
+                    url: crudServiceBaseUrl + "ListarDepto"
                 }
             }
         }
@@ -140,7 +140,7 @@ $(function () {
             transport: {
                 read: {
                     dataType: "json",
-                    url: crudServiceBaseUrl + "ListarVentana" // Depto llega al controlador por session, si necesita capturar CBX anterior llamar al data de la misma forma que el datasource
+                    url: crudServiceBaseUrl + "ListarVentana"
                 }
             }
         },

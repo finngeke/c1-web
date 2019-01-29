@@ -73,6 +73,27 @@ class DiferenciaPresupuestoClass extends \parametros
     }
 
 
+    // Listar Depto
+    public static function ListarDepto($login,$pais)
+    {
+
+        $sql = "SELECT DEP_DEPTO,DEP_DESCRIPCION FROM gst_maedeptos ORDER BY 2";
+        $data = \database::getInstancia()->getFilas($sql);
+
+        // Transformo a array asociativo
+        $array = [];
+        foreach ($data as $val) {
+            array_push($array, array(
+                    "DEP_DEPTO" => $val[0]
+                ,"DEP_DESCRIPCION" => utf8_encode($val[1]) // UTF-8 Si me Trae String
+                )
+            );
+        }
+
+        return $array;
+
+    }
+
 
 
 // Fin de la Clase
