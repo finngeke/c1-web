@@ -39,12 +39,19 @@ class ControlPortada extends Control {
             die();
         }
 
-        // Comentar para Ingresar a QA
-        if( ($Funcionario->getDatosFuncionario()->COD_TIPUSR!=99) && ($f3->get('POST.select_control_conexion')!="PROD") ){
+
+      /* Comentar para Ingresar a QA*/
+        if( ($Funcionario->getDatosFuncionario()->COD_TIPUSR!=99) && ($f3->get('POST.select_control_conexion')!="PROD")&&($Funcionario->getDatosFuncionario()->COD_TIPUSR!=103) ){
             $f3->set('contenido', 'login.php');
             echo Template::instance()->render('layout_login.php');
             die();
         }
+
+        if ($Funcionario->getDatosFuncionario()->COD_TIPUSR==103){
+            $f3->reroute('/proveedor?cod_proveedor='.$Funcionario->getDatosFuncionario()->COD_USR);
+            die();
+        }
+
 
         setlocale(LC_TIME, 'es_ES', 'Spanish_Spain', 'Spanish');
         $f3->set('SESSION.login', $Funcionario->getDatosFuncionario()->COD_USR);
