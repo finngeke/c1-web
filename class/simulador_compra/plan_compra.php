@@ -2897,7 +2897,7 @@ class plan_compra extends \parametros {
                     /*V_PRECIO_BLANCO*/         ","  . $rows['Precio'] . "" .
                 /*V_PRECIO_BLANCOH*/        ",0" .
                     /*V_COSTO_FOB*/             ","  . $rows['FOB USD'] ."".
-                /*V_COSTO_INSP*/            ","  . $rows['INSP USD'] ."".
+                /*V_COSTO_INSP*/            ","  . ($rows['INSP USD']<> null ? ($rows['INSP USD']) : 0) ."".
                 /*V_COSTO_HANGER*/          ",0" .
                 /*V_COSTO_STICKER*/         ",0" .
                 /*V_DUMPING_POR*/           ",0" .
