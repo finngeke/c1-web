@@ -193,6 +193,30 @@
 
         }
 
+        public function diferencia_unidades($f3){
+            ControlFormularioMain::cargaMain($f3);
+            $f3->set('nombre_form', 'Diferencia Unidades');
+            $f3->set('temporada_form', $f3->get('SESSION.COD_TEMPORADA'));
+            $f3->set('contenido', 'formulario/main/diferencia_unidades.html');
+            echo Template::instance()->render('layout_diferencia_unidades.php');
+        }
+
+        public function diferencia_fechas($f3){
+            ControlFormularioMain::cargaMain($f3);
+            $f3->set('nombre_form', 'Diferencia Fechas');
+            $f3->set('temporada_form', $f3->get('SESSION.COD_TEMPORADA'));
+            $f3->set('contenido', 'formulario/main/diferencia_fechas.html');
+            echo Template::instance()->render('layout_diferencia_fechas.php');
+        }
+
+        public function diferencia_presupuesto($f3){
+            ControlFormularioMain::cargaMain($f3);
+            $f3->set('nombre_form', 'Diferencia Presupuesto');
+            $f3->set('temporada_form', $f3->get('SESSION.COD_TEMPORADA'));
+            $f3->set('contenido', 'formulario/main/diferencia_presupuesto.html');
+            echo Template::instance()->render('layout_diferencia_presupuesto.php');
+        }
+
 		public function distribucion_mercaderia($f3) {
 			ControlFormularioMain::cargaMain($f3); //variable de perfilamiento.
 			$detalle = [];
