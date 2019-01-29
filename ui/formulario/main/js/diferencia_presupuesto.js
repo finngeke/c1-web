@@ -28,6 +28,9 @@ $(function () {
                 click: volver_atras_c1
             },
             { type: "separator" },
+            { template: "<label for='DropDownListTemporada'>Temporada:</label>" },
+            { template: "<label for='DropDownListVentana'>Ventana:</label>" },
+            { type: "separator" },
             {
                 type: "button",
                 text: "Salir",
@@ -44,6 +47,11 @@ $(function () {
             read:  {
                 url: crudServiceBaseUrl + "ListarDiferenciaPresupuesto",
                 dataType: "json"
+            },
+            data: function() {
+                return { TEMPORADA: String($("#DropDownListTemporada").data("kendoComboBox").value()),
+                    VENTANA: $("#DropDownListVentana").data("kendoComboBox").value()
+                };
             }
         },
         schema: {
@@ -102,7 +110,45 @@ $(function () {
     });*/
 
 
+    $("#DropDownListTemporada").kendoDropDownList({
+        optionLabel: "Seleccione Temporada",
+        dataTextField: "NOMBRE_TEMPORACA_CAMPO_BD",
+        dataValueField: "VALOR_TEMPORACA_CAMPO_BD",
+        dataSource: {
+            transport: {
+                read: {
+                    dataType: "json",
+                    url: crudServiceBaseUrl + "ListarTemporada" // Depto llega al controlador por session
+                }
+            }
+        }
+    });
 
+    $("#DropDownListVentana").kendoDropDownList({
+        optionLabel: "Seleccione Ventana",
+        dataTextField: "NOMBRE_VENTANA_CAMPO_BD",
+        dataValueField: "VALOR_VENTANA_CAMPO_BD",
+        dataSource: {
+            transport: {
+                read: {
+                    dataType: "json",
+                    url: crudServiceBaseUrl + "ListarVentana" // Depto llega al controlador por session, si necesita capturar CBX anterior llamar al data de la misma forma que el datasource
+                }
+            }
+        },
+        change: function(e) {
+
+            /*var dataItem = e.sender.dataItem();
+
+            if(dataItem){
+                dataSource.read();
+            }*/
+
+        }
+    });
+
+
+    
 
 // Fin del document ready
 });
