@@ -186,13 +186,13 @@ $f3->route('POST /TelerikFactorImportacion2/@tipo [ajax]', 'factor_Importacion\F
 
 /* PI AUTOMATICA */
 // Diferencia Unidades
-$f3->route('GET /diferencia_unidades', 'ControlFormularioMain->diferencia_unidades');
+$f3->route('GET /diferencia_unidades', 'ControlFormularioCompra->diferencia_unidades');
 $f3->route('GET /TelerikDiferenciaUnidades/@tipo [ajax]', 'diferencia_unidades\DiferenciaUnidadesController->@tipo');
 // Diferencia Fechas
-$f3->route('GET /diferencia_fechas', 'ControlFormularioMain->diferencia_fechas');
+$f3->route('GET /diferencia_fechas', 'ControlFormularioCompra->diferencia_fechas');
 $f3->route('GET /TelerikDiferenciaFechas/@tipo [ajax]', 'diferencia_fechas\DiferenciaFechasController->@tipo');
 // Diferencia Presupuesto
-$f3->route('GET /diferencia_presupuesto', 'ControlFormularioMain->diferencia_presupuesto');
+$f3->route('GET /diferencia_presupuesto', 'ControlFormularioCompra->diferencia_presupuesto');
 $f3->route('GET /TelerikDiferenciaPresupuesto/@tipo [ajax]', 'diferencia_presupuesto\DiferenciaPresupuestoController->@tipo');
 // Resumen Estilos
 $f3->route('GET /resumen_estilos', 'ControlProveedor->resumen_estilos');
