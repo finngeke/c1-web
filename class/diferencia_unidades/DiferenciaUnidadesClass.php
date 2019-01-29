@@ -4,7 +4,7 @@ namespace diferencia_unidades;
 
 use log_transaccion\LogTransaccionClass;
 
-class MantenedorProveedorClass extends \parametros
+class DiferenciaUnidadesClass extends \parametros
 {
 
     // // Listar Diferencia Unidades => El 1 Corresponde al país, el que se va enviar como variable en algún momento

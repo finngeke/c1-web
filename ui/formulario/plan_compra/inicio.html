@@ -11,7 +11,7 @@
 <!-- Main content -->
 <section class="content animated fadeInDown" style="overflow-y: auto; max-height: 75%;">
 	<div class="row">
-		<!-- left column -->
+
 		<div class="col-md-12">
 			<!-- general form elements -->
 			<div class="box box-primary">
@@ -22,129 +22,104 @@
 				<section class="content c1_fondo">
 					
 					<div class="row">
-						<div class="col-md-4">
+
 						
+						<div class="col-md-6">
+
+						<div id="modulo_factor_estimado" class="info-box bg-yellow ">
+							<span class="info-box-icon"><i class="fa fa-calculator" style="line-height: 90px;"></i></span>
+							<a href="factor_estimado">
+								<div class="info-box-content modulos">
+									<span class="info-box-number">1.- Factor Estimado</span>
+								</div>
+							</a>
 						</div>
-						
-						<div class="col-md-4">
-							<br>
-							<div id="modulo_factor_estimado" class="info-box bg-yellow ">
-								<span class="info-box-icon"><i class="fa fa-calculator" style="line-height: 90px;"></i></span>
-								<a href="factor_estimado">
+
+
+						<div id="modulo_fecha_recepcion_cd" class="info-box bg-aqua-active color-palette ">
+							<span class="info-box-icon"><i class="fa fa-truck" style="line-height: 90px;"></i></span>
+							<a href="fecha_recepcion">
+								<div class="info-box-content modulos">
+									<span class="info-box-number">2.- Fecha Recep. CD</span>
+								</div>
+							</a>
+						</div>
+
+
+						<div id="modulo_registro_de_compra" class="info-box bg-purple-active ">
+							<span class="info-box-icon"><i class="fa fa-shopping-cart" style="line-height: 90px;"></i></span>
+							<div class="info-box-content modulos">
+								<a href="#" id="tcrc_opcion3_link">
+									<span class="info-box-number">3.- Registro de Compra</span>
+								</a>
+							</div>
+						</div>
+
+
+						<div id="modulo_Factor_import" class="info-box bg-blue-active ">
+								<span class="info-box-icon"><i class="fa fa-ship" style="line-height: 90px;"></i></span>
+								<div class="info-box-content modulos">
+									<a href="Factor_Importacion">
+										<span class="info-box-number">4.- Factor de Importacion</span>
+									</a>
+								</div>
+						</div>
+
+
+						<div id="modulo_dias_transito" class="info-box bg-red-active ">
+								<span class="info-box-icon"><i class="fa fa-anchor" style="line-height: 90px;"></i></span>
+								<div class="info-box-content modulos">
+									<a href="lead_time">
+										<span class="info-box-number">5.- Lead Time</span>
+									</a>
+								</div>
+						</div>
+
+
+						</div>
+
+						<div class="col-md-6">
+
+							<div id="modulo_diferencia_unidades" class="info-box bg-blue ">
+								<span class="info-box-icon"><i class="fa fa-check-square" style="line-height: 90px;"></i></span>
+								<a href="diferencia_unidades">
 									<div class="info-box-content modulos">
-										<span class="info-box-number">1.- Factor Estimado</span>
-										<!--<span class="info-box-text">#n Registros</span>-->
-										
-										<div class="progress">
-											<div class="progress-bar" style="width: 100%"></div>
-										</div>
-										<!--<span class="progress-description">
-											{{@dia}}
-										</span>-->
+										<span class="info-box-number">Diferencia Unidades</span>
 									</div>
 								</a>
 							</div>
-							
-							<!-- /.info-box -->
-							
-							<div id="modulo_fecha_recepcion_cd" class="info-box bg-aqua-active color-palette ">
-								<span class="info-box-icon"><i class="fa fa-truck" style="line-height: 90px;"></i></span>
-								
-								<div class="info-box-content modulos">
-									<a href="fecha_recepcion">
-										<span class="info-box-number">2.- Fecha Recep. CD</span>
-										<!--<span class="info-box-text">#n Registros</span>-->
-										
-										<div class="progress">
-											<div class="progress-bar" style="width: 100%"></div>
-										</div>
-										<!--<span class="progress-description">
-											20% Cumplimiento
-										</span>-->
-									</a>
-								</div>
-								<!-- /.info-box-content -->
+
+							<div id="modulo_diferencia_fechas" class="info-box bg-blue ">
+								<span class="info-box-icon"><i class="fa fa-check-square" style="line-height: 90px;"></i></span>
+								<a href="diferencia_fechas">
+									<div class="info-box-content modulos">
+										<span class="info-box-number">Diferencia Fechas</span>
+									</div>
+								</a>
 							</div>
-							
-							<!-- /.info-box -->
-							
-							<div id="modulo_registro_de_compra" class="info-box bg-purple-active ">
-								<span class="info-box-icon"><i class="fa fa-shopping-cart" style="line-height: 90px;"></i></span>
-								
-								<div class="info-box-content modulos">
-									<!--<a href="selecion_depto">-->
-									<a href="#" id="tcrc_opcion3_link">
-										<span class="info-box-number">3.- Registro de Compra</span>
-										<!--<span class="info-box-text">#n Registros</span>-->
-										
-										
-										<div class="progress">
-											<div class="progress-bar" style="width: 100%"></div>
-										</div>
-										<!--<span class="progress-description">
-											70% Cumplimiento bmt
-										</span>-->
-									</a>
-								</div>
-								<!-- /.info-box-content -->
+
+							<div id="modulo_diferencia_presupuesto" class="info-box bg-blue ">
+								<span class="info-box-icon"><i class="fa fa-check-square" style="line-height: 90px;"></i></span>
+								<a href="diferencia_presupuesto">
+									<div class="info-box-content modulos">
+										<span class="info-box-number">Diferencia Presupuesto</span>
+									</div>
+								</a>
 							</div>
-							<div id="modulo_Factor_import" class="info-box bg-blue-active ">
-								<span class="info-box-icon"><i class="fa fa-ship" style="line-height: 90px;"></i></span>
-
-								<div class="info-box-content modulos">
-									<!--<a href="selecion_depto">-->
-									<a href="Factor_Importacion">
-										<span class="info-box-number">4.- Factor de Importacion</span>
-										<!--<span class="info-box-text">#n Registros</span>-->
 
 
-										<div class="progress">
-											<div class="progress-bar" style="width: 100%"></div>
-										</div>
-										<!--<span class="progress-description">
-											70% Cumplimiento bmt
-										</span>-->
-									</a>
-								</div>
-								<!-- /.info-box-content -->
-							</div>
-							<!-- /.info-box -->
-							<div id="modulo_dias_transito" class="info-box bg-red-active ">
-								<span class="info-box-icon"><i class="fa fa-anchor" style="line-height: 90px;"></i></span>
 
-								<div class="info-box-content modulos">
-									<!--<a href="selecion_depto">-->
-									<a href="lead_time">
-										<span class="info-box-number">5.- Lead Time</span>
-										<!--<span class="info-box-text">#n Registros</span>-->
-
-
-										<div class="progress">
-											<div class="progress-bar" style="width: 100%"></div>
-										</div>
-										<!--<span class="progress-description">
-											70% Cumplimiento bmt
-										</span>-->
-									</a>
-								</div>
-								<!-- /.info-box-content -->
-							</div>
-							<div class="col-md-4">
-							
-							</div>
-						
-						
 						</div>
+
 					</div>
 				</section>
 			</div>
 		</div>
-		<!--/.col (left) -->
+
 	</div>
-	<!-- /.row -->
 </section>
 
-<!-- /.content -->
+
 <include href="{{ @tipo_deptomarca }}" />
 <include href="{{ @seleccion_contenedor }}" />
 
