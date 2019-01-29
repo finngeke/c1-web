@@ -812,7 +812,12 @@ class PlanCompraClass extends \parametros
 
         if ($archivo == 1) {
 
-            // 1.- Guarda Registro en plc_plan_compra_oc
+            // Elimino por OC para eliminar Duplicados
+            $sql_elimina_duplicados = "DELETE FROM plc_plan_compra_oc 
+                                        WHERE COD_TEMPORADA = $temporada
+                                        AND DEP_DEPTO = '" . $depto . "'
+                                        AND PROFORMA = '" . $proforma . "'";
+            $data_elimina_duplicados = \database::getInstancia()->getConsulta($sql_elimina_duplicados);
 
             // Agrego el registro del archivo en plan_compra_oc
             $sql_plan_compra_oc = "INSERT INTO plc_plan_compra_oc (cod_temporada,dep_depto,niv_jer1,cod_jer1,niv_jer2,cod_jer2,item,cod_sublin,cod_estilo,des_estilo,vent_emb,proforma,archivo,id_color3, estado_oc,estilo_pmm)
