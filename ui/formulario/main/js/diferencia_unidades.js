@@ -29,7 +29,15 @@ $(function () {
             },
             { type: "separator" },
             { template: "<label for='DropDownListTemporada'>Temporada:</label>" },
+            {
+                template: "<input id='DropDownListTemporada' style='width: 200px;' />",
+                overflow: "never"
+            },
             { template: "<label for='DropDownListVentana'>Ventana:</label>" },
+            {
+                template: "<input id='DropDownListVentana' style='width: 200px;' />",
+                overflow: "never"
+            },
             { type: "separator" },
             {
                 type: "button",
@@ -84,6 +92,7 @@ $(function () {
 
     // Definimos KendoGrid
     $("#grid").kendoGrid({
+        autoBind:false,
         dataSource: dataSource,
         editable: true,
         toolbar: [
@@ -112,13 +121,13 @@ $(function () {
 
     $("#DropDownListTemporada").kendoDropDownList({
         optionLabel: "Seleccione Temporada",
-        dataTextField: "NOMBRE_TEMPORACA_CAMPO_BD",
-        dataValueField: "VALOR_TEMPORACA_CAMPO_BD",
+        dataTextField: "NOM_TEMPORADA_CORTO",
+        dataValueField: "COD_TEMPORADA",
         dataSource: {
             transport: {
                 read: {
                     dataType: "json",
-                    url: crudServiceBaseUrl + "ListarTemporada" // Depto llega al controlador por session
+                    url: crudServiceBaseUrl + "ListarTemporada"
                 }
             }
         }
@@ -126,8 +135,8 @@ $(function () {
 
     $("#DropDownListVentana").kendoDropDownList({
         optionLabel: "Seleccione Ventana",
-        dataTextField: "NOMBRE_VENTANA_CAMPO_BD",
-        dataValueField: "VALOR_VENTANA_CAMPO_BD",
+        dataTextField: "VENT_DESCRI",
+        dataValueField: "COD_VENTANA",
         dataSource: {
             transport: {
                 read: {

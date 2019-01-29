@@ -10,6 +10,15 @@ class DiferenciaUnidadesController extends \Control
         echo json_encode(DiferenciaUnidadesClass::ListarDiferenciaUnidades($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'),1));
     }
 
+    // Listar Temporada
+    public function ListarTemporada($f3){
+        echo json_encode(DiferenciaUnidadesClass::ListarTemporada($f3->get('SESSION.login'),1));
+    }
+
+    // Listar Ventana
+    public function ListarVentana($f3){
+        echo json_encode(DiferenciaUnidadesClass::ListarVentana($f3->get('SESSION.login'),1));
+    }
 
 
 

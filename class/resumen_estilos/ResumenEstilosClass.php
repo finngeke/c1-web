@@ -30,7 +30,47 @@ class ResumenEstilosClass extends \parametros
     }
 
 
+    // Listar Temporada
+    public static function ListarTemporada($login,$pais)
+    {
 
+        $sql = "SELECT COD_TEMPORADA, NOM_TEMPORADA_CORTO FROM PLC_TEMPORADA ORDER BY 2";
+        $data = \database::getInstancia()->getFilas($sql);
+
+        // Transformo a array asociativo
+        $array = [];
+        foreach ($data as $val) {
+            array_push($array, array(
+                    "COD_TEMPORADA" => $val[0]
+                ,"NOM_TEMPORADA_CORTO" => utf8_encode($val[1]) // UTF-8 Si me Trae String
+                )
+            );
+        }
+
+        return $array;
+
+    }
+
+    // Listar Ventana
+    public static function ListarVentana($login,$pais)
+    {
+
+        $sql = "SELECT COD_VENTANA, VENT_DESCRI FROM plc_ventana ORDER BY 2";
+        $data = \database::getInstancia()->getFilas($sql);
+
+        // Transformo a array asociativo
+        $array = [];
+        foreach ($data as $val) {
+            array_push($array, array(
+                    "COD_VENTANA" => $val[0]
+                ,"VENT_DESCRI" => utf8_encode($val[1]) // UTF-8 Si me Trae String
+                )
+            );
+        }
+
+        return $array;
+
+    }
 
 
 
