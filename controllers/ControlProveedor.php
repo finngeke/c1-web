@@ -787,7 +787,7 @@
             ControlFormularioMain::cargaMain($f3);
             $f3->set('nombre_form', 'Resumen Estilos');
             $f3->set('temporada_form', $f3->get('SESSION.COD_TEMPORADA'));
-            $f3->set('contenido', 'formulario/main/resumen_estilos.html');
+            $f3->set('contenido', 'proveedor/resumen_estilos.html');
             echo Template::instance()->render('layout_resumen_estilos.php');
 
         }
@@ -797,7 +797,7 @@
             ControlFormularioMain::cargaMain($f3);
             $f3->set('nombre_form', 'Encabezado Detalle PI');
             $f3->set('temporada_form', $f3->get('SESSION.COD_TEMPORADA'));
-            $f3->set('contenido', 'formulario/main/encabezado_detalle_pi.html');
+            $f3->set('contenido', 'proveedor/encabezado_detalle_pi.html');
             echo Template::instance()->render('layout_encabezado_detalle_pi.php');
 
         }

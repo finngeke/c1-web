@@ -25,7 +25,7 @@
 <include href="{{ @contenido }}"/>
 
 <!-- 0 En Cargar (Orden Obligatorio) -->
-<script src="{{@TELERIK}}ui/formulario/main/js/encabezado_detalle_pi.js?v={{rand(0,999999)}}"></script>
+<script src="{{@TELERIK}}ui/proveedor/js/encabezado_detalle_pi.js?v={{rand(0,999999)}}"></script>
 
 </body>
 </html>
