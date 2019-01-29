@@ -813,14 +813,16 @@ class PlanCompraClass extends \parametros
         if ($archivo == 1) {
 
             // Elimino por OC para eliminar Duplicados
-            $sql_elimina_duplicados = "DELETE FROM plc_plan_compra_oc 
+            $sql_elimina_duplicados = "DELETE FROM plc_plan_compra_oc
                                         WHERE COD_TEMPORADA = $temporada
                                         AND DEP_DEPTO = '" . $depto . "'
                                         AND PROFORMA = '" . $proforma . "'";
             $data_elimina_duplicados = \database::getInstancia()->getConsulta($sql_elimina_duplicados);
 
-            // Agrego el registro del archivo en plan_compra_oc
-            $sql_plan_compra_oc = "INSERT INTO plc_plan_compra_oc (cod_temporada,dep_depto,niv_jer1,cod_jer1,niv_jer2,cod_jer2,item,cod_sublin,cod_estilo,des_estilo,vent_emb,proforma,archivo,id_color3, estado_oc,estilo_pmm)
+            if($data_elimina_duplicados){
+
+                // Agrego el registro del archivo en plan_compra_oc
+                $sql_plan_compra_oc = "INSERT INTO plc_plan_compra_oc (cod_temporada,dep_depto,niv_jer1,cod_jer1,niv_jer2,cod_jer2,item,cod_sublin,cod_estilo,des_estilo,vent_emb,proforma,archivo,id_color3, estado_oc,estilo_pmm)
                 SELECT
                       C.COD_TEMPORADA,
                       C.DEP_DEPTO,
@@ -844,28 +846,28 @@ class PlanCompraClass extends \parametros
                 WHERE C.COD_TEMPORADA = $temporada AND C.DEP_DEPTO =  '" . $depto . "'
                 AND C.ID_COLOR3 = $id_insertar";
 
-            // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
-            if (!file_exists('../archivos/log_querys/' . $login)) {
-                mkdir('../archivos/log_querys/' . $login, 0775, true);
-            }
-            $stamp = date("Y-m-d_H-i-s");
-            $rand = rand(1, 999);
-            $content = $sql_plan_compra_oc;
-            $fp = fopen("../archivos/log_querys/" . $login . "/ACTPROFORMA-COND1A-INSCOMPRAOC-" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
-            fwrite($fp, $content);
-            fclose($fp);
+                // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+                if (!file_exists('../archivos/log_querys/' . $login)) {
+                    mkdir('../archivos/log_querys/' . $login, 0775, true);
+                }
+                $stamp = date("Y-m-d_H-i-s");
+                $rand = rand(1, 999);
+                $content = $sql_plan_compra_oc;
+                $fp = fopen("../archivos/log_querys/" . $login . "/ACTPROFORMA-COND1A-INSCOMPRAOC-" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+                fwrite($fp, $content);
+                fclose($fp);
 
-            $data_plan_compra_oc = \database::getInstancia()->getConsulta($sql_plan_compra_oc);
-
-
-            // Aquí voy a buscar todos los registros de plan color 3 que tengan la misma PI (Excluyendo el id_color 3 ya ingresado) y los agrego a plc_plan_compra_oc
+                $data_plan_compra_oc = \database::getInstancia()->getConsulta($sql_plan_compra_oc);
 
 
-            // Si puedo guardar en plc_plan_compra_oc, actualizo plc_plan_compra_color_3
-            if ($data_plan_compra_oc) {
+                // Aquí voy a buscar todos los registros de plan color 3 que tengan la misma PI (Excluyendo el id_color 3 ya ingresado) y los agrego a plc_plan_compra_oc
 
-                // 2.- Actualiza plc_plan_compra_color3 estado=18 y proforma = $proforma
-                $sql_plan_compra_color_3 = "UPDATE plc_plan_compra_color_3
+
+                // Si puedo guardar en plc_plan_compra_oc, actualizo plc_plan_compra_color_3
+                if ($data_plan_compra_oc) {
+
+                    // 2.- Actualiza plc_plan_compra_color3 estado=18 y proforma = $proforma
+                    $sql_plan_compra_color_3 = "UPDATE plc_plan_compra_color_3
                 SET proforma = '" . $proforma . "',
                 estado = 18
                 WHERE cod_temporada = $temporada
@@ -873,24 +875,24 @@ class PlanCompraClass extends \parametros
                 AND id_color3 = $id_insertar
                 ";
 
-                // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
-                if (!file_exists('../archivos/log_querys/' . $login)) {
-                    mkdir('../archivos/log_querys/' . $login, 0775, true);
-                }
-                $stamp = date("Y-m-d_H-i-s");
-                $rand = rand(1, 999);
-                $content = $sql_plan_compra_color_3;
-                $fp = fopen("../archivos/log_querys/" . $login . "/ACTPROFORMA-COND1A-UPDPLANCOLOR3-" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
-                fwrite($fp, $content);
-                fclose($fp);
+                    // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+                    if (!file_exists('../archivos/log_querys/' . $login)) {
+                        mkdir('../archivos/log_querys/' . $login, 0775, true);
+                    }
+                    $stamp = date("Y-m-d_H-i-s");
+                    $rand = rand(1, 999);
+                    $content = $sql_plan_compra_color_3;
+                    $fp = fopen("../archivos/log_querys/" . $login . "/ACTPROFORMA-COND1A-UPDPLANCOLOR3-" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+                    fwrite($fp, $content);
+                    fclose($fp);
 
-                $data_plan_compra_color_3 = \database::getInstancia()->getConsulta($sql_plan_compra_color_3);
+                    $data_plan_compra_color_3 = \database::getInstancia()->getConsulta($sql_plan_compra_color_3);
 
-                // Si se pudo actualizar plc_plan_compra_color_3, guardo en el historial
-                if ($data_plan_compra_color_3) {
+                    // Si se pudo actualizar plc_plan_compra_color_3, guardo en el historial
+                    if ($data_plan_compra_color_3) {
 
-                    // 3.- Guarda Historial (Incluye el registro + los datos de la PI)
-                    $sql_historial = "INSERT INTO plc_plan_compra_historica (temp,dpto,linea,sublinea,marca,estilo,ventana,color,user_login,user_nom,fecha,hora,pi,oc,estado,id_color3,nom_linea,nom_sublinea,nom_marca,nom_ventana,nom_color)
+                        // 3.- Guarda Historial (Incluye el registro + los datos de la PI)
+                        $sql_historial = "INSERT INTO plc_plan_compra_historica (temp,dpto,linea,sublinea,marca,estilo,ventana,color,user_login,user_nom,fecha,hora,pi,oc,estado,id_color3,nom_linea,nom_sublinea,nom_marca,nom_ventana,nom_color)
                 SELECT
                       C.COD_TEMPORADA,
                       C.DEP_DEPTO,
@@ -920,21 +922,26 @@ class PlanCompraClass extends \parametros
                 AND C.ID_COLOR3 = $id_insertar
                 ";
 
-                    // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
-                    if (!file_exists('../archivos/log_querys/' . $login)) {
-                        mkdir('../archivos/log_querys/' . $login, 0775, true);
-                    }
-                    $stamp = date("Y-m-d_H-i-s");
-                    $rand = rand(1, 999);
-                    $content = $sql_historial;
-                    $fp = fopen("../archivos/log_querys/" . $login . "/ACTPROFORMA-COND1A-INSERTHISTORIAL-" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
-                    fwrite($fp, $content);
-                    fclose($fp);
+                        // Almacenar TXT (Agregado antes del $data para hacer traza en el caso de haber error, considerar que si la ruta del archivo no existe el código no va pasar al $data)
+                        if (!file_exists('../archivos/log_querys/' . $login)) {
+                            mkdir('../archivos/log_querys/' . $login, 0775, true);
+                        }
+                        $stamp = date("Y-m-d_H-i-s");
+                        $rand = rand(1, 999);
+                        $content = $sql_historial;
+                        $fp = fopen("../archivos/log_querys/" . $login . "/ACTPROFORMA-COND1A-INSERTHISTORIAL-" . $login . "-" . $stamp . " R" . $rand . ".txt", "wb");
+                        fwrite($fp, $content);
+                        fclose($fp);
 
-                    $data_historial = \database::getInstancia()->getConsulta($sql_historial);
+                        $data_historial = \database::getInstancia()->getConsulta($sql_historial);
 
-                    if ($data_historial) {
-                        return "OK";
+                        if ($data_historial) {
+                            return "OK";
+                        } else {
+                            return "ERROR";
+                        }
+
+
                     } else {
                         return "ERROR";
                     }
@@ -944,10 +951,11 @@ class PlanCompraClass extends \parametros
                     return "ERROR";
                 }
 
-
-            } else {
+            }else{
                 return "ERROR";
             }
+
+
 
 
             // No llega con archivo
