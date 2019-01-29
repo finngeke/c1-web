@@ -1011,6 +1011,7 @@ public function ImportarAssormentValidaciones($f3){
             }
         }
 
+        if ($_error == true){
         for($i = 3;$i <= $limite; $i++){
             if ($rows[$i][$nom_columnas['Fecha de Embarque Acordada']] != null and $rows[$i][$nom_columnas['Fecha de Embarque Acordada']] != "" and $rows[$i][$nom_columnas['Fecha de Embarque Acordada']] != "0"){
                if (is_numeric($rows[$i][$nom_columnas['Fecha de Embarque Acordada']]) == true){
@@ -1020,7 +1021,7 @@ public function ImportarAssormentValidaciones($f3){
                }
             }
         }
-
+        }
         $_SESSION['dtAssorment']=$rows;
     }
     else{
