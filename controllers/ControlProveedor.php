@@ -160,6 +160,8 @@
 			ControlProveedor::obtener_estructura_directorios($_SESSION['RutaArchivoPeru']);
 			$dtarchivos = explode("$", (substr($_SESSION['Archivos'], 0, -1)));
             $dtprovoc = [];
+
+            if ($_SESSION['Archivos']<>""){
 			foreach ($dtarchivos as $val) {
 				$stringarchiv = explode("_", $val);
 						$_exist2 = false;
@@ -177,7 +179,7 @@
 
 				}
 			}
-			
+            }
 			$f3->set('nombre_form', 'PO\'s and Packing Instructions');
 			$f3->set('lista_oc', $data);
 			$f3->set('contenido', 'proveedor/download_templates.html');
