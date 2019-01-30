@@ -17,8 +17,39 @@ class PlanCompraController extends \Control
 
         echo json_encode(\simulador_compra\PlanCompraClass::ListarPlanCompra($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $f3->get('CURLOPT_PORT'), $f3->get('CURLOPT_URL'),$f3->get('SESSION.NOM_TEMPORADA_CORTO')));
 
-        // Original
-        // echo json_encode(\simulador_compra\PlanCompraClass::ListarPlanCompra($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO')));
+       // $json = \simulador_compra\PlanCompraClass::ListarPlanCompra($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $f3->get('CURLOPT_PORT'), $f3->get('CURLOPT_URL'),$f3->get('SESSION.NOM_TEMPORADA_CORTO'));
+
+    /*    $key = 0;
+        foreach ($json as $w3r_string) {
+            json_encode($w3r_string);
+            $key ++;
+            switch (json_last_error()) {
+                case JSON_ERROR_NONE:
+                    echo ' - No errors';
+                    break;
+                case JSON_ERROR_DEPTH:
+                    echo ' - Maximum stack depth exceeded';
+                    break;
+                case JSON_ERROR_STATE_MISMATCH:
+                    echo ' - Underflow or the modes mismatch';
+                    break;
+                case JSON_ERROR_CTRL_CHAR:
+                    echo ' - Unexpected control character found';
+                    break;
+                case JSON_ERROR_SYNTAX:
+                    echo ' - Syntax error, malformed JSON';
+                    break;
+                case JSON_ERROR_UTF8:
+                    echo ' - Malformed UTF-8 characters, possibly incorrectly encoded '.$key."<br>";
+                    break;
+                default:
+                    echo ' - Unknown error';
+                    break;
+            }
+            echo PHP_EOL;
+        }
+
+        die();*/
 
     }
 

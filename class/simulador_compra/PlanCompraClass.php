@@ -330,9 +330,9 @@ class PlanCompraClass extends \parametros
                 , "COD_TEMP" => $var_mom_temp //$va1[2]
                 , "LINEA" => $va1[3]
                 , "SUBLINEA" => $va1[4]
-                , "MARCA" => $va1[5]
+                , "MARCA" => utf8_encode($va1[5])
                 , "ESTILO" => utf8_encode($va1[6])
-                , "SHORT_NAME" => $va1[7]
+                , "SHORT_NAME" => utf8_encode($va1[7])
                 , "ID_CORPORATIVO" => $va1[8]
                 , "DESCMODELO" => utf8_encode($va1[9])
                 , "DESCRIP_INTERNET" => utf8_encode($va1[10])
