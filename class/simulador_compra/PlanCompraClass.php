@@ -1294,6 +1294,46 @@ class PlanCompraClass extends \parametros
          // ########################################## FIN SETEO DE VARIABLES ############################################
 
 
+
+
+        //validaciones
+        if ($DEBUT_REODER == "DEBUT"){
+            if ( ($TIPO_EMPAQUE == '') || ($TIPO_EMPAQUE == null) || ($PORTALLA_1_INI == '') || ($PORTALLA_1_INI == null) || ($DESTALLA == '') || ($DESTALLA == null) || ($CURVATALLA == '') || ($CURVATALLA == null) || ($UNID_OPCION_INICIO == 0) || ($SEG_ASIG == null) || ($SEG_ASIG == '') ){
+                return " ID: " . $ID_COLOR3 . " - DEBUT Error validacion curvado. ";
+                die();
+            }
+        }else{
+            if ( ($TIPO_EMPAQUE == '') || ($TIPO_EMPAQUE == null) || ($PORTALLA_1_INI == '') || ($PORTALLA_1_INI == null) || ($DESTALLA == '') || ($DESTALLA == null) || ($CURVATALLA == '') || ($CURVATALLA == null) || ($UNID_OPCION_INICIO == 0) ){
+                return " ID: " . $ID_COLOR3 . " - REORDER Error validacion Ajuste MasterPack. ";
+                die();
+            }
+        }
+
+
+        // 1.- Realizar cálculos del curvado... siempre y cuando los datos que llegan sean distinto de los datos base
+
+        // Hay que ir a buscar el Curvado
+        $query_curva = PlanCompraClass::CalculoCurvadoPlanCompra($TIPO_EMPAQUE,
+            $DESTALLA, $CURVATALLA, $UNID_OPCION_INICIO, $SEG_ASIG, $FORMATO, $A, $B, $C, $I,
+            $DEBUT_REODER, $PORTALLA_1_INI, $DEPTO,
+            $TEMPORADA, $COD_MARCA, $N_CURVASXCAJAS, $COD_JER2, $COD_SUBLIN, $ID_COLOR3, 1);
+
+        // Valido que se pueda realizar la QUERY
+        if (!$query_curva) {
+            return " ID: " . $ID_COLOR3 . " - No se pudo buscar curvado.";
+            die();
+        }
+        $CURVA_UNID_AJUST = $query_curva[0]; //  unid ajust
+        $CURVA_POR_AJUSTE = $query_curva[1]; //  porcenajust
+        $CURVA_N_CAJAS = $query_curva[2]; //  N° CAJAS
+        $CURVA_UNID_FINAL = $query_curva[3]; //  unidfinal
+        $CURVA_PRIMERA_CARGA = $query_curva[4]; //  primera carga
+        $CURVA_TDAS = $query_curva[5]; //  tiendas
+        $CURVA_UNIDAJUSTXTALLA = $query_curva[6]; //  unidadesajustXtalla
+
+
+
+
         // ############################### CÁLCULO CON LAS VARIABLES DEFINIDAS PREVIAMENTE ##############################
         $total_fob_usd = 0;
         $total_target_usd = 0;
@@ -1305,16 +1345,16 @@ class PlanCompraClass extends \parametros
         if ($COSTO_FOB > 0) {
             $costo_unitario_final_usd = $COSTO_FOB + $COSTO_INSP + $COSTO_RFID;
             $costo_unitario_final_usd = number_format($costo_unitario_final_usd, 2, '.', '');
-            $total_fob_usd = $costo_unitario_final_usd * $CAN;
+            $total_fob_usd = $costo_unitario_final_usd * $CURVA_UNID_FINAL;
         } else {
             $costo_unitario_final_usd = $COSTO_TARGET + $COSTO_INSP + $COSTO_RFID;
             $costo_unitario_final_usd = number_format($costo_unitario_final_usd, 2, '.', '');
-            $total_target_usd = number_format(($costo_unitario_final_usd * $CAN), 2, '.', '');
+            $total_target_usd = number_format(($costo_unitario_final_usd * $CURVA_UNID_FINAL), 2, '.', '');
         }
 
         $costo_unitario_final_usd_target = $COSTO_TARGET + $COSTO_INSP + $COSTO_RFID;
         $costo_unitario_final_usd_target = number_format($costo_unitario_final_usd_target, 2, '.', '');
-        $total_target_usd = number_format(($costo_unitario_final_usd_target * $CAN), 2, '.', '');
+        $total_target_usd = number_format(($costo_unitario_final_usd_target * $CURVA_UNID_FINAL), 2, '.', '');
 
         if ($query_factor > 0) {
             $costo_unitario_final_pesos = $costo_unitario_final_usd * $query_factor;
@@ -1324,9 +1364,7 @@ class PlanCompraClass extends \parametros
             $costo_unitario_final_pesos = round($costo_unitario_final_pesos, 0);
         }
 
-        // Costo Total Pesos : Costo unitarios final Pesos  *  unidades
-        $costo_total_pesos = $costo_unitario_final_pesos * $CAN;
-        $costo_total_pesos = number_format($costo_total_pesos, 2, '.', '');
+
         // Mkup: (Precio blanco /1.19) / Costo unitarios final Pesos  (2 decimales)
         $nuevo_mkup = ($PRECIO_BLANCO / 1.19) / $costo_unitario_final_pesos;
         $nuevo_mkup = number_format($nuevo_mkup, 3, '.', '');
@@ -1348,44 +1386,15 @@ class PlanCompraClass extends \parametros
             $total_fob_usd = number_format($total_fob_usd, 2, '.', '');
         }
 
+        // Costo Total Pesos : Costo unitarios final Pesos  *  unidades
+        $costo_total_pesos = $costo_unitario_final_pesos * $CURVA_UNID_FINAL;
+        $costo_total_pesos = number_format($costo_total_pesos, 2, '.', '');
+
         $costo_retail = 0;
         // total retail
-        if (($PRECIO_BLANCO > 0) && ($CAN > 0)) {
-            $costo_retail = round((($PRECIO_BLANCO * $CAN) / 1.19), 0, PHP_ROUND_HALF_UP);
+        if (($PRECIO_BLANCO > 0) && ($CURVA_UNID_FINAL > 0)) {
+            $costo_retail = round((($PRECIO_BLANCO * $CURVA_UNID_FINAL) / 1.19), 0, PHP_ROUND_HALF_UP);
         }
-
-
-        //validaciones
-       if ($DEBUT_REODER == "DEBUT"){
-           if ( ($TIPO_EMPAQUE == '') || ($TIPO_EMPAQUE == null) || ($PORTALLA_1_INI == '') || ($PORTALLA_1_INI == null) || ($DESTALLA == '') || ($DESTALLA == null) || ($CURVATALLA == '') || ($CURVATALLA == null) || ($UNID_OPCION_INICIO == 0) || ($SEG_ASIG == null) || ($SEG_ASIG == '') ){
-               return " ID: " . $ID_COLOR3 . " - DEBUT Error validacion curvado. ";
-               die();
-           }
-       }else{
-           if ( ($TIPO_EMPAQUE == '') || ($TIPO_EMPAQUE == null) || ($PORTALLA_1_INI == '') || ($PORTALLA_1_INI == null) || ($DESTALLA == '') || ($DESTALLA == null) || ($CURVATALLA == '') || ($CURVATALLA == null) || ($UNID_OPCION_INICIO == 0) ){
-               return " ID: " . $ID_COLOR3 . " - REORDER Error validacion Ajuste MasterPack. ";
-               die();
-           }
-       }
-
-
-        // 1.- Realizar cálculos del curvado... siempre y cuando los datos que llegan sean distinto de los datos base
-
-        // Hay que ir a buscar el Curvado
-        $query_curva = PlanCompraClass::CalculoCurvadoPlanCompra($TIPO_EMPAQUE, $DESTALLA, $CURVATALLA, $UNID_OPCION_INICIO, $SEG_ASIG, $FORMATO, $A, $B, $C, $I, $DEBUT_REODER, $PORTALLA_1_INI, $DEPTO, $TEMPORADA, $COD_MARCA, $N_CURVASXCAJAS, $COD_JER2, $COD_SUBLIN, $ID_COLOR3, 1);
-
-       // Valido que se pueda realizar la QUERY
-        if (!$query_curva) {
-            return " ID: " . $ID_COLOR3 . " - No se pudo buscar curvado.";
-            die();
-        }
-        $CURVA_UNID_AJUST = $query_curva[0]; //  unid ajust
-        $CURVA_POR_AJUSTE = $query_curva[1]; //  porcenajust
-        $CURVA_N_CAJAS = $query_curva[2]; //  N° CAJAS
-        $CURVA_UNID_FINAL = $query_curva[3]; //  unidfinal
-        $CURVA_PRIMERA_CARGA = $query_curva[4]; //  primera carga
-        $CURVA_TDAS = $query_curva[5]; //  tiendas
-        $CURVA_UNIDAJUSTXTALLA = $query_curva[6]; //  unidadesajustXtalla
 
 
         // Valido que lleguen todos los datos de la QUERY
@@ -1418,7 +1427,7 @@ class PlanCompraClass extends \parametros
         // $CURVA_PRIMERA_CARGA    //  primera carga
         // $CURVA_TDAS             //  tiendas (Enviado a ActualizaPlanCompra)
         // $CURVA_UNIDAJUSTXTALLA  //  unidadesajustXtalla (Enviado a ActualizaPlanCompra)
-        $UNIDADES_FINALES = $CAN;
+        $UNIDADES_FINALES = $CURVA_UNID_FINAL;
         $UNIDADES_INICIALES = $UNID_OPCION_INICIO;
         $cluster_ = $SEG_ASIG;
         $marca_ = $COD_MARCA;
@@ -1431,9 +1440,12 @@ class PlanCompraClass extends \parametros
 
 
         // Actualizar PLC_PLAN_COMPRA_COLOR_3 incluye PLC_PLAN_COMPRA_COLOR_CIC
-        $query_tipo_cambio = PlanCompraClass::ActualizaPlanCompra($TEMPORADA, $DEPTO, $LOGIN, $ID_COLOR3, $COSTO_FOB, $COSTO_INSP, $COSTO_RFID, $COSTO_UNIT, $COSTO_UNITS, $CST_TOTLTARGET,
-            $COSTO_TOT, $COSTO_TOTS, $MKUP, $GM, $PROVEEDOR, $VIA, $PAIS, $FACTOR_EST, $NOM_VIA, $NOM_PAIS, $TARGET, $tipo_emp_, $UNIDADES_INICIALES, $CURVA_UNID_AJUST, $UNIDADES_FINALES,
-            $CURVA_POR_AJUSTE, $CURVA_TDAS, $formatos_, $CURVA_N_CAJAS, $CURVA_UNIDAJUSTXTALLA, $marca_, $cluster_, $debut_, $precioRetail_, $precio_blanco_, $COSTO);
+        $query_tipo_cambio = PlanCompraClass::ActualizaPlanCompra($TEMPORADA,
+            $DEPTO, $LOGIN, $ID_COLOR3, $COSTO_FOB, $COSTO_INSP, $COSTO_RFID, $COSTO_UNIT, $COSTO_UNITS, $CST_TOTLTARGET,
+            $COSTO_TOT, $COSTO_TOTS, $MKUP, $GM, $PROVEEDOR, $VIA, $PAIS, $FACTOR_EST
+            , $NOM_VIA, $NOM_PAIS, $TARGET, $tipo_emp_, $UNIDADES_INICIALES, $CURVA_UNID_AJUST, $UNIDADES_FINALES,
+            $CURVA_POR_AJUSTE, $CURVA_TDAS, $formatos_, $CURVA_N_CAJAS, $CURVA_UNIDAJUSTXTALLA, $marca_
+            , $cluster_, $debut_, $precioRetail_, $precio_blanco_, $COSTO,$CURVA_PRIMERA_CARGA);
         if (!$query_tipo_cambio) {
             return " ID: " . $ID_COLOR3 . " - No se pudo ejecutar la función ActualizaPlanCompra.";
             die();
@@ -2079,7 +2091,7 @@ class PlanCompraClass extends \parametros
                                                $COSTO_TOTS, $MKUP, $GM, $PROVEEDOR
         , $VIA, $PAIS, $FACTOR_EST, $NOM_VIA, $NOM_PAIS, $TARGET
         , $tipo_empaque, $und_inicial, $und_ajust, $und_final, $porcent_ajust, $porcent_tdas, $formato
-        , $cant_cajas, $und_ajust_xtallas, $cod_marca, $cluster, $debut_, $retail, $precio_blanco, $COSTO)
+        , $cant_cajas, $und_ajust_xtallas, $cod_marca, $cluster, $debut_, $retail, $precio_blanco, $COSTO,$CURVA_PRIMERA_CARGA)
     {
 
 
@@ -2144,6 +2156,7 @@ class PlanCompraClass extends \parametros
                     ,PORCEN_T9 = '" . $dtdiviporcent[8] . "'
                     ,retail = $retail
                     ,precio_blanco = $precio_blanco
+                    ,UND_ASIG_INI = $CURVA_PRIMERA_CARGA
                 WHERE COD_TEMPORADA = $temporada
                     AND DEP_DEPTO = '" . $depto . "'
                     AND ID_COLOR3 = $ID_COLOR3
