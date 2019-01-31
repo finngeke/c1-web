@@ -56,41 +56,28 @@ $(function () {
                 url: crudServiceBaseUrl + "ListarDiferenciaUnidades",
                 dataType: "json",
                 data: function() {
-                    return { TEMPORADA: String($("#DropDownListTemporada").data("kendoComboBox").value()),
-                             VENTANA: $("#DropDownListVentana").data("kendoComboBox").value()
+                    return { DEPARTAMENTO:$("#DropDownListDepto").data("kendoDropDownList").value(),
+                        VENTANA: $("#DropDownListVentana").data("kendoDropDownList").value()
                     };
                 }
             }
         },
         schema: {
             model: {
-                id: "ID_DEL_REGISTO_QUE_LLEGA",
                 fields: {
-                    CAMPO1BD: { type: "string",editable: false }, // number - string - date
-                    CAMPO2BD: { type: "string",editable: false }, // number - string - date
-                    CAMPO3BD: { type: "string",editable: false } // number - string - date
+                    TEMPORADA: { type: "string",editable: false }, // number - string - date
+                    GRUPO_COMPRA: { type: "string",editable: false }, // number - string - date
+                    VENTANA: { type: "string",editable: false }, // number - string - date
+                    ESTILO: { type: "string",editable: false }, // number - string - date
+                    COLOR: { type: "string",editable: false }, // number - string - date
+                    UNID_PLAN: { type: "number",editable: false }, // number - string - date
+                    UNID_ACORD: { type: "number",editable: false }, // number - string - date
+                    DIFER_UND: { type: "number",editable: false }, // number - string - date
+                    PORCENT_DIFER: { type: "number",editable: false } // number - string - date
                 }
             }
-        }/*,
-        change: function () {
-            // Si existen un cambio en la data
-        }*//*,
-        requestEnd: function (e) {
-
-            // Si al Finalizar la sincronización es de tipo "update" o "create"
-            if ( (e.type === 'update') || (e.type === 'create') ) {
-                // Accion
             }
-
-        }*/
     });
-
-    // Solo si utilizo checkbox en la grilla, quitar si no se utiliza
-    /*function seleccionaOpcion(arg) {
-        $("#span_checkbox_grilla").text(this.selectedKeyNames().join(", "));
-    }*/
-
-    // Definimos KendoGrid
     $("#grid").kendoGrid({
         autoBind:false,
         dataSource: dataSource,
@@ -106,18 +93,18 @@ $(function () {
         sortable: true, // Se puede ordenar
         columns: [ // Columnas a Listar
             { selectable: true, width: "13px" }, // checkbox en la Primera Columna
-            {field: "CAMPO1BD",title: "Nombre del Campo Para el Usuario",width: 30,filterable: {multi: true}},
-            {field: "CAMPO2BD",title: "Nombre del Campo Para el Usuario",width: 30,filterable: {multi: true}},
-            {field: "CAMPO3BD",title: "Nombre del Campo Para el Usuario",width: 30,filterable: {multi: true}}
+            {field: "TEMPORADA",title: "Temporada",width: 25,filterable: {multi: true}},
+            {field: "GRUPO_COMPRA",title: "Grupo Compra",width: 30,filterable: {multi: true}},
+            {field: "VENTANA",title: "Ventana",width: 25,filterable: {multi: true}},
+            {field: "ESTILO",title: "Estilo",width: 100,filterable: {multi: true}},
+            {field: "COLOR",title: "Color",width: 30,filterable: {multi: true}},
+            {field: "UNID_PLAN",title: "Unidades Plan",width: 30,filterable: {multi: true}},
+            {field: "UNID_ACORD",title: "Unidades Acordadas",width: 30,filterable: {multi: true}},
+            {field: "DIFER_UND",title: "Diferencia Unidades",width: 30,filterable: {multi: true}},
+            {field: "PORCENT_DIFER",title: "% Diferencia Unidades",width: 30,filterable: {multi: true}}
         ]/*,
         change: seleccionaOpcion*/ // solo si estamos utilizando un checkbox en la primera columna, quitar si no se utiliza
     });
-
-    // BTN Custom, quitar si no se utiliza
-    /*$(".k-grid-custombutton_nombre_propio").click(function(e){
-        // Acción
-    });*/
-
 
     $("#DropDownListDepto").kendoDropDownList({
         optionLabel: "Seleccione Departamento",
@@ -147,11 +134,10 @@ $(function () {
         },
         change: function(e) {
 
-            /*var dataItem = e.sender.dataItem();
+           // $('#grid').data('kendoGrid').dataSource.read();
 
-            if(dataItem){
                 dataSource.read();
-            }*/
+
 
         }
     });
