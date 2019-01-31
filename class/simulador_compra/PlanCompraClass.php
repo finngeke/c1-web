@@ -374,14 +374,14 @@ class PlanCompraClass extends \parametros
                 , "C" => $va1[45]
                 , "I" => $va1[46]
                 , "UND_ASIG_INI" => number_format($va1[47],0,",",".") //$va1[47]
-                , "ROT" => $va1[48]
+                , "ROT" => str_replace(".",",",$va1[48])
                 , "NOM_PRECEDENCIA" => utf8_encode($va1[49])
                 , "NOM_VIA" => utf8_encode($va1[50])
                 , "NOM_PAIS" => utf8_encode($va1[51])
                 , "VIAJE" => utf8_encode($va1[52])
-                , "MKUP" => $va1[53]
+                , "MKUP" => str_replace(".",",",$va1[53])
                 , "PRECIO_BLANCO" => $va1[54]
-                , "GM" => $va1[55]
+                , "GM" => number_format(str_replace(",",".",$va1[55]),2,",",".")//$va1[55]
                 , "OFERTA" => number_format($va1[56],0,",",".") //utf8_encode($va1[56])
                 , "DOSX" => number_format($va1[111],0,",",".") //trim($va1[111])
                 , "OPEX" => trim($va1[112])
@@ -391,7 +391,7 @@ class PlanCompraClass extends \parametros
                 , "COSTO_INSP" => $va1[60]
                 , "COSTO_RFID" => $rfid_corregido //$va1[61]
                 , "ROYALTY_POR" => $va1[62]
-                , "COSTO_UNIT" => $va1[63]
+                , "COSTO_UNIT" => number_format(str_replace(",",".",$va1[63]),2,",",".")//$va1[63]
                 , "COSTO_UNITS" => number_format($va1[64],0,",",".")  //$va1[64]
                 , "CST_TOTLTARGET" => number_format(str_replace(",",".",$va1[65]),2,",",".") //str_replace(",",".",$va1[65])
                 , "COSTO_TOT" => number_format(str_replace(",",".",$va1[66]),2,",",".") //str_replace(",",".",$va1[66])
