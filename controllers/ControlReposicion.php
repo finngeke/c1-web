@@ -154,7 +154,7 @@
 			$f3->set('contenido', 'reposicion/distribucion_mercaderia.html');
 			echo Template::instance()->render('layout_reposicion.php');
 		}
-		
+
 		public function cargar_distribucion_mercaderia($f3) {
 			$nroEmbarque = $f3->get('GET.nroEmbarque');
 			$nroContenedor = $f3->get('GET.nroContenedor');
@@ -171,39 +171,117 @@
 			$data = \reposicion\distribucion::detalleContenedor($nroEmbarque, $nroContenedor, $login);
 			foreach ($data as $row) {
 				$cajasT = \LibraryHelper::convertNumber($row[9]);
-				$cajas = $cajasT;
+                $distEstilo = \LibraryHelper::convertNumber($row[15]);
 				$sucs = \reposicion\distribucion::detalleContenedoresSucursales($row[10], $row[11], $row[12], $nroEmbarque, $nroContenedor, $row[2], $login);
 				$aux = [];
+                $totalDist = 0;
+                $cantTPlan = 0;
+                $tdas_repartidas = 0;
+                $tdas_a = \LibraryHelper::convertNumber($row[16]);
+                $tdas_b = \LibraryHelper::convertNumber($row[17]);
+                $tdas_c = \LibraryHelper::convertNumber($row[18]);
+                $tdas_i = \LibraryHelper::convertNumber($row[19]);
+
+
 				foreach ($sucs as $suc) {
 					$codSucursal = \LibraryHelper::convertNumber($suc[0]);
 					$sucursal = \LibraryHelper::cleanText($suc[1]);
 					$cantidad = \LibraryHelper::convertNumber($suc[2]);
 					$fechaDemora = $suc[3];
 					$cluster = $suc[4];
-					$c = $cantidad;
-					if ($c > $cajas) {
-						$c = $cajas;
+
+                    $cant_a = \LibraryHelper::convertNumber($suc[6]);
+                    $cant_b = \LibraryHelper::convertNumber($suc[7]);
+                    $cant_c = \LibraryHelper::convertNumber($suc[8]);
+                    $cant_i = \LibraryHelper::convertNumber($suc[9]);
+                    $cantTPlan = ($cant_a * $tdas_a) + ($cant_b * $tdas_b) + ($cant_c * $tdas_c) + ($cant_i * $tdas_i);
+                    $tdas_in_cluster = \LibraryHelper::convertNumber($suc[10]);
+                    $distEstiloTda = \LibraryHelper::convertNumber($suc[11]);
+
+                    $c = 0;
+                    $distOld =false;
+
+                    switch  ($cluster){
+                        case 'A':
+                            $cantPlan = $cant_a;
+                            break;
+                        case 'B':
+                            $cantPlan = $cant_b;
+                            break;
+                        case 'C':
+                            $cantPlan = $cant_c;
+                            break;
+                        case 'I':
+                            $cantPlan = $cant_i;
+                            break;
+                        default:
+                            $cantPlan= '0';
+                    }
+
+                    if($distEstiloTda < $cantPlan) {
+
+                        if ($tdas_in_cluster != 0 and $cantTPlan > $totalDist and $cantTPlan > $cajasT) {
+                            $reparto = $cantidad - $distEstiloTda;
+                            $reparto = ceil($reparto);
+                            if($reparto + $totalDist <= $cajasT){
+                                $c = $reparto;
+                            }else {
+                                $c = $cajasT - $totalDist;
 					}
-					$cajas -= $c;
+                        } else {
+                            if ($tdas_in_cluster != 0 and $cantTPlan > $totalDist and $cajasT >= $cantTPlan) {
+                                $reparto = $cantidad - $distEstiloTda;
+                                $reparto = ceil($reparto);
+                                if($reparto + $totalDist <= $cajasT){
+                                    $c = $reparto;
+                                }else {
+                                    $c = $cajasT - $totalDist;
+                                }
+                            }
+                        }
+                        $totalDist += $c;
+
+                        $cajas = $cantTPlan - $totalDist;
+
+                        if($cantTPlan > $cajasT){
+                            $cajas = $cajasT - $totalDist;
+                        }
+                        $tdas_repartidas++;
+                    }
+                    if($distEstiloTda != 0 ){
+                        $distOld = true;
+                    }
+
+
 					$aux[] = array(
 						"codSucursal" => $codSucursal,
 						"sucursal" => $sucursal,
 						"cantidad" => $c,
 						"fechaDemora" => $fechaDemora,
-						"cluster" => $cluster
+                        "cluster" => $cluster,
+                        "cantPlan" => $cantPlan,
+                        "cantTotalPlan" => $cantTPlan,
+                        "tdasInCluster" => $tdas_in_cluster,
+                        "distEstiloTda" => $distEstiloTda,
+                        "distOld" => $distOld
 					);
 				}
-				
+
+                $cantSuc = count($aux);
 				$existe = false;
-				for ($i = 0; $i < count($aux); $i++) {
-					if ($aux[$i]['cluster'] != "-") {
+                $puntero = 0;
+                for ($i = 0; $i < $cantSuc; $i++) {
+                    if ($aux[$i]['cluster'] != "-" and $aux[$i]['cantTotalPlan'] != 0) {
+                        $cantTPlan = $aux[$i]['cantTotalPlan'];
+                        $puntero = $i;
 						$existe = true;
 						break;
 					}
 				}
-				if (!$existe) {
-					while ($cajas > 0) {
-						for ($i = 0; $i < count($aux); $i++) {
+                if (!$existe and $aux and $aux[$puntero] != null and $aux[$puntero]['cantTotalPlan'] != 0
+                    and $aux[$puntero]['distEstiloTda'] > $aux[$puntero]['cantPlan']) {
+                    while ($cajas > 0 and $totalDist <= $cajasT) {
+                        for ($i = $puntero; $i < $cantSuc; $i++) {
 							$aux[$i]['cantidad']++;
 							$cajas--;
 							if ($cajas == 0) {
@@ -212,8 +290,10 @@
 						}
 					}
 				} else {
-					while ($cajas > 0) {
-						for ($i = 0; $i < count($aux); $i++) {
+                    while ($aux and $aux[$puntero] != null and $aux[$puntero]['cantTotalPlan'] != 0
+                        and $cajas > 0 and $totalDist <= $cajasT
+                        and $aux[$puntero]['distEstiloTda'] > $aux[$puntero]['cantPlan']) {
+                        for ($i = $puntero; $i < $cantSuc; $i++) {
 							if ($aux[$i]['cluster'] != "-") {
 								$aux[$i]['cantidad']++;
 								$cajas--;
@@ -224,9 +304,14 @@
 						}
 					}
 				}
-				
+                if($cajasT > $cantTPlan){
+                    $diferencia = $cajasT - $totalDist;
+                }else {
+                    $diferencia = -$cantTPlan + $totalDist;
+                }
+
 				usort($aux, array('ControlReposicion', 'cmp'));
-				
+
 				$detalle[] = array(
 					"idFila" => $row[0],
 					"departamento" => utf8_encode($row[1]),
@@ -238,24 +323,28 @@
 					"curvaReparto" => $row[7],
 					"curvasCaja" => $row[8],
 					"cajasEmbarcadas" => $cajasT,
-					"diferencia" => $cajas,
+                    "diferencia" => $diferencia,
 					"sucursales" => $aux,
 					"codTemporada" => $row[10],
 					"depDepto" => $row[11],
-					"idColor3" => $row[12]
+                    "idColor3" => $row[12],
+                    "marca" => $row[13],
+                    "clusterPlan" => $row[14],
+                    "asignadas" => $totalDist
 				);
 			}
 			header("Content-Type: application/json");
 			$json = \JsonHelper::encode(array("sucursales" => $sucursales, "detalle" => $detalle), JSON_PRETTY_PRINT);
 			echo $json;
 		}
-		
+
 		public function guardar_distribucion_tienda($f3) {
 			header("Content-Type: application/json");
 			try {
 				$nro_embarque = $f3->get('POST.nroEmbarque');
 				$nro_contenedor = $f3->get('POST.nroContenedor');
 				$sucursales = $f3->get('POST.sucursales');
+
 				$data = \reposicion\distribucion::guardar_distribucion_tienda($nro_embarque, $nro_contenedor, $sucursales);
 				echo json_encode(array("estado" => 0, "mensaje" => "Datos guardados correctamente"));
 			} catch (Exception $ex) {
@@ -593,6 +682,116 @@
 
                 // $objPHPExcel->getActiveSheet()->getStyle("B$row:CX$row")->applyFromArray($estiloCelda);
                 $row++;
+            }
+            // Escribe el archivo Excel
+            header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            header("Content-Disposition: attachment; filename=Distribucion.xlsx");
+            $objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
+            $objWriter->save('php://output');
+
+		}
+
+        public function reporteria_distribucion_mercaderia($f3) {
+            ControlFormularioMain::cargaMain($f3);
+            ControlReposicion::cargaMensajes($f3);
+            $f3->set('nombre_form', 'Reporteria Embarques');
+            //$f3->set('nroEmbarque', $f3->get('GET.nroEmbarque'));
+            //$f3->set('nroContenedor', $f3->get('GET.nroContenedor'));
+            $f3->set('contenido', 'reporteriaEmbarques/reporteria_embarques.html');
+            echo Template::instance()->render('layout_reporteria_embarques.php');
+        }
+
+        public function obtener_embarques_reporteria($f3) {
+            $data =\reposicion\distribucion::listaEmbarquesReporteria();
+            $json = [];
+            foreach ($data as $row) {
+                array_push($json
+                    , array(
+                        "nroEmbarque" => $row[0],
+                        "Estado" => $row[2],
+                        "fechaETA" => $row[1]
+                    )
+                );
+            }
+            header("Content-Type: application/json");
+            echo json_encode($json);
+        }
+
+        public function excel_reporte_embarques($f3) {
+
+
+            //$embarquesHidden = $_POST['embarquesHidden'];
+
+            $listNroEmbarque = [99782,65791,  65782,65793,65794,65795,65796,65792,65790];
+
+
+            $i = 0;
+            // Crea el objeto Excel PHP
+            $objPHPExcel = new PHPExcel();
+
+            foreach($listNroEmbarque as $rowNroEmbarque){
+
+                $distribucion = \reposicion\distribucion::excel_distribucion_mercaderia(intval($rowNroEmbarque));
+
+                if($distribucion) {
+
+                    $sheetTitle = strval($rowNroEmbarque);
+
+                    if($i>0){
+                        $objPHPExcel->createSheet($i);
+                    }
+
+
+                    $objPHPExcel->getSheet($i)->setTitle($sheetTitle);
+
+
+                    $objPHPExcel->getSheet($i)->SetCellValue("A1", "TEMPORADA");
+                    $objPHPExcel->getSheet($i)->SetCellValue("B1", "COD_DEPTO");
+                    $objPHPExcel->getSheet($i)->SetCellValue("C1", "DES_DEPTO");
+                    $objPHPExcel->getSheet($i)->SetCellValue("D1", "COD_ESTILO");
+                    $objPHPExcel->getSheet($i)->SetCellValue("E1", "DES_ESTILO");
+                    $objPHPExcel->getSheet($i)->SetCellValue("F1", "DES_COLOR");
+                    $objPHPExcel->getSheet($i)->SetCellValue("G1", "VENTANA");
+                    $objPHPExcel->getSheet($i)->SetCellValue("H1", "NOM_MARCA");
+                    $objPHPExcel->getSheet($i)->SetCellValue("I1", "EVENTO");
+                    $objPHPExcel->getSheet($i)->SetCellValue("J1", "NRO_EMBARQUE");
+                    $objPHPExcel->getSheet($i)->SetCellValue("K1", "CURVATALLA");
+                    $objPHPExcel->getSheet($i)->SetCellValue("L1", "CURVAS_CAJAS");
+                    $objPHPExcel->getSheet($i)->SetCellValue("M1", "LPN_NUMBER");
+                    $objPHPExcel->getSheet($i)->SetCellValue("N1", "COD_TDA");
+                    $objPHPExcel->getSheet($i)->SetCellValue("O1", "TIPO_EMPAQUE");
+                    $objPHPExcel->getSheet($i)->SetCellValue("P1", "UNIDADES");
+
+
+                    // Se genera la consulta
+                    $row = 2;
+
+                    foreach ($distribucion as $item) {
+                        $objPHPExcel->getSheet($i)->SetCellValue("A$row", $item["TEMPORADA"]);
+                        $objPHPExcel->getSheet($i)->SetCellValue("B$row", $item["COD_DEPTO"]);
+                        $objPHPExcel->getSheet($i)->SetCellValue("C$row", $item["DES_DEPTO"]);
+                        $objPHPExcel->getSheet($i)->SetCellValue("D$row", $item["COD_ESTILO"]);
+                        $objPHPExcel->getSheet($i)->SetCellValue("E$row", $item["DES_ESTILO"]);
+                        $objPHPExcel->getSheet($i)->SetCellValue("F$row", $item["DES_COLOR"]);
+                        $objPHPExcel->getSheet($i)->SetCellValue("G$row", $item["VENTANA"]);
+                        $objPHPExcel->getSheet($i)->SetCellValue("H$row", $item["NOM_MARCA"]);
+                        $objPHPExcel->getSheet($i)->SetCellValue("I$row", $item["EVENTO"]);
+                        $objPHPExcel->getSheet($i)->SetCellValue("J$row", $item["NRO_EMBARQUE"]);
+                        $objPHPExcel->getSheet($i)->SetCellValue("K$row", $item["CURVATALLA"]);
+                        $objPHPExcel->getSheet($i)->SetCellValue("L$row", $item["CURVAS_CAJAS"]);
+                        $objPHPExcel->getSheet($i)->SetCellValue("M$row", $item["LPN_NUMBER"]);
+                        $objPHPExcel->getSheet($i)->SetCellValue("N$row", $item["COD_TDA"]);
+                        $objPHPExcel->getSheet($i)->SetCellValue("O$row", $item["TIPO_EMPAQUE"]);
+                        $objPHPExcel->getSheet($i)->SetCellValue("P$row", $item["UNIDADES"]);
+
+                        // $objPHPExcel->getActiveSheet()->getStyle("B$row:CX$row")->applyFromArray($estiloCelda);
+                        $row++;
+                    }
+                    $i++;
+                    //$objPHPExcel->addSheet($rowNroEmbarque);
+
+
+                }
             }
             // Escribe el archivo Excel
             header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");

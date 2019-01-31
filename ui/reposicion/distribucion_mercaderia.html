@@ -98,7 +98,7 @@
 		var tabla = $('.table').DataTable(opcionesTabla);
 		new $.fn.dataTable.FixedColumns(tabla, {
 			heightMatch: 'auto',
-			leftColumns: 11
+			leftColumns: 15
 		});
 		$.fn.dataTable.tables({visible: true, api: true}).fixedColumns().relayout();
 
@@ -109,16 +109,34 @@
 			var embarcadas = parseInt($(".embarcadas[data-fila='" + fila + "']").html());
 			var diferencia = parseInt($(".diferencia[data-fila='" + fila + "']").html());
 			var suma = 0;
+			var cantTPlan = parseInt($(".cantPlan[data-fila='" + fila + "']").data('canttotalplan'));
+			var distOld = $(this).data('distOld');
+			console.log(distOld);
 			$(".cajas-sucursal[data-fila='" + fila + "']").each(function() {
 				suma += parseInt($(this).val());
 			});
+
+
 			if (suma > embarcadas) {
 				alert('El valor ingresado supera las cajas embarcadas');
 				$(this).val(valorA).focus();
 			} else {
+				if(embarcadas > cantTPlan){
 				diferencia = embarcadas - suma;
+
+				}else {
+					diferencia = -cantTPlan + suma;
+				}
+				$(".asignadas[data-fila='" + fila + "']").html(suma);
 				$(this).data('value', valorN).focus();
 				$(".diferencia[data-fila='" + fila + "']").html(diferencia);
+			}
+		});
+		$('.mensaje-alerta').each(function() {
+			var distOld = $(this).data('distold');
+			var distEstiloTda = $(this).data('distestilotda');
+			if(distOld == true){
+				$(this).text(distEstiloTda+" Distribuida anteriormente")
 			}
 		});
 
@@ -149,7 +167,7 @@
 				var codTemporada = $(this).data('temporada');
 				var depDepto = $(this).data('depto');
 				var idColor3 = $(this).data('idcolor3');
-				var demora = (codSucursal != 10039) ? $(".demora-sucursal[data-fila='" + fila + "'][data-sucursal='" + codSucursal + "']").val() : "";
+				var demora = $(".demora-sucursal[data-fila='" + fila + "'][data-sucursal='" + codSucursal + "']").val();
 				if (cantidad > 0) {
 					sucursales.push({
 						"nroEmbarque": nroEmbarque,
@@ -189,8 +207,10 @@
 			$('.cajas-sucursal').each(function() {
 				var fila = parseInt($(this).data('fila'));
 				var diferencia = parseInt($(".diferencia[data-fila='" + fila + "']").html());
+				var asignadas =  parseInt($(".asignadas[data-fila='" + fila + "']").html());
+				var embarcadas = parseInt($(".embarcadas[data-fila='" + fila + "']").html());
 
-				if (diferencia > 0) {
+				if (diferencia > 0 && asignadas == embarcadas ) {
 					alert('Debe asignar todas las cajas antes de aprobar la distribución');
 					terminarAprobar();
 					return;
@@ -221,6 +241,7 @@
 		var centro = {'text-align': 'center', 'vertical-align': 'middle'};
 		var derecha = {'text-align': 'right', 'vertical-align': 'middle'};
 		var izquierda = {'text-align': 'left', 'vertical-align': 'middle'};
+		var notificacion = {'position': 'absolute','text-align': 'center', 'vertical-align': 'middle'};
 		var url = 'cargar_distribucion_mercaderia?nroEmbarque={{@nroEmbarque}}&nroContenedor={{@nroContenedor}}';
 		$('.tabla-principal').empty();
 		var $table = $('<table>').addClass('table table-bordered table-striped tabla_smaller').css({
@@ -230,31 +251,30 @@
 		$.getJSON(url, function(data) {
 				var $head = $('<thead>');
 				var $tr = $('<tr>').append(
-					$('<th>').text("#").css(centro).attr('rowspan', '2'),
-					$('<th>').text("Cod. Estlo").css(centro).attr('rowspan', '2'),
-					$('<th>').text("Nombre Estilo").css(centro).attr('rowspan', '2'),
-					$('<th>').text("Depto.").css(centro).attr('rowspan', '2'),
-					$('<th>').text("Color").css(centro).attr('rowspan', '2'),
-					$('<th>').text("Ventana").css(centro).attr('rowspan', '2'),
-					$('<th>').text("Evento").css(centro).attr('rowspan', '2'),
-					$('<th>').text("Curva Reparto").css(centro).attr('rowspan', '2'),
-					$('<th>').text("Curvas x Caja").css(centro).attr('rowspan', '2'),
-					$('<th>').text("Cajas Embarcadas").css(centro).attr('rowspan', '2'),
-					$('<th>').text("Diferencia").css(centro).attr('rowspan', '2')
+							$('<th>').text("#").css(centro),
+							$('<th>').text("Cod. Estlo").css(centro),
+							$('<th>').text("Nombre Estilo").css(centro),
+							$('<th>').text("Marca").css(centro),
+							$('<th>').text("Depto.").css(centro),
+							$('<th>').text("Color").css(centro),
+							$('<th>').text("Ventana").css(centro),
+							$('<th>').text("Evento").css(centro),
+							$('<th>').text("Cluster Plan").css(centro),
+							$('<th>').text("Curva Reparto").css(centro),
+							$('<th>').text("Curvas x Caja").css(centro),
+							$('<th>').text("Cajas Emb.").css(centro),
+							$('<th>').text("Dif.").css(centro),
+							$('<th>').text("Cajas Asig.").css(centro),
+							$('<th>').text("").css(centro)
 				);
 				$.each(data.sucursales, function(i, item) {
-					$tr.append($('<th>').text(item.codSucursal + ' - ' + item.sucursal).css(centro).attr('colspan', '3'));
-				});
-				$tr.append($('<th>').text('Demora').css(centro).attr('rowspan', '2'));
-				$head.append($tr);
-				$tr = $('<tr>');
-				$.each(data.sucursales, function(i, item) {
 					$tr.append(
-						$('<th>').text('Cluster').css(centro),
-						$('<th>').text('Cantidad').css(centro),
-						$('<th>').text('Demora').css(centro)
+								$('<th>').text(item.sucursal).css(izquierda).attr('colspan', '1').append(
+										$('<tr>').text(item.codSucursal)
+								)
 					);
 				});
+					$tr.append($('<th>').text('Demora').css(centro).attr('rowspan', '1'));
 				$head.append($tr);
 				$table.append($head);
 				var $body = $('<tbody>');
@@ -268,22 +288,38 @@
 						$('<td>').text(fila).css(derecha),
 						$('<td>').text(codEstilo).css(izquierda),
 						$('<td>').text(item.estilo).css(izquierda),
+								$('<td>').text(item.marca).css(izquierda),
 						$('<td>').text(depDepto).css(izquierda),
 						$('<td>').text(item.color).css(izquierda),
 						$('<td>').text(item.ventana).css(izquierda),
 						$('<td>').text(item.evento).css(izquierda),
+								$('<td>').text(item.clusterPlan).css(izquierda),
 						$('<td>').text(item.curvaReparto).css(centro),
 						$('<td>').text(item.curvasCaja).css(derecha),
 						$('<td>').css(derecha).append($('<span>').addClass('embarcadas').attr({'data-fila': fila}).text(item.cajasEmbarcadas)),
-						$('<td>').css(derecha).append($('<span>').addClass('diferencia').attr({'data-fila': fila}).text(item.diferencia))
+								$('<td>').css(derecha).append($('<span>').addClass('diferencia').attr({'data-fila': fila}).text(item.diferencia)),
+								$('<td>').css(derecha).append($('<span>').addClass('asignadas').attr({'data-fila': fila}).text(item.asignadas)),
+								$('<th>').append(
+								$('<table>').css({
+									'width': '100%',
+									'font-size': '12px'
+								}).append(
+										$('<tr>').text('Cluster').css(izquierda),
+										$('<tr>').text('Cantidad').css(izquierda),
+										$('<tr>').text('C. Plan').css(izquierda),
+										$('<tr>').text('Demora').css(izquierda)
+								)
+								)
 					);
+						$body.append($tr);
 					$.each(item.sucursales, function(i, item) {
-						$tr.append($('<td>').text(item.cluster).css(centro).addClass('text-danger'));
-						$tr.append(
-							$('<td>').css(centro).append(
+							$tr.append($('<td>').append(
+									$('<tr>').text(item.cluster).css(centro).addClass('text-danger'),
+									$('<tr>').css(centro).append(
 								$('<input>')
 									.addClass('cajas-sucursal')
-									.css({'width': '60px'})
+													.css({'width': '85px',
+														  'height': '15px'})
 									.attr({
 										'data-min': '0',
 										'data-fila': fila,
@@ -293,16 +329,25 @@
 										'data-idcolor3': idColor3,
 										'data-estilo': codEstilo,
 										'data-value': item.cantidad,
-										'value': item.cantidad
+														'value': item.cantidad,
+														'data-distOld': item.distold
 									})
-							)
-						);
-						if (item.codSucursal != 10039) {
-							$tr.append(
-								$('<td>').css(centro).append(
+									),
+									$('<tr>').text(item.cantPlan).css(centro).addClass('cantPlan').attr({
+										'data-fila': fila,
+										'data-sucursal': item.codSucursal,
+										'data-temporada': codTemporada,
+										'data-depto': depDepto,
+										'data-idcolor3': idColor3,
+										'data-estilo': codEstilo,
+										'data-canttotalplan': item.cantTotalPlan,
+										'value': item.cantPlan
+									}),
+									$('<tr>').css(centro).append(
 									$('<input>')
 										.addClass('demora-sucursal')
-										.css({'width': '80px'})
+													.css({'width': '85px',
+														'height': '15px'})
 										.attr({
 											'data-fila': fila,
 											'data-sucursal': item.codSucursal,
@@ -311,15 +356,21 @@
 											'data-idcolor3': idColor3,
 											'data-estilo': codEstilo,
 											'value': item.fechaDemora
-										})
-										.datepicker(opcionesCalendario)
-								)
-							);
-						} else {
-							$tr.append($('<td>').text('N/A').css(centro));
-						}
+													}).datepicker(opcionesCalendario)
+									),
+									$('<span>').text("").addClass('mensaje-alerta').attr({
+										'data-distOld': item.distOld,
+										'data-distestilotda': item.distEstiloTda,
+										'data-fila': fila,
+										'data-sucursal': item.codSucursal
+									}).css(notificacion).addClass('text-danger')
+
+							));
+
 					});
-					$tr.append($('<td>').css(centro).append(
+
+
+						$tr.append($('<th>').css(centro).attr('colspan', '4').append(
 						$('<input>')
 							.css({'width': '80px'})
 							.addClass('demora-sucursal')
@@ -336,15 +387,15 @@
 								$('.demora-sucursal[data-fila=' + fila + ']').datepicker('update', '');
 							})
 					));
+
+
 					$body.append($tr);
 				});
+
 				$table.append($body);
 				$('.tabla-principal').append($table);
-				//$table.DataTable(opcionesTabla);
 				showPage();
-			}
-		)
-		;
+		});
 	}
 
 	$(function() {

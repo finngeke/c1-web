@@ -1,5 +1,7 @@
 <?php
 	require_once '../../PHPExcel/PHPExcel.php';
+	// Obtiene la temporada para la generación de los datos
+	//$cod_temporada = $f3->get('SESSION.COD_TEMPORADA');
 
     $nroEmbarqueHidden = $_POST['nroEmbarqueHidden'];
 

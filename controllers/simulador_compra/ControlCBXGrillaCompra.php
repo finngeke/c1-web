@@ -468,30 +468,6 @@
 		// Buscar Comentarios asociados a la PI (PROFORAM)
 		public function busca_comentario_pi($f3) {
 			echo json_encode(\simulador_compra\cbx_grilla_compra::busca_comentario_pi($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $f3->get('GET.PI')));
-
-
-
-            /*$data = \simulador_compra\cbx_grilla_compra::busca_comentario_pi($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $f3->get('GET.PI'));
-
-            $json = [];
-            foreach ($data as $val) {
-
-                $json[] = array(
-                    $val["ID_COLOR3"],
-                    utf8_encode($val["PROFORMA"]),
-                    utf8_encode($val["LINEA"]),
-                    utf8_encode($val["COD_LINEA"]),
-                    utf8_encode($val["SUB_LINEA"]),
-                    utf8_encode($val["COD_SUBLINEA"]),
-                    utf8_encode($val["ESTILO"]),
-                    utf8_encode($val["COLOR"]),
-                    $val["COD_COLOR"]
-                );
-            }
-
-            header("Content-Type: application/json");
-            echo json_encode($json, JSON_PRETTY_PRINT);*/
-
 		}
 		
 		// Buscar Existe Proforma
@@ -557,10 +533,7 @@
 		}
 		
 		public function valida_tablab_cuza_color3($f3) {
-
 			echo json_encode(\simulador_compra\cbx_grilla_compra::valida_tablab_cuza_color3($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'), $f3->get('GET.OC'), $f3->get('GET.PI')));
-
-
 		}
 		
 		public function btn_actualizar_match($f3) {
