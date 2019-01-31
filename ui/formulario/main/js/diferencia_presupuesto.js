@@ -57,8 +57,8 @@ $(function () {
                 dataType: "json"
             },
             data: function() {
-                return { TEMPORADA: String($("#DropDownListTemporada").data("kendoComboBox").value()),
-                    VENTANA: $("#DropDownListVentana").data("kendoComboBox").value()
+                return { DEPARTAMENTO: String($("#DropDownListDepto").data("kendoDropDownList").value()),
+                    VENTANA: $("#DropDownListVentana").data("kendoDropDownList").value()
                 };
             }
         },
@@ -146,6 +146,7 @@ $(function () {
         },
         change: function(e) {
 
+            dataSource.read();
             /*var dataItem = e.sender.dataItem();
 
             if(dataItem){
