@@ -23,20 +23,42 @@ $(function () {
         items: [
             {
                 type: "button",
-                text: "Volver",
+                text: "Back",
                 id: "volver_atras_c1",
                 click: volver_atras_c1
             },
             { type: "separator" },
             {
                 type: "button",
-                text: "Salir",
+                text: "Logout",
                 id: "salir_c1",
                 click: salir_c1,
                 overflow: "always"
             }
         ]
     });
+
+
+    // CBX de Port of Delivery
+    function PortDeliveryDropDownEditor(container, options) {
+        $('<input required name="' + options.field + '"/>')
+            .appendTo(container)
+            .kendoDropDownList({
+                autoBind: false,
+                filter: "contains",
+                dataTextField: "NOM_PUERTO",
+                dataValueField: "COD_PUERTO",
+                dataSource: {
+                    transport: {
+                        read:  {
+                            url: crudServiceBaseUrl + "ListarPortDelivery",
+                            dataType: "json"/*
+                                            type: "POST"*/
+                        }
+                    }
+                }
+            });
+    }
 
     // Definimos DataSource
     var dataSource = new kendo.data.DataSource({
@@ -48,11 +70,21 @@ $(function () {
         },
         schema: {
             model: {
-                id: "ID_DEL_REGISTO_QUE_LLEGA",
+                id: "ID",
                 fields: {
-                    CAMPO1BD: { type: "string",editable: false }, // number - string - date
-                    CAMPO2BD: { type: "string",editable: false }, // number - string - date
-                    CAMPO3BD: { type: "string",editable: false } // number - string - date
+                    PROFORMA: { type: "string",editable: true }, // number - string - date
+                    DES_ESTILO: { type: "string",editable: false }, // number - string - date
+                    COD_MOD_PAIS: { type: "string",editable: false }, // number - string - date
+                    NOM_MARCA: { type: "string",editable: false }, // number - string - date
+                    NOM_LINEA: { type: "string",editable: false }, // number - string - date
+                    COSTO_INSP: { type: "number",editable: false }, // number - string - date
+                    UNIDADES: { type: "number",editable: false }, // number - string - date
+                    COSTO_FOB: { type: "number",editable: false }, // number - string - date
+                    COSTO_TOT: { type: "number",editable: false }, // number - string - date
+                    MTR_PACK: { type: "number",editable: false }, // number - string - date
+                    CANT_INNER: { type: "number",editable: false }, // number - string - date
+                    FECHA_EMBARQUE_ACORDADA: { type: "string",editable: false }, // number - string - date
+                    COD_PUERTO: { type: "string",editable: true } // number - string - date
                 }
             }
         }/*,
@@ -80,18 +112,27 @@ $(function () {
         editable: true,
         toolbar: [
             //{ name:"custombutton_nombre_propio", text: "Botón Custom"}, // Solo si se quiere agregar un botón custom
-            { name: "save", text: "Guardar Cambios", iconClass: "k-icon k-i-copy" },
-            { name: "cancel", text: "Cancela Modificaciones sin Guardar" }
+            { name: "save", text: "Save", iconClass: "k-icon k-i-copy" },
+            { name: "cancel", text: "Cancel unsaved changes" }
         ],
-        height: 550, // Altura del Grid
+        //height: 550, // Altura del Grid
         resizable: true, // Las Columnas pueden Cambair de Tamaño
         filterable: true, // Se puede Filtrar
         sortable: true, // Se puede ordenar
         columns: [ // Columnas a Listar
-            { selectable: true, width: "13px" }, // checkbox en la Primera Columna
-            {field: "CAMPO1BD",title: "Nombre del Campo Para el Usuario",width: 30,filterable: {multi: true}},
-            {field: "CAMPO2BD",title: "Nombre del Campo Para el Usuario",width: 30,filterable: {multi: true}},
-            {field: "CAMPO3BD",title: "Nombre del Campo Para el Usuario",width: 30,filterable: {multi: true}}
+            {field: "PROFORMA",title: "Vendor PI N°",width: 70},
+            {field: "DES_ESTILO",title: "Style Name",width: 70,filterable: {multi: true}},
+            {field: "COD_MOD_PAIS",title: "Country",width: 25,filterable: {multi: true}},
+            {field: "NOM_MARCA",title: "Brand",width: 50,filterable: {multi: true}},
+            {field: "NOM_LINEA",title: "Line",width: 50,filterable: {multi: true}},
+            {field: "COSTO_INSP",title: "Inspection",width: 30,filterable: {multi: true}},
+            {field: "UNIDADES",title: "Qtty",width: 20,filterable: {multi: true}},
+            {field: "COSTO_FOB",title: "Final Price",width: 30,filterable: {multi: true}},
+            {field: "COSTO_TOT",title: "Total Amount",width: 30,filterable: {multi: true}},
+            {field: "MTR_PACK",title: "Master Pack",width: 30,filterable: {multi: true}},
+            {field: "CANT_INNER",title: "# of Cartons",width: 35,filterable: {multi: true}},
+            {field: "FECHA_EMBARQUE_ACORDADA",title: "Delivery Date",width: 35,filterable: {multi: true}},
+            {field: "COD_PUERTO",title: "Port or Delivery",width: 70, editor: PortDeliveryDropDownEditor}
         ]/*,
         change: seleccionaOpcion*/ // solo si estamos utilizando un checkbox en la primera columna, quitar si no se utiliza
     });

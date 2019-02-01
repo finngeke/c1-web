@@ -11,16 +11,53 @@ class ResumenEstilosClass extends \parametros
     public static function ListarResumenEstilos($temporada, $depto,$login,$pais)
     {
 
-        $sql = "SELECT CAMPO1,CAMPO3,CAMPO3 FROM TABLA";
+        // 1.- Borrar Tabla
+
+
+        $sql = "SELECT 
+                   DES_ESTILO STYLE_NAME,
+                   CASE WHEN COD_MOD_PAIS = 1 THEN 'CHILE' 
+                   ELSE 'PERÚ' END COD_MOD_PAIS, 
+                   NOM_MARCA BRAND,
+                   NOM_LINEA LINE, 
+                   SUM(COSTO_INSP) INSPECTION, 
+                   SUM(UNIDADES) QTTY,
+                   COSTO_FOB FINAL_PRICE,
+                   SUM(UNIDADES*COSTO_FOB) TOTAL_AMOUNT,
+                   MTR_PACK MASTER_PACK,
+                   SUM(CANT_INNER) CARTONS,
+                   FECHA_EMBARQUE_ACORDADA DELIVERY_DATE 
+                FROM PIA_RESUMEN_ESTILO_PASO 
+                WHERE COD_PROVEEDOR = $login
+                GROUP BY
+                       DES_ESTILO,
+                       COD_MOD_PAIS,
+                       NOM_MARCA,
+                       NOM_LINEA,
+                       COSTO_FOB,
+                       MTR_PACK,
+                       FECHA_EMBARQUE_ACORDADA
+                ORDER BY DES_ESTILO ASC";
         $data = \database::getInstancia()->getFilas($sql);
 
         // Transformo a array asociativo
         $array = [];
         foreach ($data as $val) {
             array_push($array, array(
-                 "CAMPO1" => $val[0]
-                ,"CAMPO2" => $val[1]
-                ,"CAMPO3" => utf8_encode($val[2]) // UTF-8 Si me Trae String
+                "ID" => trim($val[0])."*".utf8_encode(trim($val[1]))."*".utf8_encode(trim($val[2]))."*".utf8_encode(trim($val[3]))."*".trim($val[10])
+                ,"PROFORMA" => ""
+                ,"DES_ESTILO" => trim($val[0])
+                ,"COD_MOD_PAIS" => utf8_encode(trim($val[1]))
+                ,"NOM_MARCA" => utf8_encode(trim($val[2])) // UTF-8 Si me Trae String
+                ,"NOM_LINEA" => utf8_encode(trim($val[3])) // UTF-8 Si me Trae String
+                ,"COSTO_INSP" => $val[4]
+                ,"UNIDADES" => $val[5]
+                ,"COSTO_FOB" => $val[6]
+                ,"COSTO_TOT" => $val[7]
+                ,"MTR_PACK" => $val[8]
+                ,"CANT_INNER" => $val[9]
+                ,"FECHA_EMBARQUE_ACORDADA" => trim($val[10])
+                ,"COD_PUERTO" => ""
                 )
             );
         }
@@ -72,7 +109,6 @@ class ResumenEstilosClass extends \parametros
 
     }
 
-
     // Listar Depto
     public static function ListarDepto($login,$pais)
     {
@@ -94,7 +130,31 @@ class ResumenEstilosClass extends \parametros
 
     }
 
+    // Listar Port of Delivery
+    public static function ListarPortDelivery($login,$pais)
+    {
 
+        $sql = "SELECT 
+                   T1.COD_PUERTO,
+                   T1.NOM_PUERTO 
+                FROM PIA_PUERTOS T1
+                LEFT JOIN plc_proveedores_pmm T2 ON T2.VEND_COUNTRY = T1.CNTRY_LVL_CHILD 
+                WHERE T2.COD_PROVEEDOR = $login";
+        $data = \database::getInstancia()->getFilas($sql);
+
+        // Transformo a array asociativo
+        $array = [];
+        foreach ($data as $val) {
+            array_push($array, array(
+                    "COD_PUERTO" => $val[0]
+                ,"NOM_PUERTO" => utf8_encode($val[1]) // UTF-8 Si me Trae String
+                )
+            );
+        }
+
+        return $array;
+
+    }
 
 
 

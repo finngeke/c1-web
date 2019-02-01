@@ -25,6 +25,11 @@ class ResumenEstilosController extends \Control
         echo json_encode(ResumenEstilosClass::ListarDepto($f3->get('SESSION.login'),1));
     }
 
+    // Listar Port of Delivery
+    public function ListarPortDelivery($f3){
+        echo json_encode(ResumenEstilosClass::ListarPortDelivery($f3->get('SESSION.login'),1));
+    }
+
 
 
 
