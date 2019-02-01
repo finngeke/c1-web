@@ -52,8 +52,7 @@ $(function () {
                     transport: {
                         read:  {
                             url: crudServiceBaseUrl + "ListarPortDelivery",
-                            dataType: "json"/*
-                                            type: "POST"*/
+                            dataType: "json"
                         }
                     }
                 }
@@ -65,6 +64,10 @@ $(function () {
         transport: {
             read:  {
                 url: crudServiceBaseUrl + "ListarResumenEstilos",
+                dataType: "json"
+            },
+            update: {
+                url: crudServiceBaseUrl + "ActualizaResumenEstilos",
                 dataType: "json"
             }
         },
@@ -84,7 +87,7 @@ $(function () {
                     MTR_PACK: { type: "number",editable: false }, // number - string - date
                     CANT_INNER: { type: "number",editable: false }, // number - string - date
                     FECHA_EMBARQUE_ACORDADA: { type: "string",editable: false }, // number - string - date
-                    COD_PUERTO: { type: "string",editable: true } // number - string - date
+                    COD_PUERTO: { type: "string",editable: true,validation: { required: true } } // number - string - date
                 }
             }
         }/*,
@@ -122,7 +125,7 @@ $(function () {
         columns: [ // Columnas a Listar
             {field: "PROFORMA",title: "Vendor PI N°",width: 70},
             {field: "DES_ESTILO",title: "Style Name",width: 70,filterable: {multi: true}},
-            {field: "COD_MOD_PAIS",title: "Country",width: 25,filterable: {multi: true}},
+            {field: "COD_MOD_PAIS",title: "Country",minResizableWidth: 35,width: 35,filterable: {multi: true}},
             {field: "NOM_MARCA",title: "Brand",width: 50,filterable: {multi: true}},
             {field: "NOM_LINEA",title: "Line",width: 50,filterable: {multi: true}},
             {field: "COSTO_INSP",title: "Inspection",width: 30,filterable: {multi: true}},
