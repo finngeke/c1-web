@@ -47,10 +47,10 @@ class ControlPortada extends Control {
             die();
         }
 
-        if ($Funcionario->getDatosFuncionario()->COD_TIPUSR==103){
+        /*if ($Funcionario->getDatosFuncionario()->COD_TIPUSR==103){
             $f3->reroute('/proveedor?cod_proveedor='.$Funcionario->getDatosFuncionario()->COD_USR);
             die();
-        }
+        }*/
 
 
         setlocale(LC_TIME, 'es_ES', 'Spanish_Spain', 'Spanish');
@@ -61,7 +61,14 @@ class ControlPortada extends Control {
         $f3->set('SESSION.correo', $Funcionario->getDatosFuncionario()->CORREO);
         $f3->set('SESSION.cod_tipusr', $Funcionario->getDatosFuncionario()->COD_TIPUSR);
         $f3->set('SESSION.dia', utf8_encode(strftime('%Y. %B %d. %A')));
-        $f3->reroute('/inicio');
+        if ($Funcionario->getDatosFuncionario()->COD_TIPUSR==103){
+            $f3->reroute('/proveedor?cod_proveedor='.$Funcionario->getDatosFuncionario()->COD_USR);
+        }else{
+            $f3->reroute('/inicio');
+        }
+
+
+
     }
 
     public function salir($f3) {
