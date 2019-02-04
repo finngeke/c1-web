@@ -392,11 +392,11 @@ class PlanCompraClass extends \parametros
                 , "COSTO_RFID" => $rfid_corregido //$va1[61]
                 , "ROYALTY_POR" => $va1[62]
                 , "COSTO_UNIT" => number_format(str_replace(",",".",$va1[63]),2,",",".")//$va1[63]
-                , "COSTO_UNITS" => number_format($va1[64],0,",",".")  //$va1[64]
+                , "COSTO_UNITS" => number_format(str_replace(",",".",$va1[64]),0,",",".")  //$va1[64]
                 , "CST_TOTLTARGET" => number_format(str_replace(",",".",$va1[65]),2,",",".") //str_replace(",",".",$va1[65])
                 , "COSTO_TOT" => number_format(str_replace(",",".",$va1[66]),2,",",".") //str_replace(",",".",$va1[66])
-                , "COSTO_TOTS" => number_format($va1[67],0,",",".") //$va1[67]
-                , "RETAIL" => number_format($va1[68],0,",",".") //$va1[68]
+                , "COSTO_TOTS" => number_format(str_replace(",",".",$va1[67]),0,",",".") //$va1[67]
+                , "RETAIL" => number_format(str_replace(",",".",$va1[68]),0,",",".") //$va1[68]
                 , "DEBUT_REODER" => utf8_encode($va1[69])
                 , "SEM_INI" => $va1[70]
                 , "SEM_FIN" => $va1[71]
@@ -427,9 +427,9 @@ class PlanCompraClass extends \parametros
                 , "TIPO_EMPAQUE_BASE" => utf8_encode($va1[96])
                 , "UNI_INICIALES_BASE" => $va1[97]
                 , "PRECIO_BLANCO_BASE" => $va1[98]
-                , "COSTO_TARGET_BASE" => str_replace(",",".",$va1[99])
-                , "COSTO_FOB_BASE" => str_replace(",",".",$va1[100])
-                , "COSTO_INSP_BASE" => str_replace(",",".",$va1[101])
+                , "COSTO_TARGET_BASE" => $va1[99] //str_replace(",",".",$va1[99])
+                , "COSTO_FOB_BASE" => $va1[100] //str_replace(",",".",$va1[100])
+                , "COSTO_INSP_BASE" => $va1[101] //str_replace(",",".",$va1[101])
                 , "COSTO_RFID_BASE" => $rfid_corregido //$va1[102]
                 , "COD_MARCA" => $va1[103]
                 , "N_CURVASXCAJAS" => $va1[104]
