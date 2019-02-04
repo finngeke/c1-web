@@ -201,6 +201,9 @@ $f3->route('GET /TelerikResumenEstilos/@tipo [ajax]', 'resumen_estilos\ResumenEs
 $f3->route('GET /encabezado_detalle_pi', 'ControlProveedor->encabezado_detalle_pi');
 $f3->route('GET /TelerikEncabezadoDetallePi/@tipo [ajax]', 'encabezado_detalle_pi\EncabezadoDetallePiController->@tipo');
 
+/* CARTERO */
+$f3->route('GET /EnviarCorreo/@tipo [ajax]', 'cartero\EnviarCorreo->@tipo');
+
 /* LOG TRANSACCIONES*/
 $f3->route('GET /GuardarLogTransaccion/@tipo [ajax]', 'log_transaccion\GuardaLogTransaccion->@tipo');
 
