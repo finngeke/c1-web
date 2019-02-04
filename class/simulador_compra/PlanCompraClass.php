@@ -382,7 +382,7 @@ class PlanCompraClass extends \parametros
                 , "MKUP" => str_replace(".",",",$va1[53])
                 , "PRECIO_BLANCO" => $va1[54]
                 , "GM" => number_format(str_replace(",",".",$va1[55]),2,",",".")//$va1[55]
-                , "OFERTA" => number_format($va1[56],0,",",".") //utf8_encode($va1[56])
+                , "OFERTA" => utf8_encode($va1[56])
                 , "DOSX" => number_format($va1[111],0,",",".") //trim($va1[111])
                 , "OPEX" => trim($va1[112])
                 , "COD_TIP_MON" => utf8_encode($va1[57])
