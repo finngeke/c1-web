@@ -590,11 +590,11 @@ $(function () {
                     //sheet.range("BD2:BD"+count).format("#,##0");
 
                     // Unidades Iniciales
-                    sheet.range("AK2:AK"+count).format("#,##0");
+                    //sheet.range("AK2:AK"+count).format("#,##0");
                     // Precio Blanco
-                    sheet.range("BD2:BD"+count).format("#,##0");
+                    //sheet.range("BD2:BD"+count).format("#,##0");
                     // 4 Columnas -> Target - RFID
-                    sheet.range("BJ2:BM"+count).format("#,##0.00");
+                    //sheet.range("BJ2:BM"+count).format("#,##0.00");
 
 
 
