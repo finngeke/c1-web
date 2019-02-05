@@ -24,17 +24,17 @@
 <include href="{{ @contenido }}"/>
 
 <!-- 0 En Cargar (Orden Obligatorio) -->
-<script src="{{@TELERIK}}ui/formulario/plan_compra/js/simulador_compra_permisos.js?v={{rand(0,999)}}"></script>
+<script src="{{@TELERIK}}ui/formulario/plan_compra/js/simulador_compra_permisos.js?v={{rand(0,9999)}}"></script>
 <!-- 1 En Cargar (Orden Obligatorio) -->
-<script src="{{@TELERIK}}ui/formulario/plan_compra/js/simulador_compra_lectura.js?v={{rand(0,999)}}"></script>
+<script src="{{@TELERIK}}ui/formulario/plan_compra/js/simulador_compra_lectura.js?v={{rand(0,9999)}}"></script>
 <!-- 2 En Cargar (Orden Obligatorio) -->
-<script src="{{@TELERIK}}ui/formulario/plan_compra/js/simulador_compra.js?v={{rand(0,999)}}"></script>
+<script src="{{@TELERIK}}ui/formulario/plan_compra/js/simulador_compra201.js?v={{rand(0,9999)}}"></script>
 <!-- 3 En Cargar (Orden Obligatorio) -->
-<script src="{{@TELERIK}}ui/formulario/plan_compra/js/simulador_compra_menutop.js?v={{rand(0,999)}}"></script>
+<script src="{{@TELERIK}}ui/formulario/plan_compra/js/simulador_compra_menutop.js?v={{rand(0,9999)}}"></script>
 <!-- 4 En Cargar (Orden Obligatorio) -->
-<script src="{{@TELERIK}}ui/formulario/plan_compra/js/simulador_compra_celdabtn.js?v={{rand(0,999)}}"></script>
+<script src="{{@TELERIK}}ui/formulario/plan_compra/js/simulador_compra_celdabtn.js?v={{rand(0,9999)}}"></script>
 <!-- 5 En Cargar (Orden Obligatorio) -->
-<script src="{{@TELERIK}}ui/formulario/plan_compra/js/simulador_compra_funciones.js?v={{rand(0,999)}}"></script>
+<script src="{{@TELERIK}}ui/formulario/plan_compra/js/simulador_compra_funciones.js?v={{rand(0,9999)}}"></script>
 
 </body>
 </html>
