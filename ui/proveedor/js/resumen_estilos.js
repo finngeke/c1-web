@@ -182,15 +182,20 @@ $(function () {
 
 
 
-        }/*,
+        },
         requestEnd: function (e) {
 
             // Si al Finalizar la sincronización es de tipo "update" o "create"
             if ( (e.type === 'update') || (e.type === 'create') ) {
                 // Accion
+                // $('#grid').data('kendoGrid').dataSource.read();
+                // $('#grid').data('kendoGrid').refresh();
+
+                location.reload(true);
+
             }
 
-        }*/
+        }
     });
 
 

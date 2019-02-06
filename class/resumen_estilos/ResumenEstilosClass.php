@@ -152,7 +152,7 @@ class ResumenEstilosClass extends \parametros
     }
 
     // Actualizar Registros en PIA_RESUMEN_ESTILO_PASO
-    public static function ActualizaResumenEstilos($login,$ID,$PROFORMA,$DES_ESTILO,$COD_MOD_PAIS,$NOM_MARCA,$NOM_LINEA,$FECHA_EMBARQUE_ACORDADA,$COD_PUERTO,$DEP_DEPTO)
+    public static function ActualizaResumenEstilos($login,$ID,$PROFORMA,$DES_ESTILO,$COD_MOD_PAIS,$NOM_MARCA,$NOM_LINEA,$FECHA_EMBARQUE_ACORDADA,$COD_PUERTO,$DEP_DEPTO,$PI_VENDOR)
     {
 // agregar el cambio de estado
         $sql = "BEGIN PIA_PKG_PIAUTOMATICA.PRC_ACTUALIZA_RESUMEN_ESTILO('".$login."','".$PROFORMA."','".$DES_ESTILO."','".$COD_MOD_PAIS."','".$NOM_MARCA."','".$NOM_LINEA."','".$FECHA_EMBARQUE_ACORDADA."','".$COD_PUERTO."','".$DEP_DEPTO."', :error, :data); end;";
@@ -161,8 +161,6 @@ class ResumenEstilosClass extends \parametros
         // Se pudo actualizar el registro en PIA_RESUMEN_ESTILO_PASO, actualizo plan compra color 3
         if($data==0){
 
-            // Generar la PI del Vendor
-            $PI_VENDOR = $login."-".date('dmyhis');
             $sql_color3 = "BEGIN PIA_PKG_PIAUTOMATICA.PRC_ACT_COLOR3_RESUMEN_ESTILO('".$login."','".$PROFORMA."','".$DES_ESTILO."','".$COD_MOD_PAIS."','".$NOM_MARCA."','".$NOM_LINEA."','".$FECHA_EMBARQUE_ACORDADA."','".$COD_PUERTO."','".$DEP_DEPTO."','".$PI_VENDOR."', :error, :data); end;";
             $data_color3 = \database::getInstancia()->getConsultaSP($sql_color3,2);
 

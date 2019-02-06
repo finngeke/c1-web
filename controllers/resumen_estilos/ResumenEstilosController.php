@@ -43,6 +43,8 @@ class ResumenEstilosController extends \Control
         //$tempData = html_entity_decode($_REQUEST['models']);
         //$json = json_decode($tempData, true);
 
+        $PI_VENDOR = $f3->get('SESSION.login')."-".date('dmyhis');
+
         $arrayRegistros = [];
 
         foreach ($tempData as $columna) {
@@ -67,7 +69,7 @@ class ResumenEstilosController extends \Control
             $DEP_DEPTO = trim($columna["DEP_DEPTO"]);
 
             // Alamcenar en Array los resultados
-            array_push($arrayRegistros, array(
+            /*array_push($arrayRegistros, array(
                 "ID" => trim($ID)
                 ,"PROFORMA" => trim($PROFORMA)
                 ,"DES_ESTILO" => trim($DES_ESTILO)
@@ -77,10 +79,10 @@ class ResumenEstilosController extends \Control
                 ,"FECHA_EMBARQUE_ACORDADA" => trim($FECHA_EMBARQUE_ACORDADA)
                 ,"COD_PUERTO" => trim($COD_PUERTO)
                 ,"DEP_DEPTO" => trim($DEP_DEPTO)
-            ));
+            ));*/
 
             // Actualizar Registros en PIA_RESUMEN_ESTILO_PASO
-            echo ResumenEstilosClass::ActualizaResumenEstilos($f3->get('SESSION.login'),$ID,$PROFORMA,$DES_ESTILO,$COD_MOD_PAIS,$NOM_MARCA,$NOM_LINEA,$FECHA_EMBARQUE_ACORDADA,$COD_PUERTO,$DEP_DEPTO);
+            echo ResumenEstilosClass::ActualizaResumenEstilos($f3->get('SESSION.login'),$ID,$PROFORMA,$DES_ESTILO,$COD_MOD_PAIS,$NOM_MARCA,$NOM_LINEA,$FECHA_EMBARQUE_ACORDADA,$COD_PUERTO,$DEP_DEPTO,$PI_VENDOR);
 
 
         // Fin ForEach
