@@ -19,7 +19,7 @@
     <!--<script src="{{@TELERIK}}web/telerik/content/shared/js/console.js"></script>-->
     <script src="{{@TELERIK}}web/telerik/js/cultures/kendo.culture.es-CL.min.js"></script>
 </head>
-<body>
+<body style="height:100%;overflow-y: hidden;overflow-x: hidden;">
 
 <!-- Llamada a contenido -->
 <include href="{{ @contenido }}"/>

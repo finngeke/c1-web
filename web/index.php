@@ -196,6 +196,7 @@ $f3->route('GET /TelerikDiferenciaPresupuesto/@tipo [ajax]', 'diferencia_presupu
 // Resumen Estilos
 $f3->route('GET /resumen_estilos', 'ControlProveedor->resumen_estilos');
 $f3->route('GET /TelerikResumenEstilos/@tipo [ajax]', 'resumen_estilos\ResumenEstilosController->@tipo');
+$f3->route('POST /TelerikResumenEstilosPOST/@tipo [ajax]', 'resumen_estilos\ResumenEstilosController->@tipo');
 // Encabezado, Detalle, PI
 $f3->route('GET /encabezado_detalle_pi', 'ControlProveedor->encabezado_detalle_pi');
 $f3->route('GET /TelerikEncabezadoDetallePi/@tipo [ajax]', 'encabezado_detalle_pi\EncabezadoDetallePiController->@tipo');
