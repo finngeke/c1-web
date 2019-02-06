@@ -31,9 +31,9 @@ class ResumenEstilosClass extends \parametros
                 ,"NOM_MARCA" => utf8_encode(trim($val[2])) // UTF-8 Si me Trae String
                 ,"NOM_LINEA" => utf8_encode(trim($val[3])) // UTF-8 Si me Trae String
                 ,"COSTO_INSP" => $val[4]
-                ,"UNIDADES" => $val[5]
+                ,"UNIDADES" => number_format($val[5],0,",",".") //$val[5]
                 ,"COSTO_FOB" => $val[6]
-                ,"COSTO_TOT" => $val[7]
+                ,"COSTO_TOT" => number_format($val[7],0,",",".") //$val[7]
                 ,"MTR_PACK" => $val[8]
                 ,"CANT_INNER" => $val[9]
                 ,"FECHA_EMBARQUE_ACORDADA" => trim($val[10])
