@@ -9,7 +9,8 @@ $(function () {
 
     // BTN Volver
     function volver_atras_c1(e) {
-        window.location.href = "proveedor?cod_proveedor=18937";
+        var volver_proveedor = $("#span_cod_proveedor").text();
+        window.location.href = "proveedor?cod_proveedor="+volver_proveedor;
     }
 
     // BTN salir
@@ -215,22 +216,22 @@ $(function () {
         sortable: true, // Se puede ordenar
         scrollable: true,
         columns: [ // Columnas a Listar
-            {field: "FECHA_EMBARQUE_ACORDADA",title: "Delivery Date",minResizableWidth: 40,width: 40,filterable: {multi: true}},
+            {field: "FECHA_EMBARQUE_ACORDADA",title: "Delivery Date",minResizableWidth: 60,width: 60,filterable: {multi: true}},
             {field: "COD_PUERTO",title: "Port or Delivery",minResizableWidth: 110,width: 110, editor: PortDeliveryDropDownEditor},
             {field: "PROFORMA",title: "Vendor PI N°",minResizableWidth: 90,width: 90, editable: function (dataItem) {
                                                                                             return dataItem.COD_PUERTO.length > 0;
                                                                                         }},
-            {field: "DEP_DEPTO",title: "Depto",minResizableWidth: 35,width: 35,filterable: {multi: true}},
-            {field: "DES_ESTILO",title: "Style Name",minResizableWidth: 150,width: 150,filterable: {multi: true}},
-            {field: "COD_MOD_PAIS",title: "Country",minResizableWidth: 50,width: 50,filterable: {multi: true}},
-            {field: "NOM_MARCA",title: "Brand",minResizableWidth: 90,width: 90,filterable: {multi: true}},
-            {field: "NOM_LINEA",title: "Line",minResizableWidth: 90,width: 90,filterable: {multi: true}},
-            {field: "COSTO_INSP",title: "Inspection",minResizableWidth: 50,width: 50,filterable: {multi: true}},
-            {field: "UNIDADES",title: "Qtty",minResizableWidth: 30,width: 30,filterable: {multi: true}},
-            {field: "COSTO_FOB",title: "Final Price",minResizableWidth: 50,width: 50,filterable: {multi: true}},
-            {field: "COSTO_TOT",title: "Total Amount",minResizableWidth: 30,width: 30,filterable: {multi: true}},
-            {field: "MTR_PACK",title: "Master Pack",minResizableWidth: 30,width: 30,filterable: {multi: true}},
-            {field: "CANT_INNER",title: "# of Cartons",minResizableWidth: 35,width: 35,filterable: {multi: true}}
+            {field: "DEP_DEPTO",title: "Depto",width: 35,filterable: {multi: true}},
+            {field: "DES_ESTILO",title: "Style Name",width: 150,filterable: {multi: true}},
+            {field: "COD_MOD_PAIS",title: "Country",width: 50,filterable: {multi: true}},
+            {field: "NOM_MARCA",title: "Brand",width: 90,filterable: {multi: true}},
+            {field: "NOM_LINEA",title: "Line",width: 90,filterable: {multi: true}},
+            {field: "COSTO_INSP",title: "Inspection",width: 60,filterable: {multi: true}},
+            {field: "UNIDADES",title: "Qtty",width: 60,filterable: {multi: true}},
+            {field: "COSTO_FOB",title: "Final Price",width: 60,filterable: {multi: true}},
+            {field: "COSTO_TOT",title: "Total Amount",width: 80,filterable: {multi: true}},
+            {field: "MTR_PACK",title: "Master Pack",width: 60,filterable: {multi: true}},
+            {field: "CANT_INNER",title: "# of Cartons",width: 80,filterable: {multi: true}}
 
 
         ],
