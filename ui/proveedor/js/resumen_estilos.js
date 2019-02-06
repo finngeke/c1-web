@@ -15,9 +15,7 @@ $(function () {
 
     // BTN salir
     function salir_c1(e) {
-
         window.location.href = "salir";
-
     }
 
     // Barra de menú superior
@@ -189,11 +187,7 @@ $(function () {
             // Si al Finalizar la sincronización es de tipo "update" o "create"
             if ( (e.type === 'update') || (e.type === 'create') ) {
                 // Accion
-                // $('#grid').data('kendoGrid').dataSource.read();
-                // $('#grid').data('kendoGrid').refresh();
-
                 location.reload(true);
-
             }
 
         }
@@ -272,79 +266,7 @@ $(function () {
             }
 
 
-            /*var items = this.dataSource.data();
-            for(var i = 0; i < items.length; i++) {
-                items[i].set("Common", 100);
-            }
-            this.refresh();*/
 
-            //console.log('Proforma: '+e.values.PROFORMA+' Puerto:'+e.model.COD_PUERTO);
-
-            //console.log(e.model);
-
-            /*var gridRows = this.tbody.find("tr");
-            gridRows.each(function(e){
-
-                // var duedate = $(this).find(".duedate");
-
-                console.log('Proforma: '+e.values.PROFORMA+' Puerto:'+e.values.COD_PUERTO);
-
-
-            });*/
-
-
-            // var grid = $("#grid").getKendoGrid();
-            // var firstGridItems = grid.dataSource.data();
-            /*var currentGridItems = e.sender.dataSource.data();
-            currentGridItems.forEach(function(el){
-
-                // console.log('Puerto'+el.COD_PUERTO+' Proforma:'+el.PROFORMA);
-
-                // Si al momento de realizar un cambio me llega la PI y el Puerto de Embarque
-                if( (el.PROFORMA != null) && (el.COD_PUERTO != null)){
-                    e.preventDefault();
-                    console.log('Llega consola y Puerto');
-
-                    // Revisar que la combinación Fecha Embarque + Puerto de Embarque de todas las otras celdas sea igual
-
-                }else if( (el.PROFORMA != null) && (el.COD_PUERTO == null) ){
-                    e.preventDefault();
-                    console.log('Llega Proforma no Puerto');
-
-                }
-
-                //console.log(el.COD_PUERTO);
-
-                //console.log(el.ID);
-                //firstGridItems.forEach(function(el2){
-                    //if(el2.id == el.id){ //'id' is the field that you could check for equality
-                        //$("[data-uid='"+el.uid+"']").css("background", "#aaa");
-                    //}
-                //})
-
-
-            })*/
-
-            //console.log(e);
-
-            /*var gridRows = this.tbody.find("tr");
-            gridRows.each(function(e){
-                // var duedate = $(this).find(".duedate");
-                // custom logic
-                // console.log(e);
-            });*/
-
-            /*if (e.values.name !== "") {
-                // the user changed the COD_PUERTO field
-                if (e.values.name !== e.model.name) {
-                    console.log("COD_PUERTO is modified");
-                    alert("COD_PUERTO is modified");
-                }
-            } else {
-                e.preventDefault();
-                console.log("COD_PUERTO cannot be empty");
-                alert("COD_PUERTO cannot be empty");
-            }*/
 
 
         }/*,
