@@ -746,8 +746,8 @@
 						$f3->set('SESSION.error', $msj);
 						$f3->reroute("/invoices?cod_proveedor=$cod_proveedor");
 					}
-					
 					\proveedor\proveedor::crearDetalleLPN($cod_proveedor, $invoiceNumber);
+                    \proveedor\proveedor::borrarTemp($pl_id);
 					
 				} catch (Exception $e) {
 					$msj = $e->getMessage();

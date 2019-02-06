@@ -267,5 +267,10 @@
 			$sql = "SELECT DESC_ERROR FROM PLC_PACKING_LIST_PRV_log WHERE (PL_ID = '$pl_id') ORDER BY NRO_FILA, NRO_ERROR";
 			return \database::getInstancia()->getFilas($sql);
 		}
+        public static function borrarTemp($pl_id) {
+            $sql = "BEGIN PLC_PKG_PROVEEDOR.PRC_BORRAR_TEMP('$pl_id'); END;";
+            return \database::getInstancia()->getConsultaSP($sql);
+        }
+
 // Fin de la clase
 	}

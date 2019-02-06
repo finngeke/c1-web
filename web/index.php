@@ -68,7 +68,6 @@ $f3->route('POST /guardar/factorestimado', 'factor_est\ControlCrea->guardarFacto
 $f3->route('GET /fecha_recepcion', 'ControlFormularioCompra->fecha_recepcion');
 $f3->route('GET /ajax_temporada_fecha_recepcion/@tipo [ajax]', 'temporada\ControlFechaRecepcion->@tipo');
 
-
 /* PLAN DE COMPRA */
 $f3->route('GET /plan_compra', 'ControlFormularioCompra->inicio');
 $f3->route('GET /selecion_depto', 'ControlFormularioCompra->selecciona_depto');
@@ -206,5 +205,10 @@ $f3->route('GET /EnviarCorreo/@tipo [ajax]', 'cartero\EnviarCorreo->@tipo');
 
 /* LOG TRANSACCIONES*/
 $f3->route('GET /GuardarLogTransaccion/@tipo [ajax]', 'log_transaccion\GuardaLogTransaccion->@tipo');
+
+/* REPORTERIA EMBARQUES */
+$f3->route('GET /obtener_embarques_reporteria', 'ControlReposicion->obtener_embarques_reporteria');
+$f3->route('GET /reporteria_distribucion_mercaderia', 'ControlReposicion->reporteria_distribucion_mercaderia');
+$f3->route('GET /excel_reporte_embarques', 'ControlReposicion->excel_reporte_embarques');
 
 $f3->run();
