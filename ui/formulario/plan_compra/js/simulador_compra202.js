@@ -520,7 +520,7 @@ $(function () {
                     });
                     columnCM.format('dd/mm/yyyy');
 
-                    /*var columnCG = sheet.range('BJ2:BM'+count);
+                    var columnCG = sheet.range('BJ2:BM'+count);
                     columnCG.validation({
                         from: "0",
                         to: "999",
@@ -530,7 +530,7 @@ $(function () {
                         type: "reject",
                         titleTemplate: "Error de Formato",
                         messageTemplate: "  Sólo debes utilizar puntos."
-                    });*/
+                    });
 
                     // Rows red estado Eliminado
                     var range_estados = sheet_2.range("CR2:CR"+count);

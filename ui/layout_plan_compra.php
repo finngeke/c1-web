@@ -28,7 +28,7 @@
 <!-- 1 En Cargar (Orden Obligatorio) -->
 <script src="{{@TELERIK}}ui/formulario/plan_compra/js/simulador_compra_lectura.js?v={{rand(0,999999)}}"></script>
 <!-- 2 En Cargar (Orden Obligatorio) -->
-<script src="{{@TELERIK}}ui/formulario/plan_compra/js/simulador_compra201.js?v={{rand(0,999999)}}"></script>
+<script src="{{@TELERIK}}ui/formulario/plan_compra/js/simulador_compra202.js?v={{rand(0,999999)}}"></script>
 <!-- 3 En Cargar (Orden Obligatorio) -->
 <script src="{{@TELERIK}}ui/formulario/plan_compra/js/simulador_compra_menutop.js?v={{rand(0,999999)}}"></script>
 <!-- 4 En Cargar (Orden Obligatorio) -->
