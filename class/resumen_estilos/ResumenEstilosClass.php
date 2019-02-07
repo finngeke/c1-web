@@ -154,7 +154,7 @@ class ResumenEstilosClass extends \parametros
     // Actualizar Registros en PIA_RESUMEN_ESTILO_PASO
     public static function ActualizaResumenEstilos($login,$ID,$PROFORMA,$DES_ESTILO,$COD_MOD_PAIS,$NOM_MARCA,$NOM_LINEA,$FECHA_EMBARQUE_ACORDADA,$COD_PUERTO,$DEP_DEPTO,$PI_VENDOR)
     {
-// agregar el cambio de estado
+        // Agregar el cambio de estado
         $sql = "BEGIN PIA_PKG_PIAUTOMATICA.PRC_ACTUALIZA_RESUMEN_ESTILO('".$login."','".$PROFORMA."','".$DES_ESTILO."','".$COD_MOD_PAIS."','".$NOM_MARCA."','".$NOM_LINEA."','".$FECHA_EMBARQUE_ACORDADA."','".$COD_PUERTO."','".$DEP_DEPTO."', :error, :data); end;";
         $data = \database::getInstancia()->getConsultaSP($sql,2);
 

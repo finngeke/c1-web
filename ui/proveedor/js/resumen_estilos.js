@@ -41,6 +41,37 @@ $(function () {
     });
 
 
+    // INICIO Mensajes de Loading
+
+    // Modifica el circulo del cangando por un texto
+    /*kendo.ui.progress.messages = {
+        loading: "Please wait while we process your request..."
+    };*/
+
+    function DespliegaLoading(target) {
+        var element = $(target);
+        kendo.ui.progress(element, true);
+        setTimeout(function(){
+            kendo.ui.progress(element, false);
+        }, 10000);
+    }
+
+    function MuestraCargando(target) {
+        var element = $(target);
+        kendo.ui.progress(element, true);
+    }
+
+    function OcultaCargando(target) {
+        var element = $(target);
+        kendo.ui.progress(element, false);
+    }
+
+    // Llamada
+    // DespliegaLoading(document.body);
+
+    // FIN Mensajes de Loading
+
+
     // CBX de Port of Delivery
     function PortDeliveryDropDownEditor(container, options) {
         $('<input name="' + options.field + '"/>')
@@ -187,7 +218,11 @@ $(function () {
             // Si al Finalizar la sincronización es de tipo "update" o "create"
             if ( (e.type === 'update') || (e.type === 'create') ) {
                 // Accion
-                location.reload(true);
+                //console.log(e.type);
+                //location.reload(true);
+
+                console.log("Terminó de Actualizar");
+
             }
 
         }
@@ -232,6 +267,8 @@ $(function () {
         saveChanges: function(e) {
             if (!confirm("Are you sure you want to save all changes?")) {
                 e.preventDefault();
+            }else{
+                DespliegaLoading(document.body);
             }
         },
         save: function(e) {
@@ -254,8 +291,6 @@ $(function () {
                         //this.refresh();
 
                     }
-
-
 
                 }
 

@@ -34,15 +34,9 @@ class ResumenEstilosController extends \Control
     // Actualizar Registros de PIA_RESUMEN_ESTILO_PASO (Procesar Primero)
     public function ActualizaResumenEstilos($f3){
 
-        /*echo "<pre>";
-        var_dump($_REQUEST['models']);
-        echo "</pre>";
-        die();*/
-
         $tempData = $_REQUEST['models'];
-        //$tempData = html_entity_decode($_REQUEST['models']);
-        //$json = json_decode($tempData, true);
 
+        // Definir Número de la PI
         $PI_VENDOR = $f3->get('SESSION.login')."-".date('dmyhis');
 
         $arrayRegistros = [];
@@ -51,6 +45,7 @@ class ResumenEstilosController extends \Control
 
             // Obtengo el ID del Puerto
             $PROC_COD_PUERTO = explode(" - ",trim($columna["COD_PUERTO"]));
+
             // Asigno el ID de País
             if(trim($columna["COD_MOD_PAIS"])=='CHILE'){
                 $PROC_PAIS = 1;
@@ -87,12 +82,6 @@ class ResumenEstilosController extends \Control
 
         // Fin ForEach
         }
-
-         /*echo "<pre>";
-         var_export($arrayRegistros);
-         echo "</pre>";
-         die();*/
-
 
 
     }
