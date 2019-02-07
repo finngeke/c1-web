@@ -1,5 +1,5 @@
 $(function () {
-    kendo.culture("es-CL");
+    //kendo.culture("es-CL");
     // Actualiza Fecha de Concurrencia (Solo se agrega en este JS, ya que desde fuera no se puede llamar)
     function ActualizaConcurrencia() {
 
@@ -46,6 +46,34 @@ $(function () {
         }, 1000);
 
     }
+
+    // INICIO Mensajes de Loading
+    // Modifica el circulo del cangando por un texto
+    /*kendo.ui.progress.messages = {
+        loading: "Please wait while we process your request..."
+    };*/
+
+    function DespliegaLoading(target) {
+        var element = $(target);
+        kendo.ui.progress(element, true);
+        setTimeout(function(){
+            kendo.ui.progress(element, false);
+        }, 10000);
+    }
+
+    function MuestraCargando(target) {
+        var element = $(target);
+        kendo.ui.progress(element, true);
+    }
+
+    function OcultaCargando(target) {
+        var element = $(target);
+        kendo.ui.progress(element, false);
+    }
+
+    // Llamada
+    // DespliegaLoading(document.body);
+    // FIN Mensajes de Loading
 
 
     // ####################### FUNCIONES ASOCIADAS AL DESPLIEGUE DE DATA #######################
@@ -380,19 +408,23 @@ $(function () {
 
         $.post( crudServiceBaseUrlPOST + "ProcesaDataPlanCompra", {models: kendo.stringify(arregloGuardado)},function( data ) {
 
-            // Recargar PlanCompra
-            var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
-            var sheet = spreadsheet.activeSheet();
-            sheet.dataSource.read();
-
             // Seteo popup de notoficacion
             var popupNotification = $("#popupNotification").kendoNotification().data("kendoNotification");
 
             if(data == 0){
+
+                // Recargar PlanCompra
+                var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
+                var sheet = spreadsheet.activeSheet();
+                sheet.dataSource.read();
+
                 // Mensaje de ok
                 popupNotification.getNotifications().parent().remove();
                 popupNotification.show(" Cambios Almacenados Correctamente.", "success");
             }else{
+
+                OcultaCargando(document.body);
+                
                 // Mensaje de Error
                 popupNotification.getNotifications().parent().remove();
                 popupNotification.show(data, "error");
@@ -404,6 +436,8 @@ $(function () {
 
          } ).fail(function() {
 
+            OcultaCargando(document.body);
+
             $("#tb_guardar_cambios").removeClass("k-state-disabled");
             $("#tb_cancelar_cambios").removeClass("k-state-disabled");
 
@@ -413,54 +447,6 @@ $(function () {
 
         });
 
-        /*$.ajax({
-            //type: "POST",
-            url: crudServiceBaseUrl + "ProcesaDataPlanCompra",
-            //data: {models: kendo.stringify(e.data)},
-            data: {models: kendo.stringify(arregloGuardado)},
-            contentType: "application/json",
-            //dataType: "json",
-            success: function (result) {
-                //kendo.log(result);
-                e.success(result.Updated, "update");
-                e.success(result.Created, "create");
-                e.success(result.Destroyed, "destroy");
-
-                // Recargar PlanCompra
-                var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
-                var sheet = spreadsheet.activeSheet();
-                sheet.dataSource.read();
-
-                // Seteo popup de notoficacion
-                var popupNotification = $("#popupNotification").kendoNotification().data("kendoNotification");
-
-                if(result == 0){
-                    // Mensaje de ok
-                    popupNotification.getNotifications().parent().remove();
-                    popupNotification.show(" Cambios Almacenados Correctamente.", "success");
-                }else{
-                    // Mensaje de Error
-                    popupNotification.getNotifications().parent().remove();
-                    popupNotification.show(result, "error");
-                }
-
-                $("#tb_guardar_cambios").removeClass("k-state-disabled");
-                $("#tb_cancelar_cambios").removeClass("k-state-disabled");
-
-            },
-            error: function (xhr, httpStatusMessage, customErrorMessage) {
-
-                $("#tb_guardar_cambios").removeClass("k-state-disabled");
-                $("#tb_cancelar_cambios").removeClass("k-state-disabled");
-
-
-                // Mensaje de Error
-                popupNotification.getNotifications().parent().remove();
-                popupNotification.show(" Error en el Guardado.", "error");
-
-                console.log(xhr.responseText+" / "+httpStatusMessage+" / "+customErrorMessage);
-            }
-        });*/
 
     }
 
@@ -485,11 +471,14 @@ $(function () {
 
     // Cargar info en el DataSource
     var dataSource = new kendo.data.DataSource({
-        /*requestStart:function(e){
-        },*/
+        requestStart:function(e){
+            MuestraCargando(document.body);
+        },
         requestEnd: function (e) {
+
             // Una vez que se carga la función de poder editar, asigno la columnaal editor
             if (e.type === 'read') {
+
                 setTimeout(function() {
 
                     // Asigno el CBX de País
@@ -597,6 +586,7 @@ $(function () {
                     //sheet.range("BJ2:BM"+count).format("#,##0.00");
 
 
+                    OcultaCargando(document.body);
 
                 });
             }
@@ -1276,7 +1266,6 @@ $(function () {
 
     // Función Guardar Cambios Plan de Compra
     $("#guardar_cambios_pc").click(function () {
-
 
         // Verificar Permisos ()
         if(localStorage.getItem("T0001")){
