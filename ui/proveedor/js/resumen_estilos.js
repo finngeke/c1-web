@@ -214,16 +214,22 @@ $(function () {
 
         },
         requestEnd: function (e) {
-
+            /*console.log(e);
             // Si al Finalizar la sincronización es de tipo "update" o "create"
-            if ( (e.type === 'update') || (e.type === 'create') ) {
+            if ( e.type === 'update' ) {
                 // Accion
                 //console.log(e.type);
                 //location.reload(true);
 
-                console.log("Terminó de Actualizar");
+                if(e.response==='OK'){
+                    console.log("Terminó de Actualizar");
+                }else{
+                    console.log("NO Terminó de Actualizar");
+                }
 
-            }
+
+
+            }*/
 
         }
     });
@@ -267,9 +273,9 @@ $(function () {
         saveChanges: function(e) {
             if (!confirm("Are you sure you want to save all changes?")) {
                 e.preventDefault();
-            }else{
+            }/*else{
                 DespliegaLoading(document.body);
-            }
+            }*/
         },
         save: function(e) {
 

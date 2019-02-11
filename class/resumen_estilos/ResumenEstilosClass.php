@@ -151,8 +151,29 @@ class ResumenEstilosClass extends \parametros
 
     }
 
+    // Listar Incoterm
+    public static function ListarIncoterm($login, $pais_filtro_ripley)
+    {
+
+        $sql = "SELECT COD_INCOTERM, NOM_INCOTERM FROM PIA_INCOTERM ORDER BY NOM_INCOTERM";
+        $data = \database::getInstancia()->getFilas($sql);
+
+        // Transformo a array asociativo
+        $array1 = [];
+        foreach ($data as $va1) {
+            array_push($array1, array(
+                    "COD_INCOTERM" => utf8_encode($va1[0]),
+                    "NOM_INCOTERM" => utf8_encode($va1[1])
+                )
+            );
+        }
+
+        return $array1;
+
+    }
+
     // Actualizar Registros en PIA_RESUMEN_ESTILO_PASO
-    public static function ActualizaResumenEstilos($login,$ID,$PROFORMA,$DES_ESTILO,$COD_MOD_PAIS,$NOM_MARCA,$NOM_LINEA,$FECHA_EMBARQUE_ACORDADA,$COD_PUERTO,$DEP_DEPTO,$PI_VENDOR)
+    public static function ActualizaResumenEstilos($login,$ID,$PROFORMA,$DES_ESTILO,$COD_MOD_PAIS,$NOM_MARCA,$NOM_LINEA,$FECHA_EMBARQUE_ACORDADA,$COD_PUERTO,$DEP_DEPTO)
     {
         // Agregar el cambio de estado
         $sql = "BEGIN PIA_PKG_PIAUTOMATICA.PRC_ACTUALIZA_RESUMEN_ESTILO('".$login."','".$PROFORMA."','".$DES_ESTILO."','".$COD_MOD_PAIS."','".$NOM_MARCA."','".$NOM_LINEA."','".$FECHA_EMBARQUE_ACORDADA."','".$COD_PUERTO."','".$DEP_DEPTO."', :error, :data); end;";
@@ -161,14 +182,24 @@ class ResumenEstilosClass extends \parametros
         // Se pudo actualizar el registro en PIA_RESUMEN_ESTILO_PASO, actualizo plan compra color 3
         if($data==0){
 
-            $sql_color3 = "BEGIN PIA_PKG_PIAUTOMATICA.PRC_ACT_COLOR3_RESUMEN_ESTILO('".$login."','".$PROFORMA."','".$DES_ESTILO."','".$COD_MOD_PAIS."','".$NOM_MARCA."','".$NOM_LINEA."','".$FECHA_EMBARQUE_ACORDADA."','".$COD_PUERTO."','".$DEP_DEPTO."','".$PI_VENDOR."', :error, :data); end;";
+            // Acción: Crear / Eliminar / Actualizar
+            LogTransaccionClass::GuardaLogTransaccion($login, 0, $DEP_DEPTO, 'PIA Pantalla 4 - UPDATE','Actualizar', $sql, 'OK' );
+
+            $sql_color3 = "BEGIN PIA_PKG_PIAUTOMATICA.PRC_ACT_COLOR3_RESUMEN_ESTILO('".$login."','".$PROFORMA."','".$DES_ESTILO."','".$COD_MOD_PAIS."','".$NOM_MARCA."','".$NOM_LINEA."','".$FECHA_EMBARQUE_ACORDADA."','".$COD_PUERTO."','".$DEP_DEPTO."', :error, :data); end;";
             $data_color3 = \database::getInstancia()->getConsultaSP($sql_color3,2);
 
             if($data_color3==0){
 
+                // Acción: Crear / Eliminar / Actualizar
+                LogTransaccionClass::GuardaLogTransaccion($login, 0, $DEP_DEPTO, 'PIA Pantalla 4 - UPDATE C3','Actualizar', $sql_color3, 'OK' );
+
+
                 return json_encode("OK");
                 die();
 
+            }else{
+                return json_encode("NO ENCONTRADO ".$data_color3);
+                die();
             }
 
 
@@ -178,6 +209,55 @@ class ResumenEstilosClass extends \parametros
         }
 
     }
+
+    // Actualizar Registros en PIA_RESUMEN_ESTILO_PASO
+    public static function ActualizaResumenEstiloPaso($login,$ID,$PROFORMA,$DES_ESTILO,$COD_MOD_PAIS,$NOM_MARCA,$NOM_LINEA,$FECHA_EMBARQUE_ACORDADA,$COD_PUERTO,$DEP_DEPTO)
+    {
+        // Agregar el cambio de estado
+        $sql = "BEGIN PIA_PKG_PIAUTOMATICA.PRC_ACTUALIZA_RESUMEN_ESTILO('".$login."','".$PROFORMA."','".$DES_ESTILO."','".$COD_MOD_PAIS."','".$NOM_MARCA."','".$NOM_LINEA."','".$FECHA_EMBARQUE_ACORDADA."','".$COD_PUERTO."','".$DEP_DEPTO."', :error, :data); end;";
+        $data = \database::getInstancia()->getConsultaSP($sql,2);
+
+        // Se pudo actualizar el registro en PIA_RESUMEN_ESTILO_PASO, actualizo plan compra color 3
+        if($data==0){
+
+            // Acción: Crear / Eliminar / Actualizar
+            LogTransaccionClass::GuardaLogTransaccion($login, 0, $DEP_DEPTO, 'PIA Pantalla 4 - UPDATE','Actualizar', $sql, 'OK' );
+
+            //return json_encode("OK");
+            return "OK";
+            die();
+
+
+        }else{
+            //return json_encode("ERROR");
+            return "ERROR";
+            die();
+        }
+
+    }
+
+    // Actualizar Registros en COLOR 3
+    public static function ActualizaColor3($login,$ID,$PROFORMA,$DES_ESTILO,$COD_MOD_PAIS,$NOM_MARCA,$NOM_LINEA,$FECHA_EMBARQUE_ACORDADA,$COD_PUERTO,$DEP_DEPTO)
+    {
+
+        $sql_color3 = "BEGIN PIA_PKG_PIAUTOMATICA.PRC_ACT_COLOR3_RESUMEN_ESTILO('".$login."','".$PROFORMA."','".$DES_ESTILO."','".$COD_MOD_PAIS."','".$NOM_MARCA."','".$NOM_LINEA."','".$FECHA_EMBARQUE_ACORDADA."','".$COD_PUERTO."','".$DEP_DEPTO."', :error, :data); end;";
+        $data_color3 = \database::getInstancia()->getConsultaSP($sql_color3,2);
+
+        if($data_color3==0){
+
+            // Acción: Crear / Eliminar / Actualizar
+            LogTransaccionClass::GuardaLogTransaccion($login, 0, $DEP_DEPTO, 'PIA Pantalla 4 - UPDATE C3','Actualizar', $sql_color3, 'OK' );
+
+            return "OK";
+            die();
+
+        }else{
+            return "ERROR";
+            die();
+        }
+
+    }
+
 
 // Fin de la Clase
 }

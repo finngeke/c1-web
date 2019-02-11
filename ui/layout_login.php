@@ -26,10 +26,20 @@
                  box-shadow: 0 8px 12px 2px rgba(0, 0, 0, .5);
                  border-radius:5px;">
 			<include href="{{ @contenido }}" />
+            <check if="{{ @ESTADO_C1=='LIVE' }}">
 			<div class="callout callout-{{@mensaje.color}}" style="filter:alpha(opacity=80); opacity:0.80;">
 				<h4><i class="fa {{@mensaje.icon}}"></i> {{@mensaje.header}}</h4>
 				{{@mensaje.message}}
 			</div>
+            </check>
+
+            <check if="{{ @ESTADO_C1=='MANTENCION' }}">
+                <div class="callout callout-{{@mensaje.color}}" style="filter:alpha(opacity=80); opacity:0.80;">
+                    <h4><i class="fa {{@mensaje.icon}}"></i> Estamos Trabajando</h4>
+                    Nos encontramos realizando algunas modificaciones.
+                    <br><br>Recuerda mantener limpio el cache de tu explorador, para que puedas ver siempre las últimas modificaciones y mejoras realizadas al sistema.
+                </div>
+            </check>
 			<hr>
 			<!--¿No puedes acceder a tu cuenta? <a href="mailto:epacheco@ripley.cl&amp;subject=Problemas con el ingreso C1 Web" >Haz clic aquí </a> -->
 		</div>

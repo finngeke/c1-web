@@ -30,17 +30,27 @@ class ResumenEstilosController extends \Control
         echo json_encode(ResumenEstilosClass::ListarPortDelivery($f3->get('SESSION.login'),1));
     }
 
+    // Listar Incoterm COD_PROVEEDOR
+    public function ListarIncoterm($f3){
+        echo json_encode(ResumenEstilosClass::ListarIncoterm($f3->get('SESSION.login'),1));
+    }
+
 
     // Actualizar Registros de PIA_RESUMEN_ESTILO_PASO (Procesar Primero)
     public function ActualizaResumenEstilos($f3){
 
         $tempData = $_REQUEST['models'];
 
-        // Definir Número de la PI
-        $PI_VENDOR = $f3->get('SESSION.login')."-".date('dmyhis');
+        $arrayRegistrosOK = [];
+        $arrayRegistrosERROR = [];
 
-        $arrayRegistros = [];
+        $arrayRegistrosC3OK = [];
+        $arrayRegistrosC3ERROR = [];
 
+        $total_recepcionado = count($tempData);
+
+
+        // Actualiza PIA_RESUMEN_ESTILO_PASO
         foreach ($tempData as $columna) {
 
             // Obtengo el ID del Puerto
@@ -63,7 +73,7 @@ class ResumenEstilosController extends \Control
             $COD_PUERTO = trim($PROC_COD_PUERTO[0]);
             $DEP_DEPTO = trim($columna["DEP_DEPTO"]);
 
-            // Alamcenar en Array los resultados
+            // Alamacenar en Array los resultados
             /*array_push($arrayRegistros, array(
                 "ID" => trim($ID)
                 ,"PROFORMA" => trim($PROFORMA)
@@ -76,14 +86,99 @@ class ResumenEstilosController extends \Control
                 ,"DEP_DEPTO" => trim($DEP_DEPTO)
             ));*/
 
-            // Actualizar Registros en PIA_RESUMEN_ESTILO_PASO
-            echo ResumenEstilosClass::ActualizaResumenEstilos($f3->get('SESSION.login'),$ID,$PROFORMA,$DES_ESTILO,$COD_MOD_PAIS,$NOM_MARCA,$NOM_LINEA,$FECHA_EMBARQUE_ACORDADA,$COD_PUERTO,$DEP_DEPTO,$PI_VENDOR);
+            // Actualizar Registros en PIA_RESUMEN_ESTILO_PASO [ORIGINAL]
+            // echo ResumenEstilosClass::ActualizaResumenEstilos($f3->get('SESSION.login'),$ID,$PROFORMA,$DES_ESTILO,$COD_MOD_PAIS,$NOM_MARCA,$NOM_LINEA,$FECHA_EMBARQUE_ACORDADA,$COD_PUERTO,$DEP_DEPTO);
 
+            $res = ResumenEstilosClass::ActualizaResumenEstiloPaso($f3->get('SESSION.login'),$ID,$PROFORMA,$DES_ESTILO,$COD_MOD_PAIS,$NOM_MARCA,$NOM_LINEA,$FECHA_EMBARQUE_ACORDADA,$COD_PUERTO,$DEP_DEPTO);
+
+             if($res=='OK'){
+                 array_push($arrayRegistrosOK, array(
+                     "ID" => trim($ID)
+                 ,"PROFORMA" => trim($PROFORMA)
+                 ,"DES_ESTILO" => trim($DES_ESTILO)
+                 ,"COD_MOD_PAIS" => trim($COD_MOD_PAIS)
+                 ,"NOM_MARCA" => trim($NOM_MARCA)
+                 ,"NOM_LINEA" => trim($NOM_LINEA)
+                 ,"FECHA_EMBARQUE_ACORDADA" => trim($FECHA_EMBARQUE_ACORDADA)
+                 ,"COD_PUERTO" => trim($COD_PUERTO)
+                 ,"DEP_DEPTO" => trim($DEP_DEPTO)
+                 ));
+             }elseif($res=='ERROR'){
+                 array_push($arrayRegistrosERROR, array(
+                     "ID" => trim($ID)
+                 ,"PROFORMA" => trim($PROFORMA)
+                 ,"DES_ESTILO" => trim($DES_ESTILO)
+                 ,"COD_MOD_PAIS" => trim($COD_MOD_PAIS)
+                 ,"NOM_MARCA" => trim($NOM_MARCA)
+                 ,"NOM_LINEA" => trim($NOM_LINEA)
+                 ,"FECHA_EMBARQUE_ACORDADA" => trim($FECHA_EMBARQUE_ACORDADA)
+                 ,"COD_PUERTO" => trim($COD_PUERTO)
+                 ,"DEP_DEPTO" => trim($DEP_DEPTO)
+                 ));
+             }
 
         // Fin ForEach
         }
 
+        // Actualiza COLOR 3
+        if( $total_recepcionado == count($arrayRegistrosOK) ){
 
+            foreach ($arrayRegistrosOK as $columna) {
+
+                $ID = trim($columna["ID"]);
+                $PROFORMA = trim($columna["PROFORMA"]);
+                $DES_ESTILO = trim($columna["DES_ESTILO"]);
+                $COD_MOD_PAIS = $columna["COD_MOD_PAIS"];
+                $NOM_MARCA = trim($columna["NOM_MARCA"]);
+                $NOM_LINEA = trim($columna["NOM_LINEA"]);
+                $FECHA_EMBARQUE_ACORDADA = trim($columna["FECHA_EMBARQUE_ACORDADA"]);
+                $COD_PUERTO = trim($columna["COD_PUERTO"]);
+                $DEP_DEPTO = trim($columna["DEP_DEPTO"]);
+
+                $res2 = ResumenEstilosClass::ActualizaColor3($f3->get('SESSION.login'),$ID,$PROFORMA,$DES_ESTILO,$COD_MOD_PAIS,$NOM_MARCA,$NOM_LINEA,$FECHA_EMBARQUE_ACORDADA,$COD_PUERTO,$DEP_DEPTO);
+
+                if($res2=='OK'){
+                    array_push($arrayRegistrosC3OK, array(
+                        "ID" => trim($ID)
+                    ,"PROFORMA" => trim($PROFORMA)
+                    ,"DES_ESTILO" => trim($DES_ESTILO)
+                    ,"COD_MOD_PAIS" => trim($COD_MOD_PAIS)
+                    ,"NOM_MARCA" => trim($NOM_MARCA)
+                    ,"NOM_LINEA" => trim($NOM_LINEA)
+                    ,"FECHA_EMBARQUE_ACORDADA" => trim($FECHA_EMBARQUE_ACORDADA)
+                    ,"COD_PUERTO" => trim($COD_PUERTO)
+                    ,"DEP_DEPTO" => trim($DEP_DEPTO)
+                    ));
+                }elseif($res2=='ERROR'){
+                    array_push($arrayRegistrosC3ERROR, array(
+                        "ID" => trim($ID)
+                    ,"PROFORMA" => trim($PROFORMA)
+                    ,"DES_ESTILO" => trim($DES_ESTILO)
+                    ,"COD_MOD_PAIS" => trim($COD_MOD_PAIS)
+                    ,"NOM_MARCA" => trim($NOM_MARCA)
+                    ,"NOM_LINEA" => trim($NOM_LINEA)
+                    ,"FECHA_EMBARQUE_ACORDADA" => trim($FECHA_EMBARQUE_ACORDADA)
+                    ,"COD_PUERTO" => trim($COD_PUERTO)
+                    ,"DEP_DEPTO" => trim($DEP_DEPTO)
+                    ));
+                }
+
+            }
+
+        }else{
+            return "ERROR";
+        }
+
+        echo "<pre>";
+        echo "CORRECTO: <br>";
+        var_dump($arrayRegistrosC3OK);
+        echo "<br>";
+        echo "INCORRECTO: <br>";
+        var_dump($arrayRegistrosC3ERROR);
+        echo "</pre>";
+
+
+    // Fin de ActualizaResumenEstilos
     }
 
 

@@ -8,19 +8,68 @@ class EncabezadoDetallePiClass extends \parametros
 {
 
     // Listar PI => El 1 Corresponde al país, el que se va enviar como variable en algún momento
-    public static function ListarPi($temporada, $depto,$login,$pais)
+    public static function ListarP5Encabezado($login,$pais)
     {
 
-        $sql = "SELECT CAMPO1,CAMPO3,CAMPO3 FROM TABLA";
-        $data = \database::getInstancia()->getFilas($sql);
+        $sql = "BEGIN PIA_PKG_PIAUTOMATICA.PRC_LISTAR_P5_ENCABEZADO('".$login."',$pais, :data); end;";
+        $data = \database::getInstancia()->getConsultaSP($sql,1);
 
         // Transformo a array asociativo
         $array = [];
         foreach ($data as $val) {
             array_push($array, array(
-                 "CAMPO1" => $val[0]
-                ,"CAMPO2" => $val[1]
-                ,"CAMPO3" => utf8_encode($val[2]) // UTF-8 Si me Trae String
+                "ID" => utf8_encode($val[8].'||'.$val[1].'||'.$val[2].'||'.$val[3].'||'.$val[4].'||'.$val[9])
+                ,"NOM_EST_C1" => utf8_encode($val[0])
+                ,"PI_VENDOR" => utf8_encode($val[1])
+                ,"PROFORMA" => utf8_encode($val[2]) // UTF-8 Si me Trae String
+                ,"NOM_PAIS" => utf8_encode($val[3]) // UTF-8 Si me Trae String
+                ,"INCOTERM" => $val[4]
+                ,"COD_PUERTO" => utf8_encode($val[5]) // UTF-8 Si me Trae String
+                ,"TOTAL_WEIGHT" => $val[6]
+                ,"CBM" => $val[7]
+                ,"ESTADO" => $val[8]
+                ,"COD_PUERTO_COD" => $val[9]
+                ,"DEP_DEPTO" => $val[10]
+                ,"COD_MOD_PAIS" => $val[11]
+                )
+            );
+        }
+
+        return $array;
+
+    }
+
+    // Listar Cuerpo
+    public static function ListarP5Cuerpo($login,$pais,$proforma)
+    {
+
+        $sql = "BEGIN PIA_PKG_PIAUTOMATICA.PRC_LISTAR_P5_CUERPO('".$login."',$pais,'".$proforma."', :data); end;";
+        $data = \database::getInstancia()->getConsultaSP($sql,1);
+
+        // Transformo a array asociativo
+        $array = [];
+        foreach ($data as $val) {
+            array_push($array, array(
+                 "ID" => utf8_encode($val[17].'||'.$val[1].'||'.$val[2].'||'.$val[3].'||'.$val[4].'||'.$val[5].'||'.$val[6].'||'.$val[18])
+                ,"NOM_EST_C1" => utf8_encode($val[0])
+                ,"PI_VENDOR" => utf8_encode($val[1])
+                ,"PROFORMA" => utf8_encode($val[2])
+                ,"DES_ESTILO" => utf8_encode($val[3])
+                ,"NOM_PAIS" => utf8_encode($val[4])
+                ,"NOM_MARCA" => utf8_encode($val[5])
+                ,"NOM_LINEA" => utf8_encode($val[6])
+                ,"COSTO_INSP" => $val[7]
+                ,"UNIDADES" => $val[8]
+                ,"COSTO_FOB" => $val[9]
+                ,"COSTO_TOT" => $val[10]
+                ,"MTR_PACK" => $val[11]
+                ,"CANT_INNER" => $val[12]
+                ,"FECHA_EMBARQUE_ACORDADA" => utf8_encode($val[13])
+                ,"NOM_PUERTO" => utf8_encode($val[14])
+                ,"DESTALLA" => utf8_encode($val[15])
+                ,"COLOR" => utf8_encode($val[16])
+                ,"ESTADO" => $val[17]
+                ,"COD_PUERTO" => $val[18]
                 )
             );
         }
@@ -73,7 +122,6 @@ class EncabezadoDetallePiClass extends \parametros
 
     }
 
-
     // Listar Temporada
     public static function ListarTemporada($login,$pais)
     {
@@ -117,7 +165,6 @@ class EncabezadoDetallePiClass extends \parametros
     }
 
 
-
     // Listar Depto
     public static function ListarDepto($login,$pais)
     {
@@ -136,6 +183,27 @@ class EncabezadoDetallePiClass extends \parametros
         }
 
         return $array;
+
+    }
+
+    // Listar Incoterm
+    public static function ListarIncoterm($login, $pais_filtro_ripley)
+    {
+
+        $sql = "SELECT COD_INCOTERM, NOM_INCOTERM FROM PIA_INCOTERM ORDER BY NOM_INCOTERM";
+        $data = \database::getInstancia()->getFilas($sql);
+
+        // Transformo a array asociativo
+        $array1 = [];
+        foreach ($data as $va1) {
+            array_push($array1, array(
+                    "COD_INCOTERM" => utf8_encode($va1[0]),
+                    "NOM_INCOTERM" => utf8_encode($va1[1])
+                )
+            );
+        }
+
+        return $array1;
 
     }
 
