@@ -1438,7 +1438,7 @@ $(function () {
                     if(localStorage.getItem("T0003")){
 
 
-                        if( (PROFORMA.length==0) || (PROFORMA==null) || (PROFORMA=="") || (ARCHIVO=="Cargado..") || (ESTADOC1==24)){
+                        if( (PROFORMA.length==0) || (PROFORMA==null) || (PROFORMA=="") || (ARCHIVO=="Cargado..") || (ESTADOC1>0)){
                             popupNotification.getNotifications().parent().remove();
                             popupNotification.show(" Seleccione un registro con proforma y archivo sin cargar.", "info");
                         }else {
