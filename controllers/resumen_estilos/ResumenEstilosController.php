@@ -135,7 +135,7 @@ class ResumenEstilosController extends \Control
                 $COD_PUERTO = trim($columna["COD_PUERTO"]);
                 $DEP_DEPTO = trim($columna["DEP_DEPTO"]);
 
-                $res2 = ResumenEstilosClass::ActualizaColor3($f3->get('SESSION.login'),$ID,$PROFORMA,$DES_ESTILO,$COD_MOD_PAIS,$NOM_MARCA,$NOM_LINEA,$FECHA_EMBARQUE_ACORDADA,$COD_PUERTO,$DEP_DEPTO);
+                /*$res2 = ResumenEstilosClass::ActualizaColor3($f3->get('SESSION.login'),$ID,$PROFORMA,$DES_ESTILO,$COD_MOD_PAIS,$NOM_MARCA,$NOM_LINEA,$FECHA_EMBARQUE_ACORDADA,$COD_PUERTO,$DEP_DEPTO);
 
                 if($res2=='OK'){
                     array_push($arrayRegistrosC3OK, array(
@@ -161,13 +161,24 @@ class ResumenEstilosController extends \Control
                     ,"COD_PUERTO" => trim($COD_PUERTO)
                     ,"DEP_DEPTO" => trim($DEP_DEPTO)
                     ));
-                }
+                }*/
 
             }
 
         }else{
             return "ERROR";
         }
+
+
+        echo "<pre>";
+        echo "CORRECTO: <br>";
+        var_dump($arrayRegistrosOK);
+        echo "<br>";
+        echo "INCORRECTO: <br>";
+        var_dump($arrayRegistrosERROR);
+        echo "</pre>";
+
+        echo "<br>########################################<br>";
 
         echo "<pre>";
         echo "CORRECTO: <br>";
@@ -176,6 +187,7 @@ class ResumenEstilosController extends \Control
         echo "INCORRECTO: <br>";
         var_dump($arrayRegistrosC3ERROR);
         echo "</pre>";
+
 
 
     // Fin de ActualizaResumenEstilos

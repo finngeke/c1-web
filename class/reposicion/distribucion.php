@@ -77,8 +77,8 @@
 			return \database::getInstancia()->getConsultaSP($sql, 1);
 		}
 		
-		public static function detalleContenedoresSucursales($cod_temporada, $dep_depto, $id_color3, $nro_embarque, $nro_contenedor, $cod_padre, $login) {
-			$sql = "BEGIN PLC_PKG_DISTRIBUCION.PRC_SUCURSALES_CONTENEDOR($cod_temporada, '$dep_depto', $id_color3, $nro_embarque, '$nro_contenedor', '$cod_padre', '$login', :data); END;";
+		public static function detalleContenedoresSucursales($cod_temporada, $dep_depto, $id_color3, $nro_embarque, $nro_contenedor, $cod_padre,$codMarca, $login) {
+			$sql = "BEGIN PLC_PKG_DISTRIBUCION.PRC_SUCURSALES_CONTENEDOR($cod_temporada, '$dep_depto', $id_color3, $nro_embarque, '$nro_contenedor', '$cod_padre','$codMarca', '$login', :data); END;";
 			return \database::getInstancia()->getConsultaSP($sql, 1);
 		}
 		
@@ -98,6 +98,7 @@
 					"nroEmbarque" => $nro_embarque,
 					"nroContenedor" => $nro_contenedor
 				);
+
 			}
 			$delete = array_map("unserialize", array_unique(array_map("serialize", $delete)));
 			$sql = "BEGIN ";
@@ -189,4 +190,63 @@
 					GROUP BY A.NRO_EMBARQUE, A.NRO_CONTENEDOR";
 			return \database::getInstancia()->getFila($sql);
 		}
+
+        public static function excel_distribucion_mercaderia($nro_embarque) {
+
+            $sql = "SELECT  E.NOM_TEMPORADA_CORTO  TEMPORADA
+                       ,C.DEP_DEPTO            COD_DEPTO
+                       ,B.NOM_DEPT             DES_DEPTO
+                       ,D.COD_PADRE            COD_ESTILO
+                       ,A.DES_ESTILO             
+                       ,A.NOM_COLOR            DES_COLOR
+                       ,A.NOM_VENTANA          VENTANA
+                       ,A.NOM_MARCA
+                       ,A.EVENTO
+                       ,C.NRO_EMBARQUE
+                       ,CASE WHEN A.CURVATALLA IS NULL THEN
+                       (A.CURV1||','||A.CURV2||','||A.CURV3||','||A.CURV4||','||A.CURV5||','||A.CURV6||','||A.CURV7||','||A.CURV8||','||A.CURV9)
+                        ELSE A.CURVATALLA END CURVATALLA
+                       ,A.N_CURVASXCAJAS      CURVAS_CAJAS
+                       ,C.LPN_NUMBER
+                       ,C.COD_TDA
+                       ,A.TIPO_EMPAQUE
+                       ,SUM(C.CANTIDAD) UNIDADES
+                       ,C.NRO_VARIACION
+                       ,C.NRO_FACTURA
+                       ,C.PI_NUMBER
+                       ,C.PO_NUMBER
+                       ,C.COSTO
+                       ,C.PREFIJO
+                       ,C.FECHA_DEMORA
+                       ,C.NRO_CONTENEDOR
+                       ,C.NRO_CITA
+                       ,C.NRO_DISTRO 
+                    FROM PLC_DETALLE_LPN C
+                    LEFT JOIN PLC_TEMPORADA E ON C.COD_TEMPORADA = E.COD_TEMPORADA
+                    LEFT JOIN (SELECT *FROM (SELECT COD_DEPT,NOM_DEPT,row_number() over(partition by COD_DEPT order by NOM_DEPT)RNK
+                    FROM (SELECT distinct COD_DEPT,NOM_DEPT FROM PLC_DEPTO_MARCA ORDER BY 1,2)) WHERE RNK = 1) B ON C.DEP_DEPTO = B.COD_DEPT
+                    INNER JOIN PLC_PLAN_COMPRA_COLOR_3 A ON  A.COD_TEMPORADA = C.COD_TEMPORADA 
+                    AND A.DEP_DEPTO = C.DEP_DEPTO
+                    AND A.ID_COLOR3 = C.ID_COLOR3           
+                    LEFT JOIN PLC_PLAN_COMPRA_OC   D ON C.COD_TEMPORADA = D.COD_TEMPORADA
+                    AND C.DEP_DEPTO = D.DEP_DEPTO
+                    AND C.ID_COLOR3 = D.ID_COLOR3          
+                    WHERE C.NRO_EMBARQUE = '".$nro_embarque."'
+                    GROUP BY E.NOM_TEMPORADA_CORTO,C.DEP_DEPTO,B.NOM_DEPT,D.COD_PADRE,A.DES_ESTILO,A.NOM_COLOR,A.NOM_VENTANA,A.NOM_MARCA,A.EVENTO,C.NRO_EMBARQUE
+                    ,A.CURVATALLA,(A.CURV1||','||A.CURV2||','||A.CURV3||','||A.CURV4||','||A.CURV5||','||A.CURV6||','||A.CURV7||','||A.CURV8||','||A.CURV9) 
+                    ,A.N_CURVASXCAJAS,C.LPN_NUMBER,COD_TDA,A.TIPO_EMPAQUE,C.NRO_VARIACION,C.NRO_FACTURA,C.PI_NUMBER,C.PO_NUMBER,C.COSTO,C.PREFIJO,C.FECHA_DEMORA
+                    ,C.NRO_CONTENEDOR,C.NRO_CITA,C.NRO_DISTRO 
+                    ORDER BY C.LPN_NUMBER ASC
+                    ";
+
+            return \database::getInstancia()->getFilas($sql);
+
+        }
+
+
+        public static function listaEmbarquesReporteria() {
+            $sql = "BEGIN PLC_PKG_DISTRIBUCION.PRC_LISTA_EMBARQUES_REPORTERIA(:data); END;";
+            return \database::getInstancia()->getConsultaSP($sql, 1);
+        }
+
 	}

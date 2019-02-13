@@ -243,7 +243,7 @@ class ResumenEstilosClass extends \parametros
         $sql_color3 = "BEGIN PIA_PKG_PIAUTOMATICA.PRC_ACT_COLOR3_RESUMEN_ESTILO('".$login."','".$PROFORMA."','".$DES_ESTILO."','".$COD_MOD_PAIS."','".$NOM_MARCA."','".$NOM_LINEA."','".$FECHA_EMBARQUE_ACORDADA."','".$COD_PUERTO."','".$DEP_DEPTO."', :error, :data); end;";
         $data_color3 = \database::getInstancia()->getConsultaSP($sql_color3,2);
 
-        if($data_color3==0){
+        if($data_color3 == 0){
 
             // Acción: Crear / Eliminar / Actualizar
             LogTransaccionClass::GuardaLogTransaccion($login, 0, $DEP_DEPTO, 'PIA Pantalla 4 - UPDATE C3','Actualizar', $sql_color3, 'OK' );

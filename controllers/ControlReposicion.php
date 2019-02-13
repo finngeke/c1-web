@@ -172,7 +172,8 @@
 			foreach ($data as $row) {
 				$cajasT = \LibraryHelper::convertNumber($row[9]);
                 $distEstilo = \LibraryHelper::convertNumber($row[15]);
-				$sucs = \reposicion\distribucion::detalleContenedoresSucursales($row[10], $row[11], $row[12], $nroEmbarque, $nroContenedor, $row[2], $login);
+                $codMarca = \LibraryHelper::convertNumber($row[20]);
+                $sucs = \reposicion\distribucion::detalleContenedoresSucursales($row[10], $row[11], $row[12], $nroEmbarque, $nroContenedor, $row[2],$codMarca, $login);
 				$aux = [];
                 $totalDist = 0;
                 $cantTPlan = 0;
@@ -195,8 +196,9 @@
                     $cant_c = \LibraryHelper::convertNumber($suc[8]);
                     $cant_i = \LibraryHelper::convertNumber($suc[9]);
                     $cantTPlan = ($cant_a * $tdas_a) + ($cant_b * $tdas_b) + ($cant_c * $tdas_c) + ($cant_i * $tdas_i);
-                    $tdas_in_cluster = \LibraryHelper::convertNumber($suc[10]);
-                    $distEstiloTda = \LibraryHelper::convertNumber($suc[11]);
+                    $distEstiloTda = \LibraryHelper::convertNumber($suc[10]);
+
+                    $hayDist = \LibraryHelper::convertNumber($suc[11]);
 
                     $c = 0;
                     $distOld =false;
@@ -218,36 +220,45 @@
                             $cantPlan= '0';
                     }
 
-                    if($distEstiloTda < $cantPlan) {
+                    if($hayDist == 1){
+                        $c = $cantidad;
 
-                        if ($tdas_in_cluster != 0 and $cantTPlan > $totalDist and $cantTPlan > $cajasT) {
+                    }else {
+
+                        if ($distEstiloTda < $cantPlan) {
+
+                            if ($cluster != '-' and $cantTPlan > $totalDist and $cantTPlan > $cajasT) {
                             $reparto = $cantidad - $distEstiloTda;
                             $reparto = ceil($reparto);
-                            if($reparto + $totalDist <= $cajasT){
+                                if ($reparto + $totalDist <= $cajasT) {
                                 $c = $reparto;
-                            }else {
+                                } else {
                                 $c = $cajasT - $totalDist;
 					}
                         } else {
-                            if ($tdas_in_cluster != 0 and $cantTPlan > $totalDist and $cajasT >= $cantTPlan) {
+                                if ($cluster != '-' and $cantTPlan > $totalDist and $cajasT >= $cantTPlan) {
                                 $reparto = $cantidad - $distEstiloTda;
                                 $reparto = ceil($reparto);
-                                if($reparto + $totalDist <= $cajasT){
+                                    if ($reparto + $totalDist <= $cajasT) {
                                     $c = $reparto;
-                                }else {
+                                    } else {
                                     $c = $cajasT - $totalDist;
                                 }
                             }
                         }
+
+                        }
+
+                    }
                         $totalDist += $c;
 
                         $cajas = $cantTPlan - $totalDist;
 
-                        if($cantTPlan > $cajasT){
+                    if ($cantTPlan > $cajasT) {
                             $cajas = $cajasT - $totalDist;
                         }
                         $tdas_repartidas++;
-                    }
+
                     if($distEstiloTda != 0 ){
                         $distOld = true;
                     }
@@ -261,7 +272,6 @@
                         "cluster" => $cluster,
                         "cantPlan" => $cantPlan,
                         "cantTotalPlan" => $cantTPlan,
-                        "tdasInCluster" => $tdas_in_cluster,
                         "distEstiloTda" => $distEstiloTda,
                         "distOld" => $distOld
 					);
@@ -689,6 +699,8 @@
             $objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
             $objWriter->save('php://output');
 
+
+
 		}
 
         public function reporteria_distribucion_mercaderia($f3) {
@@ -709,7 +721,7 @@
                     , array(
                         "nroEmbarque" => $row[0],
                         "Estado" => $row[2],
-                        "fechaETA" => $row[1]
+                        "fechaETA" => date_format(date_create($row[1]),'Y-m-d')
                     )
                 );
             }
@@ -719,11 +731,7 @@
 
         public function excel_reporte_embarques($f3) {
 
-
-            //$embarquesHidden = $_POST['embarquesHidden'];
-
-            $listNroEmbarque = [99782,65791,  65782,65793,65794,65795,65796,65792,65790];
-
+            $listNroEmbarque = explode(',',strval($_GET['envia_embarque']));
 
             $i = 0;
             // Crea el objeto Excel PHP
@@ -740,10 +748,7 @@
                     if($i>0){
                         $objPHPExcel->createSheet($i);
                     }
-
-
                     $objPHPExcel->getSheet($i)->setTitle($sheetTitle);
-
 
                     $objPHPExcel->getSheet($i)->SetCellValue("A1", "TEMPORADA");
                     $objPHPExcel->getSheet($i)->SetCellValue("B1", "COD_DEPTO");
@@ -761,7 +766,16 @@
                     $objPHPExcel->getSheet($i)->SetCellValue("N1", "COD_TDA");
                     $objPHPExcel->getSheet($i)->SetCellValue("O1", "TIPO_EMPAQUE");
                     $objPHPExcel->getSheet($i)->SetCellValue("P1", "UNIDADES");
-
+                    $objPHPExcel->getSheet($i)->SetCellValue("Q1", "NRO_VARIACION");
+                    $objPHPExcel->getSheet($i)->SetCellValue("R1", "NRO_FACTURA");
+                    $objPHPExcel->getSheet($i)->SetCellValue("S1", "PI_NUMBER");
+                    $objPHPExcel->getSheet($i)->SetCellValue("T1", "PO_NUMBER");
+                    $objPHPExcel->getSheet($i)->SetCellValue("U1", "COSTO");
+                    $objPHPExcel->getSheet($i)->SetCellValue("V1", "PREFIJO");
+                    $objPHPExcel->getSheet($i)->SetCellValue("W1", "FECHA_DEMORA");
+                    $objPHPExcel->getSheet($i)->SetCellValue("X1", "NRO_CONTENEDOR");
+                    $objPHPExcel->getSheet($i)->SetCellValue("Y1", "NRO_CITA");
+                    $objPHPExcel->getSheet($i)->SetCellValue("Z1", "NRO_DISTRO");
 
                     // Se genera la consulta
                     $row = 2;
@@ -783,14 +797,20 @@
                         $objPHPExcel->getSheet($i)->SetCellValue("N$row", $item["COD_TDA"]);
                         $objPHPExcel->getSheet($i)->SetCellValue("O$row", $item["TIPO_EMPAQUE"]);
                         $objPHPExcel->getSheet($i)->SetCellValue("P$row", $item["UNIDADES"]);
-
+                        $objPHPExcel->getSheet($i)->SetCellValue("Q$row", $item["NRO_VARIACION"]);
+                        $objPHPExcel->getSheet($i)->SetCellValue("R$row", $item["NRO_FACTURA"]);
+                        $objPHPExcel->getSheet($i)->SetCellValue("S$row", $item["PI_NUMBER"]);
+                        $objPHPExcel->getSheet($i)->SetCellValue("T$row", $item["PO_NUMBER"]);
+                        $objPHPExcel->getSheet($i)->SetCellValue("U$row", $item["COSTO"]);
+                        $objPHPExcel->getSheet($i)->SetCellValue("V$row", $item["PREFIJO"]);
+                        $objPHPExcel->getSheet($i)->SetCellValue("W$row", $item["FECHA_DEMORA"]);
+                        $objPHPExcel->getSheet($i)->SetCellValue("X$row", $item["NRO_CONTENEDOR"]);
+                        $objPHPExcel->getSheet($i)->SetCellValue("Y$row", $item["NRO_CITA"]);
+                        $objPHPExcel->getSheet($i)->SetCellValue("Z$row", $item["NRO_DISTRO"]);
                         // $objPHPExcel->getActiveSheet()->getStyle("B$row:CX$row")->applyFromArray($estiloCelda);
                         $row++;
                     }
                     $i++;
-                    //$objPHPExcel->addSheet($rowNroEmbarque);
-
-
                 }
             }
             // Escribe el archivo Excel
@@ -799,9 +819,6 @@
             $objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
             $objWriter->save('php://output');
 
-
-
 		}
-
 
 	}

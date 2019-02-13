@@ -49,7 +49,7 @@
 <script src="{{@BASE}}/bower_components/datatables.net-fixedcolumns-bs/js/fixedColumns.bootstrap.js"></script>
 <script>
 	var opcionesTabla = {
-		scrollY: "300px",
+		scrollY: '280px',
 		scrollX: true,
 		scrollCollapse: true,
 		paging: false,
@@ -115,8 +115,6 @@
 			$(".cajas-sucursal[data-fila='" + fila + "']").each(function() {
 				suma += parseInt($(this).val());
 			});
-
-
 			if (suma > embarcadas) {
 				alert('El valor ingresado supera las cajas embarcadas');
 				$(this).val(valorA).focus();
@@ -136,7 +134,7 @@
 			var distOld = $(this).data('distold');
 			var distEstiloTda = $(this).data('distestilotda');
 			if(distOld == true){
-				$(this).text(distEstiloTda+" Distribuida anteriormente")
+				$(this).text(distEstiloTda+" Dist. previamente")
 			}
 		});
 
@@ -197,7 +195,12 @@
 					}
 					habilitarBoton();
 				});
+			}else {
+				alert('No se puede guardar una distribucion vacia');
+				habilitarBoton();
+				return;
 			}
+
 		});
 
 		$('#btn-aprove').click(function(e) {
@@ -387,11 +390,8 @@
 								$('.demora-sucursal[data-fila=' + fila + ']').datepicker('update', '');
 							})
 					));
-
-
 					$body.append($tr);
 				});
-
 				$table.append($body);
 				$('.tabla-principal').append($table);
 				showPage();

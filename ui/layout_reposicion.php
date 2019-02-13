@@ -26,6 +26,8 @@
 	
 	<!-- jQuery 3 -->
 	<script src="{{@BASE}}/bower_components/jquery/dist/jquery.min.js"></script>
+
+
 </head>
 <body class="skin-blue sidebar-mini sidebar-collapse">
 	<div class="wrapper" style="overflow: hidden;">
