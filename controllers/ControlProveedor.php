@@ -3,8 +3,11 @@
 	/**
 	 * CONTROLADOR de PROVEEDOR
 	 * Descripción:
+	 * Descripcion: Se modifica el metodo download_label_data, ya que se agregaron nuevas columnas.
 	 * Fecha: 2018-05-16
+	 * Fecha: 2018-02-13
 	 * @author JOSÉ MIGUEL CANDIA
+	 * @author Claudio Rodriguez
 	 */
 	
 	class ControlProveedor extends Control {
@@ -338,24 +341,51 @@
 				$file = "labelData_$po_number.xlsx";
 				$objPHPExcel = new PHPExcel();
 				$objPHPExcel->getActiveSheet()->setTitle("Label Data");
+
+				// Correccion de columnas
 				// Columnas con datos de Ripley
-				$objPHPExcel->getActiveSheet()->SetCellValue("B2", "N° LPN");
-				$objPHPExcel->getActiveSheet()->SetCellValue("C2", "Packing Type");
-				$objPHPExcel->getActiveSheet()->SetCellValue("D2", "Vendor");
-				$objPHPExcel->getActiveSheet()->SetCellValue("E2", "PO#");
-				$objPHPExcel->getActiveSheet()->getStyle("B2:E2")->applyFromArray($this->estiloCabeceraR);
+				$objPHPExcel->getActiveSheet()->SetCellValue("B2", "LPN Number");
+				$objPHPExcel->getActiveSheet()->SetCellValue("C2", "Vendor ID");
+				$objPHPExcel->getActiveSheet()->SetCellValue("D2", "Dept Code");
+				$objPHPExcel->getActiveSheet()->SetCellValue("E2", "Dept Name");
+				$objPHPExcel->getActiveSheet()->SetCellValue("F2", "Line Code");
+				$objPHPExcel->getActiveSheet()->SetCellValue("G2", "Line Name");
+				$objPHPExcel->getActiveSheet()->SetCellValue("H2", "Style");
+				$objPHPExcel->getActiveSheet()->SetCellValue("I2", "Color");
+				$objPHPExcel->getActiveSheet()->SetCellValue("J2", "Pack Tipe");
+				$objPHPExcel->getActiveSheet()->SetCellValue("K2", "SKU");
+				$objPHPExcel->getActiveSheet()->SetCellValue("L2", "Size");
+				$objPHPExcel->getActiveSheet()->SetCellValue("M2", "Size Quantity");
+				$objPHPExcel->getActiveSheet()->SetCellValue("N2", "LPN Total Units");
+				$objPHPExcel->getActiveSheet()->SetCellValue("O2", "PO Number");
+				$objPHPExcel->getActiveSheet()->SetCellValue("P2", "Handling Type");
+				$objPHPExcel->getActiveSheet()->SetCellValue("Q2", "Seasson");
+				$objPHPExcel->getActiveSheet()->SetCellValue("R2", "World");
+				$objPHPExcel->getActiveSheet()->SetCellValue("S2", "Event");
+
+				//Campos solo para Peru
+				$objPHPExcel->getActiveSheet()->SetCellValue("T2", "Store Code (PE)");
+				$objPHPExcel->getActiveSheet()->SetCellValue("U2", "Store Name (PE)");
+				$objPHPExcel->getActiveSheet()->getStyle("B2:U2")->applyFromArray($this->estiloCabeceraR);
+
 				// Escribe los datos
 				$data = \proveedor\proveedor::getLabelData($po_number);
+
+				//Creacion de variables con el numero de la columa inicial y columna final
+				$colInicial = 2;
+				$colFinal = 19;
+
 				$r = 3;
+				//Recorremos toda la data
 				foreach ($data as $val) {
-					for ($x = 2; $x <= 5; $x++) {
+					for ($x = $colInicial; $x <= $colFinal; $x++) {
 						$c = \LibraryHelper::getColumnNameFromNumber($x);
-						$objPHPExcel->getActiveSheet()->SetCellValue($c . $r, $val[$x - 2]);
+						$objPHPExcel->getActiveSheet()->SetCellValue($c . $r, $val[$x - $colInicial]);
 					}
-					$objPHPExcel->getActiveSheet()->getStyle("B$r:E$r")->applyFromArray($this->estiloCelda);
+					$objPHPExcel->getActiveSheet()->getStyle("B$r:U$r")->applyFromArray($this->estiloCelda);
 					$r++;
 				}
-				for ($i = 2; $i <= 5; $i++) {
+				for ($i = $colInicial; $i <= $colFinal; $i++) {
 					$column = \LibraryHelper::getColumnNameFromNumber($i);
 					$objPHPExcel->getActiveSheet()->getColumnDimension($column)->setAutoSize(true);
 				}
