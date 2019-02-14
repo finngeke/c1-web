@@ -63,8 +63,14 @@ class ResumenEstilosController extends \Control
                 $PROC_PAIS = 2;
             }
 
+            if(trim($columna["PROFORMA"]) == null){
+                $PROFORMA_INGRESADA = 'NI';
+            }else{
+                $PROFORMA_INGRESADA = trim($columna["PROFORMA"]);
+            }
+
             $ID = trim($columna["ID"]);
-            $PROFORMA = trim($columna["PROFORMA"]);
+            $PROFORMA = $PROFORMA_INGRESADA;
             $DES_ESTILO = trim($columna["DES_ESTILO"]);
             $COD_MOD_PAIS = $PROC_PAIS;
             $NOM_MARCA = trim($columna["NOM_MARCA"]);
@@ -129,9 +135,9 @@ class ResumenEstilosController extends \Control
                 $COD_PUERTO = $columna["COD_PUERTO"];
                 $DEP_DEPTO = $columna["DEP_DEPTO"];
 
-                echo ResumenEstilosClass::ActualizaColor3($f3->get('SESSION.login'),$ID,$PROFORMA,$DES_ESTILO,$COD_MOD_PAIS,$NOM_MARCA,$NOM_LINEA,$FECHA_EMBARQUE_ACORDADA,$COD_PUERTO,$DEP_DEPTO);
+                $res2 = ResumenEstilosClass::ActualizaColor3($f3->get('SESSION.login'),$ID,$PROFORMA,$DES_ESTILO,$COD_MOD_PAIS,$NOM_MARCA,$NOM_LINEA,$FECHA_EMBARQUE_ACORDADA,$COD_PUERTO,$DEP_DEPTO);
 
-                /*if($res2=='OK'){
+                if($res2=='OK'){
                     echo "<br>Dentro OK";
                     array_push($arrayRegistrosC3OK, array(
                         "ID" => $ID
@@ -157,7 +163,7 @@ class ResumenEstilosController extends \Control
                     ,"COD_PUERTO" => $COD_PUERTO
                     ,"DEP_DEPTO" => $DEP_DEPTO
                     ));
-                }*/
+                }
 
             }
 
@@ -169,11 +175,11 @@ class ResumenEstilosController extends \Control
 
 
         echo "<pre>";
-            /*echo "UPD C1 CORRECTO: <br>";
+            echo "UPD C1 CORRECTO: <br>";
             var_dump($arrayRegistrosC3OK);
             echo "<br>";
             echo "UPD C1 INCORRECTO: <br>";
-            var_dump($arrayRegistrosC3ERROR);*/
+            var_dump($arrayRegistrosC3ERROR);
         echo "</pre>";
 
 

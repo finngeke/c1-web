@@ -215,9 +215,9 @@ $(function () {
         },
         requestEnd: function (e) {
 
-            if(e.type !== 'read'){
+            /*if(e.type !== 'read'){
                 location.reload(true);
-            }
+            }*/
 
         }
     });
