@@ -110,15 +110,7 @@ class ResumenEstilosController extends \Control
         // Fin ForEach
         }
 
-        /*echo "Recepcionado: ".$total_recepcionado." UPD OK: ".count($arrayRegistrosOK);
-
-        echo "<pre>";
-        echo "UPD CORRECTO: <br>";
-        var_dump($arrayRegistrosOK);
-        echo "<br>";
-        echo "UPD INCORRECTO: <br>";
-        var_dump($arrayRegistrosERROR);
-        echo "</pre>";*/
+        /*echo "Recepcionado: ".$total_recepcionado." UPD OK: ".count($arrayRegistrosOK);*/
 
         // Actualiza COLOR 3
         if( $total_recepcionado == count($arrayRegistrosOK) ){
@@ -138,7 +130,6 @@ class ResumenEstilosController extends \Control
                 $res2 = ResumenEstilosClass::ActualizaColor3($f3->get('SESSION.login'),$ID,$PROFORMA,$DES_ESTILO,$COD_MOD_PAIS,$NOM_MARCA,$NOM_LINEA,$FECHA_EMBARQUE_ACORDADA,$COD_PUERTO,$DEP_DEPTO);
 
                 if($res2=='OK'){
-                    echo "<br>Dentro OK";
                     array_push($arrayRegistrosC3OK, array(
                         "ID" => $ID
                     ,"PROFORMA" => $PROFORMA
@@ -151,7 +142,6 @@ class ResumenEstilosController extends \Control
                     ,"DEP_DEPTO" => $DEP_DEPTO
                     ));
                 }elseif($res2=='ERROR'){
-                    echo "<br>Dentro ERROR";
                     array_push($arrayRegistrosC3ERROR, array(
                         "ID" => $ID
                     ,"PROFORMA" => $PROFORMA
@@ -174,13 +164,7 @@ class ResumenEstilosController extends \Control
 
 
 
-        echo "<pre>";
-            echo "UPD C1 CORRECTO: <br>";
-            var_dump($arrayRegistrosC3OK);
-            echo "<br>";
-            echo "UPD C1 INCORRECTO: <br>";
-            var_dump($arrayRegistrosC3ERROR);
-        echo "</pre>";
+
 
 
 
