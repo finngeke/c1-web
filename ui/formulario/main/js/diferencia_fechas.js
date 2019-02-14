@@ -52,52 +52,47 @@ $(function () {
     // Definimos DataSource
     var dataSource = new kendo.data.DataSource({
         transport: {
-            read:  {
+             read: {
                 url: crudServiceBaseUrl + "ListarDiferenciaFechas",
-                dataType: "json"
-            },
-            data: function() {
-                return { DEPARTAMENTO: String($("#DropDownListDepto").data("kendoDropDownList").value()),
-                    VENTANA: $("#DropDownListVentana").data("kendoDropDownList").value()
-                };
+                dataType: "json",
+                data: function () {
+                    return {
+                        DEPARTAMENTO: $("#DropDownListDepto").data("kendoDropDownList").value(),
+                        VENTANA: $("#DropDownListVentana").data("kendoMultiSelect").value()
+                    };
+                }
             }
         },
         schema: {
             model: {
-                id: "ID_DEL_REGISTO_QUE_LLEGA",
+                id: 'ID',
                 fields: {
-                    CAMPO1BD: { type: "string",editable: false }, // number - string - date
-                    CAMPO2BD: { type: "string",editable: false }, // number - string - date
-                    CAMPO3BD: { type: "string",editable: false } // number - string - date
+                    NOM_TEMPO: { type: "string",editable: false }, // number - string - date
+                    GRUPO_COMPRA: { type: "string",editable: false }, // number - string - date
+                    NOM_VENTANA: { type: "string",editable: false }, // number - string - date
+                    DES_ESTILO: { type: "string",editable: false }, // number - string - date
+                    NOM_COLOR: { type: "string",editable: false }, // number - string - date
+                    FECHA_PLAN: { type: "string",editable: false }, // number - string - date
+                    FECHA_ACORDADA: { type: "string",editable: false }, // number - string - date
+                    DIF_FECHAS: { type: "string",editable: false } // number - string - date
                 }
             }
-        }/*,
-        change: function () {
-            // Si existen un cambio en la data
-        }*//*,
-        requestEnd: function (e) {
-
-            // Si al Finalizar la sincronización es de tipo "update" o "create"
-            if ( (e.type === 'update') || (e.type === 'create') ) {
-                // Accion
-            }
-
-        }*/
+        }
     });
 
     // Solo si utilizo checkbox en la grilla, quitar si no se utiliza
-    /*function seleccionaOpcion(arg) {
-        $("#span_checkbox_grilla").text(this.selectedKeyNames().join(", "));
-    }*/
+    function seleccionaOpcion(arg) {
+        $("#span_checkbox_grilla").text(this.selectedKeyNames().join("*"));
+    }
 
     // Definimos KendoGrid
     $("#grid").kendoGrid({
+        autoBind:false,
         dataSource: dataSource,
         editable: true,
         toolbar: [
-            //{ name:"custombutton_nombre_propio", text: "Botón Custom"}, // Solo si se quiere agregar un botón custom
-            { name: "save", text: "Guardar Cambios", iconClass: "k-icon k-i-copy" },
-            { name: "cancel", text: "Cancela Modificaciones sin Guardar" }
+            { name:"custombutton_aprobar", text: "Aprobar"}, // Solo si se quiere agregar un botón custom
+            { name:"custombutton_rechazar", text: "Rechazar"}
         ],
         height: 550, // Altura del Grid
         resizable: true, // Las Columnas pueden Cambair de Tamaño
@@ -105,19 +100,61 @@ $(function () {
         sortable: true, // Se puede ordenar
         columns: [ // Columnas a Listar
             { selectable: true, width: "13px" }, // checkbox en la Primera Columna
-            {field: "CAMPO1BD",title: "Nombre del Campo Para el Usuario",width: 30,filterable: {multi: true}},
-            {field: "CAMPO2BD",title: "Nombre del Campo Para el Usuario",width: 30,filterable: {multi: true}},
-            {field: "CAMPO3BD",title: "Nombre del Campo Para el Usuario",width: 30,filterable: {multi: true}}
-        ]/*,
-        change: seleccionaOpcion*/ // solo si estamos utilizando un checkbox en la primera columna, quitar si no se utiliza
+            {field: "NOM_TEMPO",title: "Temporada",width: 30,filterable: {multi: true}},
+            {field: "GRUPO_COMPRA",title: "Grupo Compra",width: 30,filterable: {multi: true}},
+            {field: "NOM_VENTANA",title: "Ventana",width: 30,filterable: {multi: true}},
+            {field: "DES_ESTILO",title: "Estilo",width: 30,filterable: {multi: true}},
+            {field: "NOM_COLOR",title: "Color",width: 30,filterable: {multi: true}},
+            {field: "FECHA_PLAN",title: "Fecha Plan",width: 30,filterable: {multi: true}},
+            {field: "FECHA_ACORDADA",title: "Fecha Acordada",width: 30,filterable: {multi: true}},
+            {field: "DIF_FECHAS",title: "Deferencia Fechas",width: 30,filterable: {multi: true}}
+        ],
+        change: seleccionaOpcion // solo si estamos utilizando un checkbox en la primera columna, quitar si no se utiliza
     });
 
     // BTN Custom, quitar si no se utiliza
-    /*$(".k-grid-custombutton_nombre_propio").click(function(e){
-        // Acción
-    });*/
-
-
+    $(".k-grid-custombutton_aprobar").click(function(e){
+        var res = confirm("Esta seguro de aprobar?");
+        seleccion = $("#span_checkbox_grilla").text();
+        console.log(seleccion);
+        if(res) {
+            $.ajax({
+                url: crudServiceBaseUrl + "aprobar",
+                data: {SELECCION: seleccion},
+                dataType: "text",
+                method: 'GET',
+                success: function (result) {
+                    popupNotification.show("Aprobado con exito!", "success");
+                    dataSource.read();
+                },
+                error: function (xhr, httpStatusMessage, customErrorMessage) {
+                    console.log(xhr);
+                    popupNotification.show("Error al aprobar.", "error");
+                }
+            });
+        }
+    });
+    $(".k-grid-custombutton_rechazar").click(function(e){
+        var res = confirm("Esta seguro de rechazar?");
+        seleccion = $("#span_checkbox_grilla").text();
+        console.log(seleccion);
+        if(res) {
+            $.ajax({
+                url: crudServiceBaseUrl + "rechazar",
+                data: {SELECCION: seleccion},
+                dataType: "text",
+                method: 'GET',
+                success: function (result) {
+                    popupNotification.show("rechazado con exito!", "success");
+                    dataSource.read();
+                },
+                error: function (xhr, httpStatusMessage, customErrorMessage) {
+                    console.log(xhr);
+                    popupNotification.show("Error al rechazar.", "error");
+                }
+            });
+        }
+    });
 
     $("#DropDownListDepto").kendoDropDownList({
         optionLabel: "Seleccione Departamento",
@@ -130,13 +167,16 @@ $(function () {
                     url: crudServiceBaseUrl + "ListarDepto"
                 }
             }
+        },
+        change: function(e) {
+            dataSource.read();
         }
     });
 
-    $("#DropDownListVentana").kendoDropDownList({
+    $("#DropDownListVentana").kendoMultiSelect({
         optionLabel: "Seleccione Ventana",
         dataTextField: "VENT_DESCRI",
-        dataValueField: "COD_VENTANA",
+        dataValueField: "VENT_DESCRI",
         dataSource: {
             transport: {
                 read: {
@@ -146,14 +186,7 @@ $(function () {
             }
         },
         change: function(e) {
-
             dataSource.read();
-
-            /*var dataItem = e.sender.dataItem();
-            if(dataItem){
-                dataSource.read();
-            }*/
-
         }
     });
 

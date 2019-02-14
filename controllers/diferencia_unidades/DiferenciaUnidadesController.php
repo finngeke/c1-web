@@ -7,9 +7,7 @@ class DiferenciaUnidadesController extends \Control
 
     // Listar Diferencia Unidades => El 1 Corresponde al país, el que se va enviar como variable en algún momento
     public function ListarDiferenciaUnidades($f3){
-
-
-        echo json_encode(DiferenciaUnidadesClass::ListarDiferenciaUnidades($f3->get('SESSION.COD_TEMPORADA'), $f3->get('GET.DEPARTAMENTO'),$f3->get('GET.VENTANA')));
+        echo json_encode(DiferenciaUnidadesClass::ListarDiferenciaUnidades($f3->get('SESSION.COD_TEMPORADA'), $f3->get('GET.DEPARTAMENTO')));
     }
 
     // Listar Temporada
@@ -27,7 +25,15 @@ class DiferenciaUnidadesController extends \Control
         echo json_encode(DiferenciaUnidadesClass::ListarDepto($f3->get('SESSION.login'),1));
     }
 
+    //Aprobar los registros seleccionados
+    public function aprobar($f3){
+        echo json_encode(DiferenciaUnidadesClass::aprobar_unidades($_GET['SELECCION'],$f3->get('SESSION.login'),1));
+    }
 
+    //Aprobar los registros seleccionados
+    public function rechazar($f3){
+        echo json_encode(DiferenciaUnidadesClass::rechazar_unidades($_GET['SELECCION'],$f3->get('SESSION.login'),1));
+    }
 
 
 

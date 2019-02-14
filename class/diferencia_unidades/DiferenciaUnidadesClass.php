@@ -8,38 +8,14 @@ class DiferenciaUnidadesClass extends \parametros
 {
 
     // Listar Diferencia Unidades => El 1 Corresponde al país, el que se va enviar como variable en algún momento
-    public static function ListarDiferenciaUnidades($temporada, $depto,$ventanas)
+    public static function ListarDiferenciaUnidades($temporada, $depto)
     {
-//convertir array para seleccionar mmultiples ventanas
-        $sql = "SELECT  T.NOM_TEMPORADA_CORTO NOM_TEMPORADA
-                        ,PLN.GRUPO_COMPRA G_PLAN
-                        ,PLN.NOM_VENTANA V_PLAN
-                        ,PLN.DES_ESTILO
-                        ,PLN.NOM_COLOR
-                        ,PLN.UNIDADES_PLAN
-                        ,RLA.UNIDADES_ACORDADA  
-                        ,RLA.UNIDADES_ACORDADA - PLN.UNIDADES_PLAN DIFER_UNID
-                        ,CASE WHEN UNIDADES_PLAN = 0 THEN 0 
-                              ELSE((RLA.UNIDADES_ACORDADA - PLN.UNIDADES_PLAN)*100)/UNIDADES_PLAN END DIFEREN_UNID   
-                FROM (
-                     select COD_TEMPORADA,GRUPO_COMPRA ,NOM_VENTANA ,DES_ESTILO,NOM_COLOR,SUM(UNIDADES) UNIDADES_PLAN
-                     from PIA_plan_compra_color
-                     where cod_temporada = $temporada
-                     and dep_depto = '".$depto."'
-                     and vent_emb in ($ventanas)
-                     GROUP BY COD_TEMPORADA,GRUPO_COMPRA,NOM_VENTANA,DES_ESTILO,NOM_COLOR) PLN
-                LEFT JOIN(select COD_TEMPORADA,GRUPO_COMPRA,NOM_VENTANA ,DES_ESTILO,NOM_COLOR,SUM(UNIDADES) UNIDADES_ACORDADA
-                            from plc_plan_compra_color_3
-                            where cod_temporada = $temporada
-                            and dep_depto = '".$depto."'
-                            and vent_emb in ($ventanas)
-                            GROUP BY COD_TEMPORADA ,GRUPO_COMPRA,NOM_VENTANA,DES_ESTILO,NOM_COLOR ) RLA ON PLN.COD_TEMPORADA = RLA.COD_TEMPORADA
-                                                                                                       AND PLN.NOM_VENTANA =RLA.NOM_VENTANA
-                                                                                                       AND PLN.DES_ESTILO =RLA.DES_ESTILO
-                                                                                                       AND PLN.NOM_COLOR = RLA.NOM_COLOR
-                LEFT JOIN PLC_TEMPORADA T ON PLN.COD_TEMPORADA = T.COD_TEMPORADA
-                ORDER BY 1,2,3,4,5";
-        $data = \database::getInstancia()->getFilas($sql);
+        $ventanas = implode(',',$_GET['VENTANA']);
+
+        //convertir array para seleccionar mmultiples ventanas
+
+        $sql = "BEGIN PIA_PKG_PIAUTOMATICA.PRC_DIFERENCIA_UNIDADES('$depto','$temporada','".$ventanas."', :data); END;";
+        $data = \database::getInstancia()->getConsultaSP($sql, 1);
 
         // Transformo a array asociativo
         $array = [];
@@ -53,7 +29,9 @@ class DiferenciaUnidadesClass extends \parametros
                 ,"UNID_PLAN" => $val[5]
                 ,"UNID_ACORD" => $val[6]
                 ,"DIFER_UND" => $val[7]
-                ,"PORCENT_DIFER" => $val[8] )
+                ,"PORCENT_DIFER" => $val[8]
+                ,"ESTADO" => $val[9]
+                ,"ID" => $val[10])
             );
         }
 
@@ -125,7 +103,45 @@ class DiferenciaUnidadesClass extends \parametros
 
     }
 
+    // aprobar
+    public static function aprobar_unidades($registros,$login,$pais)
+    {
+        $registros = explode('*',$registros);
 
+        foreach ($registros as $reg) {
+            $aux = explode(';',$reg);
+            $temporada = intval($aux[0]);
+            $departamento = $aux[1];
+            $ventana = $aux[2];
+            $desEstilo = $aux[3];
+            $nomColor = $aux[4];
+
+            $sql  = "BEGIN PIA_PKG_PIAUTOMATICA.PRC_APROBAR_UNIDADES('$departamento',$temporada,'$ventana','$desEstilo','$nomColor'); END;";
+            \database::getInstancia()->getConsulta($sql);
+
+        }
+
+    }
+
+    // rechazar
+    public static function rechazar_unidades($registros,$login,$pais)
+    {
+        $registros = explode('*',$registros);
+
+        foreach ($registros as $reg) {
+            $aux = explode(';',$reg);
+            $temporada = intval($aux[0]);
+            $departamento = $aux[1];
+            $ventana = $aux[2];
+            $desEstilo = $aux[3];
+            $nomColor = $aux[4];
+
+            $sql  = "BEGIN PIA_PKG_PIAUTOMATICA.PRC_RECHAZAR_UNIDADES('$departamento',$temporada,'$ventana','$desEstilo','$nomColor'); END;";
+            \database::getInstancia()->getConsulta($sql);
+
+        }
+
+    }
 
 
 // Fin de la Clase

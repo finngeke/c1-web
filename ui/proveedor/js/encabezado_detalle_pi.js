@@ -103,7 +103,8 @@ $(function () {
                     CBM: { type: "number",editable: false }, // number - string - date
                     ESTADO: { type: "number",editable: false }, // number - string - date
                     COD_PUERTO_COD: { type: "string",editable: false }, // number - string - date
-                    DEP_DEPTO: { type: "string",editable: false } // number - string - date
+                    DEP_DEPTO: { type: "string",editable: false }, // number - string - date
+                    COD_MOD_PAIS: { type: "number",editable: false } // number - string - date
                 }
             }
         }/*,
@@ -120,10 +121,10 @@ $(function () {
         }*/
     });
 
-    // Solo si utilizo checkbox en la grilla, quitar si no se utiliza
-    /*function seleccionaOpcion(arg) {
+    // Trabajo con los checkbox
+    function seleccionaOpcion(arg) {
         $("#span_checkbox_grilla").text(this.selectedKeyNames().join(", "));
-    }*/
+    }
 
     // Definimos GRID de la Cabecera
     $("#grid").kendoGrid({
@@ -141,6 +142,7 @@ $(function () {
         sortable: true, // Se puede ordenar
         scrollable: true,
         columns: [ // Columnas a Listar
+            { selectable: true, width: "10px" },
             {field: "NOM_EST_C1",title: "PI Status",width: 50,filterable: {multi: true}},
             {field: "PI_VENDOR",title: "Vendor PI N°",width: 40,filterable: {multi: true}},
             {field: "PROFORMA",title: "Ripley PI N°",width: 40,filterable: {multi: true}},
@@ -153,8 +155,8 @@ $(function () {
             {field: "COD_PUERTO_COD", hidden: true},
             {field: "DEP_DEPTO", hidden: true},
             {field: "COD_MOD_PAIS", hidden: true}
-        ]/*,
-        change: seleccionaOpcion*/
+        ],
+        change: seleccionaOpcion
     });
 
     var dataSource_cuerpo = "";
@@ -202,8 +204,8 @@ $(function () {
     //var key = row.attr("data-id");
 
     // Obtengo el Valor de la Proforma
-    var proforma = row.find('td:eq(2)').text();
-    var cod_mod_pais = row.find('td:eq(11)').text();
+    var proforma = row.find('td:eq(3)').text();
+    var cod_mod_pais = row.find('td:eq(12)').text();
 
     // Si puede obtener la PROFORMA, levanta el POPUP
     if(proforma.length>0){
@@ -213,7 +215,7 @@ $(function () {
         POPUPCuerpo.data("kendoWindow").open();
 
         var tit_popup = $("#cuerpo").data("kendoWindow");
-        tit_popup.title("Vendor PI N°: "+proforma);
+        tit_popup.title("Detail Vendor PI N°: "+proforma);
 
         // Definimos DataSource de la "Cabecera"
         dataSource_cuerpo = new kendo.data.DataSource({
@@ -284,6 +286,7 @@ $(function () {
     // BTN Custom, quitar si no se utiliza
     $(".k-grid-aprobar_pi").click(function(e){
         // Acción
+        alert("Test");
     });
 
 

@@ -8,19 +8,28 @@ class DiferenciaFechasClass extends \parametros
 {
 
     // // Listar Diferencia Fechas => El 1 Corresponde al país, el que se va enviar como variable en algún momento
-    public static function ListarDiferenciaFechas($temporada, $depto,$login,$pais)
+    public static function ListarDiferenciaFechas($temporada,$login,$pais)
     {
+        $depto = $_GET['DEPARTAMENTO'];
+        $ventana =  implode(',',$_GET['VENTANA']);
 
-        $sql = "SELECT CAMPO1,CAMPO3,CAMPO3 FROM TABLA";
-        $data = \database::getInstancia()->getFilas($sql);
+        $sql = "BEGIN PIA_PKG_PIAUTOMATICA.PRC_DIFERENCIA_FECHAS('$depto','$temporada','".$ventana."', :data); END;";
+        $data = \database::getInstancia()->getConsultaSP($sql, 1);
 
         // Transformo a array asociativo
         $array = [];
         foreach ($data as $val) {
             array_push($array, array(
-                 "CAMPO1" => $val[0]
-                ,"CAMPO2" => $val[1]
-                ,"CAMPO3" => utf8_encode($val[2]) // UTF-8 Si me Trae String
+                 "NOM_TEMPO" => utf8_encode($val[0])
+                ,"GRUPO_COMPRA" => utf8_encode($val[1])
+                ,"NOM_VENTANA" => utf8_encode($val[2]) // UTF-8 Si me Trae String
+                ,"DES_ESTILO" => utf8_encode($val[3])
+                ,"NOM_COLOR" => utf8_encode($val[4])
+                ,"FECHA_PLAN" => $val[5]
+                ,"FECHA_ACORDADA" => $val[6]
+                ,"DIF_FECHAS" => $val[7]
+                ,"ESTADO" => $val[8]
+                ,"ID" => $val[10]
                 )
             );
         }
@@ -93,6 +102,45 @@ class DiferenciaFechasClass extends \parametros
 
     }
 
+    // aprobar
+    public static function aprobar_fechas($registros,$login,$pais)
+    {
+        $registros = explode('*',$registros);
+
+        foreach ($registros as $reg) {
+            $aux = explode(';',$reg);
+            $temporada = intval($aux[0]);
+            $departamento = $aux[1];
+            $ventana = $aux[2];
+            $desEstilo = $aux[3];
+            $nomColor = $aux[4];
+
+            $sql  = "BEGIN PIA_PKG_PIAUTOMATICA.PRC_APROBAR_FECHAS('$departamento',$temporada,'$ventana','$desEstilo','$nomColor'); END;";
+            \database::getInstancia()->getConsulta($sql);
+
+        }
+
+    }
+
+    // rechazar
+    public static function rechazar_fechas($registros,$login,$pais)
+    {
+        $registros = explode('*',$registros);
+
+        foreach ($registros as $reg) {
+            $aux = explode(';',$reg);
+            $temporada = intval($aux[0]);
+            $departamento = $aux[1];
+            $ventana = $aux[2];
+            $desEstilo = $aux[3];
+            $nomColor = $aux[4];
+
+            $sql  = "BEGIN PIA_PKG_PIAUTOMATICA.PRC_RECHAZAR_FECHAS('$departamento',$temporada,'$ventana','$desEstilo','$nomColor'); END;";
+            \database::getInstancia()->getConsulta($sql);
+
+        }
+
+    }
 
 // Fin de la Clase
 }

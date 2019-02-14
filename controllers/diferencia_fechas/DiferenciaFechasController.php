@@ -7,7 +7,7 @@ class DiferenciaFechasController extends \Control
 
     // Listar Diferencia Fechas => El 1 Corresponde al país, el que se va enviar como variable en algún momento
     public function ListarDiferenciaFechas($f3){
-        echo json_encode(DiferenciaFechasClass::ListarDiferenciaFechas($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'),1));
+        echo json_encode(DiferenciaFechasClass::ListarDiferenciaFechas($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.login'),1));
     }
 
     // Listar Temporada
@@ -25,9 +25,15 @@ class DiferenciaFechasController extends \Control
         echo json_encode(DiferenciaFechasClass::ListarDepto($f3->get('SESSION.login'),1));
     }
 
+    //Aprobar los registros seleccionados
+    public function aprobar($f3){
+        echo json_encode(DiferenciaFechasClass::aprobar_fechas($_GET['SELECCION'],$f3->get('SESSION.login'),1));
+    }
 
-
-
+    //Aprobar los registros seleccionados
+    public function rechazar($f3){
+        echo json_encode(DiferenciaFechasClass::rechazar_fechas($_GET['SELECCION'],$f3->get('SESSION.login'),1));
+    }
 
 
 // Termina Clase

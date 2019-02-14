@@ -7,7 +7,7 @@ class DiferenciaPresupuestoController extends \Control
 
     // Listar Diferencia Presupuesto => El 1 Corresponde al país, el que se va enviar como variable en algún momento
     public function ListarDiferenciaPresupuesto($f3){
-        echo json_encode(DiferenciaPresupuestoClass::ListarDiferenciaPresupuesto($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.COD_DEPTO'), $f3->get('SESSION.login'),1));
+        echo json_encode(DiferenciaPresupuestoClass::ListarDiferenciaPresupuesto($f3->get('SESSION.COD_TEMPORADA'), $f3->get('SESSION.login'),1));
     }
 
 
@@ -26,8 +26,15 @@ class DiferenciaPresupuestoController extends \Control
         echo json_encode(DiferenciaPresupuestoClass::ListarDepto($f3->get('SESSION.login'),1));
     }
 
+    //Aprobar los registros seleccionados
+    public function aprobar($f3){
+        echo json_encode(DiferenciaPresupuestoClass::aprobar_presupuestos($_GET['SELECCION'],$f3->get('SESSION.login'),1));
+    }
 
-
+    //Aprobar los registros seleccionados
+    public function rechazar($f3){
+        echo json_encode(DiferenciaPresupuestoClass::rechazar_presupuestos($_GET['SELECCION'],$f3->get('SESSION.login'),1));
+    }
 
 
 // Termina Clase

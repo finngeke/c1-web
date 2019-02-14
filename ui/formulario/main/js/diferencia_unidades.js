@@ -57,13 +57,14 @@ $(function () {
                 dataType: "json",
                 data: function() {
                     return { DEPARTAMENTO:$("#DropDownListDepto").data("kendoDropDownList").value(),
-                        VENTANA: $("#DropDownListVentana").data("kendoDropDownList").value()
+                        VENTANA: $("#DropDownListVentana").data("kendoMultiSelect").value()
                     };
                 }
             }
         },
         schema: {
             model: {
+                id: 'ID',
                 fields: {
                     TEMPORADA: { type: "string",editable: false }, // number - string - date
                     GRUPO_COMPRA: { type: "string",editable: false }, // number - string - date
@@ -78,14 +79,22 @@ $(function () {
             }
             }
     });
+
+
+    // Solo si utilizo checkbox en la grilla, quitar si no se utiliza
+    function seleccionaOpcion(arg) {
+        $("#span_checkbox_grilla").text(this.selectedKeyNames().join("*"));
+    }
+
+
     $("#grid").kendoGrid({
         autoBind:false,
         dataSource: dataSource,
         editable: true,
         toolbar: [
             //{ name:"custombutton_nombre_propio", text: "Botón Custom"}, // Solo si se quiere agregar un botón custom
-            { name: "save", text: "Guardar Cambios", iconClass: "k-icon k-i-copy" },
-            { name: "cancel", text: "Cancela Modificaciones sin Guardar" }
+            { name:"custombutton_aprobar", text: "Aprobar"}, // Solo si se quiere agregar un botón custom
+            { name:"custombutton_rechazar", text: "Rechazar"}
         ],
         height: 550, // Altura del Grid
         resizable: true, // Las Columnas pueden Cambair de Tamaño
@@ -102,9 +111,54 @@ $(function () {
             {field: "UNID_ACORD",title: "Unidades Acordadas",width: 30,filterable: {multi: true}},
             {field: "DIFER_UND",title: "Diferencia Unidades",width: 30,filterable: {multi: true}},
             {field: "PORCENT_DIFER",title: "% Diferencia Unidades",width: 30,filterable: {multi: true}}
-        ]/*,
-        change: seleccionaOpcion*/ // solo si estamos utilizando un checkbox en la primera columna, quitar si no se utiliza
+        ],
+        change: seleccionaOpcion // solo si estamos utilizando un checkbox en la primera columna, quitar si no se utiliza
     });
+
+    // BTN Custom, quitar si no se utiliza
+    $(".k-grid-custombutton_aprobar").click(function(e){
+        var res = confirm("Esta seguro de aprobar?");
+        seleccion = $("#span_checkbox_grilla").text();
+        console.log(seleccion);
+        if(res) {
+            $.ajax({
+                url: crudServiceBaseUrl + "aprobar",
+                data: {SELECCION: seleccion},
+                dataType: "text",
+                method: 'GET',
+                success: function (result) {
+                    popupNotification.show("Aprobado con exito!", "success");
+                    dataSource.read();
+                },
+                error: function (xhr, httpStatusMessage, customErrorMessage) {
+                    console.log(xhr);
+                    popupNotification.show("Error al aprobar.", "error");
+                }
+            });
+        }
+    });
+    $(".k-grid-custombutton_rechazar").click(function(e){
+        var res = confirm("Esta seguro de rechazar?");
+        seleccion = $("#span_checkbox_grilla").text();
+        console.log(seleccion);
+        if(res) {
+            $.ajax({
+                url: crudServiceBaseUrl + "rechazar",
+                data: {SELECCION: seleccion},
+                dataType: "text",
+                method: 'GET',
+                success: function (result) {
+                    popupNotification.show("rechazado con exito!", "success");
+                    dataSource.read();
+                },
+                error: function (xhr, httpStatusMessage, customErrorMessage) {
+                    console.log(xhr);
+                    popupNotification.show("Error al rechazar.", "error");
+                }
+            });
+        }
+    });
+
 
     $("#DropDownListDepto").kendoDropDownList({
         optionLabel: "Seleccione Departamento",
@@ -117,13 +171,16 @@ $(function () {
                     url: crudServiceBaseUrl + "ListarDepto"
                 }
             }
+        },
+        change: function(e) {
+            dataSource.read();
         }
     });
 
-    $("#DropDownListVentana").kendoDropDownList({
+    $("#DropDownListVentana").kendoMultiSelect({
         optionLabel: "Seleccione Ventana",
         dataTextField: "VENT_DESCRI",
-        dataValueField: "COD_VENTANA",
+        dataValueField: "VENT_DESCRI",
         dataSource: {
             transport: {
                 read: {
@@ -133,12 +190,7 @@ $(function () {
             }
         },
         change: function(e) {
-
-           // $('#grid').data('kendoGrid').dataSource.read();
-
-                dataSource.read();
-
-
+            dataSource.read();
         }
     });
 

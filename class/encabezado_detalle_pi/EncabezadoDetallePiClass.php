@@ -231,6 +231,7 @@ class EncabezadoDetallePiClass extends \parametros
 
             return "ERROR";
             die();
+
         }
 
     }
