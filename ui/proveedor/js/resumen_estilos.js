@@ -136,13 +136,12 @@ $(function () {
         },
         change: function (e) {
 
+            if(e.items.length>0){
             var id_registro = e.items[0].ID;
             var fecha_embarque = e.items[0].FECHA_EMBARQUE_ACORDADA;
             var puerto_embarque = e.items[0].COD_PUERTO;
             var proforma = e.items[0].PROFORMA;
             var depto = e.items[0].DEP_DEPTO;
-
-            //var arregloRegistros = [];
 
             // Si el campo que estoy editando es PROFORMA o COD_PUERTO COLORES
             if(e.field == 'PROFORMA' || e.field == 'COD_PUERTO'){
@@ -199,25 +198,14 @@ $(function () {
 
             }
 
-            // Del arreglo creado previamente, elimino el registro que esta siendo modificado
-            /*
-            var removeItem = id_registro;
-            for(var i=0;i<arregloRegistros.length;i++){
-                if(arregloRegistros[i].ID == removeItem){
-                    arregloRegistros.splice(i,1);
-                }
             }
-            console.log(arregloRegistros);
-            */
-
-
 
         },
         requestEnd: function (e) {
 
-            /*if(e.type !== 'read'){
+            if(e.type !== 'read'){
                 location.reload(true);
-            }*/
+            }
 
         }
     });

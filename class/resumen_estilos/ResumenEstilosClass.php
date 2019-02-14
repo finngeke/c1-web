@@ -24,7 +24,7 @@ class ResumenEstilosClass extends \parametros
             array_push($array, array(
 
                 //DEPTO+PAIS+MARCA+LINEA+FECHA+    ESTILO
-                 "ID" => trim($val[11])."||".utf8_encode(trim($val[1]))."||".utf8_encode(trim($val[2]))."||".utf8_encode(trim($val[3]))."||".trim($val[10])."||".trim($val[0])
+                 "ID" => $val[11]
                 ,"PROFORMA" => ""
                 ,"DES_ESTILO" => trim($val[0])
                 ,"COD_MOD_PAIS" => utf8_encode(trim($val[1]))
