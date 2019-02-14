@@ -18,7 +18,7 @@ class EncabezadoDetallePiClass extends \parametros
         $array = [];
         foreach ($data as $val) {
             array_push($array, array(
-                "ID" => utf8_encode($val[8].'||'.$val[1].'||'.$val[2].'||'.$val[3].'||'.$val[4].'||'.$val[9])
+                "ID" => utf8_encode($val[2])
                 ,"NOM_EST_C1" => utf8_encode($val[0])
                 ,"PI_VENDOR" => utf8_encode($val[1])
                 ,"PROFORMA" => utf8_encode($val[2]) // UTF-8 Si me Trae String
@@ -50,7 +50,7 @@ class EncabezadoDetallePiClass extends \parametros
         $array = [];
         foreach ($data as $val) {
             array_push($array, array(
-                 "ID" => utf8_encode($val[17].'||'.$val[1].'||'.$val[2].'||'.$val[3].'||'.$val[4].'||'.$val[5].'||'.$val[6].'||'.$val[18])
+                 "ID" => utf8_encode($val[2])
                 ,"NOM_EST_C1" => utf8_encode($val[0])
                 ,"PI_VENDOR" => utf8_encode($val[1])
                 ,"PROFORMA" => utf8_encode($val[2])
@@ -164,7 +164,6 @@ class EncabezadoDetallePiClass extends \parametros
 
     }
 
-
     // Listar Depto
     public static function ListarDepto($login,$pais)
     {
@@ -197,8 +196,8 @@ class EncabezadoDetallePiClass extends \parametros
         $array1 = [];
         foreach ($data as $va1) {
             array_push($array1, array(
-                    "COD_INCOTERM" => utf8_encode($va1[0]),
-                    "NOM_INCOTERM" => utf8_encode($va1[1])
+                    "COD_INCOTERM" => $va1[0]." - ".utf8_encode($va1[1]),
+                    "NOM_INCOTERM" => $va1[0]." - ".utf8_encode($va1[1])
                 )
             );
         }
@@ -206,6 +205,37 @@ class EncabezadoDetallePiClass extends \parametros
         return $array1;
 
     }
+
+
+
+
+    // ActualizaIncoterm
+    public static function ActualizaIncoterm($login,$PROFORMA,$COD_MOD_PAIS)
+    {
+
+        $sql = "BEGIN PIA_PKG_PIAUTOMATICA.PRC_ACT_INCOTERM('".$login."','".$PROFORMA."',$COD_MOD_PAIS, :error, :data); end;";
+        $data = \database::getInstancia()->getConsultaSP($sql,2);
+
+        if($data == 0){
+
+            // Acción: Crear / Eliminar / Actualizar
+            LogTransaccionClass::GuardaLogTransaccion($login, 0, 'ND', 'PIA Pantalla 5 - UPDATE INCOTERM','Actualizar', $sql, 'OK' );
+
+            return "OK";
+            die();
+
+        }else{
+
+            // Acción: Crear / Eliminar / Actualizar
+            LogTransaccionClass::GuardaLogTransaccion($login, 0, 'ND', 'PIA Pantalla 5 - UPDATE INCOTERM','Actualizar', $sql, 'ERROR' );
+
+            return "ERROR";
+            die();
+        }
+
+    }
+
+
 
 
 // Fin de la Clase

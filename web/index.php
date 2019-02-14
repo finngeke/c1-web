@@ -200,6 +200,7 @@ $f3->route('POST /TelerikResumenEstilosPOST/@tipo [ajax]', 'resumen_estilos\Resu
 // Encabezado, Detalle, PI
 $f3->route('GET /encabezado_detalle_pi', 'ControlProveedor->encabezado_detalle_pi');
 $f3->route('GET /TelerikEncabezadoDetallePi/@tipo [ajax]', 'encabezado_detalle_pi\EncabezadoDetallePiController->@tipo');
+$f3->route('POST /TelerikEncabezadoDetallePiPOST/@tipo [ajax]', 'encabezado_detalle_pi\EncabezadoDetallePiController->@tipo');
 
 /* CARTERO */
 $f3->route('GET /EnviarCorreo/@tipo [ajax]', 'cartero\EnviarCorreo->@tipo');

@@ -2,6 +2,7 @@ $(function () {
 
     // Defrine URL Base, para Llamar a los JSON
     var crudServiceBaseUrl = "TelerikEncabezadoDetallePi/";
+    var crudServiceBaseUrlPOST = "TelerikEncabezadoDetallePiPOST/";
 
     // Se define POPUP de notificación
     var popupNotification = $("#popupNotification").kendoNotification().data("kendoNotification");
@@ -41,7 +42,7 @@ $(function () {
 
     // CBX de Incoterm
     function IncotermDropDownEditor(container, options) {
-        $('<input required name="' + options.field + '"/>')
+        $('<input name="' + options.field + '"/>')
             .appendTo(container)
             .kendoDropDownList({
                 autoBind: false,
@@ -62,7 +63,7 @@ $(function () {
 
     var ventana_cuerpo = $("#cuerpo");
     ventana_cuerpo.kendoWindow({
-        width: "360px",
+        width: "800px",
         title: "Detail",
         visible: false,
         actions: [
@@ -79,6 +80,11 @@ $(function () {
         transport: {
             read:  {
                 url: crudServiceBaseUrl + "ListarP5Encabezado",
+                dataType: "json"
+            },
+            update: {
+                type: "POST",
+                url: crudServiceBaseUrlPOST + "ActualizaIncoterm",
                 dataType: "json"
             }
         },
@@ -125,9 +131,9 @@ $(function () {
         editable: true,
         //selectable: true,
         toolbar: [
-            //{ name:"custombutton_nombre_propio", text: "Botón Custom"}, // Solo si se quiere agregar un botón custom
-            { name: "save", text: "Guardar Cambios", iconClass: "k-icon k-i-copy" },
-            { name: "cancel", text: "Cancela Modificaciones sin Guardar" }
+            { name:"aprobar_pi", text: "Botón Custom"}, // Solo si se quiere agregar un botón custom
+            { name: "save", text: "Save Changes", iconClass: "k-icon k-i-copy" },
+            { name: "cancel", text: "Cancel unsaved changes" }
         ],
         //height: 550, // Altura del Grid
         resizable: true, // Las Columnas pueden Cambair de Tamaño
@@ -276,9 +282,9 @@ $(function () {
      });
 
     // BTN Custom, quitar si no se utiliza
-    /*$(".k-grid-custombutton_nombre_propio").click(function(e){
+    $(".k-grid-aprobar_pi").click(function(e){
         // Acción
-    });*/
+    });
 
 
 

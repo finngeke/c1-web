@@ -45,5 +45,30 @@ class EncabezadoDetallePiController extends \Control
         echo json_encode(EncabezadoDetallePiClass::ListarIncoterm($f3->get('SESSION.login'),1));
     }
 
+
+    // Actualiza INCOTERM
+    public function ActualizaIncoterm($f3){
+
+        $tempData = $_REQUEST['models'];
+
+        // Actualiza PIA_RESUMEN_ESTILO_PASO
+        foreach ($tempData as $columna) {
+
+        $COD_MOD_PAIS = explode(" - ",trim($columna["COD_MOD_PAIS"]));
+        $PROFORMA = $columna["PROFORMA"];
+
+        echo EncabezadoDetallePiClass::ActualizaIncoterm($f3->get('SESSION.login'),$PROFORMA,$COD_MOD_PAIS[0]);
+
+
+        // Fin ForEach
+        }
+
+
+
+    // Fin de ActualizaIncoterm
+    }
+
+
+
 // Termina Clase
 }
