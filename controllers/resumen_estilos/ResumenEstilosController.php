@@ -73,93 +73,89 @@ class ResumenEstilosController extends \Control
             $COD_PUERTO = trim($PROC_COD_PUERTO[0]);
             $DEP_DEPTO = trim($columna["DEP_DEPTO"]);
 
-            // Alamacenar en Array los resultados
-            /*array_push($arrayRegistros, array(
-                "ID" => trim($ID)
-                ,"PROFORMA" => trim($PROFORMA)
-                ,"DES_ESTILO" => trim($DES_ESTILO)
-                ,"COD_MOD_PAIS" => trim($COD_MOD_PAIS)
-                ,"NOM_MARCA" => trim($NOM_MARCA)
-                ,"NOM_LINEA" => trim($NOM_LINEA)
-                ,"FECHA_EMBARQUE_ACORDADA" => trim($FECHA_EMBARQUE_ACORDADA)
-                ,"COD_PUERTO" => trim($COD_PUERTO)
-                ,"DEP_DEPTO" => trim($DEP_DEPTO)
-            ));*/
-
-            // Actualizar Registros en PIA_RESUMEN_ESTILO_PASO [ORIGINAL]
-            // echo ResumenEstilosClass::ActualizaResumenEstilos($f3->get('SESSION.login'),$ID,$PROFORMA,$DES_ESTILO,$COD_MOD_PAIS,$NOM_MARCA,$NOM_LINEA,$FECHA_EMBARQUE_ACORDADA,$COD_PUERTO,$DEP_DEPTO);
-
             $res = ResumenEstilosClass::ActualizaResumenEstiloPaso($f3->get('SESSION.login'),$ID,$PROFORMA,$DES_ESTILO,$COD_MOD_PAIS,$NOM_MARCA,$NOM_LINEA,$FECHA_EMBARQUE_ACORDADA,$COD_PUERTO,$DEP_DEPTO);
 
              if($res=='OK'){
                  array_push($arrayRegistrosOK, array(
-                     "ID" => trim($ID)
-                 ,"PROFORMA" => trim($PROFORMA)
-                 ,"DES_ESTILO" => trim($DES_ESTILO)
-                 ,"COD_MOD_PAIS" => trim($COD_MOD_PAIS)
-                 ,"NOM_MARCA" => trim($NOM_MARCA)
-                 ,"NOM_LINEA" => trim($NOM_LINEA)
-                 ,"FECHA_EMBARQUE_ACORDADA" => trim($FECHA_EMBARQUE_ACORDADA)
-                 ,"COD_PUERTO" => trim($COD_PUERTO)
-                 ,"DEP_DEPTO" => trim($DEP_DEPTO)
+                 "ID" => $ID
+                 ,"PROFORMA" => $PROFORMA
+                 ,"DES_ESTILO" => $DES_ESTILO
+                 ,"COD_MOD_PAIS" => $COD_MOD_PAIS
+                 ,"NOM_MARCA" => $NOM_MARCA
+                 ,"NOM_LINEA" => $NOM_LINEA
+                 ,"FECHA_EMBARQUE_ACORDADA" => $FECHA_EMBARQUE_ACORDADA
+                 ,"COD_PUERTO" => $COD_PUERTO
+                 ,"DEP_DEPTO" => $DEP_DEPTO
                  ));
              }elseif($res=='ERROR'){
                  array_push($arrayRegistrosERROR, array(
-                     "ID" => trim($ID)
-                 ,"PROFORMA" => trim($PROFORMA)
-                 ,"DES_ESTILO" => trim($DES_ESTILO)
-                 ,"COD_MOD_PAIS" => trim($COD_MOD_PAIS)
-                 ,"NOM_MARCA" => trim($NOM_MARCA)
-                 ,"NOM_LINEA" => trim($NOM_LINEA)
-                 ,"FECHA_EMBARQUE_ACORDADA" => trim($FECHA_EMBARQUE_ACORDADA)
-                 ,"COD_PUERTO" => trim($COD_PUERTO)
-                 ,"DEP_DEPTO" => trim($DEP_DEPTO)
+                  "ID" => $ID
+                 ,"PROFORMA" => $PROFORMA
+                 ,"DES_ESTILO" => $DES_ESTILO
+                 ,"COD_MOD_PAIS" => $COD_MOD_PAIS
+                 ,"NOM_MARCA" => $NOM_MARCA
+                 ,"NOM_LINEA" => $NOM_LINEA
+                 ,"FECHA_EMBARQUE_ACORDADA" => $FECHA_EMBARQUE_ACORDADA
+                 ,"COD_PUERTO" => $COD_PUERTO
+                 ,"DEP_DEPTO" => $DEP_DEPTO
                  ));
              }
 
         // Fin ForEach
         }
 
+        /*echo "Recepcionado: ".$total_recepcionado." UPD OK: ".count($arrayRegistrosOK);
+
+        echo "<pre>";
+        echo "UPD CORRECTO: <br>";
+        var_dump($arrayRegistrosOK);
+        echo "<br>";
+        echo "UPD INCORRECTO: <br>";
+        var_dump($arrayRegistrosERROR);
+        echo "</pre>";*/
+
         // Actualiza COLOR 3
         if( $total_recepcionado == count($arrayRegistrosOK) ){
 
             foreach ($arrayRegistrosOK as $columna) {
 
-                $ID = trim($columna["ID"]);
-                $PROFORMA = trim($columna["PROFORMA"]);
-                $DES_ESTILO = trim($columna["DES_ESTILO"]);
+                $ID = $columna["ID"];
+                $PROFORMA = $columna["PROFORMA"];
+                $DES_ESTILO = $columna["DES_ESTILO"];
                 $COD_MOD_PAIS = $columna["COD_MOD_PAIS"];
-                $NOM_MARCA = trim($columna["NOM_MARCA"]);
-                $NOM_LINEA = trim($columna["NOM_LINEA"]);
-                $FECHA_EMBARQUE_ACORDADA = trim($columna["FECHA_EMBARQUE_ACORDADA"]);
-                $COD_PUERTO = trim($columna["COD_PUERTO"]);
-                $DEP_DEPTO = trim($columna["DEP_DEPTO"]);
+                $NOM_MARCA = $columna["NOM_MARCA"];
+                $NOM_LINEA = $columna["NOM_LINEA"];
+                $FECHA_EMBARQUE_ACORDADA = $columna["FECHA_EMBARQUE_ACORDADA"];
+                $COD_PUERTO = $columna["COD_PUERTO"];
+                $DEP_DEPTO = $columna["DEP_DEPTO"];
 
-                /*$res2 = ResumenEstilosClass::ActualizaColor3($f3->get('SESSION.login'),$ID,$PROFORMA,$DES_ESTILO,$COD_MOD_PAIS,$NOM_MARCA,$NOM_LINEA,$FECHA_EMBARQUE_ACORDADA,$COD_PUERTO,$DEP_DEPTO);
+                echo ResumenEstilosClass::ActualizaColor3($f3->get('SESSION.login'),$ID,$PROFORMA,$DES_ESTILO,$COD_MOD_PAIS,$NOM_MARCA,$NOM_LINEA,$FECHA_EMBARQUE_ACORDADA,$COD_PUERTO,$DEP_DEPTO);
 
-                if($res2=='OK'){
+                /*if($res2=='OK'){
+                    echo "<br>Dentro OK";
                     array_push($arrayRegistrosC3OK, array(
-                        "ID" => trim($ID)
-                    ,"PROFORMA" => trim($PROFORMA)
-                    ,"DES_ESTILO" => trim($DES_ESTILO)
-                    ,"COD_MOD_PAIS" => trim($COD_MOD_PAIS)
-                    ,"NOM_MARCA" => trim($NOM_MARCA)
-                    ,"NOM_LINEA" => trim($NOM_LINEA)
-                    ,"FECHA_EMBARQUE_ACORDADA" => trim($FECHA_EMBARQUE_ACORDADA)
-                    ,"COD_PUERTO" => trim($COD_PUERTO)
-                    ,"DEP_DEPTO" => trim($DEP_DEPTO)
+                        "ID" => $ID
+                    ,"PROFORMA" => $PROFORMA
+                    ,"DES_ESTILO" => $DES_ESTILO
+                    ,"COD_MOD_PAIS" => $COD_MOD_PAIS
+                    ,"NOM_MARCA" => $NOM_MARCA
+                    ,"NOM_LINEA" => $NOM_LINEA
+                    ,"FECHA_EMBARQUE_ACORDADA" => $FECHA_EMBARQUE_ACORDADA
+                    ,"COD_PUERTO" => $COD_PUERTO
+                    ,"DEP_DEPTO" => $DEP_DEPTO
                     ));
                 }elseif($res2=='ERROR'){
+                    echo "<br>Dentro ERROR";
                     array_push($arrayRegistrosC3ERROR, array(
-                        "ID" => trim($ID)
-                    ,"PROFORMA" => trim($PROFORMA)
-                    ,"DES_ESTILO" => trim($DES_ESTILO)
-                    ,"COD_MOD_PAIS" => trim($COD_MOD_PAIS)
-                    ,"NOM_MARCA" => trim($NOM_MARCA)
-                    ,"NOM_LINEA" => trim($NOM_LINEA)
-                    ,"FECHA_EMBARQUE_ACORDADA" => trim($FECHA_EMBARQUE_ACORDADA)
-                    ,"COD_PUERTO" => trim($COD_PUERTO)
-                    ,"DEP_DEPTO" => trim($DEP_DEPTO)
+                        "ID" => $ID
+                    ,"PROFORMA" => $PROFORMA
+                    ,"DES_ESTILO" => $DES_ESTILO
+                    ,"COD_MOD_PAIS" => $COD_MOD_PAIS
+                    ,"NOM_MARCA" => $NOM_MARCA
+                    ,"NOM_LINEA" => $NOM_LINEA
+                    ,"FECHA_EMBARQUE_ACORDADA" => $FECHA_EMBARQUE_ACORDADA
+                    ,"COD_PUERTO" => $COD_PUERTO
+                    ,"DEP_DEPTO" => $DEP_DEPTO
                     ));
                 }*/
 
@@ -170,22 +166,14 @@ class ResumenEstilosController extends \Control
         }
 
 
-        echo "<pre>";
-        echo "CORRECTO: <br>";
-        var_dump($arrayRegistrosOK);
-        echo "<br>";
-        echo "INCORRECTO: <br>";
-        var_dump($arrayRegistrosERROR);
-        echo "</pre>";
 
-        echo "<br>########################################<br>";
 
         echo "<pre>";
-        echo "CORRECTO: <br>";
-        var_dump($arrayRegistrosC3OK);
-        echo "<br>";
-        echo "INCORRECTO: <br>";
-        var_dump($arrayRegistrosC3ERROR);
+            /*echo "UPD C1 CORRECTO: <br>";
+            var_dump($arrayRegistrosC3OK);
+            echo "<br>";
+            echo "UPD C1 INCORRECTO: <br>";
+            var_dump($arrayRegistrosC3ERROR);*/
         echo "</pre>";
 
 

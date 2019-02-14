@@ -214,8 +214,10 @@ class ResumenEstilosClass extends \parametros
     public static function ActualizaResumenEstiloPaso($login,$ID,$PROFORMA,$DES_ESTILO,$COD_MOD_PAIS,$NOM_MARCA,$NOM_LINEA,$FECHA_EMBARQUE_ACORDADA,$COD_PUERTO,$DEP_DEPTO)
     {
         // Agregar el cambio de estado
-        $sql = "BEGIN PIA_PKG_PIAUTOMATICA.PRC_ACTUALIZA_RESUMEN_ESTILO('".$login."','".$PROFORMA."','".$DES_ESTILO."','".$COD_MOD_PAIS."','".$NOM_MARCA."','".$NOM_LINEA."','".$FECHA_EMBARQUE_ACORDADA."','".$COD_PUERTO."','".$DEP_DEPTO."', :error, :data); end;";
+        $sql = "BEGIN PIA_PKG_PIAUTOMATICA.PRC_ACT_RESUMEN_ESTILO('".$login."','".$PROFORMA."','".$DES_ESTILO."','".$COD_MOD_PAIS."','".$NOM_MARCA."','".$NOM_LINEA."','".$FECHA_EMBARQUE_ACORDADA."','".$COD_PUERTO."','".$DEP_DEPTO."', :error, :data); end;";
         $data = \database::getInstancia()->getConsultaSP($sql,2);
+
+        // return "<br>".$data;
 
         // Se pudo actualizar el registro en PIA_RESUMEN_ESTILO_PASO, actualizo plan compra color 3
         if($data==0){
@@ -240,10 +242,12 @@ class ResumenEstilosClass extends \parametros
     public static function ActualizaColor3($login,$ID,$PROFORMA,$DES_ESTILO,$COD_MOD_PAIS,$NOM_MARCA,$NOM_LINEA,$FECHA_EMBARQUE_ACORDADA,$COD_PUERTO,$DEP_DEPTO)
     {
 
-        $sql_color3 = "BEGIN PIA_PKG_PIAUTOMATICA.PRC_ACT_COLOR3_RESUMEN_ESTILO('".$login."','".$PROFORMA."','".$DES_ESTILO."','".$COD_MOD_PAIS."','".$NOM_MARCA."','".$NOM_LINEA."','".$FECHA_EMBARQUE_ACORDADA."','".$COD_PUERTO."','".$DEP_DEPTO."', :error, :data); end;";
+        $sql_color3 = "BEGIN PIA_PKG_PIAUTOMATICA.PRC_ACT_COLOR3('".$login."','".$PROFORMA."','".$DES_ESTILO."','".$COD_MOD_PAIS."','".$NOM_MARCA."','".$NOM_LINEA."','".$FECHA_EMBARQUE_ACORDADA."','".$COD_PUERTO."','".$DEP_DEPTO."', :error, :data); end;";
         $data_color3 = \database::getInstancia()->getConsultaSP($sql_color3,2);
 
-        if($data_color3 == 0){
+        return $data_color3;
+
+        /*if($data_color3 == 0){
 
             // Acción: Crear / Eliminar / Actualizar
             LogTransaccionClass::GuardaLogTransaccion($login, 0, $DEP_DEPTO, 'PIA Pantalla 4 - UPDATE C3','Actualizar', $sql_color3, 'OK' );
@@ -254,7 +258,7 @@ class ResumenEstilosClass extends \parametros
         }else{
             return "ERROR";
             die();
-        }
+        }*/
 
     }
 

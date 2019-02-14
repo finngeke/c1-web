@@ -214,22 +214,10 @@ $(function () {
 
         },
         requestEnd: function (e) {
-            /*console.log(e);
-            // Si al Finalizar la sincronización es de tipo "update" o "create"
-            if ( e.type === 'update' ) {
-                // Accion
-                //console.log(e.type);
-                //location.reload(true);
 
-                if(e.response==='OK'){
-                    console.log("Terminó de Actualizar");
-                }else{
-                    console.log("NO Terminó de Actualizar");
-                }
-
-
-
-            }*/
+            if(e.type !== 'read'){
+                location.reload(true);
+            }
 
         }
     });
