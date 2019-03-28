@@ -720,8 +720,9 @@
                 array_push($json
                     , array(
                         "nroEmbarque" => $row[0],
-                        "Estado" => $row[2],
-                        "fechaETA" => date_format(date_create($row[1]),'Y-m-d')
+                        "Estado" => $row[3],
+                        "fechaAprobacion" => date_format(date_create($row[1]),'Y-m-d'),
+						"fechaEnvio" => date_format(date_create($row[2]),'Y-m-d')
                     )
                 );
             }

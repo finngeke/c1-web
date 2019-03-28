@@ -39,7 +39,8 @@ $(function () {
                 fields: {
                         nroEmbarque: {type: "number"}, // number - string - date
                         Estado: {type: "string"}, // number - string - date
-                        fechaETA: {type: "string"}    // number - string - date
+                        fechaAprobacion: {type: "string"},    // number - string - date
+						fechaEnvio: {type: "string"}    // number - string - date
                     }
             }
         },
@@ -61,7 +62,8 @@ $(function () {
             {selectable: true, width: "50px" },
             {field: "nroEmbarque",title: "# Embarque",width: 240},
             {field: "Estado",title: "Estado"},
-            {field: "fechaETA",title: "Fecha ETA",width: 150}
+            {field: "fechaAprobacion",title: "Fecha Aprobado.",width: 150},
+			{field: "fechaEnvio",title: "Fecha Bajada Emb.",width: 150}
         ]
     });
 
